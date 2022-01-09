@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  web:
+    build: ./client
+    ports:
+      - 4000:4000
+    volumes:
+      - ./client:/app
+
+  api:
+    build: ./server
+    ports:
+      - 4000:4000
+    volumes:
+      - ./server:/app
+    environment:
+      DB_URL: mongodb://db/vwanu
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vwanu:/data/db
+volumes:
+  vwanu:
