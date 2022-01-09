@@ -4,7 +4,8 @@
   "description": "vwanu server",
   "main": "index.js",
   "scripts": {
-    "test": "test "
+    "test": "test ",
+    "start": "nodemon bin/index.js"
   },
   "keywords": [
     "vwanu",
