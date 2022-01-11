@@ -1,13 +1,15 @@
-import "./App.css";
+import { Provider } from "react-redux";
 
-function App() {
+// Custom dependencies
+import { store } from "./store";
+import Routes from "layouts/Routes.js";
+
+const App = () => {
   return (
-    <div className="container-fluid">
-      <header className="">
-        <h1 className="">VWANU Social Media</h1>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Routes />
+    </Provider>
   );
-}
+};
 
 export default App;
