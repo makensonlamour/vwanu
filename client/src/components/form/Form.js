@@ -4,6 +4,7 @@ function FormWrapper({
   onSubmit,
   validationSchema,
   children,
+  className,
   ...otherProps
 }) {
   return (
@@ -13,7 +14,11 @@ function FormWrapper({
       validationSchema={validationSchema}
     >
       {() => (
-        <div role="form" className="p-10 card bg-base-200" {...otherProps}>
+        <div
+          role="form"
+          className={"px-10 pt-5 pb-10 card " + className}
+          {...otherProps}
+        >
           {children}
         </div>
       )}
