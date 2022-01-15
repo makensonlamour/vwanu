@@ -1,25 +1,34 @@
 version: '3.8'
 services:
-  web:
-    build: ./client
-    ports:
-      - 4000:4000
-    volumes:
-      - ./client:/app
-
   api:
-    build: ./server
+    container_name: vwanu_api
+    image: vwanu_api:0.0.1
+    build:
+      context: ./server
     ports:
-      - 4000:4000
+      - '4000:4000'
     volumes:
       - ./server:/app
     environment:
-      DB_URL: mongodb://db/vwanu
-  db:
-    image: mongo:4.0-xenial
+      - PORT=4000
+      - PGDATABASE=social_media
+      - PGUSER=vwanu
+      - PGPASSWORD=123456
+      - PGHOST=pg_db
+    depends_on:
+      - pg_db
+  pg_db:
+    container_name: pg_db
+    image: 'postgres:12'
     ports:
-      - 27017:27017
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=vwanu
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=social_media
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-      - vwanu:/data/db
+      - nps_data:/var/lib/postgresql/data
+
 volumes:
-  vwanu:
+  nps_data: {}

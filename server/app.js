@@ -1,11 +1,14 @@
 // Dependencies
-const cors = require('cors')
-const morgan = require('morgan')
-const helmet = require('helmet')
-const express = require('express')
-const methodOverride = require('method-override')
+import cors from 'cors'
+import helmet from 'helmet'
+import morgan from 'morgan'
+//import dotenv from 'dotenv'
+import express from 'express'
+import methodOverride from 'method-override'
+import testRoute from './routes/test/index.js'
 //const isLoggedIn = require('./middleware/authenticate')
-require('./passport')
+// import('./passport')
+//dotenv.config()
 
 const app = express()
 app.use(express.json({ extended: false }))
@@ -23,13 +26,16 @@ app.use((req, res, next) => {
   console.log({ path: req.path, body: req.body })
   return next()
 })
+
+
 //app.use(isLoggedIn)
 
 // Serving the routes
+app.use('/test',testRoute)
 //app.use('/api/login', require('./routes/auth'))
-app.get('/', function (req, res) {
-  res.sendfile('./pages/index.html')
-})
+
+// app.use('/api/post/', require('./routes/post/index'))
+
 /* Handling all errors */
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
@@ -37,4 +43,5 @@ app.use((err, req, res, next) => {
   return res.status(status).json({ message })
 })
 
-module.exports = app
+
+export default app

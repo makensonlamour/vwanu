@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "vwanu server",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "test ",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest ",
     "start": "nodemon bin/index.js"
   },
   "keywords": [
@@ -22,9 +23,12 @@
     "method-override": "^3.0.0",
     "mongoose": "^6.1.5",
     "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pg": "^8.7.1",
+    "sequelize": "^6.6.2",
     "socket.io": "^4.4.1"
   },
   "devDependencies": {

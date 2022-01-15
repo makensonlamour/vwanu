@@ -1,4 +1,4 @@
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 const merge = require('lodash/merge')
 
 // Custom dependencies

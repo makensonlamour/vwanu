@@ -1,26 +1,37 @@
 #!/usr/bin/env node
 
-const app = require('../app')
-const http = require('http')
+import http from 'http'
+import app from '../app.js'
+import sequelize from '../src/utils/database.js'
+import Test from '../models/test.js'
 //const socket = require('socket.io')
 
-const port = normalizePort(process.env.PORT || '4000')
+const port = normalizePort(process.env.PORT || '6000')
 app.set('port', port)
 const server = http.createServer(app)
 
-const io = require('socket.io')(server)
-io.on('connection', function (socket) {
-  console.log('A user connected')
+//  import i from'socket.io'
+//  const io=i(server)
+// io.on('connection', function (socket) {
+//   console.log('A user connected')
 
-  //Whenever someone disconnects this piece of code executed
-  io.on('disconnect', function () {
-    console.log('A user disconnected')
-  })
-})
-server.listen(port)
-server.on('error', onError)
-server.on('listening', onListening)
+//   //Whenever someone disconnects this piece of code executed
+//   io.on('disconnect', function () {
+//     console.log('A user disconnected')
+//   })
+// })
 
+async function startSERVER() {
+  try {
+    await sequelize.sync({ force: false })
+    server.listen(port)
+    server.on('error', onError)
+    server.on('listening', onListening)
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+startSERVER()
 /**
  * Normalize a port into a number, string, or false.
  */
