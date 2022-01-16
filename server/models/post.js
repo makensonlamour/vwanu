@@ -1,25 +1,22 @@
-const mongoose = require('mongoose')
-const { Schema, model } = mongoose
+import Sequelize from 'sequelize'
+import db from '../src/utils/database.js'
 
-const PostSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: String,
-      required: true,
-    },
-    desc: {
-      type: String,
-      max: 500,
-    },
-    img: {
-      type: String,
-    },
-    likes: {
-      type: Array,
-      default: [],
-    },
+const Post = db.define('Post', {
+  userId: {
+    type: Sequelize.STRING,
+    required: true,
   },
-  { timestamps: true }
-)
+  desc: {
+    type: Sequelize.STRING,
+    max: 500,
+  },
+  img: {
+    type: Sequelize.STRING,
+  },
+  likes: {
+    type: Sequelize.ARRAY,
+    default: [],
+  },
+})
 
-module.exports = mongoose.model('Post', PostSchema)
+export default Post

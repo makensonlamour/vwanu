@@ -3,7 +3,7 @@
 import http from 'http'
 import app from '../app.js'
 import sequelize from '../src/utils/database.js'
-import Test from '../models/test.js'
+
 //const socket = require('socket.io')
 
 const port = normalizePort(process.env.PORT || '6000')

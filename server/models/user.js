@@ -1,64 +1,39 @@
-const mongoose = require('mongoose')
-const { Schema, model } = mongoose
+import Sequelize from 'sequelize'
+// Custom core
+import db from '../src/utils/database.js'
+import { defineUser } from '../src/Vwanu-Local-Sequelize/index.js'
 
-const UserSchema = new Schema(
-  {
-    username: {
-      type: String,
-      require: true,
-      min: 3,
-      max: 20,
-      unique: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      max: 50,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      min: 6,
-    },
-    profilePicture: {
-      type: String,
-      default: '',
-    },
-    coverPicture: {
-      type: String,
-      default: '',
-    },
-    followers: {
-      type: Array,
-      default: [],
-    },
-    followings: {
-      type: Array,
-      default: [],
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
-    desc: {
-      type: String,
-      max: 50,
-    },
-    city: {
-      type: String,
-      max: 50,
-    },
-    from: {
-      type: String,
-      max: 50,
-    },
-    relationship: {
-      type: Number,
-      enum: [1, 2, 3],
-    },
+const User = defineUser(db, {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
   },
-  { timestamps: true }
-)
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  hash: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
+  salt: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  activationKey: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  resetPasswordKey: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  verified: {
+    type: Sequelize.BOOLEAN,
+    allowNull: true,
+  },
+})
 
-module.exports = model('User', UserSchema)
+export default User

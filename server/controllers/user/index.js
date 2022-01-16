@@ -1,63 +1,43 @@
-const mongoose = require('mongoose')
-const merge = require('lodash/merge')
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-// Custom dependencies
-const User = require('../../models/user')
-const UserError = require('../../errors/messages/user')
-const SystemError = require('../../errors/SystemErrors')
-const { catchAsync, savePopulate } = require('../../helper')
-// Constants
-const requiredFields = []
+// Custom requirements
+import userService from '../../services/user/index.js'
+import common from '../../src/utils/common.js'
+import AppError from '../../errors/index.js'
+import User from '../../models/user.js'
 
-module.exports.register = catchAsync(async (req, res) => {
-  let user = await User.findOne({ username: req.body.username })
-  if (user) throw new SystemError(UserError.USERNAME_ALREADY_EXISTS)
-  user = await User.register(req.body, req.body.password)
-  return res.json(user)
-})
+const { catchAsync, sendResponse, sendErrorResponse } = common
 
-module.exports.getOne = catchAsync(async (req, res) => {
-  const user = await User.findOneById(req.params.id)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  return res.json(user)
-})
-
-module.exports.editOne = catchAsync(async (req, res) => {
-  let user = await User.findById(req.params.id)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  user = merge(user, req.body.user)
-  return savePopulate(user, requiredFields, res)
-})
-
-module.exports.makeAndRemoveAdmin = catchAsync(async (req, res) => {
-  const user = await User.findById(req.params.id)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  if (user._id.equals(req.user._id))
-    throw new SystemError(UserError.CHANGE_OWN_INFORMATION)
-  user.isAdmin = !user.isAdmin
-  return savePopulate(user, requiredFields, res)
-})
-module.exports.removeFollowing = catchAsync(async (req, res) => {
-  const user = await User.findById(req.body.user)
-  if (!user) throw new SystemError(UserError.NO_USERS_FOUND)
-
-  user.following = user.following.filter((following) => {
-    return !following._id.equals(req.body.following)
-  })
-  const usr = await user
-    .save()
-    .then((userDetails) => userDetails.populate(requiredFields).execPopulate())
-  return res.json(usr)
-})
-
-module.exports.addFollowing = catchAsync(async (req, res) => {
-  const user = await User.findById(req.body.user)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  if (user.following.includes(req.body.following))
-    throw new SystemError(UserError.NO_DUPLICATES_INFO)
-  user.following.push(req.body.following)
-  const usr = await user
-    .save()
-    .then((userDetails) => userDetails.populate(requiredFields).execPopulate())
-  return res.json(usr)
-})
+export default {
+  createOne: catchAsync(async (req, res, next) => {
+    try {
+      const user = await User.register(req.body, req.body.password)
+      sendResponse(res, StatusCodes.CREATED, user, ReasonPhrases.CREATED)
+    } catch (err) {
+      console.log(err)
+      throw new AppError(err.message, err.statusCode)
+    }
+  }),
+  getOne: catchAsync(async (req, res, next) => {
+    try {
+      const user = await userService.findById(req.params.id)
+      console.log(user)
+      if (!user)
+        return sendErrorResponse(
+          res,
+          StatusCodes.NOT_FOUND,
+          [{ message: 'user not found' }],
+          ReasonPhrases.NOT_FOUND
+        )
+      return sendResponse(res, StatusCodes.OK, user, ReasonPhrases.OK)
+    } catch (error) {
+      console.error(error)
+      return sendErrorResponse(
+        res,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        [error],
+        ReasonPhrases.INTERNAL_SERVER_ERROR
+      )
+    }
+  }),
+}

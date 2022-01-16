@@ -1,59 +1,24 @@
-var mongoose = require('mongoose')
-const merge = require('lodash/merge')
+import merge from 'lodash/merge'
 
 // Custom dependencies
-const User = require('../../models/user')
-const Profile = require('../../models/profile')
+import User from '../../models/user'
+import Profile from '../../models/profile'
+import common from '../../src/utils/common.js'
 
-const UserError = require('../../errors/messages/user')
-const SystemError = require('../../errors/SystemErrors')
-const { catchAsync, savePopulate } = require('../../helper')
-// Constants
-const requiredFields = []
+const { catchAsync } = common
 
+export const getOne = catchAsync(async function (req, res, next) {})
 
-module.exports.getOne = catchAsync(async (req, res) => {
-  const user = await User.findOneById(req.params.id)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  return res.json(user)
-})
+export const editOne = catchAsync(async function (req, res, next) {})
+export const makeAndRemoveAdmin = catchAsync(async function (req, res, next) {})
 
-module.exports.editOne = catchAsync(async (req, res) => {
-  let user = await User.findById(req.params.id)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  user = merge(user, req.body.user)
-  return savePopulate(user, requiredFields, res)
-})
+export const removeFollowing = catchAsync(async function (req, res, next) {})
+export const addFollowing = catchAsync(async function (req, res, next) {})
 
-module.exports.makeAndRemoveAdmin = catchAsync(async (req, res) => {
-  const user = await User.findById(req.params.id)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  if (user._id.equals(req.user._id))
-    throw new SystemError(UserError.CHANGE_OWN_INFORMATION)
-  user.isAdmin = !user.isAdmin
-  return savePopulate(user, requiredFields, res)
-})
-module.exports.removeFollowing = catchAsync(async (req, res) => {
-  const user = await User.findById(req.body.user)
-  if (!user) throw new SystemError(UserError.NO_USERS_FOUND)
-
-  user.following = user.following.filter((following) => {
-    return !following._id.equals(req.body.following)
-  })
-  const usr = await user
-    .save()
-    .then((userDetails) => userDetails.populate(requiredFields).execPopulate())
-  return res.json(usr)
-})
-
-module.exports.addFollowing = catchAsync(async (req, res) => {
-  const user = await User.findById(req.body.user)
-  if (!user) throw new SystemError(UserError.NO_USER_FOUND)
-  if (user.following.includes(req.body.following))
-    throw new SystemError(UserError.NO_DUPLICATES_INFO)
-  user.following.push(req.body.following)
-  const usr = await user
-    .save()
-    .then((userDetails) => userDetails.populate(requiredFields).execPopulate())
-  return res.json(usr)
-})
+export default {
+  removeFollowing,
+  addFollowing,
+  makeAndRemoveAdmin,
+  getOne,
+  editOne,
+}
