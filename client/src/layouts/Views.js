@@ -1,25 +1,29 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import Alerts from "../components/common/Alerts";
+import { useSelector } from "react-redux";
+import { getAlerts } from "../store/alerts";
+
+//Core components
 import Login from "../views/Login/index";
 import Register from "../views/Register/index";
 import Home from "../views/Home/index";
 import ProtectRoutes from "../layouts/ProtectedRoutes/index";
 import Error404 from "../views/ErrorPage/index";
 
-const useAuth = () => {
-  const user = { loggedIn: true };
-  return user && user.loggedIn;
-};
 const Views = () => {
-  const isAuth = useAuth();
+  const alerts = useSelector(getAlerts);
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />) : (
-      <Route element={<ProtectRoutes />}>
-        <Route path="/home" element={<Home />} />
-      </Route>
-      <Route path="*" element={<Error404 />} />
-    </Routes>
+    <>
+      <Alerts alerts={alerts} />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route element={<ProtectRoutes />}>
+          <Route path="/home" element={<Home />} />
+        </Route>
+        <Route path="*" element={<Error404 />} />
+      </Routes>
+    </>
   );
 };
 

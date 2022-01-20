@@ -1,7 +1,10 @@
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 // Core components
 import { Field, Form, Submit } from "../../components/form";
+import { getCurrentUser, Login } from "../../store/auth";
 
 const ValidationSchema = Yup.object().shape({
   email: Yup.string().required().min(6).label("Email"),
@@ -9,6 +12,8 @@ const ValidationSchema = Yup.object().shape({
 });
 
 const LoginScreen = () => {
+  const dispatch = useDispatch();
+  const handleLogin = (credentials) => dispatch(Login(credentials));
   return (
     <>
       <div className="">
@@ -38,9 +43,12 @@ const LoginScreen = () => {
                 <span className="text-orange-500 text-lg font-semibold">
                   Not a member ?
                 </span>{" "}
-                <button className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case">
+                <Link
+                  to="/register"
+                  className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case"
+                >
                   Register
-                </button>
+                </Link>
               </p>
             </div>
             <Form
@@ -49,9 +57,7 @@ const LoginScreen = () => {
                 email: "",
                 password: "",
               }}
-              onSubmit={() => {
-                alert("submitted");
-              }}
+              onSubmit={handleLogin}
               className="shadow-lg rounded-3xl"
             >
               <h1 className="card-title text-orange-500">Sign in to Vwanu</h1>
@@ -80,40 +86,6 @@ const LoginScreen = () => {
             </Form>
           </div>
         </div>
-        {/*}
-      <div class="card-body">
-        {" "}
-        <h1 className="card-title mx-auto">VWANU LOGIN</h1>
-        <Form
-          validationSchema={ValidationSchema}
-          initialValues={{
-            email: "",
-            password: "",
-          }}
-          onSubmit={() => {
-            alert("submitted");
-          }}
-        >
-          <Field
-            autoCapitalize="none"
-            placeholder="Email"
-            name="email"
-            type="email"
-            autoComplete="new-email"
-          />
-          <Field
-            autoCapitalize="none"
-            autoCorrect="false"
-            placeholder="Password"
-            name="password"
-            type="password"
-            autoComplete="new-email"
-          />
-
-          <Submit title="Login" />
-        </Form>
-      </div>
-      {*/}
       </div>
     </>
   );

@@ -1,17 +1,21 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { useLocation } from "react-router";
+
+//Core components
+import Navbar from "../../components/Navbars/index";
+import SidebarLeft from "../../components/Sidebars/Left/index";
+
 const useAuth = () => {
-  const user = { loggedIn: false };
+  const user = { loggedIn: true };
   return user && user.loggedIn;
 };
 
 const ProtectedRoutes = () => {
-  const location = useLocation();
   const isAuth = useAuth();
-  return isAuth ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/" replace state={{ from: location }} />
+  return (
+    <>
+      <Navbar />
+      {isAuth ? <Outlet /> : <Navigate to="/" />}
+    </>
   );
 };
 

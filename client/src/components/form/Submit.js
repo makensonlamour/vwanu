@@ -5,6 +5,7 @@ function SubmitBtn({ title, className, ...otherProps }) {
 
   return (
     <button
+      type="submit"
       className={"btn btn-primary mt-4 normal-case " + className}
       {...otherProps}
       onClick={handleSubmit}

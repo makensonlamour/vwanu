@@ -56,7 +56,7 @@ export const Auth = createSlice({
 });
 
 export const Login = (credentials) => (dispatch, getState) => {
-  const { data, loading } = getState().authentication;
+  const { data, loading } = getState();
   if (data != null || loading) return;
   console.log({ url });
   dispatch(
@@ -72,6 +72,7 @@ export const Login = (credentials) => (dispatch, getState) => {
 };
 
 export const createUser = (newUserData) => (dispatch, getState) => {
+  console.log({ url });
   dispatch(
     action.apiCallBegan({
       url: url.REGISTER,

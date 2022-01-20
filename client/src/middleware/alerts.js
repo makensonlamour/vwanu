@@ -12,14 +12,14 @@ const alert = (store) => (next) => async (action) => {
     setAlert({
       msg: action.payload,
       id,
-      type: "warning",
+      type: "error",
       icon: "fa fa-exclamation-triangle",
     })
   );
   // Setting a sec for each 10 words
   setTimeout(
     () => store.dispatch(removeAlert(id)),
-    action.payload.length * 100
+    action.payload.length * 200
   );
 };
 
