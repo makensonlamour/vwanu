@@ -3,6 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 //Core components
 import Navbar from "../../components/Navbars/index";
 import SidebarLeft from "../../components/Sidebars/Left/index";
+import Container from "../../components/container/index";
 
 const useAuth = () => {
   const user = { loggedIn: true };
@@ -14,6 +15,7 @@ const ProtectedRoutes = () => {
   return (
     <>
       <Navbar />
+      <Container />
       {isAuth ? <Outlet /> : <Navigate to="/" />}
     </>
   );
