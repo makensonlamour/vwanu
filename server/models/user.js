@@ -1,9 +1,9 @@
 import Sequelize from 'sequelize'
 // Custom core
-import db from '../src/utils/database.js'
+import {sequelize} from '../src/utils/database.js'
 import { defineUser } from '../src/Vwanu-Local-Sequelize/index.js'
 
-const User = defineUser(db, {
+const User = defineUser(sequelize, {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,

@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 import db from '../src/utils/database.js'
 
-const Post = db.define('Post', {
+const Post = db.sequelize.define('Post', {
   userId: {
     type: Sequelize.STRING,
     required: true,

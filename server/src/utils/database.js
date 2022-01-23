@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
-import dbConfig from './dg.config.js'
-const sequelize = new Sequelize(
+
+export const sequelize = new Sequelize(
   process.env.PGDATABASE,
   process.env.PGUSER,
   process.env.PGPASSWORD,
@@ -13,17 +13,8 @@ const sequelize = new Sequelize(
   }
 )
 
-const sequeliz = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-  host: dbConfig.HOST,
-  dialect: dbConfig.dialect,
-  port: dbConfig.port,
-  operatorsAliases: false,
+export async function connectDb() {
+  await sequelize.sync({ force: false })
+}
 
-  pool: {
-    max: dbConfig.pool.max,
-    min: dbConfig.pool.min,
-    acquire: dbConfig.pool.acquire,
-    idle: dbConfig.pool.idle,
-  },
-})
-export default sequelize
+export default { sequelize, connectDb }

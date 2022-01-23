@@ -1,91 +1,24 @@
-const Post = require('../../models/post')
-const User = require('../../models/user')
-const mongoose = require('mongoose')
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
-const {catchAsync} = require('../../src/utils/helper')
-//create a post
+// Custom requirements
+import User from '../../models/user.js'
+import AppError from '../../errors/index.js'
+import common from '../../src/utils/common.js'
+import postService from '../../services/user/index.js'
 
-module.exports.createOne = catchAsync(async (req, res) => {
-  const newPost = new Post(req.body)
+const Post = {}
+const { catchAsync, sendResponse } = common
+
+export const createOne = catchAsync(async (req, res) => {
   try {
-    const savedPost = await newPost.save()
-    res.status(200).json(savedPost)
-  } catch (err) {
-    res.status(500).json(err)
-  }
+    const post = await postService.createPost()
+    return sendResponse(res, StatusCodes.CREATED, post, {})
+  } catch (error) {}
 })
+export const editOne = catchAsync(async (req, res) => {})
+export const getOne = catchAsync(async (req, res) => {})
+export const deleteOne = catchAsync(async (req, res) => {})
+export const getAll = catchAsync(async (req, res) => {})
+export const getTimeline = catchAsync(async (req, res) => {})
 
-module.exports.editOne = catchAsync('/:id', async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id)
-    if (post.userId === req.body.userId) {
-      await post.updateOne({ $set: req.body })
-      res.status(200).json('the post has been updated')
-    } else {
-      res.status(403).json('you can update only your post')
-    }
-  } catch (err) {
-    res.status(500).json(err)
-  }
-})
-//delete a post
-
-module.exports.deleteOne = catchAsync('/:id', async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id)
-    if (post.userId === req.body.userId) {
-      await post.deleteOne()
-      res.status(200).json('the post has been deleted')
-    } else {
-      res.status(403).json('you can delete only your post')
-    }
-  } catch (err) {
-    res.status(500).json(err)
-  }
-})
-//like / dislike a post
-
-module.exports.addOrRemoveLike = catchAsync(async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id)
-    if (!post.likes.includes(req.body.userId)) {
-      await post.updateOne({ $push: { likes: req.body.userId } })
-      res.status(200).json('The post has been liked')
-    } else {
-      await post.updateOne({ $pull: { likes: req.body.userId } })
-      res.status(200).json('The post has been disliked')
-    }
-  } catch (err) {
-    res.status(500).json(err)
-  }
-})
-//get a post
-
-module.exports.getOne = catchAsync(async (req, res) => {
-  console.log('in here man')
-  try {
-    const post = await Post.findById(req.params.id)
-    res.status(200).json(post)
-  } catch (err) {
-    res.status(500).json(err)
-  }
-})
-
-//get timeline posts
-
-module.exports.getTimeline = catchAsync(async (req, res) => {
-  try {
-    const currentUser = await User.findById(req.body.userId)
-    const userPosts = await Post.find({ userId: currentUser._id })
-    const friendPosts = await Promise.all(
-      currentUser.followings.map((friendId) => {
-        return Post.find({ userId: friendId })
-      })
-    )
-    res.json(userPosts.concat(...friendPosts))
-  } catch (err) {
-    res.status(500).json(err)
-  }
-})
-
-
+export default { createOne, editOne, getOne, deleteOne, getAll, getTimeline }

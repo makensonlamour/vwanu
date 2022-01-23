@@ -3,7 +3,7 @@ import Sequelize from 'sequelize'
 // Custom dependencies
 import db from '../src/utils/database.js'
 
-db.define('Profile', {
+db.sequelize.define('Profile', {
   userId: {
     type: Sequelize.STRING,
     required: true,

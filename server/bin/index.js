@@ -2,13 +2,14 @@
 
 import http from 'http'
 import app from '../app.js'
-import sequelize from '../src/utils/database.js'
+import database from '../src/utils/database.js'
 
+const expressServer = app(database)
 //const socket = require('socket.io')
 
 const port = normalizePort(process.env.PORT || '6000')
-app.set('port', port)
-const server = http.createServer(app)
+expressServer.set('port', port)
+const server = http.createServer(expressServer)
 
 //  import i from'socket.io'
 //  const io=i(server)
@@ -23,7 +24,6 @@ const server = http.createServer(app)
 
 async function startSERVER() {
   try {
-    await sequelize.sync({ force: false })
     server.listen(port)
     server.on('error', onError)
     server.on('listening', onListening)
