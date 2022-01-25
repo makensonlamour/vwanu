@@ -4,11 +4,12 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 //import Routes from "layouts/Routes.js";
 import Views from "./layouts/Views";
+import Container from "./components/container/index";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Views />
+      <Container />
     </Provider>
   );
 };
