@@ -13,13 +13,6 @@ const environment = {
       ADMIN: "/admin",
       AUTH: "/auth"
     },
-    path: {
-      LOGIN: "/",
-      REGISTER: "/register",
-      FORGOT_PASSWORD: "/forgotPassword",
-      RECOVER_PASSWORD: "/recoverPassword",
-      HOME: "/home"
-    },
     idsTypes: ["ID", "Passport", "License"]
   },
   staging: {

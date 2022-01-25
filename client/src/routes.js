@@ -1,32 +1,33 @@
-import env from "./config";
-// components
-import Home from "./views/Home/index";
-import Login from "./views/Login/index";
-import LayIndex from "./layouts/Auth";
-const paths = env.routes.path;
-const { layouts } = env;
-var routes = [
-  {
-    path: paths.Home,
-    name: "Home",
-    icon: "ni ni-tv-2 text-primary",
-    element: Home,
-    layout: layouts.HOME,
-  },
+import routesPath from "./routesPath";
+import Login from "./pages/Login/index";
+import Register from "./pages/Register/index";
+import Home from "./pages/Home/index";
 
+//define access roles
+let role = {
+  PUBLIC: "public",
+  USER: "user"
+};
+
+//Define all routes on the app
+let routes = [
   {
-    path: paths.LOGIN,
+    path: routesPath.LOGIN,
     name: "Login",
-    icon: "ni ni-tv-2 text-primary",
     element: Login,
-    layout: layouts.AUTH,
+    access: role.PUBLIC
   },
   {
-    path: paths.AuthIN,
-    name: "Auth Set Up ",
-    icon: "ni ni-tv-2 text-primary",
-    element: LayIndex,
-    layout: layouts.AUTH,
+    path: routesPath.REGISTER,
+    name: "Register",
+    element: Register,
+    access: role.PUBLIC
   },
+  {
+    path: routesPath.NEWSFEED,
+    name: "News Feed",
+    element: Home,
+    access: role.USER
+  }
 ];
-export default routes;
+export { routes, role };

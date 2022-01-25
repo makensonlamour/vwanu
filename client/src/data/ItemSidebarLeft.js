@@ -1,6 +1,13 @@
+import React from "react";
+import routesPath from "../routesPath";
 import { FcNews } from "react-icons/fc";
 import { FcGallery } from "react-icons/fc";
 import { FcFolder } from "react-icons/fc";
+
+/*
+ *define Items for sidebar left on home page
+ *
+ */
 
 export const ItemSidebarLeft = [
   {
@@ -8,49 +15,49 @@ export const ItemSidebarLeft = [
     menuItems: [
       {
         title: "News Feed",
-        link: "/home",
-        icon: <FcNews className="mx-2" size="24px" />,
+        path: routesPath.NEWSFEED,
+        icon: <FcNews className="mx-2" size="24px" />
       },
       {
         title: "Albums",
-        link: "/albums",
-        icon: <FcGallery className="mx-2" size="24px" />,
+        path: routesPath.ALBUMS,
+        icon: <FcGallery className="mx-2" size="24px" />
       },
       {
         title: "Saved Posts",
-        link: "/bookmarks",
-        icon: <FcFolder className="mx-2" size="24px" />,
-      },
-    ],
+        path: routesPath.SAVED_POST,
+        icon: <FcFolder className="mx-2" size="24px" />
+      }
+    ]
   },
   {
     menuTitle: "Community",
     menuItems: [
       {
         title: "Interest",
-        link: "/interest",
-        icon: <FcNews className="mx-2" size="24px" />,
+        path: routesPath.INTEREST,
+        icon: <FcNews className="mx-2" size="24px" />
       },
       {
         title: "Forums",
-        link: "/forums",
-        icon: <FcGallery className="mx-2" size="24px" />,
+        path: routesPath.FORUMS,
+        icon: <FcGallery className="mx-2" size="24px" />
       },
       {
         title: "My Interests",
-        link: "/myinterest",
-        icon: <FcFolder className="mx-2" size="24px" />,
+        path: routesPath.MY_INTERESTS,
+        icon: <FcFolder className="mx-2" size="24px" />
       },
       {
         title: "My Groups",
-        link: "/mygroups",
-        icon: <FcFolder className="mx-2" size="24px" />,
+        path: routesPath.MY_GROUPS,
+        icon: <FcFolder className="mx-2" size="24px" />
       },
       {
         title: "My Pages",
-        link: "/mypages",
-        icon: <FcFolder className="mx-2" size="24px" />,
-      },
-    ],
-  },
+        path: routesPath.MY_PAGES,
+        icon: <FcFolder className="mx-2" size="24px" />
+      }
+    ]
+  }
 ];

@@ -5,14 +5,14 @@ import jwtDecode from "jwt-decode";
 import { saveToken, deleteToken } from "../middleware/api";
 
 const url = env.endpoints;
-const { EXPECTED_HEADER } = env;
+//const { EXPECTED_HEADER } = env;
 
 const initialState = {
   loading: false,
   data: null,
   lastFetch: null,
   token: null,
-  error: null,
+  error: null
 };
 
 export const Auth = createSlice({
@@ -24,10 +24,10 @@ export const Auth = createSlice({
     },
     loginSucceed: (state, action) => {
       state.loading = false;
-      state.token = action.payload.token;
-      saveToken(action.payload.token);
-      state.data = action.payload.data;
-      // state.data = jwtDecode(action.payload.token);
+      state.token = action.payload.data;
+      saveToken(action.payload.data);
+      //state.data = action.payload.data;
+      state.data = jwtDecode(action.payload.data);
       state.lastFetch = Date.now;
     },
 
@@ -50,9 +50,9 @@ export const Auth = createSlice({
       state.data = null;
       state.error = null;
       deleteToken();
-      window.location.replace("/");
-    },
-  },
+      window.location.replace("/login");
+    }
+  }
 });
 
 export const Login = (credentials) => (dispatch, getState) => {
@@ -66,12 +66,12 @@ export const Login = (credentials) => (dispatch, getState) => {
       method: "POST",
       onSuccess: Auth.actions.loginSucceed.type,
       onStart: Auth.actions.loginRequested.type,
-      onError: Auth.actions.LoginFailed.type,
+      onError: Auth.actions.LoginFailed.type
     })
   );
 };
 
-export const createUser = (newUserData) => (dispatch, getState) => {
+export const createUser = (newUserData) => (dispatch) => {
   console.log({ url });
   dispatch(
     action.apiCallBegan({
@@ -80,7 +80,7 @@ export const createUser = (newUserData) => (dispatch, getState) => {
       method: "POST",
       onSuccess: Auth.actions.loginSucceed.type,
       onStart: Auth.actions.loginRequested.type,
-      onError: Auth.actions.LoginFailed.type,
+      onError: Auth.actions.LoginFailed.type
     })
   );
 };

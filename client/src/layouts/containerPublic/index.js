@@ -1,0 +1,16 @@
+import React from "react";
+import { useSelector } from "react-redux";
+
+//core components
+import { getCurrentUser } from "../../store/auth";
+import { Outlet, Navigate } from "react-router-dom";
+import routesPath from "../../routesPath";
+
+const containerPublic = () => {
+  let currentUser = useSelector(getCurrentUser);
+
+  const auth = currentUser.data;
+  return <div className="">{!auth ? <Outlet /> : <Navigate to={routesPath.NEWSFEED} />}</div>;
+};
+
+export default containerPublic;
