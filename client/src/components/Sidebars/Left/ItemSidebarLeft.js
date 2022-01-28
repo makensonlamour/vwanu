@@ -1,5 +1,5 @@
 import React from "react";
-import routesPath from "../routesPath";
+import routesPath from "../../../routesPath";
 import { FcNews } from "react-icons/fc";
 import { FcGallery } from "react-icons/fc";
 import { FcFolder } from "react-icons/fc";

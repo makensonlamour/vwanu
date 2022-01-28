@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { getCurrentUser } from "../../store/auth";
+import { useSelector, useDispatch } from "react-redux";
+import { getCurrentUser, setUser } from "../../store/auth";
 
 //core components
 import Navbar from "../../components/Navbars/index";
@@ -11,10 +11,23 @@ import routesPath from "../../routesPath";
 
 //import Views from "../Views";
 
-const Container = () => {
+const LayoutUser = () => {
+  const dispatch = useDispatch();
   let currentUser = useSelector(getCurrentUser);
 
   const auth = currentUser.data;
+
+  const loadUser = () => {
+    if (auth?.data?.user) return;
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    return dispatch(setUser(token));
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, [auth]);
+
   return (
     <>
       <Navbar />
@@ -34,4 +47,4 @@ const Container = () => {
   );
 };
 
-export default Container;
+export default LayoutUser;

@@ -3,7 +3,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 //data
-import { ItemSidebarLeft } from "../../../data/ItemSidebarLeft";
+import { ItemSidebarLeft } from "./ItemSidebarLeft";
 
 const SidebarLeft = () => {
   let activeStyle = {

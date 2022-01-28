@@ -7,11 +7,11 @@ import { useSelector } from "react-redux";
 import { getAlerts } from "../store/alerts";
 
 //Container
-import ContainerUser from "../layouts/containerUser/index";
-import ContainerPublic from "../layouts/containerPublic/index";
+import LayoutUser from "./LayoutUser/index";
+import LayoutPublic from "./LayoutPublic/index";
 
 //Core components
-import Error404 from "../pages/ErrorPage/index";
+import NotFound from "../pages/NotFound/index";
 
 const Views = () => {
   const alerts = useSelector(getAlerts);
@@ -19,17 +19,17 @@ const Views = () => {
     <>
       <Alerts alerts={alerts} />
       <Routes>
-        <Route element={<ContainerPublic />}>
+        <Route element={<LayoutPublic />}>
           {routes.map((route) => {
             return <>{route.access === role.PUBLIC ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
           })}
         </Route>
-        <Route path="/" element={<ContainerUser />}>
+        <Route path="/" element={<LayoutUser />}>
           {routes.map((route) => {
             return <>{route.access === role.USER ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
           })}
         </Route>
-        <Route path="*" element={<Error404 />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

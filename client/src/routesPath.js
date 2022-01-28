@@ -4,7 +4,7 @@ let routesPath = {
   NOTFOUND: "*",
   LOGIN: "/login",
   REGISTER: "/register",
-  LOGOUT: "/logout",
+  LOGOUT: "/login",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   NEWSFEED: "/",
@@ -15,10 +15,12 @@ let routesPath = {
   MY_INTERESTS: "/myinterest",
   MY_GROUPS: "/mygroups",
   MY_PAGES: "/mypages",
-  PROFILE: "/profile",
+  PROFILE: "/profile/:id",
   PROFILE_EDIT: "me/profile/edit",
   FRIENDS: "/friends",
-  FRIENDS_REQUESTS: "/friends/requests"
+  FRIENDS_REQUESTS: "/friends/requests",
+  PRIVACY_SETTINGS: "/privacy-settings",
+  GENERAL_SETTINGS: "/general-settings"
 };
 
 export default routesPath;
