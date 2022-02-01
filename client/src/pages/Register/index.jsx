@@ -5,17 +5,23 @@ import { useDispatch } from "react-redux";
 import routesPath from "../../routesPath";
 
 // Core components
-import { Field, Form, Submit } from "../../components/form";
+import { Field, Checkbox, Form, Submit } from "../../components/form";
 import { createUser } from "../../store/auth";
 
 const ValidationSchema = Yup.object().shape({
   email: Yup.string().required().min(6).label("Email"),
-  password: Yup.string().required().min(8).label("password")
+  password: Yup.string().required().min(8).label("password"),
+  termOfUse: Yup.bool().oneOf([true], "You must accept the terms of use and the policy privacy")
 });
+
+const initialValues = {
+  email: "",
+  password: "",
+  termOfUse: false
+};
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
-  //const auth = useSelector(getCurrentUser);
   const handleRegister = (credentials) => dispatch(createUser(credentials));
   return (
     <>
@@ -43,10 +49,7 @@ const LoginScreen = () => {
             </div>
             <Form
               validationSchema={ValidationSchema}
-              initialValues={{
-                email: "",
-                password: ""
-              }}
+              initialValues={initialValues}
               onSubmit={handleRegister}
               className="shadow-lg rounded-3xl"
             >
@@ -68,6 +71,8 @@ const LoginScreen = () => {
                 autoComplete="new-email"
                 className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
               />
+
+              <Checkbox name="termOfUse" label="I accept the terms of use and the policy privacy" className="" />
 
               <Submit className="rounded-full text-base-200 text-md" title="Register" />
             </Form>
