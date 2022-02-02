@@ -4,10 +4,5 @@ export default class AppError extends Error {
     super()
     this.message = message
     this.status = status
-    console.log('for testing properties only')
-    console.log('for testing properties only')
-    console.log('for testing properties only')
-    console.log('for testing properties only')
-    console.log('for testing properties only')
   }
 }
