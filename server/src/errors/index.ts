@@ -4,5 +4,6 @@ export default class AppError extends Error {
     super()
     this.message = message
     this.status = status
+    console.error('no error but be stupid')
   }
 }
