@@ -1,16 +1,28 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-const Step = () => {
+//Data
+import { ItemStep } from "./ItemStep";
+
+const Step = ({ step, className }) => {
   return (
     <>
       <ul className="w-full steps">
-        <li className="step step-primary">Registration</li>
-        <li className="step step-primary">Create Profile</li>
-        <li className="step">Change Profile Photo</li>
-        <li className="step">Find Friends</li>
+        {ItemStep.map((item, index) => {
+          return (
+            <li key={index} className={`step ${item.step <= step ? className : ""}`}>
+              {item.name}
+            </li>
+          );
+        })}
       </ul>
     </>
   );
+};
+
+Step.propTypes = {
+  className: PropTypes.string,
+  step: PropTypes.number
 };
 
 export default Step;

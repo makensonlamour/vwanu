@@ -2,12 +2,13 @@ import routesPath from "./routesPath";
 import Login from "./pages/Login/index";
 import Register from "./pages/Register/index";
 import Home from "./pages/Home/index";
-import { Step } from "./pages/Profil/Steps";
+import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
 let role = {
   PUBLIC: "public",
-  USER: "user"
+  USER: "user",
+  AUTH: "auth"
 };
 
 //Define all routes on the app
@@ -34,25 +35,25 @@ let routes = [
     path: routesPath.STEP_ONE,
     name: "Step one",
     element: Step,
-    access: role.USER
+    access: role.AUTH
   },
   {
     path: routesPath.STEP_TWO,
     name: "Step two",
-    element: Step,
-    access: role.USER
+    element: StepTwo,
+    access: role.AUTH
   },
   {
     path: routesPath.STEP_THREE,
     name: "Step three",
-    element: Step,
-    access: role.USER
+    element: StepThree,
+    access: role.AUTH
   },
   {
     path: routesPath.STEP_FOUR,
     name: "Step four",
-    element: Step,
-    access: role.USER
+    element: StepFour,
+    access: role.AUTH
   }
 ];
 export { routes, role };
