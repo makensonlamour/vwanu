@@ -4,7 +4,8 @@ import { Model } from 'sequelize'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import createToken from '../lib/utils/createToken'
-interface UserInterface {
+
+export interface UserInterface {
   id?: number | undefined
   email: String
   hash: String
@@ -51,6 +52,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
     static associate(models: any) {
       // define association here
+      User.hasOne(models.Profile)
     }
   }
   User.init(
