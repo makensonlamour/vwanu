@@ -3,27 +3,24 @@ import { createServer } from 'http'
 // Custom dependencies
 import app from '../app'
 import database from '../models'
+import Logger from '../lib/utils/logger'
 
-// Passing database to the server
-const expressServer = app(database)
 const port = normalizePort(process.env.PORT || '6000')
-expressServer.set('port', port)
-const server = createServer(expressServer)
 
-async function startSERVER() {
+app(database).then((expressServer) => {
+  // Passing starting database and server.
+  const server = createServer(expressServer)
   try {
     server.listen(port)
     server.on('error', onError)
-    server.on('listening', onListening)
-  } catch (err:any) {
-    console.log(err.message)
+    server.on('listening', onListening(server))
+  } catch (err: any) {
+    Logger.error(err)
+    process.exit(1)
   }
-}
-startSERVER()
-// /**
-//  * Normalize a port into a number, string, or false.
-//  */
+})
 
+//  * Normalize a port into a number, string, or false.
 function normalizePort(val: string): number | string | null {
   const port = parseInt(val, 10)
   if (isNaN(port)) return val
@@ -37,11 +34,11 @@ function onError(error: any): void {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges')
+      Logger.error(bind + ' requires elevated privileges')
       process.exit(1)
       break
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use')
+      Logger.error(bind + ' is already in use')
       process.exit(1)
       break
     default:
@@ -49,10 +46,11 @@ function onError(error: any): void {
   }
 }
 
-function onListening(): void {
-  const addr = server.address()
-  const bind: string | null =
-    typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port
-  console.log(`Listening on ${bind}`)
-  //debug('Listening on ' + bind)
+function onListening(server) {
+  return (): void => {
+    const addr = server.address()
+    const bind: string | null =
+      typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port
+    Logger.info(`Listening on ${bind} `)
+  }
 }

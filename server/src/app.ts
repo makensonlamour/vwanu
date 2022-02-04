@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import common from './lib/utils/common'
 import methodOverride from 'method-override'
-//import authRoute from './routes/auth'
+import authRoute from './routes/auth'
 import userRoute from './routes/user'
 import RequestBody from './middleware/RequestBody'
 dotenv.config()
@@ -26,9 +26,9 @@ export default async function (database: any) {
   app.use(express.urlencoded({ extended: true }))
 
   //  connect to the database
-  await database.sequelize.sync({ force: true })
+  await database.sequelize.sync({ force: true, logging: false })
   // Serving the routes
-  //app.use('/api/auth', authRoute)
+  app.use('/api/auth', authRoute)
   app.use('/api/user', userRoute)
 
   /* Handling all errors */

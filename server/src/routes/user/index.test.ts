@@ -15,7 +15,7 @@ const goodUser = { password: goodPassword, email: email }
 
 // Testing the user routes
 
-describe('Authentication', () => {
+describe('/api/user', () => {
   let expressServer: any = null
   beforeEach(async () => {
     expressServer = await app(db)

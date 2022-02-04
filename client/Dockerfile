@@ -8,4 +8,4 @@ RUN npm install
 COPY . . 
 ENV REACT_API_URL=localhost:4000/api
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["npm", "start"] 
