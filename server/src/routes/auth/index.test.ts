@@ -34,7 +34,10 @@ describe('Authentication ', () => {
         .send(goodUser)
 
       expect(response.status).toBe(202)
+      expect(response.body.data.user).toBeDefined()
       expect(response.body.data.token).toBeDefined()
+      expect(response.body.data.user.id).toBeDefined()
+      expect(typeof response.body.data.user.id).toBe('number')
       expect(typeof response.body.data.token).toBe('string')
       expect(response.header['content-type']).toEqual(
         expect.stringContaining('application/json')

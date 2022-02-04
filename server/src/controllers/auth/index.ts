@@ -16,7 +16,7 @@ export default {
           return sendResponse(
             res,
             StatusCodes.ACCEPTED,
-            { token },
+            { token, user:req.user },
             ReasonPhrases.ACCEPTED
           )
         }
