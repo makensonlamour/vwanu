@@ -35,25 +35,25 @@ let routes = [
     path: routesPath.STEP_ONE,
     name: "Step one",
     element: Step,
-    access: role.AUTH
+    access: role.PUBLIC
   },
   {
     path: routesPath.STEP_TWO,
     name: "Step two",
     element: StepTwo,
-    access: role.AUTH
+    access: role.PUBLIC
   },
   {
     path: routesPath.STEP_THREE,
     name: "Step three",
     element: StepThree,
-    access: role.AUTH
+    access: role.PUBLIC
   },
   {
     path: routesPath.STEP_FOUR,
     name: "Step four",
     element: StepFour,
-    access: role.AUTH
+    access: role.PUBLIC
   }
 ];
 export { routes, role };

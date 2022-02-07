@@ -1,11 +1,5 @@
 version: '3.8'
 services:
-  web:
-    build: ./client
-    ports:
-      - 3000:3000
-    volumes:
-      - ./client:/app
   api:
     container_name: vwanu_api
     image: vwanu_api:0.0.1
