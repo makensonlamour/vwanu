@@ -12,19 +12,28 @@ const goodUser = { password: goodPassword, email: email }
 describe('Authentication ', () => {
   let expressServer = null
   beforeEach(async () => {
+    jest.setTimeout(90000)
     expressServer = await app(db)
   })
   describe('Given incorrect credentials', () => {
+    beforeEach(async () => {
+      jest.setTimeout(90000)
+    })
     it('Should not authenticate', async () => {
+      jest.setTimeout(30000)
       const response = await request(expressServer)
         .post('/api/auth')
         .send(badUser)
+      console.log('error in body')
+      console.log(response.body, response.status)
       expect(response.status).toBe(400)
     })
   })
   describe('Given correct credentials ', () => {
+    beforeEach(async () => {
+      jest.setTimeout(90000)
+    })
     it('should authenticate', async () => {
-      expect(true).toBe(true)
       // Create a new user ,
       await request(expressServer).post('/api/user').send(goodUser)
 

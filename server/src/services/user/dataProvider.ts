@@ -1,7 +1,7 @@
 import db from '../../models'
 
 const DataProvider = {
-  getUser: async (userId: number|string) => {
+  getUser: async (userId: number | string) => {
     return new Promise(function (resolve, reject) {
       db.User.findOne({
         where: { id: userId },
@@ -16,9 +16,9 @@ const DataProvider = {
     })
   },
 
-  createUser: async (body: any) => {
+  createUser: async (body: any, password: string) => {
     return new Promise(function (resolve, reject) {
-      db.User.create(body)
+      db.User.register(body, password)
         .then((data: any) => {
           resolve(data)
         })
@@ -27,8 +27,11 @@ const DataProvider = {
         })
     })
   },
+  loginUser: (user: any, cb: Function) => {
+    db.User.login(user, cb)
+  },
 
-  updateUser: async (userId: number|string, body: any) => {
+  updateUser: async (userId: number | string, body: any) => {
     return new Promise(function (resolve, reject) {
       db.User.update(body, { where: { id: userId } })
         .then((data: any) => {
@@ -40,7 +43,7 @@ const DataProvider = {
     })
   },
 
-  deleteUser: async (userId: number|string) => {
+  deleteUser: async (userId: number | string) => {
     return new Promise(function (resolve, reject) {
       db.User.destroy({ where: { id: userId } })
         .then((data: any) => {

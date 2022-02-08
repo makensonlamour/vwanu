@@ -1,17 +1,17 @@
 'use strict'
 import { Model } from 'sequelize'
 
-export interface ProjectInterface {
+export interface ProfileInterface {
   id?: number | undefined
-  profilePicture?: string
-  coverPicture?: string
+  profilePicture?: String
+  coverPicture?: String
   followers?: number
   followings?: number | undefined
-  desc?: string
-  city?: string
+  desc?: String
+  city?: String
 }
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Profile extends Model<ProjectInterface> implements ProjectInterface {
+  class Profile extends Model<ProfileInterface> implements ProfileInterface {
     id?: number | undefined
     profilePicture: string
     coverPicture: string
@@ -22,11 +22,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any): void {
       Profile.belongsTo(models.User)
+      Profile.hasMany(models.Post, {
+        onDelete: 'CASCADE',
+      })
+      
     }
   }
   Profile.init(
     {
-      id: { type: DataTypes.NUMBER, autoIncrement: true, primaryKey: true },
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       profilePicture: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -37,11 +45,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
 
       followers: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       followings: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       desc: {
@@ -55,7 +63,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     {
       sequelize,
-      modelName: 'profile',
+      modelName: 'Profile',
     }
   )
   return Profile

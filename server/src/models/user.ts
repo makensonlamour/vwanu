@@ -53,6 +53,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any) {
       // define association here
       User.hasOne(models.Profile)
+      User.hasMany(models.Page, {
+        onDelete: 'CASCADE',
+      })
     }
   }
   User.init(

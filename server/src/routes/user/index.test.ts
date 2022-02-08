@@ -19,6 +19,7 @@ describe('/api/user', () => {
   let expressServer: any = null
   beforeEach(async () => {
     expressServer = await app(db)
+    jest.setTimeout(90*1000)
   })
   describe('Given a correct username and password', () => {
     it('should return a user and a token', async () => {

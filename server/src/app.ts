@@ -34,13 +34,14 @@ export default async function (database: any) {
   /* Handling all errors */
   // eslint-disable-next-line no-unused-vars
   app.use(function (
-    err: any,
+    err: Error | any,
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ) {
-    const { status = 500, message = 'Something went wrong ' } = err
-    res.status(status).json({ message })
+    const { status = 500 } = err
+    return sendErrorResponse(res, status, [err])
+  
   })
 
   return app
