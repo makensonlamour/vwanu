@@ -26,7 +26,6 @@ const Dropdown = () => {
             <li>
               {DropdownItem.map((item) => {
                 return item.menuItems.map((it, idx) => {
-                  console.log(it.funct);
                   return (
                     <Link to={it.path} key={idx}>
                       <span className="pr-4 py-2"> {it.icon} </span>

@@ -24,10 +24,10 @@ export const Auth = createSlice({
     },
     loginSucceed: (state, action) => {
       state.loading = false;
-      state.token = action.payload.data;
-      saveToken(action.payload.data);
-      //state.data = action.payload.data;
-      state.data = jwtDecode(action.payload.data);
+      state.token = action.payload.data.token;
+      saveToken(action.payload.data.token);
+      //state.data = action.payload.data.user;
+      state.data = jwtDecode(action.payload.data.token);
       state.lastFetch = Date.now;
     },
 
@@ -40,7 +40,7 @@ export const Auth = createSlice({
     },
     setUser: (state, action) => {
       state.loading = false;
-      state.token = action.payload.token;
+      state.token = action.payload;
       saveToken(action.payload);
       state.data = jwtDecode(action.payload);
     },
@@ -58,7 +58,6 @@ export const Auth = createSlice({
 export const Login = (credentials) => (dispatch, getState) => {
   const { data, loading } = getState();
   if (data != null || loading) return;
-  console.log({ url });
   dispatch(
     action.apiCallBegan({
       url: url.LOGIN,
@@ -72,7 +71,6 @@ export const Login = (credentials) => (dispatch, getState) => {
 };
 
 export const createUser = (newUserData) => (dispatch) => {
-  console.log({ url });
   dispatch(
     action.apiCallBegan({
       url: url.REGISTER,

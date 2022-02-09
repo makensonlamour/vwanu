@@ -22,8 +22,8 @@ const StepTwo = () => {
   return (
     <>
       <div>
-        <Step step={2} className="step-primary" />
-        <div className="w-1/2 m-auto">
+        <Step step={2} className="step-primary mb-4" />
+        <div className="w-2/5 m-auto px-6">
           <Form
             validationSchema={ValidationSchema}
             initialValues={initialValues}
@@ -54,7 +54,7 @@ const StepTwo = () => {
               type="date"
               className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
             />
-            <Submit className="rounded-full text-base-200 text-md w-1/5 ml-auto" title="Next" />
+            <Submit className="rounded-full text-base-200 text-md w-2/5 ml-auto" title="Next" />
           </Form>
         </div>
       </div>

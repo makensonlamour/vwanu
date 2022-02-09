@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watch",
-    "start": "nodemon src/bin/index.js",
-    "dev": "tsnd --respawn --transpile-only --files --exit-child --watch src src/bin/index.ts"
+    "dev": "nodemon",
+    "devops": "tsnd --respawn --transpile-only --files --exit-child --watch src src/bin/index.ts"
   },
   "keywords": [
     "vwanu",

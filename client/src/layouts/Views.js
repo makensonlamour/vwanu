@@ -16,6 +16,7 @@ import NotFound from "../pages/NotFound/index";
 
 const Views = () => {
   const alerts = useSelector(getAlerts);
+
   return (
     <>
       <Alerts alerts={alerts} />
@@ -25,14 +26,14 @@ const Views = () => {
             return <>{route.access === role.PUBLIC ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
           })}
         </Route>
-        <Route path="/" element={<LayoutAuth />}>
-          {routes.map((route) => {
-            return <>{route.access === role.AUTH ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
-          })}
-        </Route>
         <Route path="/" element={<LayoutUser />}>
           {routes.map((route) => {
             return <>{route.access === role.USER ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
+          })}
+        </Route>
+        <Route path="/" element={<LayoutAuth />}>
+          {routes.map((route) => {
+            return <>{route.access === role.AUTH ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
           })}
         </Route>
         <Route path="*" element={<NotFound />} />

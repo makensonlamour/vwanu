@@ -4,7 +4,6 @@ FROM node:16.6.1-alpine3.14
 #USER app 
 WORKDIR /app
 COPY package.json .
-RUN npm install -g ts-node
 RUN npm install
 COPY . .
 CMD ["npm","run","dev"]

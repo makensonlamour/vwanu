@@ -1,26 +1,27 @@
 import React from "react";
 import * as Yup from "yup";
+import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import routesPath from "../../../routesPath";
 import Step from "./Step";
-import { Form, Field, Submit } from "../../../components/form";
+import { Form, UploadAvatar, Submit } from "../../../components/form";
 
 const StepThree = () => {
   const navigate = useNavigate();
   const ValidationSchema = Yup.object().shape({
-    profilePhoto: Yup.mixed().required().label("profilePhoto")
+    profilePhoto: Yup.mixed().required().label("Profile Photo")
   });
 
   const initialValues = {
-    profilePhoto: null
+    profilePhoto: ""
   };
+
   return (
     <>
       <div>
         {" "}
-        <Step step={3} className="step-primary" />
-        <div className="w-1/2 m-auto">
-          <h1 className="card-title text-orange-500">Change your profil photo</h1>
+        <Step step={3} className="step-primary mb-4" />
+        <div className="w-2/5 m-auto">
           <Form
             validationSchema={ValidationSchema}
             initialValues={initialValues}
@@ -29,19 +30,22 @@ const StepThree = () => {
             }}
             className="shadow-lg rounded-3xl"
           >
-            <Field
+            <h1 className="card-title text-orange-500 pb-3 text-center">Change your profile photo</h1>
+            <UploadAvatar
               autoCapitalize="none"
               placeholder="Avatar"
               name="profilePhoto"
-              type="file"
+              id="img"
+              accept="image/png,image/jpg,image/jpeg"
+              icon={<FaUserCircle size="150px" className="m-auto text-gray-500" />}
               autoComplete="new-file"
-              className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none w-1/2 ml-auto"
+              className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none w-1/2 ml-auto hidden"
             />
-            <div className="flex-auto justify-end">
-              <Link className="mr-6" to={"../../" + routesPath.STEP_FOUR}>
+            <div className="ml-auto px-2">
+              <Link className="link link-primary pr-2" to={"../../" + routesPath.STEP_FOUR}>
                 Skip
               </Link>
-              <Submit className="rounded-full text-base-200 text-md w-1/5 ml-auto" title="Next" />
+              <Submit className="rounded-full text-base-200 text-md" title="Next" />
             </div>
           </Form>
         </div>

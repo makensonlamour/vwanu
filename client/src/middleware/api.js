@@ -19,7 +19,6 @@ const api = (store) => (next) => async (action) => {
     });
     if (onSuccess) store.dispatch({ type: onSuccess, payload: response.data });
   } catch (error) {
-    console.log({ error });
     store.dispatch({
       type: actions.apiCallFailed.type,
       payload: error?.response?.data?.message || error?.response?.data || "Unspecified error occurred"

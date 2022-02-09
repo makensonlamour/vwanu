@@ -22,7 +22,7 @@ const SidebarLeft = () => {
                 {item.menuItems.map((it, idx) => {
                   return (
                     <li key={idx}>
-                      <NavLink to={it.path} style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+                      <NavLink key={idx} to={it.path} style={({ isActive }) => (isActive ? activeStyle : undefined)}>
                         {it.icon}
                         {it.title}
                       </NavLink>
