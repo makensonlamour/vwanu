@@ -1,4 +1,4 @@
-const logger = (store) => (next) => (action) => {
+const logger = () => (next) => (action) => {
   //console.log({ store, next, action })
   next(action);
 };

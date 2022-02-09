@@ -6,5 +6,5 @@ import alerts from "../middleware/alerts";
 
 export const store = configureStore({
   reducer,
-  middleware: [thunkMiddleware, api, alerts],
+  middleware: [thunkMiddleware, api, alerts]
 });

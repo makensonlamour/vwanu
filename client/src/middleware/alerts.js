@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { BsFillExclamationTriangleFill } from "react-icons/bs";
 
 import * as actions from "../store/api";
 import { setAlert, removeAlert } from "../store/alerts";
@@ -12,15 +13,12 @@ const alert = (store) => (next) => async (action) => {
     setAlert({
       msg: action.payload,
       id,
-      type: "warning",
-      icon: "fa fa-exclamation-triangle",
+      type: "error",
+      icon: BsFillExclamationTriangleFill
     })
   );
   // Setting a sec for each 10 words
-  setTimeout(
-    () => store.dispatch(removeAlert(id)),
-    action.payload.length * 100
-  );
+  setTimeout(() => store.dispatch(removeAlert(id)), action.payload.length * 200);
 };
 
 export default alert;
