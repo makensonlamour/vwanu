@@ -8,7 +8,7 @@ let Common = {
 
   catchAsync: (fn: Function) =>
     function (req: Request, res: Response, next: NextFunction) {
-      fn(req, res, next).catch((err:any) => next(err))
+      fn(req, res, next).catch((err: any) => next(err))
     },
 
   sendResponse: (
@@ -36,16 +36,15 @@ let Common = {
   sendErrorResponse: (
     response: Response,
     statusCode: number,
-    errors: any|Function,
-    message: string
-  ) => {
-    const errorFormat = errors?.array
-      ? errors.array()
-      : Common._formatError(errors)
+    errors: string | any[]
+  ): void => {
+    // const errorFormat = errors?.array
+    //   ? errors.array()
+    //   : Common._formatError(errors)
+
     response.status(statusCode).json({
-      status: 'failure',
-      errors: errorFormat,
-      message: message,
+      status: statusCode,
+      errors,
     })
   },
 }
