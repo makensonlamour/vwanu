@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../../routesPath";
 import Step from "./Step";
+import { deleteStep } from "../../../helpers";
 
 const StepFour = () => {
+  const handleStep = () => {
+    deleteStep();
+  };
+
+  useEffect(() => {
+    handleStep();
+  }, []);
   return (
     <>
       <div>

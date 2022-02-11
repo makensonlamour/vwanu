@@ -6,6 +6,8 @@ import Error from "./Error";
 
 function UploadAvatar({ name, className, id, icon, format, ...otherProps }) {
   const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
+  //const [previewFile, setPreviewFile] = useState("");
+  let previewFile = "";
 
   return (
     <>
@@ -21,9 +23,9 @@ function UploadAvatar({ name, className, id, icon, format, ...otherProps }) {
           {...otherProps}
         />
         <label htmlFor={id}>
-          {values?.name ? (
+          {previewFile ? (
             <div className="overflow-hidden rounded-full shadow-sm m-auto h-48 w-48">
-              <img src={values[name]} className="object-fill" alt="profile_photo" />{" "}
+              <img src={previewFile} className="object-fill" alt="profile_photo" />{" "}
             </div>
           ) : (
             icon
