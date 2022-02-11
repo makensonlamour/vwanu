@@ -25,13 +25,12 @@ describe('Profile DataProvider', () => {
 
       const arg = {
         profile: 'test',
-        userId: 1,
       }
       const response = await DataProvider.createProfile(1, { profile: 'test' })
 
-      expect(response).toMatchObject({ ...arg, id: 1 })
+      expect(response).toMatchObject({ UserId: 1, id: 1 })
       expect(db.Profile.create).toHaveBeenCalledTimes(1)
-      expect(db.Profile.create).toHaveBeenCalledWith(arg)
+      expect(db.Profile.create).toHaveBeenCalledWith({ ...arg, UserId: 1 })
     })
   })
 

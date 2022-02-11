@@ -2,7 +2,7 @@ import db from '../../models'
 export default {
   createProfile: async (userId: number | String, profileData: any) => {
     return new Promise(function (resolve, reject) {
-      db.Profile.create({ ...profileData, userId: userId })
+      db.Profile.create({ ...profileData, UserId: userId })
         .then((newProfile: any) => {
           resolve(newProfile)
         })

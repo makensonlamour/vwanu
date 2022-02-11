@@ -54,6 +54,30 @@ const DataProvider = {
         })
     })
   },
+  findUserByEmail: async (email: string) => {
+    return new Promise(function (resolve, reject) {
+      db.User.find({ where: { email: email } })
+        .then((user) => {
+          resolve(user)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  resetPassword: async (userId: number | string, password: string) => {
+    return new Promise(function (resolve, reject) {
+      db.User.setPassword(password).then((hash) => {
+        db.User.update({ password: password }, { where: { id: userId } })
+          .then((user) => {
+            resolve(user)
+          })
+          .catch((err) => {
+            reject(err)
+          })
+      })
+    })
+  },
 }
 
 export default DataProvider
