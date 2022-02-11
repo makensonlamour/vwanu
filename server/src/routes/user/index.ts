@@ -6,6 +6,7 @@ import User from '../../controllers/user'
 import isSelf from '../../middleware/isSelf'
 import requireLogin from '../../middleware/requireLogin'
 import handleRequestError from '../../middleware/HandleRequestErrors'
+
 import {
   createUserSchema,
   getUserSchema,

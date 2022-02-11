@@ -73,16 +73,19 @@ export default {
     async (req: Request<VerifyUserInput>, res: Response) => {
       const id = req.params.id
       const activationKey = req.params.activationKey
+
       try {
         const user: UserInterface = await userService.getUser(id)
         if (!user)
           throw new AppError(ReasonPhrases.NOT_FOUND, StatusCodes.NOT_FOUND)
+        console.log('Is user verified ', user.verified)
         if (user.verified)
           throw new AppError('User already verified', StatusCodes.CONFLICT)
         if (user.activationKey !== activationKey)
           throw new AppError('Invalid activation key', StatusCodes.BAD_REQUEST)
-        await userService.updateUser(user.id, { verified: true })
-        return sendResponse(res, StatusCodes.OK, user, 'user verified')
+        await userService.updateUser(user, { verified: true })
+        console.log('User updated, is verified now', user.verified)
+        return sendResponse(res, StatusCodes.OK, { user }, 'user verified')
       } catch (error) {
         throw new AppError('verified user error', StatusCodes.BAD_REQUEST)
       }
@@ -109,7 +112,7 @@ export default {
           )
         }
 
-        await userService.updateUser(user.id, { resetPassword: nanoid() })
+        await userService.updateUser(user, { resetPasswordKey: nanoid() })
         await sendEmail({
           to: user.email,
           from: config.get('sendEmailFrom'),

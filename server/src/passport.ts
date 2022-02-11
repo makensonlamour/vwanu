@@ -24,9 +24,6 @@ passport.use(
             return done(null, false, { message: invalid })
           }
 
-          console.log('this is what we are dealing with')
-          console.log({ user })
-          //const isMatch = await bcrypt.compare(password.toString(), user.hash)
           const isMatch = await argon2.verify(
             user.password,
             password.toString()
