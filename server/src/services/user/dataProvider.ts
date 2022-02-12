@@ -58,7 +58,7 @@ const DataProvider = {
   },
   findUserByEmail: async (email: string) => {
     return new Promise(function (resolve, reject) {
-      db.User.find({ where: { email: email } })
+      db.User.findOne({ where: { email: email } })
         .then((user) => {
           resolve(user)
         })

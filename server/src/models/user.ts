@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import { Model } from 'sequelize'
 // Custom imports
 
-import argon2 from 'argon2'
+import argon2 from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { UserInterface } from '../schema/user'
 import createToken from '../lib/utils/createToken'
@@ -18,7 +18,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     password: string | undefined
 
     static async setPassword(password: string): Promise<string> {
-      const passwordHash = await argon2.hash(password)
+      const passwordHash = await argon2.hash(password, 12)
       return passwordHash
     }
 

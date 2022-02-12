@@ -1,0 +1,17 @@
+name: vwanu continous intergration
+
+on:
+  pull_request:
+    branches: [master, developer]
+jobs:
+  continuos-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: copy the code
+        uses: actions/checkout@v1
+      - name: Get dependencies
+        run: |
+          npm ci
+
+      - name: Testing with jest
+        run: npm run test

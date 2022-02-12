@@ -1,7 +1,7 @@
 import passport from 'passport'
 import passportJWT from 'passport-jwt'
 import Local from 'passport-local'
-import argon2 from 'argon2'
+import argon2 from 'bcryptjs'
 import bcrypt from 'bcryptjs'
 import createToken from './lib/utils/createToken'
 const LocalStrategy = Local.Strategy
@@ -24,9 +24,9 @@ passport.use(
             return done(null, false, { message: invalid })
           }
 
-          const isMatch = await argon2.verify(
-            user.password,
-            password.toString()
+          const isMatch = await argon2.compare(
+            password.toString(),
+            user.password
           )
           if (!isMatch) {
             return done(null, false, { message: invalid })

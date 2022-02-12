@@ -57,17 +57,16 @@ export default {
     }
   ),
   getOne: catchAsync(async (req: Request<GetUserInput>, res: Response) => {
-    const user = await userService
-      .getUser(req.params.id)
-      .then((user) => sendResponse(res, StatusCodes.OK, user, ReasonPhrases.OK))
-      .catch((error) => {
-        throw new AppError(
-          error?.message || ReasonPhrases.NOT_FOUND,
-          StatusCodes.NOT_FOUND
-        )
-      })
-
-    return sendResponse(res, StatusCodes.OK, user, ReasonPhrases.OK)
+    try {
+      const user = await userService.getUser(req.params.id)
+      sendResponse(res, StatusCodes.OK, user, ReasonPhrases.OK)
+    } catch (error) {
+      console.error(error)
+      throw new AppError(
+        error?.message || ReasonPhrases.NOT_FOUND,
+        StatusCodes.NOT_FOUND
+      )
+    }
   }),
   verifyOne: catchAsync(
     async (req: Request<VerifyUserInput>, res: Response) => {
