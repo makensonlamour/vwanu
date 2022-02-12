@@ -17,7 +17,6 @@
   "license": "MIT",
   "dependencies": {
     "@types/morgan": "^1.9.3",
-    "argon2": "^0.28.4",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.7",
     "cors": "^2.8.5",

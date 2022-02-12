@@ -14,12 +14,11 @@ const badUser = { password: badPassword, email: email }
 const goodUser = { password: goodPassword, email: email }
 
 // Testing the user routes
-
+jest.setTimeout(9000)
 describe('/api/user', () => {
   let expressServer: any = null
   beforeEach(async () => {
     expressServer = await app(db)
-    jest.setTimeout(90*1000)
   })
   describe('Given a correct username and password', () => {
     it('should return a user and a token', async () => {
@@ -33,6 +32,30 @@ describe('/api/user', () => {
       expect(response.body.data.token).toBeDefined()
       expect(typeof response.body.data.token).toBe('string')
       expect(response.statusCode).toBe(201)
+      expect(response.header['content-type']).toEqual(
+        expect.stringContaining('application/json')
+      )
+    })
+
+    it('should be able to verify', async () => {
+      const response = await request(expressServer)
+        .post('/api/user')
+        .send({ ...goodUser, email: 'realuser@example.com' })
+
+      const user = response.body.data.user
+      const token = response.body.data.token
+
+      expect(user.verified).toBeDefined()
+      expect(user.verified).toBe(false)
+
+      const verifyResponse = await request(expressServer).post(
+        `/api/user/verify/${user.id}/${user.activationKey}`
+      )
+      console.log('this is the verified response')
+      console.log(verifyResponse.body)
+      expect(verifyResponse.statusCode).toBe(200)
+      expect(verifyResponse.body.data.user).toBeDefined()
+      expect(verifyResponse.body.data.user.verified).toBe(true)
       expect(response.header['content-type']).toEqual(
         expect.stringContaining('application/json')
       )

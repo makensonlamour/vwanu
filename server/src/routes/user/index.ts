@@ -6,6 +6,7 @@ import User from '../../controllers/user'
 import isSelf from '../../middleware/isSelf'
 import requireLogin from '../../middleware/requireLogin'
 import handleRequestError from '../../middleware/HandleRequestErrors'
+import validateResource from '../../middleware/validateResource'
 import {
   createUserSchema,
   getUserSchema,
@@ -13,7 +14,6 @@ import {
   verifyUserSchema,
   forgotPasswordSchema,
 } from '../../schema/user'
-import validateResource from '../../middleware/validateResource'
 
 const router = express.Router()
 
