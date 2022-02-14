@@ -9,6 +9,7 @@ import common from './lib/utils/common'
 import methodOverride from 'method-override'
 import authRoute from './routes/auth'
 import userRoute from './routes/user'
+import profileRoute from './routes/profile'
 import RequestBody from './middleware/RequestBody'
 dotenv.config()
 const { sendErrorResponse } = common
@@ -30,17 +31,18 @@ export default async function (database: any) {
   // Serving the routes
   app.use('/api/auth', authRoute)
   app.use('/api/user', userRoute)
+  app.use('/api/profile', profileRoute)
 
   /* Handling all errors */
   // eslint-disable-next-line no-unused-vars
   app.use(function (
-    err: any,
+    err: Error | any,
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ) {
-    const { status = 500, message = 'Something went wrong ' } = err
-    res.status(status).json({ message })
+    const { status = 500 } = err
+    return sendErrorResponse(res, status, [err])
   })
 
   return app

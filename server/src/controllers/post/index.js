@@ -11,8 +11,9 @@ const { catchAsync, sendResponse } = common
 
 export const createOne = catchAsync(async (req, res) => {
   try {
-    const post = await postService.createPost()
-    return sendResponse(res, StatusCodes.CREATED, post, {})
+    //const post = await postService.createPost()
+    const post={}
+    return sendResponse(res, StatusCodes.CREATED, post, )
   } catch (error) {}
 })
 export const editOne = catchAsync(async (req, res) => {})
