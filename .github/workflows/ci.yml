@@ -23,29 +23,29 @@ jobs:
         with:
           node-version: '14.x'
       - run: npm ci
-      - run: npm run lint:check
+      - run: npm run lint
       - run: npm test -- --coverage
         env:
           CI: true
-      - name: Upload Test Coverage
-        uses: actions/upload-artifact@v1
-        with:
-          name: code-coverage
-          path: coverage
-      - name: Build Project
-        if: github.event_name == 'push'
-        run: npm run build
-      - name: Upload Build Folder
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v1
-        with:
-          name: build
-          path: build
-      - name: ZIP Assets
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          zip -r build.zip ./build
-          zip -r coverage.zip ./coverage
+      # - name: Upload Test Coverage
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: code-coverage
+      #     path: coverage
+      # - name: Build Project
+      #   if: github.event_name == 'push'
+      #   run: npm run build
+      # - name: Upload Build Folder
+      #   if: github.event_name == 'push'
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: build
+      #     path: build
+      # - name: ZIP Assets
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   run: |
+      #     zip -r build.zip ./build
+      #     zip -r coverage.zip ./coverage
       # - name: Create a Release
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       #   run: npx semantic-release
