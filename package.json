@@ -1,26 +1,17 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "debug": "^4.3.3",
-    "dotenv": "^11.0.0",
-    "express-winston": "^4.2.0",
-    "http-status-codes": "^2.2.0",
-    "mysql2": "^2.3.3",
-    "passport-jwt": "^4.0.0",
-    "pg": "^8.7.1",
-    "rotating-file-stream": "^3.0.2",
-    "sequelize": "^6.13.0",
-    "sqlite3": "^5.0.2",
-    "winston": "^3.4.0"
+  "scripts": {
+    "test:client":"npm run test --prefix client",
+    "test:server":"npm run test --prefix server",
+    "test": "concurrently \"npm run test:server\" \"npm run test:client\"",
+    "lint:server": "npm run lint --prefix server",
+    "lint:client": "npm run lint --prefix client",
+    "lint:check:": "lint:check:client && lint:check:server",
+    "lint": "concurrently \"npm run lint:server\" \"npm run lint:client\"",
+    "client-install": "cd client && npm install",
+    "server-install": "cd server && npm install",
+    "install-all-deps": "concurrently \"npm run server-install\" \"npm run client-install\""
   },
   "devDependencies": {
-    "@types/cors": "^2.8.12",
-    "@types/debug": "^4.1.7",
-    "@types/express": "^4.17.13",
-    "jest": "^27.4.7",
-    "source-map-support": "^0.5.21",
-    "supertest": "^6.2.1",
-    "tslint": "^6.1.3",
-    "typescript": "^4.5.5"
+    "concurrently": "^7.0.0"
   }
 }
