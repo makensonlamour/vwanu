@@ -6,7 +6,8 @@
     "lint:server": "npm run lint --prefix server",
     "lint:client": "npm run lint --prefix client",
     "lint:check:": "lint:check:client && lint:check:server",
-    "lint": "concurrently \"npm run lint:server\" \"npm run lint:client\"",
+    
+    "lint": "concurrently \"npm run lint:server\" ",
     "client-install": "cd client && npm install",
     "server-install": "cd server && npm install",
     "install-all-deps": "concurrently \"npm run server-install\" \"npm run client-install\""

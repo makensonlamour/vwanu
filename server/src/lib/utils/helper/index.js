@@ -1,5 +1,5 @@
 // Dependencies.
-const fs = require('fs')
+
 const path = require('path')
 const jwt = require('jsonwebtoken')
 const rfs = require('rotating-file-stream')
@@ -7,12 +7,11 @@ const rfs = require('rotating-file-stream')
 
 const helper = {}
 
-helper.savePopulate = (model, requiredFields, res) => {
-  return model.save().then((details) => {
+helper.savePopulate = (model, requiredFields, res) => model.save().then((details) => {
     details.populate(requiredFields).execPopulate()
     return res.json(details)
   })
-}
+
 helper.accessLogStream = rfs.createStream('access.log', {
   interval: '1d',
   path: path.join(__dirname, 'log'),

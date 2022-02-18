@@ -1,7 +1,11 @@
-import isSelf from '.'
+/* eslint-disable no-undef */
+/* eslint-disable import/no-extraneous-dependencies */
 import { jest } from '@jest/globals'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import httpMocks from 'node-mocks-http'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
+import isSelf from '.'
+
 const next = jest.fn()
 
 const res = httpMocks.createResponse()

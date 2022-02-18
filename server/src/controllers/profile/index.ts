@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import AppError from '../../errors'
 
