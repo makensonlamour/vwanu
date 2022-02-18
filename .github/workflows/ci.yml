@@ -15,9 +15,9 @@ jobs:
           echo ${{ github.event_name}}
           echo ${{ github.ref }}
           echo ${{ github}}
-          echo ${context.payload.pull_request.head.ref}
+          echo ${github.event.pull_request.head.ref}
       - name: Branch name
-        run: echo running on branch ${GITHUB_REF##*/}    
+        run: echo running on branch ${GITHUB_REF##*/}
       - uses: actions/checkout@v2
       - name: Cache node_modules
         uses: actions/cache@v1
@@ -60,8 +60,6 @@ jobs:
       #   run: npx semantic-release
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.CUSTOM_TOKEN }}
-
-    
 
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.ref == 'refs/heads/development'
