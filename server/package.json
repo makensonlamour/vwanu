@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:watch": "jest --watch --detectOpenHandles",
-    "test": "jest",
+    "test:local": "jest",
+    "test": "jest --coverage",
     "dev": "nodemon",
     "devops": "tsnd --respawn --transpile-only --files --exit-child --watch src src/bin/index.ts",
     "lint": "node_modules/.bin/eslint src/**/*.ts"

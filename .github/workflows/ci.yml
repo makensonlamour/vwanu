@@ -21,7 +21,7 @@ jobs:
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-key: |
+          restore-keys: |
             ${{ runner.os }}-node-
       - name: Use NodeJS
         uses: actions/setup-node@v1
@@ -30,7 +30,7 @@ jobs:
       - run: npm i
       - run: npm run install-all-deps
       - run: npm run lint
-      - run: npm test -- --coverage
+      - run: npm test
         env:
           CI: true
       - name: After the coverage
@@ -41,11 +41,11 @@ jobs:
           ls -a ./client/
           ls -a ./client/src
           ls -a ~/.npm
-      # - name: Upload Test Coverage
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: code-coverage
-      #     path: coverage
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: server-code-coverage
+          path: ./server/coverage
       # - name: Build Project
       #   if: github.event_name == 'push'
       #   run: npm run build
