@@ -36,10 +36,11 @@ jobs:
       - name: After the coverage
         run: |
           ls -a
-          ls -a /server/
-          ls -a /server/src 
-          ls -a /client/
-          ls -a /client/src
+          ls -a ./server/
+          ls -a ./server/src 
+          ls -a ./client/
+          ls -a ./client/src
+          ls -a ~/.npm
       # - name: Upload Test Coverage
       #   uses: actions/upload-artifact@v1
       #   with:
