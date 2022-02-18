@@ -34,7 +34,12 @@ jobs:
         env:
           CI: true
       - name: After the coverage
-        run: ls -a
+        run: |
+          ls -a
+          ls -a /server/
+          ls -a /server/src 
+          ls -a /client/
+          ls -a /client/src
       # - name: Upload Test Coverage
       #   uses: actions/upload-artifact@v1
       #   with:
