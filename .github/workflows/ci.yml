@@ -55,7 +55,7 @@ jobs:
 
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.base_ref == 'development'
-        run: echo deployed to staging test
+        run: eccho deployed to staging test
       - name: Deploy to Production
         if: github.event_name == 'pull_request' && github.base_ref == 'master'
         run: eccho deployed to production test
