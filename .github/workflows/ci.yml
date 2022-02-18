@@ -15,7 +15,7 @@ jobs:
           echo ${{ github.event_name}}
           echo ${{ github.ref }}
           echo ${{ github}}
-          echo ${github.event.pull_request.head.ref}
+          echo ${github.event.pull_request.head}
       - name: Branch name
         run: echo running on branch ${GITHUB_REF##*/}
       - uses: actions/checkout@v2
