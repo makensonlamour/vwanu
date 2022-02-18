@@ -1,7 +1,6 @@
 
 export default {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Users', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -32,9 +31,6 @@ export default {
         type: Sequelize.BOOLEAN,
         allowNull: true,
       },
-    })
-  },
-  down: (queryInterface) => {
-    return queryInterface.dropTable('Users')
-  },
+    }),
+  down: (queryInterface) => queryInterface.dropTable('Users'),
 }

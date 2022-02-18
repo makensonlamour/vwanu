@@ -3,7 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["airbnb", "prettier", "plugin:node/recommended"],
+  "extends": ["airbnb-base", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 13,
@@ -11,14 +11,14 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
     "func-names": "off",
-    "no-process-exit": "off",
-    "no-unused-vars": "warn",
-    "node/no-unsupported-features/es-syntax": [
+
+    "import/no-extraneous-dependencies": [
       "error",
-      { "ignores": ["modules"] }
-    ]
-    // "prettier/prettier": "error",
-    // "newline-after-import": "warn"
+      { "devDependencies": ["**/*.test.js", "**/*.spec.js"] }
+    ],
+    "no-undef": "error"
   }
 }

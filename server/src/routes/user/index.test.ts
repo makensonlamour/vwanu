@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest'
 
 // custom dependencies
@@ -10,8 +12,8 @@ import db from '../../models'
 const badPassword = '1'
 const goodPassword = 'password'
 const email = 'test@example.com'
-const badUser = { password: badPassword, email: email }
-const goodUser = { password: goodPassword, email: email }
+const badUser = { password: badPassword, email }
+const goodUser = { password: goodPassword, email }
 
 // Testing the user routes
 jest.setTimeout(9000)
@@ -42,8 +44,8 @@ describe('/api/user', () => {
         .post('/api/user')
         .send({ ...goodUser, email: 'realuser@example.com' })
 
-      const user = response.body.data.user
-      const token = response.body.data.token
+      const {user} = response.body.data
+      
 
       expect(user.verified).toBeDefined()
       expect(user.verified).toBe(false)
@@ -51,8 +53,8 @@ describe('/api/user', () => {
       const verifyResponse = await request(expressServer).post(
         `/api/user/verify/${user.id}/${user.activationKey}`
       )
-      console.log('this is the verified response')
-      console.log(verifyResponse.body)
+      // console.log('this is the verified response')
+      // console.log(verifyResponse.body)
       expect(verifyResponse.statusCode).toBe(200)
       expect(verifyResponse.body.data.user).toBeDefined()
       expect(verifyResponse.body.data.user.verified).toBe(true)

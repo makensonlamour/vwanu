@@ -1,6 +1,6 @@
 import config from 'config'
-import Log from './logger'
 import nodemailer, { SendMailOptions } from 'nodemailer'
+import Log from './logger'
 
 const smtp = config.get<{
   user: string

@@ -1,4 +1,8 @@
-'use strict'
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+/* eslint-disable import/no-import-module-exports */
+
+
 import { Model } from 'sequelize'
 
 export enum Moods {

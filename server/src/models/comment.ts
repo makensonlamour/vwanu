@@ -1,4 +1,6 @@
-'use strict'
+/* eslint-disable import/no-import-module-exports */
+
+
 import { Model } from 'sequelize'
 
 export interface CommentInterface {
@@ -8,6 +10,7 @@ export interface CommentInterface {
 module.exports = (sequelize: any, DataTypes: any) => {
   class Comment extends Model<CommentInterface> implements CommentInterface {
     id: number
+
     body: string
 
     static associate(models: any): void {

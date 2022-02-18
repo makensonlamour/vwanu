@@ -1,12 +1,14 @@
-require('dotenv').config()
 import jwt from 'jsonwebtoken'
 import { Response, Request, NextFunction } from 'express'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 
 import common from '../../lib/utils/common'
 
-const { catchAsync, sendResponse } = common
+require('dotenv').config()
+
+const { catchAsync } = common
 export default catchAsync(
+  // eslint-disable-next-line consistent-return
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.header('x-auth-token')
@@ -27,7 +29,7 @@ export default catchAsync(
         }
       )
     } catch (e) {
-      next({ ...e, status: StatusCodes.INTERNAL_SERVER_ERROR })
+      return next({ ...e, status: StatusCodes.INTERNAL_SERVER_ERROR })
     }
   }
 )
