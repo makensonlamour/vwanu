@@ -15,7 +15,8 @@ jobs:
           echo ${{ github.event_name}}
           echo ${{ github.ref }}
           echo ${{ github}}
-          
+      - name: Branch name
+        run: echo running on branch ${GITHUB_REF##*/}    
       - uses: actions/checkout@v2
       - name: Cache node_modules
         uses: actions/cache@v1
