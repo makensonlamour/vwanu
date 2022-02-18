@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: print some var
+        run: |
+          echo ${{ github.event_name}}
+          echo ${{ github.ref }}
+          echo ${{ github}}
+          
       - uses: actions/checkout@v2
       - name: Cache node_modules
         uses: actions/cache@v1
@@ -53,11 +59,8 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.CUSTOM_TOKEN }}
 
-      - name: print some var
-        run: |
-          echo ${{ github.event_name}}
-          echo ${{ github.ref }}
-          
+    
+
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.ref == 'refs/heads/development'
         run: echo deployed to staging test
