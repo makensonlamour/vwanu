@@ -1,22 +1,20 @@
-import _ from 'lodash'
+/* eslint-disable no-param-reassign */
+
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import Local from 'passport-local'
 
 const LocalStrategy = Local.Strategy
 
-export const defineUser = function (sequelize, userSchema) {
-  var UserSchema = sequelize.define('User', userSchema)
-  attachToUser(UserSchema)
-  return UserSchema
-}
+
 
 export const attachToUser = function (UserSchema) {
+
   UserSchema.setPassword = async function (password) {
     if (!password) throw new Error('Missing password')
     const salt = await bcrypt.genSalt(12)
     const hashPassword = await bcrypt.hash(password, salt)
-    return { hashPassword: hashPassword, salt: salt }
+    return { hashPassword, salt }
   }
 
   UserSchema.register = async function (user, password) {
@@ -39,15 +37,15 @@ export const attachToUser = function (UserSchema) {
         passwordField: 'password',
         passReqToCallback: true,
       },
-      async function (request, email, password, done) {
-        return UserSchema.findOne({
-          where: { email: email },
+      (async (request, email, password, done) => UserSchema.findOne({
+          where: { email },
         })
           .then(async (user) => {
             if (!user) {
               return done(null, false, {
                 message: 'Invalid email or password.',
               })
+             
             }
 
             const isMatch = await bcrypt.compare(password, user.hash)
@@ -56,14 +54,13 @@ export const attachToUser = function (UserSchema) {
                 message: 'Invalid email or password.',
               })
 
-            UserSchema.CreateToken(user, (err, token) => {
+            return UserSchema.CreateToken(user, (err, token) => {
               if (err) throw err
               request.token = token
               return done(null, token, { message: 'Logged In Successfully.' })
             })
           })
-          .catch((err) => done(err))
-      }
+          .catch((err) => done(err)))
     )
   }
 
@@ -76,3 +73,8 @@ export const attachToUser = function (UserSchema) {
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 }, cb)
   }
 }
+export const defineUser = function (sequelize, userSchema) {
+  const UserSchema = sequelize.define('User', userSchema);
+  attachToUser(UserSchema);
+  return UserSchema;
+};

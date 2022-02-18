@@ -1,4 +1,5 @@
-import { jest } from '@jest/globals'
+/* eslint-disable no-undef */
+
 import createToken from '.'
 
 describe('Create token function ', () => {

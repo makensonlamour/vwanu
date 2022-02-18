@@ -1,4 +1,6 @@
-'use strict'
+/* eslint-disable import/no-import-module-exports */
+
+
 import { Model } from 'sequelize'
 
 export interface ProfileInterface {
@@ -13,11 +15,17 @@ export interface ProfileInterface {
 module.exports = (sequelize: any, DataTypes: any) => {
   class Profile extends Model<ProfileInterface> implements ProfileInterface {
     id?: number | undefined
+
     profilePicture: string
+
     coverPicture: string
+
     followers?: number
+
     followings: number | undefined
+
     desc: string
+
     city: string
 
     static associate(models: any): void {

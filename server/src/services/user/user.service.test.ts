@@ -1,3 +1,5 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-undef */
 import { UserInterface } from '../../schema/user'
 import userService from './dataProvider'
 
@@ -26,7 +28,7 @@ describe('UserService', () => {
     expect(newUser.id).toBeDefined()
     expect(typeof newUser.id).toBe('number')
     expect(typeof newUser.activationKey).toBe('string')
-    expect(newUser.password == '12345678').toBe(false)
+    expect(newUser.password === '12345678').toBe(false)
   })
 
   //   it('should not create a new user with the same email', async () => {
@@ -42,11 +44,11 @@ describe('UserService', () => {
       resetPasswordKey: 'realuserEmail25@hotmail.com',
     })
     await updateUser?.reload()
-    console.log('messing with me ')
-    console.log(updateUser)
-    console.log(newUser)
+    // console.log('messing with me ')
+    // console.log(updateUser)
+    // console.log(newUser)
 
-    expect(updateUser?.resetPasswordKey == 'realuserEmail25@hotmail.com').toBe(
+    expect(updateUser?.resetPasswordKey === 'realuserEmail25@hotmail.com').toBe(
       true
     )
   })
