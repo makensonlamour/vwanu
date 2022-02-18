@@ -14,7 +14,6 @@ jobs:
         run: |
           echo ${{ github.event_name}}
           echo ${{ github.ref }}
-          echo ${{ github}}
           echo ${{github.base_ref}}
       - name: Branch name
         run: echo running on branch ${GITHUB_REF##*/}
@@ -62,10 +61,10 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.CUSTOM_TOKEN }}
 
       - name: Deploy to Staging
-        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/development'
+        if: github.event_name == 'pull_request' && github.base_ref == 'development'
         run: echo deployed to staging test
       - name: Deploy to Production
-        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'pull_request' && github.base_ref == 'master'
         run: echo deployed to production test
       # - name: Upload Coverage Reports
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
