@@ -28,7 +28,7 @@ describe('UserService', () => {
     expect(newUser.id).toBeDefined()
     expect(typeof newUser.id).toBe('number')
     expect(typeof newUser.activationKey).toBe('string')
-    expect(newUser.password == '12345678').toBe(false)
+    expect(newUser.password === '12345678').toBe(false)
   })
 
   //   it('should not create a new user with the same email', async () => {
