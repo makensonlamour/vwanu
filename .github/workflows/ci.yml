@@ -53,12 +53,17 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.CUSTOM_TOKEN }}
 
+      - name: print some var
+        run: |
+          echo ${{ github.event_name}}
+          echo ${{ github.ref }}
+          
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.ref == 'refs/heads/development'
         run: echo deployed to staging test
       - name: Deploy to Production
         if: github.event_name == 'pull_request' && github.ref == 'refs/heads/master'
-        run: echo deployed to production
+        run: echo deployed to production test
       # - name: Upload Coverage Reports
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       #   run: npx codecov
