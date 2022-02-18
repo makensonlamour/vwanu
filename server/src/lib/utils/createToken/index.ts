@@ -4,7 +4,7 @@ require('dotenv').config()
 
 const { JWT_SECRET } = process.env
 
-export default function (user: any, cb: jwt.SignCallback) {
+export default function (user: any, cb: SignCallback) {
   const payload = {
     user: {
       id: user.id,

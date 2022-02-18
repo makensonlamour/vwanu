@@ -1,4 +1,6 @@
-'use strict'
+/* eslint-disable import/no-import-module-exports */
+
+
 import { Model } from 'sequelize'
 
 export interface PostInterface {
@@ -12,10 +14,15 @@ export interface PostInterface {
 module.exports = (sequelize: any, DataTypes: any) => {
   class Post extends Model<PostInterface> implements PostInterface {
     id: number | undefined
+
     media: string
+
     mediaType: string
+
     body?: string
+
     hashTag: string | undefined
+
     private: boolean | undefined
 
     static associate(models: any): void {

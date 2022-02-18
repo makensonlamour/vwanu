@@ -1,3 +1,5 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-undef */
 import { UserInterface } from '../../schema/user'
 import userService from './dataProvider'
 
@@ -42,11 +44,11 @@ describe('UserService', () => {
       resetPasswordKey: 'realuserEmail25@hotmail.com',
     })
     await updateUser?.reload()
-    console.log('messing with me ')
-    console.log(updateUser)
-    console.log(newUser)
+    // console.log('messing with me ')
+    // console.log(updateUser)
+    // console.log(newUser)
 
-    expect(updateUser?.resetPasswordKey == 'realuserEmail25@hotmail.com').toBe(
+    expect(updateUser?.resetPasswordKey === 'realuserEmail25@hotmail.com').toBe(
       true
     )
   })
