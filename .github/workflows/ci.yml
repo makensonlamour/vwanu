@@ -10,12 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Before importing the files
-        run: ls -a
-
       - uses: actions/checkout@v2
-      - name: After importing the files
-        run: ls -a
       - name: Cache node_modules
         uses: actions/cache@v1
         with:
@@ -33,14 +28,6 @@ jobs:
       - run: npm test
         env:
           CI: true
-      - name: After the coverage
-        run: |
-          ls -a
-          ls -a ./server/
-          ls -a ./server/src 
-          ls -a ./client/
-          ls -a ./client/src
-          ls -a ~/.npm
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v1
         with:
@@ -64,28 +51,28 @@ jobs:
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       #   run: npx semantic-release
       #   env:
-      #     GITHUB_TOKEN: ${{ secrets.CUSTOM_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.base_ref == 'development'
         run: echo deployed to staging test
       - name: Deploy to Production
         if: github.event_name == 'pull_request' && github.base_ref == 'master'
-        run: echo deployed to production test
+        run: eccho deployed to production test
       # - name: Upload Coverage Reports
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       #   run: npx codecov
       #   env:
       #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      # - name: Open Issue
-      #   if: failure() && github.event_name == 'pull_request'
-      #   run: |
-      #     curl --request POST \
-      #     --url https://api.github.com/repos/${{ github.repository }}/issues \
-      #     --header 'authorization: Bearer ${{ secrets.CUSTOM_TOKEN }}' \
-      #     --header 'content-type: application/json' \
-      #     --data '{
-      #       "title": "Automated issue for commit: ${{ github.sha }}",
-      #       "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_.",
-      #       "assignees": ["${{ github.event.pull_request.user.login }}"]
-      #       }'
+      - name: Open Issue
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/issues \
+          --header 'authorization: Bearer ${{ secrets.TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "title": "Automated issue for commit: ${{ github.sha }}",
+            "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_.",
+            "assignees": ["${{ github.event.pull_request.user.login }}"]
+            }'
