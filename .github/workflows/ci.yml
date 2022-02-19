@@ -76,7 +76,6 @@ jobs:
 
           script: |
             cd vwanu
-            git checkout development
             git pull
             docker-compose down 
             docker-compose -f docker-compose.stage.yml build
