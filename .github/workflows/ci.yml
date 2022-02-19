@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Does it docker and docker Machine support
+        run: |
+          docker --version
+          docker-machine --version
+
       - uses: actions/checkout@v2
       - name: Cache node_modules
         uses: actions/cache@v1
@@ -34,7 +39,7 @@ jobs:
           name: server-code-coverage
           path: ./server/coverage
       # - name: Build Project
-      #   if: github.event_name == 'push'
+      #   if: github.event_name == 'pull_request'
       #   run: npm run build
       # - name: Upload Build Folder
       #   if: github.event_name == 'push'
@@ -43,22 +48,22 @@ jobs:
       #     name: build
       #     path: build
       # - name: ZIP Assets
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   if: github.event_name == 'pull_request' && github.base_ref == 'master'
       #   run: |
       #     zip -r build.zip ./build
       #     zip -r coverage.zip ./coverage
       # - name: Create a Release
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   if: github.event_name == 'pull_request' && github.base_ref == 'master'
       #   run: npx semantic-release
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.base_ref == 'development'
-        run: eccho deployed to staging test
+        run: echo deployed to staging test
       - name: Deploy to Production
         if: github.event_name == 'pull_request' && github.base_ref == 'master'
-        run: eccho deployed to production test
+        run: echo deployed to production test
       # - name: Upload Coverage Reports
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       #   run: npx codecov
