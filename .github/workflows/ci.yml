@@ -4,13 +4,16 @@ on:
     branches: [development, master]
   push:
     branches: [development, master]
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Running checkout
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v2
       - name: Cache node_modules
+        if: github.event_name == 'pull_request'
         uses: actions/cache@v1
         with:
           path: ~/.npm
@@ -18,15 +21,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Use NodeJS
+        if: github.event_name == 'pull_request'
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
-      - run: npm i
-      - run: npm run install-all-deps
-      - name: Check linting 
+          node-version: '16.6.1'
+      - name: Installing basic Dependencies
+        if: github.event_name == 'pull_request'
+        run: npm i
+      - name: Installing all the dependencies
+        if: github.event_name == 'pull_request'
+        run: npm run install-all-deps
+      - name: Check linting
         if: github.event_name == 'pull_request'
         run: npm run lint
-      - name: Check linting 
+      - name: Testing 🥶
         if: github.event_name == 'pull_request'
         run: npm test
         env:
@@ -58,8 +66,6 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-  
-
       - name: Deploy to Staging
         if: github.event_name == 'push' && github.base_ref == 'development'
         uses: appleboy/ssh-action@v0.1.4
@@ -74,8 +80,7 @@ jobs:
             git pull
             docker-compose down 
             docker-compose -f docker-compose.stage.yml build
-            docker-compose -f docker-compose.stage.yml up 
-
+            docker-compose -f docker-compose.stage.yml up
 
       - name: Deploy to Production
         if: github.event_name == 'push' && github.base_ref == 'master'
