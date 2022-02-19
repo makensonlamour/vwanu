@@ -4,6 +4,7 @@
   "description": "vwanu server",
   "main": "index.js",
   "scripts": {
+    "preinstall": "npm i nodemon -g",
     "test:watch": "jest --watch --detectOpenHandles",
     "test:local": "jest",
     "test": "jest --coverage",

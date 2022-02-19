@@ -5,6 +5,7 @@
     "PGHOST",
     "PGPASSWORD",
     "PGUSER",
+    "preinstall",
     "respawn",
     "tsnd",
     "Usecs",

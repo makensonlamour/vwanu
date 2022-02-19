@@ -11,16 +11,6 @@ jobs:
 
     steps:
   
-      - name: Trying to ssh into the server
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{secrets.STAGING_SSH_HOST}}
-          key: ${{secrets.STAGING_SSH_KEY}}
-          username: ${{secrets.STAGING_SSH_USERNAME}}
-
-          script: |
-            mkdir test 
-            cd test
 
       - uses: actions/checkout@v2
       - name: Cache node_modules
@@ -74,7 +64,18 @@ jobs:
 
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.base_ref == 'development'
-        run: echo deployed to staging test
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{secrets.STAGING_SSH_HOST}}
+          key: ${{secrets.STAGING_SSH_KEY}}
+          username: ${{secrets.STAGING_SSH_USERNAME}}
+
+          script: |
+            cd vwanu
+            git pull
+            docker-compose up --build --force-recreate
+
+
       - name: Deploy to Production
         if: github.event_name == 'pull_request' && github.base_ref == 'master'
         run: echo deployed to production test
