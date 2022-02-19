@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Installing docker-machine
-        run: |
-          sudo apt-get update
-          curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` -o ~/docker-machine
-          chmod +x ~/docker-machine
-          sudo cp ~/docker-machine /usr/local/bin/
+      - name: Trying to ssh into the server 
+        uses: appleboy/ssh-actions@v0.1.2
+        with: 
+          host: ${{secrets.STAGING.SSH_HOST}}
+          key: ${{secrets.STAGING.SSH_KEY}}
+          username: ${{secrets.STAGING.SSH_USERNAME}}
 
-      - name: Does it docker and docker Machine support
-        run: |
-          docker --version
-          docker-machine --version
+          script: | 
+            mkdir test 
+            cd test 
+            
 
       - uses: actions/checkout@v2
       - name: Cache node_modules
@@ -64,6 +64,13 @@ jobs:
       #   run: npx semantic-release
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+      # - name: Installing docker-machine
+      #   run: |
+      #     sudo apt-get update
+      #     curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` -o ~/docker-machine
+      #     chmod +x ~/docker-machine
+      #     sudo cp ~/docker-machine /usr/local/bin/
 
       - name: Deploy to Staging
         if: github.event_name == 'pull_request' && github.base_ref == 'development'
