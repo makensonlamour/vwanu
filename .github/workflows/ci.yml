@@ -10,23 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: echo 
-        run: | 
-          echo ${{secrets.STAGING.SSH_HOST}}
-          echo ${{secrets.STAGING.SSH_KEY}}
-          ${{secrets.STAGING.SSH_USERNAME}}
+      - name: echo
+        run: |
+          echo ${{secrets.STAGING_SSH_HOST}}
+          echo ${{secrets.STAGING_SSH_KEY}}
+          ${{secrets.STAGING_SSH_USERNAME}}
 
-      - name: Trying to ssh into the server 
+      - name: Trying to ssh into the server
         uses: appleboy/ssh-action@v0.1.4
-        with: 
-          host: ${{secrets.STAGING.SSH_HOST}}
-          key: ${{secrets.STAGING.SSH_KEY}}
-          username: ${{secrets.STAGING.SSH_USERNAME}}
+        with:
+          host: ${{secrets.STAGING_SSH_HOST}}
+          key: ${{secrets.STAGING_SSH_KEY}}
+          username: ${{secrets.STAGING_SSH_USERNAME}}
 
-          script: | 
+          script: |
             mkdir test 
-            cd test 
-            
+            cd test
 
       - uses: actions/checkout@v2
       - name: Cache node_modules
