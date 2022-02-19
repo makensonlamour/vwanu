@@ -4,20 +4,22 @@
   "description": "vwanu server",
   "main": "index.js",
   "scripts": {
-    "preinstall": "npm i nodemon -g",
-    "test:watch": "jest --watch --detectOpenHandles",
+    "dev": "nodemon",
     "test:local": "jest",
     "test": "jest --coverage",
-    "dev": "nodemon",
-    "devops": "tsnd --respawn --transpile-only --files --exit-child --watch src src/bin/index.ts",
-    "lint": "node_modules/.bin/eslint src/**/*.ts"
+    "build": "tsc",
+    "preinstall": "npm i nodemon -g",
+    "start": "node src/bin/index.js",
+    "lint": "node_modules/.bin/eslint src/**/*.ts",
+    "test:watch": "jest --watch --detectOpenHandles",
+    "devops": "tsnd --respawn --transpile-only --files --exit-child --watch src src/bin/index.ts"
   },
   "keywords": [
     "vwanu",
     "social",
     "network"
   ],
-  "author": "Webdev",
+  "author": "WebVital",
   "license": "MIT",
   "dependencies": {
     "@types/morgan": "^1.9.3",

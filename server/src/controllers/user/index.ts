@@ -1,4 +1,4 @@
-import config from 'config';
+// import config from 'config';
 import { nanoid } from 'nanoid';
 import { Response, Request } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
@@ -7,7 +7,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../../errors';
 import Log from '../../lib/utils/logger';
 import common from '../../lib/utils/common';
-import sendEmail from '../../lib/utils/mailer';
+// import sendEmail from '../../lib/utils/mailer';
 import userService from '../../services/user/dataProvider';
 import {
   UserInterface,
@@ -28,13 +28,13 @@ export default {
           req.body,
           req.body.password
         );
-
-        sendEmail({
-          to: user.email,
-          from: config.get<string>('sendEmailFrom'),
-          subject: 'Verify your email',
-          text: `Activation key: ${user.activationKey}. Id: ${user.id}`,
-        });
+        Log.info('sent');
+        // sendEmail({
+        //   to: user.email,
+        //   from: config.get<string>('sendEmailFrom') || 'test@example.com',
+        //   subject: 'Verify your email',
+        //   text: `Activation key: ${user.activationKey}. Id: ${user.id}`,
+        // });
 
         await userService.loginUser(
           user,
@@ -72,8 +72,8 @@ export default {
   }),
   verifyOne: catchAsync(
     async (req: Request<VerifyUserInput>, res: Response) => {
-      const {id} = req.params;
-      const {activationKey} = req.params;
+      const { id } = req.params;
+      const { activationKey } = req.params;
 
       try {
         const user: UserInterface = await userService.getUser(id);
@@ -114,12 +114,13 @@ export default {
         }
 
         await userService.updateUser(user, { resetPasswordKey: nanoid() });
-        await sendEmail({
-          to: user.email,
-          from: config.get('sendEmailFrom'),
-          subject: 'Reset your password',
-          text: `Password reset code ${user.resetPasswordKey}, id: ${user.id}`,
-        });
+        Log.info('sent');
+        // await sendEmail({
+        //   to: user.email,
+        //   from: config.get('sendEmailFrom') || 'test@example.com',
+        //   subject: 'Reset your password',
+        //   text: `Password reset code ${user.resetPasswordKey}, id: ${user.id}`,
+        // });
         Log.info(`Password reset email sent to user ${user.id}`);
         sendResponse(
           res,

@@ -2,16 +2,13 @@ name: Continuos integration
 on:
   pull_request:
     branches: [development, master]
-  # push:
-  #   branches: [development, master]
-
+  push:
+    branches: [development, master]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-  
-
       - uses: actions/checkout@v2
       - name: Cache node_modules
         uses: actions/cache@v1
@@ -26,15 +23,21 @@ jobs:
           node-version: '14.x'
       - run: npm i
       - run: npm run install-all-deps
-      - run: npm run lint
-      - run: npm test
+      - name: Check linting 
+        if: github.event_name == 'pull_request'
+        run: npm run lint
+      - name: Check linting 
+        if: github.event_name == 'pull_request'
+        run: npm test
         env:
           CI: true
       - name: Upload Test Coverage
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v1
         with:
           name: server-code-coverage
           path: ./server/coverage
+
       # - name: Build Project
       #   if: github.event_name == 'pull_request'
       #   run: npm run build
@@ -55,15 +58,10 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-      # - name: Installing docker-machine
-      #   run: |
-      #     sudo apt-get update
-      #     curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` -o ~/docker-machine
-      #     chmod +x ~/docker-machine
-      #     sudo cp ~/docker-machine /usr/local/bin/
+  
 
       - name: Deploy to Staging
-        if: github.event_name == 'pull_request' && github.base_ref == 'development'
+        if: github.event_name == 'push' && github.base_ref == 'development'
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{secrets.STAGING_SSH_HOST}}
@@ -72,15 +70,18 @@ jobs:
 
           script: |
             cd vwanu
+            git checkout development
             git pull
-            docker-compose up --build --force-recreate
+            docker-compose down 
+            docker-compose -f docker-compose.stage.yml build
+            docker-compose -f docker-compose.stage.yml up 
 
 
       - name: Deploy to Production
-        if: github.event_name == 'pull_request' && github.base_ref == 'master'
+        if: github.event_name == 'push' && github.base_ref == 'master'
         run: echo deployed to production test
       # - name: Upload Coverage Reports
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   if: github.event_name == 'push' && github.base_ref == 'master'
       #   run: npx codecov
       #   env:
       #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
