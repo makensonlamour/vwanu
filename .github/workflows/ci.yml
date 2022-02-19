@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: echo 
+        run: | 
+          echo ${{secrets.STAGING.SSH_HOST}}
+          echo ${{secrets.STAGING.SSH_KEY}}
+          ${{secrets.STAGING.SSH_USERNAME}}
+
       - name: Trying to ssh into the server 
         uses: appleboy/ssh-action@v0.1.2
         with: 
