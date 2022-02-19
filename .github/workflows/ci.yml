@@ -67,7 +67,7 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Deploy to Staging
-        if: github.event_name == 'push' && github.base_ref == 'development'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{secrets.STAGING_SSH_HOST}}
