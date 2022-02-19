@@ -17,7 +17,7 @@ jobs:
           ${{secrets.STAGING.SSH_USERNAME}}
 
       - name: Trying to ssh into the server 
-        uses: appleboy/ssh-action@v0.1.2
+        uses: appleboy/ssh-action@v0.1.4
         with: 
           host: ${{secrets.STAGING.SSH_HOST}}
           key: ${{secrets.STAGING.SSH_KEY}}
