@@ -14,6 +14,8 @@ jobs:
         run: |
           sudo apt-get update
           curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` -o ~/docker-machine
+          chmod +x ~/docker-machine
+          sudo cp ~/docker-machine /usr/local/bin/
 
       - name: Does it docker and docker Machine support
         run: |
