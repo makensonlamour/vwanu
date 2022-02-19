@@ -2,13 +2,12 @@ name: Continuos integration
 on:
   pull_request:
     branches: [development, master]
-  # push:
-  #   branches: [development, master]
-
+  push:
+    branches: [development, master]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Cache node_modules
@@ -16,7 +15,7 @@ jobs:
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-key: |
+          restore-keys: |
             ${{ runner.os }}-node-
       - name: Use NodeJS
         uses: actions/setup-node@v1
@@ -24,17 +23,23 @@ jobs:
           node-version: '14.x'
       - run: npm i
       - run: npm run install-all-deps
-      - run: npm run lint
-      - run: npm test -- --coverage
+      - name: Check linting 
+        if: github.event_name == 'pull_request'
+        run: npm run lint
+      - name: Check linting 
+        if: github.event_name == 'pull_request'
+        run: npm test
         env:
           CI: true
-      # - name: Upload Test Coverage
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: code-coverage
-      #     path: coverage
+      - name: Upload Test Coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v1
+        with:
+          name: server-code-coverage
+          path: ./server/coverage
+
       # - name: Build Project
-      #   if: github.event_name == 'push'
+      #   if: github.event_name == 'pull_request'
       #   run: npm run build
       # - name: Upload Build Folder
       #   if: github.event_name == 'push'
@@ -43,36 +48,52 @@ jobs:
       #     name: build
       #     path: build
       # - name: ZIP Assets
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   if: github.event_name == 'pull_request' && github.base_ref == 'master'
       #   run: |
       #     zip -r build.zip ./build
       #     zip -r coverage.zip ./coverage
       # - name: Create a Release
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   if: github.event_name == 'pull_request' && github.base_ref == 'master'
       #   run: npx semantic-release
       #   env:
-      #     GITHUB_TOKEN: ${{ secrets.CUSTOM_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+  
 
       - name: Deploy to Staging
-        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/development'
-        run: echo deployed to staging test
+        if: github.event_name == 'push' && github.base_ref == 'development'
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{secrets.STAGING_SSH_HOST}}
+          key: ${{secrets.STAGING_SSH_KEY}}
+          username: ${{secrets.STAGING_SSH_USERNAME}}
+
+          script: |
+            cd vwanu
+            git checkout development
+            git pull
+            docker-compose down 
+            docker-compose -f docker-compose.stage.yml build
+            docker-compose -f docker-compose.stage.yml up 
+
+
       - name: Deploy to Production
-        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/master'
-        run: echo deployed to production
+        if: github.event_name == 'push' && github.base_ref == 'master'
+        run: echo deployed to production test
       # - name: Upload Coverage Reports
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   if: github.event_name == 'push' && github.base_ref == 'master'
       #   run: npx codecov
       #   env:
       #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      # - name: Open Issue
-      #   if: failure() && github.event_name == 'pull_request'
-      #   run: |
-      #     curl --request POST \
-      #     --url https://api.github.com/repos/${{ github.repository }}/issues \
-      #     --header 'authorization: Bearer ${{ secrets.CUSTOM_TOKEN }}' \
-      #     --header 'content-type: application/json' \
-      #     --data '{
-      #       "title": "Automated issue for commit: ${{ github.sha }}",
-      #       "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_.",
-      #       "assignees": ["${{ github.event.pull_request.user.login }}"]
-      #       }'
+      - name: Open Issue
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/issues \
+          --header 'authorization: Bearer ${{ secrets.TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "title": "Automated issue for commit: ${{ github.sha }}",
+            "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_.",
+            "assignees": ["${{ github.event.pull_request.user.login }}"]
+            }'
