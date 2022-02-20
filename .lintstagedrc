@@ -1,5 +1,5 @@
 
 {
 "server/**/*.(js|ts)":["npm run lint:server"],
-"client/**/*.(js|ts)":["npm run lint:client]"]
+"client/**/*.(js|ts|jsx|tsx)":["npm run lint:client"]
 }
