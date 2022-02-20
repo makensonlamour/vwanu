@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
-const va = 'wadson';
+
 // Custom dependencies
 import app from '../../app';
 import db from '../../models';

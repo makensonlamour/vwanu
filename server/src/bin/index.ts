@@ -4,7 +4,7 @@ import { createServer } from 'http';
 import app from '../app';
 import database from '../models';
 import Logger from '../lib/utils/logger';
-const va = 'val';
+
 //  * Normalize a port into a number, string, or false.
 function normalizePort(val: string): number | string | null {
   const port = parseInt(val, 10);

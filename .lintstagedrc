@@ -1,4 +1,5 @@
-// .lintstagedrc
+
 {
-"*.(js|ts)":"npm run lint"
+"server/**/*.(js|ts)":["npm run lint:server"],
+"client/**/*.(js|ts)":["npm run lint:client]"]
 }
