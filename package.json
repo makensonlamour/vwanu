@@ -11,9 +11,13 @@
     "lint": "concurrently \"npm run lint:server\" ",
     "client-install": "cd client && npm install",
     "server-install": "cd server && npm install",
-    "install-all-deps": "concurrently \"npm run server-install\" \"npm run client-install\""
+    "install-all-deps": "concurrently \"npm run server-install\" \"npm run client-install\"",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "concurrently": "^7.0.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^12.3.4"
   }
 }

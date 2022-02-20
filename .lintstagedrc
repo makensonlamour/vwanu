@@ -1,0 +1,4 @@
+// .lintstagedrc
+{
+"*.(js|ts)":"npm run lint"
+}

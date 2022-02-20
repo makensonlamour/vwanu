@@ -1,10 +1,10 @@
 import { createServer } from 'http';
 
-// Custom dependencies
+// Custom dependencies i need
 import app from '../app';
 import database from '../models';
 import Logger from '../lib/utils/logger';
-
+const va = 'val';
 //  * Normalize a port into a number, string, or false.
 function normalizePort(val: string): number | string | null {
   const port = parseInt(val, 10);
@@ -13,8 +13,6 @@ function normalizePort(val: string): number | string | null {
   if (port >= 0) return port;
   return null;
 }
-
-
 
 function onListening(server) {
   return (): void => {
