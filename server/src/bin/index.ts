@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 
-// Custom dependencies
+// Custom dependencies i need
 import app from '../app';
 import database from '../models';
 import Logger from '../lib/utils/logger';
@@ -14,13 +14,11 @@ function normalizePort(val: string): number | string | null {
   return null;
 }
 
-
-
 function onListening(server) {
   return (): void => {
     const addr = server.address();
     const bind: string | null =
-      typeof addr === 'string' ? `pipe  ${addr}` : `port  ${addr?.port}`;
+      typeof addr === 'string' ? `pipe  ${addr}` : `port ${addr?.port}`;
     Logger.info(`Listening on ${bind} `);
   };
 }
