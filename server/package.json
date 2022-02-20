@@ -10,7 +10,7 @@
     "build": "tsc",
     "preinstall": "npm i nodemon -g",
     "start": "node src/bin/index.js",
-    "lint": "node_modules/.bin/eslint src/**/*.ts",
+    "lint": "node_modules/.bin/eslint src/**/*.ts ",
     "test:watch": "jest --watch --detectOpenHandles",
     "devops": "tsnd --respawn --transpile-only --files --exit-child --watch src src/bin/index.ts"
   },
