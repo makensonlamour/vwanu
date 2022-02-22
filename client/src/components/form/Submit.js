@@ -12,7 +12,13 @@ function SubmitBtn({ title, className, ...otherProps }) {
   let isLoading = auth?.loading;
 
   return (
-    <button type="submit" className={"btn btn-primary mt-4 normal-case " + className} {...otherProps} onClick={handleSubmit}>
+    <button
+      type="submit"
+      className={"btn btn-primary mt-4 normal-case " + className}
+      {...otherProps}
+      onClick={handleSubmit}
+      disabled={isLoading}
+    >
       {isLoading ? <Loader /> : title}
     </button>
   );

@@ -51,6 +51,7 @@ const LoginScreen = () => {
             >
               <h1 className="card-title text-orange-500">Sign in to Vwanu</h1>
               <Field
+                required
                 autoCapitalize="none"
                 placeholder="Email"
                 name="email"
@@ -59,6 +60,7 @@ const LoginScreen = () => {
                 className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
               />
               <Field
+                required
                 autoCapitalize="none"
                 autoCorrect="false"
                 placeholder="Password"
@@ -68,7 +70,7 @@ const LoginScreen = () => {
                 className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
               />
 
-              <Submit className="rounded-full text-base-200 text-md" title="Login" />
+              <Submit data-testid="loginBtn" className="rounded-full text-base-200 text-md" title="Login" />
             </Form>
           </div>
         </div>
