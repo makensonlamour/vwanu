@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LoginForm matches snapshot 1`] = `
+exports[`Test Dom Elements matches snapshot 1`] = `
 <div
   className=""
 >
@@ -56,6 +56,7 @@ exports[`LoginForm matches snapshot 1`] = `
            
           <a
             className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case"
+            data-testid="registerBtn"
             href="/register"
             onClick={[Function]}
           >
@@ -120,7 +121,6 @@ exports[`LoginForm matches snapshot 1`] = `
         <button
           className="btn btn-primary mt-4 normal-case rounded-full text-base-200 text-md"
           data-testid="loginBtn"
-          disabled={false}
           onClick={[Function]}
           type="submit"
         >
