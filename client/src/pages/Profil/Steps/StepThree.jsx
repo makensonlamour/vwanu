@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as Yup from "yup";
 import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import routesPath from "../../../routesPath";
 import Step from "./Step";
 import { Form, UploadAvatar, Submit } from "../../../components/form";
-import { saveStep } from "../../../helpers";
 
 const StepThree = () => {
   const navigate = useNavigate();
@@ -16,14 +15,6 @@ const StepThree = () => {
   const initialValues = {
     profilePhoto: ""
   };
-
-  const handleStep = () => {
-    saveStep(3);
-  };
-
-  useEffect(() => {
-    handleStep();
-  }, []);
 
   return (
     <>

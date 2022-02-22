@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 services:
   api:
     container_name: vwanu_api
@@ -6,7 +6,7 @@ services:
     build:
       context: ./server
     ports:
-      - "4000:4000"
+      - '4000:4000'
     volumes:
       - ./server:/app
     environment:
@@ -19,9 +19,9 @@ services:
       - pg_db
   pg_db:
     container_name: pg_db
-    image: "postgres:12"
+    image: 'postgres:12'
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       - POSTGRES_USER=vwanu
       - POSTGRES_PASSWORD=123456

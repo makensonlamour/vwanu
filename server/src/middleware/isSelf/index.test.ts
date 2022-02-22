@@ -1,9 +1,12 @@
-import isSelf from '.'
+/* eslint-disable no-undef */
+/* eslint-disable import/no-extraneous-dependencies */
 import { jest } from '@jest/globals'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import httpMocks from 'node-mocks-http'
+import { StatusCodes, ReasonPhrases } from 'http-status-codes'
+import isSelf from '.'
 
 const next = jest.fn()
-
 
 const res = httpMocks.createResponse()
 describe('IsSelf Middleware', () => {
@@ -31,6 +34,9 @@ describe('IsSelf Middleware', () => {
 
     isSelf(req, res, next)
     expect(typeof isSelf).toBe('function')
-    expect(next.mock.calls.length).toBe(0)
+    expect(next).toBeCalledWith({
+      status: StatusCodes.UNAUTHORIZED,
+      message: ReasonPhrases.UNAUTHORIZED,
+    })
   })
 })

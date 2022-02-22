@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from 'express'
-let Common = {
+
+const Common = {
   getTokenFromRequest: async (request: Request) => {
     const token = request.headers['x-auth-token']
     if (!token) return null
@@ -8,7 +9,7 @@ let Common = {
 
   catchAsync: (fn: Function) =>
     function (req: Request, res: Response, next: NextFunction) {
-      fn(req, res, next).catch((err:any) => next(err))
+      fn(req, res, next).catch((err: any) => next(err))
     },
 
   sendResponse: (
@@ -19,14 +20,15 @@ let Common = {
   ) => {
     response.status(statusCode).json({
       status: 'ok',
-      data: data,
-      message: message,
+      data,
+      message,
     })
   },
   _formatError: (errors: Function | any) => {
     if (!Array.isArray(errors))
       throw new Error('Errors must be an array or a function')
     return errors.map((error) => ({
+      // eslint-disable-next-line no-prototype-builtins
       msg: error.hasOwnProperty('message')
         ? error.message
         : 'Really confusing error',
@@ -36,16 +38,15 @@ let Common = {
   sendErrorResponse: (
     response: Response,
     statusCode: number,
-    errors: any|Function,
-    message: string
-  ) => {
-    const errorFormat = errors?.array
-      ? errors.array()
-      : Common._formatError(errors)
+    errors: string | any[]
+  ): void => {
+    // const errorFormat = errors?.array
+    //   ? errors.array()
+    //   : Common._formatError(errors)
+
     response.status(statusCode).json({
-      status: 'failure',
-      errors: errorFormat,
-      message: message,
+      status: statusCode,
+      errors,
     })
   },
 }

@@ -1,5 +1,5 @@
 import routesPath from "./routesPath";
-import Login from "./pages/Login/Login";
+import Login from "./pages/Login/index";
 import Register from "./pages/Register/index";
 import Home from "./pages/Home/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";

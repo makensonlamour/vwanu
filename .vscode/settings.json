@@ -1,3 +1,14 @@
 {
-  "cSpell.words": ["respawn", "tsnd", "vwanu"]
+  "cSpell.words": [
+    "builtins",
+    "PGDATABASE",
+    "PGHOST",
+    "PGPASSWORD",
+    "PGUSER",
+    "preinstall",
+    "respawn",
+    "tsnd",
+    "Usecs",
+    "vwanu"
+  ]
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 // Core components
@@ -6,7 +6,6 @@ import { Field, Form, Submit } from "../../../components/form";
 import Step from "./Step";
 //import StepThree from "./StepThree";
 import routesPath from "../../../routesPath";
-import { saveStep } from "../../../helpers";
 
 const StepTwo = () => {
   const navigate = useNavigate();
@@ -20,15 +19,6 @@ const StepTwo = () => {
     lastName: "",
     dateOfBirth: ""
   };
-
-  const handleStep = () => {
-    saveStep(2);
-  };
-
-  useEffect(() => {
-    handleStep();
-  }, []);
-
   return (
     <>
       <div>

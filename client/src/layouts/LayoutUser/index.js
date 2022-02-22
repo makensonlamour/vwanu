@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUser, setUser, logout } from "../../store/auth";
-import { isExpired, decoder } from "../../helpers/index";
+import { isExpired } from "../../helpers/index";
 
 //core components
 import Navbar from "../../components/Navbars/index";
@@ -13,7 +13,6 @@ import routesPath from "../../routesPath";
 const LayoutUser = () => {
   const dispatch = useDispatch();
   let currentUser = useSelector(getCurrentUser);
-  const [user, setUserObject] = useState("");
 
   const auth = currentUser;
 
@@ -25,15 +24,8 @@ const LayoutUser = () => {
     return dispatch(setUser(token));
   };
 
-  const getUser = () => {
-    const token = localStorage.getItem("token");
-    const data = decoder(token);
-    setUserObject(data);
-  };
-
   useEffect(() => {
     loadUser();
-    getUser();
   }, []);
 
   return (
@@ -44,7 +36,7 @@ const LayoutUser = () => {
           <SidebarLeft />
         </div>
         <div className="basis-3/5 drawer drawer-mobile h-auto mr-5 px-10">
-          {auth?.token ? user?.profile ? <Outlet /> : <Navigate to={routesPath.STEP_TWO} /> : <Navigate to={routesPath.LOGIN} />}
+          {auth?.token ? <Outlet /> : <Navigate to={routesPath.LOGIN} />}
         </div>
         <div className="basis-1/5 mr-5">
           {" "}
