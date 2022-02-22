@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import db from '../../models'
 import DataProvider from './dataProvider'
 
@@ -41,24 +42,21 @@ describe('Profile DataProvider', () => {
     })
 
     it('Should retrieve a new profile', async () => {
-      jest.spyOn(db.Profile, 'findOne').mockImplementation((): Promise<any> => {
-        return Promise.resolve(resultValue)
-      })
+      jest.spyOn(db.Profile, 'findOne').mockImplementation((): Promise<any> => Promise.resolve(resultValue))
       const response = await DataProvider.getProfile(1)
 
-      //Expectations
+      // Expectations
       expect(typeof response).toBe('object')
       expect(response).toMatchObject(resultValue)
       expect(db.Profile.findOne).toHaveBeenCalledTimes(1)
     })
     it('Should not retrieve a profile for an incorrect id', async () => {
-      jest.spyOn(db.Profile, 'findOne').mockImplementation((): Promise<any> => {
-        return Promise.reject({ statusCode: 400 })
-      })
+      // eslint-disable-next-line prefer-promise-reject-errors
+      jest.spyOn(db.Profile, 'findOne').mockImplementation((): Promise<any> => Promise.reject({ statusCode: 400 }))
       try {
-        const response = await DataProvider.getProfile(3)
+         await DataProvider.getProfile(3)
       } catch (error) {
-        //Expectations
+        // Expectations
         expect(typeof error).toBe('object')
         expect(db.Profile.findOne).toHaveBeenCalledTimes(1)
       }

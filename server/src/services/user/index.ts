@@ -1,5 +1,6 @@
 import Logger from '../../lib/utils/logger'
 import userDataProvider from './dataProvider'
+
 const UserService = {
   findById: async (userId: number | string) => {
     const user = await userDataProvider.getUser(userId)

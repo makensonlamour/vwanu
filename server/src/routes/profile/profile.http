@@ -13,13 +13,13 @@ content-type: application/json
 
 ###
 
-GET {{baseUrl}}/user/{{new_user.response.body.data.user.id}}
-x-auth-token: {{new_user.response.body.data.token}}
+# GET {{baseUrl}}/user/{{new_user.response.body.data.user.id}}
+# x-auth-token: {{new_user.response.body.data.token}}
 
-### Creating a profile for the user above
+# ### Creating a profile for the user above
 
-Post {{baseUrl}}/profile HTTP/1.1
+# Post {{baseUrl}}/profile HTTP/1.1
 
-{
-    "userId":"{{new_user.response.body.data.user.id}}"
-}
+# {
+#     "userId":"{{new_user.response.body.data.user.id}}"
+# }

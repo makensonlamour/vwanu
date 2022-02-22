@@ -1,4 +1,6 @@
-'use strict'
+/* eslint-disable import/no-import-module-exports */
+
+
 import { nanoid } from 'nanoid'
 import { Model } from 'sequelize'
 // Custom imports
@@ -11,10 +13,15 @@ import createToken from '../lib/utils/createToken'
 module.exports = (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
     id: number | undefined
+
     email!: string
+
     activationKey?: string | undefined
+
     resetPasswordKey?: string | undefined
+
     verified?: boolean | undefined
+
     password: string | undefined
 
     static async setPassword(password: string): Promise<string> {
@@ -34,6 +41,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static login(user: UserInterface, cb: jwt.SignCallback) {
       return createToken(user, cb)
     }
+
     static associate(models: any) {
       // define association here
       User.hasOne(models.Profile)
