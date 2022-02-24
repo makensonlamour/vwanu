@@ -9,8 +9,8 @@ import { Field, Form, Submit } from "../../components/form";
 import { Login } from "../../store/auth";
 
 const ValidationSchema = Yup.object().shape({
-  email: Yup.string().required().min(6).label("Email"),
-  password: Yup.string().required().min(8).label("password")
+  email: Yup.string().required().min(6).email().label("Email"),
+  password: Yup.string().required().min(8).label("Password")
 });
 
 const LoginScreen = () => {
@@ -35,7 +35,11 @@ const LoginScreen = () => {
             <div className="place-content-end my-8">
               <p className="text-right">
                 <span className="text-orange-500 text-lg font-semibold">Not a member ?</span>{" "}
-                <Link to={routesPath.REGISTER} className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case">
+                <Link
+                  data-testid="registerBtn"
+                  to={routesPath.REGISTER}
+                  className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case"
+                >
                   Register
                 </Link>
               </p>
@@ -51,14 +55,17 @@ const LoginScreen = () => {
             >
               <h1 className="card-title text-orange-500">Sign in to Vwanu</h1>
               <Field
+                required
                 autoCapitalize="none"
                 placeholder="Email"
                 name="email"
                 type="email"
                 autoComplete="new-email"
                 className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+                testId="email-error-message"
               />
               <Field
+                required
                 autoCapitalize="none"
                 autoCorrect="false"
                 placeholder="Password"
@@ -66,9 +73,10 @@ const LoginScreen = () => {
                 type="password"
                 autoComplete="new-email"
                 className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+                testId="password-error-message"
               />
 
-              <Submit className="rounded-full text-base-200 text-md" title="Login" />
+              <Submit data-testid="loginBtn" className="rounded-full text-base-200 text-md" title="Login" />
             </Form>
           </div>
         </div>
