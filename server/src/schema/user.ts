@@ -1,4 +1,5 @@
-import { z, object, string, TypeOf } from 'zod'
+import { z, object, string, TypeOf } from 'zod';
+
 
 export const createUserSchema = object({
   body: object({
@@ -9,7 +10,8 @@ export const createUserSchema = object({
       required_error: 'You must provide a valid password',
     }),
   }),
-})
+});
+
 
 export const UserSchema = z.object({
   id: z.number(),
@@ -18,20 +20,20 @@ export const UserSchema = z.object({
   activationKey: z.string(),
   resetPasswordKey: string(),
   verified: z.boolean(),
-})
+});
 
 export const verifyUserSchema = object({
   params: object({
     id: string(),
     activationKey: string(),
   }),
-})
+});
 
 export const getUserSchema = object({
   params: object({
     id: string(),
   }),
-})
+});
 
 export const forgotPasswordSchema = object({
   body: object({
@@ -39,7 +41,7 @@ export const forgotPasswordSchema = object({
       required_error: 'Email is required',
     }).email('Not a valid email'),
   }),
-})
+});
 
 export const resetPasswordSchema = object({
   params: object({
@@ -57,10 +59,10 @@ export const resetPasswordSchema = object({
     message: 'Passwords do not match',
     path: ['passwordConfirmation'],
   }),
-})
-export type UserInterface = z.infer<typeof UserSchema>
-export type GetUserInput = z.infer<typeof getUserSchema>['params']
-export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>
-export type CreateUserInput = TypeOf<typeof createUserSchema>['body']
-export type VerifyUserInput = TypeOf<typeof verifyUserSchema>['params']
-export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body']
+});
+export type UserInterface = z.infer<typeof UserSchema>;
+export type GetUserInput = z.infer<typeof getUserSchema>['params'];
+export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
+export type CreateUserInput = TypeOf<typeof createUserSchema>['body'];
+export type VerifyUserInput = TypeOf<typeof verifyUserSchema>['params'];
+export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];

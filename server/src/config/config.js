@@ -9,7 +9,7 @@ module.exports = {
     dialect: 'postgres',
   },
   test: {
-    url: 'sqlite:memory',
+    url: 'sqlite::memory',
   },
   production: {
     username: 'root',
