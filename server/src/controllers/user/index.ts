@@ -94,7 +94,11 @@ export default {
           throw new AppError('User already verified', StatusCodes.CONFLICT);
         if (user.activationKey !== activationKey)
           throw new AppError('Invalid activation key', StatusCodes.BAD_REQUEST);
-        await userService.updateUser(user, { verified: true });
+        await userService.updateUser(user, {
+          verified: true,
+          activationKey: null,
+        });
+
         // console.log('User updated, is verified now', user.verified);
 
         return sendResponse(

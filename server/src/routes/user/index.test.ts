@@ -5,13 +5,10 @@ import request from 'supertest';
 import app from '../../app';
 import db from '../../models';
 
-// Module  globals to
-
-// Default user
+// Module  globals
 const badPassword = '2';
 const goodPassword = 'password';
 const email = 'test@example.com';
-const badUser = { password: badPassword, email };
 const goodUser = { password: goodPassword, email };
 
 // Testing the user routes
@@ -37,38 +34,24 @@ describe('/api/user', () => {
       expect.stringContaining('application/json')
     );
   });
+  it.todo('should send an email to the user email address');
 
-  it('should create the user ,if the password is missing ', async () => {
-    const response = await request(expressServer)
-      .post('/api/user')
-      .send({ email });
-    expect(response.statusCode).toBe(400);
-    expect(response.body.data).toBeUndefined();
-    expect(response.body.errors).toBeDefined();
-  });
-  it('should not create user if password is not long enough', async () => {
-    const response = await request(expressServer)
-      .post('/api/user')
-      .send({ email, badPassword });
-    expect(response.statusCode).toBe(400);
-    expect(response.body.data).toBeUndefined();
-    expect(response.body.errors).toBeDefined();
-  });
+  it('Should not create user if request params are not correctly formatted ', async () => {
+    const badResetPasswordRequest = [
+      { password: goodPassword },
+      { email: goodPassword },
+      { email: 'notEmail', password: goodPassword },
+      { password: badPassword, email },
+    ];
+    badResetPasswordRequest.forEach(async (body) => {
+      const response = await request(expressServer)
+        .post('/api/user')
+        .send(body);
 
-  it('Should fail is email is missing ', async () => {
-    const response = await request(expressServer)
-      .post('/api/user')
-      .send({ password: 'somme-password' });
-    expect(response.statusCode).toBe(400);
-    expect(response.body.data).toBeUndefined();
-    expect(response.body.errors).toBeDefined();
-  });
-  it('should fail given wrongly formatted email and password', async () => {
-    const response = await request(expressServer)
-      .post('/api/user')
-      .send(badUser);
-    expect(response.statusCode).toBe(400);
-    expect(response.body.data).toBeUndefined();
+      expect(response.statusCode).toBe(400);
+      expect(response.body.data).toBeUndefined();
+      expect(response.body.errors).toBeDefined();
+    });
   });
 });
 
@@ -121,14 +104,20 @@ describe('/api/user after user creation. ', () => {
     const verifyResponse = await request(expressServer).post(
       `/api/user/verify/${newlyCreatedUser.id}/${activationKey}`
     );
+
     expect(verifyResponse.statusCode).toBe(200);
     expect(verifyResponse.body.data.user).toBeDefined();
     expect(verifyResponse.body.data.user.verified).toBe(true);
     expect(response.header['content-type']).toEqual(
       expect.stringContaining('application/json')
     );
+
+    const dbRecords = await db.User.findOne({
+      where: { id: newlyCreatedUser.id },
+    });
+    expect(dbRecords.activationKey).toBeNull();
   });
-  it.todo('should delete activation key once the user is verified');
+
   it('should not verify user when user is already verified', async () => {
     const verifyResponse = await request(expressServer).post(
       `/api/user/verify/${newlyCreatedUser.id}/${activationKey}`
@@ -141,10 +130,33 @@ describe('/api/user after user creation. ', () => {
     const resetpassword = await request(expressServer)
       .post('/api/user/forgotPassword')
       .send({ email: newlyCreatedUser.email });
-
     expect(resetpassword.statusCode).toBe(200);
     expect(resetpassword.body.data).toBeDefined();
     expect(resetpassword.body.errors).toBeUndefined();
+  });
+
+  it('should not reset password if missing any information', async () => {
+    const badResetPasswordRequest = [
+      { password: goodPassword },
+      { passwordConfirmation: goodPassword },
+      { password: goodPassword },
+      { password: goodPassword, passwordConfirmation: badPassword },
+      { password: badPassword, passwordConfirmation: badPassword },
+    ];
+    const { id } = newlyCreatedUser;
+    const dbRecords = await db.User.findOne({
+      where: { id },
+    });
+    const { resetPasswordKey } = dbRecords;
+    expect(resetPasswordKey).toBeDefined();
+    expect(resetPasswordKey.length > 0).toBe(true);
+    badResetPasswordRequest.forEach(async (body) => {
+      const resetPasswordResponse = await request(expressServer)
+        .post(`/api/user/resetPassword/${id}/${resetPasswordKey}`)
+        .send(body);
+
+      expect(resetPasswordResponse.statusCode).toBe(400);
+    });
   });
   it('should be able to reset a password after request', async () => {
     const { id } = newlyCreatedUser;

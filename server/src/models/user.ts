@@ -15,7 +15,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     email!: string;
 
-    activationKey?: string | undefined;
+    activationKey?: string | null;
 
     resetPasswordKey?: string | undefined;
 
@@ -68,7 +68,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
       activationKey: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: () => nanoid(),
       },
       resetPasswordKey: {
