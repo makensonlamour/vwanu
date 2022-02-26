@@ -1,0 +1,15 @@
+{
+  "dbSettings": {
+    "username": "PGUSER",
+    "password": "PGPASSWORD",
+    "database": "PGDATABASE",
+    "host": "PGHOST"
+  },
+  "smtp": {
+    "user": "SMTP_USER",
+    "pass": "SMTP_PASS",
+    "host": "SMTP_HOST",
+    "port": "SMTP_PORT",
+    "secure": "SMTP_SECURE"
+  }
+}

@@ -1,6 +1,4 @@
 /* eslint-disable import/no-import-module-exports */
-
-
 import { Model } from 'sequelize'
 
 export interface ProfileInterface {

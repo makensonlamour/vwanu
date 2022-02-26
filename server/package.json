@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "test:local": "jest --watch",
-    "test": "jest --coverage",
+    "test:local": "jest --watch --detectOpenHandles",
+    "test": "jest --coverage --passWithNoTests --detectOpenHandles",
     "build": "tsc",
     "preinstall": "npm i nodemon -g",
     "start": "node src/bin/index.js",

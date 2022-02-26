@@ -4,7 +4,7 @@ export const createUserSchema = object({
   body: object({
     email: string({
       required_error: 'You must provide a valid email address',
-    }).email('The email address you provided is not valid'),
+    }).email('The email address you provided is not a valid email'),
     password: string({
       required_error: 'You must provide a valid password',
     }).min(6, 'Password is too short - should be min 6 characters'),

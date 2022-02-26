@@ -20,6 +20,7 @@ describe('/api/user', () => {
     jest.setTimeout(9000);
   });
 
+  
   it('Given correct email and password it should return a user and a token', async () => {
     const response = await request(expressServer)
       .post('/api/user')
