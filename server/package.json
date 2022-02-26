@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon",
     "test:local": "jest --watch",
-    "test": "jest --coverage",
+    "test": "jest --coverage --passWithNoTests",
     "build": "tsc",
     "preinstall": "npm i nodemon -g",
     "start": "node src/bin/index.js",

@@ -1,0 +1,5 @@
+{
+  "dbSettings": {
+    "url": "sqlite::memory"
+  }
+}
