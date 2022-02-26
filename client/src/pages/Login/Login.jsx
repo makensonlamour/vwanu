@@ -77,6 +77,14 @@ const LoginScreen = () => {
               />
 
               <Submit data-testid="loginBtn" className="rounded-full text-base-200 text-md" title="Login" />
+              <div className="mt-4">
+                <span className="text-orange-500 text-lg">
+                  {` Don't remember your password? `}
+                  <Link className="text-blue-500" to={routesPath.FORGOT_PASSWORD}>
+                    Click here
+                  </Link>
+                </span>
+              </div>
             </Form>
           </div>
         </div>

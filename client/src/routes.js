@@ -1,6 +1,7 @@
 import routesPath from "./routesPath";
 import Login from "./pages/Login/Login";
-import Register from "./pages/Register/index";
+import Register from "./pages/Register/Register";
+import ForgotPassword from "./pages/ResetPassword/ForgotPassword";
 import Home from "./pages/Home/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
@@ -23,6 +24,12 @@ let routes = [
     path: routesPath.REGISTER,
     name: "Register",
     element: Register,
+    access: role.PUBLIC
+  },
+  {
+    path: routesPath.FORGOT_PASSWORD,
+    name: "Forgot Password",
+    element: ForgotPassword,
     access: role.PUBLIC
   },
   {

@@ -6,7 +6,7 @@ const environment = {
       LOGIN: "/auth",
       REGISTER: "/user",
       FORGOT_PASSWORD: "/forgotPassword",
-      RECOVER_PASSWORD: "/recoverPassword",
+      RESET_PASSWORD: "/resetPassword",
       AuthIN: "/index"
     },
     layouts: {

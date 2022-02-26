@@ -4,7 +4,7 @@ import { act } from "react-dom/test-utils";
 import { MemoryRouter as Router } from "react-router-dom";
 import renderer from "react-test-renderer";
 import { store } from "../../../store";
-import Login from "../Login";
+import Register from "../Register";
 import { Provider } from "react-redux";
 
 afterEach(cleanup);
@@ -13,13 +13,13 @@ const render = (component) => rtlRender(<Provider store={store}>{component}</Pro
 
 //Testing Login form
 //Test Dom Elements
-describe("Test Dom Elements", () => {
+describe("Register Test Dom Elements", () => {
   it("match snapshot", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
           <Router>
-            <Login />
+            <Register />
           </Router>
         </Provider>
       )
@@ -28,21 +28,21 @@ describe("Test Dom Elements", () => {
   });
 });
 
-it("should have a login form", () => {
+it("should have a Register form", () => {
   render(
     <Router>
-      <Login />
+      <Register />
     </Router>
   );
 
-  const loginForm = screen.getByRole("form");
-  expect(loginForm).toBeInTheDocument();
+  const registerForm = screen.getByRole("form");
+  expect(registerForm).toBeInTheDocument();
 });
 
-it("the login form should have an email input", () => {
+it("should have an email input", () => {
   render(
     <Router>
-      <Login />
+      <Register />
     </Router>
   );
 
@@ -50,10 +50,10 @@ it("the login form should have an email input", () => {
   expect(emailInput).toBeInTheDocument();
 });
 
-it("the login form should have a password input", () => {
+it("have a password input", () => {
   render(
     <Router>
-      <Login />
+      <Register />
     </Router>
   );
 
@@ -61,37 +61,48 @@ it("the login form should have a password input", () => {
   expect(passwordInput).toBeInTheDocument();
 });
 
-it("the login form should have a Login button", () => {
+it("have a checkbox input", () => {
   render(
     <Router>
-      <Login />
+      <Register />
     </Router>
   );
 
-  const submitButton = screen.getByRole("button", { name: "Login" });
+  const termCheckbox = screen.getAllByRole("checkbox")[0];
+  expect(termCheckbox).toBeInTheDocument();
+});
+
+it("should have a Register button", () => {
+  render(
+    <Router>
+      <Register />
+    </Router>
+  );
+
+  const submitButton = screen.getByRole("button", { name: "Register" });
   expect(submitButton).toBeInTheDocument();
 });
 
-it("the submit button should have the text Login", () => {
+it("the submit button should have the text Register", () => {
   render(
     <Router>
-      <Login />
+      <Register />
     </Router>
   );
 
-  const submitButton = screen.getByRole("button", { name: "Login" });
-  expect(submitButton).toHaveTextContent("Login");
+  const submitButton = screen.getByRole("button", { name: "Register" });
+  expect(submitButton).toHaveTextContent("Register");
 });
 
-it("the login page should have a register link", () => {
+it("should have a register link", () => {
   render(
     <Router>
-      <Login />
+      <Register />
     </Router>
   );
 
-  const registerLink = screen.getByTestId("registerBtn");
-  expect(registerLink).toHaveTextContent("Register");
+  const registerLink = screen.getByTestId("loginBtn");
+  expect(registerLink).toHaveTextContent("Login");
 });
 
 //Test require fields
@@ -99,7 +110,7 @@ describe("Test require fields", () => {
   it("the email input should be a required fields", () => {
     render(
       <Router>
-        <Login />
+        <Register />
       </Router>
     );
 
@@ -111,7 +122,7 @@ describe("Test require fields", () => {
   it("the password input should be a required fields", () => {
     render(
       <Router>
-        <Login />
+        <Register />
       </Router>
     );
 
@@ -123,53 +134,60 @@ describe("Test require fields", () => {
   it("on initial render, the submit button is enabled", () => {
     render(
       <Router>
-        <Login />
+        <Register />
       </Router>
     );
 
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const submitButton = screen.getByRole("button", { name: "Register" });
     expect(submitButton).not.toBeDisabled();
   });
 });
 
-//test login functionality
-describe("Test Login Functionality", () => {
-  it(" should show error message on password and email when the form is submitted with empty fields", async () => {
+//test register functionality
+describe("Test Register Functionality", () => {
+  it(" should show error message on password, email and Term of Use when the form is submitted with empty fields", async () => {
     act(() => {
       render(
         <Router>
-          <Login />
+          <Register />
         </Router>
       );
     });
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "" } });
     fireEvent.change(passwordInput, { target: { value: "" } });
+    fireEvent.change(termCheckbox, { target: { value: false } });
 
     submitButton.click();
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email is a required field"));
     await waitFor(() => expect(screen.queryByTestId("password-error-message")).toHaveTextContent("Password is a required field"));
+    await waitFor(() =>
+      expect(screen.queryByTestId("termOfUse-error-message")).toHaveTextContent("You must accept the terms of use and the policy privacy")
+    );
   });
 
   it(" should show error message email when the form is submitted with empty email", async () => {
     act(() => {
       render(
         <Router>
-          <Login />
+          <Register />
         </Router>
       );
     });
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "" } });
     fireEvent.change(passwordInput, { target: { value: "Digicel.1" } });
+    termCheckbox.click();
 
     submitButton.click();
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email is a required field"));
@@ -179,37 +197,64 @@ describe("Test Login Functionality", () => {
     act(() => {
       render(
         <Router>
-          <Login />
+          <Register />
         </Router>
       );
     });
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "test@test.com" } });
     fireEvent.change(passwordInput, { target: { value: "" } });
+    termCheckbox.click();
 
     submitButton.click();
     await waitFor(() => expect(screen.queryByTestId("password-error-message")).toHaveTextContent("Password is a required field"));
+  });
+
+  it(" should show error message Checkbox when the form is submitted when the checkbox is not check", async () => {
+    act(() => {
+      render(
+        <Router>
+          <Register />
+        </Router>
+      );
+    });
+
+    const emailInput = screen.getByPlaceholderText("Email");
+    const passwordInput = screen.getByPlaceholderText("Password");
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
+
+    fireEvent.change(emailInput, { target: { value: "test@test.com" } });
+    fireEvent.change(passwordInput, { target: { value: "Digicel.1" } });
+
+    submitButton.click();
+    await waitFor(() =>
+      expect(screen.queryByTestId("termOfUse-error-message")).toHaveTextContent("You must accept the terms of use and the policy privacy")
+    );
   });
 
   it(" should show error message email if email missing @", async () => {
     act(() => {
       render(
         <Router>
-          <Login />
+          <Register />
         </Router>
       );
     });
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "testtest.com" } });
-    fireEvent.change(passwordInput, { target: { value: "" } });
+    fireEvent.change(passwordInput, { target: { value: "Digicel.1" } });
+    termCheckbox.click();
 
     submitButton.click();
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email must be a valid email"));
@@ -219,17 +264,19 @@ describe("Test Login Functionality", () => {
     act(() => {
       render(
         <Router>
-          <Login />
+          <Register />
         </Router>
       );
     });
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "test@testcom" } });
     fireEvent.change(passwordInput, { target: { value: "" } });
+    termCheckbox.click();
 
     submitButton.click();
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email must be a valid email"));
@@ -239,17 +286,19 @@ describe("Test Login Functionality", () => {
     act(() => {
       render(
         <Router>
-          <Login />
+          <Register />
         </Router>
       );
     });
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "test@test.com" } });
     fireEvent.change(passwordInput, { target: { value: "Digi" } });
+    termCheckbox.click();
 
     submitButton.click();
     await waitFor(() => expect(screen.queryByTestId("password-error-message")).toHaveTextContent("Password must be at least 8 characters"));
@@ -259,20 +308,23 @@ describe("Test Login Functionality", () => {
     act(() => {
       render(
         <Router>
-          <Login />
+          <Register />
         </Router>
       );
     });
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+    const termCheckbox = screen.getAllByRole("checkbox")[0];
+    const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "test@test.com" } });
     fireEvent.change(passwordInput, { target: { value: "Digicel.1" } });
+    termCheckbox.click();
 
     submitButton.click();
     await waitFor(() => expect(screen.queryByTestId("password-error-message")).toBeNull());
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toBeNull());
+    await waitFor(() => expect(screen.queryByTestId("termOfUse-error-message")).toBeNull());
   });
 });

@@ -82,6 +82,33 @@ export const createUser = (newUserData) => (dispatch) => {
     })
   );
 };
+
+export const forgotPassword = (newUserData) => (dispatch) => {
+  dispatch(
+    action.apiCallBegan({
+      url: url.FORGOT_PASSWORD,
+      data: newUserData,
+      method: "POST",
+      onSuccess: Auth.actions.loginSucceed.type,
+      onStart: Auth.actions.loginRequested.type,
+      onError: Auth.actions.LoginFailed.type
+    })
+  );
+};
+
+export const resetPassword = (newUserData) => (dispatch) => {
+  dispatch(
+    action.apiCallBegan({
+      url: url.RESET_PASSWORD,
+      data: newUserData,
+      method: "POST",
+      onSuccess: Auth.actions.loginSucceed.type,
+      onStart: Auth.actions.loginRequested.type,
+      onError: Auth.actions.LoginFailed.type
+    })
+  );
+};
+
 export const { setUser } = Auth.actions;
 export const logout = () => (dispatch) => dispatch(Auth.actions.LogOut());
 export const getCurrentUser = (state) => state.authentication;
