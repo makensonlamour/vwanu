@@ -9,5 +9,5 @@
   "dbSettings": {
     "dialect": "postgres"
   },
-  "sendEmailFrom": "test@example.com"
+  "sendEmailFrom": "test@vwanu.com"
 }

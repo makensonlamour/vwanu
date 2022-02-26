@@ -1,4 +1,4 @@
-// import config from 'config';
+import config from 'config';
 import { nanoid } from 'nanoid';
 import { Response, Request } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
@@ -7,7 +7,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../../errors';
 import Log from '../../lib/utils/logger';
 import common from '../../lib/utils/common';
-// import sendEmail from '../../lib/utils/mailer';
+import sendEmail from '../../lib/utils/mailer';
 import userService from '../../services/user/dataProvider';
 import {
   UserInterface,
@@ -33,13 +33,15 @@ export default {
           req.body,
           req.body.password
         );
-        Log.info('sent');
-        // sendEmail({
-        //   to: user.email,
-        //   from: config.get<string>('sendEmailFrom') || 'test@example.com',
-        //   subject: 'Verify your email',
-        //   text: `Activation key: ${user.activationKey}. Id: ${user.id}`,
-        // });
+        // eslint-disable-next-line global-require
+        const template = require('../../seed/emailTemplates/confirmAccount.json');
+        const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
+        await sendEmail({
+          to: user.email,
+          from: config.get('sendEmailFrom') || 'test@example.com',
+          subject: template.subject,
+          html: template.body.replace(/\{link}/g, link),
+        });
 
         await userService.loginUser(
           user,
@@ -134,13 +136,16 @@ export default {
         }
 
         await userService.updateUser(user, { resetPasswordKey: nanoid() });
-        Log.info('sent');
-        // await sendEmail({
-        //   to: user.email,
-        //   from: config.get('sendEmailFrom') || 'test@example.com',
-        //   subject: 'Reset your password',
-        //   text: `Password reset code ${user.resetPasswordKey}, id: ${user.id}`,
-        // });
+
+        // eslint-disable-next-line global-require
+        const template = require('../../seed/emailTemplates/confirmAccount.json');
+        const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
+        await sendEmail({
+          to: user.email,
+          from: config.get('sendEmailFrom') || 'test@example.com',
+          subject: template.subject,
+          html: template.body.replace(/\{link}/g, link),
+        });
         Log.info(`Password reset email sent to user ${user.id}`);
         sendResponse(
           res,
