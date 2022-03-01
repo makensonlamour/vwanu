@@ -1,37 +1,34 @@
 /* eslint-disable import/no-import-module-exports */
-import { Model } from 'sequelize'
+import { Model } from 'sequelize';
 
-export interface ProfileInterface {
-  id?: number | undefined
-  profilePicture?: String
-  coverPicture?: String
-  followers?: number
-  followings?: number | undefined
-  desc?: String
-  city?: String
-}
+// Custom imports
+import { ProfileInterface } from '../schema/profile';
+
 module.exports = (sequelize: any, DataTypes: any) => {
   class Profile extends Model<ProfileInterface> implements ProfileInterface {
-    id?: number | undefined
+    id?: number | undefined;
 
-    profilePicture: string
+    lastName: string;
 
-    coverPicture: string
+    firstName: string;
 
-    followers?: number
+    dob: Date;
 
-    followings: number | undefined
+    profilePicture: string;
 
-    desc: string
+    coverPicture: string;
 
-    city: string
+    followers?: string;
+
+    followings: string | undefined;
 
     static associate(models: any): void {
-      Profile.belongsTo(models.User)
+      Profile.belongsTo(models.User, {
+        onDelete: 'CASCADE',
+      });
       Profile.hasMany(models.Post, {
         onDelete: 'CASCADE',
-      })
-      
+      });
     }
   }
   Profile.init(
@@ -41,6 +38,20 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
+
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      dob: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+
       profilePicture: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -58,19 +69,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      desc: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      city: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
     },
     {
       sequelize,
       modelName: 'Profile',
     }
-  )
-  return Profile
-}
+  );
+  return Profile;
+};

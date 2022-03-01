@@ -14,14 +14,16 @@ const goodUser = { password: goodPassword, email };
 // Testing the user routes
 
 describe('/api/user', () => {
+  beforeEach(() => {
+    jest.setTimeout(9000);
+  });
   let expressServer: any = null;
   beforeAll(async () => {
     expressServer = await app(db);
-    jest.setTimeout(9000);
   });
 
-  
   it('Given correct email and password it should return a user and a token', async () => {
+     jest.setTimeout(10000);
     const response = await request(expressServer)
       .post('/api/user')
       .send(goodUser);
@@ -62,9 +64,12 @@ describe('/api/user after user creation. ', () => {
   let response = null;
   let userFromDB = null;
   let activationKey = null;
+  beforeEach(() => {
+     jest.setTimeout(10000);
+  })
   beforeAll(async () => {
-    expressServer = await app(db);
     jest.setTimeout(9000);
+    expressServer = await app(db);
     response = await request(expressServer)
       .post('/api/user')
       .send({ ...goodUser, email: 'realuser@example.com' });
@@ -76,6 +81,7 @@ describe('/api/user after user creation. ', () => {
   });
 
   it('should not be able to reset his password if not verified', async () => {
+ 
     const resetpassword = await request(expressServer)
       .post('/api/user/forgotPassword')
       .send({ email: newlyCreatedUser.email });
@@ -83,7 +89,7 @@ describe('/api/user after user creation. ', () => {
     expect(resetpassword.statusCode).toBe(400);
     expect(resetpassword.body.errors).toBeDefined();
     expect(resetpassword.body.data).toBeUndefined();
-  });
+  },10000);
 
   it('should not verify user when wrong activationKey is given', async () => {
     expect(userFromDB.verified).toBeDefined();
@@ -97,7 +103,7 @@ describe('/api/user after user creation. ', () => {
     expect(response.header['content-type']).toEqual(
       expect.stringContaining('application/json')
     );
-  });
+  },10000);
   it('should be able to verify and existing user with correct id and activation key', async () => {
     expect(userFromDB.verified).toBeDefined();
     expect(userFromDB.verified).toBe(false);
@@ -117,7 +123,7 @@ describe('/api/user after user creation. ', () => {
       where: { id: newlyCreatedUser.id },
     });
     expect(dbRecords.activationKey).toBeNull();
-  });
+  },10000);
 
   it('should not verify user when user is already verified', async () => {
     const verifyResponse = await request(expressServer).post(
@@ -126,7 +132,7 @@ describe('/api/user after user creation. ', () => {
     expect(verifyResponse.statusCode).toBe(400);
     expect(verifyResponse.body.data).toBeUndefined();
     expect(verifyResponse.body.errors).toBeDefined();
-  });
+  },10000);
   it('should be able to send reset password request after verification', async () => {
     const resetpassword = await request(expressServer)
       .post('/api/user/forgotPassword')
@@ -134,7 +140,7 @@ describe('/api/user after user creation. ', () => {
     expect(resetpassword.statusCode).toBe(200);
     expect(resetpassword.body.data).toBeDefined();
     expect(resetpassword.body.errors).toBeUndefined();
-  });
+  },10000);
 
   it('should not reset password if missing any information', async () => {
     const badResetPasswordRequest = [
@@ -158,7 +164,7 @@ describe('/api/user after user creation. ', () => {
 
       expect(resetPasswordResponse.statusCode).toBe(400);
     });
-  });
+  },10000);
   it('should be able to reset a password after request', async () => {
     const { id } = newlyCreatedUser;
     const dbRecords = await db.User.findOne({
@@ -181,5 +187,5 @@ describe('/api/user after user creation. ', () => {
     });
     expect(dbRecords.password !== dbRecordsVerified.password).toBe(true);
     expect(dbRecordsVerified.resetPasswordKey).toBeNull();
-  });
+  },10000);
 });
