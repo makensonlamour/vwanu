@@ -1,53 +1,52 @@
 /* eslint-disable import/no-import-module-exports */
 
+import { nanoid } from 'nanoid';
+import { Model } from 'sequelize';
 
-import { nanoid } from 'nanoid'
-import { Model } from 'sequelize'
 // Custom imports
-
-import argon2 from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import { UserInterface } from '../schema/user'
-import createToken from '../lib/utils/createToken'
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { UserInterface } from '../schema/user';
+import createToken from '../lib/utils/createToken';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
-    id: number | undefined
+    id?: number | undefined;
 
-    email!: string
+    email!: string;
 
-    activationKey?: string | undefined
+    activationKey?: string | null;
 
-    resetPasswordKey?: string | undefined
+    resetPasswordKey?: string | undefined;
 
-    verified?: boolean | undefined
+    verified?: boolean | undefined;
 
-    password: string | undefined
+    password: string | undefined;
 
     static async setPassword(password: string): Promise<string> {
-      const passwordHash = await argon2.hash(password, 12)
-      return passwordHash
+      const passwordHash = await bcrypt.hash(password, 12);
+      return passwordHash;
     }
 
     static async register(
       user: Partial<UserInterface>,
       password: string
     ): Promise<UserInterface> {
-      const hash = await this.setPassword(password.toString())
-      const created = await this.create({ ...user, password: hash })
-      return created
+      const hash = await this.setPassword(password.toString());
+      const created = await this.create({ ...user, password: hash });
+      return created;
     }
 
     static login(user: UserInterface, cb: jwt.SignCallback) {
-      return createToken(user, cb)
+      return createToken(user, cb);
     }
 
     static associate(models: any) {
       // define association here
-      User.hasOne(models.Profile)
+      User.hasOne(models.Profile);
       User.hasMany(models.Page, {
         onDelete: 'CASCADE',
-      })
+      });
     }
   }
   User.init(
@@ -69,7 +68,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
       activationKey: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: () => nanoid(),
       },
       resetPasswordKey: {
@@ -85,6 +84,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       sequelize,
       modelName: 'User',
     }
-  )
-  return User
-}
+  );
+  return User;
+};

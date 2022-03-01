@@ -1,4 +1,4 @@
-// import config from 'config';
+import config from 'config';
 import { nanoid } from 'nanoid';
 import { Response, Request } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
@@ -7,7 +7,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../../errors';
 import Log from '../../lib/utils/logger';
 import common from '../../lib/utils/common';
-// import sendEmail from '../../lib/utils/mailer';
+import sendEmail from '../../lib/utils/mailer';
 import userService from '../../services/user/dataProvider';
 import {
   UserInterface,
@@ -20,6 +20,11 @@ import {
 
 const { catchAsync, sendResponse } = common;
 
+const toReturn = (user: UserInterface): Partial<UserInterface> => ({
+  id: user.id,
+  email: user.email,
+  verified: user.verified,
+});
 export default {
   createOne: catchAsync(
     async (req: Request<{}, {}, CreateUserInput>, res: Response) => {
@@ -28,13 +33,15 @@ export default {
           req.body,
           req.body.password
         );
-        Log.info('sent');
-        // sendEmail({
-        //   to: user.email,
-        //   from: config.get<string>('sendEmailFrom') || 'test@example.com',
-        //   subject: 'Verify your email',
-        //   text: `Activation key: ${user.activationKey}. Id: ${user.id}`,
-        // });
+        // eslint-disable-next-line global-require
+        const template = require('../../seed/emailTemplates/confirmAccount.json');
+        const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
+        await sendEmail({
+          to: user.email,
+          from: config.get('sendEmailFrom') || 'test@example.com',
+          subject: template.subject,
+          html: template.body.replace(/\{link}/g, link),
+        });
 
         await userService.loginUser(
           user,
@@ -48,7 +55,7 @@ export default {
             return sendResponse(
               res,
               StatusCodes.CREATED,
-              { user, token },
+              { user: toReturn(user), token },
               ReasonPhrases.CREATED
             );
           }
@@ -61,8 +68,14 @@ export default {
   ),
   getOne: catchAsync(async (req: Request<GetUserInput>, res: Response) => {
     try {
-      const user = await userService.getUser(req.params.id);
-      sendResponse(res, StatusCodes.OK, user, ReasonPhrases.OK);
+      const user: UserInterface = await userService.getUser(req.params.id);
+
+      sendResponse(
+        res,
+        StatusCodes.OK,
+        { user: toReturn(user) },
+        ReasonPhrases.OK
+      );
     } catch (error) {
       throw new AppError(
         error?.message || ReasonPhrases.NOT_FOUND,
@@ -74,7 +87,6 @@ export default {
     async (req: Request<VerifyUserInput>, res: Response) => {
       const { id } = req.params;
       const { activationKey } = req.params;
-
       try {
         const user: UserInterface = await userService.getUser(id);
         if (!user)
@@ -84,11 +96,21 @@ export default {
           throw new AppError('User already verified', StatusCodes.CONFLICT);
         if (user.activationKey !== activationKey)
           throw new AppError('Invalid activation key', StatusCodes.BAD_REQUEST);
-        await userService.updateUser(user, { verified: true });
+        await userService.updateUser(user, {
+          verified: true,
+          activationKey: null,
+        });
+
         // console.log('User updated, is verified now', user.verified);
-        return sendResponse(res, StatusCodes.OK, { user }, 'user verified');
+
+        return sendResponse(
+          res,
+          StatusCodes.OK,
+          { user: toReturn(user) },
+          'user verified'
+        );
       } catch (error) {
-        throw new AppError('verified user error', StatusCodes.BAD_REQUEST);
+        throw new AppError(error.message, StatusCodes.BAD_REQUEST);
       }
     }
   ),
@@ -114,13 +136,16 @@ export default {
         }
 
         await userService.updateUser(user, { resetPasswordKey: nanoid() });
-        Log.info('sent');
-        // await sendEmail({
-        //   to: user.email,
-        //   from: config.get('sendEmailFrom') || 'test@example.com',
-        //   subject: 'Reset your password',
-        //   text: `Password reset code ${user.resetPasswordKey}, id: ${user.id}`,
-        // });
+
+        // eslint-disable-next-line global-require
+        const template = require('../../seed/emailTemplates/confirmAccount.json');
+        const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
+        await sendEmail({
+          to: user.email,
+          from: config.get('sendEmailFrom') || 'test@example.com',
+          subject: template.subject,
+          html: template.body.replace(/\{link}/g, link),
+        });
         Log.info(`Password reset email sent to user ${user.id}`);
         sendResponse(
           res,
@@ -161,7 +186,14 @@ export default {
           );
 
         await userService.resetPassword(user.id, password);
-        sendResponse(res, StatusCodes.OK, user, ReasonPhrases.ACCEPTED);
+        await userService.updateUser(user, { resetPasswordKey: null });
+
+        sendResponse(
+          res,
+          StatusCodes.OK,
+          { user: toReturn(user) },
+          ReasonPhrases.ACCEPTED
+        );
       } catch (error) {
         // take care of the error
       }

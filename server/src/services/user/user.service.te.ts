@@ -21,7 +21,7 @@ describe('UserService', () => {
 
   it('should create a new user', async () => {
     newUser = await userService.createUser(
-      { email: 'emailme@server.com', password: 12345678 },
+      { email: 'emailme@server.com' },
       '12345678'
     );
 

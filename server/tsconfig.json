@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "baseUrl": "server/src",
     "paths": {
-      "@config/*": ["config/*"],
+      "@config/*": ["configp/*"],
       "@controllers/*": ["controller/*"],
       "@routes/*": ["routes/*"],
       "@middleware/*": ["middleware/*"],
