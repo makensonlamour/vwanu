@@ -12,7 +12,7 @@ const initialState = {
   data: null,
   lastFetch: null,
   token: null,
-  error: null
+  error: null,
 };
 
 export const Auth = createSlice({
@@ -51,8 +51,8 @@ export const Auth = createSlice({
       state.error = null;
       deleteToken();
       window.location.replace("/login");
-    }
-  }
+    },
+  },
 });
 
 export const Login = (credentials) => (dispatch, getState) => {
@@ -65,7 +65,7 @@ export const Login = (credentials) => (dispatch, getState) => {
       method: "POST",
       onSuccess: Auth.actions.loginSucceed.type,
       onStart: Auth.actions.loginRequested.type,
-      onError: Auth.actions.LoginFailed.type
+      onError: Auth.actions.LoginFailed.type,
     })
   );
 };
@@ -78,7 +78,7 @@ export const createUser = (newUserData) => (dispatch) => {
       method: "POST",
       onSuccess: Auth.actions.loginSucceed.type,
       onStart: Auth.actions.loginRequested.type,
-      onError: Auth.actions.LoginFailed.type
+      onError: Auth.actions.LoginFailed.type,
     })
   );
 };
@@ -91,7 +91,7 @@ export const forgotPassword = (newUserData) => (dispatch) => {
       method: "POST",
       onSuccess: Auth.actions.loginSucceed.type,
       onStart: Auth.actions.loginRequested.type,
-      onError: Auth.actions.LoginFailed.type
+      onError: Auth.actions.LoginFailed.type,
     })
   );
 };
@@ -104,7 +104,7 @@ export const resetPassword = (newUserData) => (dispatch) => {
       method: "POST",
       onSuccess: Auth.actions.loginSucceed.type,
       onStart: Auth.actions.loginRequested.type,
-      onError: Auth.actions.LoginFailed.type
+      onError: Auth.actions.LoginFailed.type,
     })
   );
 };

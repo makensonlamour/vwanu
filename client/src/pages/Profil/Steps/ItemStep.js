@@ -1,18 +1,18 @@
 export const ItemStep = [
   {
     step: 1,
-    name: "Registration"
+    name: "Registration",
   },
   {
     step: 2,
-    name: "Create Profile"
+    name: "Create Profile",
   },
   {
     step: 3,
-    name: "Change Profile Photo"
+    name: "Change Profile Photo",
   },
   {
     step: 4,
-    name: "Find Friends"
-  }
+    name: "Find Friends",
+  },
 ];

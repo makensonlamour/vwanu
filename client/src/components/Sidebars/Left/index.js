@@ -7,7 +7,7 @@ import { ItemSidebarLeft } from "./ItemSidebarLeft";
 
 const SidebarLeft = () => {
   let activeStyle = {
-    textDecoration: "none"
+    textDecoration: "none",
   };
   return (
     <>

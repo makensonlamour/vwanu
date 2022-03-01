@@ -1,8 +1,8 @@
+import React from "react";
 import { render as rtlRender, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { act } from "react-dom/test-utils";
 import { MemoryRouter as Router } from "react-router-dom";
-import renderer from "react-test-renderer";
+import { act as testAct, create } from "react-test-renderer";
+import { act as domAct } from "react-dom/test-utils";
 import { store } from "../../../store";
 import Login from "../Login";
 import { Provider } from "react-redux";
@@ -15,15 +15,18 @@ const render = (component) => rtlRender(<Provider store={store}>{component}</Pro
 //Test Dom Elements
 describe("Test Dom Elements", () => {
   it("match snapshot", () => {
-    const tree = renderer
-      .create(
-        <Provider store={store}>
-          <Router>
-            <Login />
-          </Router>
-        </Provider>
-      )
-      .toJSON();
+    let tree;
+    domAct(() => {
+      testAct(() => {
+        tree = create(
+          <Provider store={store}>
+            <Router>
+              <Login />
+            </Router>
+          </Provider>
+        );
+      });
+    });
     expect(tree).toMatchSnapshot();
   });
 });
@@ -135,7 +138,7 @@ describe("Test require fields", () => {
 //test login functionality
 describe("Test Login Functionality", () => {
   it(" should show error message on password and email when the form is submitted with empty fields", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Login />
@@ -156,7 +159,7 @@ describe("Test Login Functionality", () => {
   });
 
   it(" should show error message email when the form is submitted with empty email", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Login />
@@ -176,7 +179,7 @@ describe("Test Login Functionality", () => {
   });
 
   it(" should show error message password when the form is submitted with empty password", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Login />
@@ -196,7 +199,7 @@ describe("Test Login Functionality", () => {
   });
 
   it(" should show error message email if email missing @", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Login />
@@ -216,7 +219,7 @@ describe("Test Login Functionality", () => {
   });
 
   it(" should show error message email if email missing .", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Login />
@@ -236,7 +239,7 @@ describe("Test Login Functionality", () => {
   });
 
   it(" should show error message password if password is least than 8 characters .", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Login />
@@ -256,7 +259,7 @@ describe("Test Login Functionality", () => {
   });
 
   it(" shouldn't display error", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Login />

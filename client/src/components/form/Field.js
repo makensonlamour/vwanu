@@ -33,7 +33,7 @@ FormField.propTypes = {
   appendText: PropTypes.string,
   label: PropTypes.string,
   className: PropTypes.string,
-  testId: PropTypes.string
+  testId: PropTypes.string,
 };
 
 export default FormField;

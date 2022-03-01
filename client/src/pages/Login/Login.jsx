@@ -10,7 +10,7 @@ import { Login } from "../../store/auth";
 
 const ValidationSchema = Yup.object().shape({
   email: Yup.string().required().min(6).email().label("Email"),
-  password: Yup.string().required().min(8).label("Password")
+  password: Yup.string().required().min(8).label("Password"),
 });
 
 const LoginScreen = () => {
@@ -48,7 +48,7 @@ const LoginScreen = () => {
               validationSchema={ValidationSchema}
               initialValues={{
                 email: "",
-                password: ""
+                password: "",
               }}
               onSubmit={handleLogin}
               className="shadow-lg rounded-3xl"

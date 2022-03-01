@@ -14,7 +14,7 @@ const alert = (store) => (next) => async (action) => {
       msg: action.payload,
       id,
       type: "error",
-      icon: BsFillExclamationTriangleFill
+      icon: BsFillExclamationTriangleFill,
     })
   );
   // Setting a sec for each 10 words

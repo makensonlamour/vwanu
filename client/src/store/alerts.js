@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
-  list: []
+  list: [],
 };
 const Alert = createSlice({
   name: "alerts",
@@ -13,8 +13,8 @@ const Alert = createSlice({
       const firstIndex = state.list.findIndex((alert) => alert.id === action.payload);
 
       state.list.splice(firstIndex, 1);
-    }
-  }
+    },
+  },
 });
 
 export default Alert.reducer;

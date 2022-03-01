@@ -14,7 +14,7 @@ function FormError({ error, visible, testId }) {
 FormError.propTypes = {
   error: PropTypes.string,
   visible: PropTypes.bool,
-  testId: PropTypes.string
+  testId: PropTypes.string,
 };
 
 export default FormError;

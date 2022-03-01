@@ -1,8 +1,8 @@
+import React from "react";
 import { render as rtlRender, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { act } from "react-dom/test-utils";
 import { MemoryRouter as Router } from "react-router-dom";
-import renderer from "react-test-renderer";
+import { act as testAct, create } from "react-test-renderer";
+import { act as domAct } from "react-dom/test-utils";
 import { store } from "../../../store";
 import Register from "../Register";
 import { Provider } from "react-redux";
@@ -11,19 +11,22 @@ afterEach(cleanup);
 
 const render = (component) => rtlRender(<Provider store={store}>{component}</Provider>);
 
-//Testing Login form
+//Testing Register form
 //Test Dom Elements
 describe("Register Test Dom Elements", () => {
   it("match snapshot", () => {
-    const tree = renderer
-      .create(
-        <Provider store={store}>
-          <Router>
-            <Register />
-          </Router>
-        </Provider>
-      )
-      .toJSON();
+    let tree;
+    domAct(() => {
+      testAct(() => {
+        tree = create(
+          <Provider store={store}>
+            <Router>
+              <Register />
+            </Router>
+          </Provider>
+        );
+      });
+    });
     expect(tree).toMatchSnapshot();
   });
 });
@@ -146,7 +149,7 @@ describe("Test require fields", () => {
 //test register functionality
 describe("Test Register Functionality", () => {
   it(" should show error message on password, email and Term of Use when the form is submitted with empty fields", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
@@ -172,7 +175,7 @@ describe("Test Register Functionality", () => {
   });
 
   it(" should show error message email when the form is submitted with empty email", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
@@ -194,7 +197,7 @@ describe("Test Register Functionality", () => {
   });
 
   it(" should show error message password when the form is submitted with empty password", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
@@ -216,7 +219,7 @@ describe("Test Register Functionality", () => {
   });
 
   it(" should show error message Checkbox when the form is submitted when the checkbox is not check", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
@@ -226,7 +229,6 @@ describe("Test Register Functionality", () => {
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
-    const termCheckbox = screen.getAllByRole("checkbox")[0];
     const submitButton = screen.getByRole("button", { name: "Register" });
 
     fireEvent.change(emailInput, { target: { value: "test@test.com" } });
@@ -239,7 +241,7 @@ describe("Test Register Functionality", () => {
   });
 
   it(" should show error message email if email missing @", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
@@ -261,7 +263,7 @@ describe("Test Register Functionality", () => {
   });
 
   it(" should show error message email if email missing .", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
@@ -283,7 +285,7 @@ describe("Test Register Functionality", () => {
   });
 
   it(" should show error message password if password is least than 8 characters .", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
@@ -305,7 +307,7 @@ describe("Test Register Functionality", () => {
   });
 
   it(" shouldn't display error", async () => {
-    act(() => {
+    domAct(() => {
       render(
         <Router>
           <Register />
