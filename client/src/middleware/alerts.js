@@ -8,7 +8,7 @@ const alert = (store) => (next) => async (action) => {
   if (action.type !== actions.apiCallFailed.type) return next(action);
   const id = uuidv4();
   next(action);
-  console.log({ p: action });
+  console.log(action.payload);
   store.dispatch(
     setAlert({
       msg: action.payload,
@@ -18,7 +18,7 @@ const alert = (store) => (next) => async (action) => {
     })
   );
   // Setting a sec for each 10 words
-  setTimeout(() => store.dispatch(removeAlert(id)), action.payload.length * 200);
+  setTimeout(() => store.dispatch(removeAlert(id)), action.payload.length * 600);
 };
 
 export default alert;

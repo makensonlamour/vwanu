@@ -5,8 +5,8 @@ const environment = {
     endpoints: {
       LOGIN: "/auth",
       REGISTER: "/user",
-      FORGOT_PASSWORD: "/forgotPassword",
-      RESET_PASSWORD: "/resetPassword",
+      FORGOT_PASSWORD: "user/forgotPassword",
+      RESET_PASSWORD: "user/resetPassword",
       AuthIN: "/index",
     },
     layouts: {

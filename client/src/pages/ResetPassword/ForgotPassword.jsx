@@ -1,24 +1,24 @@
 import React from "react";
 import * as Yup from "yup";
 //import { Link } from "react-router-dom";
-//import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 //import routesPath from "../../routesPath";
 
 // Core components
 import { Field, Form, Submit } from "../../components/form";
-//import { createUser } from "../../store/auth";
+import { forgotPassword } from "../../store/auth";
 
 const ValidationSchema = Yup.object().shape({
-  email: Yup.string().required().min(6).email().label("Email")
+  email: Yup.string().required().min(6).email().label("Email"),
 });
 
 const initialValues = {
-  email: ""
+  email: "",
 };
 const ForgotPasswordScreen = () => {
-  // const dispatch = useDispatch();
-  //dispatch(createUser(credentials)
-  const handleResetPasword = (credentials) => console.log(credentials);
+  const dispatch = useDispatch();
+
+  const handleResetPasword = (credentials) => dispatch(forgotPassword(credentials));
   return (
     <>
       <div className="">

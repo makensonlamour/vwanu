@@ -21,12 +21,12 @@ const api = (store) => (next) => async (action) => {
   } catch (error) {
     store.dispatch({
       type: actions.apiCallFailed.type,
-      payload: error?.response?.data?.message || error?.response?.data || "Unspecified error occurred",
+      payload: error.response.data || error?.response?.data?.message || "Unspecified error occurred",
     });
     if (onError)
       store.dispatch({
         type: onError,
-        payload: error?.response?.data?.message || "Unspecified error occurred",
+        payload: error.response.data || error?.response?.data?.message || "Unspecified error occurred",
       });
   }
 };

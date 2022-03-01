@@ -83,11 +83,11 @@ export const createUser = (newUserData) => (dispatch) => {
   );
 };
 
-export const forgotPassword = (newUserData) => (dispatch) => {
+export const forgotPassword = (userData) => (dispatch) => {
   dispatch(
     action.apiCallBegan({
       url: url.FORGOT_PASSWORD,
-      data: newUserData,
+      data: userData,
       method: "POST",
       onSuccess: Auth.actions.loginSucceed.type,
       onStart: Auth.actions.loginRequested.type,
