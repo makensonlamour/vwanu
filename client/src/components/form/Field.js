@@ -4,7 +4,7 @@ import { useFormikContext } from "formik";
 
 import Error from "./Error";
 
-function FormField({ name, label, className, ...otherProps }) {
+function FormField({ name, label, className, testId, ...otherProps }) {
   const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
 
   return (
@@ -21,7 +21,7 @@ function FormField({ name, label, className, ...otherProps }) {
           onChange={handleChange(name)}
           {...otherProps}
         />
-        <Error error={errors[name]} visible={touched[name]} />
+        <Error testId={testId} error={errors[name]} visible={touched[name]} />
       </div>
     </>
   );
@@ -32,7 +32,8 @@ FormField.propTypes = {
   icon: PropTypes.string,
   appendText: PropTypes.string,
   label: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  testId: PropTypes.string,
 };
 
 export default FormField;

@@ -4,7 +4,7 @@ import { useFormikContext } from "formik";
 
 import Error from "./Error";
 
-function Checkbox({ name, label, className, ...otherProps }) {
+function Checkbox({ name, label, className, testId, ...otherProps }) {
   const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
 
   return (
@@ -21,7 +21,7 @@ function Checkbox({ name, label, className, ...otherProps }) {
           />
           <span className="label-text">{label}</span>
         </label>
-        <Error error={errors[name]} visible={touched[name]} />
+        <Error testId={testId} error={errors[name]} visible={touched[name]} />
       </div>
     </>
   );
@@ -30,7 +30,8 @@ function Checkbox({ name, label, className, ...otherProps }) {
 Checkbox.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  testId: PropTypes.string,
 };
 
 export default Checkbox;

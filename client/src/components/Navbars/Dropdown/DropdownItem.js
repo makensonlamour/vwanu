@@ -17,9 +17,9 @@ export const DropdownItem = [
       {
         title: "My profile",
         path: routesPath.PROFILE,
-        icon: <BsPersonCircle className="mx-2" size="24px" />
-      }
-    ]
+        icon: <BsPersonCircle className="mx-2" size="24px" />,
+      },
+    ],
   },
   {
     menuTitle: "Settings",
@@ -27,13 +27,13 @@ export const DropdownItem = [
       {
         title: "Privacy Settings",
         path: routesPath.PRIVACY_SETTINGS,
-        icon: <BsShieldLockFill className="mx-2" size="24px" />
+        icon: <BsShieldLockFill className="mx-2" size="24px" />,
       },
       {
         title: "General Settings",
         path: routesPath.GENERAL_SETTINGS,
-        icon: <BsGearFill className="mx-2" size="24px" />
-      }
-    ]
-  }
+        icon: <BsGearFill className="mx-2" size="24px" />,
+      },
+    ],
+  },
 ];

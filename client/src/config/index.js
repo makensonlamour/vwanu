@@ -5,15 +5,15 @@ const environment = {
     endpoints: {
       LOGIN: "/auth",
       REGISTER: "/user",
-      FORGOT_PASSWORD: "/forgotPassword",
-      RECOVER_PASSWORD: "/recoverPassword",
-      AuthIN: "/index"
+      FORGOT_PASSWORD: "user/forgotPassword",
+      RESET_PASSWORD: "user/resetPassword",
+      AuthIN: "/index",
     },
     layouts: {
       ADMIN: "/admin",
-      AUTH: "/auth"
+      AUTH: "/auth",
     },
-    idsTypes: ["ID", "Passport", "License"]
+    idsTypes: ["ID", "Passport", "License"],
   },
   staging: {
     BASE_URL: "YOUR_BASE_URL",
@@ -22,15 +22,15 @@ const environment = {
       REGISTER: "/user",
       FORGOT_PASSWORD: "/forgotPassword",
       RECOVER_PASSWORD: "/recoverPassword",
-      AuthIN: "/index"
+      AuthIN: "/index",
     },
     layouts: {
       ADMIN: "/admin",
-      AUTH: "/auth"
+      AUTH: "/auth",
     },
-    idsTypes: ["ID", "Passport", "License"]
+    idsTypes: ["ID", "Passport", "License"],
   },
-  production: {}
+  production: {},
 };
 const getEnvironment = () => {
   return environment.development;

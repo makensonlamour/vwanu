@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Dom Elements match snapshot 1`] = `
+<div
+  className=""
+>
+  <div
+    className="grid grid-cols-2 gap-4"
+  >
+    <div
+      className="justify-center"
+    >
+      <div
+        className="bg-yellow-400 rounded-br-[300px] h-screen"
+      >
+        <div
+          className="bg-blue-600 h-4/6 rounded-br-full rounded-bl-[5000px]"
+        >
+          <p
+            className="text-center text-white text-2xl py-5"
+          >
+            Logo VWANU
+          </p>
+          <p
+            className="text-5xl text-yellow-500 font-bold py-10 text-center"
+          >
+            Welcome
+          </p>
+          <p
+            className="text-white text-xl font-semibold text-center"
+          >
+            Share your Voice and Change
+          </p>
+          <p
+            className="text-white text-xl font-semibold text-center"
+          >
+            The Haitian Community!
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="place-items-center mx-20"
+    >
+      <div
+        className="place-content-end my-8"
+      >
+        <p
+          className="text-right"
+        >
+          <span
+            className="text-orange-500 text-lg font-semibold"
+          >
+            Not a member ?
+          </span>
+           
+          <a
+            className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case"
+            data-testid="registerBtn"
+            href="/register"
+            onClick={[Function]}
+          >
+            Register
+          </a>
+        </p>
+      </div>
+      <div
+        className="px-10 pt-5 pb-10 card shadow-lg rounded-3xl"
+        role="form"
+      >
+        <h1
+          className="card-title text-orange-500"
+        >
+          Sign in to Vwanu
+        </h1>
+        <div
+          className="form-control"
+        >
+          <label
+            className="label"
+          >
+            <span
+              className="label-text"
+            />
+          </label>
+          <input
+            autoCapitalize="none"
+            autoComplete="new-email"
+            className="input bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="Email"
+            required={true}
+            type="email"
+            value=""
+          />
+        </div>
+        <div
+          className="form-control"
+        >
+          <label
+            className="label"
+          >
+            <span
+              className="label-text"
+            />
+          </label>
+          <input
+            autoCapitalize="none"
+            autoComplete="new-email"
+            autoCorrect="false"
+            className="input bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="Password"
+            required={true}
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          className="btn btn-primary mt-4 normal-case rounded-full text-base-200 text-md"
+          data-testid="loginBtn"
+          onClick={[Function]}
+          type="submit"
+        >
+          Login
+        </button>
+        <div
+          className="mt-4"
+        >
+          <span
+            className="text-orange-500 text-lg"
+          >
+             Don't remember your password? 
+            <a
+              className="text-blue-500"
+              href="/forgot-password"
+              onClick={[Function]}
+            >
+              Click here
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

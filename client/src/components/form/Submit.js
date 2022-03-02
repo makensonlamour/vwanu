@@ -20,7 +20,7 @@ function SubmitBtn({ title, className, ...otherProps }) {
 
 SubmitBtn.propTypes = {
   title: PropTypes.string.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default SubmitBtn;

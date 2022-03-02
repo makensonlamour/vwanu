@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
 
@@ -12,7 +13,7 @@ const email = 'test@example.com';
 const goodUser = { password: goodPassword, email };
 
 // Testing the user routes
-
+jest.setTimeout(9000);
 describe('/api/user', () => {
   let expressServer: any = null;
   beforeAll(async () => {

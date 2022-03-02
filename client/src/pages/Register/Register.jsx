@@ -9,8 +9,8 @@ import { Field, Checkbox, Form, Submit } from "../../components/form";
 import { createUser } from "../../store/auth";
 
 const ValidationSchema = Yup.object().shape({
-  email: Yup.string().required().min(6).label("Email"),
-  password: Yup.string().required().min(8).label("password"),
+  email: Yup.string().required().min(6).email().label("Email"),
+  password: Yup.string().required().min(8).label("Password"),
   termOfUse: Yup.bool().oneOf([true], "You must accept the terms of use and the policy privacy")
 });
 
@@ -42,7 +42,11 @@ const LoginScreen = () => {
             <div className="place-content-end my-8">
               <p className="text-right">
                 <span className="text-orange-500 text-lg font-semibold">Already have an account ?</span>{" "}
-                <Link to={routesPath.LOGIN} className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case">
+                <Link
+                  data-testid="loginBtn"
+                  to={routesPath.LOGIN}
+                  className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case"
+                >
                   Login
                 </Link>
               </p>
@@ -55,14 +59,17 @@ const LoginScreen = () => {
             >
               <h1 className="card-title text-orange-500">Register to Vwanu</h1>
               <Field
+                required
                 autoCapitalize="none"
                 placeholder="Email"
                 name="email"
                 type="email"
                 autoComplete="new-email"
                 className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+                testId="email-error-message"
               />
               <Field
+                required
                 autoCapitalize="none"
                 autoCorrect="false"
                 placeholder="Password"
@@ -70,11 +77,18 @@ const LoginScreen = () => {
                 type="password"
                 autoComplete="new-email"
                 className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+                testId="password-error-message"
               />
 
-              <Checkbox name="termOfUse" label="I accept the terms of use and the policy privacy" className="" />
+              <Checkbox
+                required
+                name="termOfUse"
+                label="I accept the terms of use and the policy privacy"
+                className=""
+                testId="termOfUse-error-message"
+              />
 
-              <Submit className="rounded-full text-base-200 text-md" title="Register" />
+              <Submit data-testid="registerBtn" className="rounded-full text-base-200 text-md" title="Register" />
             </Form>
           </div>
         </div>
