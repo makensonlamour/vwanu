@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "test:local": "jest",
+    "test:local": "jest --watch",
     "test": "jest --coverage",
     "build": "tsc",
     "preinstall": "npm i nodemon -g",

@@ -35,8 +35,13 @@
     "pre:test": "react-scripts test",
     "test": "echo no test",
     "eject": "react-scripts eject",
+<<<<<<< HEAD
     "lint": "eslint --fix src/**/*.js",
     "lint:check": "eslint src/**/*.js",
+=======
+    "lint": "eslint  --fix src/**/*.js",
+    "lint:check": "node_modules/.bin/eslint src/**/*.js",
+>>>>>>> development
     "format": "prettier src/**/*.js --write. --config ./.prettierrc"
   },
   "eslintConfig": {
