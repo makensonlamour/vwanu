@@ -8,7 +8,6 @@ const multer = require('multer');
 const dotenv = require('dotenv');
 
 dotenv.config();
-// const cloudinary = cloud.v2;
 
 const { CLOUDINARY_API_KEY, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_SECRET } =
   process.env;
