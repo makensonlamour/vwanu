@@ -1,6 +1,7 @@
 import routesPath from "./routesPath";
-import Login from "./pages/Login/index";
-import Register from "./pages/Register/index";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import ForgotPassword from "./pages/ResetPassword/ForgotPassword";
 import Home from "./pages/Home/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
@@ -8,7 +9,7 @@ import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 let role = {
   PUBLIC: "public",
   USER: "user",
-  AUTH: "auth"
+  AUTH: "auth",
 };
 
 //Define all routes on the app
@@ -17,43 +18,49 @@ let routes = [
     path: routesPath.LOGIN,
     name: "Login",
     element: Login,
-    access: role.PUBLIC
+    access: role.PUBLIC,
   },
   {
     path: routesPath.REGISTER,
     name: "Register",
     element: Register,
-    access: role.PUBLIC
+    access: role.PUBLIC,
+  },
+  {
+    path: routesPath.FORGOT_PASSWORD,
+    name: "Forgot Password",
+    element: ForgotPassword,
+    access: role.PUBLIC,
   },
   {
     path: routesPath.NEWSFEED,
     name: "News Feed",
     element: Home,
-    access: role.USER
+    access: role.USER,
   },
   {
     path: routesPath.STEP_ONE,
     name: "Step one",
     element: Step,
-    access: role.PUBLIC
+    access: role.PUBLIC,
   },
   {
     path: routesPath.STEP_TWO,
     name: "Step two",
     element: StepTwo,
-    access: role.AUTH
+    access: role.AUTH,
   },
   {
     path: routesPath.STEP_THREE,
     name: "Step three",
     element: StepThree,
-    access: role.AUTH
+    access: role.AUTH,
   },
   {
     path: routesPath.STEP_FOUR,
     name: "Step four",
     element: StepFour,
-    access: role.AUTH
-  }
+    access: role.AUTH,
+  },
 ];
 export { routes, role };

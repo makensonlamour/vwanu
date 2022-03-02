@@ -41,7 +41,7 @@ UploadAvatar.propTypes = {
   icon: PropTypes.element.isRequired,
   className: PropTypes.string,
   id: PropTypes.any.required,
-  format: PropTypes.string
+  format: PropTypes.string,
 };
 
 export default UploadAvatar;

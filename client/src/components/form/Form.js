@@ -18,7 +18,7 @@ FormWrapper.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   validationSchema: PropTypes.object,
   children: PropTypes.any,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default FormWrapper;
