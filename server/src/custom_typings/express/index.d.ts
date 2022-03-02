@@ -2,5 +2,7 @@
 declare namespace Express {
   interface Request {
     token: string;
+    files: any;
+    file: any;
   }
 }

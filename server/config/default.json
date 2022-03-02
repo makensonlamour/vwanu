@@ -9,5 +9,6 @@
   "dbSettings": {
     "dialect": "postgres"
   },
-  "sendEmailFrom": "test@vwanu.com"
+  "sendEmailFrom": "test@vwanu.com",
+  "multerSetting": {}
 }
