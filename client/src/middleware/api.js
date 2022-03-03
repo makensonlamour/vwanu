@@ -21,12 +21,15 @@ const api = (store) => (next) => async (action) => {
   } catch (error) {
     store.dispatch({
       type: actions.apiCallFailed.type,
-      payload: error.response.data || error?.response?.data?.message || "Unspecified error occurred",
+      payload:
+        error?.response?.data?.errors[0]?.message ||
+        error?.response?.data ||
+        "An unknown network error has occurred on Vwanu. Try again later.",
     });
     if (onError)
       store.dispatch({
         type: onError,
-        payload: error.response.data || error?.response?.data?.message || "Unspecified error occurred",
+        payload: error?.response?.data?.errors[0]?.message || "An unknown network error has occurred on Vwanu. Try again later.",
       });
   }
 };
