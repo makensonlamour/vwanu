@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { removeAlert } from "../../store/alerts";
 import { useDispatch } from "react-redux";
 
-export default function Toast({ alerts }) {
+export default function Toast({ alerts, className }) {
   const dispatch = useDispatch();
   const onDismiss = (e) => dispatch(removeAlert(e.target.parentElement.parentElement.id));
 
@@ -11,7 +11,7 @@ export default function Toast({ alerts }) {
     <>
       {alerts?.list.map((alert) => (
         <>
-          <div className={"alert alert-" + alert.type} key={`alert-${alert.id}`} id={alert.id} toggle={onDismiss}>
+          <div className={className + " alert alert-" + alert.type} key={`alert-${alert.id}`} id={alert.id} toggle={onDismiss}>
             <div className="flex-1">
               {alert.icon && <span className="px-4">{<alert.icon size="24px" />}</span>}
               <label>{alert.msg}</label>
@@ -23,4 +23,4 @@ export default function Toast({ alerts }) {
   );
 }
 
-Toast.propTypes = { alerts: PropTypes.object.isRequired };
+Toast.propTypes = { alerts: PropTypes.object.isRequired, className: PropTypes.string };
