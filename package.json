@@ -26,5 +26,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.16.7"
   }
 }

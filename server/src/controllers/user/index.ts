@@ -18,6 +18,11 @@ import {
   ResetPasswordInput,
 } from '../../schema/user';
 
+const template = {
+  subject: 'I am sub',
+  body: "from '../../seed/emailTemplates/confirmAccount.json' {link};",
+};
+
 const { catchAsync, sendResponse } = common;
 
 const toReturn = (user: UserInterface): Partial<UserInterface> => ({
@@ -34,34 +39,44 @@ export default {
           req.body.password
         );
         // eslint-disable-next-line global-require
-        const template = require('../../seed/emailTemplates/confirmAccount.json');
+        // const template = require('../../seed/emailTemplates/confirmAccount.json');
         const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
-        await sendEmail({
-          to: user.email,
-          from: config.get('sendEmailFrom') || 'test@example.com',
-          subject: template.subject,
-          html: template.body.replace(/\{link}/g, link),
-        });
+        Log.info('I will send the email now ');
+        try {
+          await sendEmail({
+            to: user.email,
+            from: config.get('sendEmailFrom') || 'test@example.com',
+            subject: template.subject,
+            html: template.body.replace(/\{link}/g, link),
+          });
+        } catch (error) {
+          Log.error(
+            `Error sending email  when creating user code: ${error.code} message: ${error.message}`
+          );
+        } finally {
+          Log.info(' I have sent the email for now');
+          await userService.loginUser(
+            user,
+            (err: Error | null, token: string | undefined) => {
+              if (!token && err)
+                throw new AppError(
+                  err.message,
+                  StatusCodes.INTERNAL_SERVER_ERROR
+                );
 
-        await userService.loginUser(
-          user,
-          (err: Error | null, token: string | undefined) => {
-            if (!token && err)
-              throw new AppError(
-                err.message,
-                StatusCodes.INTERNAL_SERVER_ERROR
+              return sendResponse(
+                res,
+                StatusCodes.CREATED,
+                { user: toReturn(user), token },
+                ReasonPhrases.CREATED
               );
-
-            return sendResponse(
-              res,
-              StatusCodes.CREATED,
-              { user: toReturn(user), token },
-              ReasonPhrases.CREATED
-            );
-          }
-        );
+            }
+          );
+        }
       } catch (err: Error | null | any) {
         // console.log('Error registering a user');
+        Log.error("some shit happended let's see the code");
+        Log.error(err.code);
         throw new AppError(err?.message, StatusCodes.BAD_REQUEST);
       }
     }
@@ -138,21 +153,28 @@ export default {
         await userService.updateUser(user, { resetPasswordKey: nanoid() });
 
         // eslint-disable-next-line global-require
-        const template = require('../../seed/emailTemplates/confirmAccount.json');
+        // const template = require('../../seed/emailTemplates/confirmAccount.json');
         const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
-        await sendEmail({
-          to: user.email,
-          from: config.get('sendEmailFrom') || 'test@example.com',
-          subject: template.subject,
-          html: template.body.replace(/\{link}/g, link),
-        });
-        Log.info(`Password reset email sent to user ${user.id}`);
-        sendResponse(
-          res,
-          StatusCodes.OK,
-          {},
-          'A reset password email was sent to your email on file'
-        );
+        try {
+          await sendEmail({
+            to: user.email,
+            from: config.get('sendEmailFrom') || 'test@example.com',
+            subject: template.subject,
+            html: template.body.replace(/\{link}/g, link),
+          });
+        } catch (error) {
+          Log.error(
+            `Error sending email  when forgot user password: ${error.code} message: ${error.message}`
+          );
+        } finally {
+          Log.info(`Password reset email sent to user ${user.id}`);
+          sendResponse(
+            res,
+            StatusCodes.OK,
+            {},
+            'A reset password email was sent to your email on file'
+          );
+        }
       } catch (error) {
         throw new AppError(
           `need to take care of ' ${error.message} code:  ${error.code}`,

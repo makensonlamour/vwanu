@@ -21,17 +21,19 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = async (payload: SendMailOptions) =>
   new Promise<void>((resolve, reject) => {
+    Log.info('I will send and email from the mailer file');
+    Log.info(smtp.user);
     transporter
       .sendMail(payload)
       .then((info) => {
+        // save the messageId , email , time and user in database
 
-      // save the messageId , email , time and user in database 
-      
         if (smtp.logSuccess)
           Log.info(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
         resolve(info);
       })
       .catch((error) => {
+        Log.info(' shit happened when I tried to send and email');
         Log.error(error);
         reject(error);
       });

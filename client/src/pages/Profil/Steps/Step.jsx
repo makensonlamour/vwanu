@@ -22,7 +22,7 @@ const Step = ({ step, className }) => {
 
 Step.propTypes = {
   className: PropTypes.string,
-  step: PropTypes.number
+  step: PropTypes.number,
 };
 
 export default Step;

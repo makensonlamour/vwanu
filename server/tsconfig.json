@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "baseUrl": "server/src",
     "paths": {
-      "@config/*": ["configp/*"],
+      "@config/*": ["config/*"],
       "@controllers/*": ["controller/*"],
       "@routes/*": ["routes/*"],
       "@middleware/*": ["middleware/*"],
@@ -19,5 +19,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules","build"]
 }

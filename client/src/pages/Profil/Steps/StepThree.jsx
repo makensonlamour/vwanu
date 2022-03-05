@@ -1,19 +1,19 @@
 import React from "react";
 import * as Yup from "yup";
 import { FaUserCircle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
 import routesPath from "../../../routesPath";
+import { Link, useNavigate } from "react-router-dom";
 import Step from "./Step";
 import { Form, UploadAvatar, Submit } from "../../../components/form";
 
 const StepThree = () => {
   const navigate = useNavigate();
   const ValidationSchema = Yup.object().shape({
-    profilePhoto: Yup.mixed().required().label("Profile Photo")
+    profilePhoto: Yup.mixed().required().label("Profile Photo"),
   });
 
   const initialValues = {
-    profilePhoto: ""
+    profilePhoto: "",
   };
 
   return (
