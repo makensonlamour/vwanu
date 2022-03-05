@@ -5,57 +5,69 @@ exports[`Test Dom Elements match snapshot 1`] = `
   className=""
 >
   <div
-    className="grid grid-cols-2 gap-4"
+    className="lg:grid lg:grid-cols-2 lg:gap-4"
   >
     <div
-      className="justify-center"
+      className="hidden lg:justify-center lg:block"
     >
       <div
-        className="bg-yellow-400 rounded-br-[300px] h-screen"
-      >
-        <div
-          className="bg-blue-600 h-4/6 rounded-br-full rounded-bl-[5000px]"
-        >
-          <p
-            className="text-center text-white text-2xl py-5"
-          >
-            Logo VWANU
-          </p>
-          <p
-            className="text-5xl text-yellow-500 font-bold py-10 text-center"
-          >
-            Welcome
-          </p>
-          <p
-            className="text-white text-xl font-semibold text-center"
-          >
-            Share your Voice and Change
-          </p>
-          <p
-            className="text-white text-xl font-semibold text-center"
-          >
-            The Haitian Community!
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="place-items-center mx-20"
-    >
-      <div
-        className="place-content-end my-8"
+        className="bg-blue-600 rounded-t-3xl h-[90%] m-6"
       >
         <p
-          className="text-right"
+          className="text-center text-white text-2xl py-5"
+        >
+          <img
+            alt="logo_vwanu"
+            className="w-1/3 m-auto"
+            src="Asset_3.png"
+          />
+        </p>
+        <p
+          className="text-5xl text-yellow-500 font-bold py-8 text-center"
+        >
+          Welcome
+        </p>
+        <p
+          className="text-white text-xl font-semibold text-center pb-2"
+        >
+          Share your Voice and Change
+        </p>
+        <p
+          className="text-white text-xl font-semibold text-center"
+        >
+          The Haitian Community!
+        </p>
+      </div>
+      <div
+        className="bg-yellow-400 rounded-b-3xl rounded-tr-[130px] h-[50%] -mt-[9rem] m-6"
+      />
+    </div>
+    <div
+      className="place-items-center mx-10 md:mx-20"
+    >
+      <div
+        className="mt-4 mb-6 lg:hidden"
+      >
+        <img
+          alt="logo_vwanu"
+          className="w-2/5 m-auto"
+          src="Asset_2.png"
+        />
+      </div>
+      <div
+        className="place-content-center my-8"
+      >
+        <p
+          className="text-center mt-4"
         >
           <span
-            className="text-orange-500 text-lg font-semibold"
+            className="text-md text-orange-500 font-semibold md:text-2xl"
           >
             Not a member ?
           </span>
            
           <a
-            className="btn btn-sm btn-primary px-8 ml-1 rounded-full text-base-200 normal-case"
+            className="btn btn-primary btn-sm rounded-full text-base-200 normal-case md:px-8 ml-1"
             data-testid="registerBtn"
             href="/register"
             onClick={[Function]}
@@ -65,11 +77,11 @@ exports[`Test Dom Elements match snapshot 1`] = `
         </p>
       </div>
       <div
-        className="px-10 pt-5 pb-10 card shadow-lg rounded-3xl"
+        className="px-10 pt-5 pb-10 card shadow-2xl rounded-3xl"
         role="form"
       >
         <h1
-          className="card-title text-orange-500"
+          className="card-title text-orange-500 font-bold text-2xl"
         >
           Sign in to Vwanu
         </h1>
@@ -86,7 +98,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
           <input
             autoCapitalize="none"
             autoComplete="new-email"
-            className="input bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+            className="input bg-blue-200 text-blue-600 font-semibold rounded-full input-primary border-none lg:input-lg"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Email"
@@ -109,7 +121,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
             autoCapitalize="none"
             autoComplete="new-email"
             autoCorrect="false"
-            className="input bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none"
+            className="input mt-2 bg-blue-200 text-blue-600 font-semibold rounded-full input-primary border-none md:px-6 lg:input-lg"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Password"
@@ -118,8 +130,38 @@ exports[`Test Dom Elements match snapshot 1`] = `
             value=""
           />
         </div>
+        <div
+          className="form-control mt-3"
+        >
+          <label
+            className="label"
+          >
+            <input
+              className="checkbox"
+              onBlur={[Function]}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              className="label-text ml-2 text-sm lg:text-lg lg:ml-0"
+            >
+              Remember me
+            </span>
+            <span
+              className="ml-8 text-sm lg:text-lg"
+            >
+              <a
+                className="text-orange-500 font-bold"
+                href="/forgot-password"
+                onClick={[Function]}
+              >
+                Forgot password
+              </a>
+            </span>
+          </label>
+        </div>
         <button
-          className="btn btn-primary mt-4 normal-case rounded-full text-base-200 text-md"
+          className="btn btn-primary mt-4 normal-case rounded-full text-base-200 text-md btn-sm lg:btn-md"
           data-testid="loginBtn"
           onClick={[Function]}
           type="submit"
@@ -127,18 +169,86 @@ exports[`Test Dom Elements match snapshot 1`] = `
           Login
         </button>
         <div
-          className="mt-4"
+          className="mt-9 text-center"
         >
           <span
-            className="text-orange-500 text-lg"
+            className="text-blue-600 text-center inline text-md md:text-lg"
           >
-             Don't remember your password? 
+             Or sign in with 
             <a
               className="text-blue-500"
-              href="/forgot-password"
+              href="/"
               onClick={[Function]}
             >
-              Click here
+              <svg
+                className="text-2xl inline mx-1"
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"
+                />
+              </svg>
+            </a>
+            <a
+              className="text-sky-600"
+              href="/"
+              onClick={[Function]}
+            >
+              <svg
+                className="text-2xl inline mx-1"
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+                />
+              </svg>
+            </a>
+            <a
+              className="text-red-600"
+              href="/"
+              onClick={[Function]}
+            >
+              <svg
+                className="text-2xl inline mx-1"
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 512 512"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256,8C119.1,8,8,119.1,8,256S119.1,504,256,504,504,392.9,504,256,392.9,8,256,8ZM185.3,380a124,124,0,0,1,0-248c31.3,0,60.1,11,83,32.3l-33.6,32.6c-13.2-12.9-31.3-19.1-49.4-19.1-42.9,0-77.2,35.5-77.2,78.1S142.3,334,185.3,334c32.6,0,64.9-19.1,70.1-53.3H185.3V238.1H302.2a109.2,109.2,0,0,1,1.9,20.7c0,70.8-47.5,121.2-118.8,121.2ZM415.5,273.8v35.5H380V273.8H344.5V238.3H380V202.8h35.5v35.5h35.2v35.5Z"
+                />
+              </svg>
             </a>
           </span>
         </div>
