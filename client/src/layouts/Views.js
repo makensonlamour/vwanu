@@ -1,10 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { routes, role } from "../routes";
-//import routesPath from "../routesPath";
-import Alerts from "../components/common/Alerts";
-import { useSelector } from "react-redux";
-import { getAlerts } from "../store/alerts";
 
 //Container
 import LayoutUser from "./LayoutUser/index";
@@ -15,11 +11,8 @@ import LayoutAuth from "./LayoutAuth/index";
 import NotFound from "../pages/NotFound/index";
 
 const Views = () => {
-  const alerts = useSelector(getAlerts);
-
   return (
     <>
-      <Alerts alerts={alerts} />
       <Routes>
         <Route element={<LayoutPublic />}>
           {routes.map((route) => {
