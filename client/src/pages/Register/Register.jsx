@@ -11,13 +11,13 @@ import { createUser } from "../../store/auth";
 const ValidationSchema = Yup.object().shape({
   email: Yup.string().required().min(6).email().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
-  termOfUse: Yup.bool().oneOf([true], "You must accept the terms of use and the policy privacy")
+  termOfUse: Yup.bool().oneOf([true], "You must accept the terms of use and the policy privacy"),
 });
 
 const initialValues = {
   email: "",
   password: "",
-  termOfUse: false
+  termOfUse: false,
 };
 
 const LoginScreen = () => {

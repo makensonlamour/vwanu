@@ -11,6 +11,16 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
+  "ignorePatterns": [
+    "temp.js",
+    "**/vendor/*.js",
+    "**/caches/**",
+    "**/Caches/**",
+    "**/Library/**",
+    "Library/",
+    "node_modules",
+    "**/node_modules/**"
+  ],
   "rules": {
     "import/no-unresolved": "off",
     "import/extensions": "off",
