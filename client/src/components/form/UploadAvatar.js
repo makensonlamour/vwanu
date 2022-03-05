@@ -40,7 +40,7 @@ UploadAvatar.propTypes = {
   appendText: PropTypes.string,
   icon: PropTypes.element.isRequired,
   className: PropTypes.string,
-  id: PropTypes.any.required,
+  id: PropTypes.any.isRequired,
   format: PropTypes.string,
 };
 

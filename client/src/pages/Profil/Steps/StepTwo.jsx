@@ -12,12 +12,12 @@ const StepTwo = () => {
   const ValidationSchema = Yup.object().shape({
     firstName: Yup.string().required().min(3).label("First Name"),
     lastName: Yup.string().required().min(3).label("Last Name"),
-    dateOfBirth: Yup.date().required().label("Date of Birth")
+    dateOfBirth: Yup.date().required().label("Date of Birth"),
   });
   const initialValues = {
     firstName: "",
     lastName: "",
-    dateOfBirth: ""
+    dateOfBirth: "",
   };
   return (
     <>
