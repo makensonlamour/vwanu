@@ -1,20 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Register Test Dom Elements match snapshot 1`] = `
-<div
-  className=""
->
+Array [
   <div
-    className="lg:grid lg:grid-cols-2 lg:gap-4"
+    className="grid grid-cols-1 lg:mb-28 lg:grid-cols-2 lg:gap-4 xl:mx-36 2xl:mx-96"
   >
     <div
-      className="hidden lg:justify-center lg:block"
+      className="lg:justify-center"
     >
       <div
-        className="bg-blue-600 rounded-t-3xl h-[90%] m-6"
+        className="bg-gradient-to-tr from-blue-400 to-secondary h-96 z-0 lg:rounded-t-3xl lg:h-[70%] lg:m-6"
       >
         <p
-          className="text-center text-white text-2xl py-5"
+          className="text-center pt-14 text-base-100 text-2xl py-5"
         >
           <img
             alt="logo_vwanu"
@@ -23,68 +21,197 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
           />
         </p>
         <p
-          className="text-5xl text-yellow-500 font-bold py-8 text-center"
+          className="text-5xl text-v-yellow-dark font-bold py-8 text-center"
         >
-          Welcome
+          Hello
         </p>
         <p
-          className="text-white text-xl font-semibold text-center pb-2"
+          className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2"
         >
           Share your Voice and Change
         </p>
         <p
-          className="text-white text-xl font-semibold text-center"
+          className="hidden lg:block text-base-100 text-xl font-semibold text-center"
         >
           The Haitian Community!
         </p>
       </div>
       <div
-        className="bg-yellow-400 rounded-b-3xl rounded-tr-[130px] h-[50%] -mt-[9rem] m-6"
+        className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[9rem] m-6"
       />
-    </div>
-    <div
-      className="place-items-center mx-10 md:mx-20"
-    >
       <div
-        className="mt-4 mb-6 lg:hidden"
+        className="hidden lg:block mr-20 z-50 -mt-[375px]"
       >
+         
         <img
-          alt="logo_vwanu"
-          className="w-2/5 m-auto"
-          src="Asset_2.png"
+          alt="young_people"
+          className="object-fit"
+          src="welcome.png"
         />
       </div>
+    </div>
+    <div
+      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10 lg:mt-6 lg:mx-10 md:mx-36 2xl:px-24"
+    >
       <div
-        className="place-content-end my-8"
+        className="lg:place-content-center lg:mt-8 lg:mb-5"
       >
         <p
-          className="text-center mt-4"
+          className="text-center mt-10"
         >
           <span
-            className="text-md text-orange-500 font-semibold md:text-2x"
+            className="text-md text-primary font-semibold md:text-xl"
           >
             Already have an account ?
           </span>
            
           <a
-            className="btn btn-primary btn-sm rounded-full text-base-200 normal-case md:px-8 ml-1"
+            className="btn btn-primary btn-sm rounded-full normal-case hover:btn-secondary hover:text-base-100 md:px-8 ml-1 text-base-100"
             data-testid="loginBtn"
             href="/login"
             onClick={[Function]}
           >
-            Login
+            Sign In
           </a>
         </p>
       </div>
       <div
-        className="px-5 lg:px-10 pt-5 pb-10 card shadow-2xl rounded-3xl"
+        className="hidden lg:block mb-8 text-center"
+      >
+        <span
+          className="text-blue-600 text-center inline text-md md:text-lg"
+        >
+           Or sign in with 
+          <a
+            className="text-blue-500 ml-2"
+            href="/"
+            onClick={[Function]}
+          >
+            <svg
+              className="text-2xl inline mx-1"
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 16 16"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"
+              />
+            </svg>
+          </a>
+          <a
+            className="text-sky-400"
+            href="/"
+            onClick={[Function]}
+          >
+            <svg
+              className="text-2xl inline mx-1"
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 16 16"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+              />
+            </svg>
+          </a>
+          <a
+            className="text-red-600"
+            href="/"
+            onClick={[Function]}
+          >
+            <svg
+              className="text-2xl inline mx-1"
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 512 512"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256,8C119.1,8,8,119.1,8,256S119.1,504,256,504,504,392.9,504,256,392.9,8,256,8ZM185.3,380a124,124,0,0,1,0-248c31.3,0,60.1,11,83,32.3l-33.6,32.6c-13.2-12.9-31.3-19.1-49.4-19.1-42.9,0-77.2,35.5-77.2,78.1S142.3,334,185.3,334c32.6,0,64.9-19.1,70.1-53.3H185.3V238.1H302.2a109.2,109.2,0,0,1,1.9,20.7c0,70.8-47.5,121.2-118.8,121.2ZM415.5,273.8v35.5H380V273.8H344.5V238.3H380V202.8h35.5v35.5h35.2v35.5Z"
+              />
+            </svg>
+          </a>
+        </span>
+      </div>
+      <div
+        className="px-5 lg:px-10 pt-5 pb-10 card mt-4 lg:shadow-2xl lg:rounded-t-3xl"
         role="form"
       >
         <h1
-          className="card-title text-orange-500"
+          className="card-title text-primary font-bold text-xl lg:text-2xl"
         >
-          Register to Vwanu
+          Join the Vwanu Community
         </h1>
+        <div
+          className="grid grid-cols-2"
+        >
+          <div
+            className="form-control"
+          >
+            <label
+              className="label"
+            >
+              <span
+                className="label-text"
+              />
+            </label>
+            <input
+              autoCapitalize="none"
+              autoComplete="new-email"
+              className="input mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+              onBlur={[Function]}
+              onChange={[Function]}
+              placeholder="First Name"
+              type="text"
+            />
+          </div>
+          <div
+            className="form-control"
+          >
+            <label
+              className="label"
+            >
+              <span
+                className="label-text"
+              />
+            </label>
+            <input
+              autoCapitalize="none"
+              autoComplete="new-email"
+              className="input ml-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+              onBlur={[Function]}
+              onChange={[Function]}
+              placeholder="Last Name"
+              type="text"
+            />
+          </div>
+        </div>
         <div
           className="form-control"
         >
@@ -98,7 +225,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
           <input
             autoCapitalize="none"
             autoComplete="new-email"
-            className="input bg-blue-200 text-blue-600 font-semibold rounded-full input-primary border-none lg:input-lg"
+            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Email"
@@ -121,7 +248,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
             autoCapitalize="none"
             autoComplete="new-email"
             autoCorrect="false"
-            className="input mt-2 bg-blue-200 text-blue-600 font-semibold rounded-full input-primary border-none md:px-6 lg:input-lg"
+            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Password"
@@ -129,6 +256,41 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
             type="password"
             value=""
           />
+          <label
+            className="w-10 rounded px-2 py-1 text-sm hover:text-gray-700 text-gray-600 text-right -mt-9 mr-3 ml-auto"
+            htmlFor="toggle"
+            onClick={[Function]}
+          >
+            Show
+          </label>
+        </div>
+        <div
+          className="form-control"
+        >
+          <label
+            className="label"
+          >
+            <span
+              className="label-text"
+            />
+          </label>
+          <input
+            autoCapitalize="none"
+            autoComplete="new-email"
+            autoCorrect="false"
+            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="Confirm Password"
+            type="password"
+          />
+          <label
+            className="w-10 rounded px-2 py-1 text-sm hover:text-gray-700 text-gray-600 text-right -mt-9 mr-3 ml-auto"
+            htmlFor="toggle"
+            onClick={[Function]}
+          >
+            Show
+          </label>
         </div>
         <div
           className="form-control mt-3"
@@ -137,7 +299,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
             className="label"
           >
             <input
-              className="checkbox checkbox-primary border-blue-300 hover:border-blue-300 ml-2 lg:ml-2"
+              className="checkbox appearance-none checked:bg-secondary checked:text-base-100 hover:text-base-100 active:text-base-100 border-blue-300 hover:border-blue-300 ml-2 lg:ml-2"
               onBlur={[Function]}
               onChange={[Function]}
               required={true}
@@ -145,9 +307,9 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
               value={false}
             />
             <span
-              className="label-text ml-2 text-sm lg:text-lg lg:ml-2"
+              className="text-secondary font-semibold ml-2 text-sm lg:text-lg lg:ml-2"
             >
-              I accept the terms of use and the policy privacy
+              I Agree with Privacy and Policy
             </span>
             <span
               className="ml-8 text-sm lg:text-lg"
@@ -155,15 +317,108 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
           </label>
         </div>
         <button
-          className="btn btn-primary mt-4 normal-case rounded-full text-base-200 text-md btn-sm lg:btn-md"
+          className="btn btn-primary mt-4 normal-case text-base-100 hover:bg-secondary rounded-full text-md btn-md"
           data-testid="registerBtn"
           onClick={[Function]}
           type="submit"
         >
-          Register
+          Sign Up
         </button>
       </div>
+      <div
+        className="lg:hidden mb-8 text-center"
+      >
+        <span
+          className="text-blue-600 text-center inline text-md md:text-lg"
+        >
+           Or sign in with 
+          <a
+            className="text-blue-500 ml-2"
+            href="/"
+            onClick={[Function]}
+          >
+            <svg
+              className="text-2xl inline mx-1"
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 16 16"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"
+              />
+            </svg>
+          </a>
+          <a
+            className="text-sky-400"
+            href="/"
+            onClick={[Function]}
+          >
+            <svg
+              className="text-2xl inline mx-1"
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 16 16"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+              />
+            </svg>
+          </a>
+          <a
+            className="text-red-600"
+            href="/"
+            onClick={[Function]}
+          >
+            <svg
+              className="text-2xl inline mx-1"
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 512 512"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M256,8C119.1,8,8,119.1,8,256S119.1,504,256,504,504,392.9,504,256,392.9,8,256,8ZM185.3,380a124,124,0,0,1,0-248c31.3,0,60.1,11,83,32.3l-33.6,32.6c-13.2-12.9-31.3-19.1-49.4-19.1-42.9,0-77.2,35.5-77.2,78.1S142.3,334,185.3,334c32.6,0,64.9-19.1,70.1-53.3H185.3V238.1H302.2a109.2,109.2,0,0,1,1.9,20.7c0,70.8-47.5,121.2-118.8,121.2ZM415.5,273.8v35.5H380V273.8H344.5V238.3H380V202.8h35.5v35.5h35.2v35.5Z"
+              />
+            </svg>
+          </a>
+        </span>
+      </div>
     </div>
-  </div>
-</div>
+  </div>,
+  <div
+    className="bg-gray-100 shadow-lg rounded-t-lg lg:mx-6 px-6 py-6 mt-10"
+  >
+    <span
+      className="text-secondary font-semibold"
+    >
+      Language:
+    </span>
+  </div>,
+]
 `;

@@ -137,14 +137,12 @@ describe("Test require fields", () => {
 
 //test login functionality
 describe("Test Login Functionality", () => {
-  it(" should show error message on password and email when the form is submitted with empty fields", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <Login />
-        </Router>
-      );
-    });
+  it("should show error message on password and email when the form is submitted with empty fields", async () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
@@ -158,14 +156,12 @@ describe("Test Login Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("password-error-message")).toHaveTextContent("Password is a required field"));
   });
 
-  it(" should show error message email when the form is submitted with empty email", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <Login />
-        </Router>
-      );
-    });
+  it("should show error message email when the form is submitted with empty email", async () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
@@ -178,14 +174,12 @@ describe("Test Login Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email is a required field"));
   });
 
-  it(" should show error message password when the form is submitted with empty password", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <Login />
-        </Router>
-      );
-    });
+  it("should show error message password when the form is submitted with empty password", async () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
@@ -198,14 +192,12 @@ describe("Test Login Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("password-error-message")).toHaveTextContent("Password is a required field"));
   });
 
-  it(" should show error message email if email missing @", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <Login />
-        </Router>
-      );
-    });
+  it("should show error message email if email missing @", async () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
@@ -218,14 +210,12 @@ describe("Test Login Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email must be a valid email"));
   });
 
-  it(" should show error message email if email missing .", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <Login />
-        </Router>
-      );
-    });
+  it("should show error message email if email missing .", async () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
@@ -238,14 +228,12 @@ describe("Test Login Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email must be a valid email"));
   });
 
-  it(" should show error message password if password is least than 8 characters .", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <Login />
-        </Router>
-      );
-    });
+  it("should show error message password if password is least than 8 characters .", async () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");
@@ -258,14 +246,12 @@ describe("Test Login Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("password-error-message")).toHaveTextContent("Password must be at least 8 characters"));
   });
 
-  it(" shouldn't display error", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <Login />
-        </Router>
-      );
-    });
+  it("shouldn't display error", async () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const passwordInput = screen.getByPlaceholderText("Password");

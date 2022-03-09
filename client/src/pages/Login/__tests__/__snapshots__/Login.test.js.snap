@@ -5,16 +5,16 @@ exports[`Test Dom Elements match snapshot 1`] = `
   className=""
 >
   <div
-    className="lg:grid lg:grid-cols-2 lg:gap-4"
+    className="grid grid-cols-1 lg:mb-48 lg:grid-cols-2 lg:gap-4 xl:mx-36 2xl:mx-96"
   >
     <div
-      className="hidden lg:justify-center lg:block"
+      className="lg:justify-center"
     >
       <div
-        className="bg-blue-600 rounded-t-3xl h-[90%] m-6"
+        className="bg-gradient-to-tr from-blue-400 to-secondary  h-96 z-0 lg:rounded-t-3xl lg:h-[90%] lg:m-6"
       >
         <p
-          className="text-center text-white text-2xl py-5"
+          className="text-center pt-14 text-base-100 text-2xl py-5"
         >
           <img
             alt="logo_vwanu"
@@ -23,51 +23,52 @@ exports[`Test Dom Elements match snapshot 1`] = `
           />
         </p>
         <p
-          className="text-5xl text-yellow-500 font-bold py-8 text-center"
+          className="text-5xl text-v-yellow-dark font-bold py-8 text-center"
         >
           Welcome
         </p>
         <p
-          className="text-white text-xl font-semibold text-center pb-2"
+          className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2"
         >
           Share your Voice and Change
         </p>
         <p
-          className="text-white text-xl font-semibold text-center"
+          className="hidden lg:block text-base-100 text-xl font-semibold text-center"
         >
           The Haitian Community!
         </p>
       </div>
       <div
-        className="bg-yellow-400 rounded-b-3xl rounded-tr-[130px] h-[50%] -mt-[9rem] m-6"
+        className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[50%] -mt-[9rem] m-6"
       />
-    </div>
-    <div
-      className="place-items-center mx-10 md:mx-20"
-    >
       <div
-        className="mt-4 mb-6 lg:hidden"
+        className="hidden lg:block mr-20 z-50 -mt-[375px]"
       >
+         
         <img
-          alt="logo_vwanu"
-          className="w-2/5 m-auto"
-          src="Asset_2.png"
+          alt="young_people"
+          className="object-fit"
+          src="welcome.png"
         />
       </div>
+    </div>
+    <div
+      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10 lg:mt-6 lg:mx-10 md:mx-36 2xl:px-24"
+    >
       <div
-        className="place-content-center my-8"
+        className="hidden lg:block lg:place-content-center lg:my-8"
       >
         <p
           className="text-center mt-4"
         >
           <span
-            className="text-md text-orange-500 font-semibold md:text-2xl"
+            className="text-md text-primary font-semibold md:text-xl"
           >
             Not a member ?
           </span>
            
           <a
-            className="btn btn-primary btn-sm rounded-full text-base-200 normal-case md:px-8 ml-1"
+            className="btn btn-secondary btn-sm rounded-full normal-case hover:btn-primary hover:text-base-100 md:px-8 ml-1 text-base-100"
             data-testid="registerBtn"
             href="/register"
             onClick={[Function]}
@@ -77,11 +78,11 @@ exports[`Test Dom Elements match snapshot 1`] = `
         </p>
       </div>
       <div
-        className="px-5 lg:px-10 pt-5 pb-10 card shadow-2xl rounded-3xl"
+        className="px-5 lg:px-10 pt-5 pb-10 card mt-4 lg:shadow-2xl lg:rounded-t-3xl"
         role="form"
       >
         <h1
-          className="card-title text-orange-500 font-bold text-2xl"
+          className="card-title text-primary font-bold text-xl lg:text-2xl"
         >
           Sign in to Vwanu
         </h1>
@@ -98,7 +99,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
           <input
             autoCapitalize="none"
             autoComplete="new-email"
-            className="input bg-blue-200 text-blue-600 font-semibold rounded-full input-primary border-none lg:input-lg"
+            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Email"
@@ -121,7 +122,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
             autoCapitalize="none"
             autoComplete="new-email"
             autoCorrect="false"
-            className="input mt-2 bg-blue-200 text-blue-600 font-semibold rounded-full input-primary border-none md:px-6 lg:input-lg"
+            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Password"
@@ -129,6 +130,13 @@ exports[`Test Dom Elements match snapshot 1`] = `
             type="password"
             value=""
           />
+          <label
+            className="w-10 rounded px-2 py-1 text-sm hover:text-gray-700 text-gray-600 text-right -mt-9 mr-3 ml-auto"
+            htmlFor="toggle"
+            onClick={[Function]}
+          >
+            Show
+          </label>
         </div>
         <div
           className="form-control mt-3"
@@ -137,13 +145,13 @@ exports[`Test Dom Elements match snapshot 1`] = `
             className="label"
           >
             <input
-              className="checkbox checkbox-primary border-blue-300 hover:border-blue-300 ml-2 lg:ml-2"
+              className="checkbox appearance-none checked:bg-secondary checked:text-base-100 hover:text-base-100 active:text-base-100 border-blue-300 hover:border-blue-300 ml-2 lg:ml-2"
               onBlur={[Function]}
               onChange={[Function]}
               type="checkbox"
             />
             <span
-              className="label-text ml-2 text-sm lg:text-lg lg:ml-2"
+              className="text-secondary font-semibold ml-2 text-sm lg:text-lg lg:ml-2"
             >
               Remember me
             </span>
@@ -151,7 +159,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
               className="ml-8 text-sm lg:text-lg"
             >
               <a
-                className="text-orange-500 font-bold"
+                className="text-primary font-bold hover:text-secondary"
                 href="/forgot-password"
                 onClick={[Function]}
               >
@@ -161,7 +169,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
           </label>
         </div>
         <button
-          className="btn btn-primary mt-4 normal-case rounded-full text-base-200 text-md btn-sm lg:btn-md"
+          className="btn btn-primary mt-4 normal-case text-base-100 hover:bg-secondary rounded-full text-md btn-md"
           data-testid="loginBtn"
           onClick={[Function]}
           type="submit"
@@ -176,7 +184,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
           >
              Or sign in with 
             <a
-              className="text-blue-500"
+              className="text-blue-500 ml-2"
               href="/"
               onClick={[Function]}
             >
@@ -201,7 +209,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
               </svg>
             </a>
             <a
-              className="text-sky-600"
+              className="text-sky-400"
               href="/"
               onClick={[Function]}
             >
@@ -252,8 +260,38 @@ exports[`Test Dom Elements match snapshot 1`] = `
             </a>
           </span>
         </div>
+        <div
+          className="mt-8 lg:hidden"
+        >
+          <p
+            className="text-center mt-4"
+          >
+            <span
+              className="text-md text-primary font-semibold md:text-xl"
+            >
+              Not a member ?
+            </span>
+             
+            <a
+              className="btn btn-secondary btn-sm rounded-full text-base-100 normal-case md:px-8 ml-1 hover:bg-primary"
+              href="/register"
+              onClick={[Function]}
+            >
+              Register
+            </a>
+          </p>
+        </div>
       </div>
     </div>
+  </div>
+  <div
+    className="bg-gray-100 shadow-lg rounded-t-lg lg:mx-6 px-6 py-6"
+  >
+    <span
+      className="text-secondary font-semibold"
+    >
+      Language:
+    </span>
   </div>
 </div>
 `;
