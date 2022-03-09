@@ -7,6 +7,11 @@ module.exports = {
         "v-yellow": "#ffc700",
         "v-gray": "#eff3ff",
       },
+      screens: {
+        "3xl": "2000px",
+        "4xl": "2400px",
+        // => @media (min-width: 2000px) { ... }
+      },
     },
   },
   plugins: [require("daisyui")],
@@ -27,13 +32,13 @@ module.exports = {
 
           "base-100": "#FFFFFF",
 
-          info: "#3ABFF8",
+          info: "#e0f2fe",
 
-          success: "#36D399",
+          success: "#dcfce7",
 
-          warning: "#FBBD23",
+          warning: "#fef9c3",
 
-          error: "#F87272",
+          error: "#fee2e2",
         },
       },
     ],

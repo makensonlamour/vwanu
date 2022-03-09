@@ -1,9 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Register Test Dom Elements match snapshot 1`] = `
-Array [
+<div
+  className="mx-0 md:mx-0 lg:mx-16 xl:mx-32 2xl:mx-64 3xl:mx-[22%] 4xl:mx-[25%]"
+>
   <div
-    className="grid grid-cols-1 lg:mb-28 lg:grid-cols-2 lg:gap-4 xl:mx-36 2xl:mx-96"
+    className="grid grid-cols-1 lg:mb-48 lg:grid-cols-2 lg:gap-4"
   >
     <div
       className="lg:justify-center"
@@ -37,10 +39,10 @@ Array [
         </p>
       </div>
       <div
-        className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[9rem] m-6"
+        className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[35%] m-6 lg:h-[45%] xl:h-[47%] 2xl:h-[50%] 3xl:h-[55%] 4xl:h-[53%] 4xl:-mt-[25%]"
       />
       <div
-        className="hidden lg:block mr-20 z-50 -mt-[375px]"
+        className="hidden lg:block mr-20 z-50 -mt-[61%] 2xl:-mt-[62%]"
       >
          
         <img
@@ -51,7 +53,7 @@ Array [
       </div>
     </div>
     <div
-      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10 lg:mt-6 lg:mx-10 md:mx-36 2xl:px-24"
+      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10md:mx-36 lg:mt-6 lg:mx-0 xl:mx-0 2xl:mx-0"
     >
       <div
         className="lg:place-content-center lg:mt-8 lg:mb-5"
@@ -410,7 +412,7 @@ Array [
         </span>
       </div>
     </div>
-  </div>,
+  </div>
   <div
     className="bg-gray-100 shadow-lg rounded-t-lg lg:mx-6 px-6 py-6 mt-10"
   >
@@ -419,6 +421,6 @@ Array [
     >
       Language:
     </span>
-  </div>,
-]
+  </div>
+</div>
 `;

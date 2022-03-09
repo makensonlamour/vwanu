@@ -31,7 +31,7 @@ const ForgotPasswordScreen = () => {
           <div className="mt-4 mb-6 lg:mb-10">
             <img className="w-2/5 lg:w-1/5 m-auto" src={logo_mobile} alt="logo_vwanu" />
           </div>
-          <div className="justify-center m-auto lg:w-1/3">
+          <div className="justify-center m-auto md:px-16 lg:px-0 md:w-2/3 lg:w-1/3">
             <Form
               validationSchema={ValidationSchema}
               initialValues={initialValues}
@@ -40,7 +40,7 @@ const ForgotPasswordScreen = () => {
             >
               <h1 className="card-title text-secondary text-md text-center">Forgot your password?</h1>
               <p className="text-sky-600">{`Enter your email and we'll send you a link to reset your password.`}</p>
-              <Alerts className="bg-red-200 mt-4" alerts={alerts} />
+              <Alerts className="bg-error mt-4" alerts={alerts} />
               <Field
                 required
                 autoCapitalize="none"

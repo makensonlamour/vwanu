@@ -25,8 +25,8 @@ const LoginScreen = () => {
   const handleLogin = (credentials) => dispatch(Login(credentials));
   return (
     <>
-      <div className="">
-        <div className="grid grid-cols-1 lg:mb-48 lg:grid-cols-2 lg:gap-4 xl:mx-36 2xl:mx-96">
+      <div className="mx-0 md:mx-0 lg:lg:mx-16 xl:mx-32 2xl:mx-64 3xl:mx-[22%] 4xl:mx-[25%]">
+        <div className="grid grid-cols-1 lg:mb-48 lg:grid-cols-2 lg:gap-4">
           <div className="lg:justify-center">
             <div className="bg-gradient-to-tr from-blue-400 to-secondary  h-96 z-0 lg:rounded-t-3xl lg:h-[90%] lg:m-6">
               <p className="text-center pt-14 text-base-100 text-2xl py-5">
@@ -36,14 +36,14 @@ const LoginScreen = () => {
               <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">Share your Voice and Change</p>
               <p className="hidden lg:block text-base-100 text-xl font-semibold text-center">The Haitian Community!</p>
             </div>
-            <div className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[50%] -mt-[9rem] m-6"></div>
-            <div className="hidden lg:block mr-20 z-50 -mt-[375px]">
+            <div className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[35%] m-6 lg:h-[50%] xl:h-[52%] 2xl:h-[60%] 3xl:h-[63%] 3xl:-mt-[30%]"></div>
+            <div className="hidden lg:block mr-20 z-50 -mt-[61%] 2xl:-mt-[62%]">
               {" "}
               <img className="object-fit" src={WelcomeImg} alt="young_people" />
             </div>
           </div>
 
-          <div className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10 lg:mt-6 lg:mx-10 md:mx-36 2xl:px-24">
+          <div className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10 md:mx-36 lg:mt-6 lg:mx-0 xl:mx-0 2xl:mx-0">
             <div className="hidden lg:block lg:place-content-center lg:my-8">
               <p className="text-center mt-4">
                 <span className="text-md text-primary font-semibold md:text-xl">Not a member ?</span>{" "}
@@ -66,7 +66,7 @@ const LoginScreen = () => {
               className="mt-4 lg:shadow-2xl lg:rounded-t-3xl"
             >
               <h1 className="card-title text-primary font-bold text-xl lg:text-2xl">Sign in to Vwanu</h1>
-              <Alerts className="bg-red-200" alerts={alerts} />
+              <Alerts className="bg-error" alerts={alerts} />
               <Field
                 required
                 autoCapitalize="none"
