@@ -9,7 +9,7 @@ services:
     ports:
       - '80:80'
     environment:
-      REACT_API_URL: // api/api
+      - REACT_APP_API_URI=${SERVER_ADDRESS}
     restart: unless-stopped
 
   api:
