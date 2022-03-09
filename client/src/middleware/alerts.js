@@ -18,7 +18,7 @@ const alert = (store) => (next) => async (action) => {
     })
   );
   // Setting a sec for each 10 words
-  setTimeout(() => store.dispatch(removeAlert(id)), action.payload.length * 200);
+  setTimeout(() => store.dispatch(removeAlert(id)), action.payload.length * 100);
 };
 
 export default alert;

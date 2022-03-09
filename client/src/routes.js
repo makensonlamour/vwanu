@@ -2,6 +2,7 @@ import routesPath from "./routesPath";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import ForgotPassword from "./pages/ResetPassword/ForgotPassword";
+import VerifiedEmail from "./pages/VerifiedEmail/VerifiedEmail";
 import Home from "./pages/Home/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
@@ -31,6 +32,12 @@ let routes = [
     name: "Forgot Password",
     element: ForgotPassword,
     access: role.PUBLIC,
+  },
+  {
+    path: routesPath.VERIFIER_EMAIL,
+    name: "Verified Email",
+    element: VerifiedEmail,
+    access: role.AUTH,
   },
   {
     path: routesPath.NEWSFEED,
