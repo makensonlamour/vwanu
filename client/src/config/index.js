@@ -16,7 +16,7 @@ const environment = {
     idsTypes: ["ID", "Passport", "License"],
   },
   staging: {
-    BASE_URL: "YOUR_BASE_URL",
+    BASE_URL: process.env.REACT_APP_API_URL,
     endpoints: {
       LOGIN: "/auth",
       REGISTER: "/user",

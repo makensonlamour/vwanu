@@ -10,6 +10,7 @@
     "build": "tsc",
     "preinstall": "npm i nodemon -g",
     "start": "NODE_ENV=development node src/bin/index.js",
+    "start:staging": "NODE_ENV=staging node src/bin/index.js",
     "lint": "node_modules/.bin/eslint src/**/*.ts ",
     "lint:fix": "node_modules/.bin/eslint --fix src/**/*.ts ",
     "lint:prettier": "prettier  --fix src/**/*.js*",
