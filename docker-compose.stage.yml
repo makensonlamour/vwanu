@@ -26,6 +26,13 @@ services:
       - PGUSER=vwanu
       - PGPASSWORD=123456
       - PGHOST=pg_db
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - SMTP_SERVICE${SMTP_SERVICE}
+
     depends_on:
       - pg_db
    
