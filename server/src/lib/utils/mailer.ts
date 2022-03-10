@@ -11,6 +11,7 @@ const smtp = config?.get<{
   port: number;
   secure: boolean;
   logSuccess?: boolean;
+  service?: string;
 }>('smtp');
 
 const { user, pass } = smtp;
