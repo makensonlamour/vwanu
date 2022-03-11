@@ -14,7 +14,7 @@ export default function Toast({ alerts, className }) {
           <div className={className + " alert alert-" + alert.type} key={`alert-${alert.id}`} id={alert.id} toggle={onDismiss}>
             <div className="flex-1">
               {alert.icon && <span className="px-4">{<alert.icon size="24px" />}</span>}
-              <label>{alert.msg}</label>
+              <label>{alert.msg.message}</label>
             </div>
           </div>
         </>

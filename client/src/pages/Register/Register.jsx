@@ -15,14 +15,22 @@ import { BsFacebook, BsTwitter } from "react-icons/bs";
 import { FaGooglePlus } from "react-icons/fa";
 
 const ValidationSchema = Yup.object().shape({
+  firstName: Yup.string().required().min(3).label("First Name"),
+  lastName: Yup.string().required().min(3).label("Last Name"),
   email: Yup.string().required().min(6).email().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
+  passwordConfirmation: Yup.string()
+    .required()
+    .oneOf([Yup.ref("password"), null], "Passwords must be match"),
   termOfUse: Yup.bool().oneOf([true], "You must accept the terms of use and the policy privacy"),
 });
 
 const initialValues = {
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
+  passwordConfirmation: "",
   termOfUse: false,
 };
 
@@ -87,21 +95,23 @@ const LoginScreen = () => {
               <Alerts className="bg-error" alerts={alerts} />
               <div className="grid grid-cols-2">
                 <Field
+                  required
                   autoCapitalize="none"
                   placeholder="First Name"
                   name="firstName"
                   type="text"
                   autoComplete="new-email"
-                  className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+                  className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
                   testId="firstName-error-message"
                 />
                 <Field
+                  required
                   autoCapitalize="none"
                   placeholder="Last Name"
                   name="lastName"
                   type="text"
                   autoComplete="new-email"
-                  className="ml-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+                  className="ml-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
                   testId="lastName-error-message"
                 />
               </div>
@@ -112,7 +122,7 @@ const LoginScreen = () => {
                 name="email"
                 type="email"
                 autoComplete="new-email"
-                className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+                className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
                 testId="email-error-message"
               />
               <Field
@@ -122,19 +132,20 @@ const LoginScreen = () => {
                 placeholder="Password"
                 name="password"
                 autoComplete="new-email"
-                className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+                className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
                 testId="password-error-message"
                 showPassword={true}
               />
 
               <Field
+                required
                 autoCapitalize="none"
                 autoCorrect="false"
-                placeholder="Confirm Password"
-                name="confirmPassword"
+                placeholder="Password Confirmation"
+                name="passwordConfirmation"
                 autoComplete="new-email"
-                className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
-                testId="confirmPassword-error-message"
+                className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+                testId="passwordConfirmation-error-message"
                 showPassword={true}
               />
 
