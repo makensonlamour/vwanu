@@ -24,7 +24,10 @@ jobs:
           echo "\"secure\":\"${secrets.SMTP_PORT}\"" >>  server/config/local.json
           echo "\"service\":\"${secrets.SMTP_SERVICE}\"" >>  server/config/local.json
           echo "}}" >> server/config/local.json
-
+      - name: Checking env file
+        run: |
+          ls server/config
+          cat server/config/local.json
       - name: Cache node_modules
         if: github.event_name == 'pull_request'
         uses: actions/cache@v1
