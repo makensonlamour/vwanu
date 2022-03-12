@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as actions from "../store/api";
-import env from "../config";
+import env from "react-dotenv";
 
 const api = (store) => (next) => async (action) => {
   if (action.type !== actions.apiCallBegan.type) return next(action);
@@ -9,7 +9,7 @@ const api = (store) => (next) => async (action) => {
   next(action);
   try {
     const response = await axios({
-      baseURL: process.env.REACT_APP_API_URL || "http://localhost:4000/api",
+      baseURL: env.REACT_APP_API_URL || "http://localhost:4000/api",
       ...action.payload
     });
 
