@@ -16,7 +16,8 @@ jobs:
         run: |
           touch server/config/local.json
           echo { >  server/config/local.json
-          echo "\"TEST_MAIL_API_KEY\":\"${secrets.TEST_MAIL_API_KEY}\"" >>  server/config/local.json
+
+          echo "\"TEST_MAIL_API_KEY\":\"${{secrets.TEST_MAIL_API_KEY}}\"" >>  server/config/local.json
           # echo "\"TEST_MAIL_NAMESPACE\":\"${secrets.TEST_MAIL_NAMESPACE}\"" >>  server/config/local.json
           # echo "\"smtp\":{"
           # echo "\"user\":\"${secrets.SMTP_USER}\"" >>  server/config/local.json
