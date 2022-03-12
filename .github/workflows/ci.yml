@@ -16,7 +16,6 @@ jobs:
         run: |
           touch server/config/local.json
           echo { >  server/config/local.json
-
           echo "\"TEST_MAIL_API_KEY\":\"${{secrets.TEST_MAIL_API_KEY}}\"," >>  server/config/local.json
           echo "\"TEST_MAIL_NAMESPACE\":\"${{secrets.TEST_MAIL_NAMESPACE}}\"," >>  server/config/local.json
           echo "\"smtp\":{" >>  server/config/local.json
@@ -30,14 +29,14 @@ jobs:
         run: |
           ls server/config
           cat server/config/local.json
-      - name: Cache node_modules
-        if: github.event_name == 'pull_request'
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Cache node_modules
+      #   if: github.event_name == 'pull_request'
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
       - name: Use NodeJS
         if: github.event_name == 'pull_request'
         uses: actions/setup-node@v1
