@@ -13,6 +13,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/checkout@v2
       - name: Adding env variable files
+        if: github.event_name == 'pull_request'
         run: |
           touch server/config/local.json
           echo { >  server/config/local.json
@@ -25,10 +26,8 @@ jobs:
           echo "\"secure\":\"${{secrets.SMTP_PORT}}\"," >>  server/config/local.json
           echo "\"service\":\"${{secrets.SMTP_SERVICE}}\"" >>  server/config/local.json
           echo "}}" >> server/config/local.json
-      - name: Checking env file
-        run: |
-          ls server/config
-          cat server/config/local.json
+
+
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1
