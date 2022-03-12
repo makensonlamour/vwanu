@@ -22,13 +22,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     desc?: String
 
-    static associate(models: any): void {
-      Page.belongsTo(models.User)
-      Page.hasMany(models.Post, {
-        onDelete: 'CASCADE',
-      })
-      Page.hasMany(models.Like)
-    }
+    // static associate(models: any): void {
+    //   Page.belongsTo(models.User)
+    //   Page.hasMany(models.Post, {
+    //     onDelete: 'CASCADE',
+    //   })
+    //   Page.hasMany(models.Like)
+    // }
   }
   Page.init(
     {

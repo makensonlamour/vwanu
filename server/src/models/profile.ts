@@ -22,14 +22,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     followings: string | undefined;
 
-    static associate(models: any): void {
-      Profile.belongsTo(models.User, {
-        onDelete: 'CASCADE',
-      });
-      Profile.hasMany(models.Post, {
-        onDelete: 'CASCADE',
-      });
-    }
+    postText: string;
+
+    // static associate(models: any): void {
+    //   Profile.belongsTo(models.User, {
+    //     onDelete: 'CASCADE',
+    //   });
+    //   Profile.hasMany(models.Post, {
+    //     onDelete: 'CASCADE',
+    //   });
+    // }
   }
   Profile.init(
     {
