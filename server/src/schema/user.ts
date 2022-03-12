@@ -2,11 +2,13 @@ import { z, object, string, TypeOf } from 'zod';
 
 export const createUserSchema = object({
   body: object({
+
     firstName: string({
       required_error: 'Please provide a first name',
     }),
     lastName: string({
       required_error: 'Please provide a last name',
+
     }),
     email: string({
       required_error: 'You must provide a valid email address',
@@ -23,6 +25,8 @@ export const createUserSchema = object({
   }),
 });
 
+
+
 export const UserSchema = z.object({
   id: z.number(),
   email: z.string(),
@@ -37,6 +41,7 @@ export const UpUser = object({
   username: z.string(),
   email: z.string(),
   password: string(),
+
   firstName: string(),
   lastName: string(),
   avatar: string(),
@@ -44,6 +49,7 @@ export const UpUser = object({
   backgroundImage: string(),
   backgroundImageStatus: z.boolean(),
   relationshipId: z.number(),
+
   address: string(),
   activationKey: z.string(),
   resetPasswordKey: string(),
@@ -54,6 +60,7 @@ export const UpUser = object({
   gender: string(),
   birthday: string(),
   countryId: z.number(),
+
   website: string(),
   facebook: string(),
   google: string(),
@@ -70,6 +77,7 @@ export const UpUser = object({
   email_code: string(),
   src: string(),
   ip_address: string(),
+
   followPrivacy: z.boolean(),
   friendPrivacy: z.boolean(),
   postPrivacy: string(), // z.enum(['none', 'friend', 'friendsOfFriends']), // enum , I_follow , none, everyone

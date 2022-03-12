@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
 import axios from 'axios';
@@ -13,6 +14,7 @@ import db from '../../models';
 const badPassword = '2';
 const goodPassword = 'password';
 const email = 'test@example.com';
+
 const firstName = 'John';
 const lastName = 'Doe';
 
@@ -25,6 +27,7 @@ const goodUser = {
 };
 
 // Testing the user routes //
+
 describe('/api/user', () => {
   let expressServer: any = null;
   beforeAll(async () => {
@@ -32,6 +35,7 @@ describe('/api/user', () => {
   });
 
   it('Given correct email and password it should return a user and a token', async () => {
+
     const response = await request(expressServer)
       .post('/api/user')
       .send(goodUser);
@@ -73,6 +77,7 @@ describe('/api/user *after user creation*. ', () => {
   let response = null;
   let userFromDB = null;
   let activationKey = null;
+
   let userEmail = null;
   let testmailURL = null;
   let startTimestamp = null;
@@ -227,4 +232,5 @@ describe('/api/user *after user creation*. ', () => {
         done(err);
       });
   });
+
 });

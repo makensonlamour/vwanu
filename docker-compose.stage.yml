@@ -33,6 +33,8 @@ services:
       - SMTP_SECURE=${SMTP_SECURE}
       - SMTP_SERVICE=${SMTP_SERVICE}
 
+
+
     depends_on:
       - pg_db
    
