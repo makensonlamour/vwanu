@@ -9,7 +9,7 @@ services:
     ports:
       - '80:80'
     environment:
-      - REACT_APP_API_URI=${SERVER_ADDRESS}
+      - REACT_APP_API_URL=${SERVER_ADDRESS}
     restart: unless-stopped
 
   api:
@@ -31,7 +31,9 @@ services:
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
       - SMTP_SECURE=${SMTP_SECURE}
-      - SMTP_SERVICE${SMTP_SERVICE}
+      - SMTP_SERVICE=${SMTP_SERVICE}
+
+
 
     depends_on:
       - pg_db

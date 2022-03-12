@@ -1,6 +1,9 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
+import axios from 'axios';
+import config from 'config';
+import ChanceJS from 'chance';
 import request from 'supertest';
 
 // Custom dependencies
@@ -11,32 +14,28 @@ import db from '../../models';
 const badPassword = '2';
 const goodPassword = 'password';
 const email = 'test@example.com';
-// eslint-disable-next-line camelcase
-const first_name = 'Jhon';
-// eslint-disable-next-line camelcase
-const last_name = 'Doe';
-// eslint-disable-next-line camelcase
+
+const firstName = 'John';
+const lastName = 'Doe';
+
 const goodUser = {
   password: goodPassword,
   email,
-  first_name,
-  last_name,
+  firstName,
+  lastName,
   passwordConfirmation: goodPassword,
 };
 
-// Testing the user routes
-jest.setTimeout(9000);
+// Testing the user routes //
+
 describe('/api/user', () => {
-  beforeEach(() => {
-    jest.setTimeout(9000);
-  });
   let expressServer: any = null;
   beforeAll(async () => {
     expressServer = await app(db);
   });
 
   it('Given correct email and password it should return a user and a token', async () => {
-    jest.setTimeout(10000);
+
     const response = await request(expressServer)
       .post('/api/user')
       .send(goodUser);
@@ -49,43 +48,57 @@ describe('/api/user', () => {
     expect(response.header['content-type']).toEqual(
       expect.stringContaining('application/json')
     );
-  });
-  it.todo('should send an email to the user email address');
+  }, 10000);
 
   it('Should not create user if request params are not correctly formatted ', async () => {
-    const badResetPasswordRequest = [
+    [
       { password: goodPassword },
       { email: goodPassword },
       { email: 'notEmail', password: goodPassword },
       { password: badPassword, email },
-    ];
-    badResetPasswordRequest.forEach(async (body) => {
+    ].forEach(async (requestData) => {
       const response = await request(expressServer)
         .post('/api/user')
-        .send(body);
+        .send(requestData);
 
       expect(response.statusCode).toBe(400);
       expect(response.body.data).toBeUndefined();
       expect(response.body.errors).toBeDefined();
     });
-  });
+  }, 10000);
 });
 
-describe('/api/user after user creation. ', () => {
+
+// We are sure we can create a user we are testing the users other details //
+describe('/api/user *after user creation*. ', () => {
+  const chance = new ChanceJS();
   let expressServer = null;
   let newlyCreatedUser = null;
   let response = null;
   let userFromDB = null;
   let activationKey = null;
-  beforeEach(() => {
-    jest.setTimeout(10000);
-  });
+
+  let userEmail = null;
+  let testmailURL = null;
+  let startTimestamp = null;
+  let TAG = null;
+
   beforeAll(async () => {
-    jest.setTimeout(9000);
+    jest.setTimeout(11000);
+    const NAMESPACE = config.get('TEST_MAIL_NAMESPACE');
+    const API_KEY = config.get('TEST_MAIL_API_KEY');
+
+    TAG = chance.string({
+      length: 12,
+      pool: 'abcdefghijklmnopqrstuvwxyz0123456789',
+    });
+    startTimestamp = Date.now();
+    userEmail = `${NAMESPACE}.${TAG}@inbox.testmail.app`;
+    testmailURL = `https://api.testmail.app/api/json?apikey=${API_KEY}&namespace=${NAMESPACE}`;
     expressServer = await app(db);
     response = await request(expressServer)
       .post('/api/user')
-      .send({ ...goodUser, email: 'realuser@example.com' });
+      .send({ ...goodUser, email: userEmail });
     newlyCreatedUser = response.body.data.user;
     userFromDB = await db.User.findOne({
       where: { id: newlyCreatedUser.id },
@@ -200,4 +213,24 @@ describe('/api/user after user creation. ', () => {
     expect(dbRecords.password !== dbRecordsVerified.password).toBe(true);
     expect(dbRecordsVerified.resetPasswordKey).toBeNull();
   }, 10000);
+
+  it('should send an email to the user email address', (done) => {
+    const endpoint = `${testmailURL}&tag=${TAG}&timestamp_from=${startTimestamp}&livequery=true`;
+    const partOfLink = `verify/${newlyCreatedUser.id}/${userFromDB.activationKey}`;
+    axios
+      .get(endpoint)
+      .then((res) => {
+        const inbox = res.data;
+        expect(inbox.result).toEqual('success');
+        expect(inbox.count).toEqual(1);
+        expect(inbox.emails[0].html).toEqual(
+          expect.stringContaining(partOfLink)
+        );
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
 });

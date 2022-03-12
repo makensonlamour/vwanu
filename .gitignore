@@ -74,6 +74,7 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
+local.json
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -107,4 +108,4 @@ dist
 .tern-port
 
 # Temporary hide docker file
-docker-compose.yml
+

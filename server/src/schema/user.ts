@@ -2,11 +2,13 @@ import { z, object, string, TypeOf } from 'zod';
 
 export const createUserSchema = object({
   body: object({
-    first_name:string({
-      required_error:'Please provide a first name'
+
+    firstName: string({
+      required_error: 'Please provide a first name',
     }),
-    last_name:string({
-      required_error:'Please provide a last name'
+    lastName: string({
+      required_error: 'Please provide a last name',
+
     }),
     email: string({
       required_error: 'You must provide a valid email address',
@@ -39,23 +41,26 @@ export const UpUser = object({
   username: z.string(),
   email: z.string(),
   password: string(),
-  first_name: string(),
-  last_name: string(),
+
+  firstName: string(),
+  lastName: string(),
   avatar: string(),
   cover: string(),
-  background_image: string(),
-  background_image_status: z.boolean(),
-  relationship_id: z.number(),
+  backgroundImage: string(),
+  backgroundImageStatus: z.boolean(),
+  relationshipId: z.number(),
+
   address: string(),
   activationKey: z.string(),
   resetPasswordKey: string(),
   working: string(),
-  working_link: string(),
+  workingLink: string(),
   about: string(),
   school: string(),
   gender: string(),
   birthday: string(),
-  country_id: string(),
+  countryId: z.number(),
+
   website: string(),
   facebook: string(),
   google: string(),
@@ -72,35 +77,36 @@ export const UpUser = object({
   email_code: string(),
   src: string(),
   ip_address: string(),
-  follow_privacy: z.boolean(),
-  friend_privacy: z.boolean(),
-  post_privacy: string(), // enum , I_follow , none, everyone
-  message_privacy: z.string(), // enum , I_follow , none, everyone
+
+  followPrivacy: z.boolean(),
+  friendPrivacy: z.boolean(),
+  postPrivacy: string(), // z.enum(['none', 'friend', 'friendsOfFriends']), // enum , I_follow , none, everyone
+  messagePrivacy: z.string(), // enum , I_follow , none, everyone
   confirm_followers: z.boolean(),
-  show_activities_privacy: z.boolean(),
-  birth_privacy: z.boolean(),
-  visit_privacy: z.boolean(),
+  show_activitiesPrivacy: z.boolean(),
+  birthPrivacy: z.boolean(),
+  visitPrivacy: z.boolean(),
   verified: z.boolean(),
-  last_seen: z.boolean(),
-  show_last_seen: z.boolean(),
+  lastSeenPrivacy: z.boolean(),
+  showLastSeen: z.boolean(),
   emailNotification: z.boolean(),
-  e_liked_notified: z.boolean(),
-  e_shared_notified: z.boolean(),
-  e_commented_notified: z.boolean(),
-  e_followed_notified: z.boolean(),
-  e_accepted_notified: z.boolean(),
-  e_mentioned_notified: z.boolean(),
-  e_joined_group_notified: z.boolean(),
-  e_liked_page_notified: z.boolean(),
-  e_visited_notified: z.boolean(),
-  e_profile_wall_post_notified: z.boolean(),
-  e_memory_notified: z.boolean(),
+  eLikedNotified: z.boolean(),
+  eSharedNotified: z.boolean(),
+  eCommentedNotified: z.boolean(),
+  eFollowedNotified: z.boolean(),
+  eAcceptedNotified: z.boolean(),
+  eMentionedNotified: z.boolean(),
+  eJoinedGroupNotified: z.boolean(),
+  eLikedPageNotified: z.boolean(),
+  eVisitedNotified: z.boolean(),
+  eProfileWallPostNotified: z.boolean(),
+  eMemoryNotified: z.boolean(),
   status: string(),
   active: z.boolean(),
   admin: z.boolean(),
   type: string(),
   registered: string(),
-  startup_image: z.boolean(),
+  startupImage: z.boolean(),
   last_email_sent: z.number(),
   phone_number: string(),
   sms_code: string(),
@@ -189,6 +195,7 @@ export const resetPasswordSchema = object({
   }),
 });
 export type UserInterface = z.infer<typeof UserSchema>;
+export type UpUserInterface = z.infer<typeof UpUser>;
 export type GetUserInput = z.infer<typeof getUserSchema>['params'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 export type CreateUserInput = TypeOf<typeof createUserSchema>['body'];

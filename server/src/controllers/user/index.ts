@@ -40,8 +40,8 @@ export default {
         );
         // eslint-disable-next-line global-require
         // const template = require('../../seed/emailTemplates/confirmAccount.json');
-        const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
-        Log.info('I will send the email now ');
+        const link = `https://test.com/verify/${user.id}/${user.activationKey}`;
+
         try {
           await sendEmail({
             to: user.email,
@@ -54,7 +54,6 @@ export default {
             `Error sending email  when creating user code: ${error.code} message: ${error.message}`
           );
         } finally {
-          Log.info(' I have sent the email for now');
           await userService.loginUser(
             user,
             (err: Error | null, token: string | undefined) => {
@@ -74,9 +73,7 @@ export default {
           );
         }
       } catch (err: Error | null | any) {
-        // console.log('Error registering a user');
-        Log.error("some shit happended let's see the code");
-        Log.error(err.code);
+        Log.error(err);
         throw new AppError(err?.message, StatusCodes.BAD_REQUEST);
       }
     }
