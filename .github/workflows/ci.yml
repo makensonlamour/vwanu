@@ -27,6 +27,7 @@ jobs:
           echo "\"service\":\"${{secrets.SMTP_SERVICE}}\"" >>  server/config/local.json
           echo "}}" >> server/config/local.json
 
+
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1
