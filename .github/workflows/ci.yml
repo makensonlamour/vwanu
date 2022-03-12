@@ -27,7 +27,6 @@ jobs:
           echo "\"service\":\"${{secrets.SMTP_SERVICE}}\"" >>  server/config/local.json
           echo "}}" >> server/config/local.json
 
-
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1
@@ -93,9 +92,9 @@ jobs:
           script: |
             cd vwanu
             git pull
-            docker-compose down 
-            docker-compose -f docker-compose.stage.yml build
-            docker-compose -f docker-compose.stage.yml up
+            # docker-compose down 
+            # docker-compose -f docker-compose.stage.yml build
+            docker-compose -f docker-compose.stage.yml up --build -d 
 
       - name: Deploy to Production
         if: github.event_name == 'push' && github.base_ref == 'master'
