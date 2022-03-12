@@ -186,11 +186,13 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
             <input
               autoCapitalize="none"
               autoComplete="new-email"
-              className="input mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+              className="input mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
               onBlur={[Function]}
               onChange={[Function]}
               placeholder="First Name"
+              required={true}
               type="text"
+              value=""
             />
           </div>
           <div
@@ -206,11 +208,13 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
             <input
               autoCapitalize="none"
               autoComplete="new-email"
-              className="input ml-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+              className="input ml-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
               onBlur={[Function]}
               onChange={[Function]}
               placeholder="Last Name"
+              required={true}
               type="text"
+              value=""
             />
           </div>
         </div>
@@ -227,7 +231,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
           <input
             autoCapitalize="none"
             autoComplete="new-email"
-            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Email"
@@ -250,7 +254,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
             autoCapitalize="none"
             autoComplete="new-email"
             autoCorrect="false"
-            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+            className="input mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
             onBlur={[Function]}
             onChange={[Function]}
             placeholder="Password"
@@ -280,11 +284,13 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
             autoCapitalize="none"
             autoComplete="new-email"
             autoCorrect="false"
-            className="input mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-error autofill:text-secondary autofill:bg-blue-200"
+            className="input mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
             onBlur={[Function]}
             onChange={[Function]}
-            placeholder="Confirm Password"
+            placeholder="Password Confirmation"
+            required={true}
             type="password"
+            value=""
           />
           <label
             className="w-10 rounded px-2 py-1 text-sm hover:text-gray-700 text-gray-600 text-right -mt-9 mr-3 ml-auto"
