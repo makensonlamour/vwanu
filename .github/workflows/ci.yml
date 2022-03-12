@@ -19,7 +19,7 @@ jobs:
 
           echo "\"TEST_MAIL_API_KEY\":\"${{secrets.TEST_MAIL_API_KEY}}\"" >>  server/config/local.json
           echo "\"TEST_MAIL_NAMESPACE\":\"${{secrets.TEST_MAIL_NAMESPACE}}\"" >>  server/config/local.json
-          echo "\"smtp\":{"
+          echo "\"smtp\":{" >>  server/config/local.json
           echo "\"user\":\"${{secrets.SMTP_USER}}\"" >>  server/config/local.json
           echo "\"pass\":\"${{secrets.SMTP_PASS}}\"" >>  server/config/local.json
           echo "\"port\":\"${{secrets.SMTP_PORT}}\"" >>  server/config/local.json
