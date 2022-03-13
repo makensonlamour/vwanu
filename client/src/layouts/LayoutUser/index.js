@@ -32,13 +32,13 @@ const LayoutUser = () => {
     <>
       <Navbar />
       <div className="flex flex-row">
-        <div className="basis-1/5 mr-5">
+        <div className="hidden lg:inline basis-1/5 lg:mr-5">
           <SidebarLeft />
         </div>
-        <div className="basis-3/5 drawer drawer-mobile h-auto mr-5 px-10">
+        <div className="w-full lg:basis-3/5 drawer drawer-mobile h-auto lg:mr-5 lg:px-10">
           {auth?.token ? <Outlet /> : <Navigate to={routesPath.LOGIN} />}
         </div>
-        <div className="basis-1/5 mr-5">
+        <div className="hidden lg:block basis-1/5 lg:mr-5">
           {" "}
           <div className="">
             <SidebarRight />
