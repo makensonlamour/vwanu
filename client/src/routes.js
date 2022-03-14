@@ -3,7 +3,8 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import ForgotPassword from "./pages/ResetPassword/ForgotPassword";
 import VerifiedEmail from "./pages/VerifiedEmail/VerifiedEmail";
-import Home from "./pages/Home/index";
+import NewsFeed from "./pages/NewsFeed/NewsFeed";
+import Profil from "./pages/Profil/Profil";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
@@ -42,7 +43,13 @@ let routes = [
   {
     path: routesPath.NEWSFEED,
     name: "News Feed",
-    element: Home,
+    element: NewsFeed,
+    access: role.USER,
+  },
+  {
+    path: routesPath.PROFILE,
+    name: "Profile",
+    element: Profil,
     access: role.USER,
   },
   {

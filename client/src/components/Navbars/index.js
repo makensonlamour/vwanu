@@ -14,7 +14,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 const Navbar = () => {
   return (
     <>
-      <div className="flex flex-row bg-secondary navbar mb-2 shadow-lg px-4 text-base-100">
+      <div className="flex flex-row bg-secondary navbar mb-2 shadow-lg px-4 text-base-100 sticky top-0 z-50">
         <div className="basis-1/5">
           <Link to={routesPath.NEWSFEED}>
             <span className="text-lg font-bold">
@@ -34,19 +34,19 @@ const Navbar = () => {
         </div>
         <div className="grow justify-end">
           {" "}
-          <ul className="menu menu-horizontal flex-row justify-between">
-            <li>
+          <ul className="hidden lg:flex menu lg:menu-horizontal justify-between">
+            <li className="inline">
               <Link to="">
                 <FaUserPlus size="24px" />
               </Link>
             </li>
-            <li>
+            <li className="inline">
               <Link to="">
                 <IoMdChatbubbles size="24px" />
               </Link>
             </li>
             <li>
-              <Link to="">
+              <Link className="inline" to="">
                 <IoNotificationsOutline size="24px" />
               </Link>
             </li>
