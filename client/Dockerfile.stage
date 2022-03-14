@@ -3,6 +3,8 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . . 
+ENV REACT_APP_API_URL=http://165.227.81.34:4000/api
+
 RUN npm run build; 
 
 # step 2 form production
