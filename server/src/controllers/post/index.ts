@@ -1,18 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
+import { Response, Request } from 'express';
+import PostService from '../../services/post/post.service';
+import AppError from '../../errors';
 
 // Custom requirements
 
-import common from '../../lib/utils/common.js';
+import common from '../../lib/utils/common';
 
 const { catchAsync, sendResponse } = common;
 
-export const createOne = catchAsync(async (req, res) => {
- 
+export const createOne = catchAsync(async (req: Request, res: Response) => {
   try {
-    const post = {};
-    return sendResponse(res, StatusCodes.CREATED, post);
+    const post = await PostService.createOne(req.body);
+    return sendResponse(res, StatusCodes.CREATED, { post }, 'created');
   } catch (error) {
-    return null;
+    throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 // export const editOne = catchAsync(async (req, res) => {})
