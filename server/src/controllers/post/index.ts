@@ -7,9 +7,14 @@ import AppError from '../../errors';
 
 import common from '../../lib/utils/common';
 
+
+interface MulterRequest extends Request {
+  files: any;
+}
+
 const { catchAsync, sendResponse } = common;
 
-export const createOne = catchAsync(async (req: Request, res: Response) => {
+export const createOne = catchAsync(async (req: MulterRequest, res: Response) => {
   try {
     const post = await PostService.createOne(req.body);
     return sendResponse(res, StatusCodes.CREATED, { post }, 'created');
@@ -17,6 +22,7 @@ export const createOne = catchAsync(async (req: Request, res: Response) => {
     throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
+
 // export const editOne = catchAsync(async (req, res) => {})
 // export const getOne = catchAsync(async (req, res) => {})
 // export const deleteOne = catchAsync(async (req, res) => {})

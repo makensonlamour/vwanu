@@ -2,7 +2,7 @@ import config from 'config';
 import nodemailer, { SendMailOptions } from 'nodemailer';
 
 // Custom Dependencies
-import Log from './logger';
+import Log from '../logger';
 
 const smtp = config?.get<{
   user: string;

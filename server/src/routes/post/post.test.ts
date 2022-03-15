@@ -21,7 +21,7 @@ describe('/api/post', () => {
 
     newUser = response.body.data.user;
     token = response.body.data.token;
-  });
+  }, 30000);
   it('should not create a post ', async () => {
     [
       {
@@ -40,7 +40,7 @@ describe('/api/post', () => {
     const response = await request(expressServer)
       .post('/api/post')
       .set('x-auth-token', token)
-      .send({ postText: 'I am a new post', userId: newUser.id });
+      .send({ postText: 'I am a new post', UserId: newUser.id });
 
     expect(response.statusCode).toBe(201);
     expect(response.body.data.post).toBeDefined();
@@ -48,8 +48,37 @@ describe('/api/post', () => {
       expect.objectContaining({
         postText: expect.any(String),
         id: expect.any(Number),
-        private: false,
-        // userId: newUser.id,
+        privacyType: 'public',
+        UserId: newUser.id,
+      })
+    );
+    expect(response.header['content-type']).toEqual(
+      expect.stringContaining('application/json')
+    );
+  });
+
+  it('should create a new post with Picture', async () => {
+    const response = await request(expressServer)
+      .post('/api/post')
+      .set('x-auth-token', token)
+      .send({ postText: 'I am a new post', UserId: newUser.id });
+
+    expect(response.statusCode).toBe(201);
+    expect(response.body.data.post).toBeDefined();
+    expect(response.body.data.post).toEqual(
+      expect.objectContaining({
+        postText: expect.any(String),
+        id: expect.any(Number),
+        privacyType: 'public',
+        UserId: newUser.id,
+        audioCount: 0,
+        createdAt: expect.any(String),
+        imageCount: 0,
+        multiAudio: false,
+        multiImage: false,
+        multiVideo: false,
+        updatedAt: expect.any(String),
+        videoCount: 0,
       })
     );
     expect(response.header['content-type']).toEqual(
