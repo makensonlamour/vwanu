@@ -13,24 +13,26 @@ import NotFound from "../pages/NotFound/index";
 const Views = () => {
   return (
     <>
-      <Routes>
-        <Route element={<LayoutPublic />}>
-          {routes.map((route) => {
-            return <>{route.access === role.PUBLIC ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
-          })}
-        </Route>
-        <Route path="/" element={<LayoutUser />}>
-          {routes.map((route) => {
-            return <>{route.access === role.USER ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
-          })}
-        </Route>
-        <Route path="/" element={<LayoutAuth />}>
-          {routes.map((route) => {
-            return <>{route.access === role.AUTH ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
-          })}
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <div className="mx-auto max-w-screen-xl">
+        <Routes>
+          <Route element={<LayoutPublic />}>
+            {routes.map((route) => {
+              return <>{route.access === role.PUBLIC ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
+            })}
+          </Route>
+          <Route path="/" element={<LayoutUser />}>
+            {routes.map((route) => {
+              return <>{route.access === role.USER ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
+            })}
+          </Route>
+          <Route path="/" element={<LayoutAuth />}>
+            {routes.map((route) => {
+              return <>{route.access === role.AUTH ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
+            })}
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
     </>
   );
 };

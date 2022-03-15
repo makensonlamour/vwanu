@@ -22,7 +22,7 @@ const alert = (store) => (next) => async (action) => {
   } else if (action.payload.status === 400) {
     store.dispatch(
       setAlert({
-        msg: action?.payload?.errors[0]?.message,
+        msg: { message: action.payload.errors[0].message },
         id,
         type: "error",
         icon: BsFillExclamationTriangleFill,
@@ -31,7 +31,7 @@ const alert = (store) => (next) => async (action) => {
   } else if (action.payload.status >= 500) {
     store.dispatch(
       setAlert({
-        msg: { message: action.payload },
+        msg: action.payload.errors[0].message,
         id,
         type: "error",
         icon: BsFillExclamationTriangleFill,
