@@ -3,6 +3,7 @@
 import { Model } from 'sequelize';
 
 export interface PostInterface {
+
   id: number;
   multiImage: boolean;
   imageCount: number;
@@ -36,6 +37,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any): void {
       Post.belongsTo(models.User);
       // Post.hasMany(models.Media)
+
     }
   }
   Post.init(
@@ -50,6 +52,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         defaultValue: false,
       },
+
       multiAudio: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -59,6 +62,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+
       },
       postText: {
         type: DataTypes.TEXT,

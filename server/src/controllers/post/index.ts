@@ -8,6 +8,7 @@ import AppError from '../../errors';
 import common from '../../lib/utils/common';
 
 
+
 interface MulterRequest extends Request {
   files: any;
 }
@@ -15,6 +16,7 @@ interface MulterRequest extends Request {
 const { catchAsync, sendResponse } = common;
 
 export const createOne = catchAsync(async (req: MulterRequest, res: Response) => {
+
   try {
     const post = await PostService.createOne(req.body);
     return sendResponse(res, StatusCodes.CREATED, { post }, 'created');

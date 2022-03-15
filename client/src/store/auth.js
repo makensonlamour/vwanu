@@ -109,6 +109,19 @@ export const resetPassword = (newUserData) => (dispatch) => {
   );
 };
 
+export const verifiedEmail = (data) => (dispatch) => {
+  dispatch(
+    action.apiCallBegan({
+      url: `user/verify/${data.id}/${data.activationKey}`,
+      data: data,
+      method: "POST",
+      onSuccess: Auth.actions.loginSucceed.type,
+      onStart: Auth.actions.loginRequested.type,
+      onError: Auth.actions.LoginFailed.type,
+    })
+  );
+};
+
 export const { setUser } = Auth.actions;
 export const logout = () => (dispatch) => dispatch(Auth.actions.LogOut());
 export const getCurrentUser = (state) => state.authentication;

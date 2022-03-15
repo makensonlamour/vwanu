@@ -11,7 +11,7 @@ const SinglePost = () => {
       {tempPost.map((post) => {
         return (
           <>
-            <div className="card border-b pb-3 mb-10 m-2 mx-4 bg-green-50 lg:w-[52%]">
+            <div className="card border-b pb-3 mb-10 my-3 lg:ml-2 bg-green-50 lg:w-full">
               <div className="pt-3 pb-1 px-6">
                 <div className="flex flex-wrap">
                   <img alt="" className="w-10 h-10 rounded-full" src="https://i.pravatar.cc/300" />{" "}

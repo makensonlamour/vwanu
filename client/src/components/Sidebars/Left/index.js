@@ -11,7 +11,7 @@ const SidebarLeft = () => {
   };
   return (
     <>
-      <div className="hidden lg:block h-screen fixed overflow-scroll -mt-2">
+      <div className="h-screen fixed overflow-scroll -mt-2">
         <ul className="menu w-64 p-3 border bg-base-100 box h-screen">
           {ItemSidebarLeft.map((item, index) => {
             return (
