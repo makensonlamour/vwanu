@@ -25,7 +25,7 @@ const LoginScreen = () => {
   const handleLogin = (credentials) => dispatch(Login(credentials));
   return (
     <>
-      <div className="mx-0 md:mx-0 lg:lg:mx-16 xl:mx-32 2xl:mx-64 3xl:mx-[22%] 4xl:mx-[25%]">
+      <div className="mx-0 md:mx-0 lg:lg:mx-16 xl:mx-32">
         <div className="grid grid-cols-1 lg:mb-48 lg:grid-cols-2 lg:gap-4">
           <div className="lg:justify-center">
             <div className="bg-gradient-to-tr from-blue-400 to-secondary  h-96 z-0 lg:rounded-t-3xl lg:h-[90%] lg:m-6">
@@ -36,21 +36,21 @@ const LoginScreen = () => {
               <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">Share your Voice and Change</p>
               <p className="hidden lg:block text-base-100 text-xl font-semibold text-center">The Haitian Community!</p>
             </div>
-            <div className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[35%] m-6 lg:h-[50%] xl:h-[52%] 2xl:h-[60%] 3xl:h-[63%] 3xl:-mt-[30%]"></div>
-            <div className="hidden lg:block mr-20 z-50 -mt-[61%] 2xl:-mt-[62%]">
+            <div className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[38%] m-6 lg:h-[50%] xl:h-[48%]"></div>
+            <div className="hidden lg:block mr-20 z-50 -mt-[61%]">
               {" "}
               <img className="object-fit" src={WelcomeImg} alt="young_people" />
             </div>
           </div>
 
-          <div className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10 md:mx-36 lg:mt-6 lg:mx-0 xl:mx-0 2xl:mx-0">
+          <div className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-4 md:px-8 -mt-28 z-10 md:mx-36 lg:mt-6 lg:mx-0 xl:mx-0">
             <div className="hidden lg:block lg:place-content-center lg:my-8">
               <p className="text-center mt-4">
                 <span className="text-md text-primary font-semibold md:text-xl">Not a member ?</span>{" "}
                 <Link
                   data-testid="registerBtn"
                   to={routesPath.REGISTER}
-                  className="btn btn-secondary btn-sm rounded-full normal-case hover:btn-primary hover:text-base-100 md:px-8 ml-1 text-base-100"
+                  className="btn btn-secondary btn-sm rounded-full normal-case hover:bg-primary hover:text-base-100 md:px-8 ml-1 text-base-100"
                 >
                   Register
                 </Link>

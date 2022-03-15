@@ -17,8 +17,8 @@ const NewsFeed = () => {
 
   return (
     <>
-      <div className="">
-        <div className="px-3 pt-10 pb-2 justify-center align-items-center lg:w-[55%]">
+      <div className="mx-auto px-2 md:px-14 lg:px-10">
+        <div className="lg:pl-14 lg:pr-8 pt-10 pb-2 justify-center align-items-center lg:w-full">
           <Form
             validationSchema={ValidationSchema}
             initialValues={{
@@ -63,7 +63,9 @@ const NewsFeed = () => {
             <div className="ml-auto text-xs"></div>
           </Form>
         </div>
-        <SinglePost />
+        <div className="lg:pl-14 lg:pr-12 px-2 lg:px-0">
+          <SinglePost />
+        </div>
       </div>
     </>
   );
