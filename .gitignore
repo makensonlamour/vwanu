@@ -169,3 +169,5 @@ server/src/models/codes.js
 server/src/models/colored_posts.js
 server/src/models/comment.js
 server/src/models/emails.js
+.DS_Store
+**/.DS_Store
