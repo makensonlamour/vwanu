@@ -30,6 +30,7 @@ const toReturn = (user: UserInterface): Partial<UserInterface> => {
   return rest;
 };
 
+
 interface MulterRequest extends Request {
   files: any;
 }
@@ -44,11 +45,13 @@ export default {
         const documentFiles = (req as MulterRequest).files;
 
         if (documentFiles?.profilePicture || documentFiles?.coverPicture) {
+
           const photosArray = ['profilePicture', 'coverPicture'];
           photosArray.forEach((photoGroup) => {
             if (documentFiles[photoGroup])
               data[photoGroup] = documentFiles[photoGroup][0].path;
           });
+
         }
         const user: UserInterface = await userService.createUser(
           data,
