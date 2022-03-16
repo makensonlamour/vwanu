@@ -82,7 +82,6 @@ describe('/api/user *after user creation*. ', () => {
   let TAG = null;
 
   beforeAll(async () => {
-    jest.setTimeout(11000);
     const NAMESPACE = config.get('TEST_MAIL_NAMESPACE');
     const API_KEY = config.get('TEST_MAIL_API_KEY');
 
@@ -102,7 +101,7 @@ describe('/api/user *after user creation*. ', () => {
       where: { id: newlyCreatedUser.id },
     });
     activationKey = userFromDB.activationKey;
-  });
+  }, 30000);
 
   it('should not be able to reset his password if not verified', async () => {
     const resetpassword = await request(expressServer)
@@ -214,13 +213,12 @@ describe('/api/user *after user creation*. ', () => {
 
   it.skip('should send an email to the user email address', (done) => {
     const endpoint = `${testmailURL}&tag=${TAG}&timestamp_from=${startTimestamp}&livequery=true`;
-    const partOfLink = `verify/${newlyCreatedUser.id}/${userFromDB.activationKey}`;
+    const partOfLink = `verify/${newlyCreatedUser.id}`;
     axios
       .get(endpoint)
       .then((res) => {
         const inbox = res.data;
         expect(inbox.result).toEqual('success');
-        expect(inbox.count).toEqual(1);
         expect(inbox.emails[0].html).toEqual(
           expect.stringContaining(partOfLink)
         );

@@ -3,47 +3,41 @@
 import { Model } from 'sequelize';
 
 export interface PostInterface {
-  id?: number | undefined;
-  media: string;
-  mediaType: string;
-  postText?: string;
-  hashTag: string | undefined;
-  private?: boolean;
-  // postLink: string | undefined;
+
+  id: number;
+  multiImage: boolean;
+  imageCount: number;
+  multiVideo: boolean;
+  videoCount: number;
+  multiAudio: boolean;
+  audioCount: number;
+  postText: string;
+  privacyType: string;
 }
 module.exports = (sequelize: any, DataTypes: any) => {
   class Post extends Model<PostInterface> implements PostInterface {
-    id: number | undefined;
+    id: number;
 
-    media: string | undefined;
+    multiImage: boolean;
 
-    mediaType: string;
+    imageCount: number;
 
-    postText?: string;
+    multiVideo: boolean;
 
-    hashTag: string | undefined;
+    videoCount: number;
 
-    private: boolean | undefined;
+    multiAudio: boolean;
 
-    postLink: string | undefined;
+    audioCount: number;
+
+    postText: string;
+
+    privacyType: string;
 
     static associate(models: any): void {
       Post.belongsTo(models.User);
-      // Post.belongsToMany(models.Page, {
-      //   as: 'pagePost',
-      //   through: 'pagePostTable',
-      // });
-      // Post.belongsToMany(models.User, {
-      //   as: 'UserPost',
-      //   through: 'UserPostTable',
-      // });
-      // Post.belongsToMany(models.Profile, {
-      //   as: 'profilePost',
-      //   through: 'profilePostTable',
-      // });
+      // Post.hasMany(models.Media)
 
-      // Post.hasMany(models.Like);
-      // Post.hasMany(models.Comment);
     }
   }
   Post.init(
@@ -53,28 +47,50 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      media: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      multiImage: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
 
-      mediaType: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      multiAudio: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
+      multiVideo: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
 
+      },
       postText: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-
-      hashTag: {
-        type: DataTypes.TEXT,
-        allowNull: true,
+      imageCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
-      private: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      videoCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      audioCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      privacyType: {
+        type: DataTypes.ENUM(
+          'public',
+          'private',
+          'friendsOnly',
+          'friendOfFriends'
+        ),
+        defaultValue: 'public',
       },
     },
 
