@@ -3,7 +3,7 @@ import { Model } from 'sequelize';
 
 // Custom imports
 
-import { EmailTemplateInterface } from '../schema/emailTemplate';
+import { EmailTemplateInterface } from '../schema/htmlEmails';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class EmailTemplates extends Model implements EmailTemplateInterface {

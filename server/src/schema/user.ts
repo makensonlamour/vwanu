@@ -2,13 +2,11 @@ import { z, object, string, TypeOf } from 'zod';
 
 export const createUserSchema = object({
   body: object({
-
     firstName: string({
       required_error: 'Please provide a first name',
     }),
     lastName: string({
       required_error: 'Please provide a last name',
-
     }),
     email: string({
       required_error: 'You must provide a valid email address',
@@ -23,9 +21,10 @@ export const createUserSchema = object({
     message: 'Passwords do not match',
     path: ['passwordConfirmation'],
   }),
+  params: object({
+    files: z.object({}).optional(),
+  }),
 });
-
-
 
 export const UserSchema = z.object({
   id: z.number(),
@@ -41,15 +40,14 @@ export const UpUser = object({
   username: z.string(),
   email: z.string(),
   password: string(),
-
   firstName: string(),
   lastName: string(),
   avatar: string(),
-  cover: string(),
+  profilePicture: string(),
+  coverPicture: string(),
   backgroundImage: string(),
   backgroundImageStatus: z.boolean(),
   relationshipId: z.number(),
-
   address: string(),
   activationKey: z.string(),
   resetPasswordKey: string(),
@@ -60,7 +58,6 @@ export const UpUser = object({
   gender: string(),
   birthday: string(),
   countryId: z.number(),
-
   website: string(),
   facebook: string(),
   google: string(),
@@ -77,7 +74,6 @@ export const UpUser = object({
   email_code: string(),
   src: string(),
   ip_address: string(),
-
   followPrivacy: z.boolean(),
   friendPrivacy: z.boolean(),
   postPrivacy: string(), // z.enum(['none', 'friend', 'friendsOfFriends']), // enum , I_follow , none, everyone
@@ -198,6 +194,6 @@ export type UserInterface = z.infer<typeof UserSchema>;
 export type UpUserInterface = z.infer<typeof UpUser>;
 export type GetUserInput = z.infer<typeof getUserSchema>['params'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
-export type CreateUserInput = TypeOf<typeof createUserSchema>['body'];
+export type CreateUserInput = TypeOf<typeof createUserSchema>;
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>['params'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];

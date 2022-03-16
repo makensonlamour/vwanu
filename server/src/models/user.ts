@@ -31,7 +31,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     avatar: string | undefined;
 
-    cover: string;
+    coverPicture: string;
+
+    profilePicture: string;
 
     backgroundImage: string;
 
@@ -112,14 +114,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
 
     static associate(models: any) {
-
       User.hasMany(models.Page, {
         onDelete: 'CASCADE',
       });
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
       });
-
     }
   }
   User.init(
@@ -190,7 +190,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: false,
       },
 
-      cover: {
+      coverPicture: {
+        type: DataTypes.STRING,
+        defaultValue:
+          'https://images.unsplash.com/photo-1528464884105-28166ef8edd0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+      },
+      profilePicture: {
         type: DataTypes.STRING,
         defaultValue:
           'https://images.unsplash.com/photo-1528464884105-28166ef8edd0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
