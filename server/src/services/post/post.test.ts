@@ -1,36 +1,35 @@
 import Post from './post.service';
 import db from '../../models';
-import { PostInterface } from '../../schema/post';
 
-describe('Post service _reading in db__', () => {
+describe('Post service _reading in db', () => {
   const postText = ' I am a new post text ';
   let postId: number | null = null;
   beforeAll(async () => {
-    await db.sequelize.sync({ force: true });
+    await db.sequelize.sync({});
   });
 
   it('should create a post', async () => {
-    const post: PostInterface = await Post.createOne({
-      userId: 89,
+    const post: any = await Post.createOne({
       postText,
     });
     postId = post.id;
+  
     expect(post).toEqual(
       expect.objectContaining({
         postText,
         id: expect.any(Number),
-        private: false,
+        privacyType: 'public',
       })
     );
-  });
+  }, 10000);
   it('should find a post by the post id ', async () => {
     const post = await Post.findOne(postId);
     expect(post).toEqual(
       expect.objectContaining({
         postText,
         id: 1,
-        private: false,
+        privacyType: 'public',
       })
     );
-  });
+  }, 10000);
 });

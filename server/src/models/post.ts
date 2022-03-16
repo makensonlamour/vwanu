@@ -18,6 +18,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   class Post extends Model<PostInterface> implements PostInterface {
     id: number;
 
+
     multiImage: boolean;
 
     imageCount: number;
@@ -51,19 +52,21 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
-      },
 
+      },
       multiAudio: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
       },
       multiVideo: {
+
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
-
       },
+
+
       postText: {
         type: DataTypes.TEXT,
         allowNull: true,

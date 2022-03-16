@@ -11,5 +11,8 @@
   },
   "sendEmailFrom": "test@vwanu.com",
   "multerSetting": {},
-  "JWT_SECRET":"StageSecretIsREal"
+  "JWT_SECRET": "StageSecretIsREal",
+  "maxPostImages": 3,
+  "maxPostVideos": 1,
+  "maxPostAudios": 1
 }
