@@ -22,6 +22,7 @@ const environment = {
       REGISTER: "/user",
       FORGOT_PASSWORD: "/forgotPassword",
       RECOVER_PASSWORD: "/recoverPassword",
+      VERIFIED_EMAIL: "/verifiedEmail",
       AuthIN: "/index",
     },
     layouts: {

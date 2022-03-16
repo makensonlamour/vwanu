@@ -6,7 +6,7 @@ let routesPath = {
   REGISTER: "/register",
   LOGOUT: "/login",
   FORGOT_PASSWORD: "/forgot-password",
-  VERIFIER_EMAIL: "/verifier-email/:id/:token",
+  VERIFIER_EMAIL: "/verifier-email/:id/:activationKey",
   RESET_PASSWORD: "/reset-password",
   NEWSFEED: "/",
   STEP_ONE: "profile/step-one",

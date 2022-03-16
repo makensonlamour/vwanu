@@ -30,7 +30,7 @@ const LayoutAuth = () => {
     <>
       <Navbar />
       <div className="">
-        <div className="h-auto mr-5 my-4 px-16">{auth ? <Outlet /> : <Navigate to={routesPath.LOGIN} />}</div>
+        <div className="h-auto mr-5 my-4 px-16">{auth?.token ? <Outlet /> : <Navigate to={routesPath.LOGIN} />}</div>
       </div>
     </>
   );

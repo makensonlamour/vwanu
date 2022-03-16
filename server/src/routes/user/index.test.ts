@@ -211,7 +211,7 @@ describe('/api/user *after user creation*. ', () => {
     expect(dbRecordsVerified.resetPasswordKey).toBeNull();
   }, 10000);
 
-  it('should send an email to the user email address', (done) => {
+  it.skip('should send an email to the user email address', (done) => {
     const endpoint = `${testmailURL}&tag=${TAG}&timestamp_from=${startTimestamp}&livequery=true`;
     const partOfLink = `verify/${newlyCreatedUser.id}`;
     axios

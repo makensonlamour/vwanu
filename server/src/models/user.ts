@@ -112,12 +112,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
 
     static associate(models: any) {
+
       User.hasMany(models.Page, {
         onDelete: 'CASCADE',
       });
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
       });
+
     }
   }
   User.init(

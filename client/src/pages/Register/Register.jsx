@@ -40,7 +40,7 @@ const LoginScreen = () => {
   const handleRegister = (credentials) => dispatch(createUser(credentials));
   return (
     <>
-      <div className="mx-0 md:mx-0 lg:mx-16 xl:mx-32 2xl:mx-64 3xl:mx-[22%] 4xl:mx-[25%]">
+      <div className="mx-0 md:mx-0 lg:mx-16 xl:mx-32">
         <div className="grid grid-cols-1 lg:mb-48 lg:grid-cols-2 lg:gap-4">
           <div className="lg:justify-center">
             <div className="bg-gradient-to-tr from-blue-400 to-secondary h-96 z-0 lg:rounded-t-3xl lg:h-[70%] lg:m-6">
@@ -51,14 +51,14 @@ const LoginScreen = () => {
               <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">Share your Voice and Change</p>
               <p className="hidden lg:block text-base-100 text-xl font-semibold text-center">The Haitian Community!</p>
             </div>
-            <div className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[35%] m-6 lg:h-[45%] xl:h-[47%] 2xl:h-[50%] 3xl:h-[55%] 4xl:h-[53%] 4xl:-mt-[25%]"></div>
-            <div className="hidden lg:block mr-20 z-50 -mt-[61%] 2xl:-mt-[62%]">
+            <div className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] -mt-[35%] h-[40%] m-6 lg:h-[40%] xl:h-[35%]"></div>
+            <div className="hidden lg:block mr-20 z-50 -mt-[61%]">
               {" "}
               <img className="object-fit" src={WelcomeImg} alt="young_people" />
             </div>
           </div>
 
-          <div className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-8 -mt-28 z-10md:mx-36 lg:mt-6 lg:mx-0 xl:mx-0 2xl:mx-0">
+          <div className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-4 md:px-8 -mt-28 z-10 md:mx-36 lg:mt-6 lg:mx-0 xl:mx-0">
             <div className="lg:place-content-center lg:mt-8 lg:mb-5">
               <p className="text-center mt-10">
                 <span className="text-md text-primary font-semibold md:text-xl">Already have an account ?</span>{" "}

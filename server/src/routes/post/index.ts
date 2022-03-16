@@ -1,3 +1,4 @@
+
 import config from 'config';
 import express from 'express';
 
@@ -6,6 +7,7 @@ import * as Post from '../../controllers/post';
 import { createPostSchema } from '../../schema/post';
 import validateSchema from '../../middleware/validateResource';
 import requireLogin from '../../middleware/requireLogin';
+
 import { postStorage } from '../../cloudinary';
 
 const router = express.Router();
@@ -20,5 +22,6 @@ router.route('/').post(
   ]),
   Post.createOne
 );
+
 
 export default router;
