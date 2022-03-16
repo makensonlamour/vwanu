@@ -30,16 +30,32 @@ const toReturn = (user: UserInterface): Partial<UserInterface> => ({
   email: user.email,
   verified: user.verified,
 });
+
+interface MulterRequest extends Request {
+  files: any;
+}
 export default {
   createOne: catchAsync(
-    async (req: Request<{}, {}, CreateUserInput>, res: Response) => {
+    async (
+      req: Request<CreateUserInput['params'], {}, CreateUserInput['body']>,
+      res: Response
+    ) => {
       try {
+        const { password, ...data } = req.body;
+        const documentFiles = (req as MulterRequest).files;
+
+        if (documentFiles?.profilePicture || documentFiles?.coverPicture) {
+            const photosArray = ['profilePicture', 'coverPicture'];
+            photosArray.forEach((photoGroup) => {
+              if (documentFiles[photoGroup])
+                data[photoGroup] = documentFiles[photoGroup][0].path;
+            });
+        }
         const user: UserInterface = await userService.createUser(
-          req.body,
-          req.body.password
+          data,
+          password
         );
-        // eslint-disable-next-line global-require
-        // const template = require('../../seed/emailTemplates/confirmAccount.json');
+
         const link = `https://test.com/verify/${user.id}/${user.activationKey}`;
 
         try {
@@ -155,7 +171,7 @@ export default {
         try {
           await sendEmail({
             to: user.email,
-            from: config.get('sendEmailFrom') || 'test@example.com',
+            from: config.get('sendEmailFrom'),
             subject: template.subject,
             html: template.body.replace(/\{link}/g, link),
           });

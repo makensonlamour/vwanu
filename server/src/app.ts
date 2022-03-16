@@ -32,7 +32,7 @@ export default async function (database: any) {
   app.use(express.urlencoded({ extended: true }));
 
   //  connect to the database
-  await database.sequelize.sync({ force: true, logging: false });
+  await database.sequelize.sync({ logging: false });
   // Serving the routes
   app.use('/api/auth', authRoute);
   app.use('/api/user', userRoute);

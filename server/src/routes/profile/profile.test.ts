@@ -3,11 +3,11 @@
 import request from 'supertest';
 
 // custom imports
-import db from '../../models';
-import expressServer from '../../app';
+// import db from '../../models';
+// import expressServer from '../../app';
 
 const routeBase = '/api/profile';
-const user = { email: 'user@example.com', password: '1234565' };
+// const user = { email: 'user@example.com', password: '1234565' };
 const profilePicture =
   'https://c8.alamy.com/comp/2G6PJB9/default-avatar-photo-placeholder-grey-profile-picture-icon-business-man-illustration-2G6PJB9.jpg';
 const coverPicture =
@@ -15,13 +15,13 @@ const coverPicture =
 const coverPict = `${__dirname}/../../seed/assets/img/coverPicture.jpeg`;
 const profilePict = `${__dirname}/../../seed/assets/img/profilePicture.jpeg`;
 describe('Profile route /api/profile', () => {
-  let app = null;
-  let createdUser = null;
+  const app = null;
+  const createdUser = null;
 
   beforeAll(async () => {
-    jest.setTimeout(10000);
-    app = await expressServer(db);
-    createdUser = await request(app).post('/api/user').send(user);
+    // jest.setTimeout(10000);
+    // app = await expressServer(db);
+    // createdUser = await request(app).post('/api/user').send(user);
   });
 
   it.skip('should not create a profile', async () => {
