@@ -38,6 +38,8 @@ describe('/api/user', () => {
     const response = await request(expressServer)
       .post('/api/user')
       .send(goodUser);
+    console.log('Where is the goddam issue ');
+    console.log(response.body);
     expect(response.body.data.user).toBeDefined();
     expect(response.body.data.user.id).toBeDefined();
     expect(response.body.data.user.password).toBeUndefined();
@@ -213,7 +215,7 @@ describe('/api/user *after user creation*. ', () => {
 
   it.skip('should send an email to the user email address', (done) => {
     const endpoint = `${testmailURL}&tag=${TAG}&timestamp_from=${startTimestamp}&livequery=true`;
-    const partOfLink = `verify/${newlyCreatedUser.id}`;
+    const partOfLink = `verify`;
     axios
       .get(endpoint)
       .then((res) => {

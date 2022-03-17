@@ -3,7 +3,6 @@ import { nanoid } from 'nanoid';
 import { Response, Request } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-
 // Custom requirements
 import AppError from '../../errors';
 import Log from '../../lib/utils/logger';
@@ -18,20 +17,13 @@ import {
   ForgotPasswordInput,
   ResetPasswordInput,
 } from '../../schema/user';
-
-const template = {
-  subject: 'I am sub',
-  body: "from '../../seed/emailTemplates/confirmAccount.json' {link};",
-};
+import { ConfirmAccount, ResetPassword } from '../../seed/emailTemplates';
 
 const { catchAsync, sendResponse } = common;
-
 
 const toReturn = (user: any): Partial<UserInterface> => ({
   id: user.id,
   email: user.email,
-  activationKey: user.activationKey,
-  resetPasswordKey: user.resetPasswordKey,
   verified: user.verified,
   firstName: user.firstName,
   lastName: user.lastName,
@@ -70,8 +62,6 @@ const toReturn = (user: any): Partial<UserInterface> => ({
   admin: user.admin,
 });
 
-
-
 interface MulterRequest extends Request {
   files: any;
 }
@@ -84,30 +74,28 @@ export default {
       try {
         const { password, ...data } = req.body;
         const documentFiles = (req as MulterRequest).files;
-
-        console.log('Checking for pictures ');
         if (documentFiles?.profilePicture || documentFiles?.coverPicture) {
-
           const photosArray = ['profilePicture', 'coverPicture'];
           photosArray.forEach((photoGroup) => {
             if (documentFiles[photoGroup])
               data[photoGroup] = documentFiles[photoGroup][0].path;
           });
-
         }
         const user: UserInterface = await userService.createUser(
           data,
           password
         );
 
-        const link = `https://test.com/verify/${user.id}/${user.activationKey}`;
+        const link = `http://${config.get('BASE_URL')}/verify-email/${
+          user.id
+        }/${user.activationKey}`;
 
         try {
           await sendEmail({
             to: user.email,
-            from: config.get('sendEmailFrom') || 'test@example.com',
-            subject: template.subject,
-            html: template.body.replace(/\{link}/g, link),
+            from: config.get('sendEmailFrom'),
+            subject: ConfirmAccount.subject,
+            html: ConfirmAccount.body.replace(/\{link}/g, link),
           });
         } catch (error) {
           Log.error(
@@ -209,15 +197,16 @@ export default {
 
         await userService.updateUser(user, { resetPasswordKey: nanoid() });
 
-        // eslint-disable-next-line global-require
-        // const template = require('../../seed/emailTemplates/confirmAccount.json');
-        const link = `https://test.com/verify/${user.id}/${user.resetPasswordKey}`;
+        const link = `http://${config.get('BASE_URL')}/reset-password/${
+          user.id
+        }/${user.resetPasswordKey}`;
+
         try {
           await sendEmail({
             to: user.email,
             from: config.get('sendEmailFrom'),
-            subject: template.subject,
-            html: template.body.replace(/\{link}/g, link),
+            subject: ResetPassword.subject,
+            html: ResetPassword.body.replace(/\{link}/g, link),
           });
         } catch (error) {
           Log.error(
