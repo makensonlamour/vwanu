@@ -3,7 +3,7 @@ import { render as rtlRender, screen, cleanup, fireEvent, waitFor } from "@testi
 import { MemoryRouter as Router } from "react-router-dom";
 import { act as testAct, create } from "react-test-renderer";
 import { act as domAct } from "react-dom/test-utils";
-import { store } from "../../../store";
+import { store } from "../../../hooks/store";
 import Register from "../Register";
 import { Provider } from "react-redux";
 
