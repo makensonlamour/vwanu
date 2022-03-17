@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { Outlet, Navigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { getCurrentUser, setUser, logout } from "../../store/auth";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser, logout } from "../../features/auth/authSlice";
+import { useAuth } from "../../hooks/useAuth";
 import { isExpired } from "../../helpers/index";
 
 //core components
@@ -10,12 +11,13 @@ import routesPath from "../../routesPath";
 
 const LayoutAuth = () => {
   const dispatch = useDispatch();
-  let currentUser = useSelector(getCurrentUser);
+  const location = useLocation();
+  let currentUser = useAuth();
 
   const auth = currentUser;
 
   const loadUser = () => {
-    if (auth?.token) return;
+    if (auth?.data?.data) return;
     const token = localStorage.getItem("token");
     if (!token) return;
     if (isExpired(token)) return dispatch(logout());
@@ -24,13 +26,17 @@ const LayoutAuth = () => {
 
   useEffect(() => {
     loadUser();
+    // eslint-disable-next-line prettier/prettier
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
       <Navbar />
       <div className="">
-        <div className="h-auto mr-5 my-4 px-16">{auth?.token ? <Outlet /> : <Navigate to={routesPath.LOGIN} />}</div>
+        <div className="h-auto mr-5 my-4 px-16">
+          {auth?.data?.data ? <Outlet /> : <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />}
+        </div>
       </div>
     </>
   );

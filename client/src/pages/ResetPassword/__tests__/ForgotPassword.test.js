@@ -3,7 +3,7 @@ import { render as rtlRender, screen, cleanup, fireEvent, waitFor } from "@testi
 import { MemoryRouter as Router } from "react-router-dom";
 import { act as testAct, create } from "react-test-renderer";
 import { act as domAct } from "react-dom/test-utils";
-import { store } from "../../../store";
+import { store } from "../../../hooks/store";
 import ForgotPassword from "../ForgotPassword";
 import { Provider } from "react-redux";
 
@@ -103,14 +103,12 @@ describe("Test require fields", () => {
 
 //test ForgotPassword functionality
 describe("Test ForgotPassword Functionality", () => {
-  it(" should show error message email when the form is submitted with empty email", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <ForgotPassword />
-        </Router>
-      );
-    });
+  it("should show error message email when the form is submitted with empty email", async () => {
+    render(
+      <Router>
+        <ForgotPassword />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const submitButton = screen.getByRole("button", { name: "Reset Password" });
@@ -121,14 +119,12 @@ describe("Test ForgotPassword Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email is a required field"));
   });
 
-  it(" should show error message email if email missing @", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <ForgotPassword />
-        </Router>
-      );
-    });
+  it("should show error message email if email missing @", async () => {
+    render(
+      <Router>
+        <ForgotPassword />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const submitButton = screen.getByRole("button", { name: "Reset Password" });
@@ -139,14 +135,12 @@ describe("Test ForgotPassword Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email must be a valid email"));
   });
 
-  it(" should show error message email if email missing .", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <ForgotPassword />
-        </Router>
-      );
-    });
+  it("should show error message email if email missing .", async () => {
+    render(
+      <Router>
+        <ForgotPassword />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const submitButton = screen.getByRole("button", { name: "Reset Password" });
@@ -157,14 +151,12 @@ describe("Test ForgotPassword Functionality", () => {
     await waitFor(() => expect(screen.queryByTestId("email-error-message")).toHaveTextContent("Email must be a valid email"));
   });
 
-  it(" shouldn't display error", async () => {
-    domAct(() => {
-      render(
-        <Router>
-          <ForgotPassword />
-        </Router>
-      );
-    });
+  it("shouldn't display error", async () => {
+    render(
+      <Router>
+        <ForgotPassword />
+      </Router>
+    );
 
     const emailInput = screen.getByPlaceholderText("Email");
     const submitButton = screen.getByRole("button", { name: "Reset Password" });

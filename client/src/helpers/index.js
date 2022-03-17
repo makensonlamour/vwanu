@@ -12,4 +12,14 @@ export function isExpired(token) {
   return decoded.exp < currentTime;
 }
 
-//export default { isExpired, decoder };
+export function saveToken(token) {
+  localStorage.setItem("token", token);
+}
+
+export function deleteToken() {
+  localStorage.removeItem("token");
+}
+
+export function getToken() {
+  return localStorage.getItem("token");
+}
