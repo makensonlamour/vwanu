@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
   list: [],
 };
-const Alert = createSlice({
-  name: "alerts",
+
+export const authSlice = createSlice({
+  name: "alert",
   initialState,
   reducers: {
     setAlert: (state, action) => {
@@ -17,6 +19,6 @@ const Alert = createSlice({
   },
 });
 
-export default Alert.reducer;
-export const { removeAlert, setAlert } = Alert.actions;
-export const getAlerts = (state) => state.alerts;
+export default authSlice.reducer;
+export const { removeAlert, setAlert } = authSlice.actions;
+export const getAlerts = (state) => state.alert;

@@ -17,17 +17,35 @@ const Views = () => {
         <Routes>
           <Route element={<LayoutPublic />}>
             {routes.map((route) => {
-              return <>{route.access === role.PUBLIC ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
+              return (
+                <>
+                  {route.access === role.PUBLIC ? (
+                    <Route path={route.path} key={route.name} element={<route.element exact={true} />} />
+                  ) : null}
+                </>
+              );
             })}
           </Route>
           <Route path="/" element={<LayoutUser />}>
             {routes.map((route) => {
-              return <>{route.access === role.USER ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
+              return (
+                <>
+                  {route.access === role.USER ? (
+                    <Route path={route.path} key={route.name} element={<route.element />} exact={true} />
+                  ) : null}
+                </>
+              );
             })}
           </Route>
           <Route path="/" element={<LayoutAuth />}>
             {routes.map((route) => {
-              return <>{route.access === role.AUTH ? <Route path={route.path} key={route.name} element={<route.element />} /> : null}</>;
+              return (
+                <>
+                  {route.access === role.AUTH ? (
+                    <Route path={route.path} key={route.name} element={<route.element />} exact={true} />
+                  ) : null}
+                </>
+              );
             })}
           </Route>
           <Route path="*" element={<NotFound />} />

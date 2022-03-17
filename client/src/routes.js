@@ -2,7 +2,9 @@ import routesPath from "./routesPath";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import ForgotPassword from "./pages/ResetPassword/ForgotPassword";
-import VerifiedEmail from "./pages/VerifiedEmail/VerifiedEmail";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import ForgotPasswordSuccess from "./pages/ResetPassword/ForgotPasswordSuccess";
+import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import NewsFeed from "./pages/NewsFeed/NewsFeed";
 import Profil from "./pages/Profil/Profil";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
@@ -29,15 +31,27 @@ let routes = [
     access: role.PUBLIC,
   },
   {
+    path: routesPath.RESET_PASSWORD,
+    name: "Reset Password",
+    element: ResetPassword,
+    access: role.PUBLIC,
+  },
+  {
+    path: routesPath.FORGOT_PASSWORD_SUCCESS,
+    name: "Forgot Password Success",
+    element: ForgotPasswordSuccess,
+    access: role.PUBLIC,
+  },
+  {
     path: routesPath.FORGOT_PASSWORD,
     name: "Forgot Password",
     element: ForgotPassword,
     access: role.PUBLIC,
   },
   {
-    path: routesPath.VERIFIER_EMAIL,
+    path: routesPath.VERIFY_EMAIL,
     name: "Verified Email",
-    element: VerifiedEmail,
+    element: VerifyEmail,
     access: role.AUTH,
   },
   {

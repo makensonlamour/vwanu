@@ -1,20 +1,24 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import {} from "react-router-dom";
 
 //core components
-import { getCurrentUser, setUser, logout } from "../../store/auth";
+import { setUser, logout } from "../../features/auth/authSlice";
+import { useAuth } from "../../hooks/useAuth";
 import { isExpired } from "../../helpers/index";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 import routesPath from "../../routesPath";
 
 const LayoutPublic = () => {
   const dispatch = useDispatch();
-  let currentUser = useSelector(getCurrentUser);
+  const location = useLocation();
+  const from = location.state?.from || routesPath.NEWSFEED;
+  let currentUser = useAuth();
 
   const auth = currentUser;
 
   const loadUser = () => {
-    if (auth?.token) return;
+    if (auth?.data?.data) return;
     const token = localStorage.getItem("token");
     if (!token) return;
     if (isExpired(token)) return dispatch(logout());
@@ -23,9 +27,11 @@ const LayoutPublic = () => {
 
   useEffect(() => {
     loadUser();
+    // eslint-disable-next-line prettier/prettier
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <div className="">{!auth?.token ? <Outlet /> : <Navigate to={routesPath.NEWSFEED} />}</div>;
+  return <div className="">{!auth?.data?.data ? <Outlet /> : <Navigate to={from} replace={true} />}</div>;
 };
 
 export default LayoutPublic;
