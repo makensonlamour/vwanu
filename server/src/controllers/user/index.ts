@@ -86,7 +86,7 @@ export default {
           password
         );
 
-        const link = `http://${config.get('BASE_URL')}/verify-email/${
+        const link = `${config.get('BASE_URL')}/verify-email/${
           user.id
         }/${user.activationKey}`;
 
@@ -197,7 +197,7 @@ export default {
 
         await userService.updateUser(user, { resetPasswordKey: nanoid() });
 
-        const link = `http://${config.get('BASE_URL')}/reset-password/${
+        const link = `${config.get('BASE_URL')}/reset-password/${
           user.id
         }/${user.resetPasswordKey}`;
 
