@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { Response, Request } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
+
 // Custom requirements
 import AppError from '../../errors';
 import Log from '../../lib/utils/logger';
@@ -10,7 +11,7 @@ import common from '../../lib/utils/common';
 import sendEmail from '../../lib/utils/mailer';
 import userService from '../../services/user/dataProvider';
 import {
-  UserInterface,
+  UpUserInterface as UserInterface,
   CreateUserInput,
   VerifyUserInput,
   GetUserInput,
@@ -25,10 +26,48 @@ const template = {
 
 const { catchAsync, sendResponse } = common;
 
-const toReturn = (user: UserInterface): Partial<UserInterface> => {
-  const { activationKey, resetPasswordKey, password, ...rest } = user;
-  return rest;
-};
+const toReturn = (user: any): Partial<UserInterface> => ({
+  id: user.id,
+  email: user.email,
+  activationKey: user.activationKey,
+  resetPasswordKey: user.resetPasswordKey,
+  verified: user.verified,
+  firstName: user.firstName,
+  lastName: user.lastName,
+  avatar: user.avatar,
+  coverPicture: user.coverPicture,
+  profilePicture: user.profilePicture,
+  backgroundImage: user.backgroundImage,
+  //   // user.backgroundImageStatus,
+  address: user.address,
+  //   // user.working,
+  //   // user.workingLink,
+  //   // user.about,
+  //   // user.school,
+  gender: user.gender,
+  birthday: user.birthday,
+  //   // user.countryId,
+  //   // user.website,
+  //   // user.facebook,
+  //   // user.google,
+  //   // user.twitter,
+  //   // user.linkedin,
+  //   // user.youtube,
+  //   // user.vk,
+  //   // user.instagram,
+  //   // user.qq,
+  //   // user.wechat,
+  //   // user.discord,
+  //   // user.mailru,
+  language: user.language,
+  //   // user.followPrivacy,
+  //   // user.friendPrivacy,
+  //   // user.postPrivacy,
+  //   // user.messagePrivacy,
+  //   // user.lastSeenPrivacy,
+  active: user.active,
+  admin: user.admin,
+});
 
 interface MulterRequest extends Request {
   files: any;
@@ -43,7 +82,9 @@ export default {
         const { password, ...data } = req.body;
         const documentFiles = (req as MulterRequest).files;
 
+        console.log('Checking for pictures ');
         if (documentFiles?.profilePicture || documentFiles?.coverPicture) {
+          console.log('fot was sent ');
           const photosArray = ['profilePicture', 'coverPicture'];
           photosArray.forEach((photoGroup) => {
             if (documentFiles[photoGroup])
