@@ -69,6 +69,7 @@ const toReturn = (user: any): Partial<UserInterface> => ({
   admin: user.admin,
 });
 
+
 interface MulterRequest extends Request {
   files: any;
 }
@@ -84,12 +85,13 @@ export default {
 
         console.log('Checking for pictures ');
         if (documentFiles?.profilePicture || documentFiles?.coverPicture) {
-          console.log('fot was sent ');
+
           const photosArray = ['profilePicture', 'coverPicture'];
           photosArray.forEach((photoGroup) => {
             if (documentFiles[photoGroup])
               data[photoGroup] = documentFiles[photoGroup][0].path;
           });
+
         }
         const user: UserInterface = await userService.createUser(
           data,
