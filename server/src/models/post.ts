@@ -87,12 +87,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: 0,
       },
       privacyType: {
-        type: DataTypes.ENUM(
-          'public',
-          'private',
-          'friendsOnly',
-          'friendOfFriends'
-        ),
+        type: DataTypes.STRING,
         defaultValue: 'public',
       },
     },
