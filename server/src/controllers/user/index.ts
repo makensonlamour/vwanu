@@ -26,6 +26,7 @@ const template = {
 
 const { catchAsync, sendResponse } = common;
 
+
 const toReturn = (user: any): Partial<UserInterface> => ({
   id: user.id,
   email: user.email,
@@ -68,6 +69,7 @@ const toReturn = (user: any): Partial<UserInterface> => ({
   active: user.active,
   admin: user.admin,
 });
+
 
 
 interface MulterRequest extends Request {
