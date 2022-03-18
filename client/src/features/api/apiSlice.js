@@ -5,14 +5,14 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_API_URL || "http://localhost:4000/api",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        headers.set("x-auth-token", `${token}`);
+      }
+      return headers;
+    },
   }),
-  prepareHeaders: (headers, { getState }) => {
-    const token = (getState().auth.token || "").trim();
-    if (token) {
-      headers.set("authorization", `Bearer ${token}`);
-    }
-    return headers;
-  },
 
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -25,7 +25,11 @@ export const apiSlice = createApi({
       query: (credentials) => ({ url: "/user/forgotPassword", method: "POST", body: credentials }),
     }),
     resetPassword: builder.mutation({
-      query: (credentials) => ({ url: "/user/resetPassword", method: "POST", body: credentials }),
+      query: (credentials) => ({
+        url: `/user/resetPassword/${credentials.idUser}/${credentials.resetPasswordKey}`,
+        method: "POST",
+        body: credentials,
+      }),
     }),
     verifyEmail: builder.mutation({
       query: (data) => ({
@@ -33,8 +37,21 @@ export const apiSlice = createApi({
         method: "POST",
       }),
     }),
+    fetchUser: builder.query({
+      query: (id) => `/user/${id}`,
+    }),
+    updateUser: builder.mutation({
+      query: (credentials) => ({ url: "/", method: "POST", body: credentials }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useForgotPasswordMutation, useResetPasswordMutation, useVerifyEmailMutation } =
-  apiSlice;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useVerifyEmailMutation,
+  useFetchUserQuery,
+  useUpdateUserMutation,
+} = apiSlice;

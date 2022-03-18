@@ -2,7 +2,7 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import routesPath from "../../../routesPath";
 
 //RTK query
@@ -10,7 +10,6 @@ import { useResetPasswordMutation } from "../../api/apiSlice";
 import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
 
 // Core components
-//import { ForgotPasswordSuccess } from "../../../pages/ResetPassword/ForgotPasswordSuccess";
 import Alerts from "../../../components/common/Alerts";
 import { Field, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
@@ -22,14 +21,18 @@ const ValidationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Passwords must be match"),
 });
 
-const initialValues = {
-  password: "",
-  passwordConfirmation: "",
-};
-
 const FormResetPassword = () => {
+  const { idUser, resetPasswordKey } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const initialValues = {
+    password: "",
+    passwordConfirmation: "",
+    idUser,
+    resetPasswordKey,
+  };
+
   const alerts = useSelector(getAlerts);
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
   const id = uuidv4();
@@ -38,7 +41,7 @@ const FormResetPassword = () => {
     try {
       const data = await resetPassword(credentials).unwrap();
       if (data) {
-        navigate(routesPath.NEWSFEED);
+        navigate(routesPath.LOGIN);
       }
     } catch (e) {
       console.log();

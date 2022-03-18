@@ -8,7 +8,7 @@ let routesPath = {
   FORGOT_PASSWORD: "/forgot-password",
   FORGOT_PASSWORD_SUCCESS: "/forgot-password-success",
   VERIFY_EMAIL: "/verify-email/:id/:activationKey",
-  RESET_PASSWORD: "/reset-password",
+  RESET_PASSWORD: "/reset-password/:idUser/:resetPasswordKey",
   NEWSFEED: "/",
   STEP_ONE: "profile/step-one",
   STEP_TWO: "profile/step-two",

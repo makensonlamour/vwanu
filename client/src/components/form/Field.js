@@ -12,7 +12,7 @@ function FormField({ name, label, className, testId, showPassword, labelFor, ...
     <>
       <div className="form-control">
         <label className="label">
-          <span className="label-text">{label}</span>
+          <span className="label-text text-md text-secondary font-semibold -mb-2 mt-4">{label}</span>
         </label>
         <input
           className={"input " + className}
