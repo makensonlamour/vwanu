@@ -42,6 +42,8 @@ const LayoutAuth = () => {
       ) : (
         <>
           <Navbar dataUser={isSuccess && !error ? data?.data : undefined} />
+          {/*  {data?.data?.user?.birthday ? <Navigate to={routesPath.NEWSFEED} state={{ from: location }} replace /> : null} */}
+
           <div className="">
             <div className="h-auto mr-5 my-4 px-4 lg:px-16">
               {auth?.data?.data ? (
