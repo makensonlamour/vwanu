@@ -10,7 +10,9 @@ const StepFour = () => {
         <Step step={4} className="step-primary" />
         <div className="w-1/2 m-auto">
           <h1 className="card-title text-orange-500">Find Friends</h1>
-          <Link to={"../../" + routesPath.NEWSFEED}>Finish</Link>
+          <Link className="btn btn-md btn-primary rounded-full text-base-100 mt-6" to={"../../" + routesPath.NEWSFEED}>
+            Finish
+          </Link>
         </div>
       </div>
     </>

@@ -7,6 +7,7 @@ import _ from "lodash";
 import { useVerifyEmailMutation } from "../../features/api/apiSlice";
 
 // Core components
+import Loader from "../../components/common/Loader";
 import { MdMarkEmailRead } from "react-icons/md";
 import { MdInfo } from "react-icons/md";
 import { VscError } from "react-icons/vsc";
@@ -16,7 +17,7 @@ const VerifyEmailScreen = () => {
 
   // eslint-disable-next-line no-unused-vars
   const [dataObject, setDataObject] = useState({ id, activationKey });
-  const [verifyEmail, { isLoading, error, data }] = useVerifyEmailMutation({ id, activationKey });
+  const [verifyEmail, { isLoading, isSuccess, error }] = useVerifyEmailMutation({ id, activationKey });
 
   useEffect(() => {
     try {
@@ -28,13 +29,11 @@ const VerifyEmailScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(error, data);
-
   return (
     <>
       <div className="">
         <div className="mt-10 mx-0 md:mx-4">
-          {isLoading && data ? (
+          {isLoading && <Loader /> ? null : isSuccess ? (
             <div className="bg-success shadow-3xl rounded-3xl px-2 md:px-4  py-16 justify-center m-auto md:w-2/3 lg:w-2/5">
               <p className="">
                 <MdMarkEmailRead size="48" className="m-auto text-green-600" />

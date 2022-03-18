@@ -1,5 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
+import { useOutletContext } from "react-router-dom";
 
 //Core components
 import { InputField, Form, Submit } from "../../components/form";
@@ -10,17 +11,18 @@ import SinglePost from "../../components/form/Post/SinglePost";
 import ProfileHeader from "../../components/Profil/ProfileHeader";
 
 const Profil = () => {
+  const dataUser = useOutletContext();
   const ValidationSchema = Yup.object().shape({
     post: Yup.string().min(1).label("Post content"),
   });
 
-  const handleLogin = (dataPost) => console.log(dataPost);
+  const handlePost = () => console.log("post");
 
   return (
     <>
       <div className="mx-auto px-2 md:px-14 lg:px-10">
         <div className="lg:mx-14">
-          <ProfileHeader />
+          <ProfileHeader dataUser={dataUser} />
         </div>
         <div className="lg:pl-14 lg:pr-8 pt-10 pb-2 justify-center align-items-center lg:w-full">
           <Form
@@ -28,7 +30,7 @@ const Profil = () => {
             initialValues={{
               post: "",
             }}
-            onSubmit={handleLogin}
+            onSubmit={handlePost}
             className="border-b pb-3 m-2 bg-sky-50"
           >
             <div className="flex flex-wrap -mx-3 pb-3 border-b">

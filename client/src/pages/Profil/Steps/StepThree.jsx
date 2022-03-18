@@ -21,7 +21,7 @@ const StepThree = () => {
       <div>
         {" "}
         <Step step={3} className="step-primary mb-4" />
-        <div className="w-2/5 m-auto">
+        <div className="md:w-2/5 m-auto">
           <Form
             validationSchema={ValidationSchema}
             initialValues={initialValues}
@@ -42,10 +42,10 @@ const StepThree = () => {
               className="bg-blue-200 text-blue-500 font-semibold rounded-full px-6 input-primary border-none w-1/2 ml-auto hidden"
             />
             <div className="ml-auto px-2">
-              <Link className="link link-primary pr-2" to={"../../" + routesPath.STEP_FOUR}>
+              <Link className="link link-secondary pr-2" to={"../../" + routesPath.STEP_FOUR}>
                 Skip
               </Link>
-              <Submit className="rounded-full text-base-200 text-md" title="Next" />
+              <Submit className="rounded-full text-base-100 text-md" title="Next" />
             </div>
           </Form>
         </div>
