@@ -175,6 +175,36 @@ export default {
     }
   ),
 
+  updateOne: catchAsync(async (req: Request, res: Response) => {
+    const noneModifiable = ['password', 'activationKey', 'resetPasswordKey'];
+
+    const hasUnacceptable = noneModifiable.some((unacceptable) => {
+      if (Object.prototype.hasOwnProperty.call(req.body, unacceptable))
+        return true;
+      return false;
+    });
+
+    if (hasUnacceptable)
+      throw new AppError('The data provided are not accepted', 400);
+
+    const data = req.body;
+    const documentFiles = (req as MulterRequest).files;
+    if (documentFiles?.profilePicture || documentFiles?.coverPicture) {
+      const photosArray = ['profilePicture', 'coverPicture'];
+      photosArray.forEach((photoGroup) => {
+        if (documentFiles[photoGroup])
+          data[photoGroup] = documentFiles[photoGroup][0].path;
+      });
+    }
+    const user = await userService.getUser(req.params.id);
+    if (!user)
+      throw new AppError(ReasonPhrases.NOT_FOUND, StatusCodes.NOT_FOUND);
+
+    await userService.updateUser(user, { ...data });
+
+    sendResponse(res, StatusCodes.OK, { user }, 'we are good ');
+  }),
+
   forgotPassword: catchAsync(
     async (req: Request<{}, {}, ForgotPasswordInput>, res: Response) => {
       const { email } = req.body;

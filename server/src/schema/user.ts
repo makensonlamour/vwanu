@@ -151,6 +151,8 @@ export const UpUser = object({
   school_completed: string(),
   weather_unit: string(),
   StripeSessionId: string(),
+  country: string(),
+  interestedBy: string(),
 });
 export const verifyUserSchema = object({
   params: object({

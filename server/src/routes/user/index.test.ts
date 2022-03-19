@@ -245,4 +245,26 @@ describe('/api/user *after user creation*. ', () => {
         done(err);
       });
   });
+
+  it('should not update the user', async () => {
+    [
+      { password: 'password' },
+      { activationKey: 'activationKey' },
+      { resetPasswordKey: 'resetPasswordKey' },
+    ].forEach(async (unacceptable) => {
+      const res = await request(expressServer)
+        .put(`/api/user/${newlyCreatedUser.id}`)
+        .send(unacceptable);
+      expect(res.statusCode).toEqual(400);
+    });
+  });
+  it('should update the user details', async () => {
+    const modify = { country: 'United States', gender: 'f' };
+    const res = await request(expressServer)
+      .put(`/api/user/${newlyCreatedUser.id}`)
+      .send(modify);
+
+    expect(res.body.data.user).toBeDefined();
+    expect(res.body.data.user).toEqual(expect.objectContaining(modify));
+  });
 });

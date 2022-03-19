@@ -25,6 +25,13 @@ router
     requireLogin,
     isSelf,
     User.getOne
+  )
+  .put(
+    profilesStorage.fields([
+      { name: 'profilePicture', maxCount: 1 },
+      { name: 'coverPicture', maxCount: 1 },
+    ]),
+    User.updateOne
   );
 router.post(
   '/verify/:id/:activationKey',
