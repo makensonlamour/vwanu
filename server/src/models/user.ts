@@ -33,6 +33,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     coverPicture: string | undefined;
 
+    country: string | undefined;
+
     profilePicture: string | undefined;
 
     backgroundImage: string;
@@ -50,6 +52,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     school: string;
 
     gender: string;
+
+    interestedBy: string;
 
     birthday: string;
 
@@ -150,7 +154,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
       gender: {
         type: DataTypes.STRING,
-        defaultValue: 'm',
+        defaultValue: 'not specified',
+      },
+
+      country: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      interestedBy: {
+        type: DataTypes.STRING,
+        defaultValue: 'not specified',
       },
 
       about: {
