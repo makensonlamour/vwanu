@@ -48,7 +48,7 @@ const LayoutUser = () => {
             <div className="hidden lg:inline lg:basis-[25%]">
               <SidebarLeft />
             </div>
-
+            {/* {data?.data?.user?.birthday ? null : <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />} */}
             <div className="w-full lg:basis-[50%] lg:ml-28">
               {auth?.data?.data ? (
                 <Outlet context={isSuccess && !error ? data?.data : undefined} />

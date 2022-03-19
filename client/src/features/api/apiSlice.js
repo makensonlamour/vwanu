@@ -43,6 +43,9 @@ export const apiSlice = createApi({
     updateUser: builder.mutation({
       query: (credentials) => ({ url: "/", method: "POST", body: credentials }),
     }),
+    getPosts: builder.query({
+      query: () => `/post/`,
+    }),
   }),
 });
 
@@ -54,4 +57,5 @@ export const {
   useVerifyEmailMutation,
   useFetchUserQuery,
   useUpdateUserMutation,
+  useGetPostsQuery,
 } = apiSlice;
