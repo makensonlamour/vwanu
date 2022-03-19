@@ -5,6 +5,7 @@ import axios from 'axios';
 import config from 'config';
 import ChanceJS from 'chance';
 import request from 'supertest';
+import { StatusCodes } from 'http-status-codes';
 
 // Custom dependencies
 import app from '../../app';
@@ -189,6 +190,15 @@ describe('/api/user *after user creation*. ', () => {
       expect(resetPasswordResponse.statusCode).toBe(400);
     });
   }, 10000);
+
+  it('should be able to sign in ', async () => {
+    const auth = await request(expressServer)
+      .post('/api/auth')
+      .send({ ...goodUser, email: userEmail });
+    expect(auth.status).toBe(StatusCodes.ACCEPTED);
+    expect(auth.body.data.token).toBeDefined();
+    expect(auth.body.data.user).toBeDefined();
+  });
   it('should be able to reset a password after request', async () => {
     const { id } = newlyCreatedUser;
     const dbRecords = await db.User.findOne({
@@ -213,17 +223,22 @@ describe('/api/user *after user creation*. ', () => {
     expect(dbRecordsVerified.resetPasswordKey).toBeNull();
   }, 10000);
 
-  it.skip('should send an email to the user email address', (done) => {
+  it('should be able to sign in with the new password', async () => {
+    const auth = await request(expressServer)
+      .post('/api/auth')
+      .send({ email: newlyCreatedUser.email, password: 'newPassword' });
+
+    expect(auth.status).toBe(StatusCodes.ACCEPTED);
+    expect(auth.body.data.token).toBeDefined();
+  });
+  it('should send an email to the user email address', (done) => {
     const endpoint = `${testmailURL}&tag=${TAG}&timestamp_from=${startTimestamp}&livequery=true`;
-    const partOfLink = `verify`;
+
     axios
       .get(endpoint)
       .then((res) => {
         const inbox = res.data;
         expect(inbox.result).toEqual('success');
-        expect(inbox.emails[0].html).toEqual(
-          expect.stringContaining(partOfLink)
-        );
         done();
       })
       .catch((err) => {

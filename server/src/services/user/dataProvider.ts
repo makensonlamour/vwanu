@@ -64,8 +64,8 @@ const DataProvider = {
     }),
   resetPassword: async (userId: number | string, password: string) =>
     new Promise((resolve, reject) => {
-      db.User.setPassword(password).then(() => {
-        db.User.update({ password }, { where: { id: userId } })
+      db.User.setPassword(password).then((newPassword) => {
+        db.User.update({ password: newPassword }, { where: { id: userId } })
           .then((user) => {
             resolve(user);
           })
