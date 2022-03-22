@@ -15,5 +15,8 @@
   "maxPostImages": 3,
   "maxPostVideos": 1,
   "maxPostAudios": 1,
-  "BASE_URL": "http//localhost:"
+  "BASE_URL": "http//localhost:",
+  "mediumSize": "w_70,h_53,c_scale",
+  "smallSize": "w_70,h_53,c_scale",
+  "tinySize": "w_70,h_53,c_scale"
 }
