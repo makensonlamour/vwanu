@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../routesPath";
+import PropTypes from "prop-types";
 
 //core components
 import Dropdown from "./Dropdown/Dropdown";
@@ -11,7 +12,7 @@ import { FaUserPlus } from "react-icons/fa";
 import { IoMdChatbubbles } from "react-icons/io";
 import { IoNotificationsOutline } from "react-icons/io5";
 
-const Navbar = () => {
+const Navbar = ({ dataUser }) => {
   return (
     <>
       <div className="flex flex-row bg-secondary navbar mb-2 shadow-lg px-4 text-base-100 sticky top-0 z-50">
@@ -19,7 +20,7 @@ const Navbar = () => {
           <Link to={routesPath.NEWSFEED}>
             <span className="text-lg font-bold">
               {" "}
-              <img className="w-2/3 " src={logo} alt="logo_vwanu" />
+              <img className="w-full lg:w-2/3 " src={logo} alt="logo_vwanu" />
             </span>
           </Link>
         </div>
@@ -51,11 +52,13 @@ const Navbar = () => {
               </Link>
             </li>
           </ul>
-          <Dropdown />
+          <Dropdown dataUser={dataUser ? dataUser : undefined} />
         </div>
       </div>
     </>
   );
 };
+
+Navbar.propTypes = { dataUser: PropTypes.object.isRequired };
 
 export default Navbar;

@@ -3,9 +3,10 @@ import React from "react";
 
 import { FaThumbsUp, FaComment, FaShareAlt } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
-import { tempPost } from "../../../pages/NewsFeed/data/tempPost";
+import { tempPost } from "../../pages/NewsFeed/data/tempPost";
+import MediaPost from "../../components/form/Post/MediaPost";
 
-const SinglePost = () => {
+const PostList = () => {
   return (
     <>
       {tempPost.map((post) => {
@@ -20,17 +21,7 @@ const SinglePost = () => {
                 </div>
 
                 <p className="card-text pt-2 w-[100%]">{post.content}</p>
-                {post.media.length > 0
-                  ? post.media.map((media) => {
-                      return (
-                        <>
-                          <div className="pt-5 flex w-full">
-                            <img src={media} alt="" className=" flex-wrap inline object-cover object-center w-full h-48 rounded-lg" />
-                          </div>
-                        </>
-                      );
-                    })
-                  : null}
+                {post.medias.length > 0 ? <MediaPost medias={post.medias} /> : null}
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
                   <p className="text-sm text-secondary">
                     <FcLike size={20} className="inline text-secondary" /> <FaThumbsUp size={16} className="inline text-secondary mr-2" />
@@ -64,6 +55,6 @@ const SinglePost = () => {
   );
 };
 
-//SinglePost.propTypes = {};
+//PostList.propTypes = {};
 
-export default SinglePost;
+export default PostList;

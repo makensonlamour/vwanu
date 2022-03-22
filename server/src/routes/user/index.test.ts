@@ -110,8 +110,6 @@ describe('/api/user *after user creation*. ', () => {
     const userR = await request(expressServer)
       .get(`/api/user/${newlyCreatedUser.id}`)
       .set('x-auth-token', token);
-    console.log('the retrieve ');
-    console.log(userR.body.data.user);
     expect(userR.body.data.user).toBeDefined();
   });
   it('should not be able to reset his password if not verified', async () => {
@@ -279,10 +277,6 @@ describe('/api/user *after user creation*. ', () => {
     const userR = await request(expressServer)
       .get(`/api/user/${newlyCreatedUser.id}`)
       .set('x-auth-token', token);
-
-    console.log('the user back ');
-    console.log(userR.body.data.user);
-
     expect(userR.body.data.user).toEqual(expect.objectContaining(modify));
   });
 });
