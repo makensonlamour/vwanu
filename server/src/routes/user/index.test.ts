@@ -39,8 +39,7 @@ describe('/api/user', () => {
     const response = await request(expressServer)
       .post('/api/user')
       .send(goodUser);
-    console.log('Where is the goddam issue ');
-    console.log(response.body);
+
     expect(response.body.data.user).toBeDefined();
     expect(response.body.data.user.id).toBeDefined();
     expect(response.body.data.user.password).toBeUndefined();
@@ -78,12 +77,12 @@ describe('/api/user *after user creation*. ', () => {
   let response = null;
   let userFromDB = null;
   let activationKey = null;
-
+  let token = null;
   let userEmail = null;
   let testmailURL = null;
   let startTimestamp = null;
   let TAG = null;
-
+  const modify = { country: 'United States', gender: 'f' };
   beforeAll(async () => {
     const NAMESPACE = config.get('TEST_MAIL_NAMESPACE');
     const API_KEY = config.get('TEST_MAIL_API_KEY');
@@ -100,12 +99,19 @@ describe('/api/user *after user creation*. ', () => {
       .post('/api/user')
       .send({ ...goodUser, email: userEmail });
     newlyCreatedUser = response.body.data.user;
+    token = response.body.data.token;
     userFromDB = await db.User.findOne({
       where: { id: newlyCreatedUser.id },
     });
     activationKey = userFromDB.activationKey;
   }, 30000);
 
+  it('should retrieve a user by his id ', async () => {
+    const userR = await request(expressServer)
+      .get(`/api/user/${newlyCreatedUser.id}`)
+      .set('x-auth-token', token);
+    expect(userR.body.data.user).toBeDefined();
+  });
   it('should not be able to reset his password if not verified', async () => {
     const resetpassword = await request(expressServer)
       .post('/api/user/forgotPassword')
@@ -259,12 +265,18 @@ describe('/api/user *after user creation*. ', () => {
     });
   });
   it('should update the user details', async () => {
-    const modify = { country: 'United States', gender: 'f' };
     const res = await request(expressServer)
       .put(`/api/user/${newlyCreatedUser.id}`)
       .send(modify);
-
+    expect(res.body.data.user.birthday).toBeDefined();
     expect(res.body.data.user).toBeDefined();
     expect(res.body.data.user).toEqual(expect.objectContaining(modify));
+  });
+
+  it('The user should now be updated with the fields above ', async () => {
+    const userR = await request(expressServer)
+      .get(`/api/user/${newlyCreatedUser.id}`)
+      .set('x-auth-token', token);
+    expect(userR.body.data.user).toEqual(expect.objectContaining(modify));
   });
 });
