@@ -229,7 +229,7 @@ describe('/api/user *after user creation*. ', () => {
     expect(dbRecordsVerified.resetPasswordKey).toBeNull();
   }, 10000);
 
-  it('should be able to sign in with the new password', async () => {
+  it('should be able to sign in with the new password set', async () => {
     const auth = await request(expressServer)
       .post('/api/auth')
       .send({ email: newlyCreatedUser.email, password: 'newPassword' });
