@@ -39,6 +39,7 @@ const toReturn = (user: any): Partial<UserInterface> => ({
   school: user.school,
   gender: user.gender,
   birthday: user.birthday,
+  country: user.country,
   countryId: user.countryId,
   website: user.website,
   facebook: user.facebook,
@@ -60,6 +61,7 @@ const toReturn = (user: any): Partial<UserInterface> => ({
   lastSeenPrivacy: user.lastSeenPrivacy,
   active: user.active,
   admin: user.admin,
+  interestedBy: user.interestedBy,
 });
 
 interface MulterRequest extends Request {
@@ -202,7 +204,7 @@ export default {
 
     await userService.updateUser(user, { ...data });
 
-    sendResponse(res, StatusCodes.OK, { user }, 'we are good ');
+    sendResponse(res, StatusCodes.OK, { user: toReturn(user) }, 'we are good ');
   }),
 
   forgotPassword: catchAsync(
