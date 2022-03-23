@@ -1,6 +1,7 @@
 import React from "react";
 //core components
 import { NavLink } from "react-router-dom";
+//import PropTypes from "prop-types";
 
 //data
 import { ItemSidebarLeft } from "./ItemSidebarLeft";
@@ -9,10 +10,11 @@ const SidebarLeft = () => {
   let activeStyle = {
     textDecoration: "none",
   };
+
   return (
     <>
-      <div className="h-screen fixed overflow-scroll -mt-2">
-        <ul className="menu w-64 p-3 border bg-base-100 box h-screen">
+      <div className="h-screen fixed overflow-scroll -mt-2 z-30">
+        <ul className="menu w-[150vw] lg:w-64 p-3 bg-base-100 box h-screen">
           {ItemSidebarLeft.map((item, index) => {
             return (
               <>
@@ -37,5 +39,10 @@ const SidebarLeft = () => {
     </>
   );
 };
-
+/*
+SidebarLeft.propTypes = {
+  isOpen: PropTypes.bool,
+  isContext: PropTypes.bool,
+};
+*/
 export default SidebarLeft;

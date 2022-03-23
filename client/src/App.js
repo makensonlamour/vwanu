@@ -1,5 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
+import { SidebarProvider } from "./context/BottomMenuContext";
 
 // Custom dependencies
 //import { store } from "./store";
@@ -9,7 +10,9 @@ import Views from "./layouts/Views.js";
 const App = () => {
   return (
     <Provider store={store}>
-      <Views />
+      <SidebarProvider>
+        <Views />
+      </SidebarProvider>
     </Provider>
   );
 };
