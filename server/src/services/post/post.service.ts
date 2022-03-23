@@ -1,10 +1,9 @@
 import db from '../../models';
-import { CreatePostInput } from '../../schema/post';
 
 const DataProvider = {
-  createOne: async (postData: Partial<CreatePostInput>) =>
+  createOne: async (postData: any, option?: any) =>
     new Promise((resolve, reject) => {
-      db.Post.create(postData)
+      db.Post.create(postData, option)
         .then((data: any) => {
           resolve(data);
         })

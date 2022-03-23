@@ -1,9 +1,8 @@
-
 import config from 'config';
 import express from 'express';
 
 // Custom Imports
-import * as Post from '../../controllers/post';
+import * as Post from '../../controllers/post/post.controller';
 import { createPostSchema } from '../../schema/post';
 import validateSchema from '../../middleware/validateResource';
 import requireLogin from '../../middleware/requireLogin';
@@ -22,6 +21,5 @@ router.route('/').post(
   ]),
   Post.createOne
 );
-
 
 export default router;

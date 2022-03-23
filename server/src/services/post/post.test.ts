@@ -26,15 +26,15 @@ describe('Post service _reading in db', () => {
   }, 10000);
 
   it('should create a post with Media', async () => {
-    const postWithImage = await db.Post.create(
+    const postWithImage: any = await Post.createOne(
       { postText, Media: [{ original: or }, { original: or + 200 }] },
       { include: [db.Media] }
     );
-
     expect(postWithImage.Media).toBeDefined();
+    expect(postWithImage.Media[0].tiny).toBeDefined();
     expect(postWithImage.Media.length).toEqual(2);
   });
-  it('should find the media', async () => {
+  it('should find the Media', async () => {
     const media = await db.Media.findOne({ where: { original: or + 200 } });
     expect(media).toEqual(
       expect.objectContaining({
