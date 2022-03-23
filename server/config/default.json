@@ -18,5 +18,11 @@
   "BASE_URL": "http//localhost:",
   "mediumSize": "w_70,h_53,c_scale",
   "smallSize": "w_70,h_53,c_scale",
-  "tinySize": "w_70,h_53,c_scale"
+  "tinySize": "w_70,h_53,c_scale",
+
+  "cloudinary": {
+    "CLOUDINARY_API_SECRET": "add your own",
+    "CLOUDINARY_API_KEY": "your key ",
+    "CLOUDINARY_CLOUD_NAME": "your name"
+  }
 }
