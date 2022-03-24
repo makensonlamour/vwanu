@@ -84,7 +84,7 @@ const FormStepThree = () => {
         onSubmit={handleStepThree}
         className="mt-4 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10"
       >
-        <h1 className="card-title text-secondary">Change your profile photo</h1>
+        <h1 className="card-title text-secondary text-center">Change your profile photo</h1>
         <Alerts className="bg-error" alerts={alerts} />
         {avatar ? (
           <div className="object-fit overflow-hidden rounded-full shadow-sm m-auto h-48 w-48">

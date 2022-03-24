@@ -91,7 +91,7 @@ const FormStepTwo = () => {
         onSubmit={handleStepTwo}
         className="mt-4 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10"
       >
-        <h1 className="card-title text-secondary">Create your profile</h1>
+        <h1 className="card-title text-secondary text-center">Create your profile</h1>
         <Alerts className="bg-error" alerts={alerts} />
         <Field
           autoCapitalize="none"
