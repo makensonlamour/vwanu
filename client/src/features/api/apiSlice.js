@@ -13,6 +13,7 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Album", "Comment", "Post", "User"],
 
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -36,9 +37,11 @@ export const apiSlice = createApi({
         url: `/user/verify/${data.id}/${data.activationKey}`,
         method: "POST",
       }),
+      invalidatesTags: ["User"],
     }),
     fetchUser: builder.query({
       query: (id) => `/user/${id}`,
+      providesTags: ["User"],
     }),
     updateUser: builder.mutation({
       query: (credentials) => ({
@@ -46,6 +49,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: credentials,
       }),
+      invalidatesTags: ["User"],
     }),
     updateProfilePicture: builder.mutation({
       query: (credentials) => ({
@@ -53,6 +57,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: credentials.profilePicture,
       }),
+      invalidatesTags: ["User"],
     }),
     getPosts: builder.query({
       query: () => `/post/`,
