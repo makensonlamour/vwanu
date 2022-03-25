@@ -19,13 +19,17 @@ const sequelize = dbSettings.url
       dbSettings
     );
 
-const extension = '.js';
+const extension =
+  process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'production'
+    ? '.js'
+    : '.ts';
+
 fs.readdirSync(__dirname)
   .filter(
     (file: string) =>
       file.indexOf('.') !== 0 &&
       file !== basename &&
-      (file.slice(-3) === '.ts' || file.slice(-3) === extension)
+      file.slice(-3) === extension
   )
   .forEach((file: any) => {
     const model = require(path.join(__dirname, file))(
