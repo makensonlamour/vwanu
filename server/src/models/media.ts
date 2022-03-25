@@ -1,6 +1,15 @@
+
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-import-module-exports */
 
 import { Model } from 'sequelize';
+import config from 'config';
+
+const tinySize = config.get('tinySize');
+const smallSize = config.get('smallSize');
+const mediumSize = config.get('mediumSize');
+
+
 
 export interface MediaInterface {
   id: number;
@@ -61,6 +70,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
 
     {
+
+      hooks: {
+        beforeSave: (record) => {
+          const { tiny, small, medium, original } = record;
+
+          record.medium =
+            medium !== undefined
+              ? medium
+              : original.replace(/\upload\//g, `upload/${mediumSize}/`);
+          record.small =
+            small !== undefined
+              ? small
+              : original.replace(/\upload\//g, `upload/${smallSize}/`);
+          record.tiny =
+            tiny !== undefined
+              ? tiny
+              : original.replace(/\upload\//g, `upload/${tinySize}/`);
+        },
+      },
+
       sequelize,
       modelName: 'Media',
     }

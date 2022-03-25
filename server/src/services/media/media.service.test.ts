@@ -18,7 +18,9 @@ describe('MediaService', () => {
       'https://res.cloudinary.com/dnesmf7ah/image/upload/v1646131326/vwanu/profile/p9dbtktf47kxpgyslmjw.jpg';
   });
 
+
   it('should save a new data', async () => {
+
     data = await mediaService.createOne({
       original: link,
     });

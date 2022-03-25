@@ -1,12 +1,5 @@
-import config from 'config';
-
 // Core imports
 import db from '../../models';
-
-
-const tinySize = config.get('tinySize');
-const smallSize = config.get('smallSize');
-const mediumSize = config.get('mediumSize');
 
 const DataProvider = {
   getOne: async (userId: number | string) =>
@@ -25,22 +18,7 @@ const DataProvider = {
 
   createOne: async (mediaData: any) =>
     new Promise((resolve, reject) => {
-      let { medium, small, tiny } = mediaData;
-      const { original } = mediaData;
-      medium =
-        medium !== undefined
-          ? medium
-          : original.replace(/\upload\//g, `upload/${mediumSize}/`);
-      small =
-        small !== undefined
-          ? small
-          : original.replace(/\upload\//g, `upload/${smallSize}/`);
-      tiny =
-        tiny !== undefined
-          ? tiny
-          : original.replace(/\upload\//g, `upload/${tinySize}/`);
-
-      db.Media.create({ medium, small, tiny, original })
+      db.Media.create(mediaData)
         .then((data: any) => {
           resolve(data);
         })
