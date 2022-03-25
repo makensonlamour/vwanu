@@ -6,7 +6,7 @@ import db from '../../models';
 describe('Post service _reading in db', () => {
   const postText = ' I am a new post text ';
   let postId: number | null = null;
-  const or = 'original from post';
+  const or = 'original from post 1';
 
   beforeAll(async () => {
     await db.sequelize.sync({});
