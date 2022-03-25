@@ -1,23 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser, logout } from "../../features/auth/authSlice";
 import { useAuth } from "../../hooks/useAuth";
 import { isExpired, decoder } from "../../helpers/index";
 import { useFetchUserQuery } from "../../features/api/apiSlice";
+import { Transition } from "@headlessui/react";
 
 //core components
 import Loader from "../../components/common/Loader";
+import { GrClose } from "react-icons/gr";
 import Navbar from "../../components/Navbars/index";
 import SidebarLeft from "../../components/Sidebars/Left/index";
 import SidebarRight from "../../components/Sidebars/Right/index";
+import BottomNavigation from "../../components/BottomNavigation/index";
 import routesPath from "../../routesPath";
+import { BottomMenuContext } from "../../context/BottomMenuContext";
 
 const LayoutUser = () => {
   const userData = decoder(localStorage.getItem("token"));
   const dispatch = useDispatch();
   const location = useLocation();
   let currentUser = useAuth();
+  const { isSidebarOpen, closeSidebar } = useContext(BottomMenuContext);
 
   const auth = currentUser;
 
@@ -37,28 +42,72 @@ const LayoutUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    //closeSidebar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
         <>
-          <Navbar dataUser={isSuccess && !error ? data?.data : undefined} />
-          <div className="lg:flex lg:flex-row">
-            <div className="hidden lg:inline lg:basis-[25%]">
-              <SidebarLeft />
-            </div>
-            {/* {data?.data?.user?.birthday ? null : <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />} */}
-            <div className="w-full lg:basis-[50%] lg:ml-28">
-              {auth?.data?.data ? (
-                <Outlet context={isSuccess && !error ? data?.data : undefined} />
+          <div className="flex flex-col mx-auto space-y-0">
+            <Navbar dataUser={isSuccess && !error ? data?.data : undefined} />
+            <div className="flex lg:justify-between lg:space-x-5 px-2">
+              {isSidebarOpen ? (
+                <button
+                  onClick={() => {
+                    closeSidebar();
+                  }}
+                  className="lg:hidden flex text-4xl text-black items-center cursor-pointer fixed right-6 top-20 z-50"
+                >
+                  <GrClose size={24} />
+                  {console.log("open")}
+                </button>
               ) : (
-                <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />
+                console.log("close")
               )}
-            </div>
 
-            <div className="hidden lg:block lg:basis-[25%]">
-              <SidebarRight />
+              <div className="w-[0vw] lg:w-[46vw] lg:p-0 pr-0">
+                <div className="hidden lg:inline-block py-6 lg:p-0">
+                  <SidebarLeft />
+                </div>
+                {/*Mobile Sidebar*/}
+                <Transition
+                  show={isSidebarOpen}
+                  enter="transition-opacity duration-75"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="transition-opacity duration-150"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="lg:hidden">
+                    <SidebarLeft />{" "}
+                  </div>
+                </Transition>
+              </div>
+              {isSuccess ? (
+                data?.data?.user?.birthday ? null : (
+                  <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />
+                )
+              ) : null}
+              <div className="w-[100vw] lg:w-[72vw] py-6 p-3">
+                {auth?.data?.data ? (
+                  <Outlet context={isSuccess && !error ? data?.data : undefined} />
+                ) : (
+                  <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />
+                )}
+              </div>
+
+              <div className="hidden lg:w-[50vw] lg:inline-block">
+                <SidebarRight />
+              </div>
+            </div>
+            <div>
+              <BottomNavigation />
             </div>
           </div>
         </>
