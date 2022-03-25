@@ -19,6 +19,17 @@ const DataProvider = {
           reject(err(err));
         });
     }),
+
+  findMany: async (criteria: any, option?: any) =>
+    new Promise((resolve, reject) => {
+      db.Post.findAndCountAll({ where: criteria, ...option })
+        .then((posts: any[]) => resolve(posts))
+        .catch((err: any) => {
+          console.log('We have some err');
+          console.log(err);
+          reject(err(err));
+        });
+    }),
 };
 
 export default DataProvider;

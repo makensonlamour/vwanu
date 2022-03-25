@@ -43,7 +43,6 @@ describe('/api/post', () => {
     const response = await request(expressServer)
       .post('/api/post')
       .set('x-auth-token', token)
-
       .send({ postText: 'I am a new post', UserId: newUser.id });
 
     expect(response.statusCode).toBe(201);

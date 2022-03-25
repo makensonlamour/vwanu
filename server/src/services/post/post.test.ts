@@ -1,3 +1,5 @@
+import { Op } from '@sequelize/core';
+
 import Post from './post.service';
 import db from '../../models';
 
@@ -53,5 +55,20 @@ describe('Post service _reading in db', () => {
         privacyType: 'public',
       })
     );
+  }, 10000);
+
+  it('should find a post by any passed criteria ', async () => {
+    const post: any = await Post.findMany(
+      {
+        [Op.and]: [
+          { UserId: { [Op.not]: null } },
+          { postText },
+          { id: { [Op.gt]: 1 } },
+        ],
+      },
+      { include: [{ model: db.Media }] }
+    );
+
+    expect(Array.isArray(post.rows)).toBeTruthy();
   }, 10000);
 });
