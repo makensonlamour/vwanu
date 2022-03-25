@@ -25,6 +25,7 @@
   "author": "WebVital",
   "license": "MIT",
   "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.10",
     "@types/morgan": "^1.9.3",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.28.1",
