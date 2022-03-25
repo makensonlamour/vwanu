@@ -9,11 +9,7 @@ const Step = ({ step, className }) => {
     <>
       <ul className="w-full steps">
         {ItemStep.map((item, index) => {
-          return (
-            <li key={index} className={`step text-base-100 ${item.step <= step ? className : "text-base-200"}`}>
-              {item.name}
-            </li>
-          );
+          return <li key={index} className={`step text-base-100 ${item.step <= step ? className : "text-base-200"}`}></li>;
         })}
       </ul>
     </>

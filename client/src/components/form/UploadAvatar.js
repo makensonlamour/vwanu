@@ -4,8 +4,8 @@ import { useFormikContext } from "formik";
 
 import Error from "./Error";
 
-function UploadAvatar({ name, className, id, icon, format, ...otherProps }) {
-  const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
+function UploadAvatar({ name, className, id, icon, format, stateFile, ...otherProps }) {
+  const { setFieldTouched, setFieldValue, handleChange, errors, touched } = useFormikContext();
 
   return (
     <>
@@ -15,19 +15,19 @@ function UploadAvatar({ name, className, id, icon, format, ...otherProps }) {
           accept={format}
           id={id}
           className={"hidden" + className}
-          value={values[name]}
           onBlur={() => setFieldTouched(name)}
-          onChange={handleChange(name)}
+          onChange={(e) => {
+            setFieldValue(name, e.currentTarget.files[0]);
+            handleChange(name);
+            stateFile(e.currentTarget.files[0]);
+          }}
+          encType="multipart/form-data"
           {...otherProps}
         />
         <label htmlFor={id}>
-          {values?.name ? (
-            <div className="overflow-hidden rounded-full shadow-sm m-auto h-48 w-48">
-              <img src={values[name]} className="object-fill" alt="profile_photo" />{" "}
-            </div>
-          ) : (
-            icon
-          )}
+          <div className="absolute bottom-[30%] right-[28%] lg:right-[32%] lg:bottom-[32%] rounded-full bg-gray-300 opacity-75 border p-2">
+            {icon}
+          </div>
         </label>
         <Error error={errors[name]} visible={touched[name]} />
       </div>
@@ -42,6 +42,7 @@ UploadAvatar.propTypes = {
   className: PropTypes.string,
   id: PropTypes.any.isRequired,
   format: PropTypes.string,
+  stateFile: PropTypes.string,
 };
 
 export default UploadAvatar;
