@@ -39,7 +39,7 @@ export default async function (database: any) {
   app.use('/api/post', postRoute);
   app.use('/api/profile', profileRoute);
 
-  /* Handling all errors */
+  /* Handling all errors thrown */
   // eslint-disable-next-line no-unused-vars
   // eslint-disable-next-line prefer-arrow-callback
   app.use(function (
