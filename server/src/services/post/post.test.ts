@@ -3,7 +3,7 @@ import { Op } from '@sequelize/core';
 import Post from './post.service';
 import db from '../../models';
 
-describe('Post service _reading in db', () => {
+describe('Post service _reading in database', () => {
   const postText = ' I am a new post text ';
   let postId: number | null = null;
   const or = 'original from post 1';
