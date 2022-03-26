@@ -4,7 +4,7 @@ import routesPath from "../../routesPath";
 import _ from "lodash";
 
 //RTK query
-import { useVerifyEmailMutation } from "../../features/api/apiSlice";
+import { useVerifyEmailMutation } from "../../features/auth/authSlice";
 
 // Core components
 import Loader from "../../components/common/Loader";

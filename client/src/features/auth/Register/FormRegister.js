@@ -6,7 +6,7 @@ import routesPath from "../../../routesPath";
 import { useNavigate } from "react-router-dom";
 
 //RTK query
-import { useRegisterMutation } from "../../api/apiSlice";
+import { useRegisterMutation } from "../../auth/authSlice";
 import { logged } from "../authSlice";
 import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
 

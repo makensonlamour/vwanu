@@ -8,3 +8,4 @@ export { default as Error } from "./Error";
 
 //post components
 export { default as InputField } from "./Post/InputField";
+export { default as SubmitPost } from "./Post/SubmitPost";

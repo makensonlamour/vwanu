@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setUser, logout } from "../../features/auth/authSlice";
 import { useAuth } from "../../hooks/useAuth";
 import { isExpired, decoder } from "../../helpers/index";
-import { useFetchUserQuery } from "../../features/api/apiSlice";
+import { useFetchUserQuery } from "../../features/user/userSlice";
 import { Transition } from "@headlessui/react";
 
 //core components
@@ -55,7 +55,7 @@ const LayoutUser = () => {
         <>
           <div className="flex flex-col mx-auto space-y-0">
             <Navbar dataUser={isSuccess && !error ? data?.data : undefined} />
-            <div className="flex lg:justify-between lg:space-x-5 px-2">
+            <div className="flex px-2 ">
               {isSidebarOpen ? (
                 <button
                   onClick={() => {
@@ -64,13 +64,10 @@ const LayoutUser = () => {
                   className="lg:hidden flex text-4xl text-black items-center cursor-pointer fixed right-6 top-20 z-50"
                 >
                   <GrClose size={24} />
-                  {console.log("open")}
                 </button>
-              ) : (
-                console.log("close")
-              )}
+              ) : null}
 
-              <div className="w-[0vw] lg:w-[46vw] lg:p-0 pr-0">
+              <div className="w-[0vw] lg:w-[30vw] lg:p-0 pr-0">
                 <div className="hidden lg:inline-block py-6 lg:p-0">
                   <SidebarLeft />
                 </div>
@@ -94,15 +91,14 @@ const LayoutUser = () => {
                   <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />
                 )
               ) : null}
-              <div className="w-[100vw] lg:w-[72vw] py-6 p-3">
+              <div className="lg:w-[50vw] space-y-2 lg:flex-start">
                 {auth?.data?.data ? (
                   <Outlet context={isSuccess && !error ? data?.data : undefined} />
                 ) : (
                   <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />
                 )}
               </div>
-
-              <div className="hidden lg:w-[50vw] lg:inline-block">
+              <div className="hidden lg:block">
                 <SidebarRight />
               </div>
             </div>

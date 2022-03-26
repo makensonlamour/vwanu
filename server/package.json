@@ -11,8 +11,8 @@
     "preinstall": "npm i nodemon -g",
     "start": "NODE_ENV=development node src/bin/index.js",
     "start:staging": "NODE_ENV=staging node src/bin/index.js",
-    "lint": "node_modules/.bin/eslint src/**/*.ts ",
-    "lint:fix": "node_modules/.bin/eslint --fix src/**/*.ts ",
+    "lint": "eslint src/**/*.ts ",
+    "lint:fix": "eslint --fix src/**/*.ts ",
     "lint:prettier": "prettier  --fix src/**/*.js*",
     "test:watch": "jest --watch --detectOpenHandles",
     "devops": "tsnd --respawn --transpile-only --files --exit-child --watch src src/bin/index.ts"

@@ -3,7 +3,7 @@ import React from "react";
 const SidebarRight = () => {
   return (
     <>
-      <div className="hidden lg:block fixed">
+      <div className="h-screen">
         <ul className="p-3 border bg-base-100">
           <li>Online Friends</li>
         </ul>
