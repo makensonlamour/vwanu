@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setUser, logout } from "../../features/auth/authSlice";
 import { useAuth } from "../../hooks/useAuth";
 import { isExpired, decoder } from "../../helpers/index";
-import { useFetchUserQuery } from "../../features/api/apiSlice";
+import { useFetchUserQuery } from "../../features/user/userSlice";
 
 //core components
 import Loader from "../../components/common/Loader";

@@ -1,4 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { apiSlice } from "../api/apiSlice";
+
+export const userApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    fetchUser: builder.query({
+      query: (id) => `/user/${id}`,
+      providesTags: ["User"],
+    }),
+    updateUser: builder.mutation({
+      query: (credentials) => ({
+        url: `/user/${credentials.idUser}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    updateProfilePicture: builder.mutation({
+      query: (credentials) => ({
+        url: `/user/${credentials.idUser}`,
+        method: "PUT",
+        body: credentials.profilePicture,
+      }),
+      invalidatesTags: ["User"],
+    }),
+  }),
+});
+
+export const { useFetchUserQuery, useUpdateUserMutation, useUpdateProfilePictureMutation } = userApiSlice;
 
 const initialState = {
   user: null,

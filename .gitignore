@@ -1,5 +1,6 @@
 #remove my custom docker file (@gh4m21)
 docker-compose.pam.yml
+data/
 
 
 # Logs

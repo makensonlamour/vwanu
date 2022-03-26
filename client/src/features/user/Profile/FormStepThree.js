@@ -6,7 +6,7 @@ import routesPath from "../../../routesPath";
 import { useNavigate, useOutletContext, Link } from "react-router-dom";
 
 //RTK query
-import { useUpdateProfilePictureMutation } from "../../api/apiSlice";
+import { useUpdateProfilePictureMutation } from "../../user/userSlice";
 import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
 
 // Core components
@@ -86,9 +86,9 @@ const FormStepThree = () => {
       >
         <h1 className="card-title text-secondary text-center">Change your profile photo</h1>
         <Alerts className="bg-error" alerts={alerts} />
-        {avatar ? (
+        {avatar || dataUser?.user?.profilePicture ? (
           <div className="object-fit overflow-hidden rounded-full shadow-sm m-auto h-48 w-48">
-            <img src={URL.createObjectURL(avatar)} className="object-fill" alt="profile_photo" />{" "}
+            <img src={avatar ? URL.createObjectURL(avatar) : dataUser.user.profilePicture} className="object-fill" alt="profile_photo" />{" "}
           </div>
         ) : (
           <FaUserCircle size="150px" className="m-auto text-gray-500" />

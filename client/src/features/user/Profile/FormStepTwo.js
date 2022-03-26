@@ -6,7 +6,7 @@ import routesPath from "../../../routesPath";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 //RTK query
-import { useUpdateUserMutation } from "../../api/apiSlice";
+import { useUpdateUserMutation } from "../../user/userSlice";
 import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
 
 // Core components
@@ -47,7 +47,6 @@ const FormStepTwo = () => {
   });
 
   const handleStepTwo = async (credentials) => {
-    console.log(credentials);
     try {
       await updateUser(credentials).unwrap();
     } catch (e) {

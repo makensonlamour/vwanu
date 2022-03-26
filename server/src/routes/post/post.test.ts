@@ -11,17 +11,18 @@ describe('/api/post', () => {
   let token = null;
   beforeAll(async () => {
     expressServer = await app(db);
-    const response = await request(expressServer).post('/api/user').send({
-      firstName: 'John',
-      lastName: 'franc',
-      email: 'john@example.com',
-      password: 'bigPassword123',
-      passwordConfirmation: 'bigPassword123',
-    });
+    const response = await request(expressServer)
+      .post('/api/user')
+      .send({
+        firstName: 'John',
+        lastName: 'franc',
+        email: `john${Math.random()}@example.com`,
+        password: 'bigPassword123',
+        passwordConfirmation: 'bigPassword123',
+      });
 
     newUser = response.body.data.user;
     token = response.body.data.token;
-
   }, 30000);
 
   it('should not create a post ', async () => {
@@ -42,7 +43,6 @@ describe('/api/post', () => {
     const response = await request(expressServer)
       .post('/api/post')
       .set('x-auth-token', token)
-
       .send({ postText: 'I am a new post', UserId: newUser.id });
 
     expect(response.statusCode).toBe(201);
@@ -66,7 +66,6 @@ describe('/api/post', () => {
       .set('x-auth-token', token)
       .send({ postText: 'I am a new post', UserId: newUser.id });
 
-
     expect(response.statusCode).toBe(201);
     expect(response.body.data.post).toBeDefined();
     expect(response.body.data.post).toEqual(
@@ -84,7 +83,6 @@ describe('/api/post', () => {
         multiVideo: false,
         updatedAt: expect.any(String),
         videoCount: 0,
-
       })
     );
     expect(response.header['content-type']).toEqual(

@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { useOutletContext, Link } from "react-router-dom";
 
 //RTK Query
-import { useGetPostsQuery } from "../../features/api/apiSlice";
+import { useGetPostsQuery } from "../../features/post/postSlice";
 
 //Core components
 import Loader from "../../components/common/Loader";

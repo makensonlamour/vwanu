@@ -10,11 +10,11 @@ function InputField({ name, className, testId, ...otherProps }) {
   return (
     <>
       <textarea
-        className={"textarea textarea-ghost resize-none cols-4" + className}
+        className={"textarea textarea-ghost resize-none cols-4 " + className}
         value={values[name]}
         onBlur={() => setFieldTouched(name)}
         onChange={handleChange(name)}
-        rows={1}
+        rows={5}
         cols={40}
         {...otherProps}
       ></textarea>

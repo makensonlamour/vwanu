@@ -1,96 +1,60 @@
 import React from "react";
-import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { useOutletContext, Link } from "react-router-dom";
 
 //Core components
 import Loader from "../../components/common/Loader";
-import { InputField, Form, Submit } from "../../components/form";
-import { FcGallery } from "react-icons/fc";
-import { MdMyLocation, MdOutlineMood } from "react-icons/md";
-import { GoGlobe } from "react-icons/go";
 import PostList from "../../features/post/PostList";
+import InputModal from "../../features/post/components/InputModal";
 
 //RTK Query
-import { useGetPostsQuery } from "../../features/api/apiSlice";
+import { useGetPostsQuery } from "../../features/post/postSlice";
 
 const NewsFeed = () => {
-  const { data: posts, isLoading, isSuccess, isError } = useGetPostsQuery();
-  const ValidationSchema = Yup.object().shape({
-    post: Yup.string().min(1).label("Post content"),
-  });
+  const dataUser = useOutletContext();
+  const obj = {
+    UserId: dataUser?.user?.id,
+    pageSize: 6,
+    pageNumber: 0,
+  };
+
+  const { data, isLoading, isSuccess, isError } = useGetPostsQuery(obj);
 
   function reloadPage() {
     window.location.reload();
   }
 
-  const handleLogin = (dataPost) => console.log(dataPost);
-
   //generate content post with condition
   let content;
   if (isLoading) {
     content = <Loader />;
-  } else if (isSuccess) {
-    content = posts?.map((post) => <PostList key={post.id} post={post} />);
+  } else if (isSuccess && data?.data?.posts?.length > 0) {
+    content = data?.data?.posts?.map((post) => <PostList key={post.id} post={post} />);
   } else if (isError) {
     content = (
-      <div className="my-20 m-auto text-center lg:pl-14 lg:pr-12 px-2 lg:px-0">
+      <div className="my-20 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0">
         {"Failed to load post. "}{" "}
         <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
           Reload the page
         </Link>{" "}
       </div>
     );
+  } else {
+    content = <div className="my-20 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0">{"No posts "} </div>;
   }
 
   return (
     <>
-      <div className="mx-auto px-2 md:px-14 lg:px-10">
-        <div className="lg:pl-14 lg:pr-8 pt-10 pb-2 justify-center align-items-center lg:w-full">
-          <Form
-            validationSchema={ValidationSchema}
-            initialValues={{
-              post: "",
-            }}
-            onSubmit={handleLogin}
-            className="border-b pb-3 m-2 bg-sky-50"
-          >
-            <div className="flex flex-wrap -mx-3 pb-3 border-b">
-              <img alt="" className="mt-3 w-10 h-10 rounded-full inline" src="https://i.pravatar.cc/300" />
-              <InputField
-                required
-                autoCapitalize="none"
-                placeholder="What's on your mind?"
-                name="post"
-                className="inline basis-3/4 appearance-none ml-2 mt-4 text-secondary placeholder:text-gray-600 font-semibold border-none focus:bg-sky-50 active:bg-sky-50"
-                testId="post-error-message"
-              />
-              <Submit data-testid="postBtn" className="lg:ml-4 rounded-full text-md btn-sm inline ml-auto" title="Post" />
-            </div>
-            <div className="px-3 pt-2 pb-2">
-              <ul className="flex m-auto list-reset font-bold text-xs overflow-x-auto lg:overflow-hidden pb-4 lg:pb:0">
-                <li className="flex bg-green-200 py-2 px-3 rounded-full mt-4 lg:mt-0 mr-4 cursor-pointer hover:bg-green-100">
-                  <FcGallery size={22} className="inline mr-2" /> Photo/Video
-                </li>
-                <li className="flex bg-green-200 py-2 px-3 rounded-full mt-4 lg:mt-0 mr-4 cursor-pointer hover:bg-green-100">
-                  {" "}
-                  <MdOutlineMood size={22} className="inline mr-2 text-v-yellow" /> Feeling/Activity
-                </li>
-                <li className="flex bg-green-200 py-2 px-3 rounded-full mt-4 lg:mt-0 mr-4 cursor-pointer hover:bg-green-100">
-                  {" "}
-                  <MdMyLocation size={22} className="inline mr-2 text-red-500" /> Location
-                </li>
-                <li className="">
-                  <button className="flex bg-green-200 py-2 px-3 rounded-full mt-4 lg:mt-0 mr-4 cursor-pointer hover:bg-green-100">
-                    {" "}
-                    <GoGlobe size={22} className="inline mr-2" /> Public
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div className="ml-auto text-xs"></div>
-          </Form>
+      <div className="mx-auto z-30">
+        <div className="pt-10 pb-2 mx-auto align-items-center lg:w-full space-y-2">
+          <div className="lg:flex">
+            <InputModal reference="newsfeed" />
+            <div className="hidden lg:inline mx-2 rounded-2xl basis-1/3 border"></div>
+          </div>
+          <div className="lg:flex">
+            <div className="w-full lg:basis-2/3">{content}</div>
+            <div className="hidden lg:inline mx-2 rounded-2xl border lg:basis-1/3"></div>
+          </div>
         </div>
-        <div className="lg:pl-14 lg:pr-12 px-2 lg:px-0">{content}</div>
       </div>
     </>
   );

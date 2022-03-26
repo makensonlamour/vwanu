@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import routesPath from "../../../routesPath";
 
 //RTK query
-import { useLoginMutation } from "../../api/apiSlice";
+import { useLoginMutation } from "../../auth/authSlice";
 import { logged } from "../../auth/authSlice";
 import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
 

@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import routesPath from "../../../routesPath";
 
 //RTK query
-import { useForgotPasswordMutation } from "../../api/apiSlice";
+import { useForgotPasswordMutation } from "../../auth/authSlice";
 import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
 
 // Core components

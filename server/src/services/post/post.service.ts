@@ -1,10 +1,9 @@
 import db from '../../models';
-import { CreatePostInput } from '../../schema/post';
 
 const DataProvider = {
-  createOne: async (postData: Partial<CreatePostInput>) =>
+  createOne: async (postData: any, option?: any) =>
     new Promise((resolve, reject) => {
-      db.Post.create(postData)
+      db.Post.create(postData, option)
         .then((data: any) => {
           resolve(data);
         })
@@ -17,6 +16,19 @@ const DataProvider = {
       db.Post.findOne({ where: { id } })
         .then((post: any) => resolve(post))
         .catch((err: any) => {
+          reject(err(err));
+        });
+    }),
+
+  findMany: async (criteria: any, option?: any) =>
+    new Promise((resolve, reject) => {
+      db.Post.findAndCountAll({ where: criteria, ...option })
+        .then((posts: any[]) => resolve(posts))
+        .catch((err: any) => {
+          // eslint-disable-next-line no-console
+          console.log('We have some err');
+          // eslint-disable-next-line no-console
+          console.log(err);
           reject(err(err));
         });
     }),
