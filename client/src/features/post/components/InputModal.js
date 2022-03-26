@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
@@ -167,5 +168,6 @@ const InputModal = ({ reference }) => {
 InputModal.propTypes = {
   reference: PropTypes.string.isRequired,
 };
+
 
 export default InputModal;

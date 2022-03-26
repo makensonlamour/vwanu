@@ -16,4 +16,5 @@ export const apiSlice = createApi({
   tagTypes: ["Album", "Comment", "Post", "User"],
 
   endpoints: () => ({}),
+
 });

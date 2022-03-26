@@ -25,9 +25,8 @@ const DataProvider = {
       db.Post.findAndCountAll({ where: criteria, ...option })
         .then((posts: any[]) => resolve(posts))
         .catch((err: any) => {
-          // eslint-disable-next-line no-console
+
           console.log('We have some err');
-          // eslint-disable-next-line no-console
           console.log(err);
           reject(err(err));
         });
