@@ -53,6 +53,6 @@ const Dropdown = ({ dataUser }) => {
   );
 };
 
-Dropdown.propTypes = { dataUser: PropTypes.object.isRequired };
+Dropdown.propTypes = { dataUser: PropTypes.object };
 
 export default Dropdown;
