@@ -23,3 +23,11 @@ export function deleteToken() {
 export function getToken() {
   return localStorage.getItem("token");
 }
+
+//calculate scrolling page
+export function getYPosition() {
+  window.addEventListener("scroll", () => {
+    const yPosition = window.scrollY;
+    return yPosition;
+  });
+}
