@@ -1,8 +1,10 @@
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Response, Request } from 'express';
 import { Op } from '@sequelize/core';
+// import { QueryTypes } from 'sequelize';
 
 import PostService from '../../services/post/post.service';
+// import UserService from '../../services/user/dataProvider';
 import AppError from '../../errors';
 
 // Custom requirements
@@ -24,8 +26,12 @@ export const createOne = catchAsync(
         data.Media = [];
         const mediaArray = ['postImage', 'postVideo'];
         mediaArray.forEach((mediaGroup) => {
-          if (documentFiles[mediaGroup])
-            data.Media.push({ original: documentFiles[mediaGroup][0].path });
+          if (documentFiles[mediaGroup]) {
+            data.Media.push({
+              original: documentFiles[mediaGroup][0].path,
+              UserId: data.UserId,
+            });
+          }
         });
       }
 
@@ -51,18 +57,70 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
     sizes = sizeAsNumber;
 
   const query = Object.keys(data).map((key) => {
-    if (['UserId'].some((criteria) => criteria === key))
+    if (['UserId'].some((criteria) => criteria === key)) {
+      // if (key === 'UserId')
+      //   return {
+      //     UserId: {
+      //       [Op.or]: [
+      //         data.UserId,
+      //         db.sequelize.literal(
+      //           `select id from User where id=${data.UserId}`
+      //         ),
+      //       ],
+      //     },
+      //   };
+
       return { [key]: data[key] };
+    }
     return null;
   });
 
   const { rows, count }: any = await PostService.findMany(
     {
-      [Op.or]: query,
+      [Op.and]: query,
     },
-    { include: [{ model: db.Media }], limit: sizes, offset: pages * sizes }
+    {
+      include: [
+        { model: db.Media },
+        { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
+      ],
+      limit: sizes,
+      offset: pages * sizes,
+      attributes: { exclude: ['UserId'] },
+    }
   );
-  if (!rows) throw new AppError('No Post found erro', StatusCodes.NOT_FOUND);
+  // const records = await db.sequelize.query('dt');
+  // console.log(JSON.stringify(records, null, 2));
+  // console.log('will make request ');
+
+  // const { rows, count }: any = await db.Post.findAll({
+  //   where: {
+  //     UserId: {
+  //       [Op.or]: [
+  //         db.sequelize.literal(
+  //           `SELECT UserId FROM User_Follower WHERE FollowerId=1`
+  //         ),
+  //       ],
+  //     },
+  //   },
+  // });
+
+  // console.log('Request made ', rows);
+
+  // UserService.getUser(req.query.UserId as string)
+  //   .then(async (user: any) => {
+  //     if (user) {
+  //       console.log(user);
+  //       console.log('\n\n Here is the follower\n\n');
+  //       const follower = await user.getFollower();
+  //       console.log({ follower });
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log('error', err);
+  //   });
+
+  if (!rows) throw new AppError('No Post found', StatusCodes.NOT_FOUND);
 
   sendResponse(
     res,
@@ -72,7 +130,23 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   );
 });
 // export const editOne = catchAsync(async (req, res) => {})
-// export const getOne = catchAsync(async (req, res) => {})
+export const getOne = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const post = await PostService.findOne(parseInt(id, 10), {
+    include: [
+      { model: db.Media },
+      { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
+    ],
+    attributes: { exclude: ['UserId'] },
+  });
+  if (!post)
+    throw new AppError(
+      'No Post found with the specified id',
+      StatusCodes.NOT_FOUND
+    );
+
+  return sendResponse(res, StatusCodes.OK, { post }, ReasonPhrases.OK);
+});
 // export const deleteOne = catchAsync(async (req, res) => {})
 // export const getAll = catchAsync(async (req: Request, res: Response) => {
 //   const { id } = req.params;

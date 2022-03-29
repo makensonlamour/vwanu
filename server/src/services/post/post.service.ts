@@ -11,9 +11,9 @@ const DataProvider = {
           reject(err);
         });
     }),
-  findOne: async (id: number) =>
+  findOne: async (id: number, option?: any) =>
     new Promise((resolve, reject) => {
-      db.Post.findOne({ where: { id } })
+      db.Post.findOne({ where: { id }, ...option })
         .then((post: any) => resolve(post))
         .catch((err: any) => {
           reject(err(err));
@@ -25,9 +25,6 @@ const DataProvider = {
       db.Post.findAndCountAll({ where: criteria, ...option })
         .then((posts: any[]) => resolve(posts))
         .catch((err: any) => {
-
-          console.log('We have some err');
-          console.log(err);
           reject(err(err));
         });
     }),
