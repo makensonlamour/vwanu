@@ -124,6 +124,22 @@ module.exports = (sequelize: any, DataTypes: any) => {
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
       });
+      User.belongsToMany(models.User, {
+        as: 'Follower',
+        through: 'User_Follower',
+      });
+      User.belongsToMany(models.User, {
+        as: 'Following',
+        through: 'User_Following',
+      });
+      // User.belongsToMany(models.User, {
+      //   as: 'follower',
+      //   through: models.UserFollower,
+      // });
+      // User.belongsToMany(models.User, {
+      //   as: 'followed',
+      //   through: models.UserFollower,
+      // });
     }
   }
   User.init(
