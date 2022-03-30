@@ -1,39 +1,33 @@
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { Response, Request } from 'express';
+import _ from 'lodash';
 import { Op } from '@sequelize/core';
+import { Response, Request } from 'express';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
-import PostService from '../../services/post/post.service';
-import AppError from '../../errors';
-
-// Custom requirements
+/** Local dependencies */
 import db from '../../models';
+import AppError from '../../errors';
 import common from '../../lib/utils/common';
+import PostService from '../../services/post/post.service';
+import { editCommentInput, getOnePostInput } from '../../schema/post';
 
 interface MulterRequest extends Request {
   files: any;
 }
 
-const { catchAsync, sendResponse } = common;
+const {
+  catchAsync,
+  sendResponse,
+  getAcceptableQueryParams,
+  getQueryPagesAndSize,
+  getUploadedFiles,
+} = common;
 
 export const createOne = catchAsync(
   async (req: MulterRequest, res: Response) => {
     try {
-      const data = req.body;
-      const documentFiles = (req as MulterRequest).files;
-      if (documentFiles?.postImage || documentFiles?.postVideo) {
-        data.Media = [];
-        const mediaArray = ['postImage', 'postVideo'];
-        mediaArray.forEach((mediaGroup) => {
-          if (documentFiles[mediaGroup]) {
-            data.Media.push({
-              original: documentFiles[mediaGroup][0].path,
-              UserId: data.UserId,
-            });
-          }
-        });
-      }
+      const data = getUploadedFiles(['postImage', 'postVideo'], req);
 
-      let { PostId, UserId } = req.body;
+      let { PostId, UserId } = data;
 
       PostId = parseInt(PostId, 10);
       UserId = parseInt(PostId, 10);
@@ -41,7 +35,10 @@ export const createOne = catchAsync(
       if (!post)
         throw new AppError('No post found for this id', StatusCodes.NOT_FOUND);
 
-      const comment = await post.createComment({ ...data, PostId, UserId });
+      const comment = await post.createComment(
+        { ...data, PostId, UserId },
+        { include: [{ model: db.User }] }
+      );
 
       return sendResponse(res, StatusCodes.CREATED, { comment }, 'created');
     } catch (error) {
@@ -51,115 +48,80 @@ export const createOne = catchAsync(
 );
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const { page, size, ...data } = req.query;
-
-  const pageAsNumber = Number.parseInt(page as string, 10);
-  const sizeAsNumber = Number.parseInt(size as string, 10);
-
-  let pages = 0;
-  if (!Number.isNaN(pageAsNumber) && pageAsNumber > 0) pages = pageAsNumber;
-
-  let sizes = 10;
-  if (!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 && sizeAsNumber < sizes)
-    sizes = sizeAsNumber;
-
-  const query = Object.keys(data).map((key) => {
-    if (['UserId'].some((criteria) => criteria === key)) {
-      // if (key === 'UserId')
-      //   return {
-      //     UserId: {
-      //       [Op.or]: [
-      //         data.UserId,
-      //         db.sequelize.literal(
-      //           `select id from User where id=${data.UserId}`
-      //         ),
-      //       ],
-      //     },
-      //   };
-
-      return { [key]: data[key] };
-    }
-    return null;
-  });
-
+  const limitAndOffset = getQueryPagesAndSize(req);
+  const query = getAcceptableQueryParams(['UserId', 'PostId'], req);
   const { rows, count }: any = await PostService.findMany(
     {
-      [Op.and]: query,
+      [Op.or]: query,
     },
     {
       include: [
         { model: db.Media },
         { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
       ],
-      limit: sizes,
-      offset: pages * sizes,
+      ...limitAndOffset.offsetAndLimit,
       attributes: { exclude: ['UserId'] },
     }
   );
-  // const records = await db.sequelize.query('dt');
-  // console.log(JSON.stringify(records, null, 2));
-  // console.log('will make request ');
 
-  // const { rows, count }: any = await db.Post.findAll({
-  //   where: {
-  //     UserId: {
-  //       [Op.or]: [
-  //         db.sequelize.literal(
-  //           `SELECT UserId FROM User_Follower WHERE FollowerId=1`
-  //         ),
-  //       ],
-  //     },
-  //   },
-  // });
-
-  // console.log('Request made ', rows);
-
-  // UserService.getUser(req.query.UserId as string)
-  //   .then(async (user: any) => {
-  //     if (user) {
-  //       console.log(user);
-  //       console.log('\n\n Here is the follower\n\n');
-  //       const follower = await user.getFollower();
-  //       console.log({ follower });
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log('error', err);
-  //   });
-
-  if (!rows) throw new AppError('No Post found', StatusCodes.NOT_FOUND);
-
+  if (!rows) throw new AppError('No comment found', StatusCodes.NOT_FOUND);
   sendResponse(
     res,
     StatusCodes.OK,
-    { posts: rows, count, totalPages: Math.ceil(count / sizes) },
+    { posts: rows, count, totalPages: limitAndOffset.getTotalPages(count) },
     ReasonPhrases.OK
   );
 });
-// export const editOne = catchAsync(async (req, res) => {})
-export const getOne = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const post = await PostService.findOne(parseInt(id, 10), {
-    include: [
-      { model: db.Media },
-      { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
-    ],
-    attributes: { exclude: ['UserId'] },
-  });
-  if (!post)
-    throw new AppError(
-      'No Post found with the specified id',
-      StatusCodes.NOT_FOUND
+
+export const getOne = catchAsync(
+  async (req: Request<getOnePostInput, {}, {}>, res: Response) => {
+    const comment = await PostService.findOne(
+      parseInt(req.params.id.toString(), 10),
+      {
+        include: [
+          { model: db.Media },
+          { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
+        ],
+        attributes: { exclude: ['UserId'] },
+      }
     );
+    if (!comment)
+      throw new AppError(
+        'No Post found with the specified id',
+        StatusCodes.NOT_FOUND
+      );
 
-  return sendResponse(res, StatusCodes.OK, { post }, ReasonPhrases.OK);
-});
-// export const deleteOne = catchAsync(async (req, res) => {})
-// export const getAll = catchAsync(async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const post = await PostService.find
-// });
-// export const getTimeline = catchAsync(async (req, res) => {})
+    return sendResponse(res, StatusCodes.OK, { comment }, ReasonPhrases.OK);
+  }
+);
 
-// editOne, getOne, deleteOne, getAll, getTimeline
-export default { createOne, getUsersPost: getAll };
+export const editOne = catchAsync(
+  async (
+    req: Request<editCommentInput['params'], editCommentInput['body'], {}>,
+    res: Response
+  ) => {
+    let comment = await PostService.findOne(req.params.id);
+    if (!comment)
+      throw new AppError('There is no comment', StatusCodes.NOT_FOUND);
+    const data = _.omit(req.body, ['PostId']);
+    comment = await PostService.editOne(comment, data);
+    sendResponse(res, StatusCodes.OK, { comment }, ReasonPhrases.OK);
+  }
+);
+
+export const deleteOne = catchAsync(
+  async (req: Request<getOnePostInput, {}, {}>, res: Response) => {
+    let comment = await PostService.findOne(
+      parseInt(req.params.id.toString(), 10)
+    );
+    if (!comment)
+      throw new AppError(
+        'Your comment is either already removed or never existed',
+        StatusCodes.NOT_FOUND
+      );
+    comment = await PostService.deleteOne(comment);
+    sendResponse(res, StatusCodes.OK, { comment }, ReasonPhrases.OK);
+  }
+);
+
+export default { createOne, getUsersPost: getAll, getOne, editOne, deleteOne };
