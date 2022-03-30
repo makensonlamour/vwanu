@@ -1,10 +1,8 @@
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Response, Request } from 'express';
 import { Op } from '@sequelize/core';
-// import { QueryTypes } from 'sequelize';
 
 import PostService from '../../services/post/post.service';
-// import UserService from '../../services/user/dataProvider';
 import AppError from '../../errors';
 
 // Custom requirements
@@ -35,8 +33,17 @@ export const createOne = catchAsync(
         });
       }
 
-      const post = await PostService.createOne(data, { include: [db.Media] });
-      return sendResponse(res, StatusCodes.CREATED, { post }, 'created');
+      let { PostId, UserId } = req.body;
+
+      PostId = parseInt(PostId, 10);
+      UserId = parseInt(PostId, 10);
+      const post: any = await PostService.findOne(PostId);
+      if (!post)
+        throw new AppError('No post found for this id', StatusCodes.NOT_FOUND);
+
+      const comment = await post.createComment({ ...data, PostId, UserId });
+
+      return sendResponse(res, StatusCodes.CREATED, { comment }, 'created');
     } catch (error) {
       throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -135,13 +142,6 @@ export const getOne = catchAsync(async (req: Request, res: Response) => {
   const post = await PostService.findOne(parseInt(id, 10), {
     include: [
       { model: db.Media },
-      {
-        model: db.Post,
-        as: 'Comments',
-        include: [
-          { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
-        ],
-      },
       { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
     ],
     attributes: { exclude: ['UserId'] },
