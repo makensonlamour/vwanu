@@ -11,6 +11,30 @@ const DataProvider = {
           reject(err);
         });
     }),
+
+  editOne: async (post: any, fields: any) =>
+    new Promise((resolve, reject) => {
+      post
+        .update(fields)
+        .then((data: any) => {
+          resolve(data);
+        })
+        .catch((err: any) => {
+          reject(err);
+        });
+    }),
+
+  deleteOne: async (post: any) =>
+    new Promise((resolve, reject) => {
+      post
+        .delete()
+        .then((data: any) => {
+          resolve(data);
+        })
+        .catch((err: any) => {
+          reject(err);
+        });
+    }),
   findOne: async (id: number, option?: any) =>
     new Promise((resolve, reject) => {
       db.Post.findOne({ where: { id }, ...option })
