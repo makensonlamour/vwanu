@@ -27,7 +27,7 @@ const DataProvider = {
   deleteOne: async (post: any) =>
     new Promise((resolve, reject) => {
       post
-        .delete()
+        .destroy()
         .then((data: any) => {
           resolve(data);
         })

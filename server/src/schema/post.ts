@@ -37,7 +37,9 @@ export const getOnePostSchema = object({
 
 export const editPostSchema = object({
   params: object({
-    id: z.number({ required_error: 'Please provide an id' }),
+    id: z
+      .number({ required_error: 'Please provide an id' })
+      .or(z.string().regex(/\d+/).transform(Number)),
   }),
   body: object({
     media: string().optional(),
@@ -80,24 +82,15 @@ export const createCommentSchema = object({
 
 export const editCommentSchema = object({
   params: object({
-    id: z.number({ required_error: 'Please provide an id' }),
+    id: z
+      .number({ required_error: 'Please provide an id' })
+      .or(z.string().regex(/\d+/).transform(Number)),
   }),
   body: object({
     media: string().optional(),
     mediaType: string().optional(),
     hashTag: string().optional(),
     private: z.boolean().optional(),
-
-    PostId: z
-      .number({
-        required_error: 'You need a post to create a comment',
-      })
-      .or(z.string().regex(/\d+/).transform(Number)),
-    UserId: z
-      .number({
-        required_error: 'You cannot create a post if you are not a user',
-      })
-      .or(z.string().regex(/\d+/).transform(Number)),
     postText: string({
       required_error: 'A post need at least to have some text',
       invalid_type_error: "You' have not provided a recognizable text",
