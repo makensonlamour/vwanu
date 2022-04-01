@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import * as Yup from "yup";
 import { TextareaAutosize } from "@material-ui/core";
 import toast, { Toaster } from "react-hot-toast";
-import Facebook from "react-content-loader";
+import { Facebook } from "react-content-loader";
 
 //RTK Query
 import { useCreateCommentMutation } from "../../comment/commentSlice";
