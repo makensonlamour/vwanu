@@ -17,7 +17,7 @@ router.use(requireLogin);
 router
   .route('/')
   .post(
-    requireLogin,
+   
 
     postStorage.fields([
       { name: 'postImage', maxCount: config.get<number>('maxPostImages') },
@@ -27,14 +27,13 @@ router
     // validateSchema(createPostSchema),
     Post.createOne
   )
-  .get(requireLogin, validateSchema(Schema.getAllPost), Post.getAll);
+  .get(validateSchema(Schema.getAllPost), Post.getAll);
 
 // @Todo  validation
 router
   .route('/:id')
-  .get(requireLogin, Post.getOne)
-  .delete(Post.deleteOne)
-  .put(Post.editOne);
-
+  .get(validateSchema(Schema.getOnePostSchema), Post.getOne)
+  .delete(validateSchema(Schema.getOnePostSchema), Post.deleteOne)
+  .put(validateSchema(Schema.editPostSchema), Post.editOne);
 
 export default router;
