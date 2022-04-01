@@ -21,7 +21,8 @@ router
   .post(
     postStorage.fields(common.profileMediaOptions),
     validateSchema(createCommentSchema),
-    CommentController.createOne)
+    CommentController.createOne
+  )
   .get(validateSchema(getAllComment), CommentController.getAll);
 
 router

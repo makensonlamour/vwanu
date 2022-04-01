@@ -14,13 +14,8 @@ interface MulterRequest extends Request {
   files: any;
 }
 
-const {
-  catchAsync,
-  sendResponse,
-  getAcceptableQueryParams,
-  getQueryPagesAndSize,
-  getUploadedFiles,
-} = common;
+const { catchAsync, sendResponse, getQueryPagesAndSize, getUploadedFiles } =
+  common;
 
 export const createOne = catchAsync(
   async (req: MulterRequest, res: Response) => {
@@ -49,10 +44,14 @@ export const createOne = catchAsync(
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const limitAndOffset = getQueryPagesAndSize(req);
-  const query = getAcceptableQueryParams(['UserId', 'PostId'], req);
+  const { UserId, PostId } = req.query;
+  let query = {};
+  if (UserId) query = { UserId };
+  else query = { PostId };
+
   const { rows, count }: any = await PostService.findMany(
     {
-      [Op.or]: query,
+      [Op.and]: [query, { PostId: { [Op.not]: null } }],
     },
     {
       include: [
@@ -68,7 +67,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   sendResponse(
     res,
     StatusCodes.OK,
-    { posts: rows, count, totalPages: limitAndOffset.getTotalPages(count) },
+    { comment: rows, count, totalPages: limitAndOffset.getTotalPages(count) },
     ReasonPhrases.OK
   );
 });
@@ -103,7 +102,7 @@ export const editOne = catchAsync(
     let comment = await PostService.findOne(req.params.id);
     if (!comment)
       throw new AppError('There is no comment', StatusCodes.NOT_FOUND);
-    const data = _.omit(req.body, ['PostId']);
+    const data = _.omit(req.body, ['PostId', 'UserId']);
     comment = await PostService.editOne(comment, data);
     sendResponse(res, StatusCodes.OK, { comment }, ReasonPhrases.OK);
   }
@@ -111,16 +110,27 @@ export const editOne = catchAsync(
 
 export const deleteOne = catchAsync(
   async (req: Request<getOnePostInput, {}, {}>, res: Response) => {
-    let comment = await PostService.findOne(
-      parseInt(req.params.id.toString(), 10)
-    );
-    if (!comment)
-      throw new AppError(
-        'Your comment is either already removed or never existed',
-        StatusCodes.NOT_FOUND
+    try {
+      console.log('some test');
+      let comment: any = await PostService.findOne(
+        parseInt(req.params.id.toString(), 10)
       );
-    comment = await PostService.deleteOne(comment);
-    sendResponse(res, StatusCodes.OK, { comment }, ReasonPhrases.OK);
+      if (!comment)
+        throw new AppError(
+          'Your comment is either already removed or never existed',
+          StatusCodes.NOT_FOUND
+        );
+      comment = await PostService.deleteOne(comment);
+
+      sendResponse(
+        res,
+        StatusCodes.OK,
+        { comment: comment.id },
+        ReasonPhrases.OK
+      );
+    } catch (err) {
+      throw new AppError(err.message, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 );
 
