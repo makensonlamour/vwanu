@@ -56,7 +56,7 @@ const CommentList = ({ Comments, showAll }) => {
                     </div>
 
                     <p className="text-gray-800 font-light" style={{ fontSize: "0.97rem" }}>
-                      {comment?.commentText}
+                      {comment?.postText}
                     </p>
                   </div>
                 </div>
