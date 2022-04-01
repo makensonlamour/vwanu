@@ -7,7 +7,7 @@ const MediaPost = ({ medias }) => {
     content = (
       <div className="pt-5 flex w-full">
         <img
-          src={medias[0].src}
+          src={medias[0].original}
           alt={"post_image_" + medias[0]?.id}
           className=" flex-wrap inline object-cover object-center w-full rounded-lg"
         />
@@ -22,7 +22,7 @@ const MediaPost = ({ medias }) => {
             <>
               <div className="flex w-full">
                 <img
-                  src={media.src}
+                  src={media.original}
                   alt={"post_image_" + media?.id}
                   className=" flex-wrap inline object-cover object-center w-full rounded-lg"
                 />
@@ -42,7 +42,7 @@ const MediaPost = ({ medias }) => {
               {idx === 1 ? (
                 <div className={"w-full col-span-2 p-1 row-span-2"}>
                   <img
-                    src={media.src}
+                    src={media.original}
                     alt={"post_image_" + media?.id}
                     className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
                   />
@@ -50,7 +50,7 @@ const MediaPost = ({ medias }) => {
               ) : (
                 <div className={"w-full p-1"}>
                   <img
-                    src={media.src}
+                    src={media.original}
                     alt={"post_image_" + media?.id}
                     className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
                   />
@@ -70,7 +70,7 @@ const MediaPost = ({ medias }) => {
             <>
               <div className="flex w-full">
                 <img
-                  src={media.src}
+                  src={media.original}
                   alt={"post_image_" + media?.id}
                   className=" flex-wrap inline object-cover object-center w-full rounded-lg"
                 />
@@ -89,7 +89,7 @@ const MediaPost = ({ medias }) => {
             <>
               <div className="flex w-full">
                 <img
-                  src={media.src}
+                  src={media.original}
                   alt={"post_image_" + media?.id}
                   className=" flex-wrap inline object-cover object-center w-full h-48 rounded-lg"
                 />

@@ -11,10 +11,11 @@ import { useGetPostsQuery } from "../../features/post/postSlice";
 
 const NewsFeed = () => {
   const dataUser = useOutletContext();
+  const UserId = dataUser?.user?.id;
   const obj = {
-    UserId: dataUser?.user?.id,
-    pageSize: 6,
-    pageNumber: 0,
+    UserId,
+    pageSize: 10,
+    pageNumber: 1,
   };
 
   const { data, isLoading, isSuccess, isError } = useGetPostsQuery(obj);
