@@ -26,7 +26,7 @@ export const createOne = catchAsync(
       let { PostId, UserId } = data;
 
       PostId = parseInt(PostId, 10);
-      UserId = parseInt(PostId, 10);
+      UserId = parseInt(UserId, 10);
       const post: any = await PostService.findOne(PostId);
       if (!post)
         throw new AppError('No post found for this id', StatusCodes.NOT_FOUND);
