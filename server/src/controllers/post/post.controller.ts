@@ -1,21 +1,21 @@
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { Response, Request } from 'express';
+import _ from 'lodash';
 import { Op } from '@sequelize/core';
-// import { QueryTypes } from 'sequelize';
 
-import PostService from '../../services/post/post.service';
-// import UserService from '../../services/user/dataProvider';
-import AppError from '../../errors';
+import { Response, Request } from 'express';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+/** Local dependencies */
 
-// Custom requirements
 import db from '../../models';
+import AppError from '../../errors';
 import common from '../../lib/utils/common';
+import PostService from '../../services/post/post.service';
 
 interface MulterRequest extends Request {
   files: any;
 }
-
+/** Global dependencies */
 const { catchAsync, sendResponse } = common;
+const userAttributes = ['firstName', 'lastName', 'id', 'profilePicture'];
 
 export const createOne = catchAsync(
   async (req: MulterRequest, res: Response) => {
@@ -35,7 +35,9 @@ export const createOne = catchAsync(
         });
       }
 
-      const post = await PostService.createOne(data, { include: [db.Media] });
+      const post = await PostService.createOne(data, {
+        include: [{ model: db.Media, attributes: userAttributes }],
+      });
       return sendResponse(res, StatusCodes.CREATED, { post }, 'created');
     } catch (error) {
       throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
@@ -82,43 +84,25 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
     {
       include: [
         { model: db.Media },
-        { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
+
+        {
+          model: db.Post,
+          as: 'Comments',
+          include: [{ model: db.User, attributes: userAttributes }],
+        },
+        {
+          model: db.User,
+          attributes: userAttributes,
+        },
+
       ],
       limit: sizes,
       offset: pages * sizes,
       attributes: { exclude: ['UserId'] },
     }
   );
-  // const records = await db.sequelize.query('dt');
-  // console.log(JSON.stringify(records, null, 2));
-  // console.log('will make request ');
 
-  // const { rows, count }: any = await db.Post.findAll({
-  //   where: {
-  //     UserId: {
-  //       [Op.or]: [
-  //         db.sequelize.literal(
-  //           `SELECT UserId FROM User_Follower WHERE FollowerId=1`
-  //         ),
-  //       ],
-  //     },
-  //   },
-  // });
 
-  // console.log('Request made ', rows);
-
-  // UserService.getUser(req.query.UserId as string)
-  //   .then(async (user: any) => {
-  //     if (user) {
-  //       console.log(user);
-  //       console.log('\n\n Here is the follower\n\n');
-  //       const follower = await user.getFollower();
-  //       console.log({ follower });
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log('error', err);
-  //   });
 
   if (!rows) throw new AppError('No Post found', StatusCodes.NOT_FOUND);
 
@@ -129,13 +113,43 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
     ReasonPhrases.OK
   );
 });
-// export const editOne = catchAsync(async (req, res) => {})
+
+export const editOne = catchAsync(async (req: Request, res: Response) => {
+  const post = await PostService.findOne(
+    parseInt(req.params.id.toString(), 10)
+  );
+  if (!post)
+    throw new AppError(
+      'No post found with the id provided',
+      StatusCodes.NOT_FOUND
+    );
+
+  const data = _.omit(req.body, ['id', 'UserId', 'PostId']);
+  const editedPost = await PostService.editOne(post, data);
+  sendResponse(res, StatusCodes.OK, { post: editedPost }, ReasonPhrases.OK);
+});
+
 export const getOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const post = await PostService.findOne(parseInt(id, 10), {
     include: [
       { model: db.Media },
-      { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
+
+      {
+        model: db.Post,
+        as: 'Comments',
+        include: [
+          {
+            model: db.User,
+            attributes: userAttributes,
+          },
+        ],
+      },
+      {
+        model: db.User,
+        attributes: userAttributes,
+      },
+
     ],
     attributes: { exclude: ['UserId'] },
   });
@@ -147,12 +161,25 @@ export const getOne = catchAsync(async (req: Request, res: Response) => {
 
   return sendResponse(res, StatusCodes.OK, { post }, ReasonPhrases.OK);
 });
-// export const deleteOne = catchAsync(async (req, res) => {})
-// export const getAll = catchAsync(async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const post = await PostService.find
-// });
-// export const getTimeline = catchAsync(async (req, res) => {})
 
-// editOne, getOne, deleteOne, getAll, getTimeline
-export default { createOne, getUsersPost: getAll };
+export const deleteOne = catchAsync(async (req: Request, res: Response) => {
+  let post: any = await PostService.findOne(
+    parseInt(req.params.id.toString(), 10)
+  );
+  if (!post)
+    throw new AppError(
+      'Your post is either already deleted of never existed',
+      StatusCodes.NOT_FOUND
+    );
+  post = await PostService.deleteOne(post);
+
+  sendResponse(
+    res,
+    StatusCodes.GONE,
+    { post: { id: post.id } },
+    'Post delete with success'
+  );
+});
+
+export default { createOne, getAll, editOne, getOne, deleteOne };
+

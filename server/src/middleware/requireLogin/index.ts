@@ -1,9 +1,10 @@
-import jwt from 'jsonwebtoken';
-import { Response, Request, NextFunction } from 'express';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import config from 'config';
+import jwt from 'jsonwebtoken';
+import { StatusCodes } from 'http-status-codes';
+import { Response, Request, NextFunction } from 'express';
 
 import common from '../../lib/utils/common';
+import AppError from '../../errors';
 
 const JWT_SECRET = config.get<string>('JWT_SECRET');
 
@@ -14,19 +15,22 @@ export default catchAsync(
     try {
       const token = req.header('x-auth-token');
       if (!token)
-        return next({
-          message: StatusCodes.UNAUTHORIZED,
-          status: ReasonPhrases.UNAUTHORIZED,
-        });
+        throw new AppError(
+          'Missing Authentication token',
+          StatusCodes.BAD_REQUEST
+        );
 
       jwt.verify(token, JWT_SECRET as jwt.Secret, (err, decoded) => {
         if (err && !decoded)
-          return next({ ...err, status: StatusCodes.UNAUTHORIZED });
+          throw new AppError(err.message, StatusCodes.UNAUTHORIZED);
         req.user = (<any>decoded).user;
         return next();
       });
     } catch (e) {
-      return next({ ...e, status: StatusCodes.INTERNAL_SERVER_ERROR });
+      return next({
+        message: e.message || 'You sent and invalid token',
+        status: e.status || StatusCodes.BAD_REQUEST,
+      });
     }
   }
 );

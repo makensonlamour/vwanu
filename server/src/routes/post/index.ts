@@ -13,6 +13,7 @@ import { postStorage } from '../../cloudinary';
 
 const router = express.Router();
 
+router.use(requireLogin);
 router
   .route('/')
   .post(
@@ -27,7 +28,13 @@ router
     Post.createOne
   )
   .get(requireLogin, validateSchema(Schema.getAllPost), Post.getAll);
-// @Todo  validation 
-router.route('/:id').get(requireLogin, Post.getOne);
+
+// @Todo  validation
+router
+  .route('/:id')
+  .get(requireLogin, Post.getOne)
+  .delete(Post.deleteOne)
+  .put(Post.editOne);
+
 
 export default router;

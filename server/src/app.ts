@@ -14,6 +14,7 @@ import authRoute from './routes/auth';
 import userRoute from './routes/user';
 import profileRoute from './routes/profile';
 import postRoute from './routes/post';
+import commentRoute from './routes/Comments';
 import RequestBody from './middleware/RequestBody';
 
 dotenv.config();
@@ -32,12 +33,13 @@ export default async function (database: any) {
   app.use(express.urlencoded({ extended: true }));
 
   //  connect to the database
-  await database.sequelize.sync({ alter: true, logging: false });
+  await database.sequelize.sync({ logging: false, force: true });
   // Serving the routes
   app.use('/api/auth', authRoute);
   app.use('/api/user', userRoute);
   app.use('/api/post', postRoute);
   app.use('/api/profile', profileRoute);
+  app.use('/api/comment', commentRoute);
 
   /* Handling all errors thrown */
   // eslint-disable-next-line no-unused-vars

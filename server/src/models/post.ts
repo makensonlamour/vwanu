@@ -38,7 +38,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Post.belongsToMany(models.Media, {
         through: 'Post_Media',
       });
-      // Post.hasMany(models.Media)
+      Post.hasMany(models.Post, { as: 'Comments' });
     }
   }
   Post.init(
