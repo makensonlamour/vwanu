@@ -91,7 +91,7 @@ const LayoutUser = () => {
                   <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />
                 )
               ) : null}
-              <div className="lg:w-[50vw] space-y-2 lg:flex-start">
+              <div className="w-[100vw] lg:w-[50vw] space-y-2 lg:flex-start">
                 {auth?.data?.data ? (
                   <Outlet context={isSuccess && !error ? data?.data : undefined} />
                 ) : (

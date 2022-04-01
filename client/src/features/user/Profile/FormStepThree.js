@@ -97,7 +97,7 @@ const FormStepThree = () => {
           placeholder="Avatar"
           name="profilePicture"
           id="img"
-          setAvatar={setAvatar}
+          setAvatarState={setAvatar}
           accept="image/png,image/jpg,image/jpeg"
           icon={<RiImageAddFill size="24px" className="text-gray-800" />}
           autoComplete="new-file"

@@ -1,35 +1,47 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { apiSlice } from "../api/apiSlice";
+import _ from "lodash";
 
 export const postApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: (credentials) => `/post?UserId=${credentials?.UserId}&size=${credentials?.pageSize}&page=${credentials?.pageNumber}`,
-      providesTags: ["Post"],
+      keepUnusedDataFor: 10,
+      providesTags: ["Post", "Comment"],
     }),
+
+    getPostById: builder.query({
+      query: (credentials) => `/post/${credentials?.postId}`,
+      providesTags: ["Post", "Comment"],
+    }),
+
     createPost: builder.mutation({
       query: (credentials) => ({
         url: `/post?UserId=${credentials?.UserId}`,
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["Post"],
+      invalidatesTags: ["Post", "Comment"],
     }),
   }),
 });
 
-export const { useGetPostsQuery, useCreatePostMutation } = postApiSlice;
+export const { useGetPostsQuery, useGetPostByIdQuery, usePrefetch, useGetPostQueryState, useCreatePostMutation } = postApiSlice;
 
 const initialState = {
-  post: null,
+  posts: [],
 };
 
 export const postSlice = createSlice({
-  name: "post",
+  name: "list",
   initialState,
   reducers: {
     setPost: (state, action) => {
-      state.post = action.payload.data.post;
+      console.log(action.payload);
+      console.log(state.list);
+      state.list = _.unionWith(state.list, action.payload, function (a, b) {
+        return a.id === b.id;
+      });
     },
   },
 });

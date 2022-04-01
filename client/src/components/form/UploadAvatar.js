@@ -4,7 +4,7 @@ import { useFormikContext } from "formik";
 
 import Error from "./Error";
 
-function UploadAvatar({ name, className, id, icon, format, stateFile, ...otherProps }) {
+function UploadAvatar({ name, className, id, icon, format, setAvatarState, ...otherProps }) {
   const { setFieldTouched, setFieldValue, handleChange, errors, touched } = useFormikContext();
 
   return (
@@ -19,7 +19,7 @@ function UploadAvatar({ name, className, id, icon, format, stateFile, ...otherPr
           onChange={(e) => {
             setFieldValue(name, e.currentTarget.files[0]);
             handleChange(name);
-            stateFile(e.currentTarget.files[0]);
+            setAvatarState(e.currentTarget.files[0]);
           }}
           encType="multipart/form-data"
           {...otherProps}
@@ -42,7 +42,7 @@ UploadAvatar.propTypes = {
   className: PropTypes.string,
   id: PropTypes.any.isRequired,
   format: PropTypes.string,
-  stateFile: PropTypes.string,
+  setAvatarState: PropTypes.func,
 };
 
 export default UploadAvatar;

@@ -6,6 +6,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import ForgotPasswordSuccess from "./pages/ResetPassword/ForgotPasswordSuccess";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import NewsFeed from "./pages/NewsFeed/NewsFeed";
+import ViewPost from "./pages/NewsFeed/ViewPost";
 import Profil from "./pages/Profil/Profil";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
@@ -64,6 +65,12 @@ let routes = [
     path: routesPath.PROFILE,
     name: "Profile",
     element: Profil,
+    access: role.USER,
+  },
+  {
+    path: routesPath.POST,
+    name: "Post",
+    element: ViewPost,
     access: role.USER,
   },
   {
