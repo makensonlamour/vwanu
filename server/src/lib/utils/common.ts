@@ -10,7 +10,12 @@ const Common = {
 
   catchAsync: (fn: Function) =>
     function (req: Request, res: Response, next: NextFunction) {
-      fn(req, res, next).catch((err: any) => next(err));
+      fn(req, res, next).catch((err: any) =>
+        next({
+          message: err.message || 'Unidentified error occurred',
+          status: err.status || 500,
+        })
+      );
     },
 
   sendResponse: (
