@@ -48,14 +48,12 @@ export const editPostSchema = object({
     mediaType: string().optional(),
     hashTag: string().optional(),
     private: z.boolean().optional(),
-
-    UserId: z.number({
-      required_error: 'You cannot create a post if you are not a user',
-    }),
     postText: string({
       required_error: 'A post need at least to have some text',
       invalid_type_error: "You' have not provided a recognizable text",
-    }).min(1),
+    })
+      .min(1)
+      .optional(),
   }),
 });
 export const createCommentSchema = object({
@@ -177,4 +175,5 @@ export type CreatePostInterface = z.infer<typeof createPostSchema>;
 export type CreatePostInput = TypeOf<typeof createPostSchema>['body'];
 export type CreateCommentInput = TypeOf<typeof createCommentSchema>['body'];
 export type editCommentInput = TypeOf<typeof editCommentSchema>;
+export type editPostInput = TypeOf<typeof editPostSchema>;
 export type getOnePostInput = TypeOf<typeof getOnePostSchema>['params'];
