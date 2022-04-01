@@ -39,6 +39,7 @@ export const createOne = catchAsync(
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const limitAndOffset = getQueryPagesAndSize(req);
   const query = getAcceptableQueryParams(['UserId'], req);
+  query.push({ PostId: null });
   const { rows, count }: any = await PostService.findMany(
     {
       [Op.and]: query,
@@ -97,23 +98,25 @@ export const getOne = catchAsync(
   }
 );
 
-export const deleteOne = catchAsync(async (req: Request<getOnePostInput, {}, {}>, res: Response) => {
-  let post: any = await PostService.findOne(
-    parseInt(req.params.id.toString(), 10)
-  );
-  if (!post)
-    throw new AppError(
-      'Your post is either already deleted of never existed',
-      StatusCodes.NOT_FOUND
+export const deleteOne = catchAsync(
+  async (req: Request<getOnePostInput, {}, {}>, res: Response) => {
+    let post: any = await PostService.findOne(
+      parseInt(req.params.id.toString(), 10)
     );
-  post = await PostService.deleteOne(post);
+    if (!post)
+      throw new AppError(
+        'Your post is either already deleted of never existed',
+        StatusCodes.NOT_FOUND
+      );
+    post = await PostService.deleteOne(post);
 
-  sendResponse(
-    res,
-    StatusCodes.GONE,
-    { post: { id: post.id } },
-    'Post delete with success'
-  );
-});
+    sendResponse(
+      res,
+      StatusCodes.GONE,
+      { post: { id: post.id } },
+      'Post delete with success'
+    );
+  }
+);
 
 export default { createOne, getAll, editOne, getOne, deleteOne };
