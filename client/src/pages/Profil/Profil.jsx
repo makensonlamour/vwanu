@@ -46,11 +46,11 @@ const Profil = () => {
 
   return (
     <>
-      <div className="mx-auto px-2 md:px-14 lg:px-10">
-        <div className="lg:mx-14">
+      <div className="mx-auto px-2">
+        <div className="lg:mx-4">
           <ProfileHeader dataUser={dataUser} />
         </div>
-        <div className="lg:pl-14 lg:pr-8 pt-10 pb-2 justify-center align-items-center lg:w-full">
+        <div className="mx-auto lg:px-2 pt-10 pb-2 justify-center align-items-center lg:w-full">
           <Form
             validationSchema={ValidationSchema}
             initialValues={{

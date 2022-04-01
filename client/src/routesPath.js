@@ -22,6 +22,7 @@ let routesPath = {
   MY_GROUPS: "/mygroups",
   MY_PAGES: "/mypages",
   PROFILE: "/profile/:id",
+  POST: "/post/:id",
   PROFILE_EDIT: "me/profile/edit",
   FRIENDS: "/friends",
   FRIENDS_REQUESTS: "/friends/requests",

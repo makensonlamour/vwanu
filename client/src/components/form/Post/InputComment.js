@@ -5,20 +5,20 @@ import { TextareaAutosize } from "@material-ui/core";
 
 import Error from "../Error";
 
-function InputField({ name, hashtagSymbol, tagsSymbol, emojiSymbol, className, testId, ...otherProps }) {
+function InputComment({ name, maxRows, onKeyDown, className, testId, ...otherProps }) {
   const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
 
   return (
     <>
       <TextareaAutosize
-        className={"textarea textarea-ghost resize-none w-full " + className}
+        className={" " + className}
+        type="text"
         value={values[name]}
         onBlur={() => setFieldTouched(name)}
         onChange={handleChange(name)}
-        minRows={3}
-        maxRows={6}
-        cols={40}
+        maxRows={maxRows}
         autoFocus={true}
+        onKeyDown={onKeyDown}
         {...otherProps}
       ></TextareaAutosize>
       <Error testId={testId} error={errors[name]} visible={touched[name]} />
@@ -26,13 +26,12 @@ function InputField({ name, hashtagSymbol, tagsSymbol, emojiSymbol, className, t
   );
 }
 
-InputField.propTypes = {
+InputComment.propTypes = {
   name: PropTypes.string.isRequired,
   className: PropTypes.string,
   testId: PropTypes.string,
-  hashtagSymbol: PropTypes.bool,
-  tagsSymbol: PropTypes.string,
-  emojiSymbol: PropTypes.string,
+  maxRows: PropTypes.number,
+  onKeyDown: PropTypes.func,
 };
 
-export default InputField;
+export default InputComment;

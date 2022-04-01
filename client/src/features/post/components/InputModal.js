@@ -7,20 +7,44 @@ import { useOutletContext } from "react-router-dom";
 import { InputField, InputImage, SubmitPost, Form } from "../../../components/form";
 //import { FcGallery } from "react-icons/fc";
 import { MdMyLocation, MdAlternateEmail } from "react-icons/md";
-import { GoGlobe } from "react-icons/go";
 import { RiHashtag, RiImageAddFill } from "react-icons/ri";
 import { BsEmojiSmile } from "react-icons/bs";
+import toast, { Toaster } from "react-hot-toast";
+import ModalPrivacy from "../../../components/common/ModalPrivacy";
 
 //RTK Query
 import { useCreatePostMutation } from "../../post/postSlice";
+
+//Functions for notification after actions
+const postSuccess = () =>
+  toast.success("Post created successfully!", {
+    position: "top-center",
+  });
+
+const postError = () =>
+  toast.error("Sorry. Error on creating post!", {
+    position: "top-center",
+  });
 
 const InputModal = ({ reference }) => {
   const dataUser = useOutletContext();
   const UserId = dataUser?.user?.id;
   const [showModal, setShowModal] = useState(false);
+  const [openPrivacy, setOpenPrivacy] = useState(false);
+  // const [privacyText, setPrivacyText] = useState("");
   const [hashTag, setHashTag] = useState(false);
   const [image, setImage] = useState(null);
 
+  //Dialog functions
+  const handleClickOpen = () => {
+    setOpenPrivacy(true);
+  };
+
+  function reloadPage() {
+    window.location.reload();
+  }
+
+  //Formik initial value and yup validation
   const initialValues = {
     postText: "",
     postImage: "",
@@ -39,15 +63,17 @@ const InputModal = ({ reference }) => {
     formData.append("postImage", image);
     formData.append("postText", credentials.postText);
     formData.append("UserId", credentials.UserId);
-    //const obj = { UserId: credentials.UserId, postText: credentials.postText, postImage: formData };
 
     //request for post newsfeed
     if (_.isEqual(reference, "newsfeed")) {
       try {
         console.log(formData);
         await createPost(formData).unwrap();
+        postSuccess();
+        reloadPage();
       } catch (e) {
         console.log(e);
+        postError();
       }
       setImage(null);
       setShowModal(false);
@@ -58,9 +84,8 @@ const InputModal = ({ reference }) => {
       } catch (e) {
         console.log(e);
       }
-      if (isSuccess) {
-        setShowModal(false);
-      }
+      setShowModal(false);
+
       //request for post group
     } else if (_.isEqual(reference, "group")) {
       try {
@@ -86,7 +111,8 @@ const InputModal = ({ reference }) => {
 
   return (
     <>
-      <div className="flex rounded-2xl shadow-sm border p-4">
+      <Toaster />
+      <div className="flex rounded-2xl shadow-md border p-4 bg-white">
         {" "}
         <img alt="" className="flex-start justify-center align-center w-10 h-10 rounded-full" src={dataUser?.user?.profilePicture} />
         <button className="flex-end text-left pl-2 p-2 ml-4 rounded-2xl bg-sky-50 text-sm text-gray-600" onClick={() => setShowModal(true)}>
@@ -132,9 +158,13 @@ const InputModal = ({ reference }) => {
                   </div>
                   <div className="flex">
                     <span>
-                      <button className="px-3 py-1 lg:mt-0 mr-4 cursor-pointer hover:bg-gray-50">
-                        {" "}
-                        <GoGlobe size={20} className="inline mr-1" /> Everyone
+                      <button
+                        onClick={() => {
+                          handleClickOpen();
+                        }}
+                        className="px-3 py-1 lg:mt-0 mr-4 cursor-pointer hover:bg-gray-50"
+                      >
+                        <ModalPrivacy title={"Everyone"} open={openPrivacy} />
                       </button>
                     </span>
                     <span className="ml-auto">

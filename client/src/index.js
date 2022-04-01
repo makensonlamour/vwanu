@@ -7,7 +7,9 @@ import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <div className="bg-slate-100">
+      <App />
+    </div>
   </BrowserRouter>,
   document.getElementById("root")
 );
