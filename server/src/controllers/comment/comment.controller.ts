@@ -8,6 +8,7 @@ import db from '../../models';
 import AppError from '../../errors';
 import common from '../../lib/utils/common';
 import PostService from '../../services/post/post.service';
+import { include } from '../../lib/utils/commentPostInclude';
 import { editCommentInput, getOnePostInput } from '../../schema/post';
 
 interface MulterRequest extends Request {
@@ -32,7 +33,7 @@ export const createOne = catchAsync(
 
       const comment = await post.createComment(
         { ...data, PostId, UserId },
-        { include: [{ model: db.User }] }
+        { include: [{ model: db.User }, { model: db.Media }] }
       );
 
       return sendResponse(res, StatusCodes.CREATED, { comment }, 'created');
@@ -54,10 +55,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
       [Op.and]: [query, { PostId: { [Op.not]: null } }],
     },
     {
-      include: [
-        { model: db.Media },
-        { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
-      ],
+      include,
       ...limitAndOffset.offsetAndLimit,
       attributes: { exclude: ['UserId'] },
     }
@@ -77,10 +75,7 @@ export const getOne = catchAsync(
     const comment = await PostService.findOne(
       parseInt(req.params.id.toString(), 10),
       {
-        include: [
-          { model: db.Media },
-          { model: db.User, attributes: ['firstName', 'lastName', 'id'] },
-        ],
+        include,
         attributes: { exclude: ['UserId'] },
       }
     );
@@ -102,8 +97,12 @@ export const editOne = catchAsync(
     let comment = await PostService.findOne(req.params.id);
     if (!comment)
       throw new AppError('There is no comment', StatusCodes.NOT_FOUND);
-    const data = _.omit(req.body, ['PostId', 'UserId']);
-    comment = await PostService.editOne(comment, data);
+    let data = getUploadedFiles(['postImage', 'postVideo'], req as Request);
+    data = _.omit(req.body, ['PostId', 'UserId']);
+    comment = await PostService.editOne(comment, data, {
+      include,
+      attributes: { exclude: ['UserId'] },
+    });
     sendResponse(res, StatusCodes.OK, { comment }, ReasonPhrases.OK);
   }
 );
@@ -111,7 +110,6 @@ export const editOne = catchAsync(
 export const deleteOne = catchAsync(
   async (req: Request<getOnePostInput, {}, {}>, res: Response) => {
     try {
-      console.log('some test');
       let comment: any = await PostService.findOne(
         parseInt(req.params.id.toString(), 10)
       );
@@ -134,4 +132,4 @@ export const deleteOne = catchAsync(
   }
 );
 
-export default { createOne, getUsersPost: getAll, getOne, editOne, deleteOne };
+export default { createOne, getAll, getOne, editOne, deleteOne };

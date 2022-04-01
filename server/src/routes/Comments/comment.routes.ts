@@ -28,7 +28,11 @@ router
 router
   .route('/:id')
   .get(validateSchema(getOnePostSchema), CommentController.getOne)
-  .put(validateSchema(editCommentSchema), CommentController.editOne)
+  .put(
+    postStorage.fields(common.profileMediaOptions),
+    validateSchema(editCommentSchema),
+    CommentController.editOne
+  )
   .delete(validateSchema(getOnePostSchema), CommentController.deleteOne);
 
 export default router;
