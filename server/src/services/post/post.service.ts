@@ -12,6 +12,7 @@ const DataProvider = {
         });
     }),
 
+
   editOne: async (post: any, fields: any) =>
     new Promise((resolve, reject) => {
       post
@@ -37,6 +38,7 @@ const DataProvider = {
     }),
   findOne: async (id: number, option?: any) =>
     new Promise((resolve, reject) => {
+
       db.Post.findOne({ where: { id }, ...option })
         .then((post: any) => resolve(post))
         .catch((err: any) => {

@@ -28,11 +28,13 @@ router
     Post.createOne
   )
   .get(requireLogin, validateSchema(Schema.getAllPost), Post.getAll);
+
 // @Todo  validation
 router
   .route('/:id')
   .get(requireLogin, Post.getOne)
   .delete(Post.deleteOne)
   .put(Post.editOne);
+
 
 export default router;

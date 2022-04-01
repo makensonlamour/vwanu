@@ -170,6 +170,41 @@ export const getAllComment = object({
   ),
 });
 
+export const getAllPost = object({
+  query: object({
+    UserId: z
+      .number({
+        required_error: 'You cannot create a post if you are not a user',
+        invalid_type_error: 'It must be a number',
+      })
+      .or(z.string().regex(/\d+/).transform(Number))
+      .optional(),
+
+    GroupId: z
+      .number({
+        required_error: 'You cannot create a post if you are not a user',
+        invalid_type_error: 'It must be a number',
+      })
+      .or(z.string().regex(/\d+/).transform(Number))
+      .optional(),
+  }).refine(
+    (data) =>
+      mustHave.some((item) => {
+        if (
+          data[item] !== null &&
+          data[item] !== undefined &&
+          data[item] !== ''
+        )
+          return true;
+        return false;
+      }),
+
+    {
+      message: `Please pass at least either ${mustHave.join(' or ')}`,
+    }
+  ),
+});
+
 export type PostInterface = z.infer<typeof PostSchema>;
 export type CreatePostInterface = z.infer<typeof createPostSchema>;
 export type CreatePostInput = TypeOf<typeof createPostSchema>['body'];

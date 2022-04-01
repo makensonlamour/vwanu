@@ -40,7 +40,6 @@ const FormStepThree = () => {
   const handleStepThree = async (credentials) => {
     formData.append("profilePicture", avatar);
     const obj = { idUser: credentials.idUser, profilePicture: formData };
-    console.log(avatar);
     try {
       await updateProfilePicture(obj).unwrap();
     } catch (e) {
@@ -98,7 +97,7 @@ const FormStepThree = () => {
           placeholder="Avatar"
           name="profilePicture"
           id="img"
-          stateFile={setAvatar}
+          setAvatar={setAvatar}
           accept="image/png,image/jpg,image/jpeg"
           icon={<RiImageAddFill size="24px" className="text-gray-800" />}
           autoComplete="new-file"

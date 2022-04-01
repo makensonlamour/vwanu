@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import { Op } from '@sequelize/core';
+
 import { Response, Request } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 /** Local dependencies */
+
 import db from '../../models';
 import AppError from '../../errors';
 import common from '../../lib/utils/common';
@@ -82,6 +84,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
     {
       include: [
         { model: db.Media },
+
         {
           model: db.Post,
           as: 'Comments',
@@ -91,12 +94,15 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
           model: db.User,
           attributes: userAttributes,
         },
+
       ],
       limit: sizes,
       offset: pages * sizes,
       attributes: { exclude: ['UserId'] },
     }
   );
+
+
 
   if (!rows) throw new AppError('No Post found', StatusCodes.NOT_FOUND);
 
@@ -107,6 +113,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
     ReasonPhrases.OK
   );
 });
+
 export const editOne = catchAsync(async (req: Request, res: Response) => {
   const post = await PostService.findOne(
     parseInt(req.params.id.toString(), 10)
@@ -121,11 +128,13 @@ export const editOne = catchAsync(async (req: Request, res: Response) => {
   const editedPost = await PostService.editOne(post, data);
   sendResponse(res, StatusCodes.OK, { post: editedPost }, ReasonPhrases.OK);
 });
+
 export const getOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const post = await PostService.findOne(parseInt(id, 10), {
     include: [
       { model: db.Media },
+
       {
         model: db.Post,
         as: 'Comments',
@@ -140,6 +149,7 @@ export const getOne = catchAsync(async (req: Request, res: Response) => {
         model: db.User,
         attributes: userAttributes,
       },
+
     ],
     attributes: { exclude: ['UserId'] },
   });
@@ -151,6 +161,7 @@ export const getOne = catchAsync(async (req: Request, res: Response) => {
 
   return sendResponse(res, StatusCodes.OK, { post }, ReasonPhrases.OK);
 });
+
 export const deleteOne = catchAsync(async (req: Request, res: Response) => {
   let post: any = await PostService.findOne(
     parseInt(req.params.id.toString(), 10)
@@ -171,3 +182,4 @@ export const deleteOne = catchAsync(async (req: Request, res: Response) => {
 });
 
 export default { createOne, getAll, editOne, getOne, deleteOne };
+

@@ -8,7 +8,11 @@ export const postApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Post"],
     }),
     createPost: builder.mutation({
-      query: (credentials) => ({ url: `/post?UserId=${credentials?.UserId}`, method: "POST", body: credentials }),
+      query: (credentials) => ({
+        url: `/post?UserId=${credentials?.UserId}`,
+        method: "POST",
+        body: credentials,
+      }),
       invalidatesTags: ["Post"],
     }),
   }),
