@@ -10,6 +10,8 @@ export const PostSchema = z.object({
   private: z.boolean(),
 });
 
+/** some comments */
+
 export const createPostSchema = object({
   body: object({
     media: string().optional(),
