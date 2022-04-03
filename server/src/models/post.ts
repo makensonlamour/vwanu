@@ -39,6 +39,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         through: 'Post_Media',
       });
       Post.hasMany(models.Post, { as: 'Comments' });
+      Post.hasMany(models.Reaction);
     }
   }
   Post.init(

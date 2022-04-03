@@ -1,9 +1,9 @@
 import db from '../../models';
 
 const DataProvider = {
-  createOne: async (postData: any, option?: any) =>
+  createOne: async (reactionData: any, option?: any) =>
     new Promise((resolve, reject) => {
-      db.Post.create(postData, option)
+      db.Reaction.create(reactionData, option)
         .then((data: any) => {
           resolve(data);
         })
@@ -12,9 +12,9 @@ const DataProvider = {
         });
     }),
 
-  editOne: async (post: any, fields: any, option?: any) =>
+  editOne: async (reaction: any, fields: any, option?: any) =>
     new Promise((resolve, reject) => {
-      post
+      reaction
         .update(fields, option)
         .then((data: any) => {
           resolve(data);
@@ -24,9 +24,9 @@ const DataProvider = {
         });
     }),
 
-  deleteOne: async (post: any) =>
+  deleteOne: async (reaction: any) =>
     new Promise((resolve, reject) => {
-      post
+      reaction
         .destroy()
         .then((data: any) => {
           resolve(data);
@@ -37,8 +37,8 @@ const DataProvider = {
     }),
   findOne: async (id: number, option?: any) =>
     new Promise((resolve, reject) => {
-      db.Post.findOne({ where: { id }, ...option })
-        .then((post: any) => resolve(post))
+      db.Reaction.findOne({ where: { id }, ...option })
+        .then((Reaction: any) => resolve(Reaction))
         .catch((err: any) => {
           reject(err);
         });
@@ -46,8 +46,8 @@ const DataProvider = {
 
   findMany: async (criteria: any, option?: any) =>
     new Promise((resolve, reject) => {
-      db.Post.findAndCountAll({ where: criteria, ...option })
-        .then((posts: any[]) => resolve(posts))
+      db.Reaction.findAndCountAll({ where: criteria, ...option })
+        .then((Reactions: any[]) => resolve(Reactions))
         .catch((err: any) => {
           reject(err);
         });
