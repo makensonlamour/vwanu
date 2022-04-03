@@ -7,8 +7,8 @@ import { useOutletContext } from "react-router-dom";
 import { InputField, InputImage, SubmitPost, Form } from "../../../components/form";
 //import { FcGallery } from "react-icons/fc";
 import { MdMyLocation, MdAlternateEmail } from "react-icons/md";
-import { RiHashtag, RiImageAddFill } from "react-icons/ri";
-import { BsEmojiSmile } from "react-icons/bs";
+import { RiHashtag, RiImageAddFill, RiLiveFill } from "react-icons/ri";
+import { BsEmojiSmile, BsCameraFill } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
 
@@ -112,11 +112,20 @@ const InputModal = ({ reference }) => {
   return (
     <>
       <Toaster />
-      <div className="flex rounded-2xl shadow-md border p-4 bg-white">
+      <div className="flex rounded-2xl shadow-md border p-4 bg-white lg:w-[43vw] items-center">
         {" "}
         <img alt="" className="flex-start justify-center align-center w-10 h-10 rounded-full" src={dataUser?.user?.profilePicture} />
-        <button className="flex-end text-left pl-2 p-2 ml-4 rounded-2xl bg-sky-50 text-sm text-gray-600" onClick={() => setShowModal(true)}>
+        <button
+          className="flex-end text-left pl-2 p-2 ml-4 rounded-2xl bg-sky-50 text-sm text-gray-600 w-full"
+          onClick={() => setShowModal(true)}
+        >
           {`What's on your mind? #hashtag, @mention or link`}
+        </button>
+        <button className="p-2 md:p-4 bg-green-100 ml-2 rounded-full" onClick={() => setShowModal(true)}>
+          <BsCameraFill className="text-green-600 w-[16px] h-[16px] lg:w-[24px] lg:h-[24px]" />
+        </button>
+        <button className="p-2 md:p-4 bg-red-100 ml-2 rounded-full" onClick={() => setShowModal(true)}>
+          <RiLiveFill className="text-red-600 w-[16px] h-[16px] lg:w-[24px] lg:h-[24px]" />
         </button>
       </div>
       {showModal ? (

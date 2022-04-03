@@ -150,8 +150,10 @@ const PostList = ({ post, pageTitle }) => {
                   <CommentList showAll={false} Comments={post?.Comments} />
                   {post?.Comments?.length > 3 ? (
                     <>
-                      <div>
-                        <Link to={""}>View more comments</Link>
+                      <div className="text-center text-sm mt-2">
+                        <Link className="text-primary hover:text-secondary" to={`post/${post?.id}`}>
+                          View more comments...
+                        </Link>
                       </div>
                     </>
                   ) : null}

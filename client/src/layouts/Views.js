@@ -6,6 +6,7 @@ import { routes, role } from "../routes";
 import LayoutUser from "./LayoutUser/index";
 import LayoutPublic from "./LayoutPublic/index";
 import LayoutAuth from "./LayoutAuth/index";
+//import { Container, useTheme, useMediaQuery } from "@mui/material";
 
 //Core components
 import NotFound from "../pages/NotFound/index";
@@ -13,7 +14,7 @@ import NotFound from "../pages/NotFound/index";
 const Views = () => {
   return (
     <>
-      <div className="mx-auto max-w-screen-xl">
+      <div className="mx-auto ">
         <Routes>
           <Route element={<LayoutPublic />}>
             {routes.map((route) => {
