@@ -15,6 +15,7 @@ import userRoute from './routes/user';
 import profileRoute from './routes/profile';
 import postRoute from './routes/post';
 import commentRoute from './routes/Comments';
+import reactionRoute from './routes/reaction/reaction.routes';
 import RequestBody from './middleware/RequestBody';
 
 dotenv.config();
@@ -40,6 +41,7 @@ export default async function (database: any) {
   app.use('/api/post', postRoute);
   app.use('/api/profile', profileRoute);
   app.use('/api/comment', commentRoute);
+  app.use('/api/reaction', reactionRoute);
 
   /* Handling all errors thrown */
   // eslint-disable-next-line no-unused-vars
