@@ -19,7 +19,7 @@ const SidebarLeft = () => {
 
   return (
     <>
-      <div className="h-screen fixed overflow-scroll -mt-2 z-30 bg-slate-100">
+      <div className="h-screen overflow-scroll -mt-2 bg-slate-100">
         <ul className="menu w-[150vw] lg:w-64 p-3 box h-screen bg-slate-100">
           {ItemSidebarLeft.map((item, index) => {
             return (

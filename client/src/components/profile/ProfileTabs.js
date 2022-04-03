@@ -1,8 +1,18 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import Box from "@material-ui/core/Box";
-import Tabs from "@material-ui/core/Tabs";
-import LinkTab from "@material-ui/core/Tab";
+import { Box, Tabs, Tab } from "@mui/material";
+
+function LinkTab(props) {
+  return (
+    <Tab
+      component="a"
+      onClick={(event) => {
+        event.preventDefault();
+      }}
+      {...props}
+    />
+  );
+}
 
 export default function LabTabs() {
   const [value, setValue] = React.useState("1");

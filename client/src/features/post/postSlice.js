@@ -43,9 +43,14 @@ export const postSlice = createSlice({
         return a.id === b.id;
       });
     },
+
+    selectPost: (state) => {
+      state.posts = apiSlice.endpoints.getPosts.select()(state).currentData;
+      console.log(state.list);
+    },
   },
 });
 
-export const { setPost } = postSlice.actions;
+export const { setPost, selectPost } = postSlice.actions;
 
 export default postSlice.reducer;

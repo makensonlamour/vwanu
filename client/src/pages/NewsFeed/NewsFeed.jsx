@@ -104,11 +104,11 @@ const NewsFeed = () => {
         <div className="pt-10 pb-2 mx-auto align-items-center lg:w-full space-y-2">
           <div className="lg:flex">
             <InputModal reference="newsfeed" />
-            <div className="hidden lg:inline mx-2 rounded-2xl basis-1/3 border"></div>
+            <div className="hidden lg:inline mx-2 rounded-2xl basis-1/3 border bg-white"></div>
           </div>
           <div className="lg:flex">
             <div className="w-full lg:basis-2/3">{content}</div>
-            <div className="hidden lg:inline mx-2 rounded-2xl border lg:basis-1/3"></div>
+            <div className="hidden lg:inline mx-2 rounded-2xl border lg:basis-1/3 bg-white"></div>
           </div>
         </div>
       </div>

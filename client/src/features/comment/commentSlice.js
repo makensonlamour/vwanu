@@ -52,7 +52,7 @@ export const commentSlice = createSlice({
   name: "list",
   initialState,
   reducers: {
-    setPost: (state, action) => {
+    setComment: (state, action) => {
       console.log(action.payload);
       console.log(state.list);
       state.list = _.unionWith(state.list, action.payload, function (a, b) {

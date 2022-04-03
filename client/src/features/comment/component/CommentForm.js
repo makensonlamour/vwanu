@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext } from "react-router-dom";
 import * as Yup from "yup";
-import { TextareaAutosize } from "@material-ui/core";
+import { TextareaAutosize } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
 import { Facebook } from "react-content-loader";
 
@@ -59,7 +59,7 @@ const CommentForm = ({ PostId }) => {
       <Toaster />
 
       <div className="flex w-full space-x-2 items-center mt-4">
-        <img className="rounded-full" style={{ height: "2.45rem", width: "2.45rem" }} src={dataUser?.user?.profilePicture} alt="_picture" />
+        <img className="rounded-full h-8 w-8" src={dataUser?.user?.profilePicture} alt="_picture" />
         <form
           validationSchema={ValidationSchema}
           style={{ padding: ".85rem" }}
