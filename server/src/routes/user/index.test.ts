@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
-import axios from 'axios';
 import config from 'config';
 import ChanceJS from 'chance';
+import axios from 'axios';
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 
@@ -237,7 +237,7 @@ describe('/api/user *after user creation*. ', () => {
     expect(auth.status).toBe(StatusCodes.ACCEPTED);
     expect(auth.body.data.token).toBeDefined();
   });
-  it('should send an email to the user email address', (done) => {
+  it.skip('should send an email to the user email address', (done) => {
     const endpoint = `${testmailURL}&tag=${TAG}&timestamp_from=${startTimestamp}&livequery=true`;
 
     axios
