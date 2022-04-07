@@ -21,7 +21,7 @@ const endpoint = `${testmailURL}&tag=${TAG}&timestamp_from=${startTimestamp}&liv
 const userEmail = `${NAMESPACE}.${TAG}@inbox.testmail.app`;
 
 describe('Mailer', () => {
-  it('should send an email', (done) => {
+  it.skip('should send an email', (done) => {
     try {
       sendEmail({
         to: userEmail,
