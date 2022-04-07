@@ -3,9 +3,7 @@ import { render as rtlRender, screen, cleanup, fireEvent, waitFor } from "@testi
 import { MemoryRouter as Router } from "react-router-dom";
 import { act as testAct, create } from "react-test-renderer";
 import { act as domAct } from "react-dom/test-utils";
-// import { store } from "../../../hooks/store";
 import Login from "../Login";
-// import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient({
