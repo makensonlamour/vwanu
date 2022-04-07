@@ -12,10 +12,10 @@ import { FaUserPlus } from "react-icons/fa";
 import { IoMdChatbubbles } from "react-icons/io";
 import { IoNotificationsOutline } from "react-icons/io5";
 
-const Navbar = ({ dataUser }) => {
+const Navbar = ({ user }) => {
   return (
     <>
-      <div className="bg-secondary">
+      <div className="bg-secondary fixed z-10 mt-4">
         <div className="max-w-screen-xl m-auto flex flex-row sticky navbar mb-2 px-4 text-base-100 top-0 z-40">
           <div className="basis-1/5">
             <Link to={routesPath.NEWSFEED}>
@@ -53,7 +53,7 @@ const Navbar = ({ dataUser }) => {
                 </Link>
               </li>
             </ul>
-            <Dropdown dataUser={dataUser ? dataUser : undefined} />
+            <Dropdown user={user ? user : undefined} />
           </div>
         </div>
       </div>
@@ -61,6 +61,6 @@ const Navbar = ({ dataUser }) => {
   );
 };
 
-Navbar.propTypes = { dataUser: PropTypes.object.isRequired };
+Navbar.propTypes = { user: PropTypes.object.isRequired };
 
 export default Navbar;

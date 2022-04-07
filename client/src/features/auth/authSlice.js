@@ -1,73 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { apiSlice } from "../api/apiSlice";
-import jwtDecode from "jwt-decode";
-import { saveToken, deleteToken } from "../../helpers/index";
+import { api } from "../../lib/api";
+import { useFetch, usePost } from "../../lib/react-query";
+import { getToken, decoder, deleteToken } from "../../helpers";
 
-export const authApiSlice = apiSlice.injectEndpoints({
-  endpoints: (builder) => ({
-    login: builder.mutation({
-      query: (credentials) => ({ url: "/auth", method: "POST", body: credentials }),
-    }),
-    register: builder.mutation({
-      query: (credentials) => ({ url: "/user", method: "POST", body: credentials }),
-    }),
-    forgotPassword: builder.mutation({
-      query: (credentials) => ({ url: "/user/forgotPassword", method: "POST", body: credentials }),
-    }),
-    resetPassword: builder.mutation({
-      query: (credentials) => ({
-        url: `/user/resetPassword/${credentials.idUser}/${credentials.resetPasswordKey}`,
-        method: "POST",
-        body: credentials,
-      }),
-    }),
-    verifyEmail: builder.mutation({
-      query: (data) => ({
-        url: `/user/verify/${data.id}/${data.activationKey}`,
-        method: "POST",
-      }),
-      invalidatesTags: ["User"],
-    }),
-  }),
-});
+export const login = (credentials) => api.post("/auth", credentials);
 
-export const { useLoginMutation, useRegisterMutation, useForgotPasswordMutation, useResetPasswordMutation, useVerifyEmailMutation } =
-  authApiSlice;
+export const register = (credentials) => api.post("/user", credentials);
 
-const initialState = {
-  data: null,
-  user: null,
-  token: null,
+export const useVerifyEmail = (data) => usePost(`/user/verify/${data.id}/${data.activationKey}`);
+
+export const useResetPassword = (credentials) => usePost(`/user/resetPassword/${credentials.idUser}/${credentials.resetPasswordKey}`);
+
+export const useForgotPassword = () => usePost("/user/forgotPassword");
+
+export const useGetProfile = () => {
+  const token = getToken();
+  const decodeToken = decoder(token);
+  const context = useFetch(`/user/${decodeToken?.user?.id}`, undefined, { retry: false });
+  return { ...context, data: context?.data?.data?.user };
 };
 
-export const authSlice = createSlice({
-  name: "auth",
-  initialState,
-  reducers: {
-    logged: (state, action) => {
-      state.data = action.payload.data.token;
-      state.user = action.payload.data.user;
-      state.token = action.payload.data.token;
-      saveToken(action.payload.data.token);
-    },
-    setUser: (state, action) => {
-      state.token = action.payload;
-      state.user = jwtDecode(action.payload);
-      state.data = action.payload;
-      saveToken(action.payload);
-    },
-    logOut: (state) => {
-      state.token = null;
-      state.user = null;
-      state.data = null;
-      deleteToken();
-    },
-  },
-});
-
-export const { logged, setUser, logOut } = authSlice.actions;
-
-export default authSlice.reducer;
-
-export const selectCurrentUser = (state) => state.auth;
-export const logout = () => (dispatch) => dispatch(authSlice.actions.logOut());
+export const useLogOut = () => {
+  deleteToken();
+};

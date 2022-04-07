@@ -2,64 +2,101 @@
 
 exports[`Test Dom Elements match snapshot 1`] = `
 <div
-  className="mx-0 md:mx-0 lg:lg:mx-16 xl:mx-32"
+  className="mx-0 md:mx-0 "
 >
   <div
-    className="grid grid-cols-1 lg:mb-48 lg:grid-cols-2 lg:gap-4"
+    className="grid grid-cols-1 lg:mb:0 lg:grid-cols-2"
   >
     <div
-      className="lg:justify-center"
+      className="hidden lg:inline lg:relative lg:justify-center"
+      style={
+        Object {
+          "backgroundImage": "url(Home_pic.jpg)",
+          "backgroundPosition": "center",
+          "backgroundRepeat": "no-repeat",
+          "backgroundSize": "cover",
+        }
+      }
     >
       <div
-        className="bg-gradient-to-tr from-blue-400 to-secondary  h-96 z-0 lg:rounded-t-3xl lg:h-[90%] lg:m-6"
+        className="bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78] h-96 z-0 lg:h-screen"
       >
+        <img
+          alt="_shape_up"
+          className="hidden lg:block w-[22%] lg:absolute right-0 z-30 -mt-8 object-fit"
+          src="Shape_up.svg"
+        />
         <p
           className="text-center pt-14 text-base-100 text-2xl py-5"
         >
           <img
             alt="logo_vwanu"
-            className="w-1/3 m-auto"
-            src="Asset_3.png"
+            className="w-[30%] m-auto"
+            src="Vwanu_logo.svg"
           />
         </p>
         <p
-          className="text-5xl text-v-yellow-dark font-bold py-8 text-center"
+          className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center"
         >
           Welcome
         </p>
         <p
           className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2"
         >
-          Share your Voice and Change
-        </p>
-        <p
-          className="hidden lg:block text-base-100 text-xl font-semibold text-center"
-        >
-          The Haitian Community!
+          Together We are Stronger
         </p>
       </div>
-      <div
-        className="hidden lg:block bg-v-yellow rounded-b-3xl rounded-tr-[130px] h-[40%] -mt-[38%] m-6 lg:h-[50%] xl:h-[48%]"
+      <img
+        alt="_shape_down"
+        className="hidden lg:block w-[23%] lg:absolute left-0 z-30 bottom-0 object-fit rotate-180"
+        src="Shape_up.svg"
       />
-      <div
-        className="hidden lg:block mr-20 z-50 -mt-[61%]"
-      >
-         
-        <img
-          alt="young_people"
-          className="object-fit"
-          src="welcome.png"
-        />
-      </div>
     </div>
     <div
-      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] px-4 md:px-8 -mt-28 z-10 md:mx-36 lg:mt-6 lg:mx-0 xl:mx-0"
+      className="inline lg:hidden"
+    >
+      <div
+        className="bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78] h-96 z-0 lg:h-screen xl:h-full 2xl:h-full"
+      >
+        <img
+          alt="_shape_up"
+          className="hidden lg:block w-[22%] lg:absolute right-0 z-30 -mt-8 object-fit"
+          src="Shape_up.svg"
+        />
+        <p
+          className="text-center pt-14 text-base-100 text-2xl py-5"
+        >
+          <img
+            alt="logo_vwanu"
+            className="w-[30%] m-auto"
+            src="Vwanu_logo.svg"
+          />
+        </p>
+        <p
+          className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center"
+        >
+          Welcome
+        </p>
+        <p
+          className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2"
+        >
+          Together We are Stronger
+        </p>
+      </div>
+      <img
+        alt="_shape_down"
+        className="hidden lg:block w-[23%] lg:absolute left-0 z-30 bottom-0 object-fit rotate-180"
+        src="Shape_up.svg"
+      />
+    </div>
+    <div
+      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] lg:rounded-none px-4 md:px-8 -mt-28 z-10 md:mx-36 lg:mt-0 lg:mx-0 lg:h-screen xl:h-full 2xl:h-full "
     >
       <div
         className="hidden lg:block lg:place-content-center lg:my-8"
       >
         <p
-          className="text-center mt-4"
+          className="text-center mt-8"
         >
           <span
             className="text-md text-primary font-semibold md:text-xl"
@@ -78,7 +115,7 @@ exports[`Test Dom Elements match snapshot 1`] = `
         </p>
       </div>
       <div
-        className="px-5 lg:px-10 pt-5 pb-10 card mt-4 lg:shadow-2xl lg:rounded-t-3xl"
+        className="px-5 lg:px-10 pt-5 pb-10 card mt-4 lg:mt-0 lg:mx-2 xl:mx-14 3xl:mx-64"
         role="form"
       >
         <h1
@@ -284,15 +321,6 @@ exports[`Test Dom Elements match snapshot 1`] = `
         </div>
       </div>
     </div>
-  </div>
-  <div
-    className="bg-gray-100 shadow-lg rounded-t-lg lg:mx-6 px-6 py-6"
-  >
-    <span
-      className="text-secondary font-semibold"
-    >
-      Language:
-    </span>
   </div>
 </div>
 `;

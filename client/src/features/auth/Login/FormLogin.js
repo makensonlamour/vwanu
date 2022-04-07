@@ -1,69 +1,54 @@
-import React from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import routesPath from "../../../routesPath";
-
-//RTK query
-import { useLoginMutation } from "../../auth/authSlice";
-import { logged } from "../../auth/authSlice";
-import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
-
-// Core components
-import Alerts from "../../../components/common/Alerts";
+import { alertService } from "../../../components/common/Alert/Services";
+import { Alert } from "../../../components/common/Alert";
+import { useQueryClient } from "react-query";
 import { Field, Form, Checkbox, Submit } from "../../../components/form";
 import { BsFacebook, BsTwitter } from "react-icons/bs";
 import { FaGooglePlus } from "react-icons/fa";
 import Loader from "../../../components/common/Loader";
-
-const ValidationSchema = Yup.object().shape({
-  email: Yup.string().required().min(6).email().label("Email"),
-  password: Yup.string().required().min(8).label("Password"),
-});
+import { Link } from "react-router-dom";
+import routesPath from "../../../routesPath";
+import { login } from "../authSlice";
+import { saveToken } from "../../../helpers/index";
 
 const FormLogin = () => {
-  const dispatch = useDispatch();
-  const alerts = useSelector(getAlerts);
-  const [login, { isLoading, isError, error }] = useLoginMutation();
-  const id = uuidv4();
+  const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const ValidationSchema = Yup.object().shape({
+    email: Yup.string().required().min(6).email().label("Email"),
+    password: Yup.string().required().min(8).label("Password"),
+  });
+
+  function reloadPage() {
+    window.location.reload();
+  }
 
   const handleLogin = async (credentials) => {
+    setIsLoading(true);
     try {
-      const data = await login(credentials).unwrap();
-      if (isError || error) {
-        dispatch(logged(false));
-        console.log("error:" + error + "| isError:" + isError);
+      const res = await login(credentials);
+
+      if (res?.data?.data) {
+        console.log(res.data.data);
+        saveToken(res.data.data.token);
+        reloadPage();
+        queryClient.invalidateQueries();
       } else {
-        dispatch(logged(data));
+        alertService.error("Email or Password incorrect.", { autoClose: true });
       }
     } catch (e) {
-      let customMessage = ["Your email or password is incorrect", "An unknown network error has occurred on Vwanu. Try again later."];
-      if (e.data === "Unauthorized") {
-        dispatch(
-          setAlert({
-            msg: customMessage[0],
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage[0].length * 200);
+      if (e.response.status === 401) {
+        alertService.error("Email or Password incorrect.", { autoClose: true });
       } else {
-        dispatch(
-          setAlert({
-            msg: customMessage[1],
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage[1].length * 200);
+        alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <>
       <Form
@@ -73,10 +58,10 @@ const FormLogin = () => {
           password: "",
         }}
         onSubmit={handleLogin}
-        className="mt-4 lg:shadow-2xl lg:rounded-t-3xl"
+        className="mt-4 lg:mt-0 lg:mx-2 xl:mx-14 3xl:mx-64"
       >
         <h1 className="card-title text-primary font-bold text-xl lg:text-2xl">Sign in to Vwanu</h1>
-        <Alerts className="bg-error" alerts={alerts} />
+        <Alert />
         <Field
           required
           autoCapitalize="none"
@@ -108,7 +93,6 @@ const FormLogin = () => {
           }
           className=""
         />
-
         <Submit data-testid="loginBtn" className="rounded-full text-md btn-md" title={isLoading ? <Loader /> : "Login"} />
         <div className="mt-9 text-center">
           <span className="text-blue-600 text-center inline text-md md:text-lg">

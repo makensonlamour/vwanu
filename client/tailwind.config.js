@@ -6,6 +6,10 @@ module.exports = {
         "v-yellow-dark": "#ffa801",
         "v-yellow": "#ffc700",
         "v-gray": "#eff3ff",
+        "g-one": "#053DC8",
+        "g-two": "#4E81FF",
+        "placeholder-color": "#EFF3FF",
+        "vwanu-color-3": "#797979",
       },
       screens: {
         "3xl": "2000px",

@@ -6,7 +6,6 @@ import { routes, role } from "../routes";
 import LayoutUser from "./LayoutUser/index";
 import LayoutPublic from "./LayoutPublic/index";
 import LayoutAuth from "./LayoutAuth/index";
-//import { Container, useTheme, useMediaQuery } from "@mui/material";
 
 //Core components
 import NotFound from "../pages/NotFound/index";
@@ -16,40 +15,28 @@ const Views = () => {
     <>
       <div className="mx-auto ">
         <Routes>
-          <Route element={<LayoutPublic />}>
-            {routes.map((route) => {
+          <Route key={0} element={<LayoutPublic />}>
+            {routes.map((route, idx) => {
               return (
-                <>
-                  {route.access === role.PUBLIC ? (
-                    <Route path={route.path} key={route.name} element={<route.element exact={true} />} />
-                  ) : null}
-                </>
+                <>{route.access === role.PUBLIC ? <Route key={idx} path={route.path} element={<route.element exact={true} />} /> : null}</>
               );
             })}
           </Route>
-          <Route path="/" element={<LayoutUser />}>
-            {routes.map((route) => {
+          <Route key={1} path="/" element={<LayoutUser />}>
+            {routes.map((route, idx) => {
               return (
-                <>
-                  {route.access === role.USER ? (
-                    <Route path={route.path} key={route.name} element={<route.element />} exact={true} />
-                  ) : null}
-                </>
+                <>{route.access === role.USER ? <Route key={idx} path={route.path} element={<route.element />} exact={true} /> : null}</>
               );
             })}
           </Route>
-          <Route path="/" element={<LayoutAuth />}>
-            {routes.map((route) => {
+          <Route key={2} path="/" element={<LayoutAuth />}>
+            {routes.map((route, idx) => {
               return (
-                <>
-                  {route.access === role.AUTH ? (
-                    <Route path={route.path} key={route.name} element={<route.element />} exact={true} />
-                  ) : null}
-                </>
+                <>{route.access === role.AUTH ? <Route key={idx} path={route.path} element={<route.element />} exact={true} /> : null}</>
               );
             })}
           </Route>
-          <Route path="*" element={<NotFound />} />
+          <Route key={3} path="*" element={<NotFound />} />
         </Routes>
       </div>
     </>

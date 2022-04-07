@@ -1,28 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logOut } from "../../../features/auth/authSlice";
+import { deleteToken } from "../../../helpers/index";
 import { DropdownItem } from "./DropdownItem.js";
 import routesPath from "../../../routesPath";
 
 //icon
 import { BsPower } from "react-icons/bs";
 
-const Dropdown = ({ dataUser }) => {
-  const dispatch = useDispatch();
+const Dropdown = ({ user }) => {
   function Logout() {
-    dispatch(logOut());
+    deleteToken();
+    window.location.reload();
   }
 
   return (
     <>
-      {dataUser === undefined ? null : (
+      {user === undefined ? null : (
         <div className="dropdown dropdown-hover dropdown-end">
           <div tabIndex="0">
-            <div className="avatar online">
-              <div className="rounded-full w-10 h-10 m-1">
-                <img src={dataUser?.user?.profilePicture} alt="profil_image" />
+            <div className="rounded-[50px] avatar online">
+              <div className="rounded-[12px] w-10 h-10 m-1">
+                <img className=" w-10 h-10" src={user?.profilePicture} alt="profil_image" />
               </div>
             </div>
             <ul tabIndex="0" className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-64 text-gray-900">
@@ -30,7 +29,7 @@ const Dropdown = ({ dataUser }) => {
                 {DropdownItem.map((item) => {
                   return item.menuItems.map((it, idx) => {
                     return (
-                      <Link to={it.path === routesPath.PROFILE ? `profile/${dataUser.user.id}` : it.path} key={idx}>
+                      <Link to={it.path === routesPath.PROFILE ? `profile/${user?.id}` : it.path} key={idx}>
                         <span className="pr-4 py-2"> {it.icon} </span>
                         {it.title}
                       </Link>
@@ -53,6 +52,6 @@ const Dropdown = ({ dataUser }) => {
   );
 };
 
-Dropdown.propTypes = { dataUser: PropTypes.object };
+Dropdown.propTypes = { user: PropTypes.object };
 
 export default Dropdown;

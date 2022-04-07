@@ -1,35 +1,28 @@
-import React from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
 import routesPath from "../../../routesPath";
 import { useNavigate, useOutletContext } from "react-router-dom";
-
-//RTK query
-import { useUpdateUserMutation } from "../../user/userSlice";
-import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
+import { useUpdateUser } from "../../user/userSlice";
+import { alertService } from "../../../components/common/Alert/Services";
+import { Alert } from "../../../components/common/Alert";
 
 // Core components
-import Alerts from "../../../components/common/Alerts";
 import { Field, Select, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 import { differenceInYears } from "date-fns";
 
 const FormStepTwo = () => {
-  const dataUser = useOutletContext();
-  const idUser = dataUser.user.id;
-  const dispatch = useDispatch();
+  const user = useOutletContext();
+  const idUser = user?.id;
   const navigate = useNavigate();
-  const alerts = useSelector(getAlerts);
-  const [updateUser, { isLoading, data, isSuccess }] = useUpdateUserMutation();
-  const id = uuidv4();
+  const updateUser = useUpdateUser(undefined, undefined, idUser);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     country: "",
     gender: "",
     interestedBy: "",
     birthday: "",
-    idUser,
   };
 
   const ValidationSchema = Yup.object().shape({
@@ -47,40 +40,32 @@ const FormStepTwo = () => {
   });
 
   const handleStepTwo = async (credentials) => {
+    setIsLoading(true);
+    const dataObj = {
+      country: credentials.country,
+      gender: credentials.gender,
+      interestedBy: credentials.interestedBy,
+      birthday: credentials.birthday,
+      idUser,
+    };
+
     try {
-      await updateUser(credentials).unwrap();
+      await updateUser.mutateAsync(dataObj);
+      navigate("../../" + routesPath.STEP_THREE);
     } catch (e) {
-      console.log();
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
-      if (e.status === 400) {
-        dispatch(
-          setAlert({
-            msg: e.data.errors[0].message,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), e.data.errors[0].message.length * 200);
+      if (e?.response?.status === 400) {
+        alertService.error(e?.response?.data?.errors[0]?.message, { autoClose: true });
+      } else if (e?.response?.status === 401) {
+        customMessage = "Your session has expired. Please login again.";
+        alertService.error(customMessage, { autoClose: true });
       } else {
-        dispatch(
-          setAlert({
-            msg: customMessage,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage.length * 200);
+        alertService.error(customMessage, { autoClose: true });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  if (isSuccess) {
-    navigate("../../" + routesPath.STEP_THREE, { state: data });
-  }
 
   return (
     <>
@@ -91,7 +76,7 @@ const FormStepTwo = () => {
         className="mt-4 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10"
       >
         <h1 className="card-title text-secondary text-center">Create your profile</h1>
-        <Alerts className="bg-error" alerts={alerts} />
+        <Alert />
         <Field
           autoCapitalize="none"
           label="Date of Birth"

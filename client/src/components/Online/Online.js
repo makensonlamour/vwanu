@@ -36,6 +36,7 @@ const StyledBadgeOffline = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#ff0000",
     color: "#ff0000",
+    borderRadius: "50%",
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
   },
   "@keyframes ripple": {
@@ -79,7 +80,7 @@ const Online = () => {
                         <Avatar
                           alt={user.firstName + " " + user.lastName}
                           src={user?.profilePicture}
-                          style={{ width: "48px", height: "48px", marginLeft: "5px", alignSelf: "center" }}
+                          style={{ width: "48px", height: "48px", marginLeft: "5px", alignSelf: "center", borderRadius: "36%" }}
                         />
                       </StyledBadgeOnline>
                     ) : (
@@ -87,7 +88,7 @@ const Online = () => {
                         <Avatar
                           alt={user.firstName + " " + user.lastName}
                           src={user?.profilePicture}
-                          style={{ width: "48px", height: "48px", marginLeft: "5px", alignSelf: "center" }}
+                          style={{ width: "48px", height: "48px", marginLeft: "5px", alignSelf: "center", borderRadius: "36%" }}
                         />
                       </StyledBadgeOffline>
                     )}

@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+@font-face {
+  font-family: "Commons";
+  src: local("Commons"), url("./assets/fonts/TT Commons Italic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Commons";
+  src: local("Commons"), url("./assets/fonts/TT Commons Black.otf") format("opentype");
+}
+*/
