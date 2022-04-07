@@ -1,19 +1,16 @@
-import React from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
 import routesPath from "../../../routesPath";
 import { useNavigate } from "react-router-dom";
-
-//RTK query
-import { useRegisterMutation } from "../../auth/authSlice";
-import { logged } from "../authSlice";
-import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
+import { useQueryClient } from "react-query";
+import { register } from "../authSlice";
 
 // Core components
-import Alerts from "../../../components/common/Alerts";
+import { alertService } from "../../../components/common/Alert/Services";
+import { Alert } from "../../../components/common/Alert";
 import { Field, Form, Checkbox, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
+import { saveToken } from "../../../helpers/index";
 
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required().min(3).label("First Name"),
@@ -36,47 +33,29 @@ const initialValues = {
 };
 
 const FormRegister = () => {
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const alerts = useSelector(getAlerts);
-  const [login, { isLoading }] = useRegisterMutation();
-  const id = uuidv4();
 
   const handleRegister = async (credentials) => {
+    setIsLoading(true);
     try {
-      const data = await login(credentials).unwrap();
-      if (data) {
-        dispatch(logged(data));
-        navigate(routesPath.STEP_TWO, { state: data });
+      const res = await register(credentials);
+      if (res.data.data) {
+        saveToken(res.data.data.token);
+        navigate("../" + routesPath.STEP_TWO, { state: res.data.data.user });
+        queryClient.invalidateQueries();
+      } else {
+        alertService.error("This email is already existed. Try with a different one", { autoClose: true });
       }
     } catch (e) {
-      let customMessage = [
-        "This email is already existed. Try with a different one",
-        "An unknown network error has occurred on Vwanu. Try again later.",
-      ];
-
-      if (e.status === 400) {
-        dispatch(
-          setAlert({
-            msg: customMessage[0],
-            id,
-            type: "error",
-          })
-        );
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage[0].length * 200);
+      if (e.response.status === 400) {
+        alertService.error("This email is already existed. Try with a different one", { autoClose: true });
       } else {
-        dispatch(
-          setAlert({
-            msg: customMessage[1],
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage[1].length * 200);
+        alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,10 +65,10 @@ const FormRegister = () => {
         validationSchema={ValidationSchema}
         initialValues={initialValues}
         onSubmit={handleRegister}
-        className="mt-4 lg:shadow-2xl lg:rounded-t-3xl"
+        className="mt-4 lg:mt-0 lg:mx-2 xl:mx-14 3xl:mx-64"
       >
         <h1 className="card-title text-primary font-bold text-xl lg:text-2xl">Join the Vwanu Community</h1>
-        <Alerts className="bg-error" alerts={alerts} />
+        <Alert />
         <div className="grid grid-cols-2">
           <Field
             required
@@ -98,7 +77,7 @@ const FormRegister = () => {
             name="firstName"
             type="text"
             autoComplete="new-email"
-            className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+            className="mr-1 mt-1 lg:mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
             testId="firstName-error-message"
           />
           <Field
@@ -108,7 +87,7 @@ const FormRegister = () => {
             name="lastName"
             type="text"
             autoComplete="new-email"
-            className="ml-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+            className="ml-1 mt-1 lg:mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
             testId="lastName-error-message"
           />
         </div>
@@ -119,7 +98,7 @@ const FormRegister = () => {
           name="email"
           type="email"
           autoComplete="new-email"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-1 lg:mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="email-error-message"
         />
         <Field
@@ -129,7 +108,7 @@ const FormRegister = () => {
           placeholder="Password"
           name="password"
           autoComplete="new-email"
-          className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mr-1 mt-1 lg:mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="password-error-message"
           showPassword={true}
         />
@@ -141,7 +120,7 @@ const FormRegister = () => {
           placeholder="Password Confirmation"
           name="passwordConfirmation"
           autoComplete="new-email"
-          className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mr-1 mt-1 lg:mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="passwordConfirmation-error-message"
           showPassword={true}
         />

@@ -1,30 +1,17 @@
 import React from "react";
 import { useOutletContext, Link, useParams } from "react-router-dom";
 import { Facebook } from "react-content-loader";
-
-//Core components
-
+import { useGetPost } from "../../features/post/postSlice";
 import Loader from "../../components/common/Loader";
 import PostList from "../../features/post/PostList";
 
-//RTK Query
-import { useGetPostByIdQuery } from "../../features/post/postSlice";
-
 const ViewPost = () => {
   const { id } = useParams();
-  const dataUser = useOutletContext();
-  const UserId = dataUser?.user?.id;
-  console.log(UserId);
+  const user = useOutletContext();
+  const UserId = user?.id;
+  console.log(UserId, id);
 
-  //Initial posts fetch
-  const {
-    data: post,
-    isFetching,
-    isSuccess,
-    isError,
-  } = useGetPostByIdQuery({
-    postId: id,
-  });
+  const { data: post, isSuccess, isError, isFetching } = useGetPost(id);
 
   function reloadPage() {
     window.location.reload();

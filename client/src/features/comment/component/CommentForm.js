@@ -6,8 +6,7 @@ import { TextareaAutosize } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
 import { Facebook } from "react-content-loader";
 
-//RTK Query
-import { useCreateCommentMutation } from "../../comment/commentSlice";
+import { useCreateComment } from "../../comment/commentSlice";
 
 const commentSuccess = () =>
   toast.success("Comment created successfully!", {
@@ -20,8 +19,8 @@ const commentError = () =>
   });
 
 const CommentForm = ({ PostId }) => {
-  const dataUser = useOutletContext();
-  const UserId = dataUser?.user?.id;
+  const user = useOutletContext();
+  const UserId = user?.id;
   let buttonRef = useRef();
   const [postText, setPostText] = useState("");
 
@@ -37,7 +36,8 @@ const CommentForm = ({ PostId }) => {
   });
 
   //rtk query to create comment
-  const [createComment, { isFetching }] = useCreateCommentMutation();
+  // const [createComment, { isFetching }] = useCreateCommentMutation();
+  const mutationAddComment = useCreateComment((oldData, newData) => [...oldData, newData]);
 
   //object comment to set all the parameters
   const objComment = { postText, UserId, PostId };
@@ -45,9 +45,10 @@ const CommentForm = ({ PostId }) => {
   const handleComment = async (e) => {
     e.preventDefault();
     try {
-      await createComment(objComment).unwrap();
+      await mutationAddComment.mutateAsync(objComment);
       setPostText("");
       commentSuccess();
+      window.location.reload();
     } catch (e) {
       console.log(e);
       commentError();
@@ -59,7 +60,7 @@ const CommentForm = ({ PostId }) => {
       <Toaster />
 
       <div className="flex w-full space-x-2 items-center mt-4">
-        <img className="rounded-full h-8 w-8" src={dataUser?.user?.profilePicture} alt="_picture" />
+        <img className="mask mask-squircle h-8 w-8" src={user?.profilePicture} alt="_picture" />
         <form
           validationSchema={ValidationSchema}
           style={{ padding: ".85rem" }}
@@ -69,7 +70,7 @@ const CommentForm = ({ PostId }) => {
             name="postText"
             type="text"
             className="resize-none outline-none w-full bg-transparent text-md placeholder-gray-400 font-light"
-            placeholder={`Write a comment...`}
+            placeholder={`Write a comment and press enter to post`}
             maxRows={4}
             autoFocus={true}
             onKeyDown={onEnterPress}
@@ -80,7 +81,7 @@ const CommentForm = ({ PostId }) => {
           ></TextareaAutosize>
           <button ref={buttonRef} hidden onClick={handleComment} name="comment"></button>
         </form>
-        {isFetching && <Facebook />}
+        {mutationAddComment.isLoading && <Facebook />}
       </div>
     </>
   );

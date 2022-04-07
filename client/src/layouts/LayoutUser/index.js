@@ -1,10 +1,8 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser, logout } from "../../features/auth/authSlice";
-import { useAuth } from "../../hooks/useAuth";
-import { isExpired, decoder } from "../../helpers/index";
-import { useFetchUserQuery } from "../../features/user/userSlice";
+import { useGetProfile } from "../../features/auth/authSlice";
+
+import { deleteToken } from "../../helpers/index";
 import { Transition } from "@headlessui/react";
 import { Grid, Box, Paper, styled } from "@mui/material";
 
@@ -23,40 +21,26 @@ import { BottomMenuContext } from "../../context/BottomMenuContext";
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   backgroundColor: "inherit",
+  marginTop: "70px",
 }));
 
 const LayoutUser = () => {
-  const userData = decoder(localStorage.getItem("token"));
-  const dispatch = useDispatch();
+  const { data: user, error, isFetching } = useGetProfile();
   const location = useLocation();
-  let currentUser = useAuth();
   const { isSidebarOpen, closeSidebar } = useContext(BottomMenuContext);
 
-  const auth = currentUser;
-
-  const { data, isLoading, isSuccess, error } = useFetchUserQuery(userData?.user?.id);
-
-  const loadUser = () => {
-    if (auth?.data?.data) return;
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    if (isExpired(token)) return dispatch(logout());
-    return dispatch(setUser(token));
-  };
-
-  useEffect(() => {
-    loadUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (error?.response.status === 401) {
+    deleteToken();
+  }
 
   return (
     <>
-      {isLoading ? (
+      {isFetching ? (
         <Loader />
       ) : (
         <>
           <div>
-            <Navbar dataUser={isSuccess && !error ? data?.data : undefined} />
+            <Navbar user={!isFetching && !error ? user : undefined} />
             <div className="max-w-screen-xl m-auto">
               <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2} sx={{ backgroundColor: "transparent" }}>
@@ -114,13 +98,13 @@ const LayoutUser = () => {
 
                   <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                     <Item elevation={0}>
-                      {isSuccess ? (
-                        data?.data?.user?.birthday ? null : (
+                      {!isFetching && !error ? (
+                        user?.birthday ? null : (
                           <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />
                         )
                       ) : null}
-                      {auth?.data?.data ? (
-                        <Outlet context={isSuccess && !error ? data?.data : undefined} />
+                      {user ? (
+                        <Outlet context={!isFetching && !error ? user : undefined} />
                       ) : (
                         <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />
                       )}

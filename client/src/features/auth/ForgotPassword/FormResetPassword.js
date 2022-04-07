@@ -1,16 +1,10 @@
-import React from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import routesPath from "../../../routesPath";
-
-//RTK query
-import { useResetPasswordMutation } from "../../auth/authSlice";
-import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
-
-// Core components
-import Alerts from "../../../components/common/Alerts";
+import { useResetPassword } from "../../auth/authSlice";
+import { alertService } from "../../../components/common/Alert/Services";
+import { Alert } from "../../../components/common/Alert";
 import { Field, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 
@@ -23,8 +17,8 @@ const ValidationSchema = Yup.object().shape({
 
 const FormResetPassword = () => {
   const { idUser, resetPasswordKey } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     password: "",
@@ -33,44 +27,26 @@ const FormResetPassword = () => {
     resetPasswordKey,
   };
 
-  const alerts = useSelector(getAlerts);
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
-  const id = uuidv4();
+  const resetPassword = useResetPassword({ idUser, resetPasswordKey });
 
   const handleResetPasword = async (credentials) => {
+    setIsLoading(true);
     try {
-      const data = await resetPassword(credentials).unwrap();
+      const data = await resetPassword.mutateAsync(credentials);
       if (data) {
         navigate(routesPath.LOGIN);
       }
     } catch (e) {
-      console.log();
-      let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
-      if (e.status === 400) {
-        dispatch(
-          setAlert({
-            msg: e.data.errors[0].message,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), e.data.errors[0].message.length * 200);
+      if (e?.response?.status === 400) {
+        alertService.error(e?.response?.data?.errors[0]?.message, { autoClose: true });
       } else {
-        dispatch(
-          setAlert({
-            msg: customMessage,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage.length * 200);
+        alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <>
       <Form
@@ -80,7 +56,7 @@ const FormResetPassword = () => {
         className="shadow-lg rounded-3xl my-10"
       >
         <h1 className="card-title text-secondary text-md text-center">Create New password</h1>
-        <Alerts className="bg-error mt-4" alerts={alerts} />
+        <Alert />
         <Field
           required
           autoCapitalize="none"

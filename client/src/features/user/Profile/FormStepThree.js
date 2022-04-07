@@ -1,29 +1,24 @@
 import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
 import routesPath from "../../../routesPath";
 import { useNavigate, useOutletContext, Link } from "react-router-dom";
-
-//RTK query
-import { useUpdateProfilePictureMutation } from "../../user/userSlice";
-import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
+import { useUpdateProfilePicture } from "../../user/userSlice";
+import { alertService } from "../../../components/common/Alert/Services";
+import { Alert } from "../../../components/common/Alert";
 
 // Core components
-import Alerts from "../../../components/common/Alerts";
 import { UploadAvatar, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 import { FaUserCircle } from "react-icons/fa";
 import { RiImageAddFill } from "react-icons/ri";
 
 const FormStepThree = () => {
-  const dataUser = useOutletContext();
-  const idUser = dataUser.user.id;
-  const dispatch = useDispatch();
+  const user = useOutletContext();
+  const idUser = user.id;
   const navigate = useNavigate();
-  const alerts = useSelector(getAlerts);
-  const [updateProfilePicture, { isLoading, data, isSuccess }] = useUpdateProfilePictureMutation();
-  const id = uuidv4();
+  const [isLoading, setIsLoading] = useState(false);
+  const updateProfilePicture = useUpdateProfilePicture(undefined, undefined, idUser);
+
   const [avatar, setAvatar] = useState(null);
 
   const ValidationSchema = Yup.object().shape({
@@ -37,43 +32,27 @@ const FormStepThree = () => {
 
   let formData = new FormData();
 
-  const handleStepThree = async (credentials) => {
+  const handleStepThree = async () => {
+    setIsLoading(true);
     formData.append("profilePicture", avatar);
-    const obj = { idUser: credentials.idUser, profilePicture: formData };
+    formData.append("idUser", idUser);
     try {
-      await updateProfilePicture(obj).unwrap();
+      await updateProfilePicture.mutateAsync(formData);
+      navigate("../../" + routesPath.STEP_FOUR);
     } catch (e) {
-      console.log(e);
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
-      if (e.status === 400) {
-        dispatch(
-          setAlert({
-            msg: e.data.errors[0].message,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), e.data.errors[0].message.length * 200);
+      if (e?.response?.status === 400) {
+        alertService.error(e?.response?.data?.errors[0]?.message, { autoClose: true });
+      } else if (e?.response?.status === 401) {
+        customMessage = "Your session has expired. Please login again.";
+        alertService.error(customMessage, { autoClose: true });
       } else {
-        dispatch(
-          setAlert({
-            msg: customMessage,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage.length * 200);
+        alertService.error(customMessage, { autoClose: true });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  if (isSuccess) {
-    navigate("../../" + routesPath.STEP_FOUR, { state: data });
-  }
 
   return (
     <>
@@ -84,10 +63,10 @@ const FormStepThree = () => {
         className="mt-4 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10"
       >
         <h1 className="card-title text-secondary text-center">Change your profile photo</h1>
-        <Alerts className="bg-error" alerts={alerts} />
-        {avatar || dataUser?.user?.profilePicture ? (
-          <div className="object-fit overflow-hidden rounded-full shadow-sm m-auto h-48 w-48">
-            <img src={avatar ? URL.createObjectURL(avatar) : dataUser.user.profilePicture} className="object-fill" alt="profile_photo" />{" "}
+        <Alert />
+        {avatar || user?.profilePicture ? (
+          <div className="object-contain object-center overflow-hidden mask mask-squircle shadow-sm m-auto h-48 w-48 items-center">
+            <img src={avatar ? URL.createObjectURL(avatar) : user.profilePicture} className="object-fill" alt="profile_photo" />{" "}
           </div>
         ) : (
           <FaUserCircle size="150px" className="m-auto text-gray-500" />
@@ -101,7 +80,7 @@ const FormStepThree = () => {
           accept="image/png,image/jpg,image/jpeg"
           icon={<RiImageAddFill size="24px" className="text-gray-800" />}
           autoComplete="new-file"
-          className="bg-blue-200 text-secondary font-semibold rounded-full px-6 input-primary border-none w-1/2 ml-auto hidden"
+          className="bg-blue-200 text-secondary font-semibold mask mask-squircle px-6 input-primary border-none w-1/2 ml-auto hidden"
         />
         <div className="ml-auto px-2 mt-2">
           <Link className="link link-secondary pr-2" to={"../../" + routesPath.STEP_FOUR}>

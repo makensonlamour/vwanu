@@ -11,9 +11,7 @@ import { RiHashtag, RiImageAddFill, RiLiveFill } from "react-icons/ri";
 import { BsEmojiSmile, BsCameraFill } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
-
-//RTK Query
-import { useCreatePostMutation } from "../../post/postSlice";
+import { useCreatePost } from "../postSlice";
 
 //Functions for notification after actions
 const postSuccess = () =>
@@ -27,8 +25,8 @@ const postError = () =>
   });
 
 const InputModal = ({ reference }) => {
-  const dataUser = useOutletContext();
-  const UserId = dataUser?.user?.id;
+  const user = useOutletContext();
+  const UserId = user?.id;
   const [showModal, setShowModal] = useState(false);
   const [openPrivacy, setOpenPrivacy] = useState(false);
   // const [privacyText, setPrivacyText] = useState("");
@@ -56,7 +54,9 @@ const InputModal = ({ reference }) => {
     postImage: Yup.mixed().label("Image"),
   });
 
-  const [createPost, { isSuccess }] = useCreatePostMutation();
+  //const [createPost, { isSuccess }] = useCreatePostMutation();
+
+  const mutationAdd = useCreatePost((oldData, newData) => [...oldData, newData]);
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
@@ -68,7 +68,7 @@ const InputModal = ({ reference }) => {
     if (_.isEqual(reference, "newsfeed")) {
       try {
         console.log(formData);
-        await createPost(formData).unwrap();
+        await mutationAdd.mutateAsync(formData);
         postSuccess();
         reloadPage();
       } catch (e) {
@@ -80,7 +80,7 @@ const InputModal = ({ reference }) => {
       //request for post profile
     } else if (_.isEqual(reference, "profile")) {
       try {
-        await createPost(formData).unwrap();
+        await mutationAdd.mutateAsync(formData);
       } catch (e) {
         console.log(e);
       }
@@ -89,22 +89,16 @@ const InputModal = ({ reference }) => {
       //request for post group
     } else if (_.isEqual(reference, "group")) {
       try {
-        await createPost(credentials).unwrap();
+        await mutationAdd.mutateAsync(formData);
       } catch (e) {
         console.log(e);
-      }
-      if (isSuccess) {
-        setShowModal(false);
       }
       //request for post pages
     } else if (_.isEqual(reference, "pages")) {
       try {
-        await createPost(credentials).unwrap();
+        await mutationAdd.mutateAsync(formData);
       } catch (e) {
         console.log(e);
-      }
-      if (isSuccess) {
-        setShowModal(false);
       }
     } else setShowModal(false);
   };
@@ -114,17 +108,17 @@ const InputModal = ({ reference }) => {
       <Toaster />
       <div className="flex rounded-2xl shadow-md border p-4 bg-white lg:w-[43vw] items-center">
         {" "}
-        <img alt="" className="flex-start justify-center align-center w-10 h-10 rounded-full" src={dataUser?.user?.profilePicture} />
+        <img alt="" className="flex-start justify-center align-center w-14 h-14 mask mask-squircle" src={user?.profilePicture} />
         <button
           className="flex-end text-left pl-2 p-2 ml-4 rounded-2xl bg-sky-50 text-sm text-gray-600 w-full"
           onClick={() => setShowModal(true)}
         >
           {`What's on your mind? #hashtag, @mention or link`}
         </button>
-        <button className="p-2 md:p-4 bg-green-100 ml-2 rounded-full" onClick={() => setShowModal(true)}>
+        <button className="p-2 md:p-4 bg-green-100 hover:bg-green-200 ml-2 mask mask-squircle" onClick={() => setShowModal(true)}>
           <BsCameraFill className="text-green-600 w-[16px] h-[16px] lg:w-[24px] lg:h-[24px]" />
         </button>
-        <button className="p-2 md:p-4 bg-red-100 ml-2 rounded-full" onClick={() => setShowModal(true)}>
+        <button className="p-2 md:p-4 bg-red-100 hover:bg-red-200 ml-2 mask mask-squircle" onClick={() => setShowModal(true)}>
           <RiLiveFill className="text-red-600 w-[16px] h-[16px] lg:w-[24px] lg:h-[24px]" />
         </button>
       </div>
@@ -149,7 +143,7 @@ const InputModal = ({ reference }) => {
                   </button>
                   <SubmitPost
                     title="Publish"
-                    className="bg-secondary py-2 px-4 rounded-lg ml-auto border-0 text-base-100 float-right text-md leading-none font-semibold outline-none focus:outline-none ease-linear transition-all duration-150"
+                    className="bg-primary hover:bg-secondary py-2 px-4 rounded-lg ml-auto border-0 text-base-100 float-right text-md leading-none font-semibold outline-none focus:outline-none ease-linear transition-all duration-150"
                   />
                 </div>
                 {/*body*/}
@@ -192,7 +186,9 @@ const InputModal = ({ reference }) => {
                     </span>
                   </div>
                   <div className="flex mt-2">
-                    {image ? <img src={URL.createObjectURL(image)} className="bg-gray-300 m-1 w-20 h-20 rounded-lg" alt="_image" /> : null}
+                    {image ? (
+                      <img src={URL.createObjectURL(image)} className="bg-gray-300 m-1 w-20 h-20 mask mask-squircle" alt="_image" />
+                    ) : null}
                   </div>
                 </div>
                 {/*footer*/}

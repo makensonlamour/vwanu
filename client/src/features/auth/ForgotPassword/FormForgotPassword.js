@@ -1,77 +1,54 @@
-import React from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import routesPath from "../../../routesPath";
-
-//RTK query
-import { useForgotPasswordMutation } from "../../auth/authSlice";
-import { getAlerts, setAlert, removeAlert } from "../../alert/alertSlice";
+import { alertService } from "../../../components/common/Alert/Services";
+import { Alert } from "../../../components/common/Alert";
+import { useForgotPassword } from "../../auth/authSlice";
 
 // Core components
-import Alerts from "../../../components/common/Alerts";
 import { Field, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 
-const ValidationSchema = Yup.object().shape({
-  email: Yup.string().required().min(6).email().label("Email"),
-});
-
-const initialValues = {
-  email: "",
-};
-
 const FormForgotPassword = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const alerts = useSelector(getAlerts);
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
-  const id = uuidv4();
+  const forgotPassword = useForgotPassword();
+  const [isLoading, setIsLoading] = useState(false);
+  const ValidationSchema = Yup.object().shape({
+    email: Yup.string().required().min(6).email().label("Email"),
+  });
 
-  const handleResetPasword = async (credentials) => {
+  const initialValues = {
+    email: "",
+  };
+
+  const handleForgotPasword = async (credentials) => {
+    setIsLoading(true);
     try {
-      const data = await forgotPassword(credentials).unwrap();
-      navigate(routesPath.FORGOT_PASSWORD_SUCCESS, { state: data, email: credentials.email });
+      await forgotPassword.mutateAsync(credentials);
+      navigate(routesPath.FORGOT_PASSWORD_SUCCESS, { state: forgotPassword.data, email: credentials.email });
     } catch (e) {
-      console.log();
-      let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
-      if (e.status === 400) {
-        dispatch(
-          setAlert({
-            msg: e.data.errors[0].message,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), e.data.errors[0].message.length * 200);
+      if (e?.response?.status === 400) {
+        alertService.error(e?.response?.data?.errors[0]?.message, { autoClose: true });
       } else {
-        dispatch(
-          setAlert({
-            msg: customMessage,
-            id,
-            type: "error",
-          })
-        );
-
-        // Setting a sec for each 10 words
-        setTimeout(() => dispatch(removeAlert(id)), customMessage.length * 200);
+        alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <>
       <Form
         validationSchema={ValidationSchema}
         initialValues={initialValues}
-        onSubmit={handleResetPasword}
+        onSubmit={handleForgotPasword}
         className="shadow-lg rounded-3xl my-10"
       >
         <h1 className="card-title text-secondary text-md text-center">Forgot your password?</h1>
         <p className="text-sky-600">{`Enter your email and we'll send you a link to reset your password.`}</p>
-        <Alerts className="bg-error mt-4" alerts={alerts} />
+        <Alert />
         <Field
           required
           autoCapitalize="none"

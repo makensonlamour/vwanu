@@ -3,13 +3,20 @@ import { render as rtlRender, screen, cleanup, fireEvent, waitFor } from "@testi
 import { MemoryRouter as Router } from "react-router-dom";
 import { act as testAct, create } from "react-test-renderer";
 import { act as domAct } from "react-dom/test-utils";
-import { store } from "../../../hooks/store";
 import ForgotPassword from "../ForgotPassword";
-import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 afterEach(cleanup);
 
-const render = (component) => rtlRender(<Provider store={store}>{component}</Provider>);
+const render = (component) => rtlRender(<QueryClientProvider client={queryClient}>{component}</QueryClientProvider>);
 
 //Testing ForgotPassword form
 //Test Dom Elements
@@ -19,11 +26,11 @@ describe("ForgotPassword Test Dom Elements", () => {
     domAct(() => {
       testAct(() => {
         tree = create(
-          <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
             <Router>
               <ForgotPassword />
             </Router>
-          </Provider>
+          </QueryClientProvider>
         );
       });
     });
