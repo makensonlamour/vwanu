@@ -1,9 +1,11 @@
 import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 // Custom dependencies i need
 import app from '../app';
 import database from '../models';
 import Logger from '../lib/utils/logger';
+import * as realtimeFunction from '../realtimeFnc';
 
 //  * Normalize a port into a number, string, or false.
 function normalizePort(val: string): number | string | null {
@@ -41,9 +43,18 @@ function onError(error: any): void {
       throw error;
   }
 }
+let io = null;
 app(database).then((expressServer) => {
   // Passing starting database and server.
   const server = createServer(expressServer);
+  io = new Server(server, {
+    cors: {
+      origin: '*',
+    },
+  });
+
+  io.on('connection', realtimeFunction.connect);
+
   try {
     server.listen(port);
     server.on('error', onError);
