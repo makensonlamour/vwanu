@@ -10,7 +10,7 @@ import PostList from "../../features/post/PostList";
 import { useGetPostsList } from "../../features/post/postSlice";
 import InputModal from "../../features/post/components/InputModal";
 
-const NewsFeed = () => {
+const ProfileFeed = () => {
   const user = useOutletContext();
   const UserId = user?.id;
 
@@ -65,14 +65,13 @@ const NewsFeed = () => {
 
   return (
     <>
-      <div className="mx-auto z-30">
-        <div className="pt-10 pb-2 mx-auto align-items-center lg:w-full space-y-2">
+      <div className="mx-auto">
+        <div className="pb-2 mx-auto align-items-center lg:w-full space-y-2">
+          <div className="lg:basis-2/3">
+            <InputModal reference="profilefeed" />
+          </div>
           <div className="lg:flex">
-            <div>
-              <InputModal reference="newsfeed" />
-              <div className="w-full lg:w-[38vw]">{content}</div>
-            </div>
-            <span className="hidden lg:inline mx-2 rounded-2xl border w-full bg-white h-28"></span>
+            <div className="w-full">{content}</div>
           </div>
         </div>
       </div>
@@ -80,4 +79,4 @@ const NewsFeed = () => {
   );
 };
 
-export default NewsFeed;
+export default ProfileFeed;

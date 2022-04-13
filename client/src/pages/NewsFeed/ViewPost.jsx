@@ -11,7 +11,7 @@ const ViewPost = () => {
   const UserId = user?.id;
   console.log(UserId, id);
 
-  const { data: post, isSuccess, isError, isFetching } = useGetPost(id);
+  const { data: post, isSuccess, isError, isFetching } = useGetPost(["post", id], id);
 
   function reloadPage() {
     window.location.reload();

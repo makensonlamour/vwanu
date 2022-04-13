@@ -2,7 +2,7 @@ import React from "react";
 //import { Provider } from "react-redux";
 import { SidebarProvider } from "./context/BottomMenuContext";
 import { QueryClient, QueryClientProvider } from "react-query";
-// import { ReactQueryDevtools } from "react-query/devtools";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 // Custom dependencies
 //import { store } from "./store";
@@ -21,6 +21,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>
         <Views />
+        <ReactQueryDevtools />
       </SidebarProvider>
     </QueryClientProvider>
   );

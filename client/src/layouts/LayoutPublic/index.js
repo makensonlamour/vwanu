@@ -6,7 +6,7 @@ import { useGetProfile } from "../../features/auth/authSlice";
 // import { deleteToken } from "../../helpers/index";
 
 const LayoutPublic = () => {
-  const { data: user } = useGetProfile();
+  const { data: user } = useGetProfile(["user", "me"]);
 
   const location = useLocation();
   const from = location.state?.from || routesPath.NEWSFEED;

@@ -38,9 +38,9 @@ const InputModal = ({ reference }) => {
     setOpenPrivacy(true);
   };
 
-  function reloadPage() {
-    window.location.reload();
-  }
+  // function reloadPage() {
+  //   window.location.reload();
+  // }
 
   //Formik initial value and yup validation
   const initialValues = {
@@ -56,7 +56,7 @@ const InputModal = ({ reference }) => {
 
   //const [createPost, { isSuccess }] = useCreatePostMutation();
 
-  const mutationAdd = useCreatePost((oldData, newData) => [...oldData, newData]);
+  const mutationAdd = useCreatePost(["post", "home"], (oldData, newData) => [...oldData, newData]);
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
@@ -67,10 +67,9 @@ const InputModal = ({ reference }) => {
     //request for post newsfeed
     if (_.isEqual(reference, "newsfeed")) {
       try {
-        console.log(formData);
         await mutationAdd.mutateAsync(formData);
         postSuccess();
-        reloadPage();
+        // reloadPage();
       } catch (e) {
         console.log(e);
         postError();
@@ -78,35 +77,42 @@ const InputModal = ({ reference }) => {
       setImage(null);
       setShowModal(false);
       //request for post profile
-    } else if (_.isEqual(reference, "profile")) {
+    } else if (_.isEqual(reference, "profilefeed")) {
       try {
         await mutationAdd.mutateAsync(formData);
+        postSuccess();
       } catch (e) {
         console.log(e);
+        postError();
       }
       setShowModal(false);
 
       //request for post group
-    } else if (_.isEqual(reference, "group")) {
+    } else if (_.isEqual(reference, "groupfeed")) {
       try {
         await mutationAdd.mutateAsync(formData);
+        postSuccess();
       } catch (e) {
         console.log(e);
       }
+      setShowModal(false);
       //request for post pages
-    } else if (_.isEqual(reference, "pages")) {
+    } else if (_.isEqual(reference, "pagefeed")) {
       try {
         await mutationAdd.mutateAsync(formData);
+        postSuccess();
       } catch (e) {
         console.log(e);
+        postError();
       }
+      setShowModal(false);
     } else setShowModal(false);
   };
 
   return (
     <>
       <Toaster />
-      <div className="flex rounded-2xl shadow-md border p-4 bg-white lg:w-[43vw] items-center">
+      <div className="flex rounded-2xl shadow-md border p-4 bg-white lg:w-[38vw] items-center">
         {" "}
         <img alt="" className="flex-start justify-center align-center w-14 h-14 mask mask-squircle" src={user?.profilePicture} />
         <button

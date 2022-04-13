@@ -12,10 +12,10 @@ export const useResetPassword = (credentials) => usePost(`/user/resetPassword/${
 
 export const useForgotPassword = () => usePost("/user/forgotPassword");
 
-export const useGetProfile = () => {
+export const useGetProfile = (queryKey) => {
   const token = getToken();
   const decodeToken = decoder(token);
-  const context = useFetch(`/user/${decodeToken?.user?.id}`, undefined, { retry: false });
+  const context = useFetch(queryKey, `/user/${decodeToken?.user?.id}`, "", { retry: false });
   return { ...context, data: context?.data?.data?.user };
 };
 

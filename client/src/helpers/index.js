@@ -1,4 +1,6 @@
+// import React from "react";
 import jwtDecode from "jwt-decode";
+import _ from "lodash";
 
 export function decoder(token) {
   if (!token) return {};
@@ -30,4 +32,20 @@ export function getYPosition() {
     const yPosition = window.scrollY;
     return yPosition;
   });
+}
+
+// calculate number of content in an arrayObject
+export function likeArray(arrayObject, reactions) {
+  if (arrayObject.length === 0) return;
+  const array = [];
+  // eslint-disable-next-line array-callback-return
+  arrayObject.map((item) => {
+    _.find(reactions, (reaction) => {
+      if (reaction.label === item.content) {
+        return array.push(_.merge(item, reaction));
+      }
+    });
+  });
+
+  return array;
 }
