@@ -11,7 +11,7 @@ import methodOverride from 'method-override';
 import './passport';
 import common from './lib/utils/common';
 import authRoute from './routes/auth';
-import userRoute from './routes/user';
+import userRoute from './routes/user/user.routes';
 import profileRoute from './routes/profile';
 import postRoute from './routes/post';
 import commentRoute from './routes/Comments';
