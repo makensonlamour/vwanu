@@ -1,11 +1,13 @@
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import jwtAuth from 'socketio-jwt-auth';
+import config from 'config';
 
 // Custom dependencies i need
 import app from '../app';
 import database from '../models';
 import Logger from '../lib/utils/logger';
-import * as realtimeFunction from '../realtimeFnc';
+import { wrapperAroundConnect, checkAuth } from '../realtimeFnc';
 
 //  * Normalize a port into a number, string, or false.
 function normalizePort(val: string): number | string | null {
@@ -16,7 +18,7 @@ function normalizePort(val: string): number | string | null {
   return null;
 }
 
-function onListening(server) {
+export function onListening(server) {
   return (): void => {
     const addr = server.address();
     const bind: string | null =
@@ -26,7 +28,7 @@ function onListening(server) {
 }
 const port = normalizePort(process.env.PORT || '6000');
 
-function onError(error: any): void {
+export function onError(error: any): void {
   if (error.syscall !== 'listen') throw error;
   const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
   // handle specific listen errors with friendly messages
@@ -43,17 +45,24 @@ function onError(error: any): void {
       throw error;
   }
 }
-let io = null;
+
 app(database).then((expressServer) => {
   // Passing starting database and server.
   const server = createServer(expressServer);
-  io = new Server(server, {
+  const sio = new Server(server, {
     cors: {
       origin: '*',
     },
   });
 
-  io.on('connection', realtimeFunction.connect);
+  sio.use(
+    jwtAuth.authenticate(
+      { secret: config.get<string>('JWT_SECRET') },
+      checkAuth
+    )
+  );
+
+  sio.on('connection', wrapperAroundConnect(sio));
 
   try {
     server.listen(port);
