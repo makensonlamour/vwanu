@@ -1,13 +1,14 @@
 import db from '../../models';
-import { UserInterface } from '../../schema/user';
+import { UpUserInterface as UserInterface } from '../../schema/user';
 
 const DataProvider = {
-  getUser: async (userId: number | string) =>
+  getUser: async (userId: number | string, option?: any) =>
     new Promise((resolve, reject) => {
       db.User.findOne({
         where: { id: userId },
-        attributes: { exclude: ['password'] },
+        ...option,
       })
+
         .then((data: any) => {
           resolve(data);
         })

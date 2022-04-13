@@ -4,5 +4,6 @@ declare namespace Express {
     token: string;
     files: any;
     file: any;
+    user: { id: string };
   }
 }
