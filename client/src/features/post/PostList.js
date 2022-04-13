@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { formatDistance, parseISO } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
+import reactions from "../../data/reactions";
+import { likeArray } from "../../helpers/index";
 
-import { FaThumbsUp, FaComment, FaShareAlt } from "react-icons/fa";
+import { FaComment, FaShareAlt } from "react-icons/fa";
 // import { FcLike } from "react-icons/fc";
 import MediaPost from "../../components/form/Post/MediaPost";
 import CommentList from "../comment/component/CommentList";
@@ -12,40 +14,20 @@ import CommentForm from "../comment/component/CommentForm";
 import ReusableDialog from "../../components/common/ReusableDialog";
 import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
-import { FacebookSelector, FacebookCounter } from "@charkour/react-reactions";
-import { Modal } from "@mui/material";
-//import routesPath from "../../../routesPath";
+import { ReactionCounter } from "@charkour/react-reactions";
+
+import Reaction from "../reaction/component/Reaction";
+// import routesPath from "../../../routesPath";
 
 const notify = () =>
   toast.success("Post deleted successfully!", {
     position: "bottom-center",
   });
-/*
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-*/
+
 const PostList = ({ post, pageTitle }) => {
+  const user = useOutletContext();
   const [commentPrev, setCommentPrev] = useState(false);
   const [open, setOpen] = useState(false);
-
-  //Handle reactions popover
-  const [openReactions, setOpenReactions] = useState(false);
-  const handleOpenReaction = (e) => {
-    setOpenReactions(e.currentTarget);
-  };
-
-  const handleCloseReaction = () => {
-    setOpenReactions(null);
-  };
 
   // const openLike = Boolean(openReactions);
 
@@ -68,11 +50,6 @@ const PostList = ({ post, pageTitle }) => {
   const handleDisagree = () => {
     console.log("I do not agree.");
     handleClose();
-  };
-
-  const handleLike = (e) => {
-    e.preventDefault();
-    console.log("handleLike:", post.id);
   };
 
   return (
@@ -124,10 +101,20 @@ const PostList = ({ post, pageTitle }) => {
               {post.Media.length > 0 ? <MediaPost medias={post.Media} /> : null}
               <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
                 <p className="text-sm text-secondary">
-                  <FacebookCounter />
-                  {/*}  <FcLike size={20} className="inline text-secondary" /> <FaThumbsUp size={16} className="inline text-secondary mr-2" />
-                  <button className=" hover:border-b hover:border-secondary"> {post?.Reactions ? post.Reactions : 0 + " Likes"}</button>
-                  {*/}
+                  {post?.Reactions?.length > 0 ? (
+                    <ReactionCounter
+                      reactions={likeArray(post?.Reactions, reactions)}
+                      important={["vens"]}
+                      user={"vens"}
+                      className="text-md text-primary"
+                      showOthersAlways={likeArray(post?.Reactions).length > 0 && post?.Reactions?.UserId === user?.id ? true : false}
+                      onClick={() => {
+                        console.log("will show pop up of person who liked it");
+                      }}
+                    />
+                  ) : (
+                    <button className=" hover:border-b hover:border-secondary"> {"Be the first to react."}</button>
+                  )}
                 </p>
 
                 <p className="ml-auto">
@@ -146,21 +133,7 @@ const PostList = ({ post, pageTitle }) => {
 
               <div className="flex flex-wrap relative">
                 {/*Reactions*/}
-                <button
-                  onClick={handleLike}
-                  onMouseEnter={handleOpenReaction}
-                  className="mt-2 text-md font-semibold text-gray-700 hover:bg-gray-200 hover:rounded-lg px-2 py-2 lg:px-5 lg:py-2"
-                >
-                  <FaThumbsUp size={20} className="inline " /> Like
-                </button>
-                <Modal sx={{ border: "none", position: "absolute " }} open={openReactions}>
-                  <div
-                    onMouseLeave={handleCloseReaction}
-                    className="absolute bottom-[11.5rem] left-[29.7rem] transform -translate-x-1/2 -translate-y-1/2"
-                  >
-                    <FacebookSelector />
-                  </div>
-                </Modal>
+                <Reaction post={post} />
 
                 {/*Comments*/}
                 <button

@@ -2,7 +2,7 @@
 
 exports[`Register Test Dom Elements match snapshot 1`] = `
 <div
-  className="mx-0 md:mx-0 lg:h-full "
+  className="mx-0 md:mx-0 lg:h-screen "
 >
   <div
     className="grid grid-cols-1 lg:mb:0 lg:grid-cols-2"
@@ -19,7 +19,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
       }
     >
       <div
-        className="bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78] h-96 z-0 lg:h-full"
+        className="bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78] h-96 z-0 lg:h-screen"
       >
         <img
           alt="_shape_up"
@@ -36,12 +36,12 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
           />
         </p>
         <p
-          className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center"
+          className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center align-middle"
         >
           Welcome
         </p>
         <p
-          className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2"
+          className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2 align-middle"
         >
           Together We are Stronger
         </p>
@@ -56,7 +56,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
       className="inline lg:hidden"
     >
       <div
-        className="bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78] h-96 z-0 lg:h-full"
+        className="bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78] h-96 z-0 lg:h-screen"
       >
         <img
           alt="_shape_up"
@@ -90,7 +90,7 @@ exports[`Register Test Dom Elements match snapshot 1`] = `
       />
     </div>
     <div
-      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] lg:rounded-none px-4 md:px-8 -mt-28 z-10 md:mx-36 lg:mt-0 lg:mx-0 lg:h-full"
+      className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] lg:rounded-none px-4 md:px-8 -mt-28 z-10 md:mx-36 lg:mt-0 lg:mx-0 lg:h-screen"
     >
       <div
         className="lg:place-content-center lg:mt-6 lg:mb-3"

@@ -31,7 +31,6 @@ const FormLogin = () => {
       const res = await login(credentials);
 
       if (res?.data?.data) {
-        console.log(res.data.data);
         saveToken(res.data.data.token);
         reloadPage();
         queryClient.invalidateQueries();
@@ -39,7 +38,7 @@ const FormLogin = () => {
         alertService.error("Email or Password incorrect.", { autoClose: true });
       }
     } catch (e) {
-      if (e.response.status === 401) {
+      if (e?.response?.status === 401) {
         alertService.error("Email or Password incorrect.", { autoClose: true });
       } else {
         alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });

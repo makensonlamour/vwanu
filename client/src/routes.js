@@ -8,6 +8,7 @@ import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import NewsFeed from "./pages/NewsFeed/NewsFeed";
 import ViewPost from "./pages/NewsFeed/ViewPost";
 import Profil from "./pages/Profil/Profil";
+import Message from "./pages/Message/Message";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
@@ -65,6 +66,13 @@ let routes = [
     path: routesPath.PROFILE,
     name: "Profile",
     element: Profil,
+    access: role.USER,
+  },
+
+  {
+    path: routesPath.MESSAGE,
+    name: "Message",
+    element: Message,
     access: role.USER,
   },
   {

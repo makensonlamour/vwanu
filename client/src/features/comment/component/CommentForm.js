@@ -36,8 +36,7 @@ const CommentForm = ({ PostId }) => {
   });
 
   //rtk query to create comment
-  // const [createComment, { isFetching }] = useCreateCommentMutation();
-  const mutationAddComment = useCreateComment((oldData, newData) => [...oldData, newData]);
+  const mutationAddComment = useCreateComment(["post", PostId], (oldData, newData) => [...oldData, newData]);
 
   //object comment to set all the parameters
   const objComment = { postText, UserId, PostId };
@@ -48,7 +47,6 @@ const CommentForm = ({ PostId }) => {
       await mutationAddComment.mutateAsync(objComment);
       setPostText("");
       commentSuccess();
-      window.location.reload();
     } catch (e) {
       console.log(e);
       commentError();
@@ -81,8 +79,8 @@ const CommentForm = ({ PostId }) => {
           ></TextareaAutosize>
           <button ref={buttonRef} hidden onClick={handleComment} name="comment"></button>
         </form>
-        {mutationAddComment.isLoading && <Facebook />}
       </div>
+      {mutationAddComment.isLoading && <Facebook />}
     </>
   );
 };

@@ -4,4 +4,4 @@ export const useGetCommentList = (dataObj) => useLoadMore(`/comment?UserId=${dat
 
 export const useGetComment = (dataObj) => useFetch(`/comment/${dataObj?.postId}`);
 
-export const useCreateComment = (oldData, newData, dataObj) => usePost(`/comment?UserId=${dataObj?.UserId}`, dataObj, (oldData, newData));
+export const useCreateComment = (queryKey, oldData, newData) => usePost(queryKey, `/comment`, (oldData, newData));
