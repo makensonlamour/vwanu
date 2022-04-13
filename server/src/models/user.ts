@@ -99,6 +99,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     admin: boolean;
 
+    online: boolean;
+
+    lastSeen: Date;
+
     static async setPassword(password: string): Promise<string> {
       const passwordHash = await bcrypt.hash(password, 12);
       return passwordHash;
@@ -132,6 +136,18 @@ module.exports = (sequelize: any, DataTypes: any) => {
         as: 'Following',
         through: 'User_Following',
       });
+
+      // User.hasMany(models.User, { as: 'friends' });
+      User.belongsToMany(models.User, {
+        through: 'User_friends',
+        as: 'friends',
+      });
+      User.belongsToMany(models.User, {
+        through: 'User_friends_request',
+        as: 'friendsRequest',
+      });
+
+      
       // User.belongsToMany(models.User, {
       //   as: 'follower',
       //   through: models.UserFollower,
@@ -224,6 +240,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: false,
       },
 
+      online: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      lastSeen: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
+      },
       coverPicture: {
         type: DataTypes.STRING,
         allowNull: true,

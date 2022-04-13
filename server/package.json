@@ -56,8 +56,10 @@
     "passport-local": "^1.0.0",
     "passport-local-sequelize": "^0.9.0",
     "pg": "^8.7.1",
+    "redis": "^4.0.6",
     "sequelize": "^6.6.2",
     "socket.io": "^4.4.1",
+    "socketio-jwt-auth": "^0.2.1",
     "winston": "^3.4.0",
     "zod": "^3.11.6"
   },
@@ -95,6 +97,7 @@
     "prettier": "^2.5.1",
     "sequelize-cli": "^6.4.1",
     "sinon": "^13.0.1",
+    "socket.io-client": "^4.4.1",
     "source-map-support": "^0.5.21",
     "sqlite3": "^5.0.2",
     "supertest": "^6.2.2",
