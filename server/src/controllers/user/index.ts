@@ -4,6 +4,7 @@ import { Response, Request } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 // Custom requirements
+import db from '../../models';
 import AppError from '../../errors';
 import Log from '../../lib/utils/logger';
 import common from '../../lib/utils/common';
@@ -147,7 +148,7 @@ export default {
   }),
   verifyOne: catchAsync(
     async (req: Request<VerifyUserInput>, res: Response) => {
-      const { id } = req.params;
+      const { id } = req.user;
       const { activationKey } = req.params;
       try {
         const user: UserInterface = await userService.getUser(id);
@@ -162,8 +163,6 @@ export default {
           verified: true,
           activationKey: null,
         });
-
-        // console.log('User updated, is verified now', user.verified);
 
         return sendResponse(
           res,
@@ -219,7 +218,7 @@ export default {
 
         if (!user.verified) {
           Log.debug(
-            `User with email ${email} is still unverified and trying to change password`
+            `User with email ${email} is still unverified cannot change his password`
           );
           throw new AppError(
             'Must be verified to change password',
@@ -299,4 +298,213 @@ export default {
       }
     }
   ),
+  addOrRemoveFollowing: catchAsync(async (req, res) => {
+    const { id, friendId } = req.params;
+    const { action } = req.query;
+    const user: any = await userService.getUser(id, {
+      include: [
+        {
+          model: db.User,
+          as: 'friends',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+        {
+          model: db.User,
+          as: 'friendsRequest',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+        {
+          model: db.User,
+          as: 'Following',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+        {
+          model: db.User,
+          as: 'Follower',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+      ],
+    });
+    const friend: any = await userService.getUser(friendId);
+    if (!user || !friend)
+      throw new AppError(
+        'The friend or user are not found ',
+        StatusCodes.NOT_FOUND
+      );
+
+    const alreadyFollowing = await user.hasFollowing(user);
+    let alreadyFiends = await Promise.all([
+      friend.hasFriend(user),
+      user.hasFriend(friend),
+    ]);
+    alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
+
+    if (action === 'follow') {
+      if (alreadyFollowing)
+        throw new AppError(
+          'You are already following this person',
+          StatusCodes.BAD_REQUEST
+        );
+
+      if (alreadyFiends)
+        throw new AppError(
+          'They are already friends meaning you are following each and other',
+          StatusCodes.BAD_REQUEST
+        );
+      await user.addFollower(user);
+      await friend.addFollowing(friend);
+    }
+    const newU = await user.reload();
+    sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
+  }),
+  addOrRemoveFollower: catchAsync(async (req, res) => {
+    const { id, friendId } = req.params;
+    const { action } = req.query;
+    const user: any = await userService.getUser(id, {
+      include: [
+        {
+          model: db.User,
+          as: 'friends',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+        {
+          model: db.User,
+          as: 'friendsRequest',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+        {
+          model: db.User,
+          as: 'Following',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+      ],
+    });
+    const friend: any = await userService.getUser(friendId);
+    if (!user || !friend)
+      throw new AppError(
+        'The friend or user are not found ',
+        StatusCodes.NOT_FOUND
+      );
+
+    const alreadyFollowing = await user.hasFollowing(user);
+    let alreadyFiends = await Promise.all([
+      friend.hasFriend(user),
+      user.hasFriend(friend),
+    ]);
+    alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
+
+    if (action === 'follow') {
+      if (alreadyFollowing)
+        throw new AppError(
+          'You are already following this person',
+          StatusCodes.BAD_REQUEST
+        );
+
+      if (alreadyFiends)
+        throw new AppError(
+          'They are already friends meaning you are following each and other',
+          StatusCodes.BAD_REQUEST
+        );
+      await friend.addFollower(user);
+      await user.addFollowing(friend);
+    }
+    const newU = await user.reload();
+    sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
+  }),
+  addOrRemoveFriendRequest: catchAsync(async (req: Request, res: Response) => {
+    const { id, friendId } = req.params;
+    const { action } = req.query;
+
+    const requester: any = await userService.getUser(id, {
+      include: [
+        {
+          model: db.User,
+          as: 'friends',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+        {
+          model: db.User,
+          as: 'friendsRequest',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+      ],
+    });
+    const friend: any = await userService.getUser(friendId);
+
+    if (!requester || !friend)
+      throw new AppError(
+        'The friend or user are not found ',
+        StatusCodes.NOT_FOUND
+      );
+    let alreadyFiends = await Promise.all([
+      friend.hasFriend(requester),
+      requester.hasFriend(friend),
+    ]);
+    alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
+    if (alreadyFiends)
+      throw new AppError('They are already friends', StatusCodes.BAD_REQUEST);
+    const requestedFriendship = await friend.hasFriendsRequest(requester);
+
+    if (action === 'add-friend') {
+      if (requestedFriendship)
+        throw new AppError(
+          'You already requested to be friends',
+          StatusCodes.BAD_REQUEST
+        );
+      await friend.addFriendsRequest(requester);
+    } else if (action === 'remove-friend') {
+      await friend.removeFriendsRequest(requester);
+    }
+
+    const newU = await requester.reload();
+    sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
+  }),
+  addOrRemoveFriend: catchAsync(async (req: Request, res: Response) => {
+    const { id, friendId } = req.params;
+    const { action } = req.query;
+
+    const user: any = await userService.getUser(id, {
+      include: [
+        {
+          model: db.User,
+          as: 'friends',
+          attributes: ['id', 'firstName', 'lastName'],
+        },
+      ],
+    });
+    const friend: any = await userService.getUser(friendId);
+
+    if (!user || !friend)
+      throw new AppError(
+        'The friend or user are not found ',
+        StatusCodes.NOT_FOUND
+      );
+
+    const hasRequest = await user.hasFriendsRequest(friend);
+    if (!hasRequest)
+      throw new AppError('There is no friend request', StatusCodes.BAD_REQUEST);
+    let alreadyFiends = await Promise.all([
+      friend.hasFriend(user),
+      user.hasFriend(friend),
+    ]);
+    alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
+    if (action === 'add-friend') {
+      if (alreadyFiends)
+        throw new AppError('They are already friends', StatusCodes.BAD_REQUEST);
+
+      await user.addFriend(friend);
+      await friend.addFriend(user);
+    } else {
+      if (!alreadyFiends)
+        throw new AppError(
+          'You cannot unfriend , you have not been friend',
+          StatusCodes.BAD_REQUEST
+        );
+      await user.removeFriend(friend);
+      await friend.removeFriend(user);
+    }
+    const newU = await user.reload();
+
+    sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
+  }),
 };

@@ -153,6 +153,17 @@ export const UpUser = object({
   StripeSessionId: string(),
   country: string(),
   interestedBy: string(),
+  online: z.boolean(),
+  lastSeen: z.date(),
+});
+export const addOrRemoveFriendSchema = object({
+  params: object({
+    id: string(),
+    friendId: string(),
+  }),
+  query: object({
+    action: string(),
+  }),
 });
 export const verifyUserSchema = object({
   params: object({
@@ -199,3 +210,4 @@ export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 export type CreateUserInput = TypeOf<typeof createUserSchema>;
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>['params'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
+export type addOrRemoveFriendInput = TypeOf<typeof addOrRemoveFriendSchema>;

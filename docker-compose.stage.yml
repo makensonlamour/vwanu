@@ -14,7 +14,7 @@ services:
 
   api:
     container_name: vwanu_api_stage
-    image: vwanu_api:staging-1.0.1
+    image: vwanu_api:staging-2.0.1
     build:
       context: ./server
       dockerfile: Dockerfile.stage
@@ -32,12 +32,18 @@ services:
       - SMTP_PORT=${SMTP_PORT}
       - SMTP_SECURE=${SMTP_SECURE}
       - SMTP_SERVICE=${SMTP_SERVICE}
-
-
-
+      - REDIS_URL=redis://cache
     depends_on:
       - pg_db
-   
+    links:
+      - redis
+  redis: 
+    image: redis:6.2-alpine
+    container_name: redis
+    restart: unless-stopped
+    network_mode: bridge
+    expose:
+      - 6379 
   pg_db:
     container_name: pg_db
     image: 'postgres:12'
