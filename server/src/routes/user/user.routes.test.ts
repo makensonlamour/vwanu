@@ -1,9 +1,11 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
+
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { Op } from '@sequelize/core';
+
 // Custom dependencies
 import app from '../../app';
 import db from '../../models';
@@ -33,6 +35,25 @@ const testUsers = [
 ];
 const modify = { country: 'United States', gender: 'f' };
 let createdTestUsers = [];
+
+const expectedUser = {
+  id: expect.any(Number),
+  email: expect.any(String),
+  gender: expect.any(String),
+  admin: expect.any(Boolean),
+  online: expect.any(Boolean),
+  active: expect.any(Boolean),
+  language: expect.any(String),
+  lastName: expect.any(String),
+  lastSeen: expect.any(String),
+  verified: expect.any(Boolean),
+  firstName: expect.any(String),
+  createdAt: expect.any(String),
+  updatedAt: expect.any(String),
+  coverPicture: expect.any(String),
+  profilePicture: expect.any(String),
+  lastSeenPrivacy: expect.any(Boolean),
+};
 /* #endregion */
 
 // Testing the user routes //
@@ -46,7 +67,7 @@ describe('/api/user', () => {
     db.sequelize.options.logging = false;
   });
 
-  it('Should not create user if request params are not correctly formatted ', async () => {
+  it('Should not create user if request params are not ', async () => {
     badTestUser.forEach(async (requestData) => {
       const response = await testServer.post('/api/user').send(requestData);
 
@@ -77,11 +98,28 @@ describe('/api/user', () => {
     });
   }, 30000);
 
+  it('should get his own profile', async () => {
+    const requester = createdTestUsers[0];
+    const selfR = await testServer
+      .get('/api/user')
+      .set('x-auth-token', requester.token);
+
+    expect(selfR.body.data.user.id).toEqual(requester.user.id);
+    expect(selfR.body.data.user.email).toEqual(requester.user.email);
+    expect(selfR.body.data.user.password).toBeUndefined();
+    expect(selfR.body.data.user).toEqual(expect.objectContaining(expectedUser));
+  });
+
   it('should get a user by id ', async () => {
+    const requester = createdTestUsers[0];
+    const profileRequesting = createdTestUsers[1].user;
+
     const userR = await testServer
-      .get(`/api/user/${createdTestUsers[0].user.id}`)
-      .set('x-auth-token', createdTestUsers[0].token);
+      .get(`/api/user/${profileRequesting.id}`)
+      .set('x-auth-token', requester.token);
     expect(userR.body.data.user).toBeDefined();
+    expect(userR.body.data.user.id).toEqual(profileRequesting.id);
+    expect(userR.body.data.user.email).toEqual(profileRequesting.email);
   });
   it('should not be able to reset his password if not verified', async () => {
     const resetpassword = await testServer
@@ -238,7 +276,7 @@ describe('/api/user', () => {
 
   it('The user should now be updated with the fields above ', async () => {
     const userR = await testServer
-      .get(`/api/user/${createdTestUsers[0].user.id}`)
+      .get('/api/user/')
       .set('x-auth-token', createdTestUsers[0].token);
     expect(userR.body.data.user).toEqual(expect.objectContaining(modify));
   });
@@ -328,4 +366,34 @@ describe('/api/user', () => {
       user.Following.some((req) => req.id === createdTestUsers[3].user.id)
     );
   });
+
+  it('Timeline should return post for user and his friends', async () => {
+    /** #region creating posts for user 1 and user 2 */
+    const responses = [createdTestUsers[0], createdTestUsers[1]].map(
+      async (userToken) =>
+        testServer
+          .post('/api/post')
+          .set('x-auth-token', userToken.token)
+          .send({
+            postText: `I am a post made by user ${userToken.user.email}`,
+            UserId: userToken.user.id,
+          })
+    );
+
+    await Promise.all(responses);
+
+    const user_1_timeline = await testServer
+      .get('/api/user/timeline')
+      .set('x-auth-token', createdTestUsers[0].token);
+
+    const timeLinePost = user_1_timeline.body.data.posts;
+    /** expecting to find user 1 and user 2 post in user1 timeline */
+    expect(
+      timeLinePost.some(
+        (post, idx) =>
+          post.postText ===
+          `I am a post made by user ${createdTestUsers[idx].user.email}`
+      )
+    ).toBeTruthy();
+  }, 1000);
 });

@@ -10,15 +10,18 @@ import { profilesStorage } from '../../cloudinary';
 
 const router = express.Router();
 
-router.route('/').post(
-  validateResource(schema.createUserSchema),
-  profilesStorage.fields([
-    { name: 'profilePicture', maxCount: 1 },
-    { name: 'coverPicture', maxCount: 1 },
-  ]),
-  User.createOne
-);
-
+router
+  .route('/')
+  .post(
+    validateResource(schema.createUserSchema),
+    profilesStorage.fields([
+      { name: 'profilePicture', maxCount: 1 },
+      { name: 'coverPicture', maxCount: 1 },
+    ]),
+    User.createOne
+  )
+  .get(requireLogin, User.getProfile);
+router.route('/timeline').get(requireLogin, User.getTimeline);
 router.post(
   '/verify/:id/:activationKey',
   requireLogin,
