@@ -1,5 +1,6 @@
 import config from 'config';
 import { nanoid } from 'nanoid';
+import { Op } from '@sequelize/core';
 import { Response, Request } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -22,6 +23,7 @@ import { ConfirmAccount, ResetPassword } from '../../seed/emailTemplates';
 
 const { catchAsync, sendResponse } = common;
 
+const excludes = { exclude: ['password', 'activationKey', 'resetPasswordKey'] };
 const toReturn = (user: any): Partial<UserInterface> => ({
   id: user.id,
   email: user.email,
@@ -129,14 +131,43 @@ export default {
       }
     }
   ),
+
+  getProfile: catchAsync(async (req: Request, res: Response) => {
+    const user = await userService.getUser(req.user.id, {
+      attributes: excludes,
+    });
+    if (!user)
+      throw new AppError('Your profile was not found', StatusCodes.NOT_FOUND);
+    sendResponse(res, StatusCodes.OK, { user }, ReasonPhrases.OK);
+  }),
+
   getOne: catchAsync(async (req: Request<GetUserInput>, res: Response) => {
     try {
-      const user: UserInterface = await userService.getUser(req.params.id);
+      const requesterID = req.user.id.toString();
+      const requestingID = req.params.id.toString();
 
+      if (requesterID === requestingID)
+        throw new AppError(
+          'You cannot visit your one profile',
+          StatusCodes.UNAUTHORIZED
+        );
+      const users = await db.User.findAll({
+        where: { id: { [Op.or]: [requestingID, requesterID] } },
+        include: [{ model: db.User, as: 'Visitor' }],
+      });
+
+      const requester = users.find(
+        (user) => user.id.toString() === requesterID
+      );
+      const requesting = users.find(
+        (user) => user.id.toString() === requestingID
+      );
+
+      await requesting.addVisitor(requester);
       sendResponse(
         res,
         StatusCodes.OK,
-        { user: toReturn(user) },
+        { user: toReturn(requesting) },
         ReasonPhrases.OK
       );
     } catch (error) {
@@ -494,6 +525,10 @@ export default {
 
       await user.addFriend(friend);
       await friend.addFriend(user);
+      await user.addFollowing(friend);
+      await friend.addFollowing(user);
+      await user.addFollower(friend);
+      await friend.addFollower(user);
     } else {
       if (!alreadyFiends)
         throw new AppError(
@@ -506,5 +541,27 @@ export default {
     const newU = await user.reload();
 
     sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
+  }),
+
+  getTimeline: catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user.id;
+
+    const user: any = await userService.getUser(userId);
+    const followings = await user.getFollowing();
+    const followingIds = followings.map((following) => following.id);
+
+    followingIds.push(userId);
+
+    const posts = await db.Post.findAll({
+      where: { UserId: { [Op.or]: followingIds } },
+      include: [{ model: db.Post, as: 'Comments' }],
+    });
+
+    sendResponse(
+      res,
+      StatusCodes.OK,
+      { posts, pages: [], groups: [] },
+      ReasonPhrases.OK
+    );
   }),
 };

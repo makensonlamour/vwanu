@@ -147,7 +147,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         as: 'friendsRequest',
       });
 
-      
+      User.belongsToMany(models.User, {
+        through: 'User_visitors',
+        as: 'Visitor',
+      });
+
       // User.belongsToMany(models.User, {
       //   as: 'follower',
       //   through: models.UserFollower,
