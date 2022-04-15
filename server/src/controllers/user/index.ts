@@ -11,6 +11,8 @@ import Log from '../../lib/utils/logger';
 import common from '../../lib/utils/common';
 import sendEmail from '../../lib/utils/mailer';
 import userService from '../../services/user/dataProvider';
+import { include } from '../../lib/utils/commentPostInclude';
+
 import {
   UpUserInterface as UserInterface,
   CreateUserInput,
@@ -21,7 +23,7 @@ import {
 } from '../../schema/user';
 import { ConfirmAccount, ResetPassword } from '../../seed/emailTemplates';
 
-const { catchAsync, sendResponse } = common;
+const { catchAsync, sendResponse, getQueryPagesAndSize } = common;
 
 const excludes = { exclude: ['password', 'activationKey', 'resetPasswordKey'] };
 const toReturn = (user: any): Partial<UserInterface> => ({
@@ -552,9 +554,13 @@ export default {
 
     followingIds.push(userId);
 
+    const limitAndOffset = getQueryPagesAndSize(req);
+
     const posts = await db.Post.findAll({
       where: { UserId: { [Op.or]: followingIds } },
-      include: [{ model: db.Post, as: 'Comments' }],
+      include,
+      ...limitAndOffset.offsetAndLimit,
+      order: [['createdAt', 'DESC']],
     });
 
     sendResponse(

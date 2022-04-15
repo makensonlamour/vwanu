@@ -387,12 +387,22 @@ describe('/api/user', () => {
       .set('x-auth-token', createdTestUsers[0].token);
 
     const timeLinePost = user_1_timeline.body.data.posts;
+    console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n My post n\n\n\n\n\nn');
+    console.log(timeLinePost);
     /** expecting to find user 1 and user 2 post in user1 timeline */
     expect(
       timeLinePost.some(
-        (post, idx) =>
+        (post) =>
           post.postText ===
-          `I am a post made by user ${createdTestUsers[idx].user.email}`
+          `I am a post made by user ${createdTestUsers[1].user.email}`
+      )
+    ).toBeTruthy();
+
+    expect(
+      timeLinePost.some(
+        (post) =>
+          post.postText ===
+          `I am a post made by user ${createdTestUsers[0].user.email}`
       )
     ).toBeTruthy();
   }, 1000);
