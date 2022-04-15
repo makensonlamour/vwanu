@@ -1,6 +1,6 @@
 import { api } from "../../lib/api";
 import { useFetch, usePost } from "../../lib/react-query";
-import { getToken, decoder, deleteToken } from "../../helpers";
+import { deleteToken, getToken } from "../../helpers";
 
 export const login = (credentials) => api.post("/auth", credentials);
 
@@ -12,10 +12,14 @@ export const useResetPassword = (credentials) => usePost(`/user/resetPassword/${
 
 export const useForgotPassword = () => usePost("/user/forgotPassword");
 
-export const useGetProfile = (queryKey) => {
+export const useGetProfile = (queryKey, enabled) => {
   const token = getToken();
-  const decodeToken = decoder(token);
-  const context = useFetch(queryKey, `/user/${decodeToken?.user?.id}`, "", { retry: false });
+  if (token) {
+    enabled = true;
+  } else {
+    enabled = false;
+  }
+  const context = useFetch(queryKey, enabled, `/user/`, "", { retry: false });
   return { ...context, data: context?.data?.data?.user };
 };
 

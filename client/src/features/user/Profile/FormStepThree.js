@@ -17,7 +17,7 @@ const FormStepThree = () => {
   const idUser = user.id;
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const updateProfilePicture = useUpdateProfilePicture(undefined, undefined, idUser);
+  const updateProfilePicture = useUpdateProfilePicture(["user", "me"], undefined, undefined, idUser);
 
   const [avatar, setAvatar] = useState(null);
 
@@ -27,7 +27,7 @@ const FormStepThree = () => {
 
   const initialValues = {
     profilePicture: "",
-    idUser,
+    id: idUser,
   };
 
   let formData = new FormData();
@@ -37,7 +37,7 @@ const FormStepThree = () => {
     formData.append("profilePicture", avatar);
     formData.append("idUser", idUser);
     try {
-      await updateProfilePicture.mutateAsync(formData);
+      await updateProfilePicture.mutateAsync({ formData: formData, id: idUser });
       navigate("../../" + routesPath.STEP_FOUR);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";

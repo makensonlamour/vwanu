@@ -1,5 +1,5 @@
 import React from "react";
-import { useOutletContext, Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Facebook } from "react-content-loader";
 import { useGetPost } from "../../features/post/postSlice";
 import Loader from "../../components/common/Loader";
@@ -7,11 +7,11 @@ import PostList from "../../features/post/PostList";
 
 const ViewPost = () => {
   const { id } = useParams();
-  const user = useOutletContext();
-  const UserId = user?.id;
-  console.log(UserId, id);
+  // const user = useOutletContext();
+  // const UserId = user?.id;
+  // console.log(UserId, id);
 
-  const { data: post, isSuccess, isError, isFetching } = useGetPost(["post", id], id);
+  const { data: post, isSuccess, isError, isFetching } = useGetPost(["post", id], true, id);
 
   function reloadPage() {
     window.location.reload();

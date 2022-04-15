@@ -15,7 +15,7 @@ const FormStepTwo = () => {
   const user = useOutletContext();
   const idUser = user?.id;
   const navigate = useNavigate();
-  const updateUser = useUpdateUser(undefined, undefined, idUser);
+  const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
   const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
@@ -46,7 +46,7 @@ const FormStepTwo = () => {
       gender: credentials.gender,
       interestedBy: credentials.interestedBy,
       birthday: credentials.birthday,
-      idUser,
+      id: idUser,
     };
 
     try {
