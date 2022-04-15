@@ -61,15 +61,21 @@ jobs:
           name: server-code-coverage
           path: ./server/coverage
 
-      # - name: Build Project
-      #   if: github.event_name == 'pull_request'
-      #   run: npm run build
-      # - name: Upload Build Folder
-      #   if: github.event_name == 'push'
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: build
-      #     path: build
+      - name: Build Project
+        if: github.event_name == 'pull_request'
+        run: npm run build
+      - name: Upload server Build Folder
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v1
+        with:
+          name: server-build-folder
+          path: ./server/build
+      - name: Upload client Build Folder
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v1
+        with:
+          name: client-build-folder
+          path: ./client/build
       # - name: ZIP Assets
       #   if: github.event_name == 'pull_request' && github.base_ref == 'master'
       #   run: |
