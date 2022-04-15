@@ -5,9 +5,8 @@ import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
 import reactions from "../../data/reactions";
 import { likeArray } from "../../helpers/index";
-
-import { FaComment, FaShareAlt } from "react-icons/fa";
-// import { FcLike } from "react-icons/fc";
+import { RiShareForwardLine } from "react-icons/ri";
+import { BiComment } from "react-icons/bi";
 import MediaPost from "../../components/form/Post/MediaPost";
 import CommentList from "../comment/component/CommentList";
 import CommentForm from "../comment/component/CommentForm";
@@ -99,37 +98,42 @@ const PostList = ({ post, pageTitle }) => {
 
               <p className="card-text pt-2 w-[100%] font-semibold">{post.postText}</p>
               {post.Media.length > 0 ? <MediaPost medias={post.Media} /> : null}
-              <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
-                <p className="text-sm text-secondary">
-                  {post?.Reactions?.length > 0 ? (
-                    <ReactionCounter
-                      reactions={likeArray(post?.Reactions, reactions)}
-                      important={["vens"]}
-                      user={"vens"}
-                      className="text-md text-primary"
-                      showOthersAlways={likeArray(post?.Reactions).length > 0 && post?.Reactions?.UserId === user?.id ? true : false}
-                      onClick={() => {
-                        console.log("will show pop up of person who liked it");
-                      }}
-                    />
-                  ) : (
-                    <button className=" hover:border-b hover:border-secondary"> {"Be the first to react."}</button>
-                  )}
-                </p>
+              {post?.Reactions?.length || post?.Comments?.length || post?.Share?.length ? (
+                <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
+                  <p className="text-sm text-secondary">
+                    {post?.Reactions?.length > 0 ? (
+                      <>
+                        <div className="flex text-primary items-center">
+                          <ReactionCounter
+                            reactions={likeArray(post?.Reactions, reactions)}
+                            iconSize={20}
+                            important={["Wadson Vaval"]}
+                            user={user?.firstName + " " + user?.lastName}
+                            style={{ fontSize: "5px" }}
+                            className=" text-primary align-middle"
+                            showOthersAlways={likeArray(post?.Reactions).length > 0 && post?.Reactions?.UserId === user?.id ? true : false}
+                            onClick={() => {
+                              console.log("will show pop up of person who liked it");
+                            }}
+                          />
+                        </div>
+                      </>
+                    ) : null}
+                  </p>
 
-                <p className="ml-auto">
-                  <Link
-                    to={_.isEqual(pageTitle, "post") ? "" : `post/${post?.id}`}
-                    className="ml-auto text-sm text-primary mr-3 hover:border-b hover:border-primary"
-                  >
-                    {post?.Comments ? post.Comments.length : 0}
-                    {" Comments"}
-                  </Link>
-                  <button className="ml-auto text-sm text-primary hover:border-b hover:border-primary">
-                    {post?.shares ? post.shares : 0 + " shares"}
-                  </button>
-                </p>
-              </div>
+                  <p className="ml-auto">
+                    <Link
+                      to={_.isEqual(pageTitle, "post") ? "" : `post/${post?.id}`}
+                      className="ml-auto text-xs text-primary mr-2 hover:border-b hover:border-primary"
+                    >
+                      {post?.Comments?.length ? post?.Comments?.length + " Comments" : null}
+                    </Link>
+                    <button className="ml-auto text-xs text-primary hover:border-b hover:border-primary">
+                      {post?.Shares?.length ? post?.Shares?.length + " shares" : null}
+                    </button>
+                  </p>
+                </div>
+              ) : null}
 
               <div className="flex flex-wrap relative">
                 {/*Reactions*/}
@@ -140,11 +144,11 @@ const PostList = ({ post, pageTitle }) => {
                   onClick={() => setCommentPrev(!commentPrev)}
                   className="ml-auto mt-2 text-md font-semibold text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
                 >
-                  <FaComment size={20} className="inline text-secondary" />
+                  <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" />
                   {" Comment"}
                 </button>
                 <button className="ml-auto mt-2 text-md font-semibold text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2">
-                  <FaShareAlt size={20} className="inline text-secondary" />
+                  <RiShareForwardLine size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" />
                   {" Share"}
                 </button>
               </div>

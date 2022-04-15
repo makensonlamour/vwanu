@@ -30,9 +30,9 @@ export const usePrefetch = (queryKey, url, params) => {
   };
 };
 
-export const useFetch = (queryKey, url, params, config) => {
+export const useFetch = (queryKey, enabled, url, params, config) => {
   const context = useQuery(queryKey, () => fetcher(url, params), {
-    enabled: url ? true : false,
+    enabled: enabled ? enabled : false,
     ...config,
   });
 

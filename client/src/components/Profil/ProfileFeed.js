@@ -1,5 +1,6 @@
 import React from "react";
-import { useOutletContext, Link } from "react-router-dom";
+// import PropTypes from "prop-types";
+import { useParams, Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
@@ -11,10 +12,10 @@ import { useGetPostsList } from "../../features/post/postSlice";
 import InputModal from "../../features/post/components/InputModal";
 
 const ProfileFeed = () => {
-  const user = useOutletContext();
-  const UserId = user?.id;
+  const { id } = useParams();
+  const UserId = id;
 
-  const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetPostsList(["post", "home"], { UserId });
+  const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetPostsList(["post", "profile"], { UserId });
 
   function reloadPage() {
     window.location.reload();
@@ -78,5 +79,10 @@ const ProfileFeed = () => {
     </>
   );
 };
+
+/* ProfileFeed.propTypes = {
+  user: PropTypes.object.isRequired,
+  otherUser: PropTypes.object,
+}; */
 
 export default ProfileFeed;

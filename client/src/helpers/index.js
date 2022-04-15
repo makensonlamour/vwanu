@@ -42,7 +42,9 @@ export function likeArray(arrayObject, reactions) {
   arrayObject.map((item) => {
     _.find(reactions, (reaction) => {
       if (reaction.label === item.content) {
-        return array.push(_.merge(item, reaction));
+        return array.push(
+          _.merge(item, { label: reaction.label, node: reaction.node, by: item?.User?.firstName + " " + item?.User?.lastName })
+        );
       }
     });
   });

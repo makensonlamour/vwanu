@@ -79,7 +79,7 @@ class Alert extends React.Component {
   cssClasses(alert) {
     if (!alert) return;
 
-    const classes = ["alert", "alert-dismissable"];
+    const classes = ["alert", "alert-dismissable", "mb-2", "mr-auto"];
 
     const alertTypeClass = {
       [alertType.success]: "alert bg-success",
@@ -101,13 +101,13 @@ class Alert extends React.Component {
     const { alerts } = this.state;
     if (!alerts.length) return null;
     return (
-      <div className="">
+      <div className="text-left">
         {alerts.map((alert, index) => (
           <div key={index} className={this.cssClasses(alert)}>
             <a className="close" onClick={() => this.removeAlert(alert)}>
               {""}
             </a>
-            <span dangerouslySetInnerHTML={{ __html: alert.message }}></span>
+            <span className="mr-auto" dangerouslySetInnerHTML={{ __html: alert.message }}></span>
           </div>
         ))}
       </div>

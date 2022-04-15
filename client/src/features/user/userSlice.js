@@ -1,5 +1,10 @@
-import { useUpdate } from "../../lib/react-query";
+import { useUpdate, useFetch } from "../../lib/react-query";
 
-export const useUpdateUser = (oldData, newData, idUser) => useUpdate(`/user/${idUser}`, (oldData, newData));
+export const useUpdateUser = (queryKey, oldData, newData) => useUpdate(queryKey, `/user`, (oldData, newData));
 
-export const useUpdateProfilePicture = (oldData, newData, idUser) => useUpdate(`/user/${idUser}`, (oldData, newData));
+export const useUpdateProfilePicture = (queryKey, oldData, newData) => useUpdate(queryKey, `/user`, (oldData, newData));
+
+export const useGetOtherProfile = (queryKey, enabled, id) => {
+  const context = useFetch(queryKey, enabled, `/user/${id}`, "");
+  return { ...context, data: context?.data?.data?.user };
+};

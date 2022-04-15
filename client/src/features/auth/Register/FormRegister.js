@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
-import routesPath from "../../../routesPath";
-import { useNavigate } from "react-router-dom";
+// import routesPath from "../../../routesPath";
+// import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { register } from "../authSlice";
 
@@ -35,7 +35,11 @@ const initialValues = {
 const FormRegister = () => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  function reloadPage() {
+    window.location.reload();
+  }
 
   const handleRegister = async (credentials) => {
     setIsLoading(true);
@@ -43,7 +47,8 @@ const FormRegister = () => {
       const res = await register(credentials);
       if (res.data.data) {
         saveToken(res.data.data.token);
-        navigate("../" + routesPath.STEP_TWO, { state: res.data.data.user });
+        reloadPage();
+        // navigate("../" + routesPath.LOGIN, { state: res.data.data.user });
         queryClient.invalidateQueries();
       } else {
         alertService.error("This email is already existed. Try with a different one", { autoClose: true });

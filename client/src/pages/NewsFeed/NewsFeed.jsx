@@ -1,5 +1,5 @@
 import React from "react";
-import { useOutletContext, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
@@ -7,14 +7,13 @@ import { FiRefreshCcw } from "react-icons/fi";
 //Core components
 
 import PostList from "../../features/post/PostList";
-import { useGetPostsList } from "../../features/post/postSlice";
+import { useGetTimelineList } from "../../features/post/postSlice";
 import InputModal from "../../features/post/components/InputModal";
 
 const NewsFeed = () => {
-  const user = useOutletContext();
-  const UserId = user?.id;
+  // const user = useOutletContext();
 
-  const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetPostsList(["post", "home"], { UserId });
+  const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
 
   function reloadPage() {
     window.location.reload();
