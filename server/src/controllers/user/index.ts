@@ -11,7 +11,7 @@ import Log from '../../lib/utils/logger';
 import common from '../../lib/utils/common';
 import sendEmail from '../../lib/utils/mailer';
 import userService from '../../services/user/dataProvider';
-import { include } from '../../lib/utils/commentPostInclude';
+import { include, userAttributes } from '../../lib/utils/commentPostInclude';
 
 import {
   UpUserInterface as UserInterface,
@@ -456,17 +456,17 @@ export default {
 
     const people = await db.User.findAll({
       where: { id: { [Op.or]: [userId, friendId] } },
-      attributes: ['id', 'firstName', 'lastName'],
+      attributes: userAttributes,
       include: [
         {
           model: db.User,
           as: 'friendsRequest',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
         {
           model: db.User,
           as: 'FriendshipRequested',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
       ],
     });
@@ -519,12 +519,12 @@ export default {
         {
           model: db.User,
           as: 'friendsRequest',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
         {
           model: db.User,
           as: 'FriendshipRequested',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
       ],
     });
@@ -561,17 +561,17 @@ export default {
         {
           model: db.User,
           as: 'friends',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
         {
           model: db.User,
           as: 'friendsRequest',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
         {
           model: db.User,
           as: 'FriendshipRequested',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
       ],
     });
