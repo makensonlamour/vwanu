@@ -549,15 +549,15 @@ export default {
     const userId = req.user.id;
 
     const user: any = await userService.getUser(userId);
-    const followings = await user.getFollowing();
+    const followings = await user.getFollowing({ attributes: ['id'] });
     const followingIds = followings.map((following) => following.id);
 
     followingIds.push(userId);
 
     const limitAndOffset = getQueryPagesAndSize(req);
 
-    const posts = await db.Post.findAll({
-      where: { UserId: { [Op.or]: followingIds } },
+    const { rows, count } = await db.Post.findAndCountAll({
+      where: { PostId: null, UserId: { [Op.or]: followingIds } },
       include,
       ...limitAndOffset.offsetAndLimit,
       order: [['createdAt', 'DESC']],
@@ -566,7 +566,15 @@ export default {
     sendResponse(
       res,
       StatusCodes.OK,
-      { posts, pages: [], groups: [] },
+      {
+        posts: rows,
+        postCounts: count,
+        postTotalPages: limitAndOffset.getTotalPages(count), 
+        pages: [],
+        pagesCounts: 0,
+        groups: [],
+        groupsCounts: 0,
+      },
       ReasonPhrases.OK
     );
   }),
