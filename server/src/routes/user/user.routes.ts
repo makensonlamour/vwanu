@@ -44,8 +44,10 @@ router
   .route('/follow/:id/:friendId')
   .post(requireLogin, User.addOrRemoveFollower);
 router
-  .route('/request/:id/:friendId')
-  .post(requireLogin, User.addOrRemoveFriendRequest);
+  .route('/request')
+  .post(requireLogin, User.addFriendRequest)
+  .get(requireLogin, User.getFriendsRequest)
+  .delete(requireLogin, User.removeFriendsRequest);
 router.route('/friend/:id/:friendId').post(
   //
   // isSelf,

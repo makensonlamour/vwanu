@@ -64,7 +64,7 @@ describe('/api/user', () => {
   beforeAll(async () => {
     expressServer = await app(db);
     testServer = request(expressServer);
-    db.sequelize.options.logging = false;
+    // db.sequelize.options.logging = false;
   });
 
   it('Should not create user if request params are not ', async () => {
@@ -281,7 +281,7 @@ describe('/api/user', () => {
     expect(userR.body.data.user).toEqual(expect.objectContaining(modify));
   });
 
-  it('User 1 Attempt to be friend with user 2 should fail', async () => {
+  it.skip('User 1 Attempt to be friend with user 2 should fail', async () => {
     const friendsResponse = await testServer
       .post(
         `/api/user/friend/${createdTestUsers[0].user.id}/${createdTestUsers[1].user.id}?action=add-friend`
@@ -296,11 +296,16 @@ describe('/api/user', () => {
   });
 
   it('should send a friend request', async () => {
-    await testServer
-      .post(
-        `/api/user/request/${createdTestUsers[0].user.id}/${createdTestUsers[1].user.id}?action=add-friend`
-      )
-      .set('x-auth-token', createdTestUsers[0].token);
+    const res = await testServer
+      .post('/api/user/request')
+      .set('x-auth-token', createdTestUsers[0].token)
+      .send({ friendId: createdTestUsers[1].user.id });
+
+    const { FriendshipRequested } = res.body.data.user;
+
+    expect(
+      FriendshipRequested.some((req) => req.id === createdTestUsers[1].user.id)
+    ).toBe(true);
 
     const users = await db.User.findAll({
       where: {
@@ -322,7 +327,58 @@ describe('/api/user', () => {
     expect(receivedRequest).toBe(true);
   });
 
-  it('Should now become friends', async () => {
+  it('should get all friends request', async () => {
+    const res = await testServer
+      .get('/api/user/request')
+      .set('x-auth-token', createdTestUsers[0].token);
+
+    const { friendsRequest, FriendshipRequested } = res.body.data.user;
+
+    expect(
+      Array.isArray(friendsRequest) && friendsRequest.length === 0
+    ).toBeTruthy();
+    expect(
+      Array.isArray(FriendshipRequested) && FriendshipRequested.length === 1
+    ).toBeTruthy();
+
+    expect(FriendshipRequested[0].id === createdTestUsers[1].user.id);
+  });
+
+  it('should cancel a friend request', async () => {
+    const res = await testServer
+      .delete('/api/user/request')
+      .set('x-auth-token', createdTestUsers[0].token)
+      .send({ friendId: createdTestUsers[1].user.id });
+
+    const { friendsRequest, FriendshipRequested } = res.body.data.user;
+    expect(
+      Array.isArray(friendsRequest) && friendsRequest.length === 0
+    ).toBeTruthy();
+    expect(
+      Array.isArray(FriendshipRequested) && FriendshipRequested.length === 0
+    ).toBeTruthy();
+
+    const users = await db.User.findAll({
+      where: {
+        id: {
+          [Op.or]: [createdTestUsers[1].user.id, createdTestUsers[0].user.id],
+        },
+      },
+      attributes: ['id', 'lastName', 'firstName'],
+    });
+
+    const friend = users.find(
+      (user) => user.id === createdTestUsers[1].user.id
+    );
+
+    const requester = users.find(
+      (user) => user.id === createdTestUsers[0].user.id
+    );
+    const receivedRequest = await friend.hasFriendsRequest(requester);
+    expect(receivedRequest).toBe(false);
+  }, 1000);
+
+  it.skip('Should now become friends', async () => {
     const friendsResponse = await testServer
       .post(
         `/api/user/friend/${createdTestUsers[1].user.id}/${createdTestUsers[0].user.id}?action=add-friend`
@@ -335,7 +391,7 @@ describe('/api/user', () => {
     ).toBeTruthy();
   });
 
-  it('should follow the user', async () => {
+  it.skip('should follow the user', async () => {
     const followResponse = await testServer
       .post(
         `/api/user/follow/${createdTestUsers[2].user.id}/${createdTestUsers[3].user.id}?action=follow`
@@ -367,7 +423,7 @@ describe('/api/user', () => {
     );
   });
 
-  it('Timeline should return post for user and his friends', async () => {
+  it.skip('Timeline should return post for user and his friends', async () => {
     /** #region creating posts for user 1 and user 2 */
     const responses = [createdTestUsers[0], createdTestUsers[1]].map(
       async (userToken) =>
