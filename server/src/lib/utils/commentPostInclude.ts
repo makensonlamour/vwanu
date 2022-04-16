@@ -16,6 +16,7 @@ export const include = [
         include: ReactionInclude,
       },
     ],
+    order: [['createdAt', 'DESC']],
   },
   {
     model: db.User,
