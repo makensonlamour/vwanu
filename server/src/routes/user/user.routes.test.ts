@@ -378,18 +378,69 @@ describe('/api/user', () => {
     expect(receivedRequest).toBe(false);
   }, 1000);
 
-  it.skip('Should now become friends', async () => {
-    const friendsResponse = await testServer
-      .post(
-        `/api/user/friend/${createdTestUsers[1].user.id}/${createdTestUsers[0].user.id}?action=add-friend`
-      )
-      .set('x-auth-token', createdTestUsers[1].token);
-    const { user } = friendsResponse.body.data;
-    expect(user.friends).toBeDefined();
-    expect(
-      user.friends.some((req) => req.id === createdTestUsers[0].user.id)
-    ).toBeTruthy();
+  it('should deny a friend request', async () => {
+    /** User 0 sent a friend request to user 1 */
+    await testServer
+      .post('/api/user/request')
+      .set('x-auth-token', createdTestUsers[0].token)
+      .send({ friendId: createdTestUsers[1].user.id });
+
+    /** User 1 deny the friendShip */
+    const denyR = await testServer
+      .post('/api/user/friend')
+      .set('x-auth-token', createdTestUsers[1].token)
+      .send({ friendId: createdTestUsers[0].user.id, accept: false });
+
+    const { undesiredFriends, friends } = denyR.body.data.user;
+    expect(undesiredFriends[0].id === createdTestUsers[0].user.id).toBeTruthy();
+    expect(friends.length === 0).toBeTruthy();
   });
+
+  it('should not be able to send a second friend request', async () => {
+    const res = await testServer
+      .post('/api/user/request')
+      .set('x-auth-token', createdTestUsers[0].token)
+      .send({ friendId: createdTestUsers[1].user.id });
+
+    expect(res.body.errors).toEqual([
+      {
+        message: 'Your previous friend request was denied',
+        status: 400,
+      },
+    ]);
+  });
+
+  it('should accept a friend request', async () => {
+    /** User 1 send req to user 0 */
+    await testServer
+      .post('/api/user/request')
+      .set('x-auth-token', createdTestUsers[1].token)
+      .send({ friendId: createdTestUsers[0].user.id });
+
+    /** User 0 accept the friendShip */
+    const acceptR = await testServer
+      .post('/api/user/friend')
+      .set('x-auth-token', createdTestUsers[0].token)
+      .send({ friendId: createdTestUsers[1].user.id, accept: true });
+
+    const { undesiredFriends, friends } = acceptR.body.data.user;
+
+    expect(friends[0].id === createdTestUsers[1].user.id).toBeTruthy();
+    expect(undesiredFriends.length === 0).toBeTruthy();
+  });
+
+  it('should unfriend', async () => {
+    /** User 0 unfriend user1  */
+    const acceptR = await testServer
+      .delete('/api/user/friend')
+      .set('x-auth-token', createdTestUsers[0].token)
+      .send({ friendId: createdTestUsers[1].user.id });
+
+    const { friends } = acceptR.body.data.user;
+    expect(friends.length === 0).toBeTruthy();
+  });
+
+
 
   it.skip('should follow the user', async () => {
     const followResponse = await testServer

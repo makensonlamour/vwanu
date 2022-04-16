@@ -48,13 +48,11 @@ router
   .post(requireLogin, User.addFriendRequest)
   .get(requireLogin, User.getFriendsRequest)
   .delete(requireLogin, User.removeFriendsRequest);
-router.route('/friend/:id/:friendId').post(
-  //
-  // isSelf,
-  // validateResource(schema.addOrRemoveFriendSchema),
-  requireLogin,
-  User.addOrRemoveFriend
-);
+router
+  .route('/friend')
+  .post(requireLogin, User.addFriend)
+  .get(requireLogin, User.getFriends)
+  .delete(requireLogin, User.removeFriend);
 
 router
   .route('/:id')
