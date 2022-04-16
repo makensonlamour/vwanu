@@ -146,6 +146,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         through: 'User_friends_request',
         as: 'friendsRequest',
       });
+      User.belongsToMany(models.User, {
+        through: 'User_friends_Want_to_Be',
+        as: 'FriendshipRequested',
+      });
 
       User.belongsToMany(models.User, {
         through: 'User_visitors',
