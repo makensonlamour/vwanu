@@ -34,7 +34,7 @@ export function getYPosition() {
   });
 }
 
-// calculate number of content in an arrayObject
+// merge like with image like
 export function likeArray(arrayObject, reactions) {
   if (arrayObject.length === 0) return;
   const array = [];
@@ -50,4 +50,32 @@ export function likeArray(arrayObject, reactions) {
   });
 
   return array;
+}
+
+//check if exist in friends request
+
+export function checkFriendRequest(friendRequest, userId) {
+  if (friendRequest?.length === 0) return false;
+  if (!userId) return false;
+
+  // eslint-disable-next-line array-callback-return
+  const check = _.find(friendRequest, (item) => {
+    return item?.id === userId;
+  });
+  if (check) return true;
+  return false;
+}
+
+//check if friends list
+export function checkFriendList(friends, userId) {
+  if (friends?.length === 0) return false;
+  if (!userId) return false;
+
+  // eslint-disable-next-line array-callback-return
+  const check = _.find(friends, (item) => {
+    return item?.id === userId;
+  });
+
+  if (check) return true;
+  return false;
 }

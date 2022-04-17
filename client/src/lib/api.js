@@ -31,10 +31,11 @@ export const api = {
         "x-auth-token": token,
       },
     }),
-  delete: (url) =>
+  delete: (url, data) =>
     axios.delete(baseUrl + "" + url, {
       headers: {
         "x-auth-token": token,
       },
+      data,
     }),
 };

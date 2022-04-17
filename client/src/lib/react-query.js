@@ -64,7 +64,13 @@ const useGenericMutation = (func, queryKey, url, params, updater) => {
 };
 
 export const useDelete = (queryKey, url, params, updater) => {
-  return useGenericMutation((id) => api.delete(`${url}/${id}`), url, params, updater);
+  return useGenericMutation((data) => {
+    if (data?.id) {
+      api.delete(`${url}/${data?.id}`, data, url, params, updater);
+    } else {
+      api.delete(`${url}`, data, url, params, updater);
+    }
+  });
 };
 
 export const usePost = (queryKey, url, params, updater) => {
@@ -72,5 +78,11 @@ export const usePost = (queryKey, url, params, updater) => {
 };
 
 export const useUpdate = (queryKey, url, params, updater) => {
-  return useGenericMutation((data) => api.put(`${url}/${data?.id}`, data), url, params, updater);
+  return useGenericMutation((data) => {
+    if (data?.id) {
+      api.put((`${url}/${data?.id}`, data), url, params, updater);
+    } else {
+      api.put((`${url}`, data), url, params, updater);
+    }
+  });
 };
