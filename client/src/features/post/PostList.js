@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { formatDistance, parseISO } from "date-fns";
 import { Link, useOutletContext } from "react-router-dom";
@@ -11,6 +11,7 @@ import MediaPost from "../../components/form/Post/MediaPost";
 import CommentList from "../comment/component/CommentList";
 import CommentForm from "../comment/component/CommentForm";
 import ReusableDialog from "../../components/common/ReusableDialog";
+import ViewLikeButton from "../reaction/component/ViewLikeButton";
 import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
 import { ReactionCounter } from "@charkour/react-reactions";
@@ -27,6 +28,7 @@ const PostList = ({ post, pageTitle }) => {
   const user = useOutletContext();
   const [commentPrev, setCommentPrev] = useState(false);
   const [open, setOpen] = useState(false);
+  const [viewLike, setViewLike] = useState(false);
 
   // const openLike = Boolean(openReactions);
 
@@ -61,7 +63,11 @@ const PostList = ({ post, pageTitle }) => {
               <div className="flex flex-wrap">
                 <Link
                   className="flex flex-wrap mb-1"
-                  to={_.isEqual(pageTitle, "post") ? `../../profile/${post?.User?.id}` : `profile/${post?.User?.id}`}
+                  to={
+                    _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
+                      ? `../../profile/${post?.User?.id}`
+                      : `profile/${post?.User?.id}`
+                  }
                 >
                   <img alt="" className="w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
                   <span className="ml-3 pt-3 text-md font-bold text-primary">{`${post?.User?.firstName} ${post?.User?.lastName}`}</span>
@@ -100,30 +106,42 @@ const PostList = ({ post, pageTitle }) => {
               {post.Media.length > 0 ? <MediaPost medias={post.Media} /> : null}
               {post?.Reactions?.length || post?.Comments?.length || post?.Share?.length ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
-                  <p className="text-sm text-secondary">
-                    {post?.Reactions?.length > 0 ? (
-                      <>
-                        <div className="flex text-primary items-center">
-                          <ReactionCounter
-                            reactions={likeArray(post?.Reactions, reactions)}
-                            iconSize={20}
-                            important={["Wadson Vaval"]}
-                            user={user?.firstName + " " + user?.lastName}
-                            style={{ fontSize: "5px" }}
-                            className=" text-primary align-middle"
-                            showOthersAlways={likeArray(post?.Reactions).length > 0 && post?.Reactions?.UserId === user?.id ? true : false}
-                            onClick={() => {
-                              console.log("will show pop up of person who liked it");
-                            }}
-                          />
-                        </div>
-                      </>
-                    ) : null}
-                  </p>
+                  <div open={viewLike}>
+                    <ViewLikeButton
+                      reactions={post?.Reactions}
+                      label={
+                        <Fragment>
+                          <p className="text-sm text-secondary">
+                            {post?.Reactions?.length > 0 ? (
+                              <>
+                                <div className="flex text-primary items-center">
+                                  <ReactionCounter
+                                    reactions={likeArray(post?.Reactions, reactions)}
+                                    iconSize={20}
+                                    important={["Wadson Vaval"]}
+                                    user={user?.firstName + " " + user?.lastName}
+                                    style={{ fontSize: "5px" }}
+                                    className=" text-primary align-middle"
+                                    showOthersAlways={
+                                      likeArray(post?.Reactions).length > 0 && post?.Reactions?.UserId === user?.id ? true : false
+                                    }
+                                    onClick={() => {
+                                      setViewLike(!viewLike);
+                                      console.log("will show pop up of person who liked it");
+                                    }}
+                                  />
+                                </div>
+                              </>
+                            ) : null}
+                          </p>
+                        </Fragment>
+                      }
+                    />
+                  </div>
 
                   <p className="ml-auto">
                     <Link
-                      to={_.isEqual(pageTitle, "post") ? "" : `post/${post?.id}`}
+                      to={_.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed") ? "" : `post/${post?.id}`}
                       className="ml-auto text-xs text-primary mr-2 hover:border-b hover:border-primary"
                     >
                       {post?.Comments?.length ? post?.Comments?.length + " Comments" : null}

@@ -2,30 +2,35 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
-// import { useSendFriendRequest, useAcceptFriendRequest } from "../friendSlice";
-import { useSendFriendRequest } from "../friendSlice";
+import { FiUserX, FiUserPlus } from "react-icons/fi";
+import { checkFriendRequest, checkFriendList } from "../../../helpers/index";
+import AcceptFriendRequestButton from "./AcceptFriendRequestButton";
+import { useSendFriendRequest, useGetListFriendRequest, useCancelFriendRequest } from "../friendSlice";
 
-const FriendRequestButton = ({ user, otherUser }) => {
+const FriendRequestButton = ({ otherUser }) => {
   const [loading, setIsLoading] = useState(false);
+
+  //error dialog
   const friendRequestError = () =>
     toast.error("Sorry. Error on sending Friend Request!", {
       position: "top-center",
     });
 
-  /* const acceptFriendRequestError = () =>
-    toast.error("Sorry. Error on sending Friend Request!", {
+  const cancelRequestError = () =>
+    toast.error("Sorry. Error on canceling Friend Request!", {
       position: "top-center",
-    }); */
+    });
 
-  const sendFriendRequest = useSendFriendRequest(["user", "me"], { userId: user?.id, otherUserId: otherUser?.id });
-  //   const acceptFriendRequest = useAcceptFriendRequest(["user", "me"], { userId: user?.id, otherUserId: otherUser?.id });
+  const { data: listFriendRequest } = useGetListFriendRequest(["user", "me"], true);
+
+  const sendFriendRequest = useSendFriendRequest(["user", "me"]);
+  const cancelFriendRequest = useCancelFriendRequest(["user", "me"]);
 
   const handleFriendRequest = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await sendFriendRequest.mutateAsync({ UserId: user?.id, OtherUserId: otherUser?.id });
-      //add query to fetch
+      await sendFriendRequest.mutateAsync({ friendId: otherUser?.id });
     } catch (e) {
       console.log(e);
       friendRequestError();
@@ -34,35 +39,58 @@ const FriendRequestButton = ({ user, otherUser }) => {
     }
   };
 
-  /*  const handleAcceptFriendRequest = async (e) => {
+  const handleCancelFriendRequest = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await acceptFriendRequest.mutateAsync({ UserId: user?.id, OtherUserId: otherUser?.id });
-      //add query to fetch
+      await cancelFriendRequest.mutateAsync({ friendId: otherUser?.id });
     } catch (e) {
       console.log(e);
-      acceptFriendRequestError();
+      cancelRequestError();
     } finally {
       setIsLoading(false);
     }
-  }; */
+  };
 
   return (
     <>
       <Toaster />
       {otherUser ? (
-        <button onClick={handleFriendRequest} className="btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary">
-          {loading ? <Loader /> : "Send Friend Request"}
-        </button>
+        checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? null : checkFriendRequest(
+            listFriendRequest?.data?.user?.friendsRequest,
+            otherUser?.id
+          ) ? (
+          <AcceptFriendRequestButton otherUser={otherUser} />
+        ) : checkFriendRequest(listFriendRequest?.data?.user?.FriendshipRequested, otherUser?.id) ? (
+          <button
+            onClick={handleCancelFriendRequest}
+            className="items-center align-middle mr-2 btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary"
+          >
+            {loading ? (
+              <Loader />
+            ) : (
+              <>
+                <FiUserX size={"18px"} className="mr-1" />
+                {"Cancel Request"}
+              </>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={handleFriendRequest}
+            className="items-center align-middle mr-2 btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary"
+          >
+            {loading ? (
+              <Loader />
+            ) : (
+              <>
+                <FiUserPlus size={"18px"} className="mr-1" />
+                {"Send Request"}
+              </>
+            )}
+          </button>
+        )
       ) : null}
-
-      {/* <button
-        onClick={handleAcceptFriendRequest}
-        className="btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary"
-      >
-        {loading ? <Loader /> : "Accept Friend Request"}
-      </button> */}
     </>
   );
 };

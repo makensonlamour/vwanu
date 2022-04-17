@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
 import { BsXCircleFill } from "react-icons/bs";
+
 // import routesPath from "../../../routesPath";
 
 const FriendsPreview = () => {

@@ -3,16 +3,15 @@ import PropTypes from "prop-types";
 import { Routes, Route } from "react-router-dom";
 //core components
 import FriendRequestButton from "../../features/friend/component/FriendRequestButton";
+import FriendButton from "../../features/friend/component/FriendButton";
 import Loader from "../../components/common/Loader";
-import { BsThreeDots } from "react-icons/bs";
 import ProfileTabs from "./ProfileTabs";
 import PostTab from "./PostTab";
 import { allTabs1 } from "./Tablink.data";
+import { checkFriendList } from "../../helpers/index";
+import { FaUserEdit } from "react-icons/fa";
 
-//data
-
-const ProfileHeader = ({ user, otherUser }) => {
-  // const allTabs = ["/", "/about", "/friends"];
+const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
   return (
     <>
       {!user && !otherUser ? (
@@ -36,21 +35,38 @@ const ProfileHeader = ({ user, otherUser }) => {
             </div>
 
             <div className="bg-white pt-[70px] lg:pt-0 lg:pl-[200px] min-h-[120px]">
-              <div className="pr-4 pl-2 py-4 text-center lg:text-left">
-                <div className="mb-4 lg:mb-2">
-                  <h1 className="font-mock text-2xl text-gray-700 inline mr-6 lg:mr-32">
+              <div className="pr-4 pl-2 py-4 text-center lg:text-left lg:flex items-center justify-between">
+                <div className="mb-4 lg:mb-2 block">
+                  <h1 className="font-mock text-2xl text-gray-700 inline lg:mr-32">
                     {otherUser ? otherUser?.firstName + " " + otherUser?.lastName : user?.firstName + " " + user?.lastName}
                   </h1>
-                  <button className="inline ml-auto">
-                    <BsThreeDots size={24} className="text-secondary hover:text-primary" />
-                  </button>
+                  <h4 className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-1">
+                    {"I am from "}
+                    {otherUser ? otherUser?.country : user.country ? user.country : ""}
+                  </h4>
+                  <h4 className="font-mock text-md text-gray-600 mb-2 lg:0 ">
+                    {otherUser ? otherUser?.friends : user?.friends ? user?.friends?.length + " Friends" : null}
+                  </h4>
                 </div>
-                <button className="btn btn-sm btn-secondary text-base-100 rounded-full mr-2 mb-2 lg:mb-0 hover:bg-primary">Message</button>
-                <FriendRequestButton user={user} otherUser={otherUser} />
-                <h4 className="font-mock text-lg text-gray-600 mb-2 lg:0"> 3.5 Friends . 6 mutual </h4>
-
-                <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.bio : user.bio ? user.bio : ""}</h2>
+                <div>
+                  {checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? (
+                    <FriendButton otherUser={otherUser} />
+                  ) : (
+                    <FriendRequestButton user={user} otherUser={otherUser} />
+                  )}
+                  {otherUser ? (
+                    <button className="btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end">
+                      Message
+                    </button>
+                  ) : (
+                    <button className="items-center align-middle btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end">
+                      <FaUserEdit size={"18px"} />
+                      <span className="ml-1"> Edit Profile</span>
+                    </button>
+                  )}
+                </div>
               </div>
+              <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.bio : user.bio ? user.bio : ""}</h2>
             </div>
             <ProfileTabs user={user} otherUser={otherUser} />
           </div>
@@ -72,6 +88,7 @@ const ProfileHeader = ({ user, otherUser }) => {
 ProfileHeader.propTypes = {
   user: PropTypes.object.isRequired,
   otherUser: PropTypes.object,
+  listFriendRequest: PropTypes.array,
 };
 
 export default ProfileHeader;
