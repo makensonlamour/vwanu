@@ -25,20 +25,23 @@ const NewsFeed = () => {
   } else if (list?.pages?.length > 0) {
     content = (
       <>
-        <InfiniteScroll
-          /* next is the function for fetching data from backend when the user reaches the end */
-          hasMore={hasNextPage}
-          loadMore={fetchNextPage}
-          loader={<Facebook />}
-          isReverse={true}
-          pageStart={0}
-        >
-          {list?.pages.map((page) => {
-            return page?.data?.posts?.map((post) => {
-              return <PostList key={post.id} post={post} pageTitle={""} />;
-            });
-          })}
-        </InfiniteScroll>
+        <div>
+          <InfiniteScroll
+            /* next is the function for fetching data from backend when the user reaches the end */
+            hasMore={hasNextPage}
+            loadMore={fetchNextPage}
+            loader={<Facebook />}
+            isReverse={true}
+            initialLoad={true}
+            pageStart={0}
+          >
+            {list?.pages.map((page) => {
+              return page?.data?.posts?.map((post) => {
+                return <PostList key={post.id} post={post} pageTitle={""} />;
+              });
+            })}
+          </InfiniteScroll>
+        </div>
         <div className="w-full mt-6 mb-6 mx-auto text-center">
           <button className="" onClick={() => reloadPage()}>
             <FiRefreshCcw className="h-7 mx-auto" />

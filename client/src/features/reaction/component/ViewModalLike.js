@@ -18,8 +18,6 @@ const ViewModalLike = ({ reactions, label }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  console.log("desktop", reactions);
-
   return (
     <div>
       <button style={{ backgroundColor: "transparent" }} onClick={handleOpen}>

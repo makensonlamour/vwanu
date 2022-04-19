@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Global } from "@emotion/react";
 import { styled } from "@mui/material/styles";
-import { CssBaseline, Box, Typography, SwipeableDrawer } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { Box, Typography, SwipeableDrawer } from "@mui/material";
 
 const drawerBleeding = 56;
 
@@ -11,14 +10,9 @@ const Root = styled("div")(() => ({
   height: "100%",
 }));
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "light" ? "#fff" : grey[800],
-}));
-
-const Puller = styled(Box)(({ theme }) => ({
+const Puller = styled(Box)(() => ({
   width: 30,
   height: 6,
-  backgroundColor: theme.palette.mode === "light" ? grey[300] : grey[900],
   borderRadius: 3,
   position: "absolute",
   top: 8,
@@ -38,7 +32,6 @@ const ViewDrawerLike = (props) => {
 
   return (
     <Root>
-      <CssBaseline />
       <Global
         styles={{
           ".MuiDrawer-root > .MuiPaper-root": {
@@ -47,7 +40,6 @@ const ViewDrawerLike = (props) => {
           },
         }}
       />
-      {console.log("mobile", reactions)}
 
       <Box sx={{ textAlign: "center", pt: 1, backgroundColor: "transparent" }}>
         <button className="bg-inherit" onClick={toggleDrawer(true)}>
@@ -67,7 +59,7 @@ const ViewDrawerLike = (props) => {
             keepMounted: true,
           }}
         >
-          <StyledBox
+          <Box
             sx={{
               position: "absolute",
               top: -drawerBleeding,
@@ -76,14 +68,15 @@ const ViewDrawerLike = (props) => {
               visibility: "visible",
               right: 0,
               left: 0,
+              backgroundColor: "white",
             }}
           >
             <Puller />
             <Typography sx={{ p: 2, color: "blue" }}>
               {reactions?.length} {" reactions"}
             </Typography>
-          </StyledBox>
-          <StyledBox
+          </Box>
+          <Box
             sx={{
               px: 2,
               pb: 2,
@@ -114,7 +107,7 @@ const ViewDrawerLike = (props) => {
                 );
               })}
             </ul>
-          </StyledBox>
+          </Box>
         </SwipeableDrawer>
       ) : null}
     </Root>

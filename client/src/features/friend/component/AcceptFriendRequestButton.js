@@ -118,7 +118,7 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList
-                  className="text-secondary"
+                  className="text-secondary z-50"
                   autoFocusItem={open}
                   id="composition-menu"
                   aria-labelledby="composition-button"
