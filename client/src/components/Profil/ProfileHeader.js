@@ -6,6 +6,8 @@ import FriendRequestButton from "../../features/friend/component/FriendRequestBu
 import FriendButton from "../../features/friend/component/FriendButton";
 import Loader from "../../components/common/Loader";
 import ProfileTabs from "./ProfileTabs";
+import AboutTab from "./AboutTab";
+import ViewFriend from "./ViewFriend";
 import PostTab from "./PostTab";
 import { allTabs1 } from "./Tablink.data";
 import { checkFriendList } from "../../helpers/index";
@@ -73,10 +75,24 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
           <div className="mt-4 ">
             <Routes>
               <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} />} />
-              <Route path={allTabs1[1]} element={<div>About</div>} />
-              <Route path={allTabs1[2]} element={<div>Friends</div>} />
-              <Route path={allTabs1[3]} element={<div>About</div>} />
-              <Route path={allTabs1[4]} element={<div>Friends</div>} />
+              <Route
+                path={allTabs1[1]}
+                element={
+                  <div>
+                    <AboutTab user={user} />
+                  </div>
+                }
+              />
+              <Route
+                path={allTabs1[2]}
+                element={
+                  <div>
+                    <ViewFriend />
+                  </div>
+                }
+              />
+              <Route path={allTabs1[3]} element={<div>Album</div>} />
+              <Route path={allTabs1[4]} element={<div>Likes</div>} />
             </Routes>
           </div>
         </>
