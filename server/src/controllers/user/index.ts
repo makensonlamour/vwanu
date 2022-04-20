@@ -390,59 +390,131 @@ export default {
     const newU = await user.reload();
     sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
   }),
-  addOrRemoveFollower: catchAsync(async (req, res) => {
-    const { id, friendId } = req.params;
-    const { action } = req.query;
-    const user: any = await userService.getUser(id, {
+  addFollower: catchAsync(async (req, res) => {
+    const requesterID = req.user.id.toString();
+    let { friendId } = req.body;
+    friendId = friendId.toString();
+
+    const people: any = await db.User.findAll({
+      where: { id: { [Op.or]: [requesterID, friendId] } },
+      attributes: userAttributes,
       include: [
         {
           model: db.User,
-          as: 'friends',
-          attributes: ['id', 'firstName', 'lastName'],
-        },
-        {
-          model: db.User,
-          as: 'friendsRequest',
-          attributes: ['id', 'firstName', 'lastName'],
+          as: 'Follower',
+          attributes: userAttributes,
         },
         {
           model: db.User,
           as: 'Following',
-          attributes: ['id', 'firstName', 'lastName'],
+          attributes: userAttributes,
         },
       ],
     });
-    const friend: any = await userService.getUser(friendId);
-    if (!user || !friend)
+
+    const requester = people.find(
+      (person) => person.id.toString() === requesterID
+    );
+
+    const friend = people.find((person) => person.id.toString() === friendId);
+
+    if (!requester || !friend)
       throw new AppError(
-        'The friend or user are not found ',
+        'Your profile or the profile of the person you want to follow was not found',
         StatusCodes.NOT_FOUND
       );
 
-    const alreadyFollowing = await user.hasFollowing(user);
+    const alreadyFollowing = await requester.hasFollowing(friend);
     let alreadyFiends = await Promise.all([
-      friend.hasFriend(user),
-      user.hasFriend(friend),
+      friend.hasFriend(requester),
+      requester.hasFriend(friend),
     ]);
     alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
 
-    if (action === 'follow') {
-      if (alreadyFollowing)
-        throw new AppError(
-          'You are already following this person',
-          StatusCodes.BAD_REQUEST
-        );
+    if (alreadyFollowing)
+      throw new AppError(
+        'You are already following this person',
+        StatusCodes.BAD_REQUEST
+      );
 
-      if (alreadyFiends)
-        throw new AppError(
-          'They are already friends meaning you are following each and other',
-          StatusCodes.BAD_REQUEST
-        );
-      await friend.addFollower(user);
-      await user.addFollowing(friend);
-    }
-    const newU = await user.reload();
+    if (alreadyFiends)
+      throw new AppError(
+        'They are already friends meaning you are following each and other',
+        StatusCodes.BAD_REQUEST
+      );
+    await friend.addFollower(requester);
+    await requester.addFollowing(friend);
+
+    const newU = await requester.reload();
     sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
+  }),
+
+  getFollowers: catchAsync(async (req: Request, res: Response) => {
+    const requester: any = await userService.getUser(req.user.id.toString(), {
+      attributes: userAttributes,
+      include: [
+        {
+          model: db.User,
+          as: 'Follower',
+          attributes: userAttributes,
+        },
+      ],
+    });
+
+    if (!requester)
+      throw new AppError(
+        'Could not find your profiles or friends list',
+        StatusCodes.NOT_FOUND
+      );
+
+    sendResponse(
+      res,
+      StatusCodes.OK,
+      { followers: requester.followers },
+      ReasonPhrases.OK
+    );
+  }),
+
+  removeFollower: catchAsync(async (req: Request, res: Response) => {
+    const requesterId = req.user.id.toString();
+    const friendId = req.body.friendId.toString();
+
+    if (requesterId === friendId)
+      throw new AppError(
+        'You are not able remove your own friendship',
+        StatusCodes.BAD_REQUEST
+      );
+
+    const people = await db.User.findAll({
+      where: { id: { [Op.or]: [requesterId, friendId] } },
+      include: [
+        {
+          model: db.User,
+          as: 'Follower',
+          attributes: userAttributes,
+        },
+      ],
+    });
+
+    const requester = people.find(
+      (person) => person.id.toString() === requesterId
+    );
+    const friend = people.find((person) => person.id.toString() === friendId);
+
+    const areFriends = await requester.hasFriend(friend);
+
+    if (!areFriends)
+      throw new AppError(
+        'You cannot stop following a friend',
+        StatusCodes.BAD_REQUEST
+      );
+    await Promise.all([
+      friend.removeFollower(requester),
+      requester.removeFollowing(friend),
+    ]);
+
+    const newU = await requester.reload();
+    sendResponse(res, StatusCodes.OK, { user: newU }, ReasonPhrases.OK);
   }),
   addFriendRequest: catchAsync(async (req: Request, res: Response) => {
     const userId = req.user.id.toString();

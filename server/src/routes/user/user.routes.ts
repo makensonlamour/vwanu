@@ -2,6 +2,7 @@ import express from 'express';
 
 // Custom imports
 import User from '../../controllers/user';
+import FriendController from '../../controllers/friend/friend.controller';
 import * as schema from '../../schema/user';
 // import isSelf from '../../middleware/isSelf';
 import requireLogin from '../../middleware/requireLogin';
@@ -41,8 +42,10 @@ router.post(
 );
 
 router
-  .route('/follow/:id/:friendId')
-  .post(requireLogin, User.addOrRemoveFollower);
+  .route('/follow')
+  .post(requireLogin, User.addFollower)
+  .get(requireLogin, User.getFollowers)
+  .delete(requireLogin, User.removeFollower);
 router
   .route('/request')
   .post(requireLogin, User.addFriendRequest)
@@ -50,9 +53,9 @@ router
   .delete(requireLogin, User.removeFriendsRequest);
 router
   .route('/friend')
-  .post(requireLogin, User.addFriend)
-  .get(requireLogin, User.getFriends)
-  .delete(requireLogin, User.removeFriend);
+  .post(requireLogin, FriendController.addFriend)
+  .get(requireLogin, FriendController.getFriends)
+  .delete(requireLogin, FriendController.removeFriend);
 
 router
   .route('/:id')
