@@ -49,20 +49,20 @@ export function onError(error: any): void {
 app(database).then((expressServer) => {
   // Passing starting database and server.
   const server = createServer(expressServer);
-  const sio = new Server(server, {
-    cors: {
-      origin: '*',
-    },
-  });
+  // const sio = new Server(server, {
+  //   cors: {
+  //     origin: '*',
+  //   },
+  // });
 
-  sio.use(
-    jwtAuth.authenticate(
-      { secret: config.get<string>('JWT_SECRET') },
-      checkAuth
-    )
-  );
+  // sio.use(
+  //   jwtAuth.authenticate(
+  //     { secret: config.get<string>('JWT_SECRET') },
+  //     checkAuth
+  //   )
+  // );
 
-  sio.on('connection', wrapperAroundConnect(sio));
+  // sio.on('connection', wrapperAroundConnect(sio));
 
   try {
     server.listen(port);

@@ -1,4 +1,5 @@
 {
+  "host": "localhost",
   "smtp": {
     "user": "mzghhfqe244g3ssi@ethereal.email",
     "pass": "VGwXCd8dr3xZDNTXuZ",
@@ -24,6 +25,25 @@
     "CLOUDINARY_API_SECRET": "add your own",
     "CLOUDINARY_API_KEY": "your key ",
     "CLOUDINARY_CLOUD_NAME": "your name"
-  }
+  },
 
+  "authentication": {
+    "entity": "User",
+    "service": "Users",
+    "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
+    "authStrategies": ["jwt", "local"],
+    "jwtOptions": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  }
 }

@@ -31,6 +31,8 @@
     }
   },
   "dependencies": {
-    "@babel/preset-react": "^7.16.7"
+    "@babel/preset-react": "^7.16.7",
+    "@feathersjs/feathers": "^4.5.12",
+    "@feathersjs/socketio": "^4.5.14"
   }
 }
