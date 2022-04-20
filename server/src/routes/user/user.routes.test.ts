@@ -440,14 +440,12 @@ describe('/api/user', () => {
     expect(friends.length === 0).toBeTruthy();
   });
 
-
-
-  it.skip('should follow the user', async () => {
+  it('should follow the user', async () => {
     const followResponse = await testServer
-      .post(
-        `/api/user/follow/${createdTestUsers[2].user.id}/${createdTestUsers[3].user.id}?action=follow`
-      )
-      .set('x-auth-token', createdTestUsers[2].token);
+      .post('/api/user/follow/')
+      .set('x-auth-token', createdTestUsers[2].token)
+      .send({ friendId: createdTestUsers[3].user.id });
+
     const people = await db.User.findAll({
       where: {
         id: {
@@ -474,7 +472,7 @@ describe('/api/user', () => {
     );
   });
 
-  it.skip('Timeline should return post for user and his friends', async () => {
+  it('Timeline should return post for user and his friends', async () => {
     /** #region creating posts for user 1 and user 2 */
     const responses = [createdTestUsers[0], createdTestUsers[1]].map(
       async (userToken) =>
@@ -494,8 +492,7 @@ describe('/api/user', () => {
       .set('x-auth-token', createdTestUsers[0].token);
 
     const timeLinePost = user_1_timeline.body.data.posts;
-    console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n My post n\n\n\n\n\nn');
-    console.log(timeLinePost);
+
     /** expecting to find user 1 and user 2 post in user1 timeline */
     expect(
       timeLinePost.some(
