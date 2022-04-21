@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import routesPath from "../../../routesPath";
 import { useNavigate, useOutletContext, Link } from "react-router-dom";
-import { useUpdateProfilePicture } from "../../user/userSlice";
+import { updateProfilePicture } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 
@@ -17,7 +17,6 @@ const FormStepThree = () => {
   const idUser = user.id;
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const updateProfilePicture = useUpdateProfilePicture(["user", "me"], undefined, undefined, idUser);
 
   const [avatar, setAvatar] = useState(null);
 
@@ -37,7 +36,7 @@ const FormStepThree = () => {
     formData.append("profilePicture", avatar);
     formData.append("idUser", idUser);
     try {
-      await updateProfilePicture.mutateAsync({ formData: formData, id: idUser });
+      await updateProfilePicture({ formData, id: idUser });
       navigate("../../" + routesPath.STEP_FOUR);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
