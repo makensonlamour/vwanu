@@ -88,14 +88,14 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                   )}
                 </div>
               </div>
-              <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.bio : user.bio ? user.bio : ""}</h2>
+              <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.about : user?.about ? user?.about : ""}</h2>
             </div>
             <ProfileTabs user={user} otherUser={otherUser} />
           </div>
           <div className="mt-4 ">
             <Routes>
               <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} />} />
-              <Route path={allTabs1[1]} element={<div>{edit ? <EditProfile /> : <AboutTab user={user} />}</div>} />
+              <Route path={allTabs1[1]} element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={user} />}</div>} />
               <Route
                 path={allTabs1[2]}
                 element={

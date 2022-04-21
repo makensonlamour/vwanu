@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Box } from "@mui/material";
+import FormOverview from "./FormOverview";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -29,7 +30,7 @@ function a11yProps(index) {
   };
 }
 
-const EditProfileTabs = () => {
+const EditProfileTabs = ({ user }) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -44,7 +45,7 @@ const EditProfileTabs = () => {
           value={value}
           onChange={handleChange}
           aria-label="Vertical tabs example"
-          sx={{ borderRight: 1, borderColor: "divider", paddingTop: 2, paddingBottom: 2 }}
+          sx={{ borderRight: 1, borderColor: "divider", paddingTop: 2, paddingBottom: 2, textAlign: "left" }}
         >
           <Tab label="Overview" {...a11yProps(0)} />
           <Tab label="Contact and basic info" {...a11yProps(1)} />
@@ -53,8 +54,9 @@ const EditProfileTabs = () => {
           <Tab label="Family and relationships" {...a11yProps(4)} />
           <Tab label=" Details about you" {...a11yProps(5)} />
         </Tabs>
-        <TabPanel value={value} index={0}>
+        <TabPanel style={{ width: "75%" }} value={value} index={0}>
           Overview
+          <FormOverview user={user} />
         </TabPanel>
         <TabPanel value={value} index={1}>
           Contact and basic info
@@ -74,6 +76,10 @@ const EditProfileTabs = () => {
       </Box>
     </>
   );
+};
+
+EditProfileTabs.propTypes = {
+  user: PropTypes.object,
 };
 
 export default EditProfileTabs;
