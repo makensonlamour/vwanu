@@ -13,8 +13,8 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
 
   const anchorRef = useRef(null);
 
-  const acceptFriendRequest = useAcceptFriendRequest(["user", "me"]);
-  const declineFriendRequest = useDeclineFriendRequest(["user", "me"]);
+  const acceptFriendRequest = useAcceptFriendRequest(["user", "request"]);
+  const declineFriendRequest = useDeclineFriendRequest(["user", "request"]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);

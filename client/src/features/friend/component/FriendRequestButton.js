@@ -21,10 +21,10 @@ const FriendRequestButton = ({ otherUser }) => {
       position: "top-center",
     });
 
-  const { data: listFriendRequest } = useGetListFriendRequest(["user", "me"], true);
+  const { data: listFriendRequest } = useGetListFriendRequest(["user", "request"], true);
 
-  const sendFriendRequest = useSendFriendRequest(["user", "me"]);
-  const cancelFriendRequest = useCancelFriendRequest(["user", "me"]);
+  const sendFriendRequest = useSendFriendRequest(["user", "request"]);
+  const cancelFriendRequest = useCancelFriendRequest(["user", "request"]);
 
   const handleFriendRequest = async (e) => {
     e.preventDefault();

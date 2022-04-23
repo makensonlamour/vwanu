@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 //core components
 import FriendRequestButton from "../../features/friend/component/FriendRequestButton";
 import FriendButton from "../../features/friend/component/FriendButton";
 import Loader from "../../components/common/Loader";
 import ProfileTabs from "./ProfileTabs";
+import UploadPhotoCrop from "../../components/form/profile/UploadPhotoCrop";
 import AboutTab from "./AboutTab";
 import ViewFriend from "./ViewFriend";
 import PostTab from "./PostTab";
 import { allTabs1 } from "./Tablink.data";
 import { checkFriendList } from "../../helpers/index";
 import { FaUserEdit } from "react-icons/fa";
+import EditProfile from "../../pages/Profil/EditProfile";
 
 const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
+  const navigate = useNavigate();
+  const [edit, setEdit] = useState(false);
   return (
     <>
       {!user && !otherUser ? (
@@ -24,15 +28,25 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
             <div className="relative">
               <img
                 src={otherUser ? otherUser?.coverPicture : user.coverPicture}
-                className="w-full bg-white h-[150px] lg:h-[250px]"
+                className="bg-cover w-full mx-auto bg-white h-[170px] lg:h-[300px]"
                 alt="cover_profil"
               />
+              {otherUser ? null : (
+                <UploadPhotoCrop fromButton="cover" id={user?.id} className="absolute top-[6%] right-[2%] lg:right-[2%] lg:top-[6%]" />
+              )}
               <div className="w-full absolute bottom-0 left-0 transform translate-y-3/4 lg:w-auto lg:translate-x-1/3 flex justify-center">
                 <img
                   src={otherUser ? otherUser?.profilePicture : user.profilePicture}
                   className="bg-white mask mask-squircle w-[100px] h-[100px] lg:w-[140px] lg:h-[140px]"
                   alt="profile_picture"
                 />
+                {otherUser ? null : (
+                  <UploadPhotoCrop
+                    fromButton="profile"
+                    id={user?.id}
+                    className="absolute bottom-[0%] right-[30%] lg:right-[0%] lg:bottom-[0%]"
+                  />
+                )}
               </div>
             </div>
 
@@ -61,28 +75,27 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                       Message
                     </button>
                   ) : (
-                    <button className="items-center align-middle btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end">
+                    <button
+                      onClick={() => {
+                        setEdit(true);
+                        navigate("./about", { state: { edit } });
+                      }}
+                      className="items-center align-middle btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end"
+                    >
                       <FaUserEdit size={"18px"} />
                       <span className="ml-1"> Edit Profile</span>
                     </button>
                   )}
                 </div>
               </div>
-              <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.bio : user.bio ? user.bio : ""}</h2>
+              <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.about : user?.about ? user?.about : ""}</h2>
             </div>
             <ProfileTabs user={user} otherUser={otherUser} />
           </div>
           <div className="mt-4 ">
             <Routes>
               <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} />} />
-              <Route
-                path={allTabs1[1]}
-                element={
-                  <div>
-                    <AboutTab user={user} />
-                  </div>
-                }
-              />
+              <Route path={allTabs1[1]} element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={user} />}</div>} />
               <Route
                 path={allTabs1[2]}
                 element={
