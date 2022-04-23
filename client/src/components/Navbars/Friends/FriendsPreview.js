@@ -9,7 +9,7 @@ import { useGetListFriendRequest } from "../../../features/friend/friendSlice";
 // import routesPath from "../../../routesPath";
 
 const FriendsPreview = () => {
-  const { data: listFriendRequest } = useGetListFriendRequest(["user", "me"], true);
+  const { data: listFriendRequest } = useGetListFriendRequest(["user", "request"], true);
 
   return (
     <>

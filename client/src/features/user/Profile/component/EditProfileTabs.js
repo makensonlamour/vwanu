@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Box } from "@mui/material";
 import FormOverview from "./FormOverview";
+import FormContactInfo from "./FormContactInfo";
+import FormPlaceLived from "./FormPlaceLived";
+import FormWorkEducation from "./FormWorkEducation";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,28 +54,33 @@ const EditProfileTabs = ({ user }) => {
           <Tab label="Contact and basic info" {...a11yProps(1)} />
           <Tab label=" Places lived" {...a11yProps(2)} />
           <Tab label="Work and education" {...a11yProps(3)} />
-          <Tab label="Family and relationships" {...a11yProps(4)} />
-          <Tab label=" Details about you" {...a11yProps(5)} />
+          {/*}   <Tab label="Family and relationships" {...a11yProps(4)} />
+          <Tab label=" Details about you" {...a11yProps(5)} /> {*/}
         </Tabs>
         <TabPanel style={{ width: "75%" }} value={value} index={0}>
           Overview
           <FormOverview user={user} />
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel style={{ width: "75%" }} value={value} index={1}>
           Contact and basic info
+          <FormContactInfo user={user} />
         </TabPanel>
-        <TabPanel value={value} index={2}>
+        <TabPanel style={{ width: "75%" }} value={value} index={2}>
           Places lived
+          <FormPlaceLived user={user} />
         </TabPanel>
-        <TabPanel value={value} index={3}>
+        <TabPanel style={{ width: "75%" }} value={value} index={3}>
           Work and education
+          <FormWorkEducation user={user} />
         </TabPanel>
-        <TabPanel value={value} index={4}>
+        {/*}
+        <TabPanel style={{ width: "75%" }} value={value} index={4}>
           Family and relationships
         </TabPanel>
-        <TabPanel value={value} index={5}>
+        <TabPanel style={{ width: "75%" }} value={value} index={5}>
           Details about you
         </TabPanel>
+  {*/}
       </Box>
     </>
   );

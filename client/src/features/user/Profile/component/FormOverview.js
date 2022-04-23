@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Proptypes from "prop-types";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
+import { useQueryClient } from "react-query";
+
 import { Field, Form, Submit } from "../../../../components/form";
 import Loader from "../../../../components/common/Loader";
 import { useUpdateUser } from "../../userSlice";
@@ -18,6 +20,7 @@ const updateError = () =>
   });
 
 const FormOverview = ({ user }) => {
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
@@ -31,7 +34,7 @@ const FormOverview = ({ user }) => {
   const ValidationSchema = Yup.object().shape({
     firstName: Yup.string().required().label("First Name"),
     lastName: Yup.string().required().label("Last Name"),
-    about: Yup.string().label("About"),
+    about: Yup.string().nullable().label("About"),
   });
 
   const handleSubmit = async (dataObj) => {
@@ -41,6 +44,7 @@ const FormOverview = ({ user }) => {
     try {
       await updateUser.mutateAsync(data);
       updateSuccess();
+      queryClient.invalidateQueries();
     } catch (e) {
       console.log(e);
       updateError();

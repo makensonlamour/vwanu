@@ -11,7 +11,7 @@ const FriendButton = ({ otherUser }) => {
   const [loading, setIsLoading] = useState(false);
   const anchorRef = useRef(null);
 
-  const unfriend = useUnfriendUser(["user", "me"]);
+  const unfriend = useUnfriendUser(["user", "request"]);
 
   //error dialog
   const unFriendRequestError = () =>

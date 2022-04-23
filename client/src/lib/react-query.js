@@ -54,6 +54,7 @@ const useGenericMutation = (func, queryKey, url, params, updater) => {
 
       return previousData;
     },
+
     onError: (err, _, context) => {
       queryClient.setQueryData(queryKey, context);
     },

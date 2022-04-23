@@ -32,14 +32,14 @@ const Reaction = ({ post }) => {
 
   const handleReaction = async (label) => {
     const react = _.find(post.Reactions, function (o) {
-      return o.UserId === user.id;
+      return o.UserId === user?.id;
     });
 
     if (react?.UserId === user?.id) {
-      if (react.content === label) {
+      if (react?.content === label) {
         // if user like this post and click on same reaction, delete reaction
-        await deleteReaction.mutateAsync(react.id);
-        queryClient.invalidateQueries(["posts", react.PostId]);
+        await deleteReaction.mutateAsync({ id: react?.id });
+        queryClient.invalidateQueries(["posts", react?.PostId]);
       } else {
         // if user like this post and click on different reaction, update reaction
         await updateReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post.id, id: react.id });
