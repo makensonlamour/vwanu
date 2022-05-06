@@ -19,7 +19,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require("@tailwindcss/line-clamp")],
 
   //Config (optional)
   daisyui: {
@@ -44,6 +44,22 @@ module.exports = {
           warning: "#fef9c3",
 
           error: "#fee2e2",
+        },
+        screens: {
+          sm: "425px",
+          // => @media (min-width: 425px) { ... }
+
+          md: "768px",
+          // => @media (min-width: 768px) { ... }
+
+          lg: "1024px",
+          // => @media (min-width: 1024px) { ... }
+
+          xl: "1100px",
+          // => @media (min-width: 1100px) { ... }
+
+          "2xl": "1440px",
+          // => @media (min-width: 1440px) { ... }
         },
       },
     ],

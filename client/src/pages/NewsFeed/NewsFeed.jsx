@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Container, Grid, Paper, Stack, styled } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
@@ -18,6 +19,54 @@ const NewsFeed = () => {
   function reloadPage() {
     window.location.reload();
   }
+
+  const Item = styled(Paper)(() => ({
+    backgroundColor: "inherit",
+  }));
+
+  const blogs = [
+    {
+      title: "Tackle Your closest Spring cleaning",
+      date: "May 14, 2019",
+      image: "https://res.cloudinary.com/dnesmf7ah/image/upload/v1651626639/vwanu/profile/kma3lennundnkiacntoq.jpg",
+    },
+    {
+      title: "The Truth About Business Blogging",
+      date: "May 14, 2019",
+      image: "https://picsum.photos/200/300?image=0",
+    },
+    {
+      title: "10 Tips to stay healthy when you're not alone",
+      date: "May 14, 2019",
+      image: "https://picsum.photos/200/300?image=1",
+    },
+    {
+      title: "Visiting Amsterdam on a Budget",
+      date: "May 8, 2019",
+      image: "https://picsum.photos/200/300?image=2",
+    },
+    {
+      title: `OMA completes renovation of Sotheby's New things appeared for a reason`,
+      date: "May 8, 2019",
+      image: "https://picsum.photos/200/300?image=3",
+    },
+  ];
+
+  const followings = [
+    { image: "https://picsum.photos/200/300?image=0" },
+    { image: "https://picsum.photos/200/300?image=1" },
+    { image: "https://picsum.photos/200/300?image=2" },
+    { image: "https://picsum.photos/200/300?image=3" },
+    { image: "https://picsum.photos/200/300?image=4" },
+    { image: "https://picsum.photos/200/300?image=5" },
+    { image: "https://picsum.photos/200/300?image=6" },
+    { image: "https://picsum.photos/200/300?image=7" },
+    { image: "https://picsum.photos/200/300?image=8" },
+    { image: "https://picsum.photos/200/300?image=9" },
+    { image: "https://picsum.photos/200/300?image=10" },
+    { image: "https://picsum.photos/200/300?image=11" },
+    { image: "https://picsum.photos/200/300?image=12" },
+  ];
 
   let content;
   if (isLoading) {
@@ -67,17 +116,103 @@ const NewsFeed = () => {
 
   return (
     <>
-      <div className="mx-auto z-30">
-        <div className="pt-10 pb-2 mx-auto align-items-center lg:w-full space-y-2">
-          <div className="lg:flex">
-            <div>
-              <InputModal reference="newsfeed" />
-              <div className="w-full lg:w-[38vw]">{content}</div>
-            </div>
-            <span className="hidden lg:inline mx-2 rounded-2xl border w-full bg-white h-28"></span>
-          </div>
-        </div>
-      </div>
+      <Container elevation={0} className="mt-6 max-w-screen-2xl">
+        <Grid elevation={0} sx={{ display: "flex" }}>
+          <Grid sx={{ display: { xs: "none", md: "block" } }} elevation={0} xs={5}>
+            <Item elevation={0}>
+              <Grid
+                sx={{ display: { xs: "none", md: "block" } }}
+                elevation={0}
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  border: "0.2px solid #dcdcdc",
+                }}
+              >
+                <h2 className="my-3 px-6 text-xl font-medium">Blog</h2>
+                <Stack spacing={1}>
+                  {blogs.map((blog) => {
+                    return (
+                      <Item
+                        key={blog.title}
+                        elevation={0}
+                        style={{
+                          paddingTop: "0.5rem",
+                          paddingBottom: "0.5rem",
+                          display: "flex",
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                        }}
+                      >
+                        <div className="w-[6rem]">
+                          <img className="mask mask-squircle w-[5rem] h-16 rounded-lg" src={blog.image} alt={blog.title} />
+                        </div>
+                        <div>
+                          <p
+                            to="#"
+                            className=" text-sm line-clamp-2 max-w-[25ch] text-ellipsis whitespace-wrap overflow-hidden font-medium ml-2 pb-1"
+                          >
+                            <Link className="hover:text-secondary" to="/">
+                              {blog.title}
+                            </Link>
+                          </p>
+                          <p className=" text-gray-400 text-xs ml-2">{blog.date}</p>
+                        </div>
+                      </Item>
+                    );
+                  })}
+                </Stack>
+              </Grid>
+
+              {/*People you're following*/}
+              <Grid
+                sx={{ display: { xs: "none", md: "block" } }}
+                elevation={0}
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  border: "0.2px solid #dcdcdc",
+                  marginTop: "2rem",
+                  paddingLeft: "1rem",
+                  paddingRight: "1rem",
+                }}
+              >
+                <h2 className="my-5 text-xl font-medium">
+                  {`I'm Following `}
+                  <span className="font-normal text-lg text-gray-400">13</span>
+                </h2>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0} sx={{ flexWrap: "wrap" }}>
+                  {followings.map((following) => {
+                    return (
+                      <Item key={following.image} elevation={0}>
+                        <div className="w-[3rem]">
+                          <img
+                            className="object-cover mask mask-squircle w-[3rem] h-16 rounded-lg"
+                            src={following.image}
+                            alt={following.image}
+                          />
+                        </div>
+                      </Item>
+                    );
+                  })}
+                </Stack>
+              </Grid>
+            </Item>
+          </Grid>
+          <Grid sx={6} md={7}>
+            <Item elevation={0}>
+              <div className="px-3">
+                <h2 className="pb-5 text-3xl font-bold">Activity Feed</h2>
+                <InputModal reference="newsfeed" />
+                <div className="w-full">{content}</div>
+              </div>
+            </Item>
+          </Grid>
+          <Grid xs={4} md={5} style={{ backgroundColor: "#fff", mx: 2, borderRadius: "10px", border: "0.5px solid #dcdcdc", elevation: 0 }}>
+            <Item></Item>
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
 };

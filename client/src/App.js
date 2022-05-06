@@ -1,12 +1,11 @@
 import React from "react";
-//import { Provider } from "react-redux";
 import { SidebarProvider } from "./context/BottomMenuContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { ThemeProvider } from "@mui/material";
+import theme from "./theme";
 
 // Custom dependencies
-//import { store } from "./store";
-//import { store } from "./hooks/store";
 import Views from "./layouts/Views.js";
 
 const App = () => {
@@ -19,10 +18,12 @@ const App = () => {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        <Views />
-        <ReactQueryDevtools />
-      </SidebarProvider>
+      <ThemeProvider theme={theme}>
+        <SidebarProvider>
+          <Views />
+          <ReactQueryDevtools />
+        </SidebarProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
