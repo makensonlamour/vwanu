@@ -199,10 +199,10 @@ const Navbar = ({ user }) => {
             >
               <MenuItem key={"profile_1"} onClick={handleCloseUserMenu}>
                 <div style={{ display: "flex", paddingTop: "5px", paddingBottom: "5px" }}>
-                  <div>
+                  <div style={{ width: "24px", height: "18px", margin: "0.2rem", borderRadius: "25%" }}>
                     <img className="m-1" src={user?.profilePicture} alt="profil_image" />
                   </div>
-                  <p>{user?.firstName}</p>
+                  <p className="align-middle">{user?.firstName}</p>
                 </div>
               </MenuItem>
               {settings.map((setting) => (

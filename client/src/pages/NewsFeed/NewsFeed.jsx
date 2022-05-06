@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Container, Grid, Paper, Stack, styled } from "@mui/material";
+import { Timeline, TimelineItem, TimelineSeparator, TimelineDot, TimelineConnector, TimelineContent } from "@mui/lab";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
+import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 
 //Core components
 
@@ -67,6 +69,10 @@ const NewsFeed = () => {
     { image: "https://picsum.photos/200/300?image=11" },
     { image: "https://picsum.photos/200/300?image=12" },
   ];
+
+  const percentage = 73;
+
+  const steps = ["General Information", "Work Experience", "Profile Photo", "Cover Photo"];
 
   let content;
   if (isLoading) {
@@ -208,8 +214,56 @@ const NewsFeed = () => {
               </div>
             </Item>
           </Grid>
-          <Grid xs={4} md={5} style={{ backgroundColor: "#fff", mx: 2, borderRadius: "10px", border: "0.5px solid #dcdcdc", elevation: 0 }}>
-            <Item></Item>
+
+          <Grid elevation={0} xs={5}>
+            <Item elevation={0}>
+              <Grid
+                sx={{ display: { xs: "none", md: "block" } }}
+                elevation={0}
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  border: "0.2px solid #dcdcdc",
+                  paddingLeft: "1rem",
+                  paddingRight: "1rem",
+                }}
+              >
+                <h2 className="my-5 text-xl font-medium">Complete Your Profile</h2>
+                <div className="w-44 mx-auto">
+                  <CircularProgressbarWithChildren
+                    strokeWidth="4"
+                    circleRatio="0.5"
+                    className="text-primary"
+                    value={percentage}
+                    styles={buildStyles({
+                      rotation: 0.75,
+                      pathColor: `rgba(5, 61, 200, ${percentage / 100})`,
+                      textColor: "#053dc8",
+                      trailColor: "#d6d6d6",
+                    })}
+                  >
+                    <div className="text-xl font-medium text-center text-secondary align-middle -mt-10">
+                      <strong>{`${percentage} `}</strong>
+                      <span className="text-sm font-normal">{"%"}</span>
+                      <p className="text-center text-sm font-normal">Complete</p>
+                    </div>
+                  </CircularProgressbarWithChildren>
+                </div>
+                <div className="-mt-10 text-sm">
+                  <Timeline>
+                    {steps.map((label) => (
+                      <TimelineItem key={label}>
+                        <TimelineSeparator>
+                          <TimelineDot />
+                          <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>{label}</TimelineContent>
+                      </TimelineItem>
+                    ))}
+                  </Timeline>
+                </div>
+              </Grid>
+            </Item>
           </Grid>
         </Grid>
       </Container>
