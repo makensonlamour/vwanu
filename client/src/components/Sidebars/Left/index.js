@@ -58,6 +58,7 @@ import { CgMenuLeft, CgClose } from "react-icons/cg";
 import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
 import { MdGroups } from "react-icons/md";
 import { VscCommentDiscussion } from "react-icons/vsc";
+import { Tooltip } from "@mui/material";
 
 const SidebarLeft = () => {
   const [full, setFull] = useState(false);
@@ -65,14 +66,14 @@ const SidebarLeft = () => {
 
   return (
     <>
-      <div className="h-screen mx-auto antialiased flex justify-between fixed z-[1500]">
+      <div className={`${full ? "w-[15vw]" : ""} h-screen shadow-xl z-30 antialiased`}>
         {/* Mobile menu Toggle */}
         <button
           onClick={() => {
             setNavOpen(!navOpen);
             setFull(true);
           }}
-          className="md:hidden w-[20%] h-14 focus:outline-none bg-white z-50"
+          className="md:hidden w-[20%] h-14 focus:outline-none bg-white shadow-md z-10"
         >
           <CgMenuLeft size={"24px"} className={`${navOpen ? "hidden" : ""} mx-auto`} />
           <CgClose size={"24px"} className={`${navOpen ? "" : "hidden"} mx-auto`} />
@@ -80,69 +81,79 @@ const SidebarLeft = () => {
 
         <div
           className={`${
-            navOpen ? "block" : "hidden md:block"
+            navOpen ? "block w-full" : "hidden md:block"
           } md:block h-screen bg-white transition-all duration-300 space-y-2 fixed sm:relative`}
         >
-          <button onClick={() => setFull(!full)} className=" px-6 w-[17%] mb-2 hidden md:block focus:outline-none h-14">
-            <CgMenuLeft size={"24px"} className="mx-auto" />
+          <button onClick={() => setFull(!full)} className="w-full px-6 sticky mb-2 hidden md:block focus:outline-none h-14">
+            <CgMenuLeft size={"24px"} className="" />
           </button>
 
-          <div className="px-4 space-y-2 ">
+          <div className="px-4 space-y-2">
             <p className={`${full ? "block" : "hidden"}  pt-4 text-gray-500 text-lg`}>Personal</p>
             {/*My Profile */}
-            <div
-              data-id="tooltip"
-              className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
-            >
-              <FiUser size={"24px"} />
-              <h1 className={`${full ? "block" : "hidden"}`}>My Profile</h1>
+            <div className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer">
+              <Tooltip className={`${full ? "mr-3" : ""}`} title="My Profile">
+                <button className="inline-flex ">
+                  {" "}
+                  <FiUser className={`${full ? "mr-3" : ""}`} size={"24px"} />
+                  <h1 className={`${full ? "block" : "hidden"}`}>My Profile</h1>
+                </button>
+              </Tooltip>
             </div>
 
             {/*My timeline */}
-            <div
-              data-id="tooltip"
-              className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
-            >
-              <FiActivity size={"24px"} />
-              <h1 className={`${full ? "block" : "hidden"}`}>My Timeline</h1>
+            <div className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer">
+              <Tooltip title="My Timeline" className={`${full ? "mr-3" : ""}`}>
+                <button className="inline-flex ">
+                  <FiActivity className={`${full ? "mr-3" : ""}`} size={"24px"} />
+                  <h1 className={`${full ? "block" : "hidden"}`}>My Timeline</h1>
+                </button>
+              </Tooltip>
             </div>
 
             {/*My inbox */}
-            <div
-              data-id="tooltip"
-              className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
-            >
-              <FiInbox size={"24px"} />
-              <h1 className={`${full ? "block" : "hidden"}`}>My Inbox</h1>
+            <div className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer">
+              <Tooltip title="My Inbox">
+                <button className="inline-flex ">
+                  <FiInbox className={`${full ? "mr-3" : ""}`} size={"24px"} />
+
+                  <h1 className={`${full ? "block" : "hidden"}`}>My Inbox</h1>
+                </button>
+              </Tooltip>
             </div>
 
             <p className={`${full ? "block" : "hidden"}  pt-4 text-gray-500 text-lg`}>Community</p>
             <div className={`${full ? "hidden" : "block"} w-full h-[1px] bg-black`}></div>
             {/*My groups */}
-            <div
-              data-id="tooltip"
-              className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
-            >
-              <MdGroups size={"24px"} />
-              <h1 className={`${full ? "block" : "hidden"}`}>My Groups</h1>
+            <div className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer">
+              <Tooltip title="My Groups">
+                <button className="inline-flex ">
+                  <MdGroups className={`${full ? "mr-3" : ""}`} size={"24px"} />
+
+                  <h1 className={`${full ? "block" : "hidden"}`}>My Groups</h1>
+                </button>
+              </Tooltip>
             </div>
 
             {/*My network */}
-            <div
-              data-id="tooltip"
-              className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
-            >
-              <MdGroups size={"24px"} />
-              <h1 className={`${full ? "block" : "hidden"}`}>My Network</h1>
+            <div className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer">
+              <Tooltip title="My Network">
+                <button className="inline-flex ">
+                  <MdGroups className={`${full ? "mr-3" : ""}`} size={"24px"} />
+                  <h1 className={`${full ? "block" : "hidden"}`}>My Network</h1>
+                </button>
+              </Tooltip>
             </div>
 
             {/*My inbox */}
-            <div
-              data-id="tooltip"
-              className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
-            >
-              <VscCommentDiscussion size={"24px"} />
-              <h1 className={`${full ? "block" : "hidden"}`}>My Discussions</h1>
+            <div className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer">
+              <Tooltip title="My Discussions">
+                <button className="inline-flex ">
+                  <VscCommentDiscussion className={`${full ? "mr-3" : ""}`} size={"24px"} />
+
+                  <h1 className={`${full ? "block" : "hidden"}`}>My Discussions</h1>
+                </button>
+              </Tooltip>
             </div>
           </div>
         </div>

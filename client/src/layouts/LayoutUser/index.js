@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React from "react";
 import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
 
@@ -36,14 +37,25 @@ const LayoutUser = () => {
 
   return (
     <>
-      <div>
+      <div className="mx-auto w-screen">
+        <div className="flex">
+          <div className="grow">
+            <SidebarLeft />
+          </div>
+          <div className="w-screen">
+            <Navbar user={!error ? user : undefined} />
+          </div>
+        </div>
+      </div>
+      {/*}
+        <Navbar user={!error ? user : undefined} />
         <div className="m-auto">
           <Box elevation={0} sx={{ flexGrow: 1 }}>
-            <Grid container spacing={1} sx={{ backgroundColor: "transparent" }}>
+            <Grid container spacing={1} sx={{ backgroundColor: "transparent", boxShadow: 0 }}>
               <Grid item xs style={{ marginTop: 0 }}>
                 <Item>
-                  <Grid item xs={4} style={{ position: "sticky" }}>
-                    <Item sx={{ position: "sticky" }} elevation={0}>
+                  <Grid item xs={4} style={{ position: "fixed" }}>
+                    <Item sx={{ position: "fixed", zIndex: "appBar" }} elevation={0}>
                       <SidebarLeft />{" "}
                     </Item>
                   </Grid>
@@ -51,9 +63,8 @@ const LayoutUser = () => {
               </Grid>
               <Grid item xs={10}>
                 <Item>
-                  <Navbar user={!error ? user : undefined} />
                   <Grid item xs={12}>
-                    <Item className="max-w-screen-xl">
+                    <Item className="max-w-screen-xxl">
                       {!error ? user?.birthday ? null : <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace /> : null}
                       {user ? (
                         <Outlet context={!error ? user : undefined} />
@@ -68,6 +79,7 @@ const LayoutUser = () => {
           </Box>
         </div>
       </div>
+                      {*/}
     </>
   );
 };

@@ -1,3 +1,4 @@
+/*eslint-disable */
 //  import React from "react";
 // import { Link } from "react-router-dom";
 // import routesPath from "../../routesPath";
@@ -58,7 +59,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
-import { AppBar, Box, Grid, Badge, Toolbar, Typography, Menu, Container, Button, Tooltip, MenuItem } from "@mui/material";
+import { Box, Grid, Badge, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material";
 import logo from "../../assets/images/Asset_2.png";
 import { IoIosArrowDown, IoMdNotificationsOutline } from "react-icons/io";
 import { BsSearch } from "react-icons/bs";
@@ -95,61 +96,138 @@ const Navbar = ({ user }) => {
   };
 
   return (
-    <AppBar variant="elevation24" sx={{ backgroundColor: "white" }} position="sticky">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Grid xs>
+    <div className="mx-auto">
+      <div className="bg-white w-full z-20 sticky shadow-md">
+        <div className="flex items-center justify-around lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+          <div className="basis-1/6">
             <Link className="" to={routesPath.NEWSFEED}>
-              <div className="text-lg font-bold w-[100px] md:w-[150px] mr-10">
+              <div className="text-lg font-bold w-[100px] md:w-[150px] mr-10 py-2 flex">
                 {" "}
-                <img className="" src={logo} alt="logo_vwanu" />
+                <img className="justify-center" src={logo} alt="logo_vwanu" />
               </div>
             </Link>
-          </Grid>
-          <Grid xs={5} sx={{ mx: "auto" }} style={{ marginLeft: "auto" }}>
-            <Box sx={{ display: { xs: "none", lg: "flex" } }}>
+          </div>
+          <div className="basis-2/4 flex-none">
+            <div className="flex items-center justify-evenly py-2">
               {pages.map((page) => (
+                <button key={page.title} className="">
+                  {page.title}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="basis-[30%] flex-none">
+            <div className="flex justify-end items-center">
+              <BsSearch size="24px" className="text-black mr-4" />
+              <div className="h-6 bg-black w-[1px] mr-4"></div>
+              <Badge badgeContent={1} color="primary" className="mr-4">
+                <AiOutlineInbox size="24px" className="text-black" />
+              </Badge>
+              <Badge badgeContent={3} color="primary" className="mr-8">
+                <IoMdNotificationsOutline size="24px" className="text-black" />
+              </Badge>
+
+              <Tooltip title="Open profile">
+                <Button variant="text" onClick={handleOpenUserMenu} sx={{ p: 0, fontWeight: "light" }}>
+                  <p className="mr-1 text-[1.0rem] text-black capitalize font-light">{user?.firstName}</p>
+                  <IoIosArrowDown size="18px" className="mr-2" />
+                  <div className="rounded-[50px] avatar online">
+                    <div className="rounded-[12px] w-8 h-8 m-1">
+                      <img className="w-8 h-8" src={user?.profilePicture} alt="profil_image" />
+                    </div>
+                  </div>{" "}
+                </Button>
+              </Tooltip>
+              {}
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem key={"profile_1"} onClick={handleCloseUserMenu}>
+                  <div style={{ display: "flex", paddingTop: "5px", paddingBottom: "5px" }}>
+                    <div style={{ width: "24px", height: "18px", margin: "0.2rem", borderRadius: "25%" }}>
+                      <img className="m-1" src={user?.profilePicture} alt="profil_image" />
+                    </div>
+                    <p className="align-middle">{user?.firstName}</p>
+                  </div>
+                </MenuItem>
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu} sx={{ py: 1 }}>
+                    <Typography component="div" textAlign="center" style={{ display: "flex" }}>
+                      {setting.icon}
+                      {setting.title}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
+          </div>
+        </div>
+        {/*}
+        <Grid xs={3}>
+          <Link className="" to={routesPath.NEWSFEED}>
+            <div className="text-lg font-bold w-[100px] md:w-[150px] mr-10 flex">
+              {" "}
+              <img className="justify-center" src={logo} alt="logo_vwanu" />
+            </div>
+          </Link>
+        </Grid>
+        <Grid xs={6} sx={{ mx: "auto" }} style={{ marginLeft: "auto" }}>
+          <Box sx={{ display: { xs: "none", lg: "flex" } }}>
+            {pages.map((page) => (
+              <Button
+                variant="text"
+                key={page}
+                sx={{
+                  my: 2,
+                  color: "black",
+                  display: "block",
+                  textTransform: "capitalize",
+                  fontSize: "1.0rem",
+                  textAlign: "left",
+                  fontWeight: "light",
+                }}
+              >
+                {page.title}
+              </Button>
+            ))}
+          </Box>
+          {/*Icon navbar }
+          <Box sx={{ display: { xs: "none", md: "inline-flex", lg: "none" } }}>
+            {pages.map((page) => (
+              <Tooltip key={page} title={page.title}>
                 <Button
-                  variant="text"
-                  key={page}
+                  className="mx-auto px-1"
                   sx={{
                     my: 2,
+                    mx: 1,
                     color: "black",
                     display: "block",
                     textTransform: "capitalize",
                     fontSize: "1.0rem",
-                    textAlign: "left",
+                    textAlign: "center",
                     fontWeight: "light",
                   }}
                 >
-                  {page.title}
+                  {page.icon}
                 </Button>
-              ))}
-            </Box>
-            {/*Icon navbar */}
-            <Box sx={{ display: { xs: "none", md: "inline-flex", lg: "none" } }}>
-              {pages.map((page) => (
-                <Tooltip key={page} title={page.title}>
-                  <Button
-                    className="mx-auto px-1"
-                    sx={{
-                      my: 2,
-                      mx: 1,
-                      color: "black",
-                      display: "block",
-                      textTransform: "capitalize",
-                      fontSize: "1.0rem",
-                      textAlign: "center",
-                      fontWeight: "light",
-                    }}
-                  >
-                    {page.icon}
-                  </Button>
-                </Tooltip>
-              ))}
-            </Box>
-          </Grid>
-
+              </Tooltip>
+            ))}
+          </Box>
+        </Grid>
+        <Grid xs={3} sx={{ display: "flex" }}>
           <Box sx={{ display: "flex", marginLeft: "1rem" }}>
             <BsSearch size="24px" className="text-black mr-4" />
             <div className="h-6 bg-black w-[1px] mr-4"></div>
@@ -215,9 +293,10 @@ const Navbar = ({ user }) => {
               ))}
             </Menu>
           </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+        </Grid>
+        {*/}
+      </div>
+    </div>
   );
 };
 

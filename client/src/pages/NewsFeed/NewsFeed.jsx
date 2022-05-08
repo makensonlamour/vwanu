@@ -1,17 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Container, Grid, Paper, Stack, styled } from "@mui/material";
-import { Timeline, TimelineItem, TimelineSeparator, TimelineDot, TimelineConnector, TimelineContent } from "@mui/lab";
+import { Container, Grid, Paper, styled } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
-import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 
 //Core components
 
 import PostList from "../../features/post/PostList";
 import { useGetTimelineList } from "../../features/post/postSlice";
 import InputModal from "../../features/post/components/InputModal";
+import BlogComponent from "../../components/Newsfeed/BlogComponent";
+import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
+import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
 
 const NewsFeed = () => {
   // const user = useOutletContext();
@@ -72,7 +73,12 @@ const NewsFeed = () => {
 
   const percentage = 73;
 
-  const steps = ["General Information", "Work Experience", "Profile Photo", "Cover Photo"];
+  const steps = [
+    { title: "General Information", total: 6, complete: 5 },
+    { title: "Work Experience", total: 3, complete: 1 },
+    { title: "Profile Photo", total: 1, complete: 1 },
+    { title: "Cover Photo", total: 1, complete: 1 },
+  ];
 
   let content;
   if (isLoading) {
@@ -135,39 +141,7 @@ const NewsFeed = () => {
                   border: "0.2px solid #dcdcdc",
                 }}
               >
-                <h2 className="my-3 px-6 text-xl font-medium">Blog</h2>
-                <Stack spacing={1}>
-                  {blogs.map((blog) => {
-                    return (
-                      <Item
-                        key={blog.title}
-                        elevation={0}
-                        style={{
-                          paddingTop: "0.5rem",
-                          paddingBottom: "0.5rem",
-                          display: "flex",
-                          paddingLeft: "1rem",
-                          paddingRight: "1rem",
-                        }}
-                      >
-                        <div className="w-[6rem]">
-                          <img className="mask mask-squircle w-[5rem] h-16 rounded-lg" src={blog.image} alt={blog.title} />
-                        </div>
-                        <div>
-                          <p
-                            to="#"
-                            className=" text-sm line-clamp-2 max-w-[25ch] text-ellipsis whitespace-wrap overflow-hidden font-medium ml-2 pb-1"
-                          >
-                            <Link className="hover:text-secondary" to="/">
-                              {blog.title}
-                            </Link>
-                          </p>
-                          <p className=" text-gray-400 text-xs ml-2">{blog.date}</p>
-                        </div>
-                      </Item>
-                    );
-                  })}
-                </Stack>
+                <BlogComponent data={blogs} />
               </Grid>
 
               {/*People you're following*/}
@@ -183,25 +157,7 @@ const NewsFeed = () => {
                   paddingRight: "1rem",
                 }}
               >
-                <h2 className="my-5 text-xl font-medium">
-                  {`I'm Following `}
-                  <span className="font-normal text-lg text-gray-400">13</span>
-                </h2>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0} sx={{ flexWrap: "wrap" }}>
-                  {followings.map((following) => {
-                    return (
-                      <Item key={following.image} elevation={0}>
-                        <div className="w-[3rem]">
-                          <img
-                            className="object-cover mask mask-squircle w-[3rem] h-16 rounded-lg"
-                            src={following.image}
-                            alt={following.image}
-                          />
-                        </div>
-                      </Item>
-                    );
-                  })}
-                </Stack>
+                <FollowingPreview data={followings} />
               </Grid>
             </Item>
           </Grid>
@@ -228,40 +184,7 @@ const NewsFeed = () => {
                   paddingRight: "1rem",
                 }}
               >
-                <h2 className="my-5 text-xl font-medium">Complete Your Profile</h2>
-                <div className="w-44 mx-auto">
-                  <CircularProgressbarWithChildren
-                    strokeWidth="4"
-                    circleRatio="0.5"
-                    className="text-primary"
-                    value={percentage}
-                    styles={buildStyles({
-                      rotation: 0.75,
-                      pathColor: `rgba(5, 61, 200, ${percentage / 100})`,
-                      textColor: "#053dc8",
-                      trailColor: "#d6d6d6",
-                    })}
-                  >
-                    <div className="text-xl font-medium text-center text-secondary align-middle -mt-10">
-                      <strong>{`${percentage} `}</strong>
-                      <span className="text-sm font-normal">{"%"}</span>
-                      <p className="text-center text-sm font-normal">Complete</p>
-                    </div>
-                  </CircularProgressbarWithChildren>
-                </div>
-                <div className="-mt-10 text-sm">
-                  <Timeline>
-                    {steps.map((label) => (
-                      <TimelineItem key={label}>
-                        <TimelineSeparator>
-                          <TimelineDot />
-                          <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContent>{label}</TimelineContent>
-                      </TimelineItem>
-                    ))}
-                  </Timeline>
-                </div>
+                <CompleteProfile percentage={percentage} data={steps} />
               </Grid>
             </Item>
           </Grid>
