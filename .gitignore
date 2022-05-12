@@ -179,4 +179,5 @@ server/src/models/like.ts.skip
 .DS_Store
 **/.DS_Store
 server/src/models
-server/src/models/
+server/src/models/.DS_Store
+.vscode/
