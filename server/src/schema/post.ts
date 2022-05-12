@@ -18,9 +18,8 @@ export const createPostSchema = object({
     mediaType: string().optional(),
     hashTag: string().optional(),
     private: z.boolean().optional(),
-
-    UserId: z.number({
-      required_error: 'You cannot create a post if you are not a user',
+    UserId: z.string({
+      required_error: 'Only Users can create post',
     }),
     postText: string({
       required_error: 'A post need at least to have some text',
