@@ -3,7 +3,7 @@ import passport from 'passport';
 import Local from 'passport-local';
 import bcrypt from 'bcryptjs';
 
-import db from './models';
+import db from './database';
 
 const LocalStrategy = Local.Strategy;
 // const JWTStrategy = passportJWT.Strategy
