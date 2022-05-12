@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { Link } from "react-router-dom";
 import { Container, Grid, Paper, styled } from "@mui/material";
@@ -12,7 +13,10 @@ import { useGetTimelineList } from "../../features/post/postSlice";
 import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
+import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
 import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
+import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
+import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 
 const NewsFeed = () => {
   // const user = useOutletContext();
@@ -55,6 +59,39 @@ const NewsFeed = () => {
     },
   ];
 
+  const latestUpdates = [
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "10 months ago",
+      where: "",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=3",
+      name: "Adele",
+      date: "10 months ago",
+      where: "",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "2 years ago",
+      where: "",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "2 years ago",
+      where: "in the group Coffee Addicts",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "2 years ago",
+      where: "",
+    },
+  ];
+
   const followings = [
     { image: "https://picsum.photos/200/300?image=0" },
     { image: "https://picsum.photos/200/300?image=1" },
@@ -69,6 +106,47 @@ const NewsFeed = () => {
     { image: "https://picsum.photos/200/300?image=10" },
     { image: "https://picsum.photos/200/300?image=11" },
     { image: "https://picsum.photos/200/300?image=12" },
+  ];
+
+  const recentlyActive = [
+    { image: "https://picsum.photos/200/300?image=0" },
+    { image: "https://picsum.photos/200/300?image=1" },
+    { image: "https://picsum.photos/200/300?image=2" },
+    { image: "https://picsum.photos/200/300?image=3" },
+    { image: "https://picsum.photos/200/300?image=4" },
+    { image: "https://picsum.photos/200/300?image=8" },
+    { image: "https://picsum.photos/200/300?image=9" },
+    { image: "https://picsum.photos/200/300?image=10" },
+    { image: "https://picsum.photos/200/300?image=11" },
+    { image: "https://picsum.photos/200/300?image=12" },
+  ];
+
+  const groups = [
+    {
+      name: "Mountain Riders",
+      image: "https://picsum.photos/200/300?image=0",
+      members: "20",
+    },
+    {
+      name: "Graphic Design",
+      image: "https://picsum.photos/200/300?image=1",
+      members: "20",
+    },
+    {
+      name: "Nature Lovers",
+      image: "https://picsum.photos/200/300?image=2",
+      members: "19",
+    },
+    {
+      name: "Coffee Addicts",
+      image: "https://picsum.photos/200/300?image=3",
+      members: "19",
+    },
+    {
+      name: "Architecture",
+      image: "https://picsum.photos/200/300?image=4",
+      members: "17",
+    },
   ];
 
   const percentage = 73;
@@ -128,68 +206,27 @@ const NewsFeed = () => {
 
   return (
     <>
-      <Container elevation={0} className="mt-6 max-w-screen-2xl">
-        <Grid elevation={0} sx={{ display: "flex" }}>
-          <Grid sx={{ display: { xs: "none", md: "block" } }} elevation={0} xs={5}>
-            <Item elevation={0}>
-              <Grid
-                sx={{ display: { xs: "none", md: "block" } }}
-                elevation={0}
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  border: "0.2px solid #dcdcdc",
-                }}
-              >
-                <BlogComponent data={blogs} />
-              </Grid>
-
-              {/*People you're following*/}
-              <Grid
-                sx={{ display: { xs: "none", md: "block" } }}
-                elevation={0}
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  border: "0.2px solid #dcdcdc",
-                  marginTop: "2rem",
-                  paddingLeft: "1rem",
-                  paddingRight: "1rem",
-                }}
-              >
-                <FollowingPreview data={followings} />
-              </Grid>
-            </Item>
-          </Grid>
-          <Grid sx={6} md={7}>
-            <Item elevation={0}>
-              <div className="px-3">
-                <h2 className="pb-5 text-3xl font-bold">Activity Feed</h2>
-                <InputModal reference="newsfeed" />
-                <div className="w-full">{content}</div>
-              </div>
-            </Item>
-          </Grid>
-
-          <Grid elevation={0} xs={5}>
-            <Item elevation={0}>
-              <Grid
-                sx={{ display: { xs: "none", md: "block" } }}
-                elevation={0}
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  border: "0.2px solid #dcdcdc",
-                  paddingLeft: "1rem",
-                  paddingRight: "1rem",
-                }}
-              >
-                <CompleteProfile percentage={percentage} data={steps} />
-              </Grid>
-            </Item>
-          </Grid>
-        </Grid>
-      </Container>
+      <div className="mx-auto mt-6 max-w-screen-2xl">
+        <div className="flex">
+          <div className="basis-[22%]">
+            <BlogComponent data={blogs} />
+            <FollowingPreview data={followings} />
+          </div>
+          <div className="basis-[56%] xl:px-5">
+            <div className="px-3">
+              <h2 className="pb-5 text-3xl font-bold">Activity Feed</h2>
+              <InputModal reference="newsfeed" />
+              <div className="w-full">{content}</div>
+            </div>
+          </div>
+          <div className="basis-[22%]">
+            <CompleteProfile percentage={percentage} data={steps} />
+            <UpdatesComponent data={latestUpdates} />
+            <RecentlyActive data={recentlyActive} />
+            <GroupsPreview data={groups} />
+          </div>
+        </div>
+      </div>
     </>
   );
 };

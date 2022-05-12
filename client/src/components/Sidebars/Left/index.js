@@ -66,7 +66,7 @@ const SidebarLeft = () => {
 
   return (
     <>
-      <div className={`${full ? "w-[15vw]" : ""} h-screen shadow-xl z-30 antialiased`}>
+      <div className={`${full ? "w-[15vw]" : ""} h-screen shadow-xl z-30 antialiased fixed`}>
         {/* Mobile menu Toggle */}
         <button
           onClick={() => {

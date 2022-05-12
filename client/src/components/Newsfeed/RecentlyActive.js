@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Stack, styled, Paper } from "@mui/material";
 
-const FollowingPreview = ({ data }) => {
+const RecentlyActive = ({ data }) => {
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
@@ -10,10 +10,7 @@ const FollowingPreview = ({ data }) => {
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">
-        <h2 className="my-5 text-xl font-medium">
-          {`I'm Following `}
-          <span className="font-normal text-lg text-gray-400">13</span>
-        </h2>
+        <h2 className="my-5 text-xl font-medium">Recently Active Members</h2>
         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0} sx={{ flexWrap: "wrap" }}>
           {data.map((following) => {
             return (
@@ -25,13 +22,14 @@ const FollowingPreview = ({ data }) => {
             );
           })}
         </Stack>
+        <button className="my-4 bg-primary py-1 px-3 text-white rounded-lg hover:bg-secondary">See All</button>
       </div>
     </>
   );
 };
 
-FollowingPreview.propTypes = {
+RecentlyActive.propTypes = {
   data: PropTypes.array.isRequired,
 };
 
-export default FollowingPreview;
+export default RecentlyActive;
