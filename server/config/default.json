@@ -11,6 +11,9 @@
     "dialect": "postgres"
   },
   "sendEmailFrom": "test@vwanu.com",
+  "send-in-blue-service-url": "smtp-relay.sendinblue.com",
+  "send-in-blue-mail-user": "vwanuht@gmail.com",
+  "send-in-blue-mail-pass": "ZcPSk8drzEHFMn6K",
   "multerSetting": {},
   "JWT_SECRET": "StageSecretIsREal",
   "maxPostImages": 3,
@@ -29,7 +32,7 @@
 
   "authentication": {
     "entity": "User",
-    "service": "Users",
+    "service": "users",
     "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
     "authStrategies": ["jwt", "local"],
     "jwtOptions": {
@@ -44,6 +47,20 @@
     "local": {
       "usernameField": "email",
       "passwordField": "password"
+    }
+  },
+  "refresh-token": {
+    "entity": "refreshToken",
+    "service": "refresh-tokens",
+    "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
+    "jwtOptions": {
+      "header": {
+        "typ": "refresh"
+      },
+      "audience": "https://example.com",
+      "issuer": "example",
+      "algorithm": "HS256",
+      "expiresIn": "360d"
     }
   }
 }
