@@ -39,6 +39,7 @@
     "@feathersjs/express": "^4.5.14",
     "@feathersjs/feathers": "^4.5.12",
     "@feathersjs/socketio": "^4.5.14",
+    "@feathersjs/transport-commons": "^5.0.0-pre.20",
     "@jackywxd/feathers-refresh-token": "^0.2.0",
     "@sequelize/core": "^7.0.0-alpha.10",
     "@types/morgan": "^1.9.3",
