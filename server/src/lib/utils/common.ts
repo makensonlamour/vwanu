@@ -2,6 +2,8 @@ import config from 'config';
 import { Response, Request, NextFunction } from 'express';
 
 const Common = {
+
+
   getTokenFromRequest: async (request: Request) => {
     const token = request.headers['x-auth-token'];
     if (!token) return null;

@@ -1,4 +1,4 @@
-import db from '../../models';
+import db from '../../database';
 
 export const userAttributes = ['firstName', 'lastName', 'id', 'profilePicture'];
 
