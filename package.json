@@ -33,6 +33,8 @@
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
     "@feathersjs/feathers": "^4.5.12",
-    "@feathersjs/socketio": "^4.5.14"
+    "@feathersjs/socketio": "^4.5.14",
+    "@jackywxd/feathers-refresh-token": "^0.2.0",
+    "pg-tsquery": "^8.3.0"
   }
 }
