@@ -5,7 +5,7 @@ import { createClient } from 'redis';
 
 //  Custom dependencies
 import Log from './lib/utils/logger';
-import UserService from './services/user/dataProvider';
+import UserService from './servis/user/dataProvider';
 
 /** Global dependencies */
 
