@@ -19,6 +19,10 @@ jobs:
           echo { >  server/config/local.json
           echo "\"TEST_MAIL_API_KEY\":\"${{secrets.TEST_MAIL_API_KEY}}\"," >>  server/config/local.json
           echo "\"TEST_MAIL_NAMESPACE\":\"${{secrets.TEST_MAIL_NAMESPACE}}\"," >>  server/config/local.json
+          echo "\"smtp_username\": \"${{secrets.SMTP_USERNAME}}\",">>server/config/local.json
+          echo "\"smtp_password\": \"${{secrets.SMTP_PASSWORD}}\",">>  server/config/local.json
+          echo "\"smtp_port\": \"${{secrets.SMTP_PORT}}\",">>  server/config/local.json
+          echo "\"smtp_host\": \"${{secrets.SMTP_HOST}}\",">> server/config/local.json
           echo "\"smtp\":{" >>  server/config/local.json
           echo "\"user\":\"${{secrets.SMTP_USER}}\"," >>  server/config/local.json
           echo "\"pass\":\"${{secrets.SMTP_PASS}}\"," >>  server/config/local.json
@@ -100,7 +104,7 @@ jobs:
             git pull
             # docker-compose down 
             # docker-compose -f docker-compose.stage.yml build
-            docker-compose -f docker-compose.stage.yml up --build -d 
+            docker-compose -f docker-compose.stage.yml up --build -d
 
       - name: Deploy to Production
         if: github.event_name == 'push' && github.base_ref == 'master'
