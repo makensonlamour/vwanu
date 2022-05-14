@@ -208,11 +208,11 @@ const NewsFeed = () => {
     <>
       <div className="mx-auto mt-6 max-w-screen-2xl">
         <div className="flex">
-          <div className="basis-[22%]">
+          <div className="basis-[25%]">
             <BlogComponent data={blogs} />
             <FollowingPreview data={followings} />
           </div>
-          <div className="basis-[56%] xl:px-5">
+          <div className="basis-[56%] ">
             <div className="px-3">
               <h2 className="pb-5 text-3xl font-bold">Activity Feed</h2>
               <InputModal reference="newsfeed" />

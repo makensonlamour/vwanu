@@ -25,8 +25,8 @@ const Profil = () => {
 
   return (
     <>
-      <div className="mx-auto px-2">
-        <div className="lg:mx-4">
+      <div className="mx-auto ">
+        <div className="lg:mx-1">
           {user.id === id ? (
             <ProfileHeader user={user} otherUser={null} listFriendRequest={listFriendRequest} />
           ) : (

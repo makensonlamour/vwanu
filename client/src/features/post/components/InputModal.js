@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -14,7 +14,10 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { useCreatePost } from "../postSlice";
+
+const Picker = lazy(() => import("../../../components/form/EmojiPicker"));
 // import data from "@emoji-mart/data";
 // import { Picker } from "emoji-mart";
 
@@ -38,6 +41,7 @@ const InputModal = ({ reference }) => {
   const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
   const [openUploadVideo, setOpenUploadVideo] = useState(false);
   const [openUploadGif, setOpenUploadGif] = useState(false);
+  const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
   // const [privacyText, setPrivacyText] = useState("");
   const [hashTag, setHashTag] = useState(false);
   const [image, setImage] = useState(null);
@@ -218,6 +222,32 @@ const InputModal = ({ reference }) => {
                         {" "}
                         <MdAlternateEmail size={20} className="inline mr-1" />
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsIconPickerOpened(true)}
+                        className="text-right px-3 py-1 lg:mt-0 cursor-pointer hover:bg-gray-50"
+                      >
+                        <BsEmojiSmile size={20} className="inline mr-1" />
+                      </button>
+                      {isIconPickerOpened && (
+                        <ClickAwayListener onClickAway={() => setIsIconPickerOpened(false)}>
+                          <div>
+                            {(ref) => (
+                              <div ref={ref} className="absolute bottom-full right-0">
+                                <Suspense
+                                  fallback={
+                                    <div className="flex h-[357px] w-[348px] items-center justify-center rounded-lg border-2 border-[#555453] bg-[#222222]">
+                                      Loading... {/*}<Spin />{*/}
+                                    </div>
+                                  }
+                                >
+                                  <Picker onSelect={(emoji) => addIconToInput(emoji.native)} />
+                                </Suspense>
+                              </div>
+                            )}
+                          </div>
+                        </ClickAwayListener>
+                      )}
                     </span>
                   </div>
                   <div className="flex mt-2">

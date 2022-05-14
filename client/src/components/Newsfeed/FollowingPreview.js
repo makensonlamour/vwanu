@@ -14,11 +14,11 @@ const FollowingPreview = ({ data }) => {
           {`I'm Following `}
           <span className="font-normal text-lg text-gray-400">13</span>
         </h2>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0} sx={{ flexWrap: "wrap" }}>
+        <Stack direction="row" justifyContent="start" alignItems="center" spacing={0} sx={{ flexWrap: "wrap" }}>
           {data.map((following) => {
             return (
               <Item key={following.image} elevation={0}>
-                <div className="w-[3rem]">
+                <div className="w-[3rem] mx-[0.15rem]">
                   <img className="object-cover mask mask-squircle w-[3rem] h-16 rounded-lg" src={following.image} alt={following.image} />
                 </div>
               </Item>
