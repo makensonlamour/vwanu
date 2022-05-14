@@ -1,17 +1,14 @@
 /* eslint-disable import/no-import-module-exports */
-
 import { nanoid } from 'nanoid';
 import { Model } from 'sequelize';
 
 // Custom imports
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+
 import { UpUserInterface as UserInterface } from '../schema/user';
-import createToken from '../lib/utils/createToken';
 
 export default (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
-    id: number ;
+    id: number;
 
     email: string;
 
@@ -113,30 +110,13 @@ export default (sequelize: any, DataTypes: any) => {
 
     search_vector: string;
 
-    static async setPassword(password: string): Promise<string> {
-      const passwordHash = await bcrypt.hash(password, 12);
-      return passwordHash;
-    }
-
-    static async register(
-      user: Partial<UserInterface>,
-      password: string
-    ): Promise<UserInterface> {
-      const hash = await this.setPassword(password.toString());
-      const created = await this.create({ ...user, password: hash });
-      return created;
-    }
-
-    static login(user: UserInterface, cb: jwt.SignCallback) {
-      return createToken(user, cb);
-    }
-
     static associate(models: any) {
       // User.hasMany(models.Page, {
       //   onDelete: 'CASCADE',
       // });
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
+       
       });
       User.belongsToMany(models.User, {
         as: 'Follower',

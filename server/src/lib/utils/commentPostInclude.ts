@@ -1,29 +1,45 @@
-import db from '../../database';
-
 export const userAttributes = ['firstName', 'lastName', 'id', 'profilePicture'];
 
-export const ReactionInclude = [{ model: db.User, attributes: userAttributes }];
-export const include = [
-  { model: db.Media },
+// export const ReactionInclude = (app) => [
+//   { model: app.get('sequelizeClient').models.User, attributes: userAttributes },
+// ];
+
+export const include = (app) => [
+  {
+    model: app.get('sequelizeClient').models.Media,
+    
+  },
 
   {
-    model: db.Post,
+    model: app.get('sequelizeClient').models.User,
+    attributes: userAttributes,
+  },
+  {
+    model: app.get('sequelizeClient').models.Post,
     as: 'Comments',
     include: [
-      { model: db.User, attributes: userAttributes },
       {
-        model: db.Reaction,
-        include: ReactionInclude,
+        model: app.get('sequelizeClient').models.User,
+        attributes: userAttributes,
       },
+      // {
+      //   model: app.get('sequelizeClient').models.Reaction,
+      //   include: ReactionInclude,
+      // },
     ],
     order: [['createdAt', 'ASC']],
   },
   {
-    model: db.User,
+    model: app.get('sequelizeClient').models.User,
     attributes: userAttributes,
   },
-  {
-    model: db.Reaction,
-    include: [{ model: db.User, attributes: userAttributes }],
-  },
+  // {
+  //   model: app.get('sequelizeClient').models.Reaction,
+  //   include: [
+  //     {
+  //       model: app.get('sequelizeClient').models.User,
+  //       attributes: userAttributes,
+  //     },
+  //   ],
+  // },
 ];

@@ -2,8 +2,6 @@ import config from 'config';
 import { Response, Request, NextFunction } from 'express';
 
 const Common = {
-
-
   getTokenFromRequest: async (request: Request) => {
     const token = request.headers['x-auth-token'];
     if (!token) return null;
@@ -63,11 +61,6 @@ const Common = {
     { name: 'postAudio', maxCount: config.get<number>('maxPostAudios') },
   ],
 
-
-  
-  
-
-
   getAcceptableQueryParams: (
     paramsArray: string[],
     request: Request
@@ -109,12 +102,10 @@ const Common = {
     return { offsetAndLimit, getTotalPages };
   },
 
-  getUploadedFiles: (mediaArray: string[], request: Request): any => {
-    interface MulterRequest extends Request {
-      files: any;
-    }
-    const data = request.body;
-    const documentFiles = (request as MulterRequest).files;
+  getUploadedFiles: (mediaArray: string[], request): any => {
+    const data = request;
+
+    const documentFiles = request.UploadedMedia;
     if (documentFiles?.postImage || documentFiles?.postVideo) {
       data.Media = [];
 
@@ -127,6 +118,7 @@ const Common = {
         }
       });
     }
+    delete data.UploadedMedia;
     return data;
   },
 };

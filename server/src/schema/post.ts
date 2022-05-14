@@ -18,9 +18,7 @@ export const createPostSchema = object({
     mediaType: string().optional(),
     hashTag: string().optional(),
     private: z.boolean().optional(),
-    UserId: z.string({
-      required_error: 'Only Users can create post',
-    }),
+   
     postText: string({
       required_error: 'A post need at least to have some text',
       invalid_type_error: "You' have not provided a recognizable text",
