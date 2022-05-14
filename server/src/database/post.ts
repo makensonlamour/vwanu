@@ -35,9 +35,9 @@ export default (sequelize: any, DataTypes: any) => {
 
     static associate(models: any): void {
       Post.belongsTo(models.User);
-      // Post.belongsToMany(models.Medias, {
-      //   through: 'Post_Media',
-      // });
+      Post.belongsToMany(models.Media, {
+        through: 'Post_Media',
+      });
       Post.hasMany(models.Post, { as: 'Comments' });
       // Post.hasMany(models.Reaction);
     }
@@ -91,6 +91,12 @@ export default (sequelize: any, DataTypes: any) => {
     },
 
     {
+      // hooks: {
+      //   afterFind: (name, option) => {
+      //     // console.log('\n\n\n Some thing ');
+      //     // console.log({name, option});
+      //   },
+      // },
       sequelize,
       modelName: 'Post',
     }
