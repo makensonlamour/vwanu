@@ -1,8 +1,8 @@
 import type { Config } from '@jest/types';
 // Sync object
 const config: Config.InitialOptions = {
-  globalSetup: './.jest/setup.ts',
-  globalTeardown: './.jest/teardown.js',
+  // globalSetup: './.jest/setup.ts',
+  // globalTeardown: './.jest/teardown.js',
   // testEnvironment: './.jest/environment.js',
   verbose: true,
   transform: {
