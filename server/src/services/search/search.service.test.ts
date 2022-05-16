@@ -57,7 +57,7 @@ describe('search friends service', () => {
     );
   });
 
-  it('should search and find user related by first name', async () => {
+  it.skip('should search and find user related by first name', async () => {
     const rand = Math.floor(Math.random() * createdTestUsers.length);
 
     const userToSearch = createdTestUsers[rand].body;
@@ -75,7 +75,7 @@ describe('search friends service', () => {
       ])
     );
   });
-  it('should search and find user related by last name', async () => {
+  it.skip('should search and find user related by last name', async () => {
     const rand = Math.floor(Math.random() * createdTestUsers.length);
 
     const userToSearch = createdTestUsers[rand].body;

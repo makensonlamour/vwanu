@@ -9,7 +9,6 @@ const config = require('config');
 const dbSettings = config.get('dbSettings');
 
 export default function (app: Application): void {
-  console.log(' In the sequelize function');
   const sequelize = dbSettings.url
     ? new Sequelize(dbSettings.url)
     : new Sequelize({

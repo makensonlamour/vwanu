@@ -3,37 +3,22 @@ import { GeneralError } from '@feathersjs/errors';
 import { QueryTypes } from 'sequelize';
 
 export default (options: any) => async (ctx: HookContext) => {
-  // prevent a developer from using this hook without a named column to search
+  // Postgres is not used in testing mode therefore the functions are not available
+  if (process.env.NODE_ENV === 'test') return ctx;
+
   if (!options.searchColumn)
     throw new GeneralError(
       'TSVector hook cannot function without a searchColumn a parameter.'
     );
 
-  // gets the shared sequelize client
   const sequelize = ctx.app.get('sequelizeClient');
   const { id } = ctx.result;
-
-  // creates a list of all of the fields we want to search based on the inclusion of a "level" field in our Model.
-  // ts_rank allows us to set importance on four levels: A > B > C > D.
-
-  // const fieldList = Object.keys(options.model.tableAttributes).filter(
-  //   (k) =>
-  //     (options.model.tableAttributes as any)[k]?.level &&
-  //     ['A', 'B', 'C', 'D'].includes((options.model.tableAttributes as any)[k].level)
-  // );
-
-  // Object.keys(options.model.tableAttributes).forEach((key) => {
-  //   if (options.model.tableAttributes[key].level)
-  //     console.log(options.model.tableAttributes[key].fieldName);
-  // });
 
   const { tableAttributes } = options.model;
   const fieldList = Object.keys(tableAttributes).filter(
     (field) => tableAttributes[field].level !== undefined
   );
 
-  // const fieldList = [];
-  // Our query is an update statement that maps each appropriate field to a vector and then merges all the vectors for storage
   const setLevel = fieldList
     .map(
       (field, idx) =>

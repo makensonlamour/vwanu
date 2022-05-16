@@ -42,6 +42,7 @@ describe('/authmanagement service', () => {
   let act;
   const createdTestEmailsTemplates = [];
   beforeAll(async () => {
+    await app.get('sequelizeClient').sync({ alter: true, logged: false });
     testServer = request(app);
     user = (await testServer.post(userEndpoint).send(goodUser)).body;
   }, 20000);
@@ -202,12 +203,8 @@ describe('/authmanagement service', () => {
       expect(response.body.error).toBeUndefined();
       expect(response.body.extraMessage).toBeUndefined();
       expect(response.statusCode).toBe(StatusCodes.CREATED);
-      try {
-        await UserModel.destroy({ where: { id: u.id } });
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e);
-      }
+
+      await UserModel.destroy({ where: { id: u.id } });
     }, 7000);
   });
   describe('sendResetPwd', () => {

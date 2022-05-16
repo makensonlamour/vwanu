@@ -14,6 +14,7 @@ const userEndpoint = '/users';
 describe('Friend service, ', () => {
   let testServer;
   beforeAll(async () => {
+    await app.get('sequelizeClient').sync({ force: true, logged: false });
     testServer = request(app);
 
     createdTestUsers = await Promise.all(
@@ -94,7 +95,7 @@ describe('Friend service, ', () => {
       )
     ).toBeTruthy();
 
-  await testServer
+    await testServer
       .delete(`${endpoint}?UserId=${user.id}`)
       .set('authorization', requester.accessToken);
 

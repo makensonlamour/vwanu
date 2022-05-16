@@ -36,6 +36,7 @@ const expectedUser = {
 describe('/users service', () => {
   let testServer;
   beforeAll(async () => {
+    await app.get('sequelizeClient').sync({ force: true, logged: false });
     // await app.get('sequelizeClient').sync({ alter: true });
     testServer = request(app);
   }, 20000);

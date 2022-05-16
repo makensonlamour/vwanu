@@ -34,12 +34,8 @@ export default async function sendResetPwd(
   ) {
     try {
       await options.notifier('sendResetPwd', user1);
-      console.log('The notifier successd');
       return options.sanitizeUserForClient(user1);
     } catch (error) {
-      console.log(
-        '\n\n\n\n\n\n\n\n\nn\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nError in sending email'
-      );
       throw new GeneralError('notifier-error', { error: error.message });
     }
   }

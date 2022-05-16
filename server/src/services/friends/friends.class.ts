@@ -59,7 +59,7 @@ export class Friends extends Service {
     const approverId = params.User.id;
     const { friendId } = data;
 
-    console.log({ approverId, friendId });
+    // console.log({ approverId, friendId });
     const people: any = await models.User.findAll({
       where: { id: { [Op.or]: [approverId, friendId] } },
       attributes: ['id'],
