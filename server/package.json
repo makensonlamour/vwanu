@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "nodemon",
     "test:local": "jest --watch --no-cache --detectOpenHandles",
-    "test": "jest --coverage --passWithNoTests --detectOpenHandles",
+    "test": "jest --coverage --passWithNoTests --detectOpenHandles --verbose",
     "build": "tsc",
     "preinstall": "npm i nodemon -g",
     "start": "NODE_ENV=development node src/bin/index.js",
