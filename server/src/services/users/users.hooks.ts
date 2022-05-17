@@ -90,7 +90,7 @@ export default {
             VisitorId: context.params.User.id,
           });
         } catch (error) {
-          console.log(error);
+          throw new Error(error);
         }
 
         return context;

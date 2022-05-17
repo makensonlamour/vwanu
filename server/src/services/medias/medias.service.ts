@@ -2,20 +2,20 @@
 import { ServiceAddons } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
 import { Medias } from './medias.class';
-import createModel from '../../models/media.model';
 import hooks from './medias.hook';
 
 // Add this service to the service type index
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
   interface ServiceTypes {
-    posts: Medias & ServiceAddons<any>;
+    media: Medias & ServiceAddons<any>;
   }
 }
 
 export default function (app: Application): void {
+  const sequelize = app.get('sequelizeClient');
   const options = {
-    Model: createModel(app),
+    Model: sequelize.models.Media,
     paginate: app.get('paginate'),
   };
 

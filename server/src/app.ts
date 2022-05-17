@@ -13,7 +13,6 @@ import feathers, {
 } from '@feathersjs/feathers';
 
 /** Custom dependencies */
-// import './passport';
 import channels from './channels';
 import database from './database';
 import services from './services';

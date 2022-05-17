@@ -5,10 +5,10 @@ import { createClient } from 'redis';
 
 //  Custom dependencies
 import Log from './lib/utils/logger';
-import UserService from './servis/user/dataProvider';
 
 /** Global dependencies */
 
+const UserService: any = {};
 const { log } = console;
 
 const users = {};
@@ -102,7 +102,6 @@ export function checkAuth(payload, done) {
 }
 
 export const isLoggedIn = (socket, next) => {
-  console.log('verifying');
   try {
     const token = socket.handshake.headers['x-auth-token'];
     if (!token) {
@@ -118,9 +117,7 @@ export const isLoggedIn = (socket, next) => {
       config.get<string>('JWT_SECRET') as jwt.Secret,
       async (err, decoded) => {
         if (err && !decoded) {
-          console.log(
-            `this ${socket.id} sent an invalid token err: ${err.message}`
-          );
+          log(`this ${socket.id} sent an invalid token err: ${err.message}`);
           return next({
             message: err.message,
             status: StatusCodes.UNAUTHORIZED,
@@ -157,8 +154,8 @@ export const handleDisconnect = async (socket) => {
 
   // notify his online friends he has disconnected.
 
-  console.log(`socket id ${socket.id} disconnected`);
-  console.log(socket.handshake);
+  log(`socket id ${socket.id} disconnected`);
+  log(socket.handshake);
 };
 
 const toggleOnline = async (user, status: boolean) => {
