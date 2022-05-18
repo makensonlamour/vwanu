@@ -1,7 +1,7 @@
+import config from 'config';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import jwtAuth from 'socketio-jwt-auth';
-import config from 'config';
 
 // Custom dependencies i need
 import app from '../app';
@@ -46,9 +46,9 @@ export function onError(error: any): void {
   }
 }
 
-app(database).then((expressServer) => {
+database.sequelize.sync({ logging: false, alter: true }).then(() => {
   // Passing starting database and server.
-  const server = createServer(expressServer);
+  const server = createServer(app);
   const sio = new Server(server, {
     cors: {
       origin: '*',
@@ -62,7 +62,7 @@ app(database).then((expressServer) => {
     )
   );
 
-  sio.on('connection', wrapperAroundConnect(sio));
+  sio.on('connection', wrapperAroundConnect(sio, app));
 
   try {
     server.listen(port);

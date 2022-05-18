@@ -51,7 +51,7 @@ export default {
             StatusCodes.BAD_REQUEST
           );
 
-        if (req.body.accept)
+        if (req.body.accept) {
           await Promise.all([
             requester.addFriend(request),
             request.addFriend(requester),
@@ -60,7 +60,11 @@ export default {
             requester.addFollower(request),
             request.addFollower(requester),
           ]);
-        else await requester.addUndesiredFriends(request);
+          req.app.get('current_user').emit(`notification-${friendId}`, {
+            type: 'friend-request-accepted',
+            data: request,
+          });
+        } else await requester.addUndesiredFriends(request);
 
         await Promise.all([
           requester.removeFriendsRequest(request),

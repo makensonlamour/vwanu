@@ -17,7 +17,6 @@ import {
   UpUserInterface as UserInterface,
   CreateUserInput,
   VerifyUserInput,
-  GetUserInput,
   ForgotPasswordInput,
   ResetPasswordInput,
 } from '../../schema/user';
@@ -143,7 +142,7 @@ export default {
     sendResponse(res, StatusCodes.OK, { user }, ReasonPhrases.OK);
   }),
 
-  getOne: catchAsync(async (req: Request<GetUserInput>, res: Response) => {
+  getOne: catchAsync(async (req, res: Response) => {
     try {
       const requesterID = req.user.id.toString();
       const requestingID = req.params.id.toString();
@@ -166,6 +165,14 @@ export default {
       );
 
       await requesting.addVisitor(requester);
+
+      req.app
+        .get('current_user')
+        .broadcast.emit(`notification-${requestingID}`, {
+          type: 'visit',
+          data: requester,
+        });
+
       sendResponse(
         res,
         StatusCodes.OK,
@@ -584,6 +591,13 @@ export default {
       friend.addFriendsRequest(requester),
       requester.addFriendshipRequested(friend),
     ]);
+
+    req.app
+      .get('current_user')
+      .broadcast.emit(`notification-${friend.id}`, {
+        type: 'new-friend-request',
+        data: requester,
+      });
 
     const newU = await requester.reload();
     sendResponse(res, StatusCodes.OK, { user: newU }, 'okd');
