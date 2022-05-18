@@ -59,10 +59,22 @@ import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
 import { MdGroups } from "react-icons/md";
 import { VscCommentDiscussion } from "react-icons/vsc";
 import { Tooltip } from "@mui/material";
+import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const SidebarLeft = () => {
+const SidebarLeft = ({ user }) => {
   const [full, setFull] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+
+  let activeStyle = {
+    textDecoration: "none",
+    backgroundColor: "inherit",
+  };
+
+  let notActiveStyle = {
+    textDecoration: "none",
+    backgroundColor: "inherit",
+  };
 
   return (
     <>
@@ -160,6 +172,12 @@ const SidebarLeft = () => {
       </div>
     </>
   );
+};
+
+SidebarLeft.propTypes = {
+  isOpen: PropTypes.bool,
+  isContext: PropTypes.bool,
+  user: PropTypes.object,
 };
 
 export default SidebarLeft;

@@ -27,7 +27,6 @@ const settings = [
 ];
 
 const Navbar = ({ user }) => {
-  console.log(user);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => {

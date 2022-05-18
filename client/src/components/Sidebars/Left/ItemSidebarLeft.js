@@ -11,20 +11,20 @@ import { FcFolder } from "react-icons/fc";
 
 export const ItemSidebarLeft = [
   {
-    menuTitle: "Me",
+    menuTitle: "Personal",
     menuItems: [
       {
-        title: "News Feed",
+        title: "My Profile",
         path: routesPath.NEWSFEED,
         icon: <FcNews className="mx-2" size="24px" />,
       },
       {
-        title: "Albums",
-        path: routesPath.ALBUMS,
+        title: "My Timeline",
+        path: routesPath.NEWSFEED,
         icon: <FcGallery className="mx-2" size="24px" />,
       },
       {
-        title: "Saved Posts",
+        title: "My inbox",
         path: routesPath.SAVED_POST,
         icon: <FcFolder className="mx-2" size="24px" />,
       },
@@ -34,23 +34,18 @@ export const ItemSidebarLeft = [
     menuTitle: "Community",
     menuItems: [
       {
-        title: "Interest",
+        title: "My Groups",
         path: routesPath.INTEREST,
         icon: <FcNews className="mx-2" size="24px" />,
       },
       {
-        title: "Forums",
+        title: "My Network",
         path: routesPath.FORUMS,
         icon: <FcGallery className="mx-2" size="24px" />,
       },
       {
-        title: "My Interests",
+        title: "My Discussions",
         path: routesPath.MY_INTERESTS,
-        icon: <FcFolder className="mx-2" size="24px" />,
-      },
-      {
-        title: "My Groups",
-        path: routesPath.MY_GROUPS,
         icon: <FcFolder className="mx-2" size="24px" />,
       },
       {
