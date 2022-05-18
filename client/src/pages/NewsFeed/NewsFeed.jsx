@@ -208,7 +208,7 @@ const NewsFeed = () => {
     <>
       <div className="mx-auto mt-6 max-w-screen-3xl">
         <div className="flex justify-evenly">
-          <div className="basis-[25%] hidden lg:block">
+          <div className="basis-[25%] hidden xl:block">
             <BlogComponent data={blogs} />
             <FollowingPreview data={followings} />
           </div>
@@ -220,6 +220,13 @@ const NewsFeed = () => {
             </div>
           </div>
           <div className="basis-[22%] hidden lg:block">
+            <span className="block xl:hidden">
+              <BlogComponent data={blogs} />
+            </span>
+            <span className="block xl:hidden">
+              <FollowingPreview data={followings} />
+            </span>
+
             <CompleteProfile percentage={percentage} data={steps} />
             <UpdatesComponent data={latestUpdates} />
             <RecentlyActive data={recentlyActive} />

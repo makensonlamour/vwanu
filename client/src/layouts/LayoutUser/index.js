@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { useGetProfile } from "../../features/auth/authSlice";
@@ -12,10 +12,11 @@ import { Paper, styled } from "@mui/material";
 // import { GrClose } from "react-icons/gr";
 import Navbar from "../../components/Navbars/index";
 import SidebarLeft from "../../components/Sidebars/Left/index";
+import MobileSidebar from "../../components/Sidebars/Left/MobileSidebar";
 // import SidebarRight from "../../components/Sidebars/Right/index";
 // import BottomNavigation from "../../components/BottomNavigation/index";
 import routesPath from "../../routesPath";
-// import { BottomMenuContext } from "../../context/BottomMenuContext";
+import { BottomMenuContext } from "../../context/BottomMenuContext";
 
 //Styles for components
 
@@ -27,7 +28,7 @@ const LayoutUser = () => {
   const { data: user, error } = useGetProfile(["user", "me"]);
   const location = useLocation();
   const navigate = useNavigate();
-  // const { isSidebarOpen, closeSidebar } = useContext(BottomMenuContext);
+  const { isSidebarOpen } = useContext(BottomMenuContext);
 
   if (error?.response?.status === 401) {
     deleteToken();
@@ -38,12 +39,18 @@ const LayoutUser = () => {
     <>
       <div className="mx-auto">
         <div className="flex">
-          <div className="grow">
-            <SidebarLeft />
+          <div className="grow hidden md:block">
+            <SidebarLeft user={!error ? user : undefined} />
           </div>
-          <div className="md:w-[90vw] lg:w-[94vw]">
+          <div className="w-[100vw] md:w-[90vw] lg:w-[94vw]">
+            {isSidebarOpen ? (
+              <div className={`${isSidebarOpen ? "translate-x-0" : "translate-x-full"} md:hidden ease-in-out duration-300`}>
+                <MobileSidebar user={!error ? user : undefined} />
+              </div>
+            ) : null}
             <Navbar user={!error ? user : undefined} />
-            <Item elevation={0} className="max-w-screen-xxl w-[90vw] mx-auto relative">
+
+            <Item elevation={0} className="max-w-screen-xxl w-[90vw] mx-auto ">
               {!error ? user?.birthday ? null : <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace /> : null}
               {user ? (
                 <Outlet context={!error ? user : undefined} />
