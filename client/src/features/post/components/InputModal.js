@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -39,11 +39,12 @@ const InputModal = ({ reference }) => {
   const [openUploadVideo, setOpenUploadVideo] = useState(false);
   const [openUploadGif, setOpenUploadGif] = useState(false);
   const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
-  // const [privacyText, setPrivacyText] = useState("");
+  const [privacyText, setPrivacyText] = useState("public");
   const [hashTag, setHashTag] = useState(false);
   const [image, setImage] = useState(null);
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [textEditor, setTextEditor] = useState(null);
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -89,8 +90,9 @@ const InputModal = ({ reference }) => {
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
     formData.append("postImage", image);
-    formData.append("postText", credentials.postText);
+    formData.append("postText", textEditor);
     formData.append("UserId", credentials.UserId);
+    formData.append("privacyType", privacyText);
 
     //request for post newsfeed
     if (_.isEqual(reference, "newsfeed")) {
@@ -136,11 +138,7 @@ const InputModal = ({ reference }) => {
       setShowModal(false);
     } else setShowModal(false);
   };
-  /*
-  useEffect(() => {
-    new Picker({ ...props, data, ref });
-  }, []);
-*/
+
   return (
     <>
       <Toaster />
@@ -210,12 +208,12 @@ const InputModal = ({ reference }) => {
                         }}
                         className="cursor-pointer hover:bg-gray-50"
                       >
-                        <ModalPrivacy title={"Public"} open={openPrivacy} />
+                        <ModalPrivacy title={"Public"} open={openPrivacy} fn={setPrivacyText} />
                       </button>
                     </div>
                   </div>
                   <div className="flex-auto">
-                    <Editor placeholder={`Share what's on your mind, ${user?.firstName}...`} />
+                    <Editor fn={setTextEditor} placeholder={`Share what's on your mind, ${user?.firstName}...`} />
                     {/*
                     <InputField
                       required

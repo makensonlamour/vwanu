@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { CgMenuLeft, CgClose } from "react-icons/cg";
+import React, { useContext } from "react";
+import { CgClose } from "react-icons/cg";
 import { Tooltip } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 // import { ItemSidebarLeft } from "./ItemSidebarLeft";
 import routesPath from "../../../routesPath";
@@ -9,10 +9,10 @@ import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
 import { MdGroups } from "react-icons/md";
 import { VscCommentDiscussion } from "react-icons/vsc";
 import { RiPagesLine } from "react-icons/ri";
+import { BottomMenuContext } from "../../../context/BottomMenuContext";
 
 const SidebarLeft = ({ user }) => {
-  const [full, setFull] = useState(false);
-  const [navOpen, setNavOpen] = useState(false);
+  const { closeSidebar, isSidebarOpen } = useContext(BottomMenuContext);
 
   let activeStyle = {
     textDecoration: "none",
@@ -74,33 +74,44 @@ const SidebarLeft = ({ user }) => {
 
   return (
     <>
-      <div className={`${full ? "w-[15vw] " : ""} h-screen md:shadow-xl antialiased md:fixed z-50`}>
+      <div
+        className={`${
+          isSidebarOpen ? "translate-x-0" : "translate-x-full"
+        }  ease-in-out duration-300 w-full h-screen md:shadow-xl antialiased md:fixed z-50`}
+      >
         {/* Mobile menu Toggle */}
-        <button
-          onClick={() => {
-            setNavOpen(!navOpen);
-            setFull(true);
-          }}
-          className="md:hidden w-[2.7rem] lg:w-[20%] h-[2.9rem] lg:h-14 md:shadow-md focus:outline-none bg-white z-10"
-        >
-          <CgMenuLeft size={"24px"} className={`${navOpen ? "hidden" : ""} mx-auto`} />
-          <CgClose size={"24px"} className={`${navOpen ? "" : "hidden"} mx-auto`} />
-        </button>
+        <div className="shadow-lg py-2 flex justify-between px-4 bg-white">
+          <Link
+            onClick={() => {
+              closeSidebar();
+            }}
+            to={"../../profile/" + user?.id}
+            className="flex text-primary hover:text-secondary"
+          >
+            <img className="object-fit w-10 h-10 mask mask-squircle" src={user?.profilePicture} alt={user?.firstName} />
+            <div className="block ml-3">
+              <p className="text-md font-medium">{user?.firstName + " " + user?.lastName}</p>
+              <p className="text-sm font-light">My Account</p>
+            </div>
+          </Link>
+          <button
+            onClick={() => {
+              closeSidebar();
+            }}
+            className="md:hidden pr-3 h-[2.9rem] md:shadow-md focus:outline-none  z-10"
+          >
+            <CgClose size={"24px"} className="ml-auto" />
+          </button>
+        </div>
 
         <div
-          className={`${
-            navOpen ? "block w-full" : "hidden md:block"
-          } md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-scroll md:fixed sm:relative w-92`}
+          className={`"block w-full md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-scroll md:fixed sm:relative w-92`}
         >
-          <button onClick={() => setFull(!full)} className="w-full px-6 sticky mb-2 hidden md:block focus:outline-none h-14">
-            <CgMenuLeft size={"24px"} className="" />
-          </button>
-
           <div className="px-4 space-y-2">
             {ItemSidebarLeft.map((item) => {
               return (
                 <>
-                  <p key={item.menuTitle} className={`${full ? "block" : "hidden"}  pt-4 text-gray-500 text-lg`}>
+                  <p key={item.menuTitle} className="block pt-4 text-gray-500 text-lg">
                     {" "}
                     {item.menuTitle}
                   </p>
@@ -111,21 +122,23 @@ const SidebarLeft = ({ user }) => {
                         key={it.title}
                         className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
                       >
-                        <Tooltip className={`${full ? "mr-3" : ""}`} title={it.title}>
+                        <Tooltip className="mr-3" title={it.title}>
                           <NavLink
                             to={it.path}
+                            onClick={() => {
+                              closeSidebar();
+                            }}
                             style={({ isActive }) => (isActive ? activeStyle : notActiveStyle)}
                             className="inline-flex "
                           >
                             {" "}
-                            <span className={`${full ? "mr-3" : ""}`}>{it.icon}</span>
-                            <h1 className={`${full ? "block" : "hidden"}`}>{it.title}</h1>
+                            <span className="mr-3">{it.icon}</span>
+                            <h1 className="block">{it.title}</h1>
                           </NavLink>
                         </Tooltip>
                       </div>
                     );
                   })}
-                  <div className={`${full ? "hidden" : "block"} w-full h-[1px] bg-black`}></div>
                 </>
               );
             })}

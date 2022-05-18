@@ -5,7 +5,7 @@ import { GoGlobe } from "react-icons/go";
 import { BiLockAlt } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 
-function ModalPrivacy({ title }) {
+function ModalPrivacy({ title, fn }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -39,7 +39,12 @@ function ModalPrivacy({ title }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            fn("public");
+            handleClose();
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={{ backgroundColor: "#EFF3FF", borderRadius: "25px", padding: "0.5rem", marginRight: "0.5rem" }}>
               <GoGlobe size={"24px"} className="inline mr-1 " />
@@ -50,7 +55,12 @@ function ModalPrivacy({ title }) {
             </div>
           </div>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            fn("network");
+            handleClose();
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={{ backgroundColor: "#EFF3FF", borderRadius: "25px", padding: "0.5rem", marginRight: "0.5rem" }}>
               <FaUsers size={"24px"} className="inline mr-1 " />
@@ -61,7 +71,12 @@ function ModalPrivacy({ title }) {
             </div>
           </div>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            fn("me");
+            handleClose();
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={{ backgroundColor: "#EFF3FF", borderRadius: "25px", padding: "0.5rem", marginRight: "0.5rem" }}>
               <BiLockAlt size={"24px"} className="inline mr-1 " />
@@ -79,6 +94,7 @@ function ModalPrivacy({ title }) {
 
 ModalPrivacy.propTypes = {
   title: PropTypes.any.isRequired,
+  fn: PropTypes.func,
 };
 
 export default ModalPrivacy;
