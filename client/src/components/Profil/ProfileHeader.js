@@ -147,7 +147,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                     </div>
                     {*/}
                   </div>
-                  <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.about : user?.about ? user?.about : ""}</h2>
+                  {/*}  <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.about : user?.about ? user?.about : ""}</h2>{*/}
                 </div>
                 <ProfileTabs user={user} otherUser={otherUser} />
               </div>

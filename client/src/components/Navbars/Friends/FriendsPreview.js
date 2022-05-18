@@ -13,7 +13,6 @@ const FriendsPreview = () => {
 
   return (
     <>
-      {console.log("listFriendRequest", listFriendRequest)}
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
           <AiOutlineUserAdd size="24px" />

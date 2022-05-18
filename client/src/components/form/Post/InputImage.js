@@ -9,12 +9,12 @@ function InputImage({ label, name, className, id, icon, format, stateFile, ...ot
 
   return (
     <>
-      <div className="form-control">
+      <div className=" -mt-5">
         <input
           type="file"
           accept={format}
           id={id}
-          className={"hidden" + className}
+          className={"hidden " + className}
           onBlur={() => setFieldTouched(name)}
           onChange={(e) => {
             setFieldValue(name, e.currentTarget.files[0]);

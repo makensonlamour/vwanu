@@ -90,7 +90,7 @@ const InputModal = ({ reference }) => {
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
     formData.append("postImage", image);
-    formData.append("postText", textEditor);
+    formData.append("postText", credentials.postText);
     formData.append("UserId", credentials.UserId);
     formData.append("privacyType", privacyText);
 
@@ -213,8 +213,8 @@ const InputModal = ({ reference }) => {
                     </div>
                   </div>
                   <div className="flex-auto">
-                    <Editor fn={setTextEditor} placeholder={`Share what's on your mind, ${user?.firstName}...`} />
-                    {/*
+                    {/*<Editor fn={setTextEditor} placeholder={`Share what's on your mind, ${user?.firstName}...`} />*/}
+
                     <InputField
                       required
                       autoCapitalize="none"
@@ -223,7 +223,7 @@ const InputModal = ({ reference }) => {
                       className="basis-full text-lg appearance-none text-secondary placeholder:text-gray-600 font-light border-none "
                       testId="post-error-message"
                       hashtagSymbol={hashTag}
-                      /> */}
+                    />
                   </div>
                   <div>{/* add photo */}</div>
                   <div>{/* add video */}</div>
@@ -276,7 +276,19 @@ const InputModal = ({ reference }) => {
                 <div className="rounded-b-lg border-t border-solid border-gray-300 bg-placeholder-color px-4">
                   <div className="flex font-semibold text-sm justify-between items-center">
                     <div className=" text-left py-4 px-4">
-                      <button
+                      <p className="inline-flex pr-4 -pt-10">
+                        <InputImage
+                          label=""
+                          name="postImage"
+                          id="img"
+                          stateFile={setImage}
+                          accept="image/png,image/jpg,image/jpeg"
+                          icon={<AiOutlineCamera size="24px" className="text-gray-800 inline -pt-10" />}
+                          autoComplete="new-file"
+                          className="text-secondary font-semibold rounded-full px-6 input-primary -pt-10 border-none w-1/2 ml-auto hidden pr-2"
+                        />
+                      </p>
+                      {/*}    <button
                         onClick={() => {
                           setOpenUploadPhoto(!openUploadPhoto);
                           setOpenUploadVideo(false);
@@ -285,7 +297,7 @@ const InputModal = ({ reference }) => {
                         className="mr-4"
                       >
                         <AiOutlineCamera size={"24px"} />
-                      </button>
+                      </button>{*/}
                       <button
                         onClick={() => {
                           setOpenUploadVideo(!openUploadVideo);
