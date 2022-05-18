@@ -33,7 +33,7 @@ const NotificationPreview = () => {
       if (val) return sortNotification(val);
     });
     console.log(notificationList.length);
-  }, []);
+  }, [notificationList.length, socket, user.id]);
 
   return (
     <>
