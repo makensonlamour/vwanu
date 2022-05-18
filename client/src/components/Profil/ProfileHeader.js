@@ -79,9 +79,12 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                         <span>Joined Apr 2022</span>
                       </h4>
                       <h4 className="font-mock text-sm text-gray-600 mb-2 lg:-mt-1 ">
-                        <span className="pr-2">13 followers</span>
-                        <span className="pl-2">16 following</span>
-                        {otherUser ? otherUser?.friends : user?.friends ? user?.friends?.length + " Friends" : null}
+                        <span className="pr-2">
+                          {otherUser ? otherUser?.friends : user?.friends ? user?.friends?.length + " " : null}followers
+                        </span>
+                        <span className="pl-2">
+                          {otherUser ? otherUser?.friends : user?.friends ? user?.friends?.length + " " : null} following
+                        </span>
                       </h4>
                       <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
                         <div className="inline w-8 h-8 mr-2">
@@ -94,6 +97,29 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                           <AiFillTwitterCircle size={"24px"} className="mx-auto" />
                         </div>
                       </h4>
+                    </div>
+                    <div>
+                      {checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? (
+                        <FriendButton otherUser={otherUser} />
+                      ) : (
+                        <FriendRequestButton user={user} otherUser={otherUser} />
+                      )}
+                      {otherUser ? (
+                        <button className="btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end">
+                          Message
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setEdit(true);
+                            navigate("./about", { state: { edit } });
+                          }}
+                          className="items-center align-middle btn btn-sm btn-secondary text-base-100 rounded-lg mb-2 lg:mb-0 hover:bg-primary justify-end"
+                        >
+                          <FaUserEdit size={"18px"} />
+                          <span className="ml-1"> Edit Profile</span>
+                        </button>
+                      )}
                     </div>
                     {/*}
                     <div>
@@ -128,7 +154,10 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
               <div className="mt-4 ">
                 <Routes>
                   <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} />} />
-                  <Route path={allTabs1[1]} element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={user} />}</div>} />
+                  <Route
+                    path={allTabs1[1]}
+                    element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={otherUser ? otherUser : user} />}</div>}
+                  />
                   <Route
                     path={allTabs1[2]}
                     element={
