@@ -178,3 +178,4 @@ server/src/models/like.ts.skip
 
 .DS_Store
 **/.DS_Store
+docker-compose.react.yml

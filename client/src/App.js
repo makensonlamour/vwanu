@@ -5,7 +5,12 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
 
+// import { getToken } from "./helpers";
+// import io from "socket.io-client";
+// import useSocketContext from "./hooks/useSocketcontext";
 // Custom dependencies
+
+import { SocketContextProvider } from "./context/SocketContext";
 import Views from "./layouts/Views.js";
 
 const App = () => {
@@ -20,7 +25,9 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <SidebarProvider>
-          <Views />
+          <SocketContextProvider>
+            <Views />
+          </SocketContextProvider>
           <ReactQueryDevtools />
         </SidebarProvider>
       </ThemeProvider>

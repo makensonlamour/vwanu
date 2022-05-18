@@ -93,6 +93,9 @@ const notifyOnline = (socket, user) => {
 };
 
 export function checkAuth(payload, done) {
+  console.log(
+    ' \n\n\n\n\n\n\n\n\n\n\n a new connection happehuned  \n\n\n\n\n\n\n\n\n\n\n'
+  );
   UserService.getUser(payload.user.id)
     .then((user) => {
       if (!user) return done(null, false, 'user does not exist');
@@ -157,37 +160,49 @@ export const handleDisconnect = async (socket) => {
 
   // notify his online friends he has disconnected.
 
-  console.log(`socket id ${socket.id} disconnected`);
+  console.log(`socket id ${socket.id} disconnected ii`);
   console.log(socket.handshake);
 };
 
 const toggleOnline = async (user, status: boolean) => {
   await UserService.updateUser(user, { online: status, lastSeen: new Date() });
 };
+const addToAuthenticated = (socket) => {
+  socket.join('authenticated');
+};
 const notifyOnlineFriend = async (user, socket, status) => {
+  socket.broadcast.emit('authenticated', { user, status });
   const friendsRoom = `${user.id}-friend-room`;
-  const friends = await user.getFriends({ where: { online: true } });
-  friends.forEach(async (friend) => {
-    let onlineFriend = await getUser(friend.id);
-    if (!onlineFriend) return;
-    onlineFriend = JSON.parse(onlineFriend);
-    onlineFriend.socket.join(friendsRoom);
-  });
-  const { id, firstName, lastName, profilePicture } = user;
+  try {
+    const friends = await user.getFriends({ where: { online: true } });
+    if (friends)
+      friends.forEach(async (friend) => {
+        const onlineFriend = getUser(friend.id);
+        if (!onlineFriend) return;
+        // onlineFriend = JSON.parse(onlineFriend);
+        onlineFriend.socket.join(friendsRoom);
+      });
+    const { id, firstName, lastName, profilePicture } = user;
 
-  socket.broadcast.to(friendsRoom).emit('new_user_status', {
-    id,
-    firstName,
-    lastName,
-    profilePicture,
-    online: status,
-  });
+    socket.broadcast.emit(friendsRoom, {
+      id,
+      firstName,
+      lastName,
+      profilePicture,
+      online: status,
+    });
+  } catch (error) {
+    console.log('error finding ');
+    console.log(error);
+  }
 };
 
-export const wrapperAroundConnect = (io) => async (socket) => {
+export const wrapperAroundConnect = (io, app) => async (socket) => {
+  app.set('current_user', socket);
   saveOrUpdate(socket.request.user, socket);
   if (!socket.request.online) {
     await toggleOnline(socket.request.user, true);
+    addToAuthenticated(socket);
     await notifyOnlineFriend(socket.request.user, socket, true);
   }
 
@@ -196,7 +211,9 @@ export const wrapperAroundConnect = (io) => async (socket) => {
   });
 
   socket.on('disconnect', async () => {
-    log('disconnected');
+    log(
+      '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n disconnfected -1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
+    );
     await toggleOnline(socket.request.user, false);
     await notifyOnlineFriend(socket.request.user, socket, false);
   });

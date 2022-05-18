@@ -13,7 +13,9 @@ describe('api/comment', () => {
   let token = null;
   const postText = `I am the comment 1 on  post 1 `;
   beforeAll(async () => {
-    expressServer = await app(db);
+    await db.sequelize.sync({ alter: true, logging: false });
+    db.sequelize.options.logging = false;
+    expressServer = app;
     // crete a user and Login server
 
     const response = await request(expressServer)

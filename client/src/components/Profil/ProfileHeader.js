@@ -98,6 +98,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                         </div>
                       </h4>
                     </div>
+
                     <div>
                       {checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? (
                         <FriendButton otherUser={otherUser} />
@@ -121,7 +122,8 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                         </button>
                       )}
                     </div>
-                    {/*}
+                    {/*
+
                     <div>
                       {checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? (
                         <FriendButton otherUser={otherUser} />
@@ -145,7 +147,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                         </button>
                         )}
                     </div>
-                    {*/}
+                        */}
                   </div>
                   <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.about : user?.about ? user?.about : ""}</h2>
                 </div>

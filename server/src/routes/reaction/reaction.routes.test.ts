@@ -19,7 +19,9 @@ describe('/api/reaction', () => {
 
   const commentMsg = 'some comment for the post';
   beforeAll(async () => {
-    expressServer = await app(db);
+    await db.sequelize.sync({ alter: true, logging: false });
+    db.sequelize.options.logging = false;
+    expressServer = app;
     const response = await request(expressServer)
       .post('/api/user')
       .send({
