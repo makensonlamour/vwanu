@@ -1,4 +1,5 @@
 {
+  "host": "localhost",
   "smtp": {
     "user": "mzghhfqe244g3ssi@ethereal.email",
     "pass": "VGwXCd8dr3xZDNTXuZ",
@@ -9,7 +10,13 @@
   "dbSettings": {
     "dialect": "postgres"
   },
-  "sendEmailFrom": "test@vwanu.com",
+  "smtp_password": "00bcfe6b6504a3036b1c23051a00dacd",
+  "smtp_port": 587,
+  "smtp_host": "send.smtp.mailtrap.io",
+  "sendEmailFrom": "vwanuht@vwanuht.xyz",
+  "send-in-blue-service-url": "smtp-relay.sendinblue.com",
+  "send-in-blue-mail-user": "vwanuht@gmail.com",
+  "send-in-blue-mail-pass": "ZcPSk8drzEHFMn6K",
   "multerSetting": {},
   "JWT_SECRET": "StageSecretIsREal",
   "maxPostImages": 3,
@@ -24,6 +31,39 @@
     "CLOUDINARY_API_SECRET": "add your own",
     "CLOUDINARY_API_KEY": "your key ",
     "CLOUDINARY_CLOUD_NAME": "your name"
-  }
+  },
 
+  "authentication": {
+    "entity": "User",
+    "service": "users",
+    "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
+    "authStrategies": ["jwt", "local"],
+    "jwtOptions": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  },
+  "refresh-token": {
+    "entity": "refreshToken",
+    "service": "refresh-tokens",
+    "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
+    "jwtOptions": {
+      "header": {
+        "typ": "refresh"
+      },
+      "audience": "https://example.com",
+      "issuer": "example",
+      "algorithm": "HS256",
+      "expiresIn": "360d"
+    }
+  }
 }

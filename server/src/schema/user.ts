@@ -21,9 +21,6 @@ export const createUserSchema = object({
     message: 'Passwords do not match',
     path: ['passwordConfirmation'],
   }),
-  params: object({
-    files: z.object({}).optional(),
-  }),
 });
 
 export const UserSchema = z.object({
@@ -155,6 +152,11 @@ export const UpUser = object({
   interestedBy: string(),
   online: z.boolean(),
   lastSeen: z.date(),
+  resetExpires: z.date(),
+  resetAttempts: z.number(),
+  loginAttempts: z.number(),
+  resetShortPasswordKey: z.string(),
+  search_vector: z.string(),
 });
 export const addOrRemoveFriendSchema = object({
   params: object({

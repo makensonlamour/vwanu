@@ -3,34 +3,36 @@ import passport from 'passport';
 import Local from 'passport-local';
 import bcrypt from 'bcryptjs';
 
-import db from './models';
-
 const LocalStrategy = Local.Strategy;
 // const JWTStrategy = passportJWT.Strategy
- const invalid = 'invalid email or password'
+const invalid = 'invalid email or password';
 // const successLogin = 'Logged in with success'
 
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: 'email',
-      passwordField: 'password',
-      passReqToCallback: true,
-    },
-    async (request, email, password, done) =>
-      db.User.findOne({ where: { email } }).then(async (user: any) => {
-        if (!user) {
-          return done(null, false, { message: invalid });
-        }
+export default (app) =>
+  passport.use(
+    new LocalStrategy(
+      {
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true,
+      },
+      async (request, email, password, done) =>
+        app
+          .get('sequelizeClient')
+          .models.User.findOne({ where: { email } })
+          .then(async (user: any) => {
+            if (!user) {
+              return done(null, false, { message: invalid });
+            }
 
-        const isMatch = await bcrypt.compare(
-          password.toString(),
-          user.password
-        );
-        if (!isMatch) {
-          return done(null, false, { message: invalid });
-        }
-        return done(null, user, { message: 'Logged in with success' });
-      })
-  )
-);
+            const isMatch = await bcrypt.compare(
+              password.toString(),
+              user.password
+            );
+            if (!isMatch) {
+              return done(null, false, { message: invalid });
+            }
+            return done(null, user, { message: 'Logged in with success' });
+          })
+    )
+  );

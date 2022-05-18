@@ -1,19 +1,17 @@
-import { Request, Response, NextFunction } from 'express'
-import { AnyZodObject } from 'zod'
+import { AnyZodObject } from 'zod';
+import { BadRequest } from '@feathersjs/errors';
 
-const validateResource =
-  (schema: AnyZodObject) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      schema.parse({
-        body: req.body,
-        query: req.query,
-        params: req.params,
-      })
-      next()
-    } catch (e: any) {
-      next({ status: 400, message: e.errors })
-    }
+const validateResource = (schema: AnyZodObject) => (context) => {
+  try {
+    schema.parse({
+      body: context.data,
+      query: context.params.query,
+      params: context.path,
+    });
+    return context;
+  } catch (error: any) {
+    throw new BadRequest('Invalid Parameters', error);
   }
+};
 
-export default validateResource
+export default validateResource;
