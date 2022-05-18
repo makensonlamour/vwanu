@@ -29,7 +29,7 @@ const Views = () => {
     dispatch({ type: Types.SET, payload: newSocket });
     return () => newSocket.close();
   };
-  useEffect([setSocket, Types.SET, dispatch, socket]);
+  useEffect(setSocket, [Types.SET, dispatch, socket, token]);
 
   // const serverUrl = "http://localhost:4000";
   // const [socket, setSocket] = useState(null);
