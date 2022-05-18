@@ -28,7 +28,9 @@ jest.setTimeout(9000);
 describe('Authentication ', () => {
   let expressServer = null;
   beforeEach(async () => {
-    expressServer = await app(db);
+    await db.sequelize.sync({ alter: true, logging: false });
+    db.sequelize.options.logging = false;
+    expressServer = app;
   });
   describe('Given incorrect credentials', () => {
     beforeEach(async () => {});
