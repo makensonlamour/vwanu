@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
+import { Op } from '@sequelize/core';
 import { Params } from '@feathersjs/feathers';
 import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
 
-import { GeneralError } from '@feathersjs/errors';
+import { GeneralError, NotFound } from '@feathersjs/errors';
 
 /** Local dependencies */
 import common from '../../lib/utils/common';
@@ -30,8 +31,9 @@ export class Posts extends Service {
     const postData = getUploadedFiles(['postImage', 'postVideo'], data);
     const post = await this.app
       .service('posts')
-      .Model.create(postData, { include: include(this.app) })
+      .Model.create(postData, { include: include(this.app) });
 
     return Promise.resolve(post);
   }
+
 }

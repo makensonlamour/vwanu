@@ -23,6 +23,8 @@ export default function (app: Application): void {
 
   app.use('/authentication', authentication);
   const service = app.service('authentication');
+
+  // @ts-ignore
   service.hooks({
     after: {
       all: [
