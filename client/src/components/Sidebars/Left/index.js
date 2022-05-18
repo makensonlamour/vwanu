@@ -66,14 +66,14 @@ const SidebarLeft = () => {
 
   return (
     <>
-      <div className={`${full ? "w-[15vw]" : ""} h-screen shadow-xl z-30 antialiased fixed`}>
+      <div className={`${full ? "w-[15vw]" : ""} h-screen md:shadow-xl antialiased md:sticky md:top-0 z-50`}>
         {/* Mobile menu Toggle */}
         <button
           onClick={() => {
             setNavOpen(!navOpen);
             setFull(true);
           }}
-          className="md:hidden w-[20%] h-14 focus:outline-none bg-white shadow-md z-10"
+          className="md:hidden w-[2.7rem] lg:w-[20%] h-[2.9rem] lg:h-14 md:shadow-md focus:outline-none bg-white z-10"
         >
           <CgMenuLeft size={"24px"} className={`${navOpen ? "hidden" : ""} mx-auto`} />
           <CgClose size={"24px"} className={`${navOpen ? "" : "hidden"} mx-auto`} />
@@ -82,7 +82,7 @@ const SidebarLeft = () => {
         <div
           className={`${
             navOpen ? "block w-full" : "hidden md:block"
-          } md:block h-screen bg-white transition-all duration-300 space-y-2 fixed sm:relative`}
+          } md:block h-screen bg-white transition-all duration-300 space-y-2 md:fixed sm:relative w-92`}
         >
           <button onClick={() => setFull(!full)} className="w-full px-6 sticky mb-2 hidden md:block focus:outline-none h-14">
             <CgMenuLeft size={"24px"} className="" />

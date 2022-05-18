@@ -43,7 +43,7 @@ const LayoutUser = () => {
           </div>
           <div className="md:w-[90vw] lg:w-[94vw]">
             <Navbar user={!error ? user : undefined} />
-            <Item elevation={0} className="max-w-screen-xxl w-[90vw] mx-auto">
+            <Item elevation={0} className="max-w-screen-xxl w-[90vw] mx-auto relative">
               {!error ? user?.birthday ? null : <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace /> : null}
               {user ? (
                 <Outlet context={!error ? user : undefined} />

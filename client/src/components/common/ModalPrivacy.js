@@ -23,7 +23,7 @@ function ModalPrivacy({ title }) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        className="bg-placeholder-color border-gray-300"
+        className="bg-placeholder-color border-gray-300 rounded-lg hover:rounded-lg"
       >
         <span className="normal-case text-md">
           <GoGlobe size={20} className="inline mr-1" />

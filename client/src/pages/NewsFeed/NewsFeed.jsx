@@ -206,20 +206,20 @@ const NewsFeed = () => {
 
   return (
     <>
-      <div className="mx-auto mt-6 max-w-screen-2xl">
-        <div className="flex">
-          <div className="basis-[25%]">
+      <div className="mx-auto mt-6 max-w-screen-3xl">
+        <div className="flex justify-evenly">
+          <div className="basis-[25%] hidden lg:block">
             <BlogComponent data={blogs} />
             <FollowingPreview data={followings} />
           </div>
-          <div className="basis-[56%] ">
+          <div className="basis-full lg:basis-[56%] ">
             <div className="px-3">
               <h2 className="pb-5 text-3xl font-bold">Activity Feed</h2>
               <InputModal reference="newsfeed" />
               <div className="w-full">{content}</div>
             </div>
           </div>
-          <div className="basis-[22%]">
+          <div className="basis-[22%] hidden lg:block">
             <CompleteProfile percentage={percentage} data={steps} />
             <UpdatesComponent data={latestUpdates} />
             <RecentlyActive data={recentlyActive} />

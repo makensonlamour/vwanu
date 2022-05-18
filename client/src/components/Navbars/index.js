@@ -39,8 +39,8 @@ const Navbar = ({ user }) => {
   };
 
   return (
-    <div className="mx-auto sticky">
-      <div className="bg-white w-full z-20  shadow-md sticky">
+    <div className="mx-auto sticky top-0 z-50">
+      <div className="bg-white w-full z-20 shadow-md">
         <div className="flex items-center justify-around lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
           <div className="basis-1/6 md:pl-36 lg:pl-10 xl:px-6">
             <Link className="" to={routesPath.NEWSFEED}>
@@ -50,7 +50,7 @@ const Navbar = ({ user }) => {
               </div>
             </Link>
           </div>
-          <div className="basis-2/4 flex-none ">
+          <div className="basis-2/4 flex-none hidden md:block">
             <div className="hidden xl:flex  items-center justify-evenly py-2">
               {pages.map((page) => (
                 <button key={page.title} className="">
@@ -79,7 +79,7 @@ const Navbar = ({ user }) => {
 
               <Tooltip title="Open profile">
                 <Button variant="text" onClick={handleOpenUserMenu} sx={{ p: 0, fontWeight: "light" }}>
-                  <p className="mr-1 text-[1.0rem] text-black capitalize font-light">{user?.firstName}</p>
+                  <p className="hidden md:inline mr-1 text-[1.0rem] text-black capitalize font-light">{user?.firstName}</p>
                   <IoIosArrowDown size="18px" className="mr-2" />
                   <div className="rounded-[50px] avatar online">
                     <div className="rounded-[12px] w-8 h-8 m-1">

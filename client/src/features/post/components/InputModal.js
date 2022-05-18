@@ -14,12 +14,10 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { ClickAwayListener, Popover } from "@mui/material";
 import { useCreatePost } from "../postSlice";
-
-const Picker = lazy(() => import("../../../components/form/EmojiPicker"));
-// import data from "@emoji-mart/data";
-// import { Picker } from "emoji-mart";
+import Picker from "emoji-picker-react";
+import Editor from "../../../components/form/Post/InputField/Editor.js";
 
 //Functions for notification after actions
 const postSuccess = () =>
@@ -35,7 +33,6 @@ const postError = () =>
 const InputModal = ({ reference }) => {
   const user = useOutletContext();
   const UserId = user?.id;
-  const ref = useRef();
   const [showModal, setShowModal] = useState(false);
   const [openPrivacy, setOpenPrivacy] = useState(false);
   const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
@@ -45,6 +42,24 @@ const InputModal = ({ reference }) => {
   // const [privacyText, setPrivacyText] = useState("");
   const [hashTag, setHashTag] = useState(false);
   const [image, setImage] = useState(null);
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const onEmojiClick = (event, emojiObject) => {
+    setChosenEmoji(emojiObject);
+    console.log(chosenEmoji);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   //Dialog functions
   const handleClickOpen = () => {
@@ -155,13 +170,14 @@ const InputModal = ({ reference }) => {
           </button>
         </div>
       </button>
+
       {showModal ? (
         <>
           <Form
             validationSchema={ValidationSchema}
             initialValues={initialValues}
             onSubmit={handleSubmit}
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto inset-0 fixed z-50 outline-none focus:outline-none"
           >
             <div className="relative w-full my-6 mx-auto max-w-md lg:max-w-2xl">
               {/*content*/}
@@ -199,6 +215,8 @@ const InputModal = ({ reference }) => {
                     </div>
                   </div>
                   <div className="flex-auto">
+                    <Editor placeholder={`Share what's on your mind, ${user?.firstName}...`} />
+                    {/*
                     <InputField
                       required
                       autoCapitalize="none"
@@ -207,7 +225,7 @@ const InputModal = ({ reference }) => {
                       className="basis-full text-lg appearance-none text-secondary placeholder:text-gray-600 font-light border-none "
                       testId="post-error-message"
                       hashtagSymbol={hashTag}
-                    />
+                      /> */}
                   </div>
                   <div>{/* add photo */}</div>
                   <div>{/* add video */}</div>
@@ -224,30 +242,30 @@ const InputModal = ({ reference }) => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setIsIconPickerOpened(true)}
+                        onClick={handleClick}
+                        aria-describedby={id}
                         className="text-right px-3 py-1 lg:mt-0 cursor-pointer hover:bg-gray-50"
                       >
                         <BsEmojiSmile size={20} className="inline mr-1" />
                       </button>
-                      {isIconPickerOpened && (
-                        <ClickAwayListener onClickAway={() => setIsIconPickerOpened(false)}>
-                          <div>
-                            {(ref) => (
-                              <div ref={ref} className="absolute bottom-full right-0">
-                                <Suspense
-                                  fallback={
-                                    <div className="flex h-[357px] w-[348px] items-center justify-center rounded-lg border-2 border-[#555453] bg-[#222222]">
-                                      Loading... {/*}<Spin />{*/}
-                                    </div>
-                                  }
-                                >
-                                  <Picker onSelect={(emoji) => addIconToInput(emoji.native)} />
-                                </Suspense>
-                              </div>
-                            )}
-                          </div>
-                        </ClickAwayListener>
-                      )}
+                      <Popover
+                        id={id}
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        onMouseDown={handleClose}
+                        onMouseLeave={handleClose}
+                        anchorOrigin={{
+                          vertical: "center",
+                          horizontal: "center",
+                        }}
+                        transformOrigin={{
+                          vertical: "center",
+                          horizontal: "center",
+                        }}
+                      >
+                        <Picker onEmojiClick={onEmojiClick} />
+                      </Popover>
                     </span>
                   </div>
                   <div className="flex mt-2">

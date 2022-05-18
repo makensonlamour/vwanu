@@ -31,7 +31,6 @@
     }
   },
   "dependencies": {
-    "@babel/preset-react": "^7.16.7",
-    "react-circular-progressbar": "^2.0.4"
+    "@babel/preset-react": "^7.16.7"
   }
 }

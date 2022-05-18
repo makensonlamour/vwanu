@@ -69,7 +69,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                 <div className=" bg-white pt-[70px] lg:pt-8 min-h-[120px]">
                   <div className=" py-4 text-center 0">
                     <div className="mb-4 lg:mb-2 block">
-                      <h1 className="font-mock text-2xl font-semibold text-gray-700 inline">
+                      <h1 className="font-mock text-2xl font-semibold text-primary inline">
                         {otherUser ? otherUser?.firstName + " " + otherUser?.lastName : user?.firstName + " " + user?.lastName}
                       </h1>
                       <h4 className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
@@ -83,8 +83,8 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                         <span className="pl-2">16 following</span>
                         {otherUser ? otherUser?.friends : user?.friends ? user?.friends?.length + " Friends" : null}
                       </h4>
-                      <h4 className="font-mock flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
-                        <div className="inline w-8 h-8  mr-2">
+                      <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
+                        <div className="inline w-8 h-8 mr-2">
                           <BsFacebook size={"24px"} className="mx-auto" />
                         </div>
                         <div className="inline w-8 h-8  mr-2">

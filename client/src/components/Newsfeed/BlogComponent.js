@@ -10,7 +10,7 @@ const BlogComponent = ({ data }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-200 rounded-lg p-2 mb-8">
+      <div className="bg-white w-full 4xl:w-[70%] border border-gray-200 rounded-lg p-2 mb-8">
         <h2 className="my-3 px-6 text-xl font-medium">Blog</h2>
         <Stack spacing={1}>
           {data.map((blog) => {
