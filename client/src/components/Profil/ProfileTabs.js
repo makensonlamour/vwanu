@@ -16,15 +16,17 @@ export default function LabTabs() {
 
   return (
     <>
-      <Box variant="elevation0" className="bg-v-gray" sx={{ width: "100%" }}>
+      <Box elevation={0} variant="elevation0" className="bg-placeholder-color" sx={{ width: "100%" }}>
         <TabContext value={value}>
           <Box>
             <TabList
-              className="bg-white rounded-b-lg"
+              elevation={0}
+              className="bg-placeholder-color text-sm rounded-b-lg mt-2"
               onChange={handleChange}
               aria-label="lab API tabs example"
               variant="scrollable"
               scrollButtons="auto"
+              sx={{ textTransform: "capitalize" }}
             >
               <Tab label="Post" value="1" component={Link} to={allTabs[0]} />
               <Tab label="About" value="2" component={Link} to={allTabs[1]} />
