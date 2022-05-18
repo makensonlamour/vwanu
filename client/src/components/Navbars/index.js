@@ -4,7 +4,8 @@ import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
 import { Badge, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material";
 import logo from "../../assets/images/Asset_2.png";
-import { IoIosArrowDown, IoMdNotificationsOutline } from "react-icons/io";
+import NotificationPreview from "../Navbars/Notification/NotificationPreview";
+import { IoIosArrowDown } from "react-icons/io";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineInbox } from "react-icons/ai";
 import { FiActivity } from "react-icons/fi";
@@ -72,9 +73,7 @@ const Navbar = ({ user }) => {
               <Badge badgeContent={1} color="primary" className="mr-4">
                 <AiOutlineInbox size="24px" className="text-black" />
               </Badge>
-              <Badge badgeContent={3} color="primary" className="mr-8">
-                <IoMdNotificationsOutline size="24px" className="text-black" />
-              </Badge>
+              <NotificationPreview />
 
               <Tooltip title="Open profile">
                 <Button variant="text" onClick={handleOpenUserMenu} sx={{ p: 0, fontWeight: "light" }}>

@@ -52,6 +52,7 @@
     "slate": "^0.78.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.79.0",
+    "socket.io-client": "^4.5.1",
     "tailwind-scrollbar-hide": "^1.1.7",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.3",
