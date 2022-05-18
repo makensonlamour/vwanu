@@ -16,7 +16,7 @@ import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
 import { ClickAwayListener, Popover } from "@mui/material";
 import { useCreatePost } from "../postSlice";
-import Picker from "emoji-picker-react";
+// import Picker from "emoji-picker-react";
 import Editor from "../../../components/form/Post/InputField/Editor.js";
 
 //Functions for notification after actions
@@ -238,7 +238,7 @@ const InputModal = ({ reference }) => {
                         {" "}
                         <MdAlternateEmail size={20} className="inline mr-1" />
                       </button>
-                      <button
+                      {/* <button
                         type="button"
                         onClick={handleClick}
                         aria-describedby={id}
@@ -263,7 +263,7 @@ const InputModal = ({ reference }) => {
                         }}
                       >
                         <Picker onEmojiClick={onEmojiClick} />
-                      </Popover>
+                      </Popover> */}
                     </span>
                   </div>
                   <div className="flex mt-2">
