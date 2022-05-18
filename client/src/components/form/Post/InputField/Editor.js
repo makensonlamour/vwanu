@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import { createEditor } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
@@ -6,9 +6,6 @@ import { withHistory } from "slate-history";
 
 const Editor = ({ placeholder }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-  useEffect(() => {
-    console.log("text", editor.children.length);
-  }, []);
 
   return (
     <Slate editor={editor} value={initialValue}>
