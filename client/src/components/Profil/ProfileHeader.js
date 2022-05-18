@@ -156,10 +156,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
               <div className="mt-4 ">
                 <Routes>
                   <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} />} />
-                  <Route
-                    path={allTabs1[1]}
-                    element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={otherUser ? otherUser : user} />}</div>}
-                  />
+                  <Route path={allTabs1[1]} element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={user} />}</div>} />
                   <Route
                     path={allTabs1[2]}
                     element={
