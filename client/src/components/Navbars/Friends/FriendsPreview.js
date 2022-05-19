@@ -1,7 +1,7 @@
 import React from "react";
 // import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { FaUserPlus } from "react-icons/fa";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import { BsXCircleFill } from "react-icons/bs";
 import { useGetListFriendRequest } from "../../../features/friend/friendSlice";
 // import AcceptFriendRequestButton from "../../../features/friend/component/AcceptFriendRequestButton";
@@ -13,10 +13,9 @@ const FriendsPreview = () => {
 
   return (
     <>
-      {console.log("listFriendRequest", listFriendRequest)}
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <FaUserPlus size="24px" />
+          <AiOutlineUserAdd size="24px" />
         </label>
         <ul tabIndex="2" className="dropdown-content menu py-2 shadow bg-base-100 rounded-box w-[22rem] text-gray-900">
           {listFriendRequest?.data?.user?.friendsRequest?.length > 0 ? (

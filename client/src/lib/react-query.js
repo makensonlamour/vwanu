@@ -54,6 +54,7 @@ const useGenericMutation = (func, queryKey, url, params, updater) => {
 
       return previousData;
     },
+
     onError: (err, _, context) => {
       queryClient.setQueryData(queryKey, context);
     },
@@ -80,9 +81,9 @@ export const usePost = (queryKey, url, params, updater) => {
 export const useUpdate = (queryKey, url, params, updater) => {
   return useGenericMutation((data) => {
     if (data?.id) {
-      api.put((`${url}/${data?.id}`, data), url, params, updater);
+      api.put(`${url}/${data?.id}`, data, url, params, updater);
     } else {
-      api.put((`${url}`, data), url, params, updater);
+      api.put(`${url}`, data, url, params, updater);
     }
   });
 };

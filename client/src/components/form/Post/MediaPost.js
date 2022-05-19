@@ -2,14 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const MediaPost = ({ medias }) => {
+  console.log(medias);
   let content;
   if (medias.length === 1) {
     content = (
-      <div className="pt-5 flex w-full">
+      <div className="pt-5 flex w-full ">
         <img
           src={medias[0].original}
           alt={"post_image_" + medias[0]?.id}
-          className=" flex-wrap inline object-cover object-center w-full rounded-lg"
+          className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full rounded-lg"
         />
       </div>
     );
@@ -20,11 +21,11 @@ const MediaPost = ({ medias }) => {
         {medias.map((media) => {
           return (
             <>
-              <div className="flex w-full">
+              <div className="flex w-full ">
                 <img
                   src={media.original}
                   alt={"post_image_" + media?.id}
-                  className=" flex-wrap inline object-cover object-center w-full rounded-lg"
+                  className=" flex-wrap inline object-cover h-[100%] w-96 object-top rounded-lg"
                 />
               </div>
             </>

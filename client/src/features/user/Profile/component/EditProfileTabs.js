@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Tabs, Tab, Box } from "@mui/material";
-import OverviewAbout from "./AboutTab/OverviewAbout";
-import ViewContactInfo from "./AboutTab/ViewContactInfo";
-import ViewPlaceLived from "./AboutTab/ViewPlaceLived";
-import ViewWorkEducation from "./AboutTab/ViewWorkEducation";
+import FormOverview from "./FormOverview";
+import FormContactInfo from "./FormContactInfo";
+import FormPlaceLived from "./FormPlaceLived";
+import FormWorkEducation from "./FormWorkEducation";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -33,7 +33,7 @@ function a11yProps(index) {
   };
 }
 
-const AboutTab = ({ user }) => {
+const EditProfileTabs = ({ user }) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -59,19 +59,19 @@ const AboutTab = ({ user }) => {
         </Tabs>
         <TabPanel style={{ width: "75%" }} value={value} index={0}>
           Overview
-          <OverviewAbout user={user} />
+          <FormOverview user={user} />
         </TabPanel>
         <TabPanel style={{ width: "75%" }} value={value} index={1}>
           Contact and basic info
-          <ViewContactInfo user={user} />
+          <FormContactInfo user={user} />
         </TabPanel>
         <TabPanel style={{ width: "75%" }} value={value} index={2}>
           Places lived
-          <ViewPlaceLived user={user} />
+          <FormPlaceLived user={user} />
         </TabPanel>
         <TabPanel style={{ width: "75%" }} value={value} index={3}>
           Work and education
-          <ViewWorkEducation user={user} />
+          <FormWorkEducation user={user} />
         </TabPanel>
         {/*}
         <TabPanel style={{ width: "75%" }} value={value} index={4}>
@@ -86,8 +86,8 @@ const AboutTab = ({ user }) => {
   );
 };
 
-AboutTab.propTypes = {
+EditProfileTabs.propTypes = {
   user: PropTypes.object,
 };
 
-export default AboutTab;
+export default EditProfileTabs;

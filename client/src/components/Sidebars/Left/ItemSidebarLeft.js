@@ -1,8 +1,9 @@
 import React from "react";
 import routesPath from "../../../routesPath";
-import { FcNews } from "react-icons/fc";
-import { FcGallery } from "react-icons/fc";
-import { FcFolder } from "react-icons/fc";
+import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
+import { MdGroups } from "react-icons/md";
+import { VscCommentDiscussion } from "react-icons/vsc";
+import { RiPagesLine } from "react-icons/ri";
 
 /*
  *define Items for sidebar left on home page
@@ -11,22 +12,22 @@ import { FcFolder } from "react-icons/fc";
 
 export const ItemSidebarLeft = [
   {
-    menuTitle: "Me",
+    menuTitle: "Personal",
     menuItems: [
       {
-        title: "News Feed",
+        title: "My Profile",
+        path: "/profile",
+        icon: <FiUser size={"24px"} />,
+      },
+      {
+        title: "My Timeline",
         path: routesPath.NEWSFEED,
-        icon: <FcNews className="mx-2" size="24px" />,
+        icon: <FiActivity size={"24px"} />,
       },
       {
-        title: "Albums",
-        path: routesPath.ALBUMS,
-        icon: <FcGallery className="mx-2" size="24px" />,
-      },
-      {
-        title: "Saved Posts",
-        path: routesPath.SAVED_POST,
-        icon: <FcFolder className="mx-2" size="24px" />,
+        title: "My inbox",
+        path: routesPath.MESSAGE,
+        icon: <FiInbox size={"24px"} />,
       },
     ],
   },
@@ -34,29 +35,24 @@ export const ItemSidebarLeft = [
     menuTitle: "Community",
     menuItems: [
       {
-        title: "Interest",
-        path: routesPath.INTEREST,
-        icon: <FcNews className="mx-2" size="24px" />,
-      },
-      {
-        title: "Forums",
-        path: routesPath.FORUMS,
-        icon: <FcGallery className="mx-2" size="24px" />,
-      },
-      {
-        title: "My Interests",
-        path: routesPath.MY_INTERESTS,
-        icon: <FcFolder className="mx-2" size="24px" />,
-      },
-      {
         title: "My Groups",
         path: routesPath.MY_GROUPS,
-        icon: <FcFolder className="mx-2" size="24px" />,
+        icon: <MdGroups size={"24px"} />,
+      },
+      {
+        title: "My Network",
+        path: routesPath.FRIENDS,
+        icon: <MdGroups size={"24px"} />,
+      },
+      {
+        title: "My Discussions",
+        path: routesPath.MY_INTERESTS,
+        icon: <VscCommentDiscussion size={"24px"} />,
       },
       {
         title: "My Pages",
         path: routesPath.MY_PAGES,
-        icon: <FcFolder className="mx-2" size="24px" />,
+        icon: <RiPagesLine size={"24px"} />,
       },
     ],
   },

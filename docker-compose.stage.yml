@@ -37,13 +37,13 @@ services:
       - pg_db
     links:
       - redis
-  redis: 
+  redis:
     image: redis:6.2-alpine
     container_name: redis
     restart: unless-stopped
     network_mode: bridge
     expose:
-      - 6379 
+      - 6379
   pg_db:
     container_name: pg_db
     image: 'postgres:12'

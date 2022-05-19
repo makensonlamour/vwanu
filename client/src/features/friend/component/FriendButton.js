@@ -11,7 +11,7 @@ const FriendButton = ({ otherUser }) => {
   const [loading, setIsLoading] = useState(false);
   const anchorRef = useRef(null);
 
-  const unfriend = useUnfriendUser(["user", "me"]);
+  const unfriend = useUnfriendUser(["user", "request"]);
 
   //error dialog
   const unFriendRequestError = () =>
@@ -73,7 +73,7 @@ const FriendButton = ({ otherUser }) => {
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        className="items-center align-middle mr-1 btn btn-sm btn-primary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end"
+        className="items-center align-middle mr-1 btn btn-sm btn-primary text-base-100 rounded-lg mb-2 lg:mb-0 hover:bg-primary justify-end"
       >
         {loading ? (
           <Loader />

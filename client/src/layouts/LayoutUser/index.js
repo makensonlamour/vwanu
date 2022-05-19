@@ -1,34 +1,34 @@
 import React, { useContext } from "react";
 import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
+
 import { useGetProfile } from "../../features/auth/authSlice";
 
 import { deleteToken } from "../../helpers/index";
-import { Transition } from "@headlessui/react";
-import { Grid, Box, Paper, styled } from "@mui/material";
+// import { Transition } from "@headlessui/react";
+import { Paper, styled } from "@mui/material";
 
 //core components
 // import Loader from "../../components/common/Loader";
-import { GrClose } from "react-icons/gr";
+// import { GrClose } from "react-icons/gr";
 import Navbar from "../../components/Navbars/index";
 import SidebarLeft from "../../components/Sidebars/Left/index";
-import SidebarRight from "../../components/Sidebars/Right/index";
-import BottomNavigation from "../../components/BottomNavigation/index";
+import MobileSidebar from "../../components/Sidebars/Left/MobileSidebar";
+// import SidebarRight from "../../components/Sidebars/Right/index";
+// import BottomNavigation from "../../components/BottomNavigation/index";
 import routesPath from "../../routesPath";
 import { BottomMenuContext } from "../../context/BottomMenuContext";
 
 //Styles for components
 
-const Item = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(1),
+const Item = styled(Paper)(() => ({
   backgroundColor: "inherit",
-  marginTop: "70px",
 }));
 
 const LayoutUser = () => {
   const { data: user, error } = useGetProfile(["user", "me"]);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isSidebarOpen, closeSidebar } = useContext(BottomMenuContext);
+  const { isSidebarOpen } = useContext(BottomMenuContext);
 
   if (error?.response?.status === 401) {
     deleteToken();
@@ -37,90 +37,27 @@ const LayoutUser = () => {
 
   return (
     <>
-      <div>
-        <Navbar user={!error ? user : undefined} />
-        <div className=" m-auto">
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2} sx={{ backgroundColor: "transparent" }}>
-              <Grid
-                item
-                xs={3}
-                sx={{
-                  display: { xs: "none", sm: "none", md: "block" },
-                  position: "sticky",
-                }}
-                style={{ position: "sticky" }}
-              >
-                <Item sx={{ position: "fixed" }} elevation={0}>
-                  <SidebarLeft />{" "}
-                </Item>
-              </Grid>
-              {/*for mobile*/}
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  display: { xs: "block", sm: "none" },
-                  zIndex: "30",
-                }}
-                style={{ position: "sticky" }}
-              >
-                <Item sx={{ position: "fixed" }} elevation={0}>
-                  {/*Mobile Sidebar*/}
-                  {isSidebarOpen ? (
-                    <button
-                      onClick={() => {
-                        closeSidebar();
-                      }}
-                      className="lg:hidden flex text-4xl text-black items-center cursor-pointer fixed right-6 top-20 z-50"
-                    >
-                      <GrClose size={24} />
-                    </button>
-                  ) : null}
+      <div className="mx-auto">
+        <div className="flex">
+          <div className="grow hidden md:block">
+            <SidebarLeft user={!error ? user : undefined} />
+          </div>
+          <div className="w-[100vw] md:w-[90vw] lg:w-[94vw]">
+            {isSidebarOpen ? (
+              <div className={`${isSidebarOpen ? "translate-x-0" : "translate-x-full"} md:hidden ease-in-out duration-300`}>
+                <MobileSidebar user={!error ? user : undefined} />
+              </div>
+            ) : null}
+            <Navbar user={!error ? user : undefined} />
 
-                  <Transition
-                    show={isSidebarOpen}
-                    enter="transition-opacity duration-75"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="transition-opacity duration-150"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <div className="lg:hidden">
-                      <SidebarLeft />{" "}
-                    </div>
-                  </Transition>
-                </Item>
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-                <Item elevation={0} className="max-w-screen-lg">
-                  {!error ? user?.birthday ? null : <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace /> : null}
-                  {user ? (
-                    <Outlet context={!error ? user : undefined} />
-                  ) : (
-                    <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />
-                  )}
-                </Item>
-              </Grid>
-              <Grid
-                item
-                xs={1}
-                sx={{
-                  display: { xs: "none", sm: "none", md: "block" },
-                }}
-              >
-                <Item sx={{ position: "fixed" }} elevation={0}>
-                  <div className="hidden lg:block">
-                    <SidebarRight />
-                  </div>
-                </Item>
-              </Grid>
-            </Grid>
-          </Box>
-          <div>
-            <BottomNavigation />
+            <Item elevation={0} className="max-w-screen-xxl w-[90vw] mx-auto ">
+              {!error ? user?.birthday ? null : <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace /> : null}
+              {user ? (
+                <Outlet context={!error ? user : undefined} />
+              ) : (
+                <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />
+              )}
+            </Item>
           </div>
         </div>
       </div>

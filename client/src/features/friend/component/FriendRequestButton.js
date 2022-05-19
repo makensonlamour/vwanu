@@ -21,10 +21,10 @@ const FriendRequestButton = ({ otherUser }) => {
       position: "top-center",
     });
 
-  const { data: listFriendRequest } = useGetListFriendRequest(["user", "me"], true);
+  const { data: listFriendRequest } = useGetListFriendRequest(["user", "request"], true);
 
-  const sendFriendRequest = useSendFriendRequest(["user", "me"]);
-  const cancelFriendRequest = useCancelFriendRequest(["user", "me"]);
+  const sendFriendRequest = useSendFriendRequest(["user", "request"]);
+  const cancelFriendRequest = useCancelFriendRequest(["user", "request"]);
 
   const handleFriendRequest = async (e) => {
     e.preventDefault();
@@ -64,7 +64,7 @@ const FriendRequestButton = ({ otherUser }) => {
         ) : checkFriendRequest(listFriendRequest?.data?.user?.FriendshipRequested, otherUser?.id) ? (
           <button
             onClick={handleCancelFriendRequest}
-            className="items-center align-middle mr-2 btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary"
+            className="items-center align-middle mr-2 btn btn-sm btn-secondary text-base-100 rounded-lg mb-2 lg:mb-0 hover:bg-primary"
           >
             {loading ? (
               <Loader />
@@ -78,7 +78,7 @@ const FriendRequestButton = ({ otherUser }) => {
         ) : (
           <button
             onClick={handleFriendRequest}
-            className="items-center align-middle mr-2 btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary"
+            className="items-center align-middle mr-2 btn btn-sm btn-secondary text-base-100 rounded-lg mb-2 lg:mb-0 hover:bg-primary"
           >
             {loading ? (
               <Loader />

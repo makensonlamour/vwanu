@@ -61,25 +61,33 @@ const PostList = ({ post, pageTitle }) => {
           <div className="border-[0.5px] border-slate-200 pb-3 mb-5 mt-4 rounded-lg shadow-md lg:w-full bg-white">
             <div className="pt-3 pb-1 px-3">
               <div className="flex flex-wrap">
-                <Link
-                  className="flex flex-wrap mb-1"
-                  to={
-                    _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
-                      ? `../../profile/${post?.User?.id}`
-                      : `profile/${post?.User?.id}`
-                  }
-                >
+                <div>
+                  {" "}
                   <img alt="" className="w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
-                  <span className="ml-3 pt-3 text-md font-bold text-primary">{`${post?.User?.firstName} ${post?.User?.lastName}`}</span>
-                </Link>
-                <span className="ml-auto pt-3 text-xs text-gray-500">
-                  {formatDistance(parseISO(post?.createdAt), new Date(), [
-                    {
-                      includeSeconds: true,
-                    },
-                  ])}
-                </span>
-                <span className="ml-2 mt-2">
+                </div>
+                <div className="block">
+                  <Link
+                    className="flex flex-wrap mb-1"
+                    to={
+                      _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
+                        ? `../../profile/${post?.User?.id}`
+                        : `profile/${post?.User?.id}`
+                    }
+                  >
+                    <span className="ml-3 text-md font-bold text-primary">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
+                    <span className="text-md font-light ml-2"> {" posted an update"}</span>
+                  </Link>
+                  <p className="ml-3 font-medium text-sm text-gray-900">
+                    {formatDistance(parseISO(post?.createdAt), new Date(), [
+                      {
+                        includeSeconds: true,
+                      },
+                    ])}{" "}
+                    {" ago"} <span className="ml-2 text-gray-600">{" • "}</span> <span className="ml-2">{post?.privacyType}</span>
+                    {}
+                  </p>
+                </div>
+                <span className="ml-auto mt-2">
                   <button
                     label="Test"
                     onClick={() => {
@@ -101,8 +109,13 @@ const PostList = ({ post, pageTitle }) => {
                   handleDisagree={handleDisagree}
                 />
               </div>
-
-              <p className="card-text pt-2 w-[100%] font-semibold">{post.postText}</p>
+              {post.postText.split("\n").map((text) => {
+                return (
+                  <p key={text} className="card-text pt-2 w-[100%] font-semibold">
+                    {text}
+                  </p>
+                );
+              })}
               {post.Media.length > 0 ? <MediaPost medias={post.Media} /> : null}
               {post?.Reactions?.length || post?.Comments?.length || post?.Share?.length ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">

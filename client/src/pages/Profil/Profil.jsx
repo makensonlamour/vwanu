@@ -1,6 +1,7 @@
 import React from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
+import _ from "lodash";
 
 import { useGetOtherProfile } from "../../features/user/userSlice";
 import { useGetListFriendRequest } from "../../features/friend/friendSlice";
@@ -14,18 +15,18 @@ const Profil = () => {
   const { id } = useParams();
   const user = useOutletContext();
 
-  if (user.id === id) {
+  if (_.isEqual(user?.id.toString(), id.toString())) {
     console.log();
     queryClient.removeQueries(["user", "otherUser"]);
   }
 
-  const { data: otherUser } = useGetOtherProfile(["user", "otherUser"], user?.id === id ? false : true, id);
-  const { data: listFriendRequest } = useGetListFriendRequest(["user", "me"], true);
+  const { data: otherUser } = useGetOtherProfile(["user", "otherUser"], _.isEqual(user?.id.toString(), id.toString()) ? false : true, id);
+  const { data: listFriendRequest } = useGetListFriendRequest(["user", "request"], true);
 
   return (
     <>
-      <div className="mx-auto px-2">
-        <div className="lg:mx-4">
+      <div className=" max-w-screen-2xl">
+        <div className="lg:mx-1">
           {user.id === id ? (
             <ProfileHeader user={user} otherUser={null} listFriendRequest={listFriendRequest} />
           ) : (
