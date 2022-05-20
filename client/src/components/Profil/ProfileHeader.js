@@ -42,20 +42,24 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
             <div className="mx-10 lg:basis-[75%]">
               <div className="rounded-lg border-gray-700 bg-white overflow-hidden mb-2">
                 <div className="relative">
-                  <img
-                    src={otherUser ? otherUser?.coverPicture : user.coverPicture}
-                    className="bg-cover w-full mx-auto bg-white h-[140px] lg:h-[170px]"
-                    alt="cover_profil"
-                  />
+                  <div className="bg-blend-multiply">
+                    <img
+                      src={otherUser ? otherUser?.coverPicture : user.coverPicture}
+                      className="mx-auto max-h-52 overflow-hidden lg:h-[170px]"
+                      alt="cover_profil"
+                    />
+                  </div>
                   {otherUser ? null : (
                     <UploadPhotoCrop fromButton="cover" id={user?.id} className="absolute top-[6%] right-[2%] lg:right-[2%] lg:top-[6%]" />
                   )}
                   <div className="w-full absolute bottom-0 left-0 transform translate-y-1/4 flex justify-center">
-                    <img
-                      src={otherUser ? otherUser?.profilePicture : user.profilePicture}
-                      className="bg-white mask mask-squircle w-[120px] h-[120px] lg:w-[120px] lg:h-[120px]"
-                      alt="profile_picture"
-                    />
+                    <div className="flex items-center justify-center mask mask-squircle w-[126px] h-[126px] bg-white">
+                      <img
+                        src={otherUser ? otherUser?.profilePicture : user.profilePicture}
+                        className="object-fit mask mask-squircle w-[120px] h-[120px]"
+                        alt="profile_picture"
+                      />
+                    </div>
                     {/*otherUser ? null : (
                       <UploadPhotoCrop
                         fromButton="profile"

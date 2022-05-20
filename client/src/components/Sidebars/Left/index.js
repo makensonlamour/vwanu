@@ -90,7 +90,7 @@ const SidebarLeft = ({ user }) => {
         <div
           className={`${
             navOpen ? "block w-full" : "hidden md:block"
-          } md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-scroll md:fixed sm:relative w-92`}
+          } md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-auto md:fixed sm:relative w-92`}
         >
           <button onClick={() => setFull(!full)} className="w-full px-6 sticky mb-2 hidden md:block focus:outline-none h-14">
             <CgMenuLeft size={"24px"} className="" />
