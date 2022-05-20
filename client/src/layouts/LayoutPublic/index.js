@@ -1,13 +1,10 @@
 import React from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import routesPath from "../../routesPath";
-import { useGetProfile } from "../../features/auth/authSlice";
-
+import useAuthContext from "../../hooks/useAuthContext";
 // import { deleteToken } from "../../helpers/index";
-
 const LayoutPublic = () => {
-  const { data: user } = useGetProfile(["user", "me"]);
-
+  const { user } = useAuthContext();
   const location = useLocation();
   const from = location.state?.from || routesPath.NEWSFEED;
 

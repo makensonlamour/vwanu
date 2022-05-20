@@ -21,7 +21,13 @@ import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 const NewsFeed = () => {
   // const user = useOutletContext();
 
-  const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
+  // const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
+  const list = [];
+
+  const isLoading = false,
+    fetchNextPage = () => {},
+    hasNextPage = false,
+    isError = false;
 
   function reloadPage() {
     window.location.reload();

@@ -22,7 +22,8 @@ export function deleteToken() {
   localStorage.removeItem("token");
 }
 
-export function getToken() {
+export function getToken(name = null) {
+  if (name) return localStorage.getItem(name);
   return localStorage.getItem("token");
 }
 

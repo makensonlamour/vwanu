@@ -43,7 +43,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
               <div className="rounded-lg border-gray-700 bg-white overflow-hidden mb-2">
                 <div className="relative">
                   <img
-                    src={otherUser ? otherUser?.coverPicture : user.coverPicture}
+                    src={otherUser ? otherUser?.coverPicture : user.coverPicture.original}
                     className="bg-cover w-full mx-auto bg-white h-[140px] lg:h-[170px]"
                     alt="cover_profil"
                   />
@@ -52,7 +52,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                   )}
                   <div className="w-full absolute bottom-0 left-0 transform translate-y-1/4 flex justify-center">
                     <img
-                      src={otherUser ? otherUser?.profilePicture : user.profilePicture}
+                      src={otherUser ? otherUser?.profilePicture : user.profilePicture.small}
                       className="bg-white mask mask-squircle w-[120px] h-[120px] lg:w-[120px] lg:h-[120px]"
                       alt="profile_picture"
                     />

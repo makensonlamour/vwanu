@@ -7,8 +7,10 @@ import theme from "./theme";
 
 // Custom dependencies
 import Views from "./layouts/Views.js";
+import useAuthContext from "./hooks/useAuthContext";
 
 const App = () => {
+  const { authIsReady } = useAuthContext();
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -19,10 +21,15 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <SidebarProvider>
-          <Views />
-          <ReactQueryDevtools />
-        </SidebarProvider>
+        <>
+          {" "}
+          {authIsReady && (
+            <SidebarProvider>
+              <Views />
+              <ReactQueryDevtools />
+            </SidebarProvider>
+          )}
+        </>
       </ThemeProvider>
     </QueryClientProvider>
   );

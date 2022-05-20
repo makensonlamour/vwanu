@@ -7,11 +7,13 @@ import "react-circular-progressbar/dist/styles.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { history } from "./components/common/Alert/_helpers";
-
+import { AuthContextProvider } from "./context/AuthContext";
 ReactDOM.render(
   <BrowserRouter history={history}>
     <div>
-      <App />
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
     </div>
   </BrowserRouter>,
   document.getElementById("root")
