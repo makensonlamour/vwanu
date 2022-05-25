@@ -14,9 +14,12 @@ import { RiPagesLine } from "react-icons/ri";
 import { CgMenuLeft } from "react-icons/cg";
 import { BottomMenuContext } from "../../context/BottomMenuContext";
 import FriendsPreview from "./Friends/FriendsPreview";
+import useAuth from "../../hooks/useAuth";
+import { deleteToken } from "../../helpers/index";
 
 const Navbar = ({ user }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const { logout } = useAuth();
 
   const { toggleSidebar, isSidebarOpen } = useContext(BottomMenuContext);
 
@@ -36,7 +39,6 @@ const Navbar = ({ user }) => {
     },
     { title: "Account", icon: "" },
     { title: "Dashboard", icon: "" },
-    { title: "Logout", icon: "" },
   ];
 
   const handleOpenUserMenu = (event) => {
@@ -46,6 +48,11 @@ const Navbar = ({ user }) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  function handleLogout() {
+    deleteToken("feathers-jwt");
+    logout();
+  }
 
   return (
     <div className="mx-auto sticky top-0 z-40">
@@ -114,7 +121,7 @@ const Navbar = ({ user }) => {
                     <IoIosArrowDown size="18px" className="mr-2" />
                     <div className="rounded-[50px] avatar online">
                       <div className="rounded-[12px] w-8 h-8 m-1">
-                        <img className="w-8 h-8" src={user?.profilePicture} alt="profil_image" />
+                        <img className="object-cover object-center w-8 h-8" src={user?.profilePicture?.original} alt="profil_image" />
                       </div>
                     </div>{" "}
                   </Button>
@@ -155,8 +162,8 @@ const Navbar = ({ user }) => {
                         <p className="w-16">
                           <img
                             style={{ width: "36px", height: "36px", marginRight: "10px" }}
-                            className="m-1 w-10 h-10 mask mask-squircle"
-                            src={user?.profilePicture}
+                            className="object-cover object-center m-1 w-10 h-10 mask mask-squircle"
+                            src={user?.profilePicture?.original}
                             alt="profil_image"
                           />
                         </p>
@@ -176,6 +183,13 @@ const Navbar = ({ user }) => {
                       </Typography>
                     </MenuItem>
                   ))}
+                  <MenuItem
+                    key="logout"
+                    sx={{ py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </MenuItem>
                 </Menu>
               </span>
             </div>

@@ -16,7 +16,7 @@ const FollowingPreview = ({ data }) => {
         </h2>
         <Stack
           direction="row"
-          justifyContent="start"
+          justifyContent="left"
           alignItems="center"
           spacing={0}
           sx={{ flexWrap: "wrap", marginLeft: "auto", marginRight: "auto" }}
@@ -24,7 +24,7 @@ const FollowingPreview = ({ data }) => {
           {data.map((following) => {
             return (
               <Item key={following.image} elevation={0}>
-                <div className="w-[3rem] mx-[0.15rem]">
+                <div className="w-[3.5rem] mx-[0.15rem]">
                   <img className="object-cover mask mask-squircle w-[3rem] h-16 rounded-lg" src={following.image} alt={following.image} />
                 </div>
               </Item>

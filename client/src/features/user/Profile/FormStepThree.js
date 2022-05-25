@@ -5,6 +5,7 @@ import { useNavigate, useOutletContext, Link } from "react-router-dom";
 import { updateProfilePicture } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
+import useAuthContext from "../../../hooks/useAuthContext";
 
 // Core components
 import { UploadAvatar, Form, Submit } from "../../../components/form";
@@ -14,7 +15,8 @@ import { RiImageAddFill } from "react-icons/ri";
 
 const FormStepThree = () => {
   const user = useOutletContext();
-  const idUser = user.id;
+  const { dispatch, Types } = useAuthContext();
+  const idUser = user?.id;
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,7 +38,8 @@ const FormStepThree = () => {
     formData.append("profilePicture", avatar);
     formData.append("idUser", idUser);
     try {
-      await updateProfilePicture({ formData, id: idUser });
+      const res = await updateProfilePicture({ formData, id: idUser });
+      dispatch({ type: Types.USER_UPDATED, payload: res?.data });
       navigate("../../" + routesPath.STEP_FOUR);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";

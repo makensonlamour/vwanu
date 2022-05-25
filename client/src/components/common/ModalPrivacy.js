@@ -26,7 +26,9 @@ function ModalPrivacy({ title, fn }) {
         className="bg-placeholder-color border-gray-300 rounded-lg hover:rounded-lg"
       >
         <span className="normal-case text-md">
-          <GoGlobe size={20} className="inline mr-1" />
+          {title === "public" ? <GoGlobe size={20} className="inline mr-1" /> : null}
+          {title === "network" ? <FaUsers size={20} className="inline mr-1 " /> : null}
+          {title === "me" ? <BiLockAlt size={20} className="inline mr-1 " /> : null}
           {title}
         </span>
       </Button>
@@ -45,7 +47,7 @@ function ModalPrivacy({ title, fn }) {
             handleClose();
           }}
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", color: `${title === "public" ? "#ff4200" : ""}` }}>
             <div style={{ backgroundColor: "#EFF3FF", borderRadius: "25px", padding: "0.5rem", marginRight: "0.5rem" }}>
               <GoGlobe size={"24px"} className="inline mr-1 " />
             </div>
@@ -61,7 +63,7 @@ function ModalPrivacy({ title, fn }) {
             handleClose();
           }}
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", color: `${title === "network" ? "#ff4200" : ""}` }}>
             <div style={{ backgroundColor: "#EFF3FF", borderRadius: "25px", padding: "0.5rem", marginRight: "0.5rem" }}>
               <FaUsers size={"24px"} className="inline mr-1 " />
             </div>
@@ -77,7 +79,7 @@ function ModalPrivacy({ title, fn }) {
             handleClose();
           }}
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", color: `${title === "me" ? "#ff4200" : ""}` }}>
             <div style={{ backgroundColor: "#EFF3FF", borderRadius: "25px", padding: "0.5rem", marginRight: "0.5rem" }}>
               <BiLockAlt size={"24px"} className="inline mr-1 " />
             </div>

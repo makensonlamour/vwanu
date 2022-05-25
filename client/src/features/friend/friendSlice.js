@@ -1,8 +1,9 @@
 import { usePost, useFetch, useDelete } from "../../lib/react-query";
 
-export const useSendFriendRequest = (queryKey) => usePost(queryKey, `/user/request`);
-export const useCancelFriendRequest = (queryKey) => useDelete(queryKey, `/user/request`);
-export const useGetListFriendRequest = (queryKey, enabled) => useFetch(queryKey, enabled, `/user/request`);
+export const useSendFriendRequest = (queryKey) => usePost(queryKey, `/friendRequest`);
+export const useCancelFriendRequest = (queryKey) => usePost(queryKey, `/friendRequest`);
+export const useGetListFriendRequest = (queryKey, enabled) =>
+  useFetch(queryKey, enabled, `/friendRequest/?action=people-i-want-to-be-friend-with`);
 export const useFollowUser = (queryKey, dataObj) =>
   usePost(queryKey, `/user/follow/${dataObj.userId}/${dataObj.otherUserId}?action=follow`);
 /* 

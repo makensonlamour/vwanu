@@ -1,51 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import * as Yup from "yup";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
-import { useQueryClient } from "react-query";
 import { Field, Form, Checkbox, Submit } from "../../../components/form";
 import { BsFacebook, BsTwitter } from "react-icons/bs";
 import { FaGooglePlus } from "react-icons/fa";
 import Loader from "../../../components/common/Loader";
 import { Link } from "react-router-dom";
 import routesPath from "../../../routesPath";
-import { login } from "../authSlice";
-import { saveToken } from "../../../helpers/index";
+// import { login } from "../authSlice";
+import useAuth from "../../../hooks/useAuth";
 
 const FormLogin = () => {
-  const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, error, login } = useAuth();
 
   const ValidationSchema = Yup.object().shape({
     email: Yup.string().required().min(6).email().label("Email"),
     password: Yup.string().required().min(8).label("Password"),
   });
 
-  function reloadPage() {
-    window.location.reload();
-  }
-
   const handleLogin = async (credentials) => {
-    setIsLoading(true);
-    try {
-      const res = await login(credentials);
-
-      if (res?.data?.data) {
-        saveToken(res.data.data.token);
-        reloadPage();
-        queryClient.invalidateQueries();
-      } else {
-        alertService.error("Email or Password incorrect.", { autoClose: true });
-      }
-    } catch (e) {
-      if (e?.response?.status === 401) {
-        alertService.error("Email or Password incorrect.", { autoClose: true });
-      } else {
-        alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    await login(credentials);
+    alertService.error(error, { autoClose: true });
   };
 
   return (

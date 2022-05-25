@@ -148,9 +148,13 @@ const InputModal = ({ reference }) => {
       >
         <div className="flex items-center px-4 pb-4">
           {" "}
-          <Link to={"../profile/" + user?.id}>
+          <Link className="w-14 h-14 mx-auto " to={"../profile/" + user?.id}>
             {" "}
-            <img alt="" className="flex-start justify-center align-center w-14 h-14 mask mask-squircle" src={user?.profilePicture} />{" "}
+            <img
+              alt=""
+              className="object-cover object-center flex-start justify-center align-center mx-auto w-14 h-14 mask mask-squircle"
+              src={user?.profilePicture?.original}
+            />{" "}
           </Link>
           <p className="flex-end text-left pl-2 p-2 ml-4 rounded-2xl text-md font-light text-gray-600 w-full">
             {`Share what's on your mind, ${user?.firstName}...`}
@@ -195,8 +199,8 @@ const InputModal = ({ reference }) => {
                         {" "}
                         <img
                           alt=""
-                          className="flex-start justify-center align-center w-12 h-12 mask mask-squircle"
-                          src={user?.profilePicture}
+                          className="object-cover object-center flex-start justify-center align-center w-12 h-12 mask mask-squircle"
+                          src={user?.profilePicture?.original}
                         />{" "}
                       </Link>
                     </div>
@@ -208,7 +212,7 @@ const InputModal = ({ reference }) => {
                         }}
                         className="cursor-pointer hover:bg-gray-50"
                       >
-                        <ModalPrivacy title={"Public"} open={openPrivacy} fn={setPrivacyText} />
+                        <ModalPrivacy title={privacyText} open={openPrivacy} fn={setPrivacyText} />
                       </button>
                     </div>
                   </div>
@@ -276,7 +280,7 @@ const InputModal = ({ reference }) => {
                 <div className="rounded-b-lg border-t border-solid border-gray-300 bg-placeholder-color px-4">
                   <div className="flex font-semibold text-sm justify-between items-center">
                     <div className=" text-left py-4 px-4">
-                      <p className="inline-flex pr-4 -pt-10">
+                      {/*}  <p className="inline-flex pr-4 -pt-10">
                         <InputImage
                           label=""
                           name="postImage"
@@ -287,8 +291,8 @@ const InputModal = ({ reference }) => {
                           autoComplete="new-file"
                           className="text-secondary font-semibold rounded-full px-6 input-primary -pt-10 border-none w-1/2 ml-auto hidden pr-2"
                         />
-                      </p>
-                      {/*}    <button
+                    </p> {*/}
+                      <button
                         onClick={() => {
                           setOpenUploadPhoto(!openUploadPhoto);
                           setOpenUploadVideo(false);
@@ -297,7 +301,7 @@ const InputModal = ({ reference }) => {
                         className="mr-4"
                       >
                         <AiOutlineCamera size={"24px"} />
-                      </button>{*/}
+                      </button>
                       <button
                         onClick={() => {
                           setOpenUploadVideo(!openUploadVideo);

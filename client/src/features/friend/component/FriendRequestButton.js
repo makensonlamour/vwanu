@@ -30,7 +30,7 @@ const FriendRequestButton = ({ otherUser }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await sendFriendRequest.mutateAsync({ friendId: otherUser?.id });
+      await sendFriendRequest.mutateAsync({ UserID: otherUser?.id });
     } catch (e) {
       console.log(e);
       friendRequestError();
@@ -43,7 +43,7 @@ const FriendRequestButton = ({ otherUser }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await cancelFriendRequest.mutateAsync({ friendId: otherUser?.id });
+      await cancelFriendRequest.mutateAsync({ UserID: otherUser?.id });
     } catch (e) {
       console.log(e);
       cancelRequestError();
@@ -52,11 +52,13 @@ const FriendRequestButton = ({ otherUser }) => {
     }
   };
 
+  console.log(listFriendRequest?.data);
+
   return (
     <>
       <Toaster />
       {otherUser ? (
-        checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? null : checkFriendRequest(
+        checkFriendList(listFriendRequest?.data, otherUser?.id) ? null : checkFriendRequest(
             listFriendRequest?.data?.user?.friendsRequest,
             otherUser?.id
           ) ? (
@@ -85,7 +87,7 @@ const FriendRequestButton = ({ otherUser }) => {
             ) : (
               <>
                 <FiUserPlus size={"18px"} className="mr-1" />
-                {"Send Request"}
+                {"Connect"}
               </>
             )}
           </button>

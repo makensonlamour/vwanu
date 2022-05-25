@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../routesPath";
+import { FormattedMessage } from "react-intl";
 
 // Core components
 import FormLogin from "../../features/auth/Login/FormLogin";
@@ -29,8 +30,17 @@ const LoginScreen = () => {
               <p className="text-center pt-14 text-base-100 text-2xl py-5">
                 <img className="w-[30%] m-auto" src={logo} alt="logo_vwanu" />
               </p>
-              <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center">Welcome</p>
-              <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">Together We are Stronger</p>
+              <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center">
+                {" "}
+                <FormattedMessage id="login.welcome" defaultMessage="Welcome" description="This is the welcome message in the login page" />
+              </p>
+              <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">
+                <FormattedMessage
+                  id="login.together"
+                  defaultMessage="Together We are Stronger"
+                  description="This is the message after the welcome message"
+                />
+              </p>
             </div>
             <img
               src={Shape_up}
@@ -45,8 +55,16 @@ const LoginScreen = () => {
               <p className="text-center pt-14 text-base-100 text-2xl py-5">
                 <img className="w-[30%] m-auto" src={logo} alt="logo_vwanu" />
               </p>
-              <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center">Welcome</p>
-              <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">Together We are Stronger</p>
+              <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center">
+                <FormattedMessage id="login.welcome" defaultMessage="Welcome" description="This is the welcome message in the login page" />
+              </p>
+              <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">
+                <FormattedMessage
+                  id="login.together"
+                  defaultMessage="Together We are Stronger"
+                  description="This is the message after the welcome message"
+                />
+              </p>
             </div>
             <img
               src={Shape_up}

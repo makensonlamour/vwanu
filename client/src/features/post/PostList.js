@@ -116,7 +116,7 @@ const PostList = ({ post, pageTitle }) => {
                   </p>
                 );
               })}
-              {post.Media.length > 0 ? <MediaPost medias={post.Media} /> : null}
+              {post?.Media?.length > 0 ? <MediaPost medias={post.Media} /> : null}
               {post?.Reactions?.length || post?.Comments?.length || post?.Share?.length ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
                   <div open={viewLike}>

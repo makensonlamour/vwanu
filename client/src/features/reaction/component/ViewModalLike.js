@@ -40,7 +40,7 @@ const ViewModalLike = ({ reactions, label }) => {
               {reactions?.length} {" reactions"}
             </Typography>
             <ul className="block border-b border-primary" style={{ borderTop: "1px solid #efefef" }}>
-              {reactions.map((reaction, idx) => {
+              {reactions?.map((reaction, idx) => {
                 return (
                   <>
                     <li key={idx} style={{ display: "flex", justifyContent: "between", padding: "5px", borderBottom: "1px solid #efefef" }}>

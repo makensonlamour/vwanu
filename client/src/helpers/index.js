@@ -18,11 +18,12 @@ export function saveToken(token) {
   localStorage.setItem("token", token);
 }
 
-export function deleteToken() {
-  localStorage.removeItem("token");
+export function deleteToken(name) {
+  localStorage.removeItem(name);
 }
 
-export function getToken() {
+export function getToken(name = null) {
+  if (name) return localStorage.getItem(name);
   return localStorage.getItem("token");
 }
 

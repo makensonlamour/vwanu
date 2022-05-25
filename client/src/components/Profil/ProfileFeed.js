@@ -36,7 +36,7 @@ const ProfileFeed = () => {
           pageStart={0}
         >
           {list?.pages.map((page) => {
-            return page?.data?.posts?.map((post) => {
+            return page?.data?.map((post) => {
               return <PostList key={post.id} post={post} pageTitle={""} />;
             });
           })}

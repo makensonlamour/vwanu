@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import * as Yup from "yup";
 // import routesPath from "../../../routesPath";
 // import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "react-query";
-import { register } from "../authSlice";
+// import { register } from "../authSlice";
+import useAuth from "../../../hooks/useAuth";
 
 // Core components
 import { alertService } from "../../../components/common/Alert/Services";
@@ -34,7 +35,9 @@ const initialValues = {
 
 const FormRegister = () => {
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, error, signup } = useAuth();
+
   // const navigate = useNavigate();
 
   function reloadPage() {
@@ -42,10 +45,12 @@ const FormRegister = () => {
   }
 
   const handleRegister = async (credentials) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
-      const res = await register(credentials);
-      if (res.data.data) {
+      const res = await signup(credentials);
+      alertService.error(error, { autoClose: true });
+
+      if (res?.data?.data) {
         saveToken(res.data.data.token);
         reloadPage();
         // navigate("../" + routesPath.LOGIN, { state: res.data.data.user });
@@ -60,7 +65,7 @@ const FormRegister = () => {
         alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
       }
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 

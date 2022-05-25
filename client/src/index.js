@@ -7,11 +7,30 @@ import "react-circular-progressbar/dist/styles.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { history } from "./components/common/Alert/_helpers";
+import { AuthContextProvider } from "./context/AuthContext";
+import { IntlProvider } from "react-intl";
+import lan_en from "./translations/en.json";
+import lan_fr from "./translations/fr.json";
+import lan_es from "./translations/es.json";
+import lan_ht from "./translations/ht.json";
+
+const languages = {
+  en: lan_en,
+  fr: lan_fr,
+  es: lan_es,
+  ht: lan_ht,
+};
+
+const language = navigator.language.split(/[-_]/)[0];
 
 ReactDOM.render(
   <BrowserRouter history={history}>
     <div>
-      <App />
+      <AuthContextProvider>
+        <IntlProvider locale={language} messages={languages[language]}>
+          <App />
+        </IntlProvider>
+      </AuthContextProvider>
     </div>
   </BrowserRouter>,
   document.getElementById("root")

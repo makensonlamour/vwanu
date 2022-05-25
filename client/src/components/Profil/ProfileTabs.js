@@ -16,7 +16,7 @@ export default function LabTabs() {
 
   return (
     <>
-      <Box elevation={0} variant="elevation0" className="bg-placeholder-color" sx={{ width: "100%" }}>
+      <Box elevation={0} variant="elevation0" className="bg-placeholder-color" sx={{ width: "100%", zIndex: "fab" }}>
         <TabContext value={value}>
           <Box>
             <TabList
@@ -26,14 +26,13 @@ export default function LabTabs() {
               aria-label="lab API tabs example"
               variant="scrollable"
               scrollButtons="auto"
-              sx={{ textTransform: "capitalize" }}
             >
-              <Tab label="Post" value="1" component={Link} to={allTabs[0]} />
-              <Tab label="About" value="2" component={Link} to={allTabs[1]} />
-              <Tab label="Friends" value="3" component={Link} to={allTabs[2]} />
-              <Tab label="Album" value="4" component={Link} to={allTabs[3]} />
-              <Tab label="Likes" value="5" component={Link} to={allTabs[4]} />
-              <Tab label="Groups" value="6" component={Link} to={allTabs[5]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Post" value="1" component={Link} to={allTabs[0]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="About" value="2" component={Link} to={allTabs[1]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Friends" value="3" component={Link} to={allTabs[2]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Album" value="4" component={Link} to={allTabs[3]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Likes" value="5" component={Link} to={allTabs[4]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Groups" value="6" component={Link} to={allTabs[5]} />
             </TabList>
           </Box>
         </TabContext>

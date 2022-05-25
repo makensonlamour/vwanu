@@ -1,87 +1,110 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Tabs, Tab, Box } from "@mui/material";
-import OverviewAbout from "./AboutTab/OverviewAbout";
-import ViewContactInfo from "./AboutTab/ViewContactInfo";
-import ViewPlaceLived from "./AboutTab/ViewPlaceLived";
-import ViewWorkEducation from "./AboutTab/ViewWorkEducation";
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div role="tabpanel" hidden={value !== index} id={`vertical-tabpanel-${index}`} aria-labelledby={`vertical-tab-${index}`} {...other}>
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <h3 className="text-secondary font-semibold text-lg">{children}</h3>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
-  };
-}
+import ViewDetails from "./AboutTab/ViewDetails";
+import { format } from "date-fns";
 
 const AboutTab = ({ user }) => {
-  const [value, setValue] = useState(0);
+  //object destructuring
+  const objectDetails = [
+    {
+      name: "First Name",
+      value: user?.firstName,
+    },
+    {
+      name: "Last Name",
+      value: user?.lastName,
+    },
+    {
+      name: "Nick Name",
+      value: user?.nickName,
+    },
+    {
+      name: "Birth Date",
+      value: format(new Date(user?.birthday), "MMMM dd, yyyy"),
+    },
+    {
+      name: "Gender",
+      value: user?.gender === "m" ? "male" : "female",
+    },
+    {
+      name: "Interested By",
+      value: user?.interestedBy === "m" ? "male" : "female",
+    },
+    {
+      name: "Language",
+      value: user?.language,
+    },
+  ];
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const objectContact = [
+    {
+      name: "Email",
+      value: user?.email,
+    },
+    {
+      name: "Telephone",
+      value: user?.telephone,
+    },
+    {
+      name: "Website",
+      value: user?.website,
+    },
+    {
+      name: "Facebook",
+      value: user?.facebook,
+    },
+    {
+      name: "Twitter",
+      value: user?.twitter,
+    },
+    {
+      name: "Instagram",
+      value: user?.instagram,
+    },
+  ];
+
+  const objectPlaces = [
+    {
+      name: "Current city",
+      value: user?.country,
+    },
+    {
+      name: "Hometown",
+      value: user?.country,
+    },
+  ];
+
+  const objectWorkedExperience = [
+    {
+      name: "Job Title",
+      value: "Developer",
+    },
+  ];
+
+  const objectBiography = [
+    {
+      name: "Biography",
+      value: user?.about,
+    },
+  ];
 
   return (
     <>
-      <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex", marginBottom: 5, marginLeft: 1 }} className="rounded-lg border">
-        <Tabs
-          orientation="vertical"
-          value={value}
-          onChange={handleChange}
-          aria-label="Vertical tabs example"
-          sx={{ borderRight: 1, borderColor: "divider", paddingTop: 2, paddingBottom: 2, textAlign: "left" }}
-        >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Contact and basic info" {...a11yProps(1)} />
-          <Tab label=" Places lived" {...a11yProps(2)} />
-          <Tab label="Work and education" {...a11yProps(3)} />
-          {/*}   <Tab label="Family and relationships" {...a11yProps(4)} />
-          <Tab label=" Details about you" {...a11yProps(5)} /> {*/}
-        </Tabs>
-        <TabPanel style={{ width: "75%" }} value={value} index={0}>
-          Overview
-          <OverviewAbout user={user} />
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={1}>
-          Contact and basic info
-          <ViewContactInfo user={user} />
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={2}>
-          Places lived
-          <ViewPlaceLived user={user} />
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={3}>
-          Work and education
-          <ViewWorkEducation user={user} />
-        </TabPanel>
-        {/*}
-        <TabPanel style={{ width: "75%" }} value={value} index={4}>
-          Family and relationships
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={5}>
-          Details about you
-        </TabPanel>
-  {*/}
-      </Box>
+      <div className="mb-10">
+        <ViewDetails title="General Information" user={objectDetails} />
+      </div>
+      <div className="mb-10">
+        <ViewDetails title="Contact Info" user={objectContact} />
+      </div>
+      <div className="mb-10">
+        <ViewDetails title="Places Lived" user={objectPlaces} />
+      </div>
+      <div className="mb-10">
+        <ViewDetails title="Work Experience" user={objectWorkedExperience} />
+      </div>
+      <div className="mb-10">
+        <ViewDetails title="Biography" user={objectBiography} />
+      </div>
     </>
   );
 };

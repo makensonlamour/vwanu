@@ -5,6 +5,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { useUpdateUser } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
+import useAuthContext from "../../../hooks/useAuthContext";
 
 // Core components
 import { Field, Select, Form, Submit } from "../../../components/form";
@@ -13,9 +14,10 @@ import { differenceInYears } from "date-fns";
 
 const FormStepTwo = () => {
   const user = useOutletContext();
+  const { dispatch, Types } = useAuthContext();
   const idUser = user?.id;
   const navigate = useNavigate();
-  const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
+  const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
   const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
@@ -50,7 +52,9 @@ const FormStepTwo = () => {
     };
 
     try {
-      await updateUser.mutateAsync(dataObj);
+      const res = await updateUser.mutateAsync(dataObj);
+      dispatch({ type: Types.USER_UPDATED, payload: res?.data });
+
       navigate("../../" + routesPath.STEP_THREE);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
@@ -73,9 +77,9 @@ const FormStepTwo = () => {
         validationSchema={ValidationSchema}
         initialValues={initialValues}
         onSubmit={handleStepTwo}
-        className="mt-4 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10"
+        className="mt-4 lg:shadow-2xl border bg-white border-gray-300 lg:rounded-t-3xl md:px-24 lg:px-10"
       >
-        <h1 className="card-title text-secondary text-center">Create your profile</h1>
+        <h1 className="card-title text-black text-center">Create your profile</h1>
         <Alert />
         <Field
           autoCapitalize="none"
@@ -83,14 +87,14 @@ const FormStepTwo = () => {
           placeholder="Date of Birth"
           name="birthday"
           type="date"
-          className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mr-1 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Select
           required
           label="Gender"
           placeholder="Gender"
           name="gender"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="gender-error-message"
           options={[
             { id: 0, name: "Not Specified", value: "" },
@@ -103,7 +107,7 @@ const FormStepTwo = () => {
           label="Interest By"
           placeholder="Interest By"
           name="interestedBy"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="interestBy-error-message"
           options={[
             { id: 0, name: "Not Specified", value: "" },
@@ -116,7 +120,7 @@ const FormStepTwo = () => {
           label="Country"
           placeholder="Country"
           name="country"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="country-error-message"
           options={[
             { id: 0, name: "Not Specified", value: "" },
@@ -124,7 +128,7 @@ const FormStepTwo = () => {
             { id: 2, name: "Dominican Republic", value: "do" },
           ]}
         />
-        <Submit className="rounded-full text-base-100 text-md w-2/5 ml-auto" title={isLoading ? <Loader /> : "Next"} />{" "}
+        <Submit className="rounded-2xl text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />{" "}
       </Form>
     </>
   );

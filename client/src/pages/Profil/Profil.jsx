@@ -16,7 +16,6 @@ const Profil = () => {
   const user = useOutletContext();
 
   if (_.isEqual(user?.id.toString(), id.toString())) {
-    console.log();
     queryClient.removeQueries(["user", "otherUser"]);
   }
 
@@ -27,10 +26,10 @@ const Profil = () => {
     <>
       <div className=" max-w-screen-2xl">
         <div className="lg:mx-1">
-          {user.id === id ? (
-            <ProfileHeader user={user} otherUser={null} listFriendRequest={listFriendRequest} />
+          {user?.id === id ? (
+            <ProfileHeader user={user} otherUser={null} listFriendRequest={listFriendRequest?.data} />
           ) : (
-            <ProfileHeader user={user} otherUser={otherUser} listFriendRequest={listFriendRequest} />
+            <ProfileHeader user={user} otherUser={otherUser} listFriendRequest={listFriendRequest?.data} />
           )}
         </div>
 

@@ -22,6 +22,12 @@ const NewsFeed = () => {
   // const user = useOutletContext();
 
   const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
+  // const list = [];
+
+  // const isLoading = false,
+  //   fetchNextPage = () => {},
+  //   hasNextPage = false,
+  //   isError = false;
 
   function reloadPage() {
     window.location.reload();
@@ -164,23 +170,24 @@ const NewsFeed = () => {
   } else if (list?.pages?.length > 0) {
     content = (
       <>
-        <div>
-          <InfiniteScroll
-            /* next is the function for fetching data from backend when the user reaches the end */
-            hasMore={hasNextPage}
-            loadMore={fetchNextPage}
-            loader={<Facebook />}
-            isReverse={true}
-            initialLoad={true}
-            pageStart={0}
-          >
-            {list?.pages.map((page) => {
-              return page?.data?.posts?.map((post) => {
-                return <PostList key={post.id} post={post} pageTitle={""} />;
-              });
-            })}
-          </InfiniteScroll>
-        </div>
+        <InfiniteScroll
+          /* next is the function for fetching data from backend when the user reaches the end */
+          hasMore={hasNextPage}
+          loadMore={fetchNextPage}
+          loader={
+            <div className="py-10">
+              <Facebook foregroundColor="#000" />
+            </div>
+          }
+          isReverse={true}
+          pageStart={0}
+        >
+          {list?.pages.map((page) => {
+            return page?.data?.map((post) => {
+              return <PostList key={post.id} post={post} pageTitle={""} />;
+            });
+          })}
+        </InfiniteScroll>
         <div className="w-full mt-6 mb-6 mx-auto text-center">
           <button className="" onClick={() => reloadPage()}>
             <FiRefreshCcw className="h-7 mx-auto" />
@@ -190,8 +197,7 @@ const NewsFeed = () => {
     );
   } else if (isError) {
     content = (
-      <div className="my-20 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white shadow-md">
-        <Facebook />
+      <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
         {"Failed to load post. "}{" "}
         <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
           Reload the page
@@ -214,9 +220,9 @@ const NewsFeed = () => {
           </div>
           <div className="basis-full lg:basis-[56%] ">
             <div className="px-3">
-              <h2 className="pb-5 text-3xl font-bold">Activity Feed</h2>
+              <h2 className="pb-5 text-2xl font-bold">Activity Feed</h2>
               <InputModal reference="newsfeed" />
-              <div className="w-full">{content}</div>
+              <div className="w-full py-2">{content}</div>
             </div>
           </div>
           <div className="basis-[22%] hidden lg:block">

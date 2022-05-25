@@ -31,7 +31,7 @@ const Reaction = ({ post }) => {
   const deleteReaction = useDeleteReaction();
 
   const handleReaction = async (label) => {
-    const react = _.find(post.Reactions, function (o) {
+    const react = _.find(post?.Reactions, function (o) {
       return o.UserId === user?.id;
     });
 
@@ -42,7 +42,7 @@ const Reaction = ({ post }) => {
         queryClient.invalidateQueries(["posts", react?.PostId]);
       } else {
         // if user like this post and click on different reaction, update reaction
-        await updateReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post.id, id: react.id });
+        await updateReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post?.id, id: react?.id });
       }
     } else {
       // if user not like this post, create reaction
@@ -51,8 +51,8 @@ const Reaction = ({ post }) => {
   };
 
   const isLike = () => {
-    const react = _.find(post.Reactions, function (o) {
-      return o.UserId === user.id;
+    const react = _.find(post?.Reactions, function (o) {
+      return o?.UserId === user?.id;
     });
 
     if (react?.UserId === user?.id) {
@@ -90,11 +90,11 @@ const Reaction = ({ post }) => {
                 }}
                 className="inline-flex text-lg items-center"
               >
-                {like.node}
+                {like?.node}
               </p>{" "}
               <p style={{ textTransform: "capitalize" }} className="text-left align-middle">
                 {" "}
-                {like.content}
+                {like?.content}
               </p>
             </Fragment>
           ) : (
