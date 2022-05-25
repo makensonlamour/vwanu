@@ -16,6 +16,10 @@ import authmanagementService from './authmanagement/authmanagement.service';
 
 import timeline from './timeline/timeline.service';
 
+import groups from './groups/groups.service';
+
+import blogs from './blogs/blogs.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -31,4 +35,6 @@ export default function (app: Application): void {
   app.configure(friendRequest);
   app.configure(undesiredFriend);
   app.configure(authmanagementService);
+  app.configure(groups);
+  app.configure(blogs);
 }

@@ -15,6 +15,7 @@ import refreshToken from './refresh-token';
 import Media from './media';
 import Visitors from './Visitors';
 import friend from './Friends';
+import blog from './blog';
 
 const tables = [
   user,
@@ -25,6 +26,7 @@ const tables = [
   Media,
   Visitors,
   friend,
+  blog,
 ];
 
 export default function (app: Application): void {
