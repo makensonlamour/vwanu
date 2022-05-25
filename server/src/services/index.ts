@@ -20,6 +20,8 @@ import groups from './groups/groups.service';
 
 import blogs from './blogs/blogs.service';
 
+import timelineBlogs from './timeline-blogs/timeline-blogs.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -37,4 +39,5 @@ export default function (app: Application): void {
   app.configure(authmanagementService);
   app.configure(groups);
   app.configure(blogs);
+  app.configure(timelineBlogs);
 }
