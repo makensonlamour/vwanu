@@ -10,6 +10,7 @@ import { FiRefreshCcw } from "react-icons/fi";
 
 import PostList from "../../features/post/PostList";
 import { useGetTimelineList } from "../../features/post/postSlice";
+import { useGetListFollowing } from "../../features/follower/followerSlice";
 import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
@@ -22,6 +23,8 @@ const NewsFeed = () => {
   // const user = useOutletContext();
 
   const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
+  const { data: listFollowing } = useGetListFollowing(["user", "following"], true);
+
   // const list = [];
 
   // const isLoading = false,
@@ -96,22 +99,6 @@ const NewsFeed = () => {
       date: "2 years ago",
       where: "",
     },
-  ];
-
-  const followings = [
-    { image: "https://picsum.photos/200/300?image=0" },
-    { image: "https://picsum.photos/200/300?image=1" },
-    { image: "https://picsum.photos/200/300?image=2" },
-    { image: "https://picsum.photos/200/300?image=3" },
-    { image: "https://picsum.photos/200/300?image=4" },
-    { image: "https://picsum.photos/200/300?image=5" },
-    { image: "https://picsum.photos/200/300?image=6" },
-    { image: "https://picsum.photos/200/300?image=7" },
-    { image: "https://picsum.photos/200/300?image=8" },
-    { image: "https://picsum.photos/200/300?image=9" },
-    { image: "https://picsum.photos/200/300?image=10" },
-    { image: "https://picsum.photos/200/300?image=11" },
-    { image: "https://picsum.photos/200/300?image=12" },
   ];
 
   const recentlyActive = [
@@ -216,7 +203,7 @@ const NewsFeed = () => {
         <div className="flex justify-evenly">
           <div className="basis-[25%] hidden xl:block">
             <BlogComponent data={blogs} />
-            <FollowingPreview data={followings} />
+            <FollowingPreview data={listFollowing?.data} />
           </div>
           <div className="basis-full lg:basis-[56%] ">
             <div className="px-3">
@@ -230,7 +217,7 @@ const NewsFeed = () => {
               <BlogComponent data={blogs} />
             </span>
             <span className="block xl:hidden">
-              <FollowingPreview data={followings} />
+              <FollowingPreview data={listFollowing?.data} />
             </span>
 
             <CompleteProfile percentage={percentage} data={steps} />

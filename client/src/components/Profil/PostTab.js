@@ -8,22 +8,6 @@ import UpdatesComponent from "../Newsfeed/UpdatesComponent";
 // import InfoCard from "../../features/user/Profile/component/InfoCard";
 
 const PostTab = ({ user, otherUser, listFollowing }) => {
-  const followings = [
-    { image: "https://picsum.photos/200/300?image=0" },
-    { image: "https://picsum.photos/200/300?image=1" },
-    { image: "https://picsum.photos/200/300?image=2" },
-    { image: "https://picsum.photos/200/300?image=3" },
-    { image: "https://picsum.photos/200/300?image=4" },
-    { image: "https://picsum.photos/200/300?image=5" },
-    { image: "https://picsum.photos/200/300?image=6" },
-    { image: "https://picsum.photos/200/300?image=7" },
-    { image: "https://picsum.photos/200/300?image=8" },
-    { image: "https://picsum.photos/200/300?image=9" },
-    { image: "https://picsum.photos/200/300?image=10" },
-    { image: "https://picsum.photos/200/300?image=11" },
-    { image: "https://picsum.photos/200/300?image=12" },
-  ];
-
   const latestUpdates = [
     {
       avatar: "https://picsum.photos/200/300?image=4",
