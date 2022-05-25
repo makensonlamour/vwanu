@@ -77,7 +77,7 @@ const MenuButton = ({ otherUser }) => {
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        className="items-center align-middle mr-1 btn btn-sm btn-primary text-base-100 rounded-lg mb-2 lg:mb-0 hover:bg-primary justify-end"
+        className="items-center align-middle mr-1 btn btn-sm bg-white border border-gray-300 text-gray-900 rounded-lg mb-2 lg:mb-0 hover:bg-primary hover:text-base-100 hover:border-0 justify-end"
       >
         {loading ? (
           <Loader />

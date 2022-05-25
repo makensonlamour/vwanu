@@ -19,8 +19,9 @@ import EditProfile from "../../pages/Profil/EditProfile";
 import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
 import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
+import { format } from "date-fns";
 
-const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
+const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest, listFollowing }) => {
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
 
@@ -80,7 +81,10 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                       {"From "}
                       {otherUser ? otherUser?.country : user.country ? user.country : ""}
                       <span className="px-2">•</span>
-                      <span>Joined Apr 2022</span>
+                      <span>
+                        {"Joined "}
+                        {format(new Date(otherUser ? otherUser?.createdAt : user?.createdAt), "MMM dd, yyyy")}
+                      </span>
                     </h4>
                     <h4 className="font-mock text-sm text-gray-600 mb-2 lg:-mt-1 ">
                       <span className="pr-2">
@@ -103,11 +107,7 @@ const ProfileHeader = ({ user, otherUser, listFriendRequest }) => {
                     </h4>
                   </div>
                   <div>
-                    {checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? (
-                      <FriendButton otherUser={otherUser} />
-                    ) : (
-                      <FriendRequestButton user={user} otherUser={otherUser} />
-                    )}
+                    {otherUser && <FriendRequestButton user={user} otherUser={otherUser} />}
 
                     {
                       otherUser && <MenuButton user={user} otherUser={otherUser} />
@@ -194,6 +194,10 @@ ProfileHeader.propTypes = {
   user: PropTypes.object.isRequired,
   otherUser: PropTypes.object,
   listFriendRequest: PropTypes.array,
+  listFriend: PropTypes.array,
+  listFollowers: PropTypes.array,
+  listRequest: PropTypes.array,
+  listFollowing: PropTypes.array,
 };
 
 export default ProfileHeader;

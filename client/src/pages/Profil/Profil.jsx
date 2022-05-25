@@ -4,7 +4,8 @@ import { useQueryClient } from "react-query";
 import _ from "lodash";
 
 import { useGetOtherProfile } from "../../features/user/userSlice";
-import { useGetListFriendRequestSent } from "../../features/friend/friendSlice";
+import { useGetListFriendRequestSent, useGetListFriend } from "../../features/friend/friendSlice";
+import { useGetListFollowing, useGetListFollowers } from "../../features/follower/followerSlice";
 
 //Core components
 // import Loader from "../../components/common/Loader";
@@ -20,16 +21,33 @@ const Profil = () => {
   }
 
   const { data: otherUser } = useGetOtherProfile(["user", "otherUser"], _.isEqual(user?.id.toString(), id.toString()) ? false : true, id);
-  const { data: listFriendSent } = useGetListFriendRequestSent(["user", "request"], true);
+  const { data: listFriendSent } = useGetListFriendRequestSent(["user", "sent"], true);
+  const { data: listFriend } = useGetListFriend(["user", "friend"], true);
+  const { data: listFollowers } = useGetListFollowers(["user", "followers"], true);
+  const { data: listFollowing } = useGetListFollowing(["user", "following"], true);
 
   return (
     <>
       <div className=" max-w-screen-2xl">
         <div className="lg:mx-1">
           {user?.id === id ? (
-            <ProfileHeader user={user} otherUser={null} listFriendRequest={listFriendSent?.data} />
+            <ProfileHeader
+              user={user}
+              otherUser={null}
+              listFriendSent={listFriendSent?.data}
+              listFriend={listFriend?.data}
+              listFollowers={listFollowers?.data}
+              listFollowing={listFollowing?.data}
+            />
           ) : (
-            <ProfileHeader user={user} otherUser={otherUser} listFriendRequest={listFriendSent?.data} />
+            <ProfileHeader
+              user={user}
+              otherUser={otherUser}
+              listFriendRequest={listFriendSent?.data}
+              listFriend={listFriend?.data}
+              listFollowers={listFollowers?.data}
+              listFollowing={listFollowing?.data}
+            />
           )}
         </div>
 

@@ -26,6 +26,7 @@ const useAuth = () => {
 
       //dispatch({ type: Types.USER_LOGGED_IN, payload: user });
       if (!isCancelled) setLoading(false);
+      window.location.reload();
     } catch (error) {
       console.error(error);
       if (!isCancelled) {
@@ -47,10 +48,12 @@ const useAuth = () => {
       console.log(res.User);
       //   dispatch user to the whole app if successful
       dispatch({ type: Types.USER_LOGGED_IN, payload: res.User });
+
       if (!isCancelled) {
         setLoading(false);
         setError(null);
       }
+      window.location.reload();
     } catch (error) {
       if (!isCancelled) {
         setLoading(false);
@@ -72,6 +75,7 @@ const useAuth = () => {
       }
       // Let the whole app knows the user is out
       dispatch({ type: Types.USER_LOGGED_OUT });
+      window.location.reload();
     } catch (error) {
       if (!isCancelled) {
         setError(error.message);

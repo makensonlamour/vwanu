@@ -21,7 +21,7 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
   };
 
   const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    if (anchorRef.current && anchorRef.current.contains(event?.target)) {
       return;
     }
 
@@ -58,12 +58,13 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
     });
 
   const handleAcceptfriendRequest = async (e) => {
-    console.log("accepted");
     e.preventDefault();
     setIsLoading(true);
+
     try {
       await acceptFriendRequest.mutateAsync({ friendId: otherUser?.id, accept: true });
       //add query to fetch
+      window.location.reload();
     } catch (e) {
       console.log(e);
       acceptFriendRequestError();
@@ -73,12 +74,12 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
   };
 
   const handleDeclinefriendRequest = async (e) => {
-    console.log("Decline");
     e.preventDefault();
     setIsLoading(true);
     try {
       await declineFriendRequest.mutateAsync({ friendId: otherUser?.id, accept: false });
       //add query to fetch
+      // window.location.reload();
     } catch (e) {
       console.log(e);
       declineFriendRequestError();
@@ -97,7 +98,7 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        className="items-center align-middle mr-1 btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end"
+        className="items-center align-middle mr-1 btn btn-sm btn-secondary text-base-100 rounded-xl mb-2 lg:mb-0 hover:bg-primary justify-end"
       >
         {loading ? (
           <Loader />
@@ -118,7 +119,7 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList
-                  className="text-secondary"
+                  className="text-secondary rounded-2xl px-2"
                   autoFocusItem={open}
                   id="composition-menu"
                   aria-labelledby="composition-button"
@@ -127,20 +128,20 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
                   <MenuItem
                     onClick={(e) => {
                       handleAcceptfriendRequest(e);
-                      handleClose();
+                      handleClose(e);
                     }}
-                    className="text-green-600"
+                    className="text-green-600 rounded-xl"
                   >
-                    <FiCheck size={"24px"} /> Accept
+                    <FiCheck size={20} className="mr-1" /> Accept
                   </MenuItem>
                   <MenuItem
                     onClick={(e) => {
                       handleDeclinefriendRequest(e);
-                      handleClose();
+                      handleClose(e);
                     }}
-                    className="text-red-600"
+                    className="text-red-600 rounded-xl"
                   >
-                    <AiOutlineClose size={"24px"} /> Decline
+                    <AiOutlineClose size={20} className="mr-1" /> Decline
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>

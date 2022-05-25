@@ -1,4 +1,4 @@
-import { usePost, useFetch, useDelete } from "../../lib/react-query";
+import { usePost, useUpdate, useFetch, useDelete } from "../../lib/react-query";
 
 export const useSendFriendRequest = (queryKey) => usePost(queryKey, `/friendRequest`);
 
@@ -16,7 +16,7 @@ export const useFollowUser = (queryKey, dataObj) =>
 export const useUnfollowUser = (queryKey, dataObj) =>
   usePost(queryKey, `/user/follow/${dataObj.userId}/${dataObj.otherUserId}?action=unfollow`); */
 
-export const useAcceptFriendRequest = (queryKey) => usePost(queryKey, `/user/friend`);
-export const useDeclineFriendRequest = (queryKey) => usePost(queryKey, `/user/friend`);
-export const useGetListFriend = (queryKey, enabled) => useFetch(queryKey, enabled, `/user/friend`);
-export const useUnfriendUser = (queryKey) => useDelete(queryKey, `/user/friend`);
+export const useAcceptFriendRequest = (queryKey) => useUpdate(queryKey, `/friendRequest`);
+export const useDeclineFriendRequest = (queryKey) => useUpdate(queryKey, `/friendRequest`);
+export const useGetListFriend = (queryKey, enabled) => useFetch(queryKey, enabled, `/friends`);
+export const useUnfriendUser = (queryKey, friendID) => useDelete(queryKey, `/friends/?friendId=${friendID}`);

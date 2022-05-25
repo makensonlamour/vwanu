@@ -115,7 +115,7 @@ const Navbar = ({ user }) => {
                     onClick={handleOpenUserMenu}
                     sx={{ p: 0, fontWeight: "light", paddingLeft: "10px", paddingRight: "10px", borderRadius: "15px" }}
                   >
-                    <p className="hidden md:inline mr-1 text-[1.0rem] lg:hidden xl:inline text-black capitalize font-light">
+                    <p className="hidden md:inline mr-1 text-[0.75rem] lg:hidden xl:inline text-black capitalize font-light">
                       {user?.firstName}
                     </p>
                     <IoIosArrowDown size="18px" className="mr-2" />
