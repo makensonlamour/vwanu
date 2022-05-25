@@ -88,10 +88,12 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                     </h4>
                     <h4 className="font-mock text-sm text-gray-600 mb-2 lg:-mt-1 ">
                       <span className="pr-2">
-                        {otherUser ? otherUser?.friends : user?.friends ? user?.friends?.length + " " : null}followers
+                        {otherUser ? listFollowers?.length : listFollowers?.length}
+                        {" followers"}
                       </span>
                       <span className="pl-2">
-                        {otherUser ? otherUser?.friends : user?.friends ? user?.friends?.length + " " : null} following
+                        {otherUser ? listFollowing?.length : listFollowing?.length}
+                        {" following"}
                       </span>
                     </h4>
                     <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
@@ -161,7 +163,7 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
               <ProfileTabs user={user} otherUser={otherUser} />
               <div className="mt-8 ">
                 <Routes>
-                  <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} />} />
+                  <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} listFollowing={listFollowing} />} />
                   <Route
                     path={allTabs1[1]}
                     element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={otherUser ? otherUser : user} />}</div>}

@@ -7,7 +7,7 @@ import UpdatesComponent from "../Newsfeed/UpdatesComponent";
 
 // import InfoCard from "../../features/user/Profile/component/InfoCard";
 
-const PostTab = ({ user, otherUser }) => {
+const PostTab = ({ user, otherUser, listFollowing }) => {
   const followings = [
     { image: "https://picsum.photos/200/300?image=0" },
     { image: "https://picsum.photos/200/300?image=1" },
@@ -61,7 +61,7 @@ const PostTab = ({ user, otherUser }) => {
     <>
       <div className="lg:flex">
         <div className="basis-[30%] -mt-8 mr-4">
-          <FollowingPreview data={followings} />
+          <FollowingPreview data={listFollowing} />
           <UpdatesComponent data={latestUpdates} />
         </div>
 
@@ -76,6 +76,7 @@ const PostTab = ({ user, otherUser }) => {
 PostTab.propTypes = {
   user: PropTypes.object.isRequired,
   otherUser: PropTypes.object,
+  listFollowing: PropTypes.array,
 };
 
 export default PostTab;
