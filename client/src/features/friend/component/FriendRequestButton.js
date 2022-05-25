@@ -5,7 +5,7 @@ import Loader from "../../../components/common/Loader";
 import { FiUserX, FiUserPlus } from "react-icons/fi";
 import { checkFriendRequest, checkFriendList } from "../../../helpers/index";
 import AcceptFriendRequestButton from "./AcceptFriendRequestButton";
-import { useSendFriendRequest, useGetListFriendRequest, useCancelFriendRequest } from "../friendSlice";
+import { useSendFriendRequest, useGetListFriendRequestSent, useGetListFriendReceive, useCancelFriendRequest } from "../friendSlice";
 
 const FriendRequestButton = ({ otherUser }) => {
   const [loading, setIsLoading] = useState(false);
@@ -21,7 +21,8 @@ const FriendRequestButton = ({ otherUser }) => {
       position: "top-center",
     });
 
-  const { data: listFriendRequest } = useGetListFriendRequest(["user", "request"], true);
+  const { data: listFriendSent } = useGetListFriendRequestSent(["user", "request"], true);
+  const { data: listFriendReceive } = useGetListFriendReceive(["user", "request"], true);
 
   const sendFriendRequest = useSendFriendRequest(["user", "request"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "request"]);
@@ -52,18 +53,15 @@ const FriendRequestButton = ({ otherUser }) => {
     }
   };
 
-  console.log(listFriendRequest?.data);
+  console.log(listFriendSent?.data);
 
   return (
     <>
       <Toaster />
       {otherUser ? (
-        checkFriendList(listFriendRequest?.data, otherUser?.id) ? null : checkFriendRequest(
-            listFriendRequest?.data?.user?.friendsRequest,
-            otherUser?.id
-          ) ? (
+        checkFriendList(listFriendSent?.data, otherUser?.id) ? null : checkFriendRequest(listFriendSent?.data, otherUser?.id) ? (
           <AcceptFriendRequestButton otherUser={otherUser} />
-        ) : checkFriendRequest(listFriendRequest?.data?.user?.FriendshipRequested, otherUser?.id) ? (
+        ) : checkFriendRequest(listFriendReceive?.data, otherUser?.id) ? (
           <button
             onClick={handleCancelFriendRequest}
             className="items-center align-middle mr-2 btn btn-sm btn-secondary text-base-100 rounded-lg mb-2 lg:mb-0 hover:bg-primary"

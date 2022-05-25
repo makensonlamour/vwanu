@@ -19,7 +19,7 @@ COPY --from=ts-compiler /usr/app/package*.json ./
 COPY --from=ts-compiler /usr/app/build ./
 RUN npm install --only=production
 EXPOSE 587
-CMD ["npm","run","start:staging"]
+CMD ["npm","run","start"]
 
 
 

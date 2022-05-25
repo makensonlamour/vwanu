@@ -4,7 +4,7 @@ import { useQueryClient } from "react-query";
 import _ from "lodash";
 
 import { useGetOtherProfile } from "../../features/user/userSlice";
-import { useGetListFriendRequest } from "../../features/friend/friendSlice";
+import { useGetListFriendRequestSent } from "../../features/friend/friendSlice";
 
 //Core components
 // import Loader from "../../components/common/Loader";
@@ -20,16 +20,16 @@ const Profil = () => {
   }
 
   const { data: otherUser } = useGetOtherProfile(["user", "otherUser"], _.isEqual(user?.id.toString(), id.toString()) ? false : true, id);
-  const { data: listFriendRequest } = useGetListFriendRequest(["user", "request"], true);
+  const { data: listFriendSent } = useGetListFriendRequestSent(["user", "request"], true);
 
   return (
     <>
       <div className=" max-w-screen-2xl">
         <div className="lg:mx-1">
           {user?.id === id ? (
-            <ProfileHeader user={user} otherUser={null} listFriendRequest={listFriendRequest?.data} />
+            <ProfileHeader user={user} otherUser={null} listFriendRequest={listFriendSent?.data} />
           ) : (
-            <ProfileHeader user={user} otherUser={otherUser} listFriendRequest={listFriendRequest?.data} />
+            <ProfileHeader user={user} otherUser={otherUser} listFriendRequest={listFriendSent?.data} />
           )}
         </div>
 

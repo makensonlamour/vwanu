@@ -3,13 +3,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BsXCircleFill } from "react-icons/bs";
-import { useGetListFriendRequest } from "../../../features/friend/friendSlice";
+import { useGetListFriendRequestSent } from "../../../features/friend/friendSlice";
 // import AcceptFriendRequestButton from "../../../features/friend/component/AcceptFriendRequestButton";
 
 // import routesPath from "../../../routesPath";
 
 const FriendsPreview = () => {
-  const { data: listFriendRequest } = useGetListFriendRequest(["user", "request"], true);
+  const { data: listFriendSent } = useGetListFriendRequestSent(["user", "request"], true);
 
   return (
     <>
@@ -18,9 +18,9 @@ const FriendsPreview = () => {
           <AiOutlineUserAdd size="24px" />
         </label>
         <ul tabIndex="2" className="dropdown-content menu py-2 shadow bg-base-100 rounded-box w-[22rem] text-gray-900">
-          {listFriendRequest?.data?.user?.friendsRequest?.length > 0 ? (
+          {listFriendSent?.data?.length > 0 ? (
             <li>
-              {listFriendRequest?.data?.user?.friendsRequest?.map((friend, idx) => {
+              {listFriendSent?.data?.map((friend, idx) => {
                 return (
                   <Link key={idx} to={"/profile/" + friend?.id} className="text-base border-b">
                     <div className="flex items-center align-middle justify-between">
