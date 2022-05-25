@@ -140,6 +140,7 @@ describe('Posts services', () => {
       .get(`${endpoint}?UserId=${newUser.id}`)
       .set('authorization', `Bearer ${token}`);
 
+    console.log('All post made');
     console.log(allPostResponse.body);
     // const allPost = allPostResponse.body;
     // expect(allPostResponse.status).toBe(StatusCodes.OK);

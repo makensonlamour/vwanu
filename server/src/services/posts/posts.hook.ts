@@ -4,6 +4,7 @@ import * as feathersAuthentication from '@feathersjs/authentication';
 import validateResource from '../../middleware/validateResource';
 import * as schema from '../../schema/post';
 import IncludeAssociations from '../../Hooks/IncludeAssociations';
+import addAssociation from '../../Hooks/AddAssociations';
 
 const { authenticate } = feathersAuthentication.hooks;
 
@@ -59,6 +60,49 @@ export default {
         }
 
         return context;
+      },
+      addAssociation({
+        models: [
+          {
+            model: 'users',
+            attributes: [
+              'firstName',
+              'lastName',
+              'id',
+              'profilePicture',
+              'createdAt',
+            ],
+          },
+        ],
+      }),
+      // (context) => {
+      //   const sequelize = context.params.sequelize || {};
+      //   sequelize.raw = false;
+      //   sequelize.include = [
+      //     {
+      //       model: context.app.services.users.Model,
+      //       attributes: [
+      //         'firstName',
+      //         'lastName',
+      //         'id',
+      //         'profilePicture',
+      //         'createdAt',
+      //       ],
+      //     },
+      //   ];
+      //   return context;
+      // },
+
+      (context) => {
+        const { query = {} } = context.params;
+
+        if (!query.$sort) {
+          query.$sort = {
+            createdAt: -1,
+          };
+        }
+
+        context.params.query = query;
       },
     ],
     get: [],
