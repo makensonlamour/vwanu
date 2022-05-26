@@ -1,7 +1,8 @@
 // import { HooksObject } from '@feathersjs/feathers';
 import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
-import IncludeAssociations from '../../Hooks/IncludeAssociations';
+// import IncludeAssociations from '../../Hooks/IncludeAssociations';
+import addAssociation from '../../Hooks/AddAssociations';
 
 const { authenticate } = authentication.hooks;
 
@@ -16,18 +17,39 @@ export default {
         query.privacyType = 'public';
       },
 
-      IncludeAssociations({
-        include: [
+      // IncludeAssociations({
+      //   include: [
+      //     {
+      //       model: 'posts',
+      //       as: 'Comments',
+      //       attributes: ['id', 'postText'],
+      //       include: [
+      //         {
+      //           model: 'posts',
+      //           as: 'User',
+      //           attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // }),
+      addAssociation({
+        models: [
+          {
+            model: 'reactions',
+          },
           {
             model: 'posts',
             as: 'Comments',
-            attributes: ['id', 'postText'],
-            include: [
-              {
-                model: 'posts',
-                as: 'User',
-                attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
-              },
+          },
+          {
+            model: 'users',
+            attributes: [
+              'firstName',
+              'lastName',
+              'id',
+              'profilePicture',
+              'createdAt',
             ],
           },
         ],

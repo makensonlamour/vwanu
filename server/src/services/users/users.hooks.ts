@@ -90,13 +90,15 @@ export default {
             VisitorId: context.params.User.id,
           });
 
+          console.log(Object.keys(context.app.services.notification));
           await context.app.service('notification').create({
-            UserId: context.id,
-            from: context.params.User.id,
+            UserId: 1,
+            from: 1,
             message: 'visit your profile',
             type: 'visit',
           });
         } catch (error) {
+          console.log(error);
           throw new Error(error);
         }
 

@@ -4,7 +4,7 @@ import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
 import { Badge, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material";
 import logo from "../../assets/images/Asset_2.png";
-import { IoIosArrowDown, IoMdNotificationsOutline } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineInbox } from "react-icons/ai";
 import { FiActivity } from "react-icons/fi";
@@ -14,15 +14,26 @@ import { RiPagesLine } from "react-icons/ri";
 import { CgMenuLeft } from "react-icons/cg";
 import { BottomMenuContext } from "../../context/BottomMenuContext";
 import FriendsPreview from "./Friends/FriendsPreview";
+import NotificationPreview from "./Notification/NotificationPreview";
 import useAuth from "../../hooks/useAuth";
 import { deleteToken } from "../../helpers/index";
 
 import client from "../../features/feathers";
 const Navbar = ({ user }) => {
   const nots = async () => {
-    const notifs = await client.service("notification").find();
-    console.log({ notifs });
-    client.service.on("created", console.log);
+    console.log("here are the services");
+    console.log(Object.keys(client.services));
+    try {
+      const notifs = await client.service("notification").find();
+      console.log("Notifs --");
+      console.log({ notifs });
+      client.service("notification").on("created", (m) => {
+        console.log("something");
+        console.log(m);
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -115,9 +126,9 @@ const Navbar = ({ user }) => {
               <p className="px-1">
                 <FriendsPreview />
               </p>
-              <Badge badgeContent={3} color="primary" className="mr-8">
-                <IoMdNotificationsOutline size="24px" className="text-black" />
-              </Badge>
+              <p className="px-1">
+                <NotificationPreview />
+              </p>
 
               <span className="hidden sm:block">
                 <Tooltip title="Open profile">
