@@ -1,26 +1,25 @@
 /* eslint-disable import/no-import-module-exports */
 
-
-import { Model } from 'sequelize'
+import { Model } from 'sequelize';
 
 export interface PageInterface {
-  id: number | undefined
-  pagePicture?: String
-  pageCoverPicture?: String
-  followers?: number
-  desc?: String
+  id: number | undefined;
+  pagePicture?: String;
+  pageCoverPicture?: String;
+  followers?: number;
+  desc?: String;
 }
-module.exports = (sequelize: any, DataTypes: any) => {
+export default (sequelize: any, DataTypes: any) => {
   class Page extends Model<PageInterface> implements PageInterface {
-    id: number | undefined
+    id: number | undefined;
 
-    pagePicture?: String
+    pagePicture?: String;
 
-    pageCoverPicture?: String
+    pageCoverPicture?: String;
 
-    followers?: number
+    followers?: number;
 
-    desc?: String
+    desc?: String;
 
     // static associate(models: any): void {
     //   Page.belongsTo(models.User)
@@ -60,6 +59,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       sequelize,
       modelName: 'Page',
     }
-  )
-  return Page
-}
+  );
+  return Page;
+};
