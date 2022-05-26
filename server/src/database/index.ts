@@ -17,6 +17,7 @@ import Visitors from './Visitors';
 import friend from './Friends';
 import blog from './blog';
 import album from './album';
+import notification from './notification';
 
 const tables = [
   user,
@@ -29,6 +30,7 @@ const tables = [
   friend,
   blog,
   album,
+  notification,
 ];
 
 export default function (app: Application): void {

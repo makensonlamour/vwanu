@@ -89,6 +89,13 @@ export default {
             UserId: context.id,
             VisitorId: context.params.User.id,
           });
+
+          await context.app.service('notification').create({
+            UserId: context.id,
+            from: context.params.User.id,
+            message: 'visit your profile',
+            type: 'visit',
+          });
         } catch (error) {
           throw new Error(error);
         }
