@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
@@ -17,7 +17,18 @@ import FriendsPreview from "./Friends/FriendsPreview";
 import useAuth from "../../hooks/useAuth";
 import { deleteToken } from "../../helpers/index";
 
+import client from "../../features/feathers";
 const Navbar = ({ user }) => {
+  const nots = async () => {
+    const notifs = await client.service("notification").find();
+    console.log({ notifs });
+    client.service.on("created", console.log);
+  };
+
+  useEffect(() => {
+    nots();
+  }, []);
+
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { logout } = useAuth();
 
