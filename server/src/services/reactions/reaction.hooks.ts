@@ -1,11 +1,28 @@
 import * as authentication from '@feathersjs/authentication';
 
+import addAssociation from '../../Hooks/AddAssociations';
+
 const { authenticate } = authentication.hooks;
 
 export default {
   before: {
     all: [authenticate('jwt')],
-    find: [],
+    find: [
+      addAssociation({
+        models: [
+          {
+            model: 'users',
+            attributes: [
+              'firstName',
+              'lastName',
+              'id',
+              'profilePicture',
+              'createdAt',
+            ],
+          },
+        ],
+      }),
+    ],
     get: [],
     create: [],
     update: [],

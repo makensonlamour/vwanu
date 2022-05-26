@@ -1,17 +1,28 @@
-import React, { useEffect } from "react";
+/*eslint-disable */
+import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { IoNotificationsOutline } from "react-icons/io5";
 import { BsXCircleFill } from "react-icons/bs";
+import { IoMdNotificationsOutline } from "react-icons/io";
+import { Badge } from "@mui/material";
 // import routesPath from "../../../routesPath";
 import client from "../../../features/feathers";
+import useAuthContext from "../../../hooks/useAuthContext";
 const NotificationPreview = () => {
-  const ntificationList = [];
+  const { user } = useAuthContext();
+  console.log("my user");
+  console.log(user);
+  const [notificationList, setNotificationList] = useState([]);
 
   const nots = async () => {
-    const notifs = await client.service("notification").find();
-    console.log({ notifs });
-    client.service.on("created", console.log);
+    const notifications = await client.service("notification").find({ query: { UserId: user.id } });
+    setNotificationList(notifications);
+
+    client.service("notification").on("created", (notification) => {
+      if (notification.UserId.toString() === user.id.toString()) {
+        setNotificationList((notificationList) => [...notificationList, notification]);
+      }
+    });
   };
 
   useEffect(() => {
@@ -21,10 +32,12 @@ const NotificationPreview = () => {
     <>
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <IoNotificationsOutline size="24px" />
+          <Badge badgeContent={notificationList?.length} color="primary" className="mr-8">
+            <IoMdNotificationsOutline size="24px" className="text-black" />
+          </Badge>
         </label>
         <ul tabIndex="2" className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-gray-900">
-          {ntificationList.length > 0 ? (
+          {notificationList.length > 0 ? (
             <li>
               Notification
               <Link to={""} onClick={console.log("view more messages")}>
@@ -38,7 +51,7 @@ const NotificationPreview = () => {
                   {" "}
                   <BsXCircleFill size={"48px"} className="m-auto p-2" />
                 </span>
-                <span> 0 Notifcation</span>
+                <span> 0 Notification</span>
               </div>
             </>
           )}

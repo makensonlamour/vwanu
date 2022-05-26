@@ -13,6 +13,7 @@ import refreshTokens from './refresh-tokens/refresh-tokens.service';
 import emailTemplate from './email-template/email-template.service';
 import undesiredFriend from './undesiredFriends/undesiredFriends.service';
 import authmanagementService from './authmanagement/authmanagement.service';
+import reaction from './reactions/reaction.service';
 
 import timeline from './timeline/timeline.service';
 
@@ -46,4 +47,5 @@ export default function (app: Application): void {
   app.configure(timelineBlogs);
   app.configure(albums);
   app.configure(notification);
+  app.configure(reaction);
 }

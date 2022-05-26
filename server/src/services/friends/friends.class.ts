@@ -21,7 +21,7 @@ export class Friends extends Service {
   }
 
   async find(params: Params) {
-    const { id } = params.User;
+    const id = params.query.UserId || params.User.id;
     const { models } = this.app.get('sequelizeClient');
 
     const userAndFriends: any = await models.User.findOne({
@@ -146,7 +146,7 @@ export class Friends extends Service {
       createdAt: undesiredFriend.User_friends_undesired.createdAt,
       updatedAt: undesiredFriend.User_friends_undesired.updatedAt,
     };
-  
+
     return Promise.resolve(undesiredFriend);
   }
 

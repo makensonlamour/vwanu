@@ -22,8 +22,9 @@ export class Followers extends Service {
 
     let response = [];
     const UserModel = this.app.service('users').Model;
-    const { action } = params.query;
-    const requesterId = params.User.id;
+    const { action, UserId } = params.query;
+    const requesterId = UserId || params.User.id;
+
     let requester;
 
     switch (action) {
@@ -73,7 +74,7 @@ export class Followers extends Service {
       .models.User_Follower.destroy({
         where: { UserId: params.query.UserId, FollowerId: params.User.id },
       });
-        
+
     return Promise.resolve(res);
   }
 }

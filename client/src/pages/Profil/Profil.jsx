@@ -25,7 +25,10 @@ const Profil = () => {
   const { data: listFriend } = useGetListFriend(["user", "friend"], true);
   const { data: listFollowers } = useGetListFollowers(["user", "followers"], true);
   const { data: listFollowing } = useGetListFollowing(["user", "following"], true);
-
+  // const listFollowers = [];
+  // const listFollowing = [];
+  // const listFriendSent = [];
+  // const listFriend = [];
   return (
     <>
       <div className=" max-w-screen-2xl">
