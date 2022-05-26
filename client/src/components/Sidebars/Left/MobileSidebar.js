@@ -77,18 +77,18 @@ const SidebarLeft = ({ user }) => {
       <div
         className={`${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
-        }  ease-in-out duration-300 w-full h-screen md:shadow-xl antialiased md:fixed z-50`}
+        }  ease-in-out duration-300 w-full md:shadow-xl antialiased md:fixed z-50`}
       >
         {/* Mobile menu Toggle */}
-        <div className="shadow-lg py-2 flex justify-between px-4 bg-white">
+        <div className="shadow-xl py-2 flex justify-between px-4 bg-white ">
           <Link
             onClick={() => {
               closeSidebar();
             }}
             to={"../../profile/" + user?.id}
-            className="flex text-primary hover:text-secondary"
+            className="flex text-primary hover:text-secondary "
           >
-            <img className="object-fit w-10 h-10 mask mask-squircle" src={user?.profilePicture} alt={user?.firstName} />
+            <img className="object-cover w-10 h-10 mask mask-squircle" src={user?.profilePicture?.original} alt={user?.firstName} />
             <div className="block ml-3">
               <p className="text-md font-medium">{user?.firstName + " " + user?.lastName}</p>
               <p className="text-sm font-light">My Account</p>
@@ -105,7 +105,7 @@ const SidebarLeft = ({ user }) => {
         </div>
 
         <div
-          className={`"block w-full md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-scroll md:fixed sm:relative w-92`}
+          className={`"block w-full md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-auto md:fixed sm:relative w-92`}
         >
           <div className="px-4 space-y-2">
             {ItemSidebarLeft.map((item) => {

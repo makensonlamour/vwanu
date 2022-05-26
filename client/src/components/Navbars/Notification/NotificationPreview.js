@@ -10,24 +10,31 @@ import client from "../../../features/feathers";
 import useAuthContext from "../../../hooks/useAuthContext";
 const NotificationPreview = () => {
   const { user } = useAuthContext();
-  console.log("my user");
-  console.log(user);
   const [notificationList, setNotificationList] = useState([]);
 
-  const nots = async () => {
-    const notifications = await client.service("notification").find({ query: { UserId: user.id } });
-    setNotificationList(notifications);
+  const onCreatedListener = (notification) => {
+    if (notification.UserId.toString() === user.id.toString() && notification.from.toString() !== user.id.toString()) {
+      setNotificationList((notificationList) => [...notificationList, notification]);
+    }
+  };
+  const notificationService = client.service("notification");
 
-    client.service("notification").on("created", (notification) => {
-      if (notification.UserId.toString() === user.id.toString()) {
-        setNotificationList((notificationList) => [...notificationList, notification]);
-      }
-    });
+  const nots = async () => {
+    const notifications = await notificationService.find({ query: { UserId: user.id } });
+    notifications.forEach(onCreatedListener);
+    client.service("notification").on("created", onCreatedListener);
+
+    return () => {
+      client.service("notification").removeListener("created", onCreatedListener);
+    };
   };
 
   useEffect(() => {
     nots();
   }, []);
+
+  console.log(notificationList);
+
   return (
     <>
       <div className="dropdown dropdown-hover dropdown-end">
@@ -36,14 +43,46 @@ const NotificationPreview = () => {
             <IoMdNotificationsOutline size="24px" className="text-black" />
           </Badge>
         </label>
-        <ul tabIndex="2" className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-gray-900">
-          {notificationList.length > 0 ? (
-            <li>
-              Notification
-              <Link to={""} onClick={console.log("view more messages")}>
-                View more notification...
-              </Link>
-            </li>
+        <ul tabIndex="2" className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-96 text-gray-900">
+          {notificationList?.length > 0 ? (
+            <>
+              <div className="flex justify-between mb-4 m-2">
+                <h4 className="text-lg font-semibold">Notifications</h4>
+                <button className="text-sm text-primary font-[400]">Mark all as read</button>
+              </div>
+              <div className="overflow-hidden hover:overflow-auto hover:scrollbar">
+                {notificationList?.map((notification, idx) => {
+                  if (idx <= 5) {
+                    return (
+                      <Link
+                        key={idx}
+                        to={"/notification/" + notification?.id}
+                        className="text-base mx-2 my-1 py-2 hover:bg-placeholder-color px-2 rounded-xl"
+                      >
+                        <div className="flex items-center align-middle justify-between">
+                          <div className="w-12">
+                            <img className="object-cover w-6 h-6 mask mask-squircle" src={notification?.profilePicture?.original} alt="" />
+                          </div>
+                          <div className=" text-sm w-72">
+                            <p className="pb-1">
+                              <span className="font-semibold"> {notification?.firstName + " " + notification?.lastName}</span>
+                              <span className="font-normal"> {" " + notification?.message}</span>
+                            </p>
+                            <p className="pt-1 text-gray-400 font-medium text">{notification?.createdAt}</p>
+                          </div>
+                          <div className="text-sm">view</div>
+                        </div>
+                      </Link>
+                    );
+                  }
+                })}
+              </div>
+              <li className="border-t hover:text-primary mx-auto text-center -px-2 text-gray-900">
+                <Link to={""} onClick={console.log("view more Notifications")}>
+                  {"View Notifications >"}
+                </Link>
+              </li>
+            </>
           ) : (
             <>
               <div className="text-primary font-semibold p-5 text-center">

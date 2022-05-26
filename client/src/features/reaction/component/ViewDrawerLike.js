@@ -47,7 +47,6 @@ const ViewDrawerLike = (props) => {
           },
         }}
       />
-      {console.log("mobile", reactions)}
 
       <Box sx={{ textAlign: "center", pt: 1, backgroundColor: "transparent" }}>
         <button className="bg-inherit" onClick={toggleDrawer(true)}>

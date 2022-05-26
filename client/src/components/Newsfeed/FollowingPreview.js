@@ -8,8 +8,6 @@ const FollowingPreview = ({ data }) => {
     backgroundColor: "inherit",
   }));
 
-  console.log(data);
-
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">

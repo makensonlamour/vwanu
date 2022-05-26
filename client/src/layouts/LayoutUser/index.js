@@ -29,7 +29,7 @@ const LayoutUser = () => {
   return (
     <>
       <div className="mx-auto">
-        <div className="flex">
+        <div className="flex overflow-auto">
           <div className="grow hidden md:block">
             <SidebarLeft user={user ? user : undefined} />
           </div>
@@ -38,14 +38,17 @@ const LayoutUser = () => {
               <div className={`${isSidebarOpen ? "translate-x-0" : "translate-x-full"} md:hidden ease-in-out duration-300`}>
                 <MobileSidebar user={user ? user : undefined} />
               </div>
-            ) : null}
-            <Navbar user={user ? user : undefined} />
+            ) : (
+              <>
+                {" "}
+                <Navbar user={user ? user : undefined} />
+                <Item elevation={0} className="max-w-screen-xxl w-[100vw] sm:w-[90vw] mx-auto">
+                  {user && !user?.birthday && <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />}
 
-            <Item elevation={0} className="max-w-screen-xxl w-[100vw] sm:w-[90vw] mx-auto">
-              {user && !user?.birthday && <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />}
-
-              {user ? <Outlet context={user || undefined} /> : <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />}
-            </Item>
+                  {user ? <Outlet context={user || undefined} /> : <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />}
+                </Item>
+              </>
+            )}
           </div>
         </div>
       </div>

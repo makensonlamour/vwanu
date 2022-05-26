@@ -21,7 +21,7 @@ const FriendsPreview = () => {
             <AiOutlineUserAdd size={"24px"} />
           </Badge>
         </label>
-        <ul tabIndex="2" className="dropdown-content menu py-2 shadow bg-base-100 rounded-box w-[22rem] text-gray-900">
+        <ul tabIndex="2" className="dropdown-content menu py-2 shadow bg-base-100 rounded-box w-96 text-gray-900">
           {listFriendReceive?.data?.length > 0 ? (
             <li>
               {listFriendReceive?.data?.map((friend, idx) => {
