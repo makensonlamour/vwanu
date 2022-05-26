@@ -146,54 +146,9 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                   <div>
                     {otherUser && <FriendRequestButton user={user} otherUser={otherUser} />}
 
-                    {
-                      otherUser && <MenuButton user={user} otherUser={otherUser} />
-
-                      /*(
-                      <button className="btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end">
-                        Message
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          setEdit(true);
-                          navigate("./about", { state: { edit } });
-                        }}
-                        className="items-center align-middle btn btn-sm btn-secondary text-base-100 rounded-lg mb-2 lg:mb-0 hover:bg-primary justify-end"
-                      >
-                        <FaUserEdit size={"18px"} />
-                        <span className="ml-1"> Edit Profile</span>
-                      </button>
-                      )*/
-                    }
+                    {otherUser && <MenuButton user={user} otherUser={otherUser} />}
                   </div>
-                  {/*}
-                    <div>
-                      {checkFriendList(listFriendRequest?.data?.user?.friends, otherUser?.id) ? (
-                        <FriendButton otherUser={otherUser} />
-                      ) : (
-                        <FriendRequestButton user={user} otherUser={otherUser} />
-                      )}
-                    {otherUser ? (
-                        <button className="btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end">
-                          Message
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            setEdit(true);
-                            navigate("./about", { state: { edit } });
-                          }}
-                          className="items-center align-middle btn btn-sm btn-secondary text-base-100 rounded-full mb-2 lg:mb-0 hover:bg-primary justify-end"
-                        >
-                          <FaUserEdit size={"18px"} />
-                          <span className="ml-1"> Edit Profile</span>
-                        </button>
-                        )}
-                    </div>
-                    {*/}
                 </div>
-                {/*}  <h2 className="font-mock text-gray-500">{otherUser ? otherUser?.about : user?.about ? user?.about : ""}</h2>{*/}
               </div>
               <ProfileTabs user={user} otherUser={otherUser} />
               <div className="mt-8 ">

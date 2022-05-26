@@ -6,7 +6,7 @@ import { CircularProgressbarWithChildren, buildStyles } from "react-circular-pro
 const CompleteProfile = ({ data, percentage }) => {
   return (
     <>
-      <div className="w-[250px] bg-white border border-gray-200 rounded-lg p-2 mb-8">
+      <div className="w-[300px] bg-white border border-gray-200 rounded-lg p-2 mb-8">
         <h2 className="my-5 text-xl font-medium">Complete Your Profile</h2>
         <div className="w-44 mx-auto">
           <CircularProgressbarWithChildren
