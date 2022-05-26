@@ -17,6 +17,8 @@ import { checkFriendList } from "../../helpers/index";
 import { FaUserEdit } from "react-icons/fa";
 import EditProfile from "../../pages/Profil/EditProfile";
 import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
+import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
+import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { format } from "date-fns";
@@ -34,14 +36,47 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
     { title: "Cover Photo", total: 1, complete: 1 },
   ];
 
+  const latestUpdates = [
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "10 months ago",
+      where: "",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=3",
+      name: "Adele",
+      date: "10 months ago",
+      where: "",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "2 years ago",
+      where: "",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "2 years ago",
+      where: "in the group Coffee Addicts",
+    },
+    {
+      avatar: "https://picsum.photos/200/300?image=4",
+      name: "John",
+      date: "2 years ago",
+      where: "",
+    },
+  ];
+
   return (
     <>
       {!user && !otherUser ? (
         <Loader />
       ) : (
         <>
-          <div className="flex ">
-            <div className="rounded-t-lg lg:basis-[75%]">
+          <div className="flex justify-between w-full">
+            <div className="rounded-t-lg basis-full lg:basis-[72%] mr-4">
               <div className="rounded-t-lg border-gray-700 bg-white">
                 <div className="relative ">
                   <div className="">
@@ -182,8 +217,14 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
               </div>
             </div>
 
-            <div className="basis-[22%] ml-auto mt-8">
+            <div className="hidden lg:block basis-[20%] ml-auto mx-2 mt-8">
               <CompleteProfile percentage={percentage} data={steps} />
+              <div className="block xl:hidden">
+                <FollowingPreview data={listFollowing} />
+              </div>
+              <div className="block xl:hidden">
+                <UpdatesComponent data={latestUpdates} />
+              </div>
             </div>
           </div>
         </>

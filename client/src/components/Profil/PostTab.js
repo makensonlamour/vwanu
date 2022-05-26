@@ -44,12 +44,16 @@ const PostTab = ({ user, otherUser, listFollowing }) => {
   return (
     <>
       <div className="lg:flex">
-        <div className="basis-[30%] -mt-8 mr-4">
-          <FollowingPreview data={listFollowing} />
-          <UpdatesComponent data={latestUpdates} />
+        <div className="hidden xl:block basis-[30%] -mt-8 mr-4">
+          <div className="">
+            <FollowingPreview data={listFollowing} />
+          </div>
+          <div className="">
+            <UpdatesComponent data={latestUpdates} />
+          </div>
         </div>
 
-        <div className="basis-[70%]">
+        <div className="basis-full xl:basis-[70%]">
           <ProfileFeed user={user} otherUser={otherUser} />
         </div>
       </div>

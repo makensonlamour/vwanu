@@ -1,27 +1,39 @@
 import React from "react";
-import { useGetListFriendRequestSent } from "../../features/friend/friendSlice";
-import FriendButton from "../../features/friend/component/FriendButton";
+import { useGetListFriend } from "../../features/friend/friendSlice";
+// import FriendButton from "../../features/friend/component/FriendButton";
 
 const ViewFriend = () => {
-  const { data: listFriendSent } = useGetListFriendRequestSent(["user", "me"], true);
+  const { data: listFriendSent } = useGetListFriend(["user", "friend"], true);
 
   return (
     <>
-      <div className="bg-white w-full rounded-lg mx-2 border p-4">
-        <h4 className="mb-2 border-b font-semibold text-secondary">Friends {" (" + listFriendSent?.data?.length + ")"}</h4>
-        <div className="flex flex-wrap">
+      <div className="my-2">
+        <div className="flex flex-wrap lg:justify-between xl:justify-start py-2">
           {listFriendSent?.data?.length > 0 ? (
             listFriendSent?.data?.map((friend, idx) => {
               return (
-                <div key={idx} className="p-4 border mx-1 rounded-lg">
+                <div
+                  key={idx}
+                  className="bg-white w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:w-[32%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3"
+                >
                   <img
-                    className="object-cover w-16 h-16 mask mask-squircle mx-auto mb-2"
+                    className="object-cover w-28 h-28 mask mask-squircle mx-auto mb-2"
                     src={friend?.profilePicture?.original}
                     alt="_profile"
                   />
-                  <span className="mx-auto font-semibold text-secondary text-center">{friend?.firstName + " " + friend?.lastName}</span>
-                  <div className="block px-2 pt-2">
-                    <FriendButton otherUser={{ id: friend?.id }} />
+                  <p className="mx-auto py-3 font-semibold text-lg text-gray-900 text-center">
+                    {friend?.firstName + " " + friend?.lastName}
+                  </p>
+                  <p className="mx-auto font-normal text-sm text-gray-400 text-center">{"Joined Apr 2022"}</p>
+                  <p className="mx-auto py-1 font-normal text-sm text-gray-400 text-center">{"14 followers"}</p>
+                  <div className="px-4">
+                    <button className="capitalize mt-4 mb-8 rounded-xl px-3 btn btn-sm bg-white w-full border border-gray-300 text-gray-900 hover:text-base-100 hover:bg-primary hover:border-0">
+                      Send Message
+                    </button>
+                  </div>
+                  <div className="flex border border-gray-300 rounded-b-xl -px-6 justify-around bg-placeholder-color">
+                    <button className="basis-1/2 py-3 border-r border-gray-300">Follow</button>
+                    <button className="basis-1/2 py-3 border-l border-gray-300">Connect</button>
                   </div>
                 </div>
               );
