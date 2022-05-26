@@ -78,6 +78,7 @@ export default {
     get: [
       async (context) => {
         if (
+          !context.params.provider ||
           !context.params.User ||
           !context.id ||
           context.params.User.id === context.id
@@ -90,15 +91,15 @@ export default {
             VisitorId: context.params.User.id,
           });
 
-          console.log(Object.keys(context.app.services.notification));
           await context.app.service('notification').create({
-            UserId: 1,
-            from: 1,
-            message: 'visit your profile',
-            type: 'visit',
+            UserId: context.params.User.id,
+            to: context.id,
+            message: 'Visited your profile',
+            type: 'direct',
+            entityName: 'users',
+            entityId: context.id,
           });
         } catch (error) {
-          console.log(error);
           throw new Error(error);
         }
 

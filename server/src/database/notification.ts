@@ -4,10 +4,12 @@ import { Model } from 'sequelize';
 
 export interface NotificationInterface {
   id: number;
-  from: number;
+  to: number;
   message: string;
   type: string;
   view: boolean;
+  entityName: string;
+  entityId: number;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Notification
@@ -16,13 +18,17 @@ export default (sequelize: any, DataTypes: any) => {
   {
     id: number;
 
-    from: number;
+    to: number;
 
     message: string;
 
     type: string;
 
     view: boolean;
+
+    entityId: number;
+
+    entityName: string;
 
     static associate(models: any): void {
       Notification.belongsTo(models.User);
@@ -35,7 +41,7 @@ export default (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      from: {
+      to: {
         type: DataTypes.INTEGER,
       },
 
@@ -47,6 +53,13 @@ export default (sequelize: any, DataTypes: any) => {
       type: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      entityName: {
+        type: DataTypes.STRING,
+      },
+
+      entityId: {
+        type: DataTypes.INTEGER,
       },
       view: {
         type: DataTypes.BOOLEAN,
