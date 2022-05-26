@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { BsXCircleFill } from "react-icons/bs";
 // import routesPath from "../../../routesPath";
-
+import client from "../../../features/feathers";
 const NotificationPreview = () => {
   const ntificationList = [];
 
+  const nots = async () => {
+    const notifs = await client.service("notification").find();
+    console.log({ notifs });
+    client.service.on("created", console.log);
+  };
+
+  useEffect(() => {
+    nots();
+  }, []);
   return (
     <>
       <div className="dropdown dropdown-hover dropdown-end">
