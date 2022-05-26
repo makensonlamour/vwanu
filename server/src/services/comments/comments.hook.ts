@@ -1,14 +1,15 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 
 import addAssociation from '../../Hooks/AddAssociations';
+import autoOwn from '../../Hooks/AutoOwn';
+import LimitToOwner from '../../Hooks/LimitToOwner';
 
 const { authenticate } = feathersAuthentication.hooks;
 
 export default {
   before: {
-    all: [],
+    all: [authenticate('jwt')],
     find: [
-      authenticate('jwt'),
       addAssociation({
         models: [
           {
@@ -41,17 +42,34 @@ export default {
         ],
       }),
     ],
-    create: [authenticate('jwt')],
-    update: [authenticate('jwt')],
-    patch: [authenticate('jwt')],
-    remove: [authenticate('jwt')],
+    create: [autoOwn],
+    update: [LimitToOwner],
+    patch: [LimitToOwner],
+    remove: [LimitToOwner],
   },
 
   after: {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      async (context) => {
+        const { UserId } = await context.app
+          .service('posts')
+          .get(context.result.PostId);
+
+        await context.app.service('notification').create({
+          UserId: context.params.User.id,
+          to: UserId, //
+          message: 'Commented on your post',
+          type: 'direct',
+          entityName: 'posts',
+          entityId: context.result.PostId, //
+        });
+
+        return context;
+      },
+    ],
     update: [],
     patch: [],
     remove: [],
