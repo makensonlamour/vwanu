@@ -22,6 +22,8 @@ import blogs from './blogs/blogs.service';
 
 import timelineBlogs from './timeline-blogs/timeline-blogs.service';
 
+import albums from './albums/albums.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -40,4 +42,5 @@ export default function (app: Application): void {
   app.configure(groups);
   app.configure(blogs);
   app.configure(timelineBlogs);
+  app.configure(albums);
 }

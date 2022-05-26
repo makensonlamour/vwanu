@@ -16,6 +16,7 @@ import Media from './media';
 import Visitors from './Visitors';
 import friend from './Friends';
 import blog from './blog';
+import album from './album';
 
 const tables = [
   user,
@@ -27,6 +28,7 @@ const tables = [
   Visitors,
   friend,
   blog,
+  album,
 ];
 
 export default function (app: Application): void {
