@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
@@ -18,27 +18,27 @@ import NotificationPreview from "./Notification/NotificationPreview";
 import useAuth from "../../hooks/useAuth";
 import { deleteToken } from "../../helpers/index";
 
-import client from "../../features/feathers";
+// import client from "../../features/feathers";
 const Navbar = ({ user }) => {
-  const nots = async () => {
-    console.log("here are the services");
-    console.log(Object.keys(client.services));
-    try {
-      const notifs = await client.service("notification").find();
-      console.log("Notifs --");
-      console.log({ notifs });
-      client.service("notification").on("created", (m) => {
-        console.log("something");
-        console.log(m);
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const nots = async () => {
+  //   console.log("here are the services");
+  //   console.log(Object.keys(client.services));
+  //   try {
+  //     const notifs = await client.service("notification").find();
+  //     console.log("Notifs --");
+  //     console.log({ notifs });
+  //     client.service("notification").on("created", (m) => {
+  //       console.log("something");
+  //       console.log(m);
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  useEffect(() => {
-    nots();
-  }, []);
+  // useEffect(() => {
+  //   nots();
+  // }, []);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { logout } = useAuth();

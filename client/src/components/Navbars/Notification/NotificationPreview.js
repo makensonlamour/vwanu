@@ -13,19 +13,20 @@ const NotificationPreview = () => {
   const [notificationList, setNotificationList] = useState([]);
 
   const onCreatedListener = (notification) => {
-    if (notification.UserId.toString() === user.id.toString() && notification.from.toString() !== user.id.toString()) {
+    console.log("\n\n\n\ncreated", notification);
+    if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
     }
   };
   const notificationService = client.service("notification");
 
   const nots = async () => {
-    const notifications = await notificationService.find({ query: { UserId: user.id } });
+    const notifications = await notificationService.find({ query: { to: user.id } });
     notifications.forEach(onCreatedListener);
-    client.service("notification").on("created", onCreatedListener);
+    notificationService.on("created", onCreatedListener);
 
     return () => {
-      client.service("notification").removeListener("created", onCreatedListener);
+      notificationService.removeListener("created", onCreatedListener);
     };
   };
 
@@ -61,11 +62,11 @@ const NotificationPreview = () => {
                       >
                         <div className="flex items-center align-middle justify-between">
                           <div className="w-12">
-                            <img className="object-cover w-6 h-6 mask mask-squircle" src={notification?.profilePicture?.original} alt="" />
+                            <img className="object-cover w-6 h-6 mask mask-squircle" src={notification?.User?.profilePicture} alt="" />
                           </div>
                           <div className=" text-sm w-72">
                             <p className="pb-1">
-                              <span className="font-semibold"> {notification?.firstName + " " + notification?.lastName}</span>
+                              <span className="font-semibold"> {notification?.User?.firstName + " " + notification?.User?.lastName}</span>
                               <span className="font-normal"> {" " + notification?.message}</span>
                             </p>
                             <p className="pt-1 text-gray-400 font-medium text">{notification?.createdAt}</p>
