@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const ViewDetails = ({ title, user }) => {
+  const navigate = useNavigate();
+  const [edit, setEdit] = useState(false);
   return (
     <>
       <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
         <div className="border-b flex justify-between items-center pb-4">
           <p className="font-bold text-lg">{title}</p>
-          <button className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold">Edit</button>
+          <button
+            onClick={() => {
+              setEdit(true);
+              navigate("../about", { state: { edit } });
+            }}
+            className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
+          >
+            Edit
+          </button>
         </div>
         {user?.map((detail) => {
           return (

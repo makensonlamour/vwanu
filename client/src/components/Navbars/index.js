@@ -55,9 +55,9 @@ const Navbar = ({ user }) => {
   }
 
   return (
-    <div className="mx-auto sticky top-0 z-40">
-      <div className="bg-white w-full py-1 shadow-md">
-        <div className="flex items-center justify-between md:justify-around lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+    <div className="mx-auto w-full sticky top-0 z-40">
+      <div className="bg-white basis-full py-1 shadow-md">
+        <div className="flex basis-full items-center justify-between md:justify-around lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
           {isSidebarOpen ? null : (
             <div className="ml-2 inline md:hidden">
               <button
@@ -70,7 +70,7 @@ const Navbar = ({ user }) => {
               </button>
             </div>
           )}
-          <div className="basis-1/6 ml-2 md:pl-36 lg:pl-10 xl:px-6">
+          <div className="basis-[30%] md:basis-[12%] ml-2 md:pl-6 lg:pl-10 xl:px-6">
             <Link className="" to={routesPath.NEWSFEED}>
               <div className="text-lg font-bold w-[100px] md:w-[150px] mr-10 py-2 flex">
                 {" "}
@@ -78,7 +78,7 @@ const Navbar = ({ user }) => {
               </div>
             </Link>
           </div>
-          <div className="basis-[35%] xl:basis-2/4 flex-none hidden md:block">
+          <div className="basis-[35%] md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
             <div className="hidden xl:flex items-center justify-evenly py-2">
               {pages.map((page) => (
                 <button key={page.title + " title"} className=" text-primary hover:text-secondary active:text-secondary">
@@ -94,7 +94,7 @@ const Navbar = ({ user }) => {
               ))}
             </div>
           </div>
-          <div className="basis-[30%] flex-none">
+          <div className="basis-[70%] lg:basis-[30%] flex-none">
             <div className="flex justify-end items-center">
               <BsSearch size="24px" className="text-black mr-4" />
               <div className="h-6 bg-black w-[1px] mr-4"></div>
@@ -108,17 +108,17 @@ const Navbar = ({ user }) => {
                 <IoMdNotificationsOutline size="24px" className="text-black" />
               </Badge>
 
-              <span className="hidden md:block">
+              <span className="hidden sm:block">
                 <Tooltip title="Open profile">
                   <Button
                     ariant="text"
                     onClick={handleOpenUserMenu}
                     sx={{ p: 0, fontWeight: "light", paddingLeft: "10px", paddingRight: "10px", borderRadius: "15px" }}
                   >
-                    <p className="hidden md:inline mr-1 text-[0.75rem] lg:hidden xl:inline text-black capitalize font-light">
-                      {user?.firstName}
-                    </p>
-                    <IoIosArrowDown size="18px" className="mr-2" />
+                    <p className="hidden mr-1 text-[0.75rem] md:hidden xl:inline text-black capitalize font-light">{user?.firstName}</p>
+                    <span className="hidden md:hidden xl:inline">
+                      <IoIosArrowDown size="18px" className="mr-2" />
+                    </span>
                     <div className="rounded-[50px] avatar online">
                       <div className="rounded-[12px] w-8 h-8 m-1">
                         <img className="object-cover object-center w-8 h-8" src={user?.profilePicture?.original} alt="profil_image" />
@@ -127,7 +127,6 @@ const Navbar = ({ user }) => {
                   </Button>
                 </Tooltip>
 
-                {}
                 <Menu
                   sx={{ mt: "45px", borderRadius: "15px" }}
                   id="menu-appbar"
