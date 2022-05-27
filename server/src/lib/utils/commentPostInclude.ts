@@ -7,7 +7,6 @@ export const userAttributes = ['firstName', 'lastName', 'id', 'profilePicture'];
 export const include = (app) => [
   {
     model: app.get('sequelizeClient').models.Media,
-    
   },
 
   {
@@ -17,6 +16,7 @@ export const include = (app) => [
   {
     model: app.get('sequelizeClient').models.Post,
     as: 'Comments',
+    attributes: ['id', 'posText', 'PostId', 'createdAt', 'updatedAt'],
     include: [
       {
         model: app.get('sequelizeClient').models.User,

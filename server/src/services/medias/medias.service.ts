@@ -8,7 +8,7 @@ import hooks from './medias.hook';
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
   interface ServiceTypes {
-    media: Medias & ServiceAddons<any>;
+    medias: Medias & ServiceAddons<any>;
   }
 }
 

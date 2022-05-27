@@ -106,7 +106,12 @@ const Common = {
     const data = request;
 
     const documentFiles = request.UploadedMedia;
-    if (documentFiles?.postImage || documentFiles?.postVideo) {
+
+    console.log(mediaArray);
+    console.log(documentFiles);
+    if (documentFiles && mediaArray.some((media) => documentFiles[media])) {
+      console.log(' In ');
+      // if (documentFiles?.postImage || documentFiles?.postVideo) {
       data.Media = [];
 
       mediaArray.forEach((mediaGroup) => {
