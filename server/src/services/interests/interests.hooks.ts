@@ -12,7 +12,11 @@ export default {
     find: [
       authenticate('jwt', 'anonymous'),
       (context) => {
-        if (!context.params.User?.admin) context.params.query.approved = true;
+        if (!context.params.User?.admin) {
+          context.params.query.approved = true;
+          if(context.params.provider)
+          context.params.query.accessible = true;
+        }
         return context;
       },
     ],
@@ -37,7 +41,11 @@ export default {
             .service(context.path)
             .get(context.id);
           if (approved)
-            throw new BadRequest('Approved interest cannot be modified');
+            if (
+              Object.keys(context.data).length > 0 ||
+              !context.data.accessible
+            )
+              throw new BadRequest('Approved interest cannot be modified');
         }
         return context;
       },

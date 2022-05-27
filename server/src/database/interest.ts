@@ -7,6 +7,7 @@ export interface InterestInterface {
   id: string;
   name: string;
   approved: boolean;
+  accessible: boolean;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Interest extends Model<InterestInterface> implements InterestInterface {
@@ -16,8 +17,12 @@ export default (sequelize: any, DataTypes: any) => {
 
     approved: boolean;
 
+    accessible: boolean;
+
     static associate(models: any): void {
       Interest.belongsToMany(models.User, { through: 'User_Interest' });
+      Interest.belongsToMany(models.Blog, { through: 'Blog_Interest' });
+      // Interest.belongsToMany(models.Page, { through: 'Page_Interest' });
     }
   }
   Interest.init(
@@ -37,6 +42,11 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      accessible: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
       },
     },
 

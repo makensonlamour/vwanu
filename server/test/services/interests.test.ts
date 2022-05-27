@@ -181,4 +181,5 @@ describe("'interests' service", () => {
     });
   });
   it.todo('Everyone can see an interest');
+  it.todo('should associate a user to an interest');
 });
