@@ -1,4 +1,4 @@
-import {  HookContext } from '@feathersjs/feathers';
+import { HookContext } from '@feathersjs/feathers';
 import { merge } from 'lodash';
 
 type Assoc = {
@@ -14,6 +14,9 @@ const associateModels = (include, context) => {
 
   (Array.isArray(include) ? include : [include]).forEach((assoc: any) => {
     const { as: associate, model, include: subInclude, ...rest } = assoc;
+    if (associate === 'medias')
+      console.log(context.app.service(model).Model.associations);
+
     if (associate in context.app.service(model).Model.associations) {
       const association: Assoc = {
         association: context.app.service(assoc.model).Model.associations[
@@ -41,14 +44,18 @@ export default (options): any =>
   async (context: HookContext) => {
     if (!options.include) throw new Error(`Include is not defined`);
 
-    const include: any = associateModels(options.include, context);
+    try {
+      const include: any = associateModels(options.include, context);
 
-    if (include) {
-      context.params.sequelize = merge(context.params.sequelize, {
-        include,
-        raw: false,
-      });
-      // console.log(context.params.sequelize);
+      if (include) {
+        context.params.sequelize = merge(context.params.sequelize, {
+          include,
+          raw: false,
+        });
+        // console.log(context.params.sequelize);
+      }
+      return context;
+    } catch (err) {
+      throw new Error(err);
     }
-    return context;
   };
