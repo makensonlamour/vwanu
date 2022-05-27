@@ -1,40 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tab } from "@mui/material";
+import { TabPanel, TabContext, TabList } from "@mui/lab";
 import FormOverview from "./FormOverview";
 import FormContactInfo from "./FormContactInfo";
 import FormPlaceLived from "./FormPlaceLived";
 import FormWorkEducation from "./FormWorkEducation";
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div role="tabpanel" hidden={value !== index} id={`vertical-tabpanel-${index}`} aria-labelledby={`vertical-tab-${index}`} {...other}>
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <h3 className="text-secondary font-semibold text-lg">{children}</h3>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
-  };
-}
-
 const EditProfileTabs = ({ user }) => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("one");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -42,46 +16,42 @@ const EditProfileTabs = ({ user }) => {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex", marginBottom: 5, marginLeft: 1 }} className="rounded-lg border">
-        <Tabs
-          orientation="vertical"
-          value={value}
-          onChange={handleChange}
-          aria-label="Vertical tabs example"
-          sx={{ borderRight: 1, borderColor: "divider", paddingTop: 2, paddingBottom: 2, textAlign: "left" }}
-        >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Contact and basic info" {...a11yProps(1)} />
-          <Tab label=" Places lived" {...a11yProps(2)} />
-          <Tab label="Work and education" {...a11yProps(3)} />
-          {/*}   <Tab label="Family and relationships" {...a11yProps(4)} />
-          <Tab label=" Details about you" {...a11yProps(5)} /> {*/}
-        </Tabs>
-        <TabPanel style={{ width: "75%" }} value={value} index={0}>
-          Overview
-          <FormOverview user={user} />
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={1}>
-          Contact and basic info
-          <FormContactInfo user={user} />
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={2}>
-          Places lived
-          <FormPlaceLived user={user} />
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={3}>
-          Work and education
-          <FormWorkEducation user={user} />
-        </TabPanel>
-        {/*}
-        <TabPanel style={{ width: "75%" }} value={value} index={4}>
-          Family and relationships
-        </TabPanel>
-        <TabPanel style={{ width: "75%" }} value={value} index={5}>
-          Details about you
-        </TabPanel>
-  {*/}
-      </Box>
+      <div className="bg-white border border-gray-300 py-10 px-16 rounded-xl">
+        <h4 className="mb-8 text-lg font-semibold">{`Edit "Work Experience" Information`}</h4>
+        <TabContext value={value}>
+          <div>
+            <TabList
+              sx={{ marginBottom: "-2rem", borderBottom: "1px #eff3ff solid" }}
+              value={value}
+              onChange={handleChange}
+              textColor="primary"
+              indicatorColor="primary"
+              aria-label="secondary TabList  example"
+            >
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label="General Information" />
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label="Contact Info" />
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label="Places Lived" />
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label="Work Experience" />
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="five" label="Biography" />
+            </TabList>
+          </div>
+          <TabPanel value="one">
+            <FormOverview user={user} />
+          </TabPanel>
+          <TabPanel value="two">
+            <FormContactInfo user={user} />
+          </TabPanel>
+          <TabPanel value="three">
+            <FormPlaceLived user={user} />
+          </TabPanel>
+          <TabPanel value="four">
+            <FormWorkEducation user={user} />
+          </TabPanel>
+          <TabPanel value="five">
+            <FormWorkEducation user={user} />
+          </TabPanel>
+        </TabContext>
+      </div>
     </>
   );
 };

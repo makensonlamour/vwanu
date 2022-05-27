@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import routesPath from "../../../routesPath";
 
 const ViewDetails = ({ title, user }) => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const ViewDetails = ({ title, user }) => {
           <button
             onClick={() => {
               setEdit(true);
-              navigate("../about", { state: { edit } });
+              navigate("../.." + routesPath.PROFILE_EDIT, { state: { edit } });
             }}
             className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
           >

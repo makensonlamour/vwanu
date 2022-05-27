@@ -61,17 +61,9 @@ const FormWorkEducation = ({ user }) => {
           label="Work place"
           name="work"
           type="text"
-          className="w-full mr-1 mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="w-full mr-1 mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
         />
-        <Field
-          autoCapitalize="none"
-          placeholder="Education place"
-          label="Education place"
-          name="education"
-          type="text"
-          className="w-full mr-1 mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
-        />
-        <Submit className="rounded-full text-base-100 text-md w-full mt-4 ml-auto" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="rounded-2xl text-base-100 text-md w-1/5 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

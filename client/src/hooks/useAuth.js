@@ -26,7 +26,6 @@ const useAuth = () => {
 
       //dispatch({ type: Types.USER_LOGGED_IN, payload: user });
       if (!isCancelled) setLoading(false);
-      window.location.reload();
     } catch (error) {
       console.error(error);
       if (!isCancelled) {
@@ -53,7 +52,6 @@ const useAuth = () => {
         setLoading(false);
         setError(null);
       }
-      window.location.reload();
     } catch (error) {
       if (!isCancelled) {
         setLoading(false);
