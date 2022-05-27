@@ -23,7 +23,7 @@ import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { format } from "date-fns";
 
-const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest, listFollowing }) => {
+const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest, listFollowing, notificationList }) => {
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
 
@@ -82,7 +82,7 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                   <div className="">
                     <img
                       src={otherUser ? otherUser?.coverPicture?.original : user?.coverPicture?.original}
-                      className="mx-auto max-h-52 w-full object-cover rounded-t-lg lg:h-[170px]"
+                      className="mx-auto max-h-64 w-full object-cover rounded-t-lg lg:h-[250px]"
                       alt="cover_profile"
                     />
                   </div>
@@ -153,7 +153,12 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
               <ProfileTabs user={user} otherUser={otherUser} />
               <div className="mt-8 ">
                 <Routes>
-                  <Route path={allTabs1[0]} element={<PostTab user={user} otherUser={otherUser} listFollowing={listFollowing} />} />
+                  <Route
+                    path={allTabs1[0]}
+                    element={
+                      <PostTab user={user} otherUser={otherUser} listFollowing={listFollowing} notificationList={notificationList} />
+                    }
+                  />
                   <Route
                     path={allTabs1[1]}
                     element={<div>{edit ? <EditProfile user={user} /> : <AboutTab user={otherUser ? otherUser : user} />}</div>}
@@ -178,7 +183,7 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                 <FollowingPreview data={listFollowing} />
               </div>
               <div className="block xl:hidden">
-                <UpdatesComponent data={latestUpdates} />
+                <UpdatesComponent data={notificationList} />
               </div>
             </div>
           </div>
@@ -196,6 +201,7 @@ ProfileHeader.propTypes = {
   listFollowers: PropTypes.array,
   listRequest: PropTypes.array,
   listFollowing: PropTypes.array,
+  notificationList: PropTypes.array,
 };
 
 export default ProfileHeader;

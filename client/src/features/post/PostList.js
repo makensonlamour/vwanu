@@ -53,6 +53,8 @@ const PostList = ({ post, pageTitle }) => {
     handleClose();
   };
 
+  console.log(post);
+
   return (
     <>
       {post ? (
@@ -63,7 +65,7 @@ const PostList = ({ post, pageTitle }) => {
               <div className="flex flex-wrap">
                 <div>
                   {" "}
-                  <img alt="" className="w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
+                  <img alt="" className="object-cover object-center w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
                 </div>
                 <div className="block">
                   <Link

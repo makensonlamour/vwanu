@@ -1,10 +1,10 @@
-/* eslint-disable */
-import React from "react";
-import { Link } from "react-router-dom";
-import { Container, Grid, Paper, styled } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Link, useOutletContext } from "react-router-dom";
+// import { Paper, styled } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
+import client from "../../features/feathers";
 
 //Core components
 
@@ -20,10 +20,33 @@ import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
 import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 
 const NewsFeed = () => {
-  // const user = useOutletContext();
-
+  const user = useOutletContext();
+  const [notificationList, setNotificationList] = useState([]);
   const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
   const { data: listFollowing } = useGetListFollowing(["user", "following"], true);
+
+  const onCreatedListener = (notification) => {
+    console.log("created", notification);
+    if (notification.to.toString() === user.id.toString() && notification?.UserId?.toString() !== user.id.toString()) {
+      setNotificationList((notificationList) => [...notificationList, notification]);
+    }
+  };
+  const notificationService = client.service("notification");
+
+  const nots = async () => {
+    const notifications = await notificationService.find({ query: { to: user?.id } });
+    notifications.forEach(onCreatedListener);
+    notificationService.on("created", onCreatedListener);
+
+    return () => {
+      notificationService.removeListener("created", onCreatedListener);
+    };
+  };
+
+  useEffect(() => {
+    nots();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const list = [];
 
@@ -35,11 +58,11 @@ const NewsFeed = () => {
   function reloadPage() {
     window.location.reload();
   }
-
+  /*
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
-
+*/
   const blogs = [
     {
       title: "Tackle Your closest Spring cleaning",
@@ -65,39 +88,6 @@ const NewsFeed = () => {
       title: `OMA completes renovation of Sotheby's New things appeared for a reason`,
       date: "May 8, 2019",
       image: "https://picsum.photos/200/300?image=3",
-    },
-  ];
-
-  const latestUpdates = [
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "10 months ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=3",
-      name: "Adele",
-      date: "10 months ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "in the group Coffee Addicts",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
     },
   ];
 
@@ -221,7 +211,7 @@ const NewsFeed = () => {
             </span>
 
             <CompleteProfile percentage={percentage} data={steps} />
-            <UpdatesComponent data={latestUpdates} />
+            <UpdatesComponent data={notificationList} />
             <RecentlyActive data={recentlyActive} />
             <GroupsPreview data={groups} />
           </div>

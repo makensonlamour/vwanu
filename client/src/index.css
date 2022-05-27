@@ -6,21 +6,25 @@
   .scrollbar::-webkit-scrollbar {
     width: 10px;
     height: 20px;
+    margin-left: 10px;
   }
 
   .scrollbar::-webkit-scrollbar-track {
     border-radius: 100vh;
     background: #f7f4ed;
+    margin-left: 10px;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
     background: #ff420050;
     border-radius: 100vh;
     border: 3px solid #f6f7ed;
+    margin-left: 10px;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #ff420050;
+    margin-left: 10px;
   }
 }
 

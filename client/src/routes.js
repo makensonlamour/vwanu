@@ -8,6 +8,7 @@ import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import NewsFeed from "./pages/NewsFeed/NewsFeed";
 import ViewPost from "./pages/NewsFeed/ViewPost";
 import Profil from "./pages/Profil/Profil";
+import EditProfile from "./pages/Profil/EditProfile";
 import Message from "./pages/Message/Message";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
@@ -66,6 +67,13 @@ let routes = [
     path: routesPath.PROFILE,
     name: "Profile",
     element: Profil,
+    access: role.USER,
+  },
+
+  {
+    path: routesPath.PROFILE_EDIT,
+    name: "Edit Profile",
+    element: EditProfile,
     access: role.USER,
   },
 

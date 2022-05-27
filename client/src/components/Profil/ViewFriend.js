@@ -32,8 +32,8 @@ const ViewFriend = () => {
                     </button>
                   </div>
                   <div className="flex border border-gray-300 rounded-b-xl -px-6 justify-around bg-placeholder-color">
-                    <button className="basis-1/2 py-3 border-r border-gray-300">Follow</button>
-                    <button className="basis-1/2 py-3 border-l border-gray-300">Connect</button>
+                    <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Follow</button>
+                    <button className="basis-1/2 py-3 border-l border-gray-300 hover:bg-gray-100">Connect</button>
                   </div>
                 </div>
               );

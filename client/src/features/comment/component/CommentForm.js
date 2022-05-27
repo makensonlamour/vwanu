@@ -58,7 +58,7 @@ const CommentForm = ({ PostId }) => {
       <Toaster />
 
       <div className="flex w-full space-x-2 items-center mt-4">
-        <img className="mask mask-squircle h-8 w-8" src={user?.profilePicture} alt="_picture" />
+        <img className="object-cover mask mask-squircle h-10 w-10" src={user?.profilePicture?.original} alt="_picture" />
         <form
           validationSchema={ValidationSchema}
           style={{ padding: ".85rem" }}
@@ -80,7 +80,7 @@ const CommentForm = ({ PostId }) => {
           <button ref={buttonRef} hidden onClick={handleComment} name="comment"></button>
         </form>
       </div>
-      {mutationAddComment.isLoading && <Facebook />}
+      {mutationAddComment?.isLoading && <Facebook />}
     </>
   );
 };

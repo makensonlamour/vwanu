@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import _ from "lodash";
 
+import client from "../../features/feathers";
 import { useGetOtherProfile } from "../../features/user/userSlice";
 import { useGetListFriendRequestSent, useGetListFriend } from "../../features/friend/friendSlice";
 import { useGetListFollowing, useGetListFollowers } from "../../features/follower/followerSlice";
@@ -15,6 +16,7 @@ const Profil = () => {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const user = useOutletContext();
+  const [notificationList, setNotificationList] = useState([]);
 
   if (_.isEqual(user?.id.toString(), id.toString())) {
     queryClient.removeQueries(["user", "otherUser"]);
@@ -25,10 +27,34 @@ const Profil = () => {
   const { data: listFriend } = useGetListFriend(["user", "friend"], true);
   const { data: listFollowers } = useGetListFollowers(["user", "followers"], true);
   const { data: listFollowing } = useGetListFollowing(["user", "following"], true);
-  // const listFollowers = [];
-  // const listFollowing = [];
+  // const listFollowersOther = [];
+  // const listFollowingOther = [];
   // const listFriendSent = [];
-  // const listFriend = [];
+  // const listFriendOther = [];
+
+  const onCreatedListener = (notification) => {
+    console.log("created", notification);
+    if (notification.to.toString() === user.id.toString() && notification?.UserId?.toString() !== user.id.toString()) {
+      setNotificationList((notificationList) => [...notificationList, notification]);
+    }
+  };
+  const notificationService = client.service("notification");
+
+  const nots = async () => {
+    const notifications = await notificationService.find({ query: { to: user?.id } });
+    notifications.forEach(onCreatedListener);
+    notificationService.on("created", onCreatedListener);
+
+    return () => {
+      notificationService.removeListener("created", onCreatedListener);
+    };
+  };
+
+  useEffect(() => {
+    nots();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <div className=" max-w-screen-2xl">
@@ -41,6 +67,7 @@ const Profil = () => {
               listFriend={listFriend?.data}
               listFollowers={listFollowers?.data}
               listFollowing={listFollowing?.data}
+              notificationList={notificationList}
             />
           ) : (
             <ProfileHeader
@@ -50,6 +77,7 @@ const Profil = () => {
               listFriend={listFriend?.data}
               listFollowers={listFollowers?.data}
               listFollowing={listFollowing?.data}
+              notificationList={notificationList}
             />
           )}
         </div>

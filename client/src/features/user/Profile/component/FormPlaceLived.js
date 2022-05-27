@@ -24,7 +24,6 @@ const FormPlaceLived = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
-  console.log("user", user);
   const initialValues = {
     country: "",
     livingCountry: "",
@@ -60,7 +59,7 @@ const FormPlaceLived = ({ user }) => {
           label="Country From"
           placeholder="Country From"
           name="country"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="country-error-message"
           isSearchable={true}
           options={[
@@ -75,7 +74,7 @@ const FormPlaceLived = ({ user }) => {
           label="Living Country"
           placeholder="Living Country"
           name="livingCountry"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-1 lg:mt-2 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="livingCountry-error-message"
           isSearchable={true}
           options={[
@@ -85,7 +84,7 @@ const FormPlaceLived = ({ user }) => {
             { id: 2, name: "Haiti", value: "ht" },
           ]}
         />
-        <Submit className="rounded-full text-base-100 text-md w-full mt-4 ml-auto" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="rounded-2xl text-base-100 text-md w-1/5 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

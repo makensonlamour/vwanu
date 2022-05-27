@@ -7,7 +7,7 @@ import UpdatesComponent from "../Newsfeed/UpdatesComponent";
 
 // import InfoCard from "../../features/user/Profile/component/InfoCard";
 
-const PostTab = ({ user, otherUser, listFollowing }) => {
+const PostTab = ({ user, otherUser, listFollowing, notificationList }) => {
   const latestUpdates = [
     {
       avatar: "https://picsum.photos/200/300?image=4",
@@ -49,7 +49,7 @@ const PostTab = ({ user, otherUser, listFollowing }) => {
             <FollowingPreview data={listFollowing} />
           </div>
           <div className="">
-            <UpdatesComponent data={latestUpdates} />
+            <UpdatesComponent data={notificationList} />
           </div>
         </div>
 
@@ -65,6 +65,7 @@ PostTab.propTypes = {
   user: PropTypes.object.isRequired,
   otherUser: PropTypes.object,
   listFollowing: PropTypes.array,
+  notificationList: PropTypes.array,
 };
 
 export default PostTab;
