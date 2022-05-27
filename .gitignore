@@ -175,6 +175,7 @@ server/src/models/comment.js
 server/src/models/emails.js
 server/src/models/comment.tsh
 server/src/models/like.ts.skip
+server/config/test.fake.json
 
 .DS_Store
 **/.DS_Store

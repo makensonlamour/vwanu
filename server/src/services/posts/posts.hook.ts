@@ -34,7 +34,7 @@ export default {
       async (context) => {
         const { params, app } = context;
         const { query } = params;
-
+        const wantedPrivacy = query.privacyType;
         query.PostId = null;
         query.privacyType = 'public';
 
@@ -57,6 +57,17 @@ export default {
           if (!actualUser || !otherUser) {
             throw new Error('The user was not found');
           }
+          const areFriends = actualUser.hasFriend(otherUser);
+          // TODO added myNetwork and public
+          if (areFriends) query.privacyType = 'public';
+        }
+
+        if (
+          query.UserId &&
+          params.User.id.toString() === query.UserId.toString()
+        ) {
+          if (wantedPrivacy) query.privacyType = wantedPrivacy;
+          else delete query.privacyType;
         }
 
         return context;

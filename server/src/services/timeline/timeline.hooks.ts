@@ -40,6 +40,10 @@ export default {
               },
             ],
           },
+          {
+            model: 'posts',
+            as: 'Media',
+          },
         ],
       }),
       addAssociation({
