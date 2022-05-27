@@ -27,6 +27,8 @@ import albums from './albums/albums.service';
 
 import notification from './notification/notification.service';
 
+import interests from './interests/interests.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -48,4 +50,5 @@ export default function (app: Application): void {
   app.configure(albums);
   app.configure(notification);
   app.configure(reaction);
+  app.configure(interests);
 }
