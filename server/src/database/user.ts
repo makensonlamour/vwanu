@@ -117,6 +117,10 @@ export default (sequelize: any, DataTypes: any) => {
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
       });
+
+      User.hasMany(models.Interest, {
+        as: 'MyInterest',
+      });
       User.hasMany(models.Blog, {
         onDelete: 'CASCADE',
       });
