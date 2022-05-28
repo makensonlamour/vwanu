@@ -15,7 +15,7 @@ const ProfileFeed = () => {
   const { id } = useParams();
   const UserId = id;
 
-  const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetPostsList(["post", "profile"], { UserId });
+  const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetPostsList(["post", "profile"], UserId);
 
   function reloadPage() {
     window.location.reload();
