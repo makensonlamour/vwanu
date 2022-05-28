@@ -6,12 +6,9 @@ import { BsCardImage } from "react-icons/bs";
 import { ImProfile } from "react-icons/im";
 import { Tab } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
-// import FormOverview from "../../features/user/Profile/component/FormOverview";
-// import FormContactInfo from "../../features/user/Profile/component/FormContactInfo";
-// import FormPlaceLived from "../../features/user/Profile/component/FormPlaceLived";
-// import FormWorkEducation from "../../features/user/Profile/component/FormWorkEducation";
 import EditProfileTabs from "../../features/user/Profile/component/EditProfileTabs";
 import EditProfilePictureTabs from "../../features/user/Profile/component/EditProfilePictureTabs";
+import EditCoverPictureTabs from "../../features/user/Profile/component/EditCoverPictureTabs";
 
 const EditProfile = () => {
   const user = useOutletContext();
@@ -110,7 +107,9 @@ const EditProfile = () => {
               <TabPanel value="2">
                 <EditProfilePictureTabs user={user} />
               </TabPanel>
-              <TabPanel value="3">Item Three</TabPanel>
+              <TabPanel value="3">
+                <EditCoverPictureTabs user={user} />
+              </TabPanel>
             </div>
           </TabContext>
         </div>

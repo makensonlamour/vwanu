@@ -12,9 +12,10 @@ import UploadPhotoCrop from "../../components/form/profile/UploadPhotoCrop";
 import AboutTab from "./AboutTab";
 import ViewFriend from "./ViewFriend";
 import PostTab from "./PostTab";
+import AlbumTab from "./AlbumTab"
 import { allTabs1 } from "./Tablink.data";
 import { checkFriendList } from "../../helpers/index";
-import { FaUserEdit } from "react-icons/fa";
+import { FaUserEdit, FaUserAlt } from "react-icons/fa";
 import EditProfile from "../../pages/Profil/EditProfile";
 import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
 import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
@@ -76,8 +77,8 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
       ) : (
         <>
           <div className="flex justify-between w-full">
-            <div className="rounded-t-lg basis-full lg:basis-[72%] mr-4">
-              <div className="rounded-t-lg border-gray-700 bg-white">
+            <div className="basis-full lg:basis-[72%] mr-4">
+              <div className="border-gray-700 bg-white">
                 <div className="relative ">
                   <div className="">
                     <img
@@ -87,12 +88,16 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                     />
                   </div>
                   <div className="transform translate-y-1/4 absolute w-full left-0 bottom-0 z-30 flex justify-center">
-                    <div className="flex items-center justify-center mask mask-squircle w-[126px] h-[126px] bg-white">
-                      <img
-                        src={otherUser ? otherUser?.profilePicture?.original : user?.profilePicture?.original}
-                        className="object-cover mask mask-squircle w-[120px] h-[120px]"
-                        alt="profile_picture"
-                      />
+                    <div className="flex items-center justify-center mask mask-squircle w-[126px] h-[126px] bg-gray-100">
+                      {otherUser?.profilePicture?.original !== "null" || user?.profilePicture?.original !== "null" ? (
+                        <img
+                          src={otherUser ? otherUser?.profilePicture?.original : user?.profilePicture?.original}
+                          className="object-cover mask mask-squircle w-[120px] h-[120px]"
+                          alt="profile_picture"
+                        />
+                      ) : (
+                        <FaUserAlt size="78px" className="" />
+                      )}
                     </div>
                   </div>
 
@@ -171,7 +176,7 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                       </div>
                     }
                   />
-                  <Route path={allTabs1[3]} element={<div>Album</div>} />
+                  <Route path={allTabs1[3]} element={<div><AlbumTab user={otherUser ? otherUser : user} /></div>} />
                   <Route path={allTabs1[4]} element={<div>Likes</div>} />
                 </Routes>
               </div>

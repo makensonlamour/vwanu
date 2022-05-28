@@ -8,6 +8,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineInbox } from "react-icons/ai";
 import { FiActivity } from "react-icons/fi";
+import { FaUserAlt } from "react-icons/fa";
 import { BiUserCircle, BiMessageDetail } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
 import { RiPagesLine } from "react-icons/ri";
@@ -143,7 +144,11 @@ const Navbar = ({ user }) => {
                     </span>
                     <div className="rounded-[50px] avatar online">
                       <div className="rounded-[12px] w-8 h-8 m-1">
-                        <img className="object-cover object-center w-8 h-8" src={user?.profilePicture?.original} alt="profil_image" />
+                        {user?.profilePicture?.original ? (
+                          <img className="object-cover object-center w-8 h-8" src={user?.profilePicture?.original} alt="profil_image" />
+                        ) : (
+                          <FaUserAlt size="48" className="" />
+                        )}
                       </div>
                     </div>{" "}
                   </Button>
