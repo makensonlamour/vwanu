@@ -24,4 +24,39 @@ export class Albums extends Service {
 
     return Promise.resolve(post);
   }
+
+  // eslint-disable-next-line no-unused-vars
+  async patch(id, data, params: Params) {
+
+    const postData = getUploadedFiles(['albumImage', 'albumVideo'], data);
+  
+
+    const Medias = await Promise.all(
+      postData.Media.map((media) =>
+        this.app.service('medias').Model.create(media)
+      )
+    );
+
+    const album = await this.app
+      .get('sequelizeClient')
+      .models.Album.findByPk(id, {
+        include: [
+          {
+            model: this.app.get('sequelizeClient').models.User,
+            attributes: [
+              'firstName',
+              'lastName',
+              'id',
+              'profilePicture',
+              'createdAt',
+              'updatedAt',
+            ],
+          },
+        ],
+      });
+
+    await Promise.all(Medias.map((media) => album.addPhotos(media)));
+
+    return Promise.resolve({ album, Medias });
+  }
 }

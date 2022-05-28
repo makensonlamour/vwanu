@@ -19,6 +19,7 @@ export default (sequelize: any, DataTypes: any) => {
       Album.belongsTo(models.User);
       Album.belongsToMany(models.Media, {
         through: 'Album_Media',
+        as: 'Photos',
       });
     }
   }

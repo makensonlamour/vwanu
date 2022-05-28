@@ -116,9 +116,12 @@ const Common = {
 
       mediaArray.forEach((mediaGroup) => {
         if (documentFiles[mediaGroup]) {
-          data.Media.push({
-            original: documentFiles[mediaGroup][0].path,
-            UserId: data.UserId,
+          documentFiles[mediaGroup].forEach((doc) => {
+            if (doc.path)
+              data.Media.push({
+                original: doc.path,
+                UserId: data.UserId,
+              });
           });
         }
       });
