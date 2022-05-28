@@ -113,14 +113,14 @@ const PostList = ({ post, pageTitle }) => {
                   handleDisagree={handleDisagree}
                 />
               </div>
-              {post.postText.split("\n").map((text) => {
+              {post?.postText?.split("\n").map((text) => {
                 return (
                   <p key={text} className="card-text pt-2 w-[100%] font-semibold">
                     {text}
                   </p>
                 );
               })}
-              {post?.Media?.length > 0 ? <MediaPost medias={post.Media} /> : null}
+              {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} /> : null}
               {post?.Reactions?.length || post?.Comments?.length || post?.Share?.length ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
                   <div open={viewLike}>
