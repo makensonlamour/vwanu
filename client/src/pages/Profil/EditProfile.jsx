@@ -11,6 +11,7 @@ import { TabPanel, TabContext, TabList } from "@mui/lab";
 // import FormPlaceLived from "../../features/user/Profile/component/FormPlaceLived";
 // import FormWorkEducation from "../../features/user/Profile/component/FormWorkEducation";
 import EditProfileTabs from "../../features/user/Profile/component/EditProfileTabs";
+import EditProfilePictureTabs from "../../features/user/Profile/component/EditProfilePictureTabs";
 
 const EditProfile = () => {
   const user = useOutletContext();
@@ -106,7 +107,9 @@ const EditProfile = () => {
               <TabPanel value="1">
                 <EditProfileTabs user={user} />
               </TabPanel>
-              <TabPanel value="2">Item Two</TabPanel>
+              <TabPanel value="2">
+                <EditProfilePictureTabs user={user} />
+              </TabPanel>
               <TabPanel value="3">Item Three</TabPanel>
             </div>
           </TabContext>

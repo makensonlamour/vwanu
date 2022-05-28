@@ -90,16 +90,18 @@ const PostList = ({ post, pageTitle }) => {
                   </p>
                 </div>
                 <span className="ml-auto mt-2">
-                  <button
-                    label="Test"
-                    onClick={() => {
-                      console.log("open", open);
-                      handleClickOpen();
-                    }}
-                    className="flex justify-center items-center"
-                  >
-                    <BsThreeDots className="h-6 w-6 hover:bg-gray-200" />
-                  </button>
+                  {post?.User?.id === user?.id && (
+                    <button
+                      label="Test"
+                      onClick={() => {
+                        console.log("open", open);
+                        handleClickOpen();
+                      }}
+                      className="flex justify-center items-center"
+                    >
+                      <BsThreeDots className="h-6 w-6 hover:bg-gray-200" />
+                    </button>
+                  )}
                 </span>
                 <ReusableDialog
                   title={"Delete Post"}

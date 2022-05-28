@@ -4,6 +4,7 @@ import { formatDistance, parseISO } from "date-fns";
 import { Link } from "react-router-dom";
 
 const CommentList = ({ Comments, showAll }) => {
+  console.log(Comments);
   return (
     <>
       {Comments?.length > 0

@@ -17,11 +17,13 @@ const ViewPost = () => {
     window.location.reload();
   }
 
+  console.log(post);
+
   let content;
   if (isFetching) {
     content = <Loader />;
   } else if (isSuccess && post) {
-    content = <PostList pageTitle={"post"} post={post?.data?.post} />;
+    content = <PostList pageTitle={"post"} post={post?.data} />;
   } else if (isError) {
     content = (
       <div className="my-4 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white shadow-md">

@@ -11,10 +11,10 @@ function ReusableDialog({ title, action, item, open, handleClose, handleAgree, h
         <DialogContentText id="alert-dialog-description">{`Are you sure you want to ${action} this ${item}?`}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleDisagree} color="red">
+        <Button sx={{ color: "red" }} onClick={handleDisagree}>
           No
         </Button>
-        <Button onClick={handleAgree} color="primary">
+        <Button sx={{ color: "green" }} onClick={handleAgree}>
           Yes
         </Button>
       </DialogActions>
