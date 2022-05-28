@@ -32,6 +32,10 @@ export default {
               'createdAt',
             ],
           },
+          {
+            model: 'medias',
+            as: 'Medias',
+          },
         ],
       }),
     ],
