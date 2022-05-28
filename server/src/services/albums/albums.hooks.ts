@@ -5,6 +5,7 @@ import * as authentication from '@feathersjs/authentication';
 import addAssociation from '../../Hooks/AddAssociations';
 // import IncludeAssociations from '../../Hooks/IncludeAssociations';
 import autoOwn from '../../Hooks/AutoOwn';
+// import saveAndAssociateMedia from '../../Hooks/SaveAndAssociateMedia';
 
 // const UserAttributes = [
 //   'firstName',
@@ -30,6 +31,10 @@ export default {
               'profilePicture',
               'createdAt',
             ],
+          },
+          {
+            model: 'medias',
+            as: 'Medias',
           },
         ],
       }),

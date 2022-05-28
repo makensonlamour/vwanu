@@ -6,6 +6,7 @@ export interface AlbumInterface {
   id: number;
   name: string;
   privacyType: string;
+  coverPicture: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Album extends Model<AlbumInterface> implements AlbumInterface {
@@ -15,10 +16,13 @@ export default (sequelize: any, DataTypes: any) => {
 
     privacyType: string;
 
+    coverPicture: string;
+
     static associate(models: any): void {
       Album.belongsTo(models.User);
       Album.belongsToMany(models.Media, {
         through: 'Album_Media',
+        as: 'Medias',
       });
     }
   }
@@ -31,7 +35,12 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       name: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      coverPicture: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
 
