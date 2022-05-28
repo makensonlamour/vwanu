@@ -67,7 +67,6 @@ const FormOverview = ({ user }) => {
     try {
       await updateUser?.mutateAsync(data);
       updateSuccess();
-      console.log(updateUser);
       queryClient.invalidateQueries();
       window.location.reload();
     } catch (e) {
@@ -151,7 +150,7 @@ const FormOverview = ({ user }) => {
           className="w-full mr-1 mt-1 mb-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
   {*/}
-        <Submit className="  rounded-2xl text-base-100 text-md w-1/4" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className=" rounded-2xl text-base-100 text-md w-1/4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

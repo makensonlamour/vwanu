@@ -44,10 +44,10 @@ const FormStepTwo = () => {
   const handleStepTwo = async (credentials) => {
     setIsLoading(true);
     const dataObj = {
-      country: credentials.country,
-      gender: credentials.gender,
-      interestedBy: credentials.interestedBy,
-      birthday: credentials.birthday,
+      country: credentials?.country,
+      gender: credentials?.gender,
+      interestedBy: credentials?.interestedBy,
+      birthday: credentials?.birthday,
       id: idUser,
     };
 

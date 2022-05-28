@@ -4,30 +4,30 @@ import ReactCrop from "react-image-crop";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
 import toast, { Toaster } from "react-hot-toast";
-import { updateProfilePicture } from "../../../../features/user/userSlice";
+import { updateProfilePicture } from "../../userSlice";
 
 //Functions for notification after actions
-const uploadProfileSuccess = () =>
-  toast.success("profile picture updated successfully!", {
+const uploadCoverSuccess = () =>
+  toast.success("Cover picture updated successfully!", {
     position: "top-center",
   });
 
-const uploadProfileError = () =>
-  toast.error("Sorry. Error on updating profile picture!", {
+const uploadCoverError = () =>
+  toast.error("Sorry. Error on updating Cover picture!", {
     position: "top-center",
   });
 
-const FormUploadPhoto = ({ user }) => {
+const FormUploadCover = ({ user }) => {
   function reload() {
     window.location.reload();
   }
   const [files, setFiles] = useState([]);
   const [crop, setCrop] = useState({
     unit: "%", // Can be 'px' or '%'
-    x: 25,
-    y: 15,
-    width: 50,
-    height: 65,
+    x: 0,
+    y: 10,
+    width: 98,
+    height: 50,
     aspect: 1,
   });
   //save the image that used to be crop
@@ -84,17 +84,17 @@ const FormUploadPhoto = ({ user }) => {
   const handleSubmit = async () => {
     getCroppedImg();
     const formData = new FormData();
-    formData.append("profilePicture", result);
+    formData.append("coverPicture", result);
     formData.append("UserId", user?.id);
     try {
       const res = await updateProfilePicture({ formData, id: user?.id });
       if (res?.data) {
-        uploadProfileSuccess();
+        uploadCoverSuccess();
         reload();
       }
     } catch (e) {
       console.log(e);
-      uploadProfileError();
+      uploadCoverError();
     } finally {
       setImage(false);
     }
@@ -138,11 +138,12 @@ const FormUploadPhoto = ({ user }) => {
             {files?.map((file) => {
               return (
                 <div key={file?.path} className="">
-                  <div className="h-36 w-36">
+                  <h4 className="text-center text-lg py-3 font-semibold">Preview</h4>
+                  <div className="h-36 w-full mx-4">
                     <img
                       alt={user?.firstName}
                       src={previewImg}
-                      className="h-36 w-36 mask mask-squircle object-cover"
+                      className="h-36 w-full object-cover"
                       // Revoke data uri after image is loaded
                       onLoad={() => {
                         URL.revokeObjectURL(result);
@@ -152,7 +153,7 @@ const FormUploadPhoto = ({ user }) => {
                 </div>
               );
             })}
-            <div className="mt-2 flex flex-col justify-center">
+            <div className="mt-2 mx-4 flex flex-col justify-center">
               <button
                 onClick={handleSubmit}
                 className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
@@ -166,33 +167,27 @@ const FormUploadPhoto = ({ user }) => {
           </div>
         </div>
       ) : (
-        <>
-          <div className="p-6 bg-placeholder-color rounded-2xl border-2 border-sky-500 border-dotted">
-            <div {...getRootProps({ className: "dropzone" })}>
-              <input {...getInputProps()} />
-              <div className="mx-auto justify-center w-full">
-                <p className="text-center text-lg font-normal">{`Drop your image here`}</p>
-                <button
-                  className="mt-3 flex justify-center px-8 mx-auto py-2 items-center bg-primary text-base-100 hover:bg-secondary rounded-xl border-0"
-                  onClick={open}
-                >
-                  Select your file
-                </button>
-              </div>
+        <div className="p-6 bg-placeholder-color rounded-2xl border-2 border-sky-500 border-dotted">
+          <div {...getRootProps({ className: "dropzone" })}>
+            <input {...getInputProps()} />
+            <div className="mx-auto justify-center w-full">
+              <p className="text-center text-lg font-normal">{`Drop your image here`}</p>
+              <button
+                className="mt-3 flex justify-center px-8 mx-auto py-2 items-center bg-primary text-base-100 hover:bg-secondary rounded-xl border-0"
+                onClick={open}
+              >
+                Select your file
+              </button>
             </div>
           </div>
-          <div className="mt-6 px-4 py-3 bg-warning w-full border border-yellow-300 rounded-2xl">
-            <p className="text-v-yellow-dark text-sm">{`For best results, upload an image that is 300px by 300px or larger.`}</p>
-            <p className="text-v-yellow-dark text-sm">{`If you'd like to delete the existing profile photo but not upload a new one, please use the delete tab.`}</p>
-          </div>
-        </>
+        </div>
       )}
     </>
   );
 };
 
-FormUploadPhoto.propTypes = {
+FormUploadCover.propTypes = {
   user: PropTypes.object,
 };
 
-export default FormUploadPhoto;
+export default FormUploadCover;
