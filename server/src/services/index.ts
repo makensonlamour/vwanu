@@ -30,6 +30,8 @@ import notification from './notification/notification.service';
 import interests from './interests/interests.service';
 import medias from './medias/medias.service';
 
+import communities from './communities/communities.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -53,4 +55,5 @@ export default function (app: Application): void {
   app.configure(reaction);
   app.configure(interests);
   app.configure(medias);
+  app.configure(communities);
 }

@@ -13,9 +13,10 @@ import blog from './blog';
 import album from './album';
 import Media from './media';
 import friend from './Friends';
-import reaction from './reaction';
 import Visitors from './Visitors';
 import interest from './interest';
+import reaction from './reaction';
+import community from './communities';
 import notification from './notification';
 import refreshToken from './refresh-token';
 import emailTemplate from './emailTemplate';
@@ -30,6 +31,7 @@ const tables = [
   interest,
   Visitors,
   reaction,
+  community,
   notification,
   refreshToken,
   emailTemplate,
