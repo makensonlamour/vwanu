@@ -14,7 +14,7 @@
   },
 
   "sendEmailFrom": "vwanuht@vwanuht.xyz",
-  "maxPostImages": 3,
+  "maxPostImages": 4,
   "maxPostVideos": 1,
   "maxPostAudios": 1,
   "BASE_URL": "http//localhost:",

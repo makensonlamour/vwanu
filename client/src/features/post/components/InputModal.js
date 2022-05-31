@@ -1,12 +1,12 @@
 /* eslint-disable */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import _ from "lodash";
 //import FormPost from "../FormPost";
 import { useOutletContext } from "react-router-dom";
-import { InputField, InputImage, SubmitPost, Form } from "../../../components/form";
+import { InputField, SubmitPost, Form } from "../../../components/form";
 //import { FcGallery } from "react-icons/fc";
 import { MdAlternateEmail } from "react-icons/md";
 import { RiHashtag } from "react-icons/ri";
@@ -14,10 +14,11 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
-import { ClickAwayListener, Popover } from "@mui/material";
+import { Popover } from "@mui/material";
 import { useCreatePost } from "../postSlice";
 import Picker from "emoji-picker-react";
-import Editor from "../../../components/form/Post/InputField/Editor.js";
+import InputPhoto from "./InputPhoto";
+// import Editor from "../../../components/form/Post/InputField/Editor.js";
 
 //Functions for notification after actions
 const postSuccess = () =>
@@ -38,13 +39,15 @@ const InputModal = ({ reference }) => {
   const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
   const [openUploadVideo, setOpenUploadVideo] = useState(false);
   const [openUploadGif, setOpenUploadGif] = useState(false);
-  const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
+  // const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
   const [privacyText, setPrivacyText] = useState("public");
   const [hashTag, setHashTag] = useState(false);
   const [image, setImage] = useState(null);
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [textEditor, setTextEditor] = useState(null);
+  // const [textEditor, setTextEditor] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [blobFile, setBlobFile] = useState([]);
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -67,10 +70,6 @@ const InputModal = ({ reference }) => {
     setOpenPrivacy(true);
   };
 
-  // function reloadPage() {
-  //   window.location.reload();
-  // }
-
   //Formik initial value and yup validation
   const initialValues = {
     postText: "",
@@ -84,12 +83,18 @@ const InputModal = ({ reference }) => {
   });
 
   //const [createPost, { isSuccess }] = useCreatePostMutation();
-
+  console.log(files);
   const mutationAdd = useCreatePost(["post", "home"], (oldData, newData) => [...oldData, newData]);
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
-    formData.append("postImage", image);
+    if (files?.length) {
+      files?.map((file) => {
+        console.log(file);
+        formData.append("postImage", file);
+      });
+    }
+    console.log("blobFile", blobFile);
     formData.append("postText", credentials.postText);
     formData.append("UserId", credentials.UserId);
     formData.append("privacyType", privacyText);
@@ -106,6 +111,8 @@ const InputModal = ({ reference }) => {
       }
       setImage(null);
       setShowModal(false);
+      setFiles([]);
+      setBlobFile([]);
       //request for post profile
     } else if (_.isEqual(reference, "profilefeed")) {
       try {
@@ -270,11 +277,36 @@ const InputModal = ({ reference }) => {
                       </Popover>
                     </span>
                   </div>
-                  <div className="flex mt-2">
-                    {image ? (
-                      <img src={URL.createObjectURL(image)} className="bg-gray-300 m-1 w-20 h-20 mask mask-squircle" alt="_image" />
-                    ) : null}
-                  </div>
+                  {openUploadPhoto && (
+                    <div className="flex">
+                      <div className="w-full">
+                        {files?.length === 0 ? (
+                          <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
+                            <InputPhoto fn={setFiles} />
+                          </div>
+                        ) : null}
+                        {files?.length > 0 && (
+                          <div className="flex flex-wrap mt-2 overflow-auto scrollbar h-36">
+                            <>
+                              <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
+                                {" "}
+                                <InputPhoto fn={setFiles} />
+                              </div>
+                              {files?.map((file) => {
+                                return (
+                                  <img
+                                    src={file?.preview}
+                                    className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
+                                    alt={file?.path}
+                                  />
+                                );
+                              })}
+                            </>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 {/*footer*/}
                 <div className="rounded-b-lg border-t border-solid border-gray-300 bg-placeholder-color px-4">
