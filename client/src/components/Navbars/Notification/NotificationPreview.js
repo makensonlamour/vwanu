@@ -17,7 +17,6 @@ const NotificationPreview = () => {
   const [notificationList, setNotificationList] = useState([]);
 
   const onCreatedListener = (notification) => {
-    console.log("created", notification);
     if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
     }
@@ -37,8 +36,6 @@ const NotificationPreview = () => {
   useEffect(() => {
     nots();
   }, []);
-
-  console.log(notificationList);
 
   return (
     <>
@@ -99,7 +96,7 @@ const NotificationPreview = () => {
                 }
               })}
               <li className="sticky border-t hover:text-primary mx-auto text-center -px-2 text-gray-900">
-                <Link to={""} onClick={console.log("view more Notifications")}>
+                <Link to={""} onClick={() => console.log("view more Notifications")}>
                   {"View Notifications >"}
                 </Link>
               </li>
