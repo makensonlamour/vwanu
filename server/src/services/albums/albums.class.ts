@@ -19,7 +19,9 @@ export class Albums extends Service {
   async create(data, params: Params) {
     const postData = getUploadedFiles(['albumImage', 'albumVideo'], data);
     const post = await this.app.service('albums').Model.create(postData, {
-      include: [{ model: this.app.get('sequelizeClient').models.Media }],
+      include: [
+        { model: this.app.get('sequelizeClient').models.Media, as: 'Medias' },
+      ],
     });
 
     return Promise.resolve(post);
