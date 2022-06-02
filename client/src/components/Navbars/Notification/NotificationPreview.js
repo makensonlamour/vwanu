@@ -41,7 +41,7 @@ const NotificationPreview = () => {
     <>
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <Badge badgeContent={notificationList?.length} color="primary" className="mr-8">
+          <Badge badgeContent={notificationList?.length} color="primary" className="">
             <IoMdNotificationsOutline size="24px" className="text-black" />
           </Badge>
         </label>

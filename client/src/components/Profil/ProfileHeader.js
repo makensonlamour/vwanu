@@ -12,7 +12,7 @@ import UploadPhotoCrop from "../../components/form/profile/UploadPhotoCrop";
 import AboutTab from "./AboutTab";
 import ViewFriend from "./ViewFriend";
 import PostTab from "./PostTab";
-import AlbumTab from "./AlbumTab"
+import AlbumTab from "./AlbumTab";
 import { allTabs1 } from "./Tablink.data";
 import { checkFriendList } from "../../helpers/index";
 import { FaUserEdit, FaUserAlt } from "react-icons/fa";
@@ -77,9 +77,9 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
       ) : (
         <>
           <div className="flex justify-between w-full">
-            <div className="basis-full lg:basis-[72%] mr-4">
+            <div className="w-[100vw] lg:w-[65vw] lg:basis-[72%]">
               <div className="border-gray-700 bg-white">
-                <div className="relative ">
+                <div className="relative w-[100vw] lg:w-[65vw]">
                   <div className="">
                     <img
                       src={otherUser ? otherUser?.coverPicture?.original : user?.coverPicture?.original}
@@ -176,7 +176,14 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                       </div>
                     }
                   />
-                  <Route path={allTabs1[3]} element={<div><AlbumTab user={otherUser ? otherUser : user} /></div>} />
+                  <Route
+                    path={allTabs1[3]}
+                    element={
+                      <div>
+                        <AlbumTab user={otherUser ? otherUser : user} />
+                      </div>
+                    }
+                  />
                   <Route path={allTabs1[4]} element={<div>Likes</div>} />
                 </Routes>
               </div>

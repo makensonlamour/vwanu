@@ -90,11 +90,9 @@ const InputModal = ({ reference }) => {
   const handleSubmit = async (credentials) => {
     if (files?.length) {
       files?.map((file) => {
-        console.log(file);
         formData.append("postImage", file);
       });
     }
-    console.log("blobFile", blobFile);
     formData.append("postText", credentials.postText);
     formData.append("UserId", credentials.UserId);
     formData.append("privacyType", privacyText);
