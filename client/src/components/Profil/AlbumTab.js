@@ -12,6 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Field, Form, Submit } from "../../components/form";
 import Loader from "../../components/common/Loader";
 import { useCreateAlbum } from "../../features/album/albumSlice";
+import ViewAlbum from "../../features/album/component/ViewAlbum";
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Album Name"),
@@ -39,23 +40,32 @@ const AlbumTab = ({ user }) => {
 
   const [openAddAlbum, setOpenAddAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [viewAlbum, setViewAlbum] = useState(false);
+  const [album,setAlbum] = useState(null)
+  const [albumId, setAlbumId] = useState("");
   const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setViewAlbum(false);
+    setAlbumId("");
   };
 
   const handleCreateAlbum = async (data) => {
     setIsLoading(true);
     try {
       console.log(data);
-      await addAlbum.mutateAsync({ data });
+      await addAlbum.mutateAsync(data);
       addSuccess();
+      const initialValues = {
+        name: "",
+      };
     } catch (e) {
       console.log(e);
       addError();
     } finally {
       setIsLoading(false);
+      setOpenAddAlbum(false);
     }
   };
 
@@ -108,7 +118,7 @@ const AlbumTab = ({ user }) => {
                     </Fragment>
                   }
                   value="1"
-                />
+                /> 
                 <Tab
                   sx={{ textTransform: "capitalize" }}
                   label={
@@ -152,7 +162,11 @@ const AlbumTab = ({ user }) => {
                       </Form>
                     </div>
                   )}
-                  <AlbumList user={user} />
+                  {viewAlbum ? (
+                    <ViewAlbum albumId={albumId} user={user} album={album} />
+                  ) : (
+                    <AlbumList user={user} fn={setViewAlbum} setAlbumId={setAlbumId} setAlbum={setAlbum} />
+                  )}
                 </div>
               </TabPanel>
             </div>

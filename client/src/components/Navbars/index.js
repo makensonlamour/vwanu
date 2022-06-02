@@ -80,7 +80,7 @@ const Navbar = ({ user }) => {
   return (
     <div className="mx-auto w-full sticky top-0 z-40">
       <div className="bg-white basis-full py-1 shadow-md">
-        <div className="flex basis-full items-center justify-between md:justify-around lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+        <div className="flex basis-full items-center justify-around md:justify-around lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
           {isSidebarOpen ? null : (
             <div className="ml-2 inline md:hidden">
               <button
@@ -101,7 +101,7 @@ const Navbar = ({ user }) => {
               </div>
             </Link>
           </div>
-          <div className="basis-[35%] md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
+          <div className="basis-[30%] md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
             <div className="hidden xl:flex items-center justify-evenly py-2">
               {pages.map((page) => (
                 <button key={page.title + " title"} className=" text-primary hover:text-secondary active:text-secondary">
@@ -117,8 +117,8 @@ const Navbar = ({ user }) => {
               ))}
             </div>
           </div>
-          <div className="basis-[70%] lg:basis-[30%] flex-none">
-            <div className="flex justify-end items-center">
+          <div className="basis-[60%] lg:basis-[30%] flex-none">
+            <div className="flex justify-between md:justify-end items-center">
               <BsSearch size="24px" className="text-black mr-4" />
               <div className="h-6 bg-black w-[1px] mr-4"></div>
               <Badge badgeContent={1} color="primary" className="mr-4">

@@ -5,7 +5,7 @@ import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
 
 const InputPhoto = ({ fn }) => {
-  const { getRootProps, getInputProps, open } = useDropzone({
+  const { fileRejections, getRootProps, getInputProps, open } = useDropzone({
     maxFiles: 4,
     accept: {
       "image/png": [".png"],
@@ -24,6 +24,10 @@ const InputPhoto = ({ fn }) => {
     noClick: true,
     noKeyboard: true,
   });
+
+  if (fileRejections?.length > 0) {
+    alert(`You can't upload more than 4 images at once`);
+  }
 
   return (
     <div {...getRootProps({ className: "dropzone" })}>
