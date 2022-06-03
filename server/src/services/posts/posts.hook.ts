@@ -5,6 +5,7 @@ import validateResource from '../../middleware/validateResource';
 import * as schema from '../../schema/post';
 import IncludeAssociations from '../../Hooks/IncludeAssociations';
 import addAssociation from '../../Hooks/AddAssociations';
+import OrderBy from '../../Hooks/OrderBy.hooks';
 
 const { authenticate } = feathersAuthentication.hooks;
 
@@ -104,17 +105,7 @@ export default {
       //   return context;
       // },
 
-      (context) => {
-        const { query = {} } = context.params;
-
-        if (!query.$sort) {
-          query.$sort = {
-            createdAt: -1,
-          };
-        }
-
-        context.params.query = query;
-      },
+      OrderBy,
     ],
     get: [],
     create: [
@@ -138,12 +129,7 @@ export default {
       //   return context;
       // },
     ],
-    find: [
-      (context) => {
-        console.log(context.data);
-        return context;
-      },
-    ],
+    find: [],
     get: [],
     create: [],
     update: [],

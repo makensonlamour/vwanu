@@ -4,6 +4,7 @@ import * as authentication from '@feathersjs/authentication';
 /** Local dependencies */
 import IncludeAssociations from '../../Hooks/IncludeAssociations';
 import addAssociation from '../../Hooks/AddAssociations';
+import OrderBy from '../../Hooks/OrderBy.hooks';
 
 const { authenticate } = authentication.hooks;
 
@@ -59,7 +60,7 @@ export default {
         ],
       }),
     ],
-    find: [onlyPublic],
+    find: [onlyPublic, OrderBy],
     get: [],
     create: [],
     update: [],
