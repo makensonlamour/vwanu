@@ -34,8 +34,8 @@ const EditCoverPictureTabs = ({ user }) => {
   return (
     <>
       <Toaster />
-      <div className="bg-white border border-gray-300 py-10 px-16 rounded-xl">
-        <h4 className="mb-8 text-2xl font-semibold">{`Change Cover Picture`}</h4>
+      <div className="bg-white border border-gray-300 py-10 px-4 md:px-16 rounded-xl">
+        <h4 className="text-center md:text-left mb-8 text-2xl font-semibold">{`Change Cover Picture`}</h4>
         <div className="px-4 py-3 bg-info w-full border border-sky-300 rounded-2xl">
           <span className="text-secondary text-sm">{`Your Cover Photo will be used to customize the header of your profile.`}</span>
         </div>

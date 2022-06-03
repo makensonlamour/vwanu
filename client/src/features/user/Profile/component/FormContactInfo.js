@@ -80,7 +80,7 @@ const FormContactInfo = ({ user }) => {
           placeholder="Facebook"
           name="facebook"
           type="text"
-          className="mr-1 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -88,7 +88,7 @@ const FormContactInfo = ({ user }) => {
           placeholder="Twitter"
           name="twitter"
           type="text"
-          className="mr-1 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -96,7 +96,7 @@ const FormContactInfo = ({ user }) => {
           placeholder="Instagram"
           name="instagram"
           type="text"
-          className="mr-1 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -104,9 +104,9 @@ const FormContactInfo = ({ user }) => {
           placeholder="Website"
           name="website"
           type="text"
-          className="mr-1 mt-1 mb-4 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 mb-4 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
-        <Submit className="rounded-2xl text-base-100 text-md w-1/5 mt-2" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/5 mt-2" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

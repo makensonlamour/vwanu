@@ -19,19 +19,17 @@ const updateError = () =>
     position: "top-center",
   });
 
-const FormWorkEducation = ({ user }) => {
+const FormBiography = ({ user }) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
   const initialValues = {
-    work: "",
-    education: "",
+    about: "",
   };
 
   const ValidationSchema = Yup.object().shape({
-    education: Yup.string().label("Education"),
-    work: Yup.string().label("Work place"),
+    about: Yup.string().label("Biography"),
   });
 
   const handleSubmit = async (dataObj) => {
@@ -56,9 +54,9 @@ const FormWorkEducation = ({ user }) => {
         <Toaster />
         <Field
           autoCapitalize="none"
-          placeholder="Work place"
-          label="Work place"
-          name="work"
+          placeholder="Biography"
+          label="Biography"
+          name="about"
           type="text"
           className="w-full mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
         />
@@ -68,8 +66,8 @@ const FormWorkEducation = ({ user }) => {
   );
 };
 
-FormWorkEducation.propTypes = {
+FormBiography.propTypes = {
   user: Proptypes.object,
 };
 
-export default FormWorkEducation;
+export default FormBiography;

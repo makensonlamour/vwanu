@@ -280,7 +280,7 @@ const InputModal = ({ reference }) => {
                       <div className="w-full">
                         {files?.length === 0 ? (
                           <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
-                            <InputPhoto fn={setFiles} />
+                            <InputPhoto fn={setFiles} maxFiles={4} />
                           </div>
                         ) : null}
                         {files?.length > 0 && (

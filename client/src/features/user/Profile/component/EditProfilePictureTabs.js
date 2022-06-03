@@ -33,13 +33,11 @@ const EditProfilePictureTabs = ({ user }) => {
     }
   };
 
-  console.log(user);
-
   return (
     <>
       <Toaster />
-      <div className="bg-white border border-gray-300 py-10 px-16 rounded-xl">
-        <h4 className="mb-8 text-2xl font-semibold">{`Change Profile Picture`}</h4>
+      <div className="bg-white border border-gray-300 py-10 px-4 md:px-16 rounded-xl">
+        <h4 className="text-center md:text-left mb-8 text-2xl font-semibold">{`Change Profile Picture`}</h4>
         <div className="px-4 py-3 bg-info w-full border border-sky-300 rounded-2xl">
           <span className="text-secondary text-sm">{`Your profile photo will be used on your profile and throughout the site.`}</span>
         </div>

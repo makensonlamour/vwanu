@@ -53,6 +53,8 @@ const PostList = ({ post, pageTitle }) => {
     handleClose();
   };
 
+  console.log(post);
+
   return (
     <>
       {post ? (
