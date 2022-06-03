@@ -27,6 +27,8 @@
   "smallSize": "w_70,h_53,c_scale",
   "tinySize": "w_70,h_53,c_scale",
 
+  "MAX_NUMBER_OF_ADMIN": 3,
+
   "cloudinary": {
     "CLOUDINARY_API_SECRET": "add your own",
     "CLOUDINARY_API_KEY": "your key ",
