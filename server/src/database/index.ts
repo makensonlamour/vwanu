@@ -17,6 +17,7 @@ import Visitors from './Visitors';
 import interest from './interest';
 import reaction from './reaction';
 import community from './communities';
+import discussion from './discussion';
 import notification from './notification';
 import refreshToken from './refresh-token';
 import emailTemplate from './emailTemplate';
@@ -32,6 +33,7 @@ const tables = [
   Visitors,
   reaction,
   community,
+  discussion,
   notification,
   refreshToken,
   emailTemplate,

@@ -32,6 +32,8 @@ import medias from './medias/medias.service';
 
 import communities from './communities/communities.service';
 
+import discussion from './discussion/discussion.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -56,4 +58,5 @@ export default function (app: Application): void {
   app.configure(interests);
   app.configure(medias);
   app.configure(communities);
+  app.configure(discussion);
 }

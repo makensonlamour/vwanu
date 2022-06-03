@@ -14,6 +14,10 @@ export interface CommunityInterface {
   privacyType: boolean;
 
   UserId: number;
+
+  numMembers: number;
+
+  numAdmins: number;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Community
@@ -32,11 +36,31 @@ export default (sequelize: any, DataTypes: any) => {
 
     UserId: number;
 
+    numMembers: number;
+
+    numAdmins: number;
+
     static associate(models: any): void {
-      Community.hasMany(models.User, { as: 'members' });
-      Community.hasOne(models.User, { as: 'creator' });
-      Community.hasMany(models.User, { as: 'moderators' });
-      Community.hasMany(models.User, { as: 'administrators' });
+      Community.belongsToMany(models.User, {
+        as: 'members',
+        through: 'community-members',
+      });
+      Community.belongsToMany(models.User, {
+        as: 'creator',
+        through: 'community-creator',
+      });
+      Community.belongsToMany(models.User, {
+        as: 'moderators',
+        through: 'community-moderators',
+      });
+      Community.belongsToMany(models.User, {
+        as: 'administrators',
+        through: 'community-administrators',
+      });
+      Community.belongsToMany(models.User, {
+        as: 'administratorsRequest',
+        through: 'community-administratorsRequest',
+      });
     }
   }
   Community.init(
@@ -50,6 +74,14 @@ export default (sequelize: any, DataTypes: any) => {
       UserId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      numMembers: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      numAdmins: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
       name: {
         type: DataTypes.STRING,

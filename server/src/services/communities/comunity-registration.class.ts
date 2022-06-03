@@ -40,4 +40,33 @@ export class CommunitiesRegistration extends Service {
     const community2 = await community.addMembers(user);
     return Promise.resolve(community2);
   }
+
+  async delete(id, data, params) {
+    // eslint-disable-next-line prefer-destructuring
+    const models = this.app.get('sequelizeClient').models;
+    const UserModel = models.User;
+    const CommunityModel = models.Community;
+
+    const communityId = id;
+    const UserId = params.User.id;
+
+    const user = await UserModel.findByPk(UserId);
+    const community = await CommunityModel.findByPk(communityId);
+
+    if (!community) {
+      throw new NotFound('The community does not exist');
+    }
+
+    if (!user) {
+      throw new NotFound('The user does not exist');
+    }
+
+    const isMember = await community.hasMembers(user);
+
+    if (!isMember)
+      throw new BadRequest('Your are not a member of that community');
+
+    const lefter = await community.removeMembers(user);
+    return Promise.resolve(lefter);
+  }
 }
