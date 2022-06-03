@@ -84,7 +84,7 @@ const FormPlaceLived = ({ user }) => {
             { id: 2, name: "Haiti", value: "ht" },
           ]}
         />
-        <Submit className="rounded-2xl text-base-100 text-md w-1/5 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/5 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

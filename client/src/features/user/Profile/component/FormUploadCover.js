@@ -119,6 +119,7 @@ const FormUploadCover = ({ user }) => {
                 // Revoke data uri after image is loaded
                 onLoad={(e) => {
                   setImage(e.target);
+                  getCroppedImg();
                 }}
               />
             </ReactCrop>
@@ -132,18 +133,18 @@ const FormUploadCover = ({ user }) => {
     <>
       <Toaster />
       {files?.length > 0 ? (
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
           <div>{preview}</div>
           <div className="block mx-auto">
             {files?.map((file) => {
               return (
-                <div key={file?.path} className="">
+                <div key={file?.path} className="mt-5 md:mt-0">
                   <h4 className="text-center text-lg py-3 font-semibold">Preview</h4>
-                  <div className="h-36 w-full mx-4">
+                  <div className="h-36 w-72 mx-4">
                     <img
                       alt={user?.firstName}
                       src={previewImg}
-                      className="h-36 w-full object-cover"
+                      className="h-36 w-72 object-cover"
                       // Revoke data uri after image is loaded
                       onLoad={() => {
                         URL.revokeObjectURL(result);

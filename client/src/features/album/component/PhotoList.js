@@ -14,12 +14,16 @@ const PhotoList = ({ user }) => {
           <div className="flex flex-wrap justify-start">
             {photos?.data?.map((photo) => {
               return (
-                <Link to={"#"} key={photo?.id} className="shadow-sm rounded-lg w-[130px] h-[130px] mx-3 mt-3 mb-3 hover:shadow-lg">
+                <Link
+                  to={"#"}
+                  key={photo?.id}
+                  className="shadow-sm rounded-lg h-[120px] w-[120px] sm:w-[130px] sm:h-[130px] mx-3 sm:mx-3 mt-3 mb-3 hover:shadow-lg"
+                >
                   <ViewPhoto
                     photo={photo}
                     imgComponent={
                       <img
-                        className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
+                        className="shadow-sm h-[120px] w-[120px] sm:h-[130px] sm:w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
                         src={photo?.original}
                         alt={"_img_" + photo?.id}
                       />

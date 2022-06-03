@@ -14,6 +14,7 @@ const EditProfile = () => {
   const user = useOutletContext();
 
   const [value, setValue] = useState("1");
+  const mediaQuery = window.matchMedia("(max-width: 768px)");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -31,16 +32,18 @@ const EditProfile = () => {
             <FiUser size={"18px"} className="mr-1" /> View My Profile
           </Link>
         </div>
-        <div className="flex mt-8 mb-4">
+        <div className="flex flex-col md:flex-row mt-8 mb-4">
           <TabContext value={value}>
             <div className="basis-[20%]">
               <div className="">
                 <TabList
                   TabIndicatorProps={{ style: { background: "inherit" } }}
                   sx={{ justifyContent: "start" }}
-                  orientation="vertical"
+                  orientation={`${mediaQuery.matches ? "horizontal" : "vertical"}`}
                   onChange={handleChange}
                   aria-label="lab API tabs example"
+                  variant="scrollable"
+                  scrollButtons="auto"
                 >
                   <Tab
                     style={{ heigth: "150px" }}

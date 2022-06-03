@@ -10,4 +10,4 @@ export const useGetAlbum = (queryKey, enabled = true, dataObj) => useFetch(query
 
 export const useCreateAlbum = (queryKey, oldData, newData) => usePost(queryKey, `/albums`, (oldData, newData));
 
-export const useAddPhoto = (queryKey, oldData, newData) => useUpdate(queryKey, `/albums`, (oldData, newData));
+export const useAddPhoto = (queryKey, oldData, newData, albumId) => useUpdate(queryKey, `/albums/${albumId}`, (oldData, newData));

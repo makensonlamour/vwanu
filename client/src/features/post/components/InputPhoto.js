@@ -4,9 +4,9 @@ import { MdPhotoSizeSelectActual } from "react-icons/md";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
 
-const InputPhoto = ({ fn }) => {
+const InputPhoto = ({ fn, maxFiles }) => {
   const { fileRejections, getRootProps, getInputProps, open } = useDropzone({
-    maxFiles: 4,
+    maxFiles: maxFiles,
     accept: {
       "image/png": [".png"],
       "image/jpg": [".jpg", ".jpeg"],
@@ -43,6 +43,7 @@ const InputPhoto = ({ fn }) => {
 
 InputPhoto.propTypes = {
   fn: PropTypes.func,
+  maxFiles: PropTypes.number,
 };
 
 export default InputPhoto;

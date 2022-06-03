@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React, { useState } from "react";
 import * as Yup from "yup";
 import routesPath from "../../../routesPath";
@@ -5,7 +6,6 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { useUpdateUser } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
-import useAuthContext from "../../../hooks/useAuthContext";
 
 // Core components
 import { Field, Select, Form, Submit } from "../../../components/form";
@@ -14,7 +14,6 @@ import { differenceInYears } from "date-fns";
 
 const FormStepTwo = () => {
   const user = useOutletContext();
-  const { dispatch, Types } = useAuthContext();
   const idUser = user?.id;
   const navigate = useNavigate();
   const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
@@ -52,9 +51,7 @@ const FormStepTwo = () => {
     };
 
     try {
-      const res = await updateUser.mutateAsync(dataObj);
-      dispatch({ type: Types.USER_UPDATED, payload: res?.data });
-
+      await updateUser.mutateAsync(dataObj);
       navigate("../../" + routesPath.STEP_THREE);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";

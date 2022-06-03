@@ -115,10 +115,11 @@ const FormUploadPhoto = ({ user }) => {
               <img
                 alt={user?.firstName}
                 src={file?.preview}
-                className="h-72 w-96"
+                className="h-72 w-96 object-cover"
                 // Revoke data uri after image is loaded
                 onLoad={(e) => {
                   setImage(e.target);
+                  getCroppedImg();
                 }}
               />
             </ReactCrop>
@@ -132,12 +133,12 @@ const FormUploadPhoto = ({ user }) => {
     <>
       <Toaster />
       {files?.length > 0 ? (
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
           <div>{preview}</div>
           <div className="block mx-auto">
             {files?.map((file) => {
               return (
-                <div key={file?.path} className="">
+                <div key={file?.path} className="mt-6 md:mt-0">
                   <div className="h-36 w-36">
                     <img
                       alt={user?.firstName}

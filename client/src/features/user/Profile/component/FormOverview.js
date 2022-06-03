@@ -79,7 +79,7 @@ const FormOverview = ({ user }) => {
 
   return (
     <>
-      <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
+      <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full -px-4">
         <Toaster />
         <Field
           autoCapitalize="none"
@@ -87,7 +87,7 @@ const FormOverview = ({ user }) => {
           label="First Name"
           name="firstName"
           type="text"
-          className="w-full mr-1 mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -95,7 +95,7 @@ const FormOverview = ({ user }) => {
           label="Last Name"
           name="lastName"
           type="text"
-          className="w-full mr-1 mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -103,7 +103,7 @@ const FormOverview = ({ user }) => {
           placeholder="Date of Birth"
           name="birthday"
           type="date"
-          className="mr-1 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Select
           label="Gender"
@@ -147,10 +147,10 @@ const FormOverview = ({ user }) => {
           label="About"
           name="about"
           type="text"
-          className="w-full mr-1 mt-1 mb-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 mb-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
   {*/}
-        <Submit className=" rounded-2xl text-base-100 text-md w-1/4" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

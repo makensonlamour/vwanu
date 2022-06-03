@@ -6,6 +6,7 @@ import FormOverview from "./FormOverview";
 import FormContactInfo from "./FormContactInfo";
 import FormPlaceLived from "./FormPlaceLived";
 import FormWorkEducation from "./FormWorkEducation";
+import FormBiography from "./FormBiography";
 
 const EditProfileTabs = ({ user }) => {
   const [value, setValue] = useState("one");
@@ -16,8 +17,8 @@ const EditProfileTabs = ({ user }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-300 py-10 px-16 rounded-xl">
-        <h4 className="mb-8 text-lg font-semibold">{`Edit "Work Experience" Information`}</h4>
+      <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl">
+        <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`Edit "Work Experience" Information`}</h4>
         <TabContext value={value}>
           <div>
             <TabList
@@ -27,6 +28,8 @@ const EditProfileTabs = ({ user }) => {
               textColor="primary"
               indicatorColor="primary"
               aria-label="secondary TabList  example"
+              variant="scrollable"
+              scrollButtons="auto"
             >
               <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label="General Information" />
               <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label="Contact Info" />
@@ -48,7 +51,7 @@ const EditProfileTabs = ({ user }) => {
             <FormWorkEducation user={user} />
           </TabPanel>
           <TabPanel value="five">
-            <FormWorkEducation user={user} />
+            <FormBiography user={user} />
           </TabPanel>
         </TabContext>
       </div>

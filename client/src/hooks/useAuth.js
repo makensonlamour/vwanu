@@ -15,17 +15,27 @@ const useAuth = () => {
     setLoading(true);
     try {
       //signup the user
-      console.log({ firstName, lastName, email, password, passwordConfirmation, termOfUse });
       const res = await register({ firstName, lastName, email, password, passwordConfirmation, termOfUse });
-      console.log(res?.data);
+
+      //if success try login the user
       if (res?.data) {
-        dispatch({ type: Types.USER_LOGGED_IN, payload: res?.data });
+        const responseLogin = await client.authenticate({
+          strategy: "local",
+          email,
+          password,
+        });
+
+        // dispatch the user to the whole application
+        if (responseLogin?.data) {
+          dispatch({ type: Types.USER_LOGGED_IN, payload: responseLogin?.data });
+        }
       }
-      // try create user with data
-      // dispatch the user to the whole application
 
       //dispatch({ type: Types.USER_LOGGED_IN, payload: user });
-      if (!isCancelled) setLoading(false);
+      if (!isCancelled) {
+        setLoading(false);
+        setError(null);
+      }
     } catch (error) {
       console.error(error);
       if (!isCancelled) {

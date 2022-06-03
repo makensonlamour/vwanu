@@ -25,11 +25,13 @@ const ViewAlbum = ({ albumId, album, user }) => {
         {user?.id?.toString() === id?.toString() && (
           <div className="flex flex-col md:flex-row justify-between items-center py-5">
             <div className="flex">
-              <button className="px-4 py-2 text-sm bg-white border border-red-500 text-gray-900 rounded-xl mr-2">Delete Album</button>
+              <button className="px-2 sm:px-4 py-2 text-xs sm:text-sm bg-white border border-red-500 text-gray-900 rounded-xl mr-2">
+                Delete Album
+              </button>
               <AddPhoto user={user} />
-              <button className="px-4 py-2 text-sm bg-placeholder-color text-gray-900 rounded-xl">Add Videos</button>
+              <button className="px-2 sm:px-4 py-2 text-xs sm:text-sm bg-placeholder-color text-gray-900 rounded-xl">Add Videos</button>
             </div>
-            <select className="my-3 md:my-0 w-full md:w-1/5 px-4 py-2 text-gray-900 border border-gray-300 rounded-xl">
+            <select className="my-3 md:my-0 w-full md:w-1/5 px-2 sm:px-4 py-2 text-gray-900 border border-gray-300 rounded-xl">
               <option value="public">Public</option>
               <option value="network">My Network</option>
               <option value="me">Only Me</option>
