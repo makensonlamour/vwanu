@@ -44,15 +44,30 @@ export default {
           {
             model: 'posts',
             as: 'Media',
+            include: [
+              {
+                model: 'posts',
+                as: 'User',
+                attributes: UserAttributes,
+              },
+            ],
+          },
+
+          {
+            model: 'posts',
+            as: 'Reactions',
+            include: [
+              {
+                model: 'posts',
+                as: 'User',
+                attributes: UserAttributes,
+              },
+            ],
           },
         ],
       }),
       addAssociation({
         models: [
-          {
-            model: 'reactions',
-          },
-
           {
             model: 'users',
             attributes: UserAttributes,
