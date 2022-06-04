@@ -14,7 +14,7 @@ const associateModels = (include, context) => {
 
   (Array.isArray(include) ? include : [include]).forEach((assoc: any) => {
     const { as: associate, model, include: subInclude, ...rest } = assoc;
-    if (associate === 'medias')
+    if (associate === 'Reaction')
       console.log(context.app.service(model).Model.associations);
 
     if (associate in context.app.service(model).Model.associations) {
