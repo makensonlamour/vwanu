@@ -13,6 +13,7 @@ import AboutTab from "./AboutTab";
 import ViewFriend from "./ViewFriend";
 import PostTab from "./PostTab";
 import AlbumTab from "./AlbumTab";
+import NetworkTab from "./NetworkTab";
 import { allTabs1 } from "./Tablink.data";
 import { checkFriendList } from "../../helpers/index";
 import { FaUserEdit, FaUserAlt } from "react-icons/fa";
@@ -79,11 +80,11 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
           <div className="flex justify-between w-full">
             <div className="w-[100vw] lg:w-[65vw] lg:basis-[72%]">
               <div className="border-gray-700 bg-white">
-                <div className="relative w-[100vw] lg:w-[65vw]">
+                <div className="relative w-full lg:w-[65vw]">
                   <div className="">
                     <img
                       src={otherUser ? otherUser?.coverPicture?.original : user?.coverPicture?.original}
-                      className="mx-auto max-h-64 w-full object-cover rounded-t-lg lg:h-[250px]"
+                      className="mx-auto max-h-64 w-full object-cover lg:h-[250px]"
                       alt="cover_profile"
                     />
                   </div>
@@ -156,7 +157,7 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                 </div>
               </div>
               <ProfileTabs user={user} otherUser={otherUser} />
-              <div className="mt-8 ">
+              <div className="mt-8 px-2">
                 <Routes>
                   <Route
                     path={allTabs1[0]}
@@ -172,7 +173,7 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                     path={allTabs1[2]}
                     element={
                       <div>
-                        <ViewFriend />
+                        <NetworkTab user={otherUser ? otherUser : user} />
                       </div>
                     }
                   />

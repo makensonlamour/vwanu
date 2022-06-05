@@ -1,18 +1,18 @@
 import React from "react";
-// import { useGetListFriend } from "../../features/friend/friendSlice";
 import PropTypes from "prop-types";
-// import { checkFriendList } from "../../../helpers/index";
-// import FriendButton from "../../features/friend/component/FriendButton";
+import { useGetListFriendReceive } from "../../../features/friend/friendSlice";
 
-const ViewFriend = ({ data, noDataLabel }) => {
-  // const { data: listFriend } = useGetListFriend(["user", "friend"], true);
+const Friends = ({ fn }) => {
+  const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
+
+  fn(listFriendReceive?.data?.length);
 
   return (
     <>
       <div className="my-2">
         <div className="flex flex-wrap lg:justify-between xl:justify-start py-2">
-          {data?.length > 0 ? (
-            data?.map((friend, idx) => {
+          {listFriendReceive?.data?.length > 0 ? (
+            listFriendReceive?.data?.map((friend, idx) => {
               return (
                 <div
                   key={idx}
@@ -34,15 +34,15 @@ const ViewFriend = ({ data, noDataLabel }) => {
                     </button>
                   </div>
                   <div className="flex border border-gray-300 rounded-b-xl -px-6 justify-around bg-placeholder-color">
-                    <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Follow</button>
-                    <button className="basis-1/2 py-3 border-l border-gray-300 hover:bg-gray-100">Connect</button>
+                    <button className="basis-1/2 py-3 border-r border-gray-300 hover:text-primary hover:bg-gray-100">Follow</button>
+                    <button className="basis-1/2 py-3 border-l border-gray-300 hover:text-primary hover:bg-gray-100">Connect</button>
                   </div>
                 </div>
               );
             })
           ) : (
-            <div className="flex w-52 p-10 mx-auto">
-              <span>{noDataLabel}</span>
+            <div className="flex w-52 p-6 mx-auto">
+              <span>No Friends Request</span>
             </div>
           )}
         </div>
@@ -51,9 +51,9 @@ const ViewFriend = ({ data, noDataLabel }) => {
   );
 };
 
-ViewFriend.propTypes = {
-  data: PropTypes.array,
-  noDataLabel: PropTypes.any,
+Friends.propTypes = {
+  user: PropTypes.object,
+  fn: PropTypes.func,
 };
 
-export default ViewFriend;
+export default Friends;

@@ -6,17 +6,14 @@ const MediaPost = ({ medias }) => {
   let content;
   if (medias?.length === 1) {
     content = (
-      <div
-        style={{ backgroundImage: `url('${medias[0]?.original}')` }}
-        className="glass bg-cover pt-5 flex justify-center items-center w-full mt-2"
-      >
+      <div className="bg-black rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <ViewPhoto
           photo={medias[0]}
           imgComponent={
             <img
               src={medias[0]?.original}
               alt={"post_image_" + medias[0]?.id}
-              className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full rounded-lg"
+              className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
             />
           }
         />

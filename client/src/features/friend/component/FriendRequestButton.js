@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import { FiUserX, FiUserPlus } from "react-icons/fi";
@@ -16,6 +17,7 @@ import {
 } from "../friendSlice";
 
 const FriendRequestButton = ({ otherUser }) => {
+  const { id } = useParams();
   const [loading, setIsLoading] = useState(false);
   const [isEnter, setIsEnter] = useState(false);
 
@@ -37,7 +39,7 @@ const FriendRequestButton = ({ otherUser }) => {
 
   const { data: listFriendSent } = useGetListFriendRequestSent(["user", "sent"], true);
   const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
-  const { data: listFriendship } = useGetListFriend(["user", "friend"], true);
+  const { data: listFriendship } = useGetListFriend(["user", "friend"], id === "undefined" ? false : true, id);
 
   const sendFriendRequest = useSendFriendRequest(["user", "request"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "request"]);

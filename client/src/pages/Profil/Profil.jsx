@@ -5,7 +5,7 @@ import _ from "lodash";
 
 import client from "../../features/feathers";
 import { useGetOtherProfile } from "../../features/user/userSlice";
-import { useGetListFriendRequestSent, useGetListFriend } from "../../features/friend/friendSlice";
+import { useGetListFriendRequestSent } from "../../features/friend/friendSlice";
 import { useGetListFollowing, useGetListFollowers } from "../../features/follower/followerSlice";
 
 //Core components
@@ -24,7 +24,6 @@ const Profil = () => {
 
   const { data: otherUser } = useGetOtherProfile(["user", "otherUser"], _.isEqual(user?.id.toString(), id.toString()) ? false : true, id);
   const { data: listFriendSent } = useGetListFriendRequestSent(["user", "sent"], true);
-  const { data: listFriend } = useGetListFriend(["user", "friend"], true);
   const { data: listFollowers } = useGetListFollowers(["user", "followers"], true);
   const { data: listFollowing } = useGetListFollowing(["user", "following"], true);
   // const listFollowersOther = [];
@@ -33,7 +32,6 @@ const Profil = () => {
   // const listFriendOther = [];
 
   const onCreatedListener = (notification) => {
-    console.log("created", notification);
     if (notification.to.toString() === user.id.toString() && notification?.UserId?.toString() !== user.id.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
     }
@@ -43,7 +41,6 @@ const Profil = () => {
   const nots = async () => {
     const notifications = await notificationService.find({ query: { to: user?.id } });
     notifications.forEach(onCreatedListener);
-    notificationService.on("created", onCreatedListener);
 
     return () => {
       notificationService.removeListener("created", onCreatedListener);
@@ -64,7 +61,6 @@ const Profil = () => {
               user={user}
               otherUser={null}
               listFriendSent={listFriendSent?.data}
-              listFriend={listFriend?.data}
               listFollowers={listFollowers?.data}
               listFollowing={listFollowing?.data}
               notificationList={notificationList}
@@ -74,7 +70,6 @@ const Profil = () => {
               user={user}
               otherUser={otherUser}
               listFriendRequest={listFriendSent?.data}
-              listFriend={listFriend?.data}
               listFollowers={listFollowers?.data}
               listFollowing={listFollowing?.data}
               notificationList={notificationList}

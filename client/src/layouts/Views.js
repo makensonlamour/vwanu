@@ -15,7 +15,7 @@ const Views = () => {
   // const { user } = useAuthContext();
   return (
     <>
-      <div className="mx-auto overflow-auto bg-placeholder-color">
+      <div className="mx-auto bg-placeholder-color">
         <Routes>
           !user?
           <Route key={0} element={<LayoutPublic />}>

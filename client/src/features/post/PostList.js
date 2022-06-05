@@ -170,7 +170,7 @@ const PostList = ({ post, pageTitle }) => {
                 </div>
               ) : null}
 
-              <div className="flex flex-wrap relative">
+              <div className="flex flex-wrap">
                 {/*Reactions*/}
                 <Reaction post={post} />
 
