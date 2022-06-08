@@ -21,7 +21,7 @@ export default (sequelize: any, DataTypes: any) => {
 
     static associate(models: any): void {
       Interest.belongsToMany(models.User, { through: 'User_Interest' });
-      Interest.belongsToMany(models.Blog, { through: 'Blog_Interest' });
+      Interest.hasMany(models.Blog);
       // Interest.belongsToMany(models.Page, { through: 'Page_Interest' });
     }
   }

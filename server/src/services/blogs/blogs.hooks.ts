@@ -1,34 +1,52 @@
 import * as authentication from '@feathersjs/authentication';
-import LimitToOwner from '../../Hooks/LimitToOwner';
-// import isSelfHook from '../../Hooks/isSelf.hook';
-// Don't remove this comment. It's needed to format import lines nicely.
+
+/** Local dependencies  */
+import {
+  AutoOwn,
+  LimitToOwner,
+  OwnerAccess,
+  SaveInterest,
+  IncludeAssociations,
+} from '../../Hooks';
 
 const { authenticate } = authentication.hooks;
-
+const UserAttributes = [
+  'firstName',
+  'lastName',
+  'id',
+  'profilePicture',
+  'createdAt',
+];
 export default {
   before: {
-    all: [authenticate('jwt')],
-    find: [
-      (context) => {
-        const { params } = context;
-        const { query } = params;
-        query.privacyType = 'public';
-        if (
-          query.UserId &&
-          query.UserId.toString() === params.User.id.toString()
-        )
-          delete query.privacyType;
-        return context;
-      },
+    all: [
+      authenticate('jwt'),
+      IncludeAssociations({
+        include: [
+          {
+            model: 'blogs',
+            as: 'User',
+            attributes: UserAttributes,
+          },
+          { model: 'blogs', as: 'Interests' },
+
+          {
+            model: 'blogs',
+            as: 'Response',
+            include: [
+              {
+                model: 'blogs',
+                as: 'User',
+                attributes: UserAttributes,
+              },
+            ],
+          },
+        ],
+      }),
     ],
+    find: [OwnerAccess({ publish: true })],
     get: [],
-    create: [
-      (context) => {
-        const { data, params } = context;
-        data.UserId = params.User.id;
-        return context;
-      },
-    ],
+    create: [AutoOwn],
     update: [LimitToOwner],
     patch: [LimitToOwner],
     remove: [LimitToOwner],
@@ -38,9 +56,9 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
-    update: [],
-    patch: [],
+    create: [SaveInterest],
+    update: [SaveInterest],
+    patch: [SaveInterest],
     remove: [],
   },
 

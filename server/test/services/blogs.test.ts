@@ -1,7 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
-
+import slugify from '../../src/lib/utils/slugify';
+import sanitizeHtml from '../../src/lib/utils/sanitizeHtml';
 /** Local dependencies */
+
 import app from '../../src/app';
 import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
 
@@ -12,7 +14,7 @@ describe("'blogs ' service", () => {
   const userEndpoint = '/users';
   const endpoint = '/blogs';
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ alter: true, logged: false });
+    await app.get('sequelizeClient').sync({ force: true, logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u) => {
@@ -30,11 +32,10 @@ describe("'blogs ' service", () => {
   });
 
   it('should be able to create new blogs', async () => {
-    const user = testUsers[0].body;
     const newBlog = {
-      blogTitle: 'Title',
-      blogText: 'Body, text',
-      categories: ' some, category',
+      blogTitle: 'Title ew',
+      blogText: '<strong>Body text</strong><img src=x/>',
+      interests: ['some', 'category'],
     };
     const blogs: any = await Promise.all(
       testUsers.map(({ body }) =>
@@ -45,35 +46,113 @@ describe("'blogs ' service", () => {
       )
     );
     firstBlogs = blogs.map((blog) => blog.body);
-
-    expect(firstBlogs[0]).toMatchObject({
-      ...newBlog,
-      id: expect.any(Number),
-      UserId: user.id,
-      privacyType: 'private',
-      updatedAt: expect.any(String),
-      createdAt: expect.any(String),
-      BlogId: null,
+    firstBlogs.forEach((firstBlog) => {
+      expect(firstBlog).toMatchObject({
+        blogText: sanitizeHtml(newBlog.blogText),
+        blogTitle: sanitizeHtml(newBlog.blogTitle),
+        id: expect.any(String),
+        UserId: expect.any(Number),
+        publish: false,
+        updatedAt: expect.any(String),
+        createdAt: expect.any(String),
+        BlogId: null,
+        slug: slugify(newBlog.blogTitle),
+        Response: [],
+        Interests: [
+          {
+            id: expect.any(String),
+            name: expect.any(String),
+            approved: false,
+            accessible: true,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            UserId: expect.any(Number),
+            Blog_Interest: expect.any(Object),
+          },
+          {
+            id: expect.any(String),
+            name: expect.any(String),
+            approved: false,
+            accessible: true,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            UserId: expect.any(Number),
+            Blog_Interest: expect.any(Object),
+          },
+        ],
+        User: {
+          firstName: expect.any(String),
+          lastName: expect.any(String),
+          id: expect.any(Number),
+          profilePicture: expect.any(String),
+          createdAt: expect.any(String),
+        },
+      });
     });
   });
   it('should be able to edit his blogs', async () => {
     const modifications = {
       blogTitle: 'Better Title',
       blogText: 'Bigger Body, text',
-      categories: ' more,some, category',
+      interests: ['more', 'some', 'category'],
     };
     const user = testUsers[0].body;
     const modifiedBlog = await testServer
       .patch(`${endpoint}/${firstBlogs[0].id}`)
       .send(modifications)
       .set('authorization', user.accessToken);
-    expect(modifiedBlog.body).toEqual(
-      expect.objectContaining({
-        ...modifications,
-        id: firstBlogs[0].id,
-        UserId: user.id,
-      })
-    );
+
+    expect(modifiedBlog.body).toMatchObject({
+      blogText: sanitizeHtml(modifications.blogText),
+      blogTitle: sanitizeHtml(modifications.blogTitle),
+      id: expect.any(String),
+      UserId: expect.any(Number),
+      publish: false,
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String),
+      BlogId: null,
+      slug: expect.any(String),
+      Response: [],
+      Interests: [
+        {
+          id: expect.any(String),
+          name: expect.any(String),
+          approved: false,
+          accessible: true,
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          UserId: expect.any(Number),
+          Blog_Interest: expect.any(Object),
+        },
+        {
+          id: expect.any(String),
+          name: expect.any(String),
+          approved: false,
+          accessible: true,
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          UserId: expect.any(Number),
+          Blog_Interest: expect.any(Object),
+        },
+        {
+          id: expect.any(String),
+          name: expect.any(String),
+          approved: false,
+          accessible: true,
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          UserId: expect.any(Number),
+          Blog_Interest: expect.any(Object),
+        },
+      ],
+      User: {
+        firstName: expect.any(String),
+        lastName: expect.any(String),
+        id: expect.any(Number),
+        profilePicture: expect.any(String),
+        createdAt: expect.any(String),
+      },
+    });
   });
   it('should be able to delete his own blog', async () => {
     const user = testUsers[0].body;
@@ -113,41 +192,37 @@ describe("'blogs ' service", () => {
     );
   });
   it('should only show public blogs if not owner', async () => {
-    const user = testUsers[1].body;
+    const user1 = testUsers[1].body;
+    const user0 = testUsers[0].body;
     await Promise.all(
       [1, 2, 3].map((i) =>
         testServer
           .post(endpoint)
           .send({
-            privacyType: i % 2 ? 'private' : 'public',
-            blogTitle: `Private Title ${i} from ${user.id}`,
+            publish: i % 2,
+            blogTitle: `Private Title ${i} from ${user1.id}`,
             blogText: 'Bigger Body, text ',
-            categories: ' more,some, category',
+            categories: ['more', 'some', 'category'],
           })
-          .set('authorization', user.accessToken)
+          .set('authorization', user1.accessToken)
       )
     );
 
     let blogs = await testServer
-      .get(`${endpoint}?UserId=${user.id}`)
-      .set('authorization', testUsers[0].body.accessToken);
+      .get(`${endpoint}?UserId=${user1.id}`)
+      .set('authorization', user0.accessToken);
     blogs = blogs.body.map((blog) => blog);
 
     blogs.forEach((blog) => {
-      expect(blog).toEqual(
-        expect.objectContaining({
-          id: expect.any(Number),
-          blogText: expect.any(String),
-          blogTitle: expect.any(String),
-          categories: expect.any(String),
-          privacyType: 'public',
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          UserId: user.id,
-          BlogId: null,
-        })
-      );
+      expect(blog.publish).toBeTruthy();
     });
   });
-  it('owner should see both his private and public blogs', async () => {});
+  it('owner should see both his private and public blogs', async () => {
+    const user1 = testUsers[1].body;
+    const blogs = await testServer
+      .get(`${endpoint}?UserId=${user1.id}`)
+      .set('authorization', user1.accessToken);
+
+    expect(blogs.body.some((blog) => blog.publish === false)).toBeTruthy();
+  });
 });
