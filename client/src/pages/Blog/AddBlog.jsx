@@ -5,7 +5,6 @@ import { useGetInterestList } from "../../features/interest/interestSlice";
 import { useCreateBlog } from "../../features/blog/blogSlice";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-// import parse from "html-react-parser";
 import { assignValue } from "./../../helpers/index";
 import InputCover from "../../features/blog/component/InputCover";
 
@@ -26,25 +25,30 @@ const AddBlog = () => {
   const [blogTitle, setBlogTitle] = useState("");
   const [interest, setInterest] = useState([]);
 
-  // {parse(`${text}`)} --- to parse the blog html
   const createBlog = useCreateBlog(["blog", "create"], undefined, undefined);
   const { data: interestList } = useGetInterestList(["interest", "all"], true);
 
   const handleSubmit = async (publish) => {
-    let arrayInterest = [];
-    let dataObj;
+    let formData = new FormData();
     try {
       interest?.forEach((item) => {
-        return arrayInterest.push(item?.label);
+        return formData.append("interests", item?.label);
       });
+      formData.append("blogText", text);
+      formData.append("blogTitle", blogTitle);
+      formData.append("coverPicture", cover[0]);
 
       if (publish) {
-        dataObj = { blogText: text, blogTitle, blogInterest: arrayInterest, coverPicture: cover, publish: true };
+        formData.append("publish", true);
       } else {
-        dataObj = { blogText: text, blogTitle, interest: arrayInterest, coverPicture: cover, publish: false };
+        formData.append("publish", false);
       }
-      await createBlog.mutateAsync(dataObj);
+      await createBlog.mutateAsync(formData);
       blogSuccess();
+      setText(null);
+      setCover([]);
+      setBlogTitle(null);
+      setInterest([]);
     } catch (e) {
       console.log(e);
       blogError();
