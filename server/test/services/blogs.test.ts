@@ -11,6 +11,7 @@ describe("'blogs ' service", () => {
   let testServer;
   let testUsers;
   let firstBlogs;
+  let blogs;
   const userEndpoint = '/users';
   const endpoint = '/blogs';
   beforeAll(async () => {
@@ -23,8 +24,6 @@ describe("'blogs ' service", () => {
         return testServer.post(userEndpoint).send(user);
       }, 10000)
     );
-
-    // testUsers = testUsers.map((testUser) => testUser.body);
   }, 100000);
   it('registered the service', () => {
     const service = app.service('blogs');
@@ -37,7 +36,7 @@ describe("'blogs ' service", () => {
       blogText: '<strong>Body text</strong><img src=x/>',
       interests: ['some', 'category'],
     };
-    const blogs: any = await Promise.all(
+    const fstBlogs: any = await Promise.all(
       testUsers.map(({ body }) =>
         testServer
           .post(endpoint)
@@ -45,7 +44,7 @@ describe("'blogs ' service", () => {
           .set('authorization', body.accessToken)
       )
     );
-    firstBlogs = blogs.map((blog) => blog.body);
+    firstBlogs = fstBlogs.map((blog) => blog.body);
     firstBlogs.forEach((firstBlog) => {
       expect(firstBlog).toMatchObject({
         blogText: sanitizeHtml(newBlog.blogText),
@@ -194,7 +193,7 @@ describe("'blogs ' service", () => {
   it('should only show public blogs if not owner', async () => {
     const user1 = testUsers[1].body;
     const user0 = testUsers[0].body;
-    await Promise.all(
+    blogs = await Promise.all(
       [1, 2, 3].map((i) =>
         testServer
           .post(endpoint)
@@ -208,21 +207,40 @@ describe("'blogs ' service", () => {
       )
     );
 
-    let blogs = await testServer
+    let user0Blogs = await testServer
       .get(`${endpoint}?UserId=${user1.id}`)
       .set('authorization', user0.accessToken);
-    blogs = blogs.body.map((blog) => blog);
+    user0Blogs = user0Blogs.body.map((blog) => blog);
 
-    blogs.forEach((blog) => {
+    user0Blogs.forEach((blog) => {
       expect(blog.publish).toBeTruthy();
     });
   });
   it('owner should see both his private and public blogs', async () => {
     const user1 = testUsers[1].body;
-    const blogs = await testServer
+    const MyBlogs = await testServer
       .get(`${endpoint}?UserId=${user1.id}`)
       .set('authorization', user1.accessToken);
 
-    expect(blogs.body.some((blog) => blog.publish === false)).toBeTruthy();
+    expect(MyBlogs.body.some((blog) => blog.publish === false)).toBeTruthy();
+  });
+
+  it('only owner can review non-publish blog', async () => {
+    const user0 = testUsers[0].body; // not the creator
+    let mixedBlogs: any = await Promise.all(
+      blogs.map(({ body }) =>
+        testServer
+          .get(`${endpoint}/${body.id}`)
+          .set('authorization', user0.accessToken)
+      )
+    );
+
+    mixedBlogs = mixedBlogs.map((response) => response.body);
+
+    expect(mixedBlogs.some((resp) => resp?.publish === true)).toBeTruthy();
+    // Due to some of the post being private and he is not the creator
+    expect(
+      mixedBlogs.some((resp) => resp?.message === 'You cannot review this item')
+    ).toBeTruthy();
   });
 });

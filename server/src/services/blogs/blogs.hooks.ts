@@ -1,5 +1,5 @@
 import * as authentication from '@feathersjs/authentication';
-
+import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 /** Local dependencies  */
 import {
   AutoOwn,
@@ -7,7 +7,10 @@ import {
   OwnerAccess,
   SaveInterest,
   IncludeAssociations,
+  // ValidateResource,
 } from '../../Hooks';
+
+// import * as Schema from '../../schema/blog.schema';
 
 const { authenticate } = authentication.hooks;
 const UserAttributes = [
@@ -17,6 +20,7 @@ const UserAttributes = [
   'profilePicture',
   'createdAt',
 ];
+const SaveCover = saveProfilePicture(['coverPicture']);
 export default {
   before: {
     all: [
@@ -46,16 +50,16 @@ export default {
     ],
     find: [OwnerAccess({ publish: true })],
     get: [],
-    create: [AutoOwn],
-    update: [LimitToOwner],
-    patch: [LimitToOwner],
+    create: [AutoOwn, SaveCover],
+    update: [LimitToOwner, SaveCover],
+    patch: [LimitToOwner, SaveCover],
     remove: [LimitToOwner],
   },
 
   after: {
     all: [],
     find: [],
-    get: [],
+    get: [OwnerAccess({ publish: true })],
     create: [SaveInterest],
     update: [SaveInterest],
     patch: [SaveInterest],

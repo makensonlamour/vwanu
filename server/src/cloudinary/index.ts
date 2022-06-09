@@ -31,6 +31,13 @@ const postImages = new CloudinaryStorage({
     folder: 'vwanu/post',
   },
 });
+const blogImages = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    allowedFormats: ['jpg', 'png', 'jpeg'],
+    folder: 'vwanu/blog',
+  },
+});
 
 const albumImages = new CloudinaryStorage({
   cloudinary,
@@ -41,6 +48,7 @@ const albumImages = new CloudinaryStorage({
 });
 
 export const postStorage = multer({ storage: postImages });
+export const blogStorage = multer({ storage: blogImages });
 export const profilesStorage = multer({ storage: profilePictures });
 
 export const albumStorage = multer({ storage: albumImages });
