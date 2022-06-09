@@ -32,7 +32,9 @@ export default (sequelize: any, DataTypes: any) => {
       });
       Blog.belongsToMany(models.Interest, { through: 'Blog_Interest' });
       Blog.hasMany(models.Blog, { as: 'Response' });
-      Blog.hasMany(models.Reaction);
+      // Blog.hasMany(models.Reaction);
+
+      // Blogs will be associated with likes
     }
   }
   Blog.init(
