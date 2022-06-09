@@ -1,66 +1,83 @@
+/* eslint-disable no-param-reassign */
 import { Model } from 'sequelize';
+import slugify from '../lib/utils/slugify';
+import sanitizeHtml from '../lib/utils/sanitizeHtml';
 
 export interface BlogInterface {
-  id: number;
+  id: string;
   blogText: string;
   blogTitle: string;
-  privacyType: string;
-  categories: string[];
+  coverPicture: string;
+  publish: boolean;
+  slug: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Blog extends Model<BlogInterface> implements BlogInterface {
-    id: number;
+    id: string;
 
     blogText: string;
 
     blogTitle: string;
 
-    privacyType: string;
+    publish: boolean;
 
-    categories: string[];
+    coverPicture: string;
+
+    slug: string;
 
     static associate(models: any): void {
       Blog.belongsTo(models.User);
-      // Blog.belongsToMany(models.Media, {
-      //   through: 'Blog_Media',
-      // });
+      Blog.belongsToMany(models.Media, {
+        through: 'Blog_Media',
+      });
+      Blog.belongsToMany(models.Interest, { through: 'Blog_Interest' });
       Blog.hasMany(models.Blog, { as: 'Response' });
-      // Blog.hasMany(models.Reaction);
+      Blog.hasMany(models.Reaction);
     }
   }
   Blog.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
       },
-
+      coverPicture: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      slug: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
       blogText: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
       blogTitle: {
         type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      categories: {
-        type: DataTypes.STRING,
         allowNull: false,
       },
-      privacyType: {
-        type: DataTypes.STRING,
-        defaultValue: 'private',
+
+      publish: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
 
     {
-      // hooks: {
-      //   afterFind: (name, option) => {
-      //     // console.log('\n\n\n Some thing ');
-      //     // console.log({name, option});
-      //   },
-      // },
+      hooks: {
+        beforeSave: (data) => {
+          data.blogText = sanitizeHtml(data.blogText);
+          data.blogTitle = sanitizeHtml(data.blogTitle);
+          data.slug = slugify(data.blogTitle, {
+            replacement: '-',
+            lower: true,
+            strict: true,
+          });
+        },
+      },
       sequelize,
       modelName: 'Blog',
     }
