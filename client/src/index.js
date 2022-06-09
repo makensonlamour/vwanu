@@ -23,6 +23,10 @@ const languages = {
 
 const language = navigator.language.split(/[-_]/)[0];
 
+if (typeof document === "undefined") {
+  React.useLayoutEffect = React.useEffect;
+}
+
 const root = createRoot(document.getElementById("root"));
 
 root.render(
