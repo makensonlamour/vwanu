@@ -6,6 +6,9 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import ForgotPasswordSuccess from "./pages/ResetPassword/ForgotPasswordSuccess";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import NewsFeed from "./pages/NewsFeed/NewsFeed";
+import Blog from "./pages/Blog/Blog";
+import ViewBlog from "./pages/Blog/ViewBlog";
+import AddBlog from "./pages/Blog/AddBlog";
 import ViewPost from "./pages/NewsFeed/ViewPost";
 import Profil from "./pages/Profil/Profil";
 import EditProfile from "./pages/Profil/EditProfile";
@@ -61,6 +64,24 @@ let routes = [
     path: routesPath.NEWSFEED,
     name: "News Feed",
     element: NewsFeed,
+    access: role.USER,
+  },
+  {
+    path: routesPath.BLOG,
+    name: "Blog",
+    element: Blog,
+    access: role.USER,
+  },
+  {
+    path: routesPath.VIEW_BLOG,
+    name: "View blog",
+    element: ViewBlog,
+    access: role.USER,
+  },
+  {
+    path: routesPath.ADD_BLOG,
+    name: "Add Blog",
+    element: AddBlog,
     access: role.USER,
   },
   {

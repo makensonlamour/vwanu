@@ -43,7 +43,7 @@ export function likeArray(arrayObject, reactions) {
   arrayObject.map((item) => {
     _.find(reactions, (reaction) => {
       if (reaction.label === item.content) {
-        return array.push(
+        return array?.push(
           _.merge(item, { label: reaction.label, node: reaction.node, by: item?.User?.firstName + " " + item?.User?.lastName })
         );
       }
@@ -79,4 +79,16 @@ export function checkFriendList(friends, userId) {
 
   if (check) return true;
   return false;
+}
+
+//assign value for interest
+export function assignValue(obj) {
+  if (obj?.length === 0) return;
+  const array = [];
+
+  obj?.map((item) => {
+    return array?.push({ value: item?.id, label: item?.name });
+  });
+
+  return array;
 }

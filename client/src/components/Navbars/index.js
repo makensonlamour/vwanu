@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
 import { Badge, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material";
@@ -47,11 +47,11 @@ const Navbar = ({ user }) => {
   const { toggleSidebar, isSidebarOpen } = useContext(BottomMenuContext);
 
   const pages = [
-    { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath.NEWSFEED },
-    { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: "" },
-    { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: "" },
-    { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: "" },
-    { title: "Blog", icon: <RiPagesLine size={24} className="mx-auto" />, path: "" },
+    { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
+    { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: "#" },
+    { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: "#" },
+    { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: "#" },
+    { title: "Blog", icon: <RiPagesLine size={24} className="mx-auto" />, path: routesPath?.BLOG },
   ];
 
   const settings = [
@@ -94,7 +94,7 @@ const Navbar = ({ user }) => {
             </div>
           )}
           <div className="basis-[28%] md:basis-[12%] ml-2 md:pl-6 lg:pl-10 xl:px-6">
-            <Link className="" to={routesPath.NEWSFEED}>
+            <Link className="" to={routesPath?.NEWSFEED}>
               <div className="text-lg font-bold w-[100px] md:w-[150px] mr-10 py-2 flex">
                 {" "}
                 <img className="justify-center" src={logo} alt="logo_vwanu" />
@@ -103,16 +103,27 @@ const Navbar = ({ user }) => {
           </div>
           <div className="md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
             <div className="hidden xl:flex items-center justify-evenly py-2">
-              {pages.map((page) => (
-                <button key={page.title + " title"} className=" text-primary hover:text-secondary active:text-secondary">
-                  {page.title}
-                </button>
+              {pages?.map((page) => (
+                <NavLink
+                  to={page?.path}
+                  key={page?.title + " title"}
+                  activeClassName="text-secondary"
+                  className=" text-primary hover:text-secondary active:text-secondary"
+                >
+                  {page?.title}
+                </NavLink>
               ))}
             </div>
             <div className="hidden md:flex xl:hidden">
-              {pages.map((page) => (
-                <Tooltip key={page + " icon"} title={page.title}>
-                  <button className="mx-auto px-1 flex text-primary hover:text-secondary active:text-secondary">{page.icon}</button>
+              {pages?.map((page) => (
+                <Tooltip key={page + " icon"} title={page?.title}>
+                  <NavLink
+                    to={page?.path}
+                    activeClassName="text-secondary"
+                    className="mx-auto px-1 flex text-primary hover:text-secondary active:text-secondary"
+                  >
+                    {page?.icon}
+                  </NavLink>
                 </Tooltip>
               ))}
             </div>
