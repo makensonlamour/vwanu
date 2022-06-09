@@ -41,7 +41,7 @@ const AddBlog = () => {
       if (publish) {
         dataObj = { blogText: text, blogTitle, blogInterest: arrayInterest, coverPicture: cover, publish: true };
       } else {
-        dataObj = { blogText: text, blogTitle, blogInterest: arrayInterest, coverPicture: cover, publish: false };
+        dataObj = { blogText: text, blogTitle, interest: arrayInterest, coverPicture: cover, publish: false };
       }
       await createBlog.mutateAsync(dataObj);
       blogSuccess();
