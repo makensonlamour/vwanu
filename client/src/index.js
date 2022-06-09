@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,17 +23,20 @@ const languages = {
 
 const language = navigator.language.split(/[-_]/)[0];
 
-ReactDOM.render(
-  <BrowserRouter history={history}>
-    <div>
-      <AuthContextProvider>
-        <IntlProvider locale={language} messages={languages[language]}>
-          <App />
-        </IntlProvider>
-      </AuthContextProvider>
-    </div>
-  </BrowserRouter>,
-  document.getElementById("root")
+const root = createRoot(document.getElementById("root"));
+
+root.render(
+  <StrictMode>
+    <BrowserRouter history={history}>
+      <div>
+        <AuthContextProvider>
+          <IntlProvider locale={language} messages={languages[language]}>
+            <App />
+          </IntlProvider>
+        </AuthContextProvider>
+      </div>
+    </BrowserRouter>
+  </StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
