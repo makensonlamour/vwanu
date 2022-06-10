@@ -54,9 +54,10 @@ describe("'blogs ' service", () => {
         publish: false,
         updatedAt: expect.any(String),
         createdAt: expect.any(String),
-        BlogId: null,
         slug: slugify(newBlog.blogTitle),
-        Response: [],
+        amountOfLikes: 0,
+        amountOfComments: 0,
+
         Interests: [
           {
             id: expect.any(String),
@@ -109,9 +110,10 @@ describe("'blogs ' service", () => {
       publish: false,
       updatedAt: expect.any(String),
       createdAt: expect.any(String),
-      BlogId: null,
       slug: expect.any(String),
-      Response: [],
+      amountOfLikes: 0,
+      amountOfComments: 0,
+
       Interests: [
         {
           id: expect.any(String),
@@ -198,7 +200,8 @@ describe("'blogs ' service", () => {
         testServer
           .post(endpoint)
           .send({
-            publish: i % 2,
+            // eslint-disable-next-line no-unneeded-ternary
+            publish: i % 2 === 0 ? false : true,
             blogTitle: `Private Title ${i} from ${user1.id}`,
             blogText: 'Bigger Body, text ',
             categories: ['more', 'some', 'category'],
@@ -236,7 +239,6 @@ describe("'blogs ' service", () => {
     );
 
     mixedBlogs = mixedBlogs.map((response) => response.body);
-
     expect(mixedBlogs.some((resp) => resp?.publish === true)).toBeTruthy();
     // Due to some of the post being private and he is not the creator
     expect(

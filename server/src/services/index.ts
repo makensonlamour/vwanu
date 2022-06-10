@@ -34,6 +34,8 @@ import communities from './communities/communities.service';
 
 import discussion from './discussion/discussion.service';
 
+import blogResponse from './blog-response/blog-response.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -59,4 +61,5 @@ export default function (app: Application): void {
   app.configure(medias);
   app.configure(communities);
   app.configure(discussion);
+  app.configure(blogResponse);
 }

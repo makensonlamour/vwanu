@@ -10,6 +10,8 @@ export interface BlogInterface {
   coverPicture: string;
   publish: boolean;
   slug: string;
+  amountOfLikes: number;
+  amountOfComments: number;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Blog extends Model<BlogInterface> implements BlogInterface {
@@ -25,13 +27,17 @@ export default (sequelize: any, DataTypes: any) => {
 
     slug: string;
 
+    amountOfLikes: number;
+
+    amountOfComments: number;
+
     static associate(models: any): void {
       Blog.belongsTo(models.User);
       // Blog.belongsToMany(models.Media, {
       //   through: 'Blog_Media',
       // });
       Blog.belongsToMany(models.Interest, { through: 'Blog_Interest' });
-      Blog.hasMany(models.Blog, { as: 'Response' });
+      Blog.hasMany(models.BlogResponse);
       // Blog.hasMany(models.Reaction);
 
       // Blogs will be associated with likes
@@ -61,7 +67,8 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-
+      amountOfLikes: { type: DataTypes.INTEGER, defaultValue: 0 },
+      amountOfComments: { type: DataTypes.INTEGER, defaultValue: 0 },
       publish: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

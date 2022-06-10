@@ -19,6 +19,7 @@ import reaction from './reaction';
 import community from './communities';
 import discussion from './discussion';
 import notification from './notification';
+import BlogResponse from './blog-response';
 import refreshToken from './refresh-token';
 import emailTemplate from './emailTemplate';
 
@@ -35,6 +36,7 @@ const tables = [
   community,
   discussion,
   notification,
+  BlogResponse,
   refreshToken,
   emailTemplate,
 ];
