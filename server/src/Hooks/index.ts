@@ -5,3 +5,4 @@ export { default as SaveInterest } from './SaveInterest';
 export { default as IncludeAssociations } from './IncludeAssociations';
 export { default as ValidateResource } from './validateResource';
 export { default as AdjustCount } from './AdjustCount';
+export { default as LimitedAccess } from './LimitedAccess';

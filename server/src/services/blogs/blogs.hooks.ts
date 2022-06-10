@@ -9,6 +9,7 @@ import {
   SaveInterest,
   IncludeAssociations,
   ValidateResource,
+  LimitedAccess,
 } from '../../Hooks';
 
 import * as Schema from '../../schema/blog.schema';
@@ -37,7 +38,7 @@ export default {
         ],
       }),
     ],
-    find: [OwnerAccess({ publish: true })],
+    find: [],
     get: [],
     create: [ValidateResource(Schema.createBlogSchema), AutoOwn, SaveCover],
     update: [commonHooks.disallow('external')],
@@ -55,7 +56,7 @@ export default {
 
   after: {
     all: [],
-    find: [],
+    find: [LimitedAccess({ publish: true })],
     get: [OwnerAccess({ publish: true })],
     create: [SaveInterest],
     update: [SaveInterest],
