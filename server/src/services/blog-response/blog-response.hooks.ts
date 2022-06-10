@@ -1,8 +1,19 @@
 import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
-import { AutoOwn, LimitToOwner, IncludeAssociations } from '../../Hooks';
+import {
+  AutoOwn,
+  LimitToOwner,
+  IncludeAssociations,
+  AdjustCount,
+} from '../../Hooks';
 
 const { authenticate } = authentication.hooks;
+
+const AdjustCountOptions = {
+  model: 'Blog',
+  field: 'amountOfComments',
+  key: 'BlogId',
+};
 const UserAttributes = [
   'firstName',
   'lastName',
@@ -17,7 +28,7 @@ export default {
       IncludeAssociations({
         include: [
           {
-            model: 'blogs',
+            model: 'blogResponse',
             as: 'User',
             attributes: UserAttributes,
           },
@@ -36,10 +47,10 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [AdjustCount(AdjustCountOptions)],
     update: [],
     patch: [],
-    remove: [],
+    remove: [AdjustCount(AdjustCountOptions)],
   },
 
   error: {
