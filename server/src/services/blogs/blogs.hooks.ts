@@ -1,3 +1,4 @@
+import commonHooks from 'feathers-hooks-common';
 import * as authentication from '@feathersjs/authentication';
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 /** Local dependencies  */
@@ -7,10 +8,10 @@ import {
   OwnerAccess,
   SaveInterest,
   IncludeAssociations,
-  // ValidateResource,
+  ValidateResource,
 } from '../../Hooks';
 
-// import * as Schema from '../../schema/blog.schema';
+import * as Schema from '../../schema/blog.schema';
 
 const { authenticate } = authentication.hooks;
 const UserAttributes = [
@@ -33,26 +34,22 @@ export default {
             attributes: UserAttributes,
           },
           { model: 'blogs', as: 'Interests' },
-
-          {
-            model: 'blogs',
-            as: 'Response',
-            include: [
-              {
-                model: 'blogs',
-                as: 'User',
-                attributes: UserAttributes,
-              },
-            ],
-          },
         ],
       }),
     ],
     find: [OwnerAccess({ publish: true })],
     get: [],
-    create: [AutoOwn, SaveCover],
-    update: [LimitToOwner, SaveCover],
-    patch: [LimitToOwner, SaveCover],
+    create: [ValidateResource(Schema.createBlogSchema), AutoOwn, SaveCover],
+    update: [commonHooks.disallow('external')],
+    patch: [
+      commonHooks.iff(
+        commonHooks.isProvider('external'),
+        commonHooks.preventChanges(true, ...['slug', 'id'])
+      ),
+      ValidateResource(Schema.editBlogSchema),
+      LimitToOwner,
+      SaveCover,
+    ],
     remove: [LimitToOwner],
   },
 

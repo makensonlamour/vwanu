@@ -41,16 +41,6 @@ export default async (context: HookContext) => {
         model: UserModel,
         attributes: UserAttributes,
       },
-      {
-        model: BlogModel,
-        as: 'Response',
-        include: [
-          {
-            model: UserModel,
-            attributes: UserAttributes,
-          },
-        ],
-      },
     ],
   });
   context.result = blog;
