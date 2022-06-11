@@ -12,7 +12,9 @@ import user from './user';
 import blog from './blog';
 import album from './album';
 import Media from './media';
+import Korem from './korem';
 import friend from './Friends';
+import service from './service';
 import Visitors from './Visitors';
 import interest from './interest';
 import reaction from './reaction';
@@ -28,8 +30,10 @@ const tables = [
   post,
   blog,
   album,
+  Korem,
   Media,
   friend,
+  service,
   interest,
   Visitors,
   reaction,
