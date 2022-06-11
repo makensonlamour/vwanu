@@ -48,8 +48,8 @@ const Navbar = ({ user }) => {
 
   const pages = [
     { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
-    { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: "#" },
-    { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: "#" },
+    { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
+    { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: routesPath?.GROUPS },
     { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: "#" },
     { title: "Blog", icon: <RiPagesLine size={24} className="mx-auto" />, path: routesPath?.BLOG },
   ];
