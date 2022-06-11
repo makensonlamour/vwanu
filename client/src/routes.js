@@ -13,6 +13,8 @@ import ViewPost from "./pages/NewsFeed/ViewPost";
 import Profil from "./pages/Profil/Profil";
 import EditProfile from "./pages/Profil/EditProfile";
 import Message from "./pages/Message/Message";
+import Member from "./pages/Member/Member";
+import AddCommunity from "./pages/Community/AddCommunity";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
@@ -108,6 +110,18 @@ let routes = [
     path: routesPath.POST,
     name: "Post",
     element: ViewPost,
+    access: role.USER,
+  },
+  {
+    path: routesPath.MEMBERS,
+    name: "Member",
+    element: Member,
+    access: role.USER,
+  },
+  {
+    path: routesPath.ADD_GROUPS,
+    name: "Add Community",
+    element: AddCommunity,
     access: role.USER,
   },
   {

@@ -1,12 +1,17 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { useGetBlog } from "../../features/blog/blogSlice";
+import { useGetBlog, useGetBlogList } from "../../features/blog/blogSlice";
 import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
+import { GoComment } from "react-icons/go";
+import SingleBlogRelated from "../../components/Blog/SingleBlogRelated";
+import SingleResponse from "../../components/Blog/SingleResponse";
+
 const ViewBlog = () => {
   const { id } = useParams();
   const { data: blog } = useGetBlog(["blog", id], id?.toString() !== "undefined" ? true : false, id);
-  console.log(blog);
+  const { data: blogList } = useGetBlogList(["blog", "all"], true);
+
   return (
     <>
       <div className="mb-10">
@@ -41,8 +46,8 @@ const ViewBlog = () => {
                 </div>
               </Link>
               <div className="">
-                <Link to={`./${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color rounded-lg">
-                  {blog?.data?.Response?.length} Comments
+                <Link to={`#`} className="px-4 py-2 hover:bg-gray-50 rounded-lg flex items-center">
+                  <GoComment size={"18px"} className="mr-2" /> {blog?.data?.Response?.length} Comments
                 </Link>
               </div>
             </div>
@@ -51,26 +56,63 @@ const ViewBlog = () => {
             <p className="">{parse(`${blog?.data?.blogText}`)}</p>
           </div>
           <div className="mt-10 px-40">
-            <div className="">
-              <Link to={"../../profile/" + blog?.data?.User?.id} className="py-10 ">
+            <div className="border-b border-t border-gray-300">
+              <Link to={"../../profile/" + blog?.data?.User?.id} className="py-10 flex items-center">
                 <img
                   src={blog?.data?.User?.profilePicture}
                   alt={"_img_" + blog?.data?.User?.firstName}
                   className="w-[3rem] h-[3rem] mask mask-squircle"
                 />
-                <span className="">{blog?.data?.User?.firstName + " " + blog?.data?.User?.lastName}</span>
+                <p className="text-lg font-semibold ml-3 hover:text-primary">
+                  {blog?.data?.User?.firstName + " " + blog?.data?.User?.lastName}
+                </p>
               </Link>
             </div>
           </div>
-          <div className="mt-10 px-40">
+          <div className="mt-5 px-40">
             <div className="">
-              <p className="text-2xl font-semibold">Related Articles</p>
+              <p className="text-2xl font-semibold pb-10">Related Articles</p>
+              <div className="flex justify-between">
+                {blogList?.data?.length > 0 &&
+                  blogList?.data?.map((blog, idx) => {
+                    if (idx < 2) {
+                      return (
+                        <div key={blog?.id} className="w-[48%]">
+                          {" "}
+                          <SingleBlogRelated blog={blog} />
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+              </div>
             </div>
           </div>
           <div className="mt-10 px-40">
-            <div className="">
+            <div className="border-t border-gray-300 mt-5">
               <p className="text-2xl font-semibold">Responses</p>
-              <div className="bg-white rounded-xl p-4"></div>
+              <div className="bg-white border border-gray-300 rounded-xl p-4 mt-6 flex flex-col justify-end">
+                <Link to={"../../profile/" + blog?.data?.User?.id} className="py-4 flex items-center">
+                  <img
+                    src={blog?.data?.User?.profilePicture}
+                    alt={"_img_" + blog?.data?.User?.firstName}
+                    className="w-[3rem] h-[3rem] mask mask-squircle"
+                  />
+                  <p className="text-md font-[500] ml-3 hover:text-primary">
+                    {blog?.data?.User?.firstName + " " + blog?.data?.User?.lastName}
+                  </p>
+                </Link>
+                <textarea
+                  className="w-full border border-gray-300 rounded-xl p-4 mt-3 h-28"
+                  row={"8"}
+                  placeholder="Write a response..."
+                ></textarea>
+                <button className="ml-auto px-6 py-1 bg-primary text-white hover:bg-secondary rounded-xl mt-4">Publish</button>
+              </div>
+              <div className="">
+                <SingleResponse blog={blog} />
+              </div>
             </div>
           </div>
         </div>

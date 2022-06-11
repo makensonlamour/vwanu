@@ -10,6 +10,7 @@ import {
   IncludeAssociations,
   ValidateResource,
   LimitedAccess,
+  TrueBoolean,
 } from '../../Hooks';
 
 import * as Schema from '../../schema/blog.schema';
@@ -40,13 +41,19 @@ export default {
     ],
     find: [],
     get: [],
-    create: [ValidateResource(Schema.createBlogSchema), AutoOwn, SaveCover],
+    create: [
+      TrueBoolean(['publish']),
+      ValidateResource(Schema.createBlogSchema),
+      AutoOwn,
+      SaveCover,
+    ],
     update: [commonHooks.disallow('external')],
     patch: [
       commonHooks.iff(
         commonHooks.isProvider('external'),
         commonHooks.preventChanges(true, ...['slug', 'id'])
       ),
+      TrueBoolean(['publish']),
       ValidateResource(Schema.editBlogSchema),
       LimitToOwner,
       SaveCover,

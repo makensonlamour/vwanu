@@ -35,6 +35,7 @@ describe("'blogs ' service", () => {
       blogTitle: 'Title ew',
       blogText: '<strong>Body text</strong><img src=x/>',
       interests: ['some', 'category'],
+      publish: 'false',
     };
     const fstBlogs: any = await Promise.all(
       testUsers.map(({ body }) =>
