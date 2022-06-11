@@ -31,8 +31,9 @@ export default function LabTabs() {
               <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="About" value="2" component={Link} to={allTabs[1]} />
               <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Network" value="3" component={Link} to={allTabs[2]} />
               <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Album" value="4" component={Link} to={allTabs[3]} />
-              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Likes" value="5" component={Link} to={allTabs[4]} />
-              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Groups" value="6" component={Link} to={allTabs[5]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Blog" value="5" component={Link} to={allTabs[4]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Community" value="6" component={Link} to={allTabs[5]} />
+              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Forum" value="7" component={Link} to={allTabs[6]} />
             </TabList>
           </Box>
         </TabContext>
