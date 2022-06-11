@@ -25,7 +25,7 @@ export default (options: ADJUST_COUNT_OPTION) =>
         break;
 
       case 'create':
-        await Model.increment({ [field]: incremental||1 }, { where: { id } });
+        await Model.increment({ [field]: incremental || 1 }, { where: { id } });
         break;
 
       default:

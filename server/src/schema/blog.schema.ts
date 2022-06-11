@@ -14,8 +14,7 @@ export const createBlogSchema = object({
     blogText: string({
       required_error: 'Please provide some for your blog',
       invalid_type_error: "You' have not provided a recognizable text",
-    })
-      .min(1),
+    }).min(1),
     blogTitle: string({
       required_error: 'Please provide a title for your blog',
       invalid_type_error: "You' have not provided a recognizable text",
