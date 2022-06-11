@@ -10,105 +10,107 @@ export default (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
     id: number;
 
-    email: string;
+    about: string;
 
-    activationKey?: string | null;
+    admin: boolean;
 
-    resetPasswordKey?: string | undefined;
+    address: string;
 
-    resetShortPasswordKey?: string | undefined;
-
-    verified?: boolean | undefined;
-
-    password: string | undefined;
-
-    username?: string | undefined;
-
-    firstName: string;
-
-    lastName: string;
+    active: boolean;
 
     avatar: string | undefined;
 
-    coverPicture: string | undefined;
+    activationKey?: string | null;
 
-    country: string | undefined;
-
-    profilePicture: string | undefined;
+    birthday: string;
 
     backgroundImage: string;
 
     backgroundImageStatus: boolean;
 
-    address: string;
-
-    working: string;
-
-    workingLink: string;
-
-    about: string;
-
-    school: string;
-
-    gender: string;
-
-    interestedBy: string;
-
-    birthday: string;
-
     countryId: number;
 
-    website: string;
+    country: string | undefined;
 
-    facebook: string;
-
-    google: string;
-
-    twitter: string;
-
-    linkedin: string;
-
-    youtube: string;
-
-    vk: string;
-
-    instagram: string;
-
-    qq: string;
-
-    wechat: string;
+    coverPicture: string | undefined;
 
     discord: string;
 
-    mailru: string;
+    email: string;
 
-    language: string;
+    facebook: string;
+
+    firstName: string;
 
     followPrivacy: boolean;
 
     friendPrivacy: boolean;
 
-    postPrivacy: string;
+    gender: string;
 
-    messagePrivacy: string;
+    google: string;
+
+    instagram: string;
+
+    interestedBy: string;
+
+    lastSeen: Date;
+
+    lastName: string;
+
+    linkedin: string;
+
+    language: string;
+
+    loginAttempts: number;
 
     lastSeenPrivacy: boolean;
 
-    active: boolean;
+    mailru: string;
 
-    admin: boolean;
+    messagePrivacy: string;
 
     online: boolean;
 
-    lastSeen: Date;
+    postPrivacy: string;
+
+    password: string | undefined;
+
+    profilePicture: string | undefined;
+
+    qq: string;
 
     resetExpires: Date;
 
     resetAttempts: number;
 
-    loginAttempts: number;
+    relationshipId: string;
+
+    resetPasswordKey?: string | undefined;
+
+    resetShortPasswordKey?: string | undefined;
+
+    school: string;
 
     search_vector: string;
+
+    twitter: string;
+
+    username?: string | undefined;
+
+    vk: string;
+
+    verified?: boolean | undefined;
+
+    wechat: string;
+
+    website: string;
+
+    working: string;
+
+    workingLink: string;
+
+    youtube: string;
 
     static associate(models: any) {
       // User.hasMany(models.Page, {
@@ -191,9 +193,84 @@ export default (sequelize: any, DataTypes: any) => {
         // @ts-ignore
         level: 'C',
       },
+
+      discord: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      wechat: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      facebook: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      mailru: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      qq: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      vk: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      instagram: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      youtube: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      linkedin: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      twitter: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+
+      relationshipId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+      },
+      avatar: { type: DataTypes.STRING, allowNull: true, unique: true },
+      username: { type: DataTypes.STRING, allowNull: true, unique: true },
       birthday: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      backgroundImage: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      backgroundImageStatus: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
@@ -216,6 +293,11 @@ export default (sequelize: any, DataTypes: any) => {
       gender: {
         type: DataTypes.STRING,
         defaultValue: 'not specified',
+      },
+
+      google: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
 
       country: {

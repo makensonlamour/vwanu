@@ -44,7 +44,7 @@ export const UpUser = object({
   coverPicture: string(),
   backgroundImage: string(),
   backgroundImageStatus: z.boolean(),
-  relationshipId: z.number(),
+  relationshipId: z.string(),
   address: string(),
   activationKey: z.string(),
   resetPasswordKey: string(),
