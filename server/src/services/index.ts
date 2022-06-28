@@ -42,6 +42,16 @@ import blogKorem from './blog-korem/blog-korem.service';
 
 import services from './services/services.service';
 
+import communityUsers from './community-users/community-users.service';
+
+import communityRole from './community-role/community-role.service';
+
+import communityInvitationRequest from './community-invitation-request/community-invitation-request.service';
+
+import registration from './communityRegistration/communityRegistration.service';
+
+import communityJoin from './community-join/community-join.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -71,4 +81,9 @@ export default function (app: Application): void {
   app.configure(korem);
   app.configure(blogKorem);
   app.configure(services);
+  app.configure(communityUsers);
+  app.configure(communityRole);
+  app.configure(communityInvitationRequest);
+  app.configure(registration);
+  app.configure(communityJoin);
 }

@@ -15,12 +15,6 @@ export default function (app: Application): void {
         logging: false,
         ...dbSettings,
       });
-  // : new Sequelize(
-  //     dbSettings.database,
-  //     dbSettings.username,
-  //     dbSettings.password,
-  //     dbSettings
-  //   );
 
   const oldSetup = app.setup;
   app.set('sequelizeClient', sequelize);

@@ -3,11 +3,11 @@
 import { ServiceAddons } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
 import { Communities } from './communities.class';
-import { CommunitiesRegistration } from './comunity-registration.class';
+import { CommunitiesRegistration } from '../communityRegistration/comunity-registration.class';
 import { CommunityAdmin } from './community-admin.class';
 
 import hooks from './communities.hooks';
-import registrationHooks from './registration.hooks';
+import registrationHooks from '../communityRegistration/registration.hooks';
 import adminHooks from './community-admin.hooks';
 
 // Add this service to the service type index

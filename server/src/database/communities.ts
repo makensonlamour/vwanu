@@ -13,15 +13,13 @@ export interface CommunityInterface {
 
   profilePicture: string;
 
-  privacyType: boolean;
-
   UserId: number;
 
   numMembers: number;
 
   numAdmins: number;
 
-  type: string; // public, hidden , private
+  privacyType: string; // public, hidden , private
 
   canInvite: string; // all-member, organizers && Mods, org-only
 
@@ -54,15 +52,13 @@ export default (sequelize: any, DataTypes: any) => {
 
     profilePicture: string;
 
-    privacyType: boolean;
-
     UserId: number;
 
     numMembers: number;
 
     numAdmins: number;
 
-    type: string; // public, hidden , private
+    privacyType: string; // public, hidden , private
 
     canInvite: string; // all-member, organizers && Mods, org-only
 
@@ -85,10 +81,10 @@ export default (sequelize: any, DataTypes: any) => {
       //   as: 'members',
       //   through: 'community-members',
       // });
-      Community.belongsToMany(models.User, {
-        as: 'creator',
-        through: 'community-creator',
-      });
+      // Community.belongsToMany(models.User, {
+      //   as: 'creator',
+      //   through: 'community-creator',
+      // });
       // Community.belongsToMany(models.User, {
       //   as: 'moderators',
       //   through: 'community-moderators',
@@ -97,10 +93,8 @@ export default (sequelize: any, DataTypes: any) => {
       //   as: 'administrators',
       //   through: 'community-administrators',
       // });
-      // Community.belongsToMany(models.User, {
-      //   as: 'administratorsRequest',
-      //   through: 'community-administratorsRequest',
-      // });
+      Community.hasMany(models.CommunityInvitationRequest);
+      Community.hasMany(models.CommunityUsers);
     }
   }
   Community.init(
@@ -129,10 +123,9 @@ export default (sequelize: any, DataTypes: any) => {
         unique: true,
       },
 
-      type: {
-        type: DataTypes.STRING,
+      privacyType: {
+        type: DataTypes.ENUM('public', 'hidden', 'private'),
         allowNull: false,
-        unique: true,
       },
       coverPicture: {
         type: DataTypes.STRING,
@@ -148,36 +141,39 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      privacyType: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
+
       canInvite: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
         allowNull: true,
       },
 
       canInPost: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
         allowNull: true,
       },
       canInUploadPhotos: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
         allowNull: true,
       },
 
       canInUploadDoc: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
         allowNull: true,
       },
 
       canInUploadVideo: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
         allowNull: true,
       },
 
       canMessageInGroup: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
         allowNull: true,
       },
       defaultInvitationEmail: {

@@ -1,6 +1,7 @@
 import * as authentication from '@feathersjs/authentication';
-// Don't remove this comment. It's needed to format import lines nicely.
 
+/** Local dependencies */
+import AutoAssign from '../../Hooks/AutoAssign.hook';
 
 const { authenticate } = authentication.hooks;
 
@@ -9,11 +10,7 @@ export default {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [
-      (context) => {
-        context.data.UserId = context.params.User.id;
-      },
-    ],
+    create: [AutoAssign({ hostId: null })],
     update: [],
     patch: [],
     remove: [],
