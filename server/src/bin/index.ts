@@ -9,12 +9,10 @@ function normalizePort(val: string): number | string | null {
   return null;
 }
 function onListening(server) {
-  return (): void => {
-    const addr = server.address();
-    const bind: string | null =
-      typeof addr === 'string' ? `pipe  ${addr}` : `port ${addr?.port}`;
-    Logger.info(`Listening on ${bind} `);
-  };
+  const addr = server.address();
+  const bind: string | null =
+    typeof addr === 'string' ? `pipe  ${addr}` : `port ${addr?.port}`;
+  Logger.info(`Listening on ${bind} `);
 }
 const port = normalizePort(process.env.PORT || '6000');
 function onError(error: any): void {

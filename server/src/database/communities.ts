@@ -9,15 +9,33 @@ export interface CommunityInterface {
 
   coverPicture: string;
 
-  profilePicture: string;
+  description: string;
 
-  privacyType: boolean;
+  profilePicture: string;
 
   UserId: number;
 
   numMembers: number;
 
   numAdmins: number;
+
+  privacyType: string; // public, hidden , private
+
+  canInvite: string; // all-member, organizers && Mods, org-only
+
+  canInPost: string; // all-member, organizers && Mods, org-only
+
+  canInUploadPhotos: string; // all-member, organizers && Mods, org-only
+
+  canInUploadDoc: string; // all-member, organizers && Mods, org-only
+
+  canInUploadVideo: string; // all-member, organizers && Mods, org-only
+
+  canMessageInGroup: string; // all-member, organizers && Mods, org-only
+
+  haveDiscussionForum: boolean;
+
+  defaultInvitationEmail: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Community
@@ -30,9 +48,9 @@ export default (sequelize: any, DataTypes: any) => {
 
     coverPicture: string;
 
-    profilePicture: string;
+    description: string;
 
-    privacyType: boolean;
+    profilePicture: string;
 
     UserId: number;
 
@@ -40,27 +58,43 @@ export default (sequelize: any, DataTypes: any) => {
 
     numAdmins: number;
 
+    privacyType: string; // public, hidden , private
+
+    canInvite: string; // all-member, organizers && Mods, org-only
+
+    canInPost: string; // all-member, organizers && Mods, org-only
+
+    canInUploadPhotos: string; // all-member, organizers && Mods, org-only
+
+    canInUploadDoc: string; // all-member, organizers && Mods, org-only
+
+    canInUploadVideo: string; // all-member, organizers && Mods, org-only
+
+    canMessageInGroup: string; // all-member, organizers && Mods, org-only
+
+    haveDiscussionForum: boolean;
+
+    defaultInvitationEmail: string;
+
     static associate(models: any): void {
-      Community.belongsToMany(models.User, {
-        as: 'members',
-        through: 'community-members',
-      });
-      Community.belongsToMany(models.User, {
-        as: 'creator',
-        through: 'community-creator',
-      });
-      Community.belongsToMany(models.User, {
-        as: 'moderators',
-        through: 'community-moderators',
-      });
-      Community.belongsToMany(models.User, {
-        as: 'administrators',
-        through: 'community-administrators',
-      });
-      Community.belongsToMany(models.User, {
-        as: 'administratorsRequest',
-        through: 'community-administratorsRequest',
-      });
+      // Community.belongsToMany(models.User, {
+      //   as: 'members',
+      //   through: 'community-members',
+      // });
+      // Community.belongsToMany(models.User, {
+      //   as: 'creator',
+      //   through: 'community-creator',
+      // });
+      // Community.belongsToMany(models.User, {
+      //   as: 'moderators',
+      //   through: 'community-moderators',
+      // });
+      // Community.belongsToMany(models.User, {
+      //   as: 'administrators',
+      //   through: 'community-administrators',
+      // });
+      Community.hasMany(models.CommunityInvitationRequest);
+      Community.hasMany(models.CommunityUsers);
     }
   }
   Community.init(
@@ -88,17 +122,68 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: false,
         unique: true,
       },
+
+      privacyType: {
+        type: DataTypes.ENUM('public', 'hidden', 'private'),
+        allowNull: false,
+      },
       coverPicture: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        unique: true,
       },
       profilePicture: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      privacyType: {
-        type: DataTypes.STRING,
+
+      canInvite: {
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
         allowNull: true,
+      },
+
+      canInPost: {
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
+        allowNull: true,
+      },
+      canInUploadPhotos: {
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
+        allowNull: true,
+      },
+
+      canInUploadDoc: {
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
+        allowNull: true,
+      },
+
+      canInUploadVideo: {
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
+        allowNull: true,
+      },
+
+      canMessageInGroup: {
+        type: DataTypes.ENUM('A', 'M', 'E'),
+        defaultValue: 'E',
+        allowNull: true,
+      },
+      defaultInvitationEmail: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+
+      haveDiscussionForum: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
     },
 

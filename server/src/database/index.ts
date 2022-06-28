@@ -24,6 +24,9 @@ import notification from './notification';
 import BlogResponse from './blog-response';
 import refreshToken from './refresh-token';
 import emailTemplate from './emailTemplate';
+import communityRoles from './community-roles';
+import communityUsers from './community-users';
+import communityInvitationRequest from './communityInvitationRequest';
 
 const tables = [
   user,
@@ -43,6 +46,9 @@ const tables = [
   BlogResponse,
   refreshToken,
   emailTemplate,
+  communityUsers,
+  communityRoles,
+  communityInvitationRequest,
 ];
 
 export default function (app: Application): void {
