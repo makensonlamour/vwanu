@@ -67,7 +67,7 @@ describe("'community-join ' service", () => {
 
     communities = communities.map((community) => community.body);
 
-    [, publicCommunity, ] = communities;
+    [, publicCommunity] = communities;
 
     invitations = await Promise.all(
       testUsers.map((guest, idx) =>
