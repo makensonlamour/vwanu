@@ -29,6 +29,11 @@ const AddBlog = () => {
   const { data: interestList } = useGetInterestList(["interest", "all"], true);
 
   const handleSubmit = async (publish) => {
+    if (!text && !blogTitle) {
+      alert("Please enter a blog title and a blog text to continue");
+      return;
+    }
+
     let formData = new FormData();
     try {
       interest?.forEach((item) => {
