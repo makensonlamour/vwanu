@@ -23,7 +23,7 @@ let routesPath = {
   VIEW_MESSAGE: "/messages/:id",
   MY_GROUPS: "/mygroups",
   GROUPS: "/groups",
-  VIEW_GROUPS: "/groups/:id",
+  VIEW_GROUPS: "/groups/:id/*",
   ADD_GROUPS: "/groups/add",
   MY_PAGES: "/mypages",
   BLOG: "/blogs",
