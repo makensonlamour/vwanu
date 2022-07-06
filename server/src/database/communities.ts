@@ -125,6 +125,7 @@ export default (sequelize: any, DataTypes: any) => {
 
       privacyType: {
         type: DataTypes.ENUM('public', 'hidden', 'private'),
+        defaultValue: 'public',
         allowNull: false,
       },
       coverPicture: {

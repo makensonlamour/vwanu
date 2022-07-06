@@ -6,6 +6,10 @@ import * as authentication from '@feathersjs/authentication';
 import LimitToOwner from '../../Hooks/LimitToOwner';
 import { AutoOwn } from '../../Hooks';
 
+import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
+
+import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
+
 const { authenticate } = authentication.hooks;
 
 // const AuthorizedOrPublic = async (context) => {
@@ -29,7 +33,11 @@ export default {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [AutoOwn],
+    create: [
+      AutoOwn,
+      saveProfilePicture(['profilePicture', 'coverPicture']),
+      filesToBody,
+    ],
     update: [LimitToOwner],
     patch: [LimitToOwner],
     remove: [LimitToOwner],
