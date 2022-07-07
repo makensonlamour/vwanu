@@ -77,14 +77,14 @@ export default (sequelize: any, DataTypes: any) => {
     defaultInvitationEmail: string;
 
     static associate(models: any): void {
+      Community.belongsToMany(models.Interest, {
+        through: 'Community_Interest',
+      });
       // Community.belongsToMany(models.User, {
       //   as: 'members',
       //   through: 'community-members',
       // });
-      // Community.belongsToMany(models.User, {
-      //   as: 'creator',
-      //   through: 'community-creator',
-      // });
+      Community.hasOne(models.User);
       // Community.belongsToMany(models.User, {
       //   as: 'moderators',
       //   through: 'community-moderators',
