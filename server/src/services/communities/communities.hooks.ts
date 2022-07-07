@@ -4,33 +4,23 @@ import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 import LimitToOwner from '../../Hooks/LimitToOwner';
-import { AutoOwn } from '../../Hooks';
+import { AutoOwn, IncludeAssociations } from '../../Hooks';
 
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 
 import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
 
+import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
+
 const { authenticate } = authentication.hooks;
-
-// const AuthorizedOrPublic = async (context) => {
-//   const { params, app } = context;
-//   const { id } = context.params.User;
-
-//   const { CommunitiesUsers, Communities } = app.get('sequelizeClient').models;
-
-//   const communities = await CommunitiesUsers.find({
-//     where: { UserId: id },
-//   });
-
-//   const otherCommunities = await Communities.find({
-//     where: { privacyType: { [Op.or]: ['private', 'hidden'] } },
-//   });
-
-//   // search along the members table if the current user is in
-// };
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [
+      authenticate('jwt'),
+      IncludeAssociations({
+        include: [{ model: 'communities', as: 'Interests' }],
+      }),
+    ],
     find: [],
     get: [],
     create: [
@@ -39,7 +29,10 @@ export default {
       filesToBody,
     ],
     update: [LimitToOwner],
-    patch: [LimitToOwner],
+    patch: [
+      LimitToOwner,
+      saveProfilePicture(['profilePicture', 'coverPicture']),
+    ],
     remove: [LimitToOwner],
   },
 
@@ -47,7 +40,13 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      SaveAndAttachInterests({
+        entityName: 'Community',
+        relationTableName: 'Community_Interest',
+        foreignKey: 'CommunityId',
+      }),
+    ],
     update: [],
     patch: [],
     remove: [],

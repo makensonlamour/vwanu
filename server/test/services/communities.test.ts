@@ -15,7 +15,24 @@ describe("'communities ' service", () => {
   const userEndpoint = '/users';
   const endpoint = '/communities';
   const interests = ['sport', 'education'];
-
+  const CommunityBasicDetails = {
+    id: expect.any(String),
+    name: 'unique',
+    coverPicture: null,
+    profilePicture: null,
+    createdAt: expect.any(String),
+    updatedAt: expect.any(String),
+    numMembers: 0,
+    numAdmins: 0,
+    haveDiscussionForum: true,
+    canInvite: 'E',
+    canInPost: 'E',
+    canInUploadPhotos: 'E',
+    canInUploadDoc: 'E',
+    canInUploadVideo: 'E',
+    canMessageInGroup: 'E',
+    defaultInvitationEmail: null,
+  };
   beforeAll(async () => {
     await app.get('sequelizeClient').sync({ force: true, logged: false });
     testServer = request(app);
@@ -55,25 +72,10 @@ describe("'communities ' service", () => {
     commutes.forEach(({ body }, idx) => {
       if (idx === 0) {
         expect(body).toMatchObject({
-          id: expect.any(String),
-          name: 'unique',
-          coverPicture: null,
-          profilePicture: null,
+          ...CommunityBasicDetails,
           privacyType: 'public',
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
           UserId: creator.id,
-          numMembers: 0,
-          numAdmins: 0,
-          haveDiscussionForum: true,
           description: expect.any(String),
-          canInvite: 'E',
-          canInPost: 'E',
-          canInUploadPhotos: 'E',
-          canInUploadDoc: 'E',
-          canInUploadVideo: 'E',
-          canMessageInGroup: 'E',
-          defaultInvitationEmail: null,
         });
       }
       if (idx === 1) {
@@ -93,7 +95,7 @@ describe("'communities ' service", () => {
     });
   });
   it('Users can create any community ', async () => {
-    const name = 'New community';
+    const name = 'y community';
     const description = 'Unique description required';
     const privacyTypes = ['private', 'public', 'hidden'];
     communities = await Promise.all(
@@ -112,25 +114,11 @@ describe("'communities ' service", () => {
 
     communities.forEach(({ body }, idx) => {
       expect(body).toMatchObject({
-        id: expect.any(String),
+        ...CommunityBasicDetails,
         name: expect.stringContaining(name),
-        coverPicture: null,
-        profilePicture: null,
-        privacyType: privacyTypes[idx], // three different types of communities
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
+        privacyType: privacyTypes[idx],
         UserId: creator.id,
-        numMembers: 0,
-        numAdmins: 0,
-        haveDiscussionForum: true,
         description: expect.stringContaining(description),
-        canInvite: 'E',
-        canInPost: 'E',
-        canInUploadPhotos: 'E',
-        canInUploadDoc: 'E',
-        canInUploadVideo: 'E',
-        canMessageInGroup: 'E',
-        defaultInvitationEmail: null,
       });
     });
   });
@@ -145,25 +133,11 @@ describe("'communities ' service", () => {
       .set('authorization', creator.accessToken);
 
     expect(publicCommunity.body).toMatchObject({
-      id: expect.any(String),
-      name: `community`,
-      coverPicture: null,
-      profilePicture: null,
+      ...CommunityBasicDetails,
+      name: 'community',
       privacyType: 'public',
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
       UserId: creator.id,
-      numMembers: 0,
-      numAdmins: 0,
-      haveDiscussionForum: true,
       description: 'description',
-      canInvite: 'E',
-      canInPost: 'E',
-      canInUploadPhotos: 'E',
-      canInUploadDoc: 'E',
-      canInUploadVideo: 'E',
-      canMessageInGroup: 'E',
-      defaultInvitationEmail: null,
     });
   });
 
@@ -178,6 +152,7 @@ describe("'communities ' service", () => {
         description,
       })
       .set('authorization', creator.accessToken);
+
     expect(editedCommunity.body).toMatchObject({
       ...communityToChange,
       name,
