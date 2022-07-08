@@ -1,21 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
+import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { useGetAlbum } from "../albumSlice";
 import ViewPhoto from "./ViewPhoto";
 import AddPhoto from "./AddPhoto";
 import { format } from "date-fns";
+import { Field, Form, Submit } from "../../../components/form";
+import Loader from "../../../components/common/Loader";
+import toast, { Toaster } from "react-hot-toast";
+import { useUpdateAlbum } from "../albumSlice";
+
+const ValidationSchema = Yup.object().shape({
+  name: Yup.string().required().label("Album Name"),
+});
+
+const updateSuccess = () =>
+  toast.success("Profile updated successfully!", {
+    position: "top-center",
+  });
+
+const updateError = () =>
+  toast.error("Sorry. Error on updating profile!", {
+    position: "top-center",
+  });
 
 const ViewAlbum = ({ albumId, album, user }) => {
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const { data: photos } = useGetAlbum(["me", "album", "photo"], true, { albumId });
-  console.log(photos?.createdAt);
+
+  const updateName = useUpdateAlbum(["album", photos?.data?.id], undefined, undefined, photos?.data?.id);
+
+  const initialValues = {
+    name: photos?.data?.name || "",
+  };
+
+  const handleEdit = async (data) => {
+    setIsLoading(true);
+    try {
+      await updateName.mutateAsync(data);
+      updateSuccess();
+    } catch (e) {
+      console.log(e);
+      updateError();
+    } finally {
+      setIsLoading(false);
+      setIsEdit(false);
+    }
+  };
+
   return (
     <>
       <div className="">
         <div className="flex justify-center items-center">
-          <h4 className="text-xl font-semibold mr-2">{photos?.data?.name}</h4>
-          <button className="px-4 py-1 bg-primary text-white rounded-xl">edit</button>
+          {isEdit ? (
+            <div className="">
+              <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleEdit} className="w-full">
+                <h4 className="text-xl font-semibold">Edit Album {` "${photos?.data?.name}" `} name</h4>
+                <Toaster />
+                <Field
+                  autoCapitalize="none"
+                  label="Name"
+                  placeholder="Name"
+                  name="name"
+                  type="text"
+                  className=" mr-1 mt-1 mb-4 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+                />
+                <Submit className="inline rounded-2xl text-base-100 text-md w-2/5 mt-2" title={isLoading ? <Loader /> : "Save"} />{" "}
+              </Form>
+            </div>
+          ) : (
+            <>
+              <h4 className="text-xl font-semibold mr-2">{photos?.data?.name}</h4>
+              <button onClick={() => setIsEdit(true)} className="px-4 py-1 bg-primary text-white rounded-xl">
+                edit
+              </button>
+            </>
+          )}
         </div>
         <div className="flex justify-center py-3">
           <span className="text-sm">{format(new Date(album.createdAt), "MMM dd, yyyy")}</span>

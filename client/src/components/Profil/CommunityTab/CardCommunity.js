@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { AvatarGroup, Avatar } from "@mui/material";
+import { MdGroups } from "react-icons/md";
+import random_cover from "../../../assets/images/cover_group_random.png";
 
 const CardCommunity = ({ data }) => {
   return (
@@ -9,12 +11,21 @@ const CardCommunity = ({ data }) => {
       {data && (
         <div className="border border-gray-300 rounded-xl w-full">
           <div className="relative">
-            <div className="">
-              <img src={data?.coverPicture} alt={data?.name} className="w-full h-36 object-cover rounded-t-xl" />
+            <div className="bg-gray-700 rounded-t-xl">
+              {data?.coverPicture !== null ? (
+                <img src={data?.coverPicture} alt={data?.name} className="w-full h-36 object-cover rounded-t-xl" />
+              ) : (
+                <img src={random_cover} alt={data?.name} className="w-full h-36 object-cover rounded-t-xl" />
+              )}
             </div>
+
             <div className="transform translate-y-2/4 absolute w-full left-0 bottom-0 z-30 flex justify-center">
-              <div className="flex items-center justify-center mask mask-squircle w-[86px] h-[86px] bg-gray-50">
-                <img src={data?.profilePicture} className="object-cover mask mask-squircle w-[80px] h-[80px]" alt="profile_picture" />
+              <div className="flex items-center justify-center mask mask-squircle w-[86px] h-[86px] bg-gray-100">
+                {data?.profilePicture !== null ? (
+                  <img src={data?.profilePicture} className="object-cover mask mask-squircle w-[80px] h-[80px]" alt="profile_picture" />
+                ) : (
+                  <MdGroups size="60px" className="text-gray-300" />
+                )}
               </div>
             </div>
           </div>
@@ -25,9 +36,9 @@ const CardCommunity = ({ data }) => {
           </div>
           <div className="px-4 pt-2">
             <p className="text-center text-sm text-gray-500">
-              <span className="">{data?.privacy}</span>
+              <span className="">{data?.privacyType}</span>
               <span className="">{" • "}</span>
-              <span className="">{data?.type}</span>
+              <span className="">{data?.privacyType}</span>
             </p>
           </div>
           <div className="pt-8 px-4 pb-4">

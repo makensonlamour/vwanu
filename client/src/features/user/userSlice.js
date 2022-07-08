@@ -9,3 +9,5 @@ export const useGetOtherProfile = (queryKey, enabled, id) => {
   const context = useFetch(queryKey, enabled, `/users/${id}`, "");
   return { ...context, data: context?.data?.data };
 };
+
+export const useGetAllMembers = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/users`);

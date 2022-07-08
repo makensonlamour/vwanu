@@ -5,6 +5,9 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import CommunityTabs from "./CommunityTabs";
 import { allTabs1 } from "./Tablink.data";
 import UpdatesComponent from "../Newsfeed/UpdatesComponent";
+import { MdGroups } from "react-icons/md";
+import random_cover from "../../assets/images/cover_group_random.png";
+import ManageTabs from "./ManageTabs";
 
 //core components
 // import FriendRequestButton from "../../features/friend/component/FriendRequestButton";
@@ -94,19 +97,27 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
             <div className="w-[100vw] lg:w-[65vw] lg:basis-[72%]">
               <div className="border-gray-700 bg-white">
                 <div className="relative w-full lg:w-[65vw]">
-                  <div className="">
-                    <img src={dataBlog?.coverPicture} className="mx-auto max-h-64 w-full object-cover lg:h-[450px]" alt="cover_profile" />
+                  <div className="bg-gray-700 bg-repeat h-64">
+                    {communityData?.coverPicture !== null ? (
+                      <img
+                        src={communityData?.coverPicture}
+                        className="mx-auto max-h-64 w-full object-cover lg:h-[450px]"
+                        alt="cover_profile"
+                      />
+                    ) : (
+                      <img src={random_cover} className="mx-auto max-h-64 w-full object-cover lg:h-[450px]" alt="cover_profile" />
+                    )}
                   </div>
                   <div className="transform translate-y-3/4 absolute w-[20%] left-10 bottom-0 z-30 flex justify-start">
                     <div className="flex items-center justify-center mask mask-squircle w-[156px] h-[156px] bg-gray-100">
-                      {dataBlog?.profilePicture !== "null" ? (
+                      {communityData?.profilePicture !== null ? (
                         <img
-                          src={dataBlog?.profilePicture}
+                          src={communityData?.profilePicture}
                           className="object-cover mask mask-squircle w-[150px] h-[150px]"
                           alt="profile_picture"
                         />
                       ) : (
-                        <FaUserAlt size="78px" className="" />
+                        <MdGroups size="78px" className="text-gray-300" />
                       )}
                     </div>
                   </div>
@@ -125,15 +136,15 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                   <div className="absolute left-[13.5rem]">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex items-center justify-between">
-                        <h1 className="font-mock text-2xl font-semibold inline mr-2">{dataBlog?.name}</h1>
-                        <p className="mx-2 bg-secondary px-2 py-[0.15rem] rounded-lg text-white">{dataBlog?.type}</p>
-                        <p className="ml-2">{dataBlog?.privacy}</p>
+                        <h1 className="font-mock text-2xl font-semibold inline mr-2">{communityData?.name}</h1>
+                        <p className="mx-2 bg-secondary px-2 py-[0.15rem] rounded-lg text-white">{communityData?.interests}</p>
+                        <p className="ml-2">{communityData?.privacyType}</p>
                       </div>
                       <button className="px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white">
-                        {dataBlog?.userRole}
+                        {user?.id === communityData?.UserId ? "Creator" : "Member"}
                       </button>
                     </div>
-                    <p className="py-2 w-[45%] text-sm">{dataBlog?.description}</p>
+                    <p className="py-2 w-[45%] text-sm">{communityData?.description}</p>
                     <p className="py-2 flex items-center">
                       {"Organizer:"}
                       <span className="ml-4">
@@ -167,7 +178,14 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                   <Route path={allTabs1[3]} element={<div>Discussions</div>} />
                   <Route path={allTabs1[4]} element={<div>Send Invites</div>} />
                   <Route path={allTabs1[5]} element={<div>Send Messages</div>} />
-                  <Route path={allTabs1[6]} element={<div>manage</div>} />
+                  <Route
+                    path={allTabs1[6]}
+                    element={
+                      <div>
+                        <ManageTabs />
+                      </div>
+                    }
+                  />
                 </Routes>
               </div>
             </div>

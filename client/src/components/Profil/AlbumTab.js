@@ -57,7 +57,7 @@ const AlbumTab = ({ user }) => {
       console.log(data);
       await addAlbum.mutateAsync(data);
       addSuccess();
-      const initialValues = {
+      initialValues = {
         name: "",
       };
     } catch (e) {

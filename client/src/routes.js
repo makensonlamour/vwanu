@@ -16,6 +16,7 @@ import Message from "./pages/Message/Message";
 import Member from "./pages/Member/Member";
 import AddCommunity from "./pages/Community/AddCommunity";
 import ViewCommunity from "./pages/Community/ViewCommunity";
+import Community from "./pages/Community/Community";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
@@ -117,6 +118,12 @@ let routes = [
     path: routesPath.MEMBERS,
     name: "Member",
     element: Member,
+    access: role.USER,
+  },
+  {
+    path: routesPath.GROUPS,
+    name: "Community",
+    element: Community,
     access: role.USER,
   },
   {
