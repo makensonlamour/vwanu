@@ -3,53 +3,13 @@ import PropTypes from "prop-types";
 import CardCommunity from "../../../components/Profil/CommunityTab/CardCommunity";
 // import { format } from "date-fns";
 
-const CommunityList = () => {
-  const community = [
-    {
-      id: 1,
-      coverPicture: "https://picsum.photos/600/600?random=1",
-      profilePicture: "https://picsum.photos/200/300?random=2",
-      name: "Sports Players",
-      privacy: "Public",
-      type: "Club",
-      statut: "Organizer",
-    },
-    {
-      id: 2,
-      coverPicture: "https://picsum.photos/600/600?random=1",
-      profilePicture: "https://picsum.photos/200/300?random=2",
-      name: "Coffee Addicts",
-      privacy: "Private",
-      type: "Meetup",
-      statut: "Organizer",
-    },
-    {
-      id: 3,
-      coverPicture: "https://picsum.photos/600/600?random=1",
-      profilePicture: "https://picsum.photos/200/300?random=2",
-      name: "Sports Players",
-      privacy: "Private",
-      type: "Meetup",
-      statut: "Organizer",
-    },
-    {
-      id: 4,
-      coverPicture: "https://picsum.photos/600/600?random=1",
-      profilePicture: "https://picsum.photos/200/300?random=2",
-      name: "Lorem ipsum",
-      privacy: "Hidden",
-      type: "Club",
-      statut: "Organizer",
-    },
-  ];
-  console.log(community);
-
+const CommunityList = ({ communityList }) => {
   return (
     <>
       <div className="">
-        {community?.length > 0 ? (
+        {communityList?.data?.length > 0 ? (
           <div className="flex flex-wrap lg:justify-between py-2">
-            {community?.map((item) => {
+            {communityList?.data?.map((item) => {
               return (
                 <div key={item?.name} className="w-[48%] my-2">
                   <CardCommunity data={item} />
@@ -72,6 +32,7 @@ CommunityList.propTypes = {
   fn: PropTypes.func,
   setAlbum: PropTypes.func,
   setAlbumId: PropTypes.func,
+  communityList: PropTypes.array.isRequired,
 };
 
 export default CommunityList;

@@ -9,14 +9,15 @@ import FormStepSix from "../../features/community/component/FormStepSix";
 
 const AddCommunity = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [data, setData] = useState(null);
   const steps = ["Details", "Settings", "Forum", "Photo", "Cover Photo", "Invites"];
   const StepComponents = [
-    <FormStepOne key={"0_element"} setStep={setCurrentStep} currentStep={currentStep} />,
-    <FormStepTwo key={"1_element"} setStep={setCurrentStep} currentStep={currentStep} />,
-    <FormStepThree key={"2_element"} setStep={setCurrentStep} currentStep={currentStep} />,
-    <FormStepFour key={"3_element"} setStep={setCurrentStep} currentStep={currentStep} />,
-    <FormStepFive key={"4_element"} setStep={setCurrentStep} currentStep={currentStep} />,
-    <FormStepSix key={"5_element"} setStep={setCurrentStep} currentStep={currentStep} />,
+    <FormStepOne key={"0_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
+    <FormStepTwo key={"1_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
+    <FormStepThree key={"2_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
+    <FormStepFour key={"3_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
+    <FormStepFive key={"4_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
+    <FormStepSix key={"5_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
   ];
   return (
     <>

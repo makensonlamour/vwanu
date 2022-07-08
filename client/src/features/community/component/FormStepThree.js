@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import { FormGroup, Checkbox, FormControlLabel } from "@mui/material";
 import { Form } from "../../../components/form";
+import { useUpdateCommunity } from "../communitySlice";
 
 //Functions for notification after actions
 const updateSuccess = () =>
@@ -16,19 +17,21 @@ const updateError = () =>
     position: "top-center",
   });
 
-const FormStepThree = ({ setStep, currentStep }) => {
+const FormStepThree = ({ setStep, currentStep, data, setData }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const updateCommunity = useUpdateCommunity(["community", data?.id], data?.id, undefined, undefined);
   //data
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(data?.haveDiscussionForum);
 
   const handleNext = async () => {
     setIsLoading(true);
-    const data = {
-      isEnabled,
+    const dataObj = {
+      haveDiscussionForum: isEnabled,
     };
 
     try {
-      console.log(data);
+      let result = await updateCommunity.mutateAsync(dataObj);
+      setData(result?.data);
       updateSuccess();
       setStep(currentStep + 1);
       //   window.location.reload();
@@ -40,6 +43,7 @@ const FormStepThree = ({ setStep, currentStep }) => {
     }
   };
   const handlePrevious = () => {
+    setData(data);
     setStep(currentStep - 1);
   };
   return (
@@ -58,7 +62,7 @@ const FormStepThree = ({ setStep, currentStep }) => {
             <FormGroup>
               <FormControlLabel
                 onChange={(e) => setIsEnabled(e.target.checked)}
-                control={<Checkbox />}
+                control={<Checkbox defaultChecked={data?.haveDiscussionForum} />}
                 label="Yes, I want this group to have a discussion forum."
               />
             </FormGroup>
@@ -87,6 +91,8 @@ const FormStepThree = ({ setStep, currentStep }) => {
 FormStepThree.propTypes = {
   setStep: PropTypes.func.isRequired,
   currentStep: PropTypes.number,
+  setData: PropTypes.func,
+  data: PropTypes.object,
 };
 
 export default FormStepThree;

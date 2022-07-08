@@ -6,6 +6,7 @@ import Loader from "../../../components/common/Loader";
 import "react-tabs/style/react-tabs.css";
 import FormUploadCover from "../../user/Profile/component/FormUploadCover";
 import { Form } from "../../../components/form";
+import { updateGroupPicture } from "../communitySlice";
 
 //Functions for notification after actions
 const updateSuccess = () =>
@@ -19,16 +20,16 @@ const updateError = () =>
   });
 
 const uploadProfileSuccess = () =>
-  toast.success("profile picture updated successfully!", {
+  toast.success("cover picture updated successfully!", {
     position: "top-center",
   });
 
 const uploadProfileError = () =>
-  toast.error("Sorry. Error on updating profile picture!", {
+  toast.error("Sorry. Error on updating cover picture!", {
     position: "top-center",
   });
 
-const FormStepFive = ({ setStep, currentStep }) => {
+const FormStepFive = ({ setStep, currentStep, data, setData }) => {
   const user = useOutletContext();
   const [isLoading, setIsLoading] = useState(false);
   const [img, getImg] = useState([]);
@@ -37,10 +38,8 @@ const FormStepFive = ({ setStep, currentStep }) => {
 
   const handleNext = async () => {
     setIsLoading(true);
-    const data = {};
 
     try {
-      console.log(data);
       updateSuccess();
       setStep(currentStep + 1);
       //   window.location.reload();
@@ -55,21 +54,41 @@ const FormStepFive = ({ setStep, currentStep }) => {
     setStep(currentStep - 1);
   };
 
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     const formData = new FormData();
-    formData.append("profilePicture", null);
-    formData.append("UserId", user?.id);
+    formData.append("coverPicture", img[0]);
+    formData.append("id", data?.id);
     try {
-      // const res = await updateProfilePicture({ formData, id: user?.id });
-      // if (res?.data) {
-      uploadProfileSuccess();
-      window.location.reload();
-      // }
+      const res = await updateGroupPicture({ formData, id: data?.id });
+      if (res?.data) {
+        uploadProfileSuccess();
+        // let result = await updateCommunity.mutateAsync(formData);
+        setData(res?.data);
+        // window.location.reload();
+      }
     } catch (e) {
       console.log(e);
       uploadProfileError();
     }
   };
+
+  // const handleDelete = async () => {
+  //   const formData = new FormData();
+  //   formData.append("coverPicture", null);
+  //   formData.append("id", data?.id);
+  //   try {
+  //     const res = await updateGroupPicture({ formData, id: data?.id });
+  //     if (res?.data) {
+  //       uploadProfileSuccess();
+  //       setData(res?.data);
+  //       // window.location.reload();
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //     uploadProfileError();
+  //   }
+  // };
+
   return (
     <>
       <div className="py-2 lg:mx-24">
@@ -96,7 +115,7 @@ const FormStepFive = ({ setStep, currentStep }) => {
                 </div>
                 <div className="mt-2 flex flex-col justify-center">
                   <button
-                    onClick={handleSubmit}
+                    onClick={handleSave}
                     className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl w-1/4 mx-auto"
                   >
                     Save
@@ -136,6 +155,8 @@ const FormStepFive = ({ setStep, currentStep }) => {
 FormStepFive.propTypes = {
   setStep: PropTypes.func.isRequired,
   currentStep: PropTypes.number,
+  setData: PropTypes.func,
+  data: PropTypes.object,
 };
 
 export default FormStepFive;

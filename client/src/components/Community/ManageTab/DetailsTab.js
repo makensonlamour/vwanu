@@ -1,34 +1,30 @@
 import React, { useState } from "react";
-import * as Yup from "yup";
 import PropTypes from "prop-types";
+import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
-import Loader from "../../../components/common/Loader";
-import { Field, TextArea, Select, Form, Submit } from "../../../components/form";
 import { assignValue } from "../../../helpers/index";
-import { useGetInterestList } from "../../interest/interestSlice";
-import { useCreateCommunity } from "../communitySlice";
+import Loader from "../../common/Loader";
+import { useGetInterestList } from "../../../features/interest/interestSlice";
+import { Field, TextArea, Select, Form, Submit } from "../../form";
 
-//Functions for notification after actions
 const updateSuccess = () =>
-  toast.success("Community created successfully!", {
+  toast.success("Community update successfully!", {
     position: "top-center",
   });
 
 const updateError = () =>
-  toast.error("Sorry. Error on creating community!", {
+  toast.error("Sorry. Error on updating community!", {
     position: "top-center",
   });
 
-const FormStepOne = ({ setStep, currentStep, setData, data }) => {
+const DetailsTab = ({ communityData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
-  const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
   const options = assignValue(interestList?.data);
-
   const initialValues = {
-    communityName: data?.name || "",
-    interest: data?.interests || "",
-    communityDescription: data?.description || "",
+    communityName: communityData?.name || "",
+    interest: communityData?.interests || "",
+    communityDescription: communityData?.description || "",
   };
 
   const ValidationSchema = Yup.object().shape({
@@ -36,21 +32,12 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
     interest: Yup.string().required().label("Interest"),
     communityDescription: Yup.string().label("Community Description"),
   });
-  const handleSubmit = async (dataObj) => {
-    setIsLoading(true);
-    const data = {
-      name: dataObj?.communityName,
-      interests: dataObj?.interest,
-      privacyType: "public",
-      description: dataObj?.communityDescription,
-    };
 
+  const handleSubmit = async (data) => {
+    setIsLoading(true);
     try {
-      let result = await createCommunity.mutateAsync(data);
+      console.log(data);
       updateSuccess();
-      setData(result?.data);
-      setStep(currentStep + 1);
-      //   window.location.reload();
     } catch (e) {
       console.log(e);
       updateError();
@@ -58,9 +45,10 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
       setIsLoading(false);
     }
   };
+
   return (
     <>
-      <div className="py-2 lg:mx-24">
+      <div className="bg-white border border-gray-300 py-4 px-2 md:px-6 rounded-xl w-full">
         <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
           <Toaster />
           <Field
@@ -82,25 +70,19 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
             name="communityDescription"
             type="text"
             maxRows="5"
-            minRows="5"
+            minRows="3"
             style={{ width: "100%" }}
             className="p-4 mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
-          <Submit
-            className="w-full rounded-2xl text-base-100 text-md md:w-[30%]"
-            title={isLoading ? <Loader /> : "Create Community and Continue"}
-          />{" "}
+          <Submit className="w-full rounded-2xl text-base-100 text-md md:w-[30%]" title={isLoading ? <Loader /> : "Save changes"} />{" "}
         </Form>
       </div>
     </>
   );
 };
 
-FormStepOne.propTypes = {
-  setStep: PropTypes.func.isRequired,
-  setData: PropTypes.func,
-  data: PropTypes.object,
-  currentStep: PropTypes.number,
+DetailsTab.propTypes = {
+  communityData: PropTypes.object.isRequired,
 };
 
-export default FormStepOne;
+export default DetailsTab;

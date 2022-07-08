@@ -44,7 +44,7 @@ const useGenericMutation = (func, queryKey, url, params, updater) => {
 
   return useMutation(func, {
     onMutate: async (data) => {
-      await queryClient.cancelQueries(queryKey);
+      // await queryClient.cancelQueries(queryKey);
 
       const previousData = queryClient.getQueryData(queryKey);
 
@@ -53,6 +53,10 @@ const useGenericMutation = (func, queryKey, url, params, updater) => {
       });
 
       return previousData;
+    },
+
+    onSuccess: async (data) => {
+      await queryClient.setQueryData(queryKey, data);
     },
 
     onError: (err, _, context) => {
@@ -65,25 +69,37 @@ const useGenericMutation = (func, queryKey, url, params, updater) => {
 };
 
 export const useDelete = (queryKey, url, params, updater) => {
-  return useGenericMutation((data) => {
-    if (data?.id) {
-      api.delete(`${url}/${data?.id}`, data, url, params, updater);
-    } else {
-      api.delete(`${url}`, data, url, params, updater);
-    }
-  });
+  return useGenericMutation(
+    (data) => {
+      if (data?.id) {
+        return api.delete((`${url}/${data?.id}`, data), queryKey, url, params, updater);
+      } else {
+        return api.delete((`${url}`, data), queryKey, url, params, updater);
+      }
+    },
+    queryKey,
+    url,
+    params,
+    updater
+  );
 };
 
 export const usePost = (queryKey, url, params, updater) => {
-  return useGenericMutation((data) => api.post(url, data), url, params, updater);
+  return useGenericMutation((data) => api.post(url, data), queryKey, url, params, updater);
 };
 
 export const useUpdate = (queryKey, url, params, updater) => {
-  return useGenericMutation((data) => {
-    if (data?.id) {
-      api.patch(`${url}/${data?.id}`, data, url, params, updater);
-    } else {
-      api.patch(`${url}`, data, url, params, updater);
-    }
-  });
+  return useGenericMutation(
+    (data) => {
+      if (data?.id) {
+        return api.patch(`${url}/${data?.id}`, data);
+      } else {
+        return api.patch(`${url}`, data);
+      }
+    },
+    queryKey,
+    url,
+    params,
+    updater
+  );
 };

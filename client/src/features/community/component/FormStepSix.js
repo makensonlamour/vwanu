@@ -1,81 +1,59 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import Loader from "../../../components/common/Loader";
 import { TextArea, Submit, Form } from "../../../components/form";
 import Chip from "@mui/material/Chip";
+import { useGetAllMembers } from "../../user/userSlice";
 
 //Functions for notification after actions
-const updateSuccess = () =>
-  toast.success("Profile updated successfully!", {
-    position: "top-center",
-  });
 
-const updateError = () =>
-  toast.error("Sorry. Error on updating profile!", {
-    position: "top-center",
-  });
-
-const FormStepSix = ({ setStep, currentStep }) => {
+const FormStepSix = ({ setStep, currentStep, data }) => {
   const user = useOutletContext();
+  const navigate = useNavigate();
+  const { data: members } = useGetAllMembers(["members", "all"]);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(user);
-
   const handleNext = async () => {
-    setIsLoading(true);
-    const data = {};
-
-    try {
-      console.log(data);
-      updateSuccess();
-      //   setStep(currentStep + 1);
-      //   window.location.reload();
-    } catch (e) {
-      console.log(e);
-      updateError();
-    } finally {
-      setIsLoading(false);
-    }
+    navigate("../../group/" + data?.id);
   };
   const handlePrevious = () => {
     setStep(currentStep - 1);
   };
 
-  const members = [
-    {
-      id: 0,
-      profilePicture: "",
-      name: "Adele",
-    },
-    {
-      id: 1,
-      profilePicture: "",
-      name: "Alyssa",
-    },
-    {
-      id: 2,
-      profilePicture: "",
-      name: "Arianna",
-    },
-    {
-      id: 3,
-      profilePicture: "",
-      name: "Charles",
-    },
-    {
-      id: 4,
-      profilePicture: "",
-      name: "Maverick",
-    },
-    {
-      id: 5,
-      profilePicture: "",
-      name: "Neville",
-    },
-  ];
+  // const members = [
+  //   {
+  //     id: 0,
+  //     profilePicture: "",
+  //     name: "Adele",
+  //   },
+  //   {
+  //     id: 1,
+  //     profilePicture: "",
+  //     name: "Alyssa",
+  //   },
+  //   {
+  //     id: 2,
+  //     profilePicture: "",
+  //     name: "Arianna",
+  //   },
+  //   {
+  //     id: 3,
+  //     profilePicture: "",
+  //     name: "Charles",
+  //   },
+  //   {
+  //     id: 4,
+  //     profilePicture: "",
+  //     name: "Maverick",
+  //   },
+  //   {
+  //     id: 5,
+  //     profilePicture: "",
+  //     name: "Neville",
+  //   },
+  // ];
 
   const initialValues = {
     message: "",
@@ -92,7 +70,9 @@ const FormStepSix = ({ setStep, currentStep }) => {
   };
 
   const handleAdd = (data) => {
+    setIsLoading(true);
     setSelectMember((selectMember) => [...selectMember, data]);
+    setIsLoading(false);
   };
 
   const handleSubmit = (data) => {
@@ -109,7 +89,6 @@ const FormStepSix = ({ setStep, currentStep }) => {
   return (
     <>
       <div className="my-4 mx-24">
-        <Toaster />
         <div className="border border-gray-300 rounded-lg">
           <div className="grid grid-cols-2">
             <div className="border-r border-gray-300">
@@ -119,15 +98,21 @@ const FormStepSix = ({ setStep, currentStep }) => {
                 <input className="w-full outline-0 py-2 px-4 border border-gray-300 rounded-lg" placeholder="Search Members" />
               </div>
               <div className="py-4 px-6">
-                {members?.map((member) => {
+                {members?.data?.data?.map((member) => {
                   return (
-                    <div key={member?.name + "_" + member?.id} className="flex justify-between items-center mb-4">
-                      <div className="flex justify-evenly items-center">
-                        <div className="mr-4">
-                          <img src={member?.profilePicture} alt="profile_img" className="bg-gray-100 mask mask-squircle w-10 h-10" />
+                    <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
+                      {user?.id !== member?.id && (
+                        <div className="flex justify-evenly items-center">
+                          <div className="mr-4">
+                            <img
+                              src={member?.profilePicture?.original}
+                              alt="profile_img"
+                              className="bg-gray-100 mask mask-squircle w-10 h-10"
+                            />
+                          </div>
+                          <div className="">{member?.firstName + " " + member?.lastName}</div>
                         </div>
-                        <div className="">{member?.name}</div>
-                      </div>
+                      )}
                       <div className="">
                         {isIntoArray(member) ? (
                           <button onClick={handleDelete(member)}>remove</button>
@@ -150,8 +135,8 @@ const FormStepSix = ({ setStep, currentStep }) => {
                 <div className="flex flex-wrap p-4 mt-4">
                   {selectMember?.map((data) => {
                     return (
-                      <div className="mr-2 mb-2" key={data.id}>
-                        <Chip label={data.name} onDelete={handleDelete(data)} />
+                      <div className="mr-2 mb-2" key={data?.id}>
+                        <Chip label={data.firstName + " " + data?.lastName} onDelete={handleDelete(data)} />
                       </div>
                     );
                   })}
@@ -205,6 +190,8 @@ const FormStepSix = ({ setStep, currentStep }) => {
 FormStepSix.propTypes = {
   setStep: PropTypes.func.isRequired,
   currentStep: PropTypes.number,
+  setData: PropTypes.func,
+  data: PropTypes.object,
 };
 
 export default FormStepSix;

@@ -4,7 +4,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 // import _ from "lodash";
 
 import client from "../../features/feathers";
-// import { useGetOtherProfile } from "../../features/user/userSlice";
+import { useGetCommunity } from "../../features/community/communitySlice";
 
 //Core components
 // import Loader from "../../components/common/Loader";
@@ -13,11 +13,11 @@ import CommunityHeader from "../../components/Community/CommunityHeader";
 const ViewCommunity = () => {
   // const queryClient = useQueryClient();
   const { id } = useParams();
-  console.log(id);
+  const { data: community } = useGetCommunity(["community", id], id !== undefined ? true : false, id);
   const user = useOutletContext();
   const [notificationList, setNotificationList] = useState([]);
 
-  const communityData = {};
+  // const communityData = {};
 
   // if (_.isEqual(user?.id.toString(), id.toString())) {
   //   queryClient.removeQueries(["user", "otherUser"]);
@@ -48,7 +48,7 @@ const ViewCommunity = () => {
     <>
       <div className=" max-w-screen-2xl">
         <div className="lg:mx-1">
-          {<CommunityHeader user={user} communityData={communityData} otherUser={null} notificationList={notificationList} />}
+          {<CommunityHeader user={user} communityData={community?.data} otherUser={null} notificationList={notificationList} />}
         </div>
       </div>
     </>

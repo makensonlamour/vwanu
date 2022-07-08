@@ -8,6 +8,7 @@ import { MdGroup } from "react-icons/md";
 import "react-tabs/style/react-tabs.css";
 import FormUploadPhoto from "../../user/Profile/component/FormUploadPhoto";
 import { Form } from "../../../components/form";
+import { updateGroupPicture } from "../communitySlice";
 
 //Functions for notification after actions
 const updateSuccess = () =>
@@ -30,8 +31,9 @@ const uploadProfileError = () =>
     position: "top-center",
   });
 
-const FormStepFour = ({ setStep, currentStep }) => {
+const FormStepFour = ({ setStep, currentStep, data, setData }) => {
   const user = useOutletContext();
+  // const updateCommunity = updateGroupPicture(["community", data?.id], data?.id, undefined, undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [img, getImg] = useState([]);
   //data
@@ -39,10 +41,8 @@ const FormStepFour = ({ setStep, currentStep }) => {
 
   const handleNext = async () => {
     setIsLoading(true);
-    const data = {};
 
     try {
-      console.log(data);
       updateSuccess();
       setStep(currentStep + 1);
       //   window.location.reload();
@@ -57,21 +57,41 @@ const FormStepFour = ({ setStep, currentStep }) => {
     setStep(currentStep - 1);
   };
 
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     const formData = new FormData();
-    formData.append("profilePicture", null);
-    formData.append("UserId", user?.id);
+    formData.append("profilePicture", img[0]);
+    formData.append("id", data?.id);
     try {
-      // const res = await updateProfilePicture({ formData, id: user?.id });
-      // if (res?.data) {
-      uploadProfileSuccess();
-      window.location.reload();
-      // }
+      const res = await updateGroupPicture({ formData, id: data?.id });
+      if (res?.data) {
+        uploadProfileSuccess();
+        // let result = await updateCommunity.mutateAsync(formData);
+        setData(res?.data);
+        // window.location.reload();
+      }
     } catch (e) {
       console.log(e);
       uploadProfileError();
     }
   };
+
+  const handleDelete = async () => {
+    const formData = new FormData();
+    formData.append("profilePicture", null);
+    formData.append("id", data?.id);
+    try {
+      const res = await updateGroupPicture({ formData, id: data?.id });
+      if (res?.data) {
+        uploadProfileSuccess();
+        setData(res?.data);
+        // window.location.reload();
+      }
+    } catch (e) {
+      console.log(e);
+      uploadProfileError();
+    }
+  };
+
   return (
     <>
       <div className="py-2 lg:mx-24">
@@ -101,7 +121,7 @@ const FormStepFour = ({ setStep, currentStep }) => {
                 </div>
                 <div className="mt-2 flex flex-col justify-center">
                   <button
-                    onClick={handleSubmit}
+                    onClick={handleSave}
                     className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
                   >
                     Save
@@ -133,7 +153,7 @@ const FormStepFour = ({ setStep, currentStep }) => {
                   <div className="mt-8">
                     <p className="">{`If you'd like to delete your current Profile Picture, use the delete Profile Picture button`}.</p>
                     <div className="mt-6">
-                      <button onClick={handleSubmit} className="px-6 py-3 bg-red-600 text-base-100 hover:bg-secondary rounded-xl">
+                      <button onClick={handleDelete} className="px-6 py-3 bg-red-600 text-base-100 hover:bg-secondary rounded-xl">
                         Delete My Profile Picture
                       </button>
                     </div>
@@ -172,6 +192,8 @@ const FormStepFour = ({ setStep, currentStep }) => {
 FormStepFour.propTypes = {
   setStep: PropTypes.func.isRequired,
   currentStep: PropTypes.number,
+  setData: PropTypes.func,
+  data: PropTypes.object,
 };
 
 export default FormStepFour;
