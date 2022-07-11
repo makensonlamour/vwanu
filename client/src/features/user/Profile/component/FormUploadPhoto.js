@@ -17,7 +17,7 @@ const uploadProfileError = () =>
     position: "top-center",
   });
 
-const FormUploadPhoto = ({ user }) => {
+const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
   function reload() {
     window.location.reload();
   }
@@ -51,6 +51,7 @@ const FormUploadPhoto = ({ user }) => {
         const url = URL.createObjectURL(blob);
         setPreviewImg(url);
         setResult(blob);
+        getImg([blob, url]);
       }, "image/jpeg");
 
       //   console.log(canvas);
@@ -135,36 +136,51 @@ const FormUploadPhoto = ({ user }) => {
       {files?.length > 0 ? (
         <div className="flex flex-col md:flex-row">
           <div>{preview}</div>
-          <div className="block mx-auto">
-            {files?.map((file) => {
-              return (
-                <div key={file?.path} className="mt-6 md:mt-0">
-                  <div className="h-36 w-36">
-                    <img
-                      alt={user?.firstName}
-                      src={previewImg}
-                      className="h-36 w-36 mask mask-squircle object-cover"
-                      // Revoke data uri after image is loaded
-                      onLoad={() => {
-                        URL.revokeObjectURL(result);
-                      }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-            <div className="mt-2 flex flex-col justify-center">
+          {hideViewer && (
+            <div className="lg:ml-6 ">
               <button
-                onClick={handleSubmit}
-                className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
+                onClick={() => {
+                  setFiles([]);
+                  getImg([]);
+                }}
+                className="block my-2 px-8 rounded-lg py-2 bg-red-500 hover:bg-red-700 text-white"
               >
-                Save
-              </button>
-              <button onClick={() => setFiles([])} className="block my-2 hover:text-primary">
                 Cancel
               </button>
             </div>
-          </div>
+          )}
+          {hideViewer ? null : (
+            <div className="block mx-auto">
+              {files?.map((file) => {
+                return (
+                  <div key={file?.path} className="mt-6 md:mt-0">
+                    <div className="h-36 w-36">
+                      <img
+                        alt={user?.firstName}
+                        src={previewImg}
+                        className="h-36 w-36 mask mask-squircle object-cover"
+                        // Revoke data uri after image is loaded
+                        onLoad={() => {
+                          URL.revokeObjectURL(result);
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+              <div className="mt-2 flex flex-col justify-center">
+                <button
+                  onClick={handleSubmit}
+                  className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
+                >
+                  Save
+                </button>
+                <button onClick={() => setFiles([])} className="block my-2 hover:text-primary">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <>
@@ -194,6 +210,8 @@ const FormUploadPhoto = ({ user }) => {
 
 FormUploadPhoto.propTypes = {
   user: PropTypes.object,
+  hideViewer: PropTypes.bool,
+  getImg: PropTypes.func,
 };
 
 export default FormUploadPhoto;

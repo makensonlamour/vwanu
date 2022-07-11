@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { AvatarGroup, Avatar } from "@mui/material";
 
 const CardCommunity = ({ data }) => {
@@ -18,7 +19,9 @@ const CardCommunity = ({ data }) => {
             </div>
           </div>
           <div className="px-4 pt-14">
-            <p className="text-center text-xl font-semibold">{data?.name}</p>
+            <Link to={"../../groups/" + data?.id} className="flex justify-center text-center text-xl font-semibold hover:text-primary">
+              {data?.name}
+            </Link>
           </div>
           <div className="px-4 pt-2">
             <p className="text-center text-sm text-gray-500">

@@ -1,11 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CardCommunity from "../../../components/Profil/CommunityTab/CardCommunity";
-// import { useGetAlbumList } from "../albumSlice";
 // import { format } from "date-fns";
 
 const CommunityList = () => {
-  //   const { data: albums } = useGetAlbumList(["user", "albums"], true, user?.id);
   const community = [
     {
       id: 1,

@@ -17,7 +17,7 @@ const uploadCoverError = () =>
     position: "top-center",
   });
 
-const FormUploadCover = ({ user }) => {
+const FormUploadCover = ({ user, hideViewer, getImg }) => {
   function reload() {
     window.location.reload();
   }
@@ -69,6 +69,13 @@ const FormUploadCover = ({ user }) => {
     },
     onDrop: (acceptedFiles) => {
       setFiles(
+        acceptedFiles?.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+      getImg(
         acceptedFiles?.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
@@ -132,41 +139,56 @@ const FormUploadCover = ({ user }) => {
   return (
     <>
       <Toaster />
+      {hideViewer && files?.length > 0 && (
+        <div className="flex justify-center">
+          <button
+            onClick={() => {
+              setFiles([]);
+              getImg([]);
+            }}
+            className="block my-2 px-8 rounded-lg py-2 bg-red-500 hover:bg-red-700 text-white"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
       {files?.length > 0 ? (
-        <div className="flex flex-col md:flex-row">
-          <div>{preview}</div>
-          <div className="block mx-auto">
-            {files?.map((file) => {
-              return (
-                <div key={file?.path} className="mt-5 md:mt-0">
-                  <h4 className="text-center text-lg py-3 font-semibold">Preview</h4>
-                  <div className="h-36 w-72 mx-4">
-                    <img
-                      alt={user?.firstName}
-                      src={previewImg}
-                      className="h-36 w-72 object-cover"
-                      // Revoke data uri after image is loaded
-                      onLoad={() => {
-                        URL.revokeObjectURL(result);
-                      }}
-                    />
+        hideViewer ? null : (
+          <div className="flex flex-col md:flex-row">
+            <div>{preview}</div>
+            <div className="block mx-auto">
+              {files?.map((file) => {
+                return (
+                  <div key={file?.path} className="mt-5 md:mt-0">
+                    <h4 className="text-center text-lg py-3 font-semibold">Preview</h4>
+                    <div className="h-36 w-72 mx-4">
+                      <img
+                        alt={user?.firstName}
+                        src={previewImg}
+                        className="h-36 w-72 object-cover"
+                        // Revoke data uri after image is loaded
+                        onLoad={() => {
+                          URL.revokeObjectURL(result);
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-            <div className="mt-2 mx-4 flex flex-col justify-center">
-              <button
-                onClick={handleSubmit}
-                className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
-              >
-                Save
-              </button>
-              <button onClick={() => setFiles([])} className="block my-2 hover:text-primary">
-                Cancel
-              </button>
+                );
+              })}
+              <div className="mt-2 mx-4 flex flex-col justify-center">
+                <button
+                  onClick={handleSubmit}
+                  className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
+                >
+                  Save
+                </button>
+                <button onClick={() => setFiles([])} className="block my-2 hover:text-primary">
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )
       ) : (
         <div className="p-6 bg-placeholder-color rounded-2xl border-2 border-sky-500 border-dotted">
           <div {...getRootProps({ className: "dropzone" })}>
@@ -189,6 +211,8 @@ const FormUploadCover = ({ user }) => {
 
 FormUploadCover.propTypes = {
   user: PropTypes.object,
+  hideViewer: PropTypes.bool,
+  getImg: PropTypes.func,
 };
 
 export default FormUploadCover;

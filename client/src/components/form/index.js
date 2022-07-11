@@ -1,6 +1,8 @@
 export { default as Form } from "./Form";
+
 export { default as Submit } from "./Submit";
 export { default as Field } from "./Field";
+export { default as TextArea } from "./TextArea";
 export { default as Telephone } from "./Telephone";
 export { default as Checkbox } from "./Checkbox";
 export { default as Select } from "./Select";

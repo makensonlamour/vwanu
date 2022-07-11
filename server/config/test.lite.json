@@ -1,0 +1,8 @@
+{
+  "smtp": {
+    "logSuccess": true
+  },
+  "dbSettings": {
+    "url": "sqlite::memory"
+  }
+}

@@ -11,6 +11,7 @@ import client from "../../features/feathers";
 import PostList from "../../features/post/PostList";
 import { useGetTimelineList } from "../../features/post/postSlice";
 import { useGetListFollowing } from "../../features/follower/followerSlice";
+import { useGetBlogList } from "../../features/blog/blogSlice";
 import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
@@ -24,6 +25,7 @@ const NewsFeed = () => {
   const [notificationList, setNotificationList] = useState([]);
   const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
   const { data: listFollowing } = useGetListFollowing(["user", "following"], true);
+  const { data: blogList } = useGetBlogList(["blog", "all"], true);
 
   const onCreatedListener = (notification) => {
     console.log("created", notification);
@@ -192,7 +194,7 @@ const NewsFeed = () => {
       <div className="mx-auto mt-6 max-w-screen-3xl">
         <div className="flex justify-evenly">
           <div className="basis-[25%] hidden xl:block">
-            <BlogComponent data={blogs} />
+            <BlogComponent data={blogList?.data} />
             <FollowingPreview data={listFollowing?.data} />
           </div>
           <div className="basis-full lg:basis-[56%] ">

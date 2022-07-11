@@ -25,7 +25,7 @@ const SingleBlogRelated = ({ blog }) => {
           </div>
         )}
         <div className="px-8 mt-7">
-          <Link to={`./${blog?.id}`} className="text-2xl font-semibold hover:text-primary">
+          <Link to={`../../blogs/${blog?.id}`} className="text-2xl font-semibold hover:text-primary">
             {blog?.blogTitle}
           </Link>
           <p className="mt-7 line-clamp-3">{parse(blog?.blogText)}</p>
@@ -38,7 +38,7 @@ const SingleBlogRelated = ({ blog }) => {
               </div>
             </Link>
             <div className="">
-              <Link to={`./${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color rounded-lg flex items-center">
+              <Link to={`../../blogs/${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color rounded-lg flex items-center">
                 {blog?.Response?.length} <GoComment size={"18px"} className="ml-2" />
               </Link>
             </div>
