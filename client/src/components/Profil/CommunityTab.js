@@ -5,10 +5,12 @@ import { Link, useParams } from "react-router-dom";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import CommunityList from "../../features/community/component/CommunityList";
+import { useGetMyCommunityList } from "../../features/community/communitySlice";
 
 const CommunityTab = ({ user }) => {
   const { id } = useParams();
   const [value, setValue] = useState("1");
+  const { data: communityList } = useGetMyCommunityList(["community", "all"], user?.id !== null ? true : false, user?.id);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -67,7 +69,7 @@ const CommunityTab = ({ user }) => {
               </TabList>
               <TabPanel value="1">
                 <div className="mt-8 wull">
-                  <CommunityList />
+                  <CommunityList communityList={communityList} />
                 </div>
               </TabPanel>
               <TabPanel value="2">

@@ -27,7 +27,7 @@ const useAuth = () => {
 
         // dispatch the user to the whole application
         if (responseLogin?.data) {
-          dispatch({ type: Types.USER_LOGGED_IN, payload: responseLogin?.data });
+          dispatch({ type: Types.USER_LOGGED_IN, payload: responseLogin?.User });
         }
       }
 
@@ -44,6 +44,7 @@ const useAuth = () => {
       }
     }
   };
+
   const login = async ({ email, password }) => {
     setLoading(true);
     setError(null);

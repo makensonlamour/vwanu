@@ -1,9 +1,5 @@
 import React from "react";
 import * as Yup from "yup";
-// import routesPath from "../../../routesPath";
-// import { useNavigate } from "react-router-dom";
-import { useQueryClient } from "react-query";
-// import { register } from "../authSlice";
 import useAuth from "../../../hooks/useAuth";
 
 // Core components
@@ -11,7 +7,6 @@ import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import { Field, Form, Checkbox, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
-import { saveToken } from "../../../helpers/index";
 
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required().min(3).label("First Name"),
@@ -34,38 +29,24 @@ const initialValues = {
 };
 
 const FormRegister = () => {
-  const queryClient = useQueryClient();
-  // const [isLoading, setIsLoading] = useState(false);
   const { isLoading, error, signup } = useAuth();
-
-  // const navigate = useNavigate();
 
   function reloadPage() {
     window.location.reload();
   }
 
   const handleRegister = async (credentials) => {
-    // setIsLoading(true);
     try {
-      const res = await signup(credentials);
+      await signup(credentials);
       alertService.error(error, { autoClose: true });
-
-      if (res?.data?.data) {
-        saveToken(res.data.data.token);
-        reloadPage();
-        // navigate("../" + routesPath.LOGIN, { state: res.data.data.user });
-        queryClient.invalidateQueries();
-      } else {
-        alertService.error("This email is already existed. Try with a different one", { autoClose: true });
-      }
+      reloadPage();
     } catch (e) {
+      console.log("error", e);
       if (e.response.status === 400) {
         alertService.error("This email is already existed. Try with a different one", { autoClose: true });
       } else {
         alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
       }
-    } finally {
-      // setIsLoading(false);
     }
   };
 

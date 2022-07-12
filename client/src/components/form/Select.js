@@ -21,9 +21,9 @@ function FormSelect({ name, label, options, className, testId, link, ...otherPro
           {...otherProps}
         >
           {options?.map((option) => {
-            return !_.isEqual(option?.name, "Not Specified") ? (
+            return !_.isEqual(option?.label, "Not Specified") ? (
               <MenuItem key={option?.id} value={option?.value}>
-                {option?.name}
+                {option?.label}
               </MenuItem>
             ) : (
               ""
