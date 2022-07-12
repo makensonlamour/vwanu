@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+  web:
+    container_name: vwanu_web_stage
+    image: vwanu_web:staging-nginx
+    build:
+      context: ./client
+      dockerfile: Dockerfile.nginx
+    ports:
+      - '3000:80'
+    environment:
+      - REACT_APP_API_URL=${SERVER_ADDRESS}
+    restart: unless-stopped
+  api:
+    container_name: vwanu_api_stage
+    image: vwanu_api:staging-nginx-2.0.1
+    build:
+      context: ./server
+      dockerfile: Dockerfile.stage
+    ports:
+      - '4000:4000'
+    environment:
+      - PORT=4000
+      - PGDATABASE=social_media
+      - PGUSER=vwanu
+      - PGPASSWORD=123456
+      - PGHOST=pg_db
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - SMTP_SERVICE=${SMTP_SERVICE}
+      - REDIS_URL=redis://cache
+    depends_on:
+      - pg_db
+    links:
+      - redis
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    restart: unless-stopped
+    network_mode: bridge
+    expose:
+      - 6379
+  pg_db:
+    container_name: pg_db
+    image: 'postgres:12'
+    ports:
+      - '5432:5432'
+    restart: always
+
+    environment:
+      - POSTGRES_USER=vwanu
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=social_media
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - data:/var/lib/postgresql/data
+  nginx:
+    depends_on:
+      - api
+      - web
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "3050:80"
+volumes:
+  data: {}
