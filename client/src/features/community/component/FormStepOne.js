@@ -3,7 +3,9 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
-import { Field, TextArea, Select, Form, Submit } from "../../../components/form";
+import { Field, TextArea, Form, Submit } from "../../../components/form";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 import { assignValue } from "../../../helpers/index";
 import { useGetInterestList } from "../../interest/interestSlice";
 import { useCreateCommunity } from "../communitySlice";
@@ -21,13 +23,16 @@ const updateError = () =>
 
 const FormStepOne = ({ setStep, currentStep, setData, data }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [interest, setInterest] = useState([]);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
   const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
   const options = assignValue(interestList?.data);
 
+
+  const animatedComponents = makeAnimated();
+
   const initialValues = {
     communityName: data?.name || "",
-    interest: data?.interests || "",
     communityDescription: data?.description || "",
   };
 
@@ -40,7 +45,8 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
     setIsLoading(true);
     const data = {
       name: dataObj?.communityName,
-      interests: dataObj?.interest,
+
+      interests: interest,
       privacyType: "public",
       description: dataObj?.communityDescription,
     };
@@ -71,10 +77,22 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
             className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Select
+
             label="Interest"
             name="interest"
             options={options}
             className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+
+            placeholder={"Select the category..."}
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            options={options}
+            isMulti
+            name="interest"
+            onChange={(values) => {
+              setInterest(values);
+            }}
+
           />
           <TextArea
             autoCapitalize="none"
