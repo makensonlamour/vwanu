@@ -8,7 +8,7 @@ COPY ./ ./
 RUN npm i --legacy-peer-deps
 ENV REACT_APP_API_URL=143.244.157.80
 
-RUN npx run prettier --fix; 
+#RUN npx run prettier --fix; 
 RUN npm run build; 
 
 
