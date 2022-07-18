@@ -28,6 +28,7 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
   const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
   const options = assignValue(interestList?.data);
 
+
   const animatedComponents = makeAnimated();
 
   const initialValues = {
@@ -44,6 +45,7 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
     setIsLoading(true);
     const data = {
       name: dataObj?.communityName,
+
       interests: interest,
       privacyType: "public",
       description: dataObj?.communityDescription,
@@ -75,6 +77,12 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
             className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Select
+
+            label="Interest"
+            name="interest"
+            options={options}
+            className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+
             placeholder={"Select the category..."}
             closeMenuOnSelect={false}
             components={animatedComponents}
@@ -84,6 +92,7 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
             onChange={(values) => {
               setInterest(values);
             }}
+
           />
           <TextArea
             autoCapitalize="none"

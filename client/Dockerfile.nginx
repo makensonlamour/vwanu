@@ -1,0 +1,26 @@
+FROM node:alpine As build-stage
+WORKDIR /app
+COPY package.json ./
+COPY package-lock.json ./
+COPY ./ ./
+# COPY node_modules ./
+
+RUN npm i --legacy-peer-deps
+ENV REACT_APP_API_URL=143.244.157.80
+
+#RUN npx run prettier --fix; 
+RUN npm run build; 
+
+
+# step 2 form production
+FROM nginx:1.12-alpine 
+# RUN addgroup app && adduser -S -G app app
+# USER app
+# COPY --from=build-stage /app/build /usr/share/nginx/html/
+
+COPY --from=build-stage /app/build /var/www
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80 
+ENTRYPOINT [ "nginx","-g", "daemon off;" ]
+# CMD ["npm", "run", "start"]
+
