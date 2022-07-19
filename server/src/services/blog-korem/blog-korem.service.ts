@@ -4,7 +4,6 @@ import { Application } from '../../declarations';
 import { BlogKorem } from './blog-korem.class';
 import hooks from './blog-korem.hooks';
 
-
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
   interface ServiceTypes {
@@ -23,6 +22,5 @@ export default function (app: Application): void {
 
   // Get our initialized service so that we can register hooks
   const service = app.service('blogKorem');
-
   service.hooks(hooks);
 }

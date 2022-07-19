@@ -16,7 +16,7 @@ describe("'blogResponse ' service", () => {
   const endpoint = '/blogResponse';
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ alter: true, logged: false });
+    await app.get('sequelizeClient').sync({ force: true, logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(3).map((u) => {

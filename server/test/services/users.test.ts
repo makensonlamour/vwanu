@@ -3,9 +3,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
-import app from '../../app';
+import app from '../../src/app';
 
-import { getRandUsers } from '../../lib/utils/generateFakeUser';
+import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
 
 const endpoint = '/users';
 /* #region  Global variables Main */
@@ -41,15 +41,6 @@ describe('/users service', () => {
     testServer = request(app);
   }, 20000);
 
-  afterAll(async () => {
-    await Promise.all(
-      createdTestUsers.map((requester) =>
-        testServer
-          .delete(`${endpoint}/${requester?.user.id}`)
-          .set('authorization', requester.token)
-      )
-    );
-  });
   it('The user service is running', async () => {
     const service = app.service('users');
     expect(service).toBeDefined();
@@ -97,7 +88,7 @@ describe('/users service', () => {
 
   it('should return all users', async () => {
     const users = await testServer
-      .get(`${endpoint}?&language=en&$select['id']`)
+      .get(`${endpoint}`)
       .set('authorization', `Bearer ${createdTestUsers[0].token}`);
 
     createdTestUsers.forEach((createdUser) => {

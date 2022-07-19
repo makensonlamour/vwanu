@@ -2,15 +2,16 @@
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 // custom dependencies
-import app from '../../app';
-import { getRandUsers } from '../../lib/utils/generateFakeUser';
+import app from '../../src/app';
+import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
 
-const testImage = `${__dirname}/../../seed/assets/img/coverPicture.jpeg`;
+// export const createPost = (testServer) => {};
 describe('Posts services', () => {
   let testServer;
   let newUser;
   let token;
   let thePost;
+  const postMade = 1;
   const endpoint = '/posts';
   const userEndpoint = '/users';
   beforeAll(async () => {
@@ -53,7 +54,7 @@ describe('Posts services', () => {
         errors: expect.any(Array),
       });
     });
-  });
+  }, 3000);
   it('should create a new post', async () => {
     const response = await testServer
       .post(endpoint)
@@ -81,43 +82,8 @@ describe('Posts services', () => {
     expect(response.header['content-type']).toEqual(
       expect.stringContaining('application/json')
     );
-  });
+  }, 3000);
 
-  it('should create a new post with Picture', async () => {
-    const postText = 'I am a post that will have a picture';
-    const response = await testServer
-      .post(endpoint)
-      .set('authorization', token)
-      .field('postText', postText)
-      .attach('postImage', testImage);
-
-    // console.log('returned value is ');
-    // console.log(response.body);
-    expect(response.status).toEqual(StatusCodes.CREATED);
-    expect(response.body).toMatchObject({
-      id: expect.any(Number),
-      postText,
-      UserId: newUser.id,
-      Media: expect.arrayContaining([
-        expect.any(Object),
-        // expect.objectContaining({
-        //   id: expect.any(Number),
-        //   original: expect.any(String),
-        //   UserId: expect.any(Number),
-        //   updatedAt: expect.any(String),
-        //   createdAt: expect.any(String),
-        //   medium: expect.any(String),
-        //   small: expect.any(String),
-        //   tiny: expect.any(String),
-        //   large: null,
-        // }),
-      ]),
-      updatedAt: expect.any(String),
-      createdAt: expect.any(String),
-      // PostId: null,
-    });
-    // console.log(response.body);
-  });
   it('should retrieve a post by its id', async () => {
     const samePostResponse = await testServer
       .get(`${endpoint}/${thePost.id}`)
@@ -131,7 +97,7 @@ describe('Posts services', () => {
     expect(samePost.Comments).toBeDefined();
     expect(Array.isArray(samePost.Comments)).toBeTruthy();
     expect(samePostResponse.statusCode).toBe(StatusCodes.OK);
-  });
+  }, 3000);
 
   it('should retrieve all post by userId', async () => {
     // const page = 0;
@@ -142,10 +108,10 @@ describe('Posts services', () => {
 
     console.log('All post made');
     console.log(allPostResponse.body);
-    // const allPost = allPostResponse.body;
-    // expect(allPostResponse.status).toBe(StatusCodes.OK);
-    // expect(Array.isArray(allPost)).toBeTruthy();
-    // // expect(allPost.length).toBeLessThanOrEqual(size);
+    const allPost = allPostResponse.body;
+    expect(allPostResponse.status).toBe(StatusCodes.OK);
+
+    expect(allPost.length).toBeLessThanOrEqual(postMade);
     // // expect(allPost.every((post) => post.User.id === newUser.id)).toBeTruthy();
   });
   it('should create comment for a post', async () => {
@@ -159,7 +125,7 @@ describe('Posts services', () => {
       });
 
     expect(commentResponse.statusCode);
-  });
+  }, 3000);
 
   it('should have at least one comment', async () => {
     const samePostResponse = await testServer
@@ -180,7 +146,7 @@ describe('Posts services', () => {
     expect(firstComment.User).toBeDefined();
     expect(firstComment.User.id === newUser.id).toBeTruthy();
     expect(firstComment.User.profilePicture).toBeDefined();
-  });
+  }, 3000);
 
   it('should edit a post', async () => {
     const editedPostResponse = await testServer
@@ -194,7 +160,7 @@ describe('Posts services', () => {
     expect(editedLPost.id).toEqual(thePost.id);
     expect(editedLPost.postText).toEqual('I am a new string do yo like me');
     expect(editedLPost.UserId).toEqual(thePost.UserId);
-  });
+  }, 3000);
   it('should delete a post with all its comment', async () => {
     const deletedPostResponse = await testServer
       .delete(`${endpoint}/${thePost.id}`)
@@ -208,5 +174,5 @@ describe('Posts services', () => {
       .set('authorization', token);
 
     expect(retrievePostResponse.statusCode).toBe(StatusCodes.NOT_FOUND);
-  }, 2000);
+  }, 3000);
 });

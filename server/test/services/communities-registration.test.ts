@@ -91,7 +91,7 @@ describe("'communities ' service", () => {
     expect(service).toBeTruthy();
   });
 
-  it('Users with invitation can respond and become members', async () => {
+  it.skip('Users with invitation can respond and become members', async () => {
     const resp = await Promise.all(
       testUsers.map((user, idx) =>
         testServer
@@ -125,7 +125,7 @@ describe("'communities ' service", () => {
       });
     });
   });
-  it('Users with invitation can choose not to become members', async () => {
+  it.skip('Users with invitation can choose not to become members', async () => {
     let guest: any = getRandUser();
     delete guest.id;
     guest = await testServer.post(userEndpoint).send(guest);
@@ -148,6 +148,7 @@ describe("'communities ' service", () => {
       })
       .set('authorization', guest.accessToken);
 
+      console.log(response.body);
     expect(response.body).toMatchObject({
       message: expect.any(String),
       newMember: null,
