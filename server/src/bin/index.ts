@@ -1,6 +1,7 @@
 import app from '../app';
 import Logger from '../lib/utils/logger';
 
+// Testing development 
 function normalizePort(val: string): number | string | null {
   const port = parseInt(val, 10);
   // eslint-disable-next-line no-restricted-globals
