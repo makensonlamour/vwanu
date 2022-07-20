@@ -21,8 +21,7 @@ class PuppeteerEnvironment extends NodeEnvironment {
       throw new Error('wsEndpoint not found');
     }
 
-    // await app.get('sequelizeClient').sync({ alter: true });
-    // const testServer = request(app);
+
 
     // connect to puppeteer
     this.global.__BROWSER_GLOBAL__ = JSON.parse(wsEndpoint);

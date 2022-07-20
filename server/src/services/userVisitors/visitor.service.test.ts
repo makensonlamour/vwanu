@@ -15,9 +15,8 @@ describe('User visitors service', () => {
   let testServer;
   beforeAll(async () => {
     await app.get('sequelizeClient').sync({ force: true, logged: false });
-    // await app.get('sequelizeClient').sync({ alter: true });
+   
     testServer = request(app);
-
     // Creating test users
     createdTestUsers = await Promise.all(
       getRandUsers(4).map((user) => {
