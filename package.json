@@ -4,7 +4,7 @@
     "test:server:local": "npm run test:local --prefix server",
     "test:server": "npm run test --prefix server",
     "test:local": "concurrently \"npm run test:server\" \"npm run test:client\"",
-    "test": "concurrently \"npm run test:server\" \"npm run test:client\"",
+    "test": "npm run test:server",
     "lint:server": "npm run lint --prefix server",
     "lint:client": "npm run lint --prefix client",
     "lint:check:": "lint:check:client && lint:check:server",

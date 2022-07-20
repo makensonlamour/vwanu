@@ -2,7 +2,6 @@
 import request from 'supertest';
 
 /** Local dependencies */
-
 import app from '../../src/app';
 import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
 
@@ -15,7 +14,9 @@ describe("'BlogKorem' service", () => {
   const blogKoremEndpoint = '/blogKorem';
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ alter: true, logged: false });
+    const sequelize = app.get('sequelizeClient');
+    sequelize.options.logging = false;
+    await sequelize.sync({ force: true, logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u) => {
