@@ -1,0 +1,13 @@
+{
+  "smtp": {
+    "logSuccess": true
+  },
+  "dbSettings": {
+    "username": "vwanu",
+    "password": 123456,
+    "host": "localhost",
+    "port": 5432,
+    "database": "social_media",
+    "dialect": "postgres"
+  }
+}
