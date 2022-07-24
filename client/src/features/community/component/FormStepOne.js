@@ -1,11 +1,12 @@
+/*eslint-disable */
 import React, { useState } from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
-import { Field, TextArea, Form, Submit } from "../../../components/form";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import { Field, TextArea, Select, Form, Submit } from "../../../components/form";
+// import Select from "react-select";
+// import makeAnimated from "react-select/animated";
 import { assignValue } from "../../../helpers/index";
 import { useGetInterestList } from "../../interest/interestSlice";
 import { useCreateCommunity } from "../communitySlice";
@@ -21,42 +22,44 @@ const updateError = () =>
     position: "top-center",
   });
 
-const FormStepOne = ({ setStep, currentStep, setData, data }) => {
+const FormStepOne = ({ setStep, currentStep, setData }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [interest, setInterest] = useState([]);
+  // const [interest, setInterest] = useState([]);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
   const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
   const options = assignValue(interestList?.data);
 
-
-  const animatedComponents = makeAnimated();
+  // const animatedComponents = makeAnimated();
 
   const initialValues = {
-    communityName: data?.name || "",
-    communityDescription: data?.description || "",
+    communityName: "",
+    interest: "",
+    communityDescription: "",
   };
 
   const ValidationSchema = Yup.object().shape({
     communityName: Yup.string().required().label("Community Name"),
-    interest: Yup.string().required().label("Interest"),
+    interest: Yup.string().label("Interest"),
     communityDescription: Yup.string().label("Community Description"),
   });
+
   const handleSubmit = async (dataObj) => {
+    console.log("submit");
+
     setIsLoading(true);
     const data = {
       name: dataObj?.communityName,
-
       interests: interest,
       privacyType: "public",
       description: dataObj?.communityDescription,
     };
-
+    console.log(data);
     try {
       let result = await createCommunity.mutateAsync(data);
       updateSuccess();
       setData(result?.data);
       setStep(currentStep + 1);
-      //   window.location.reload();
+      // window.location.reload();
     } catch (e) {
       console.log(e);
       updateError();
@@ -64,6 +67,7 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
       setIsLoading(false);
     }
   };
+
   return (
     <>
       <div className="py-2 lg:mx-24">
@@ -74,25 +78,14 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
             label="Community Name (required)"
             name="communityName"
             type="text"
-            className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="w-full mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Select
-
             label="Interest"
-            name="interest"
-            options={options}
-            className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-
+            className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
             placeholder={"Select the category..."}
-            closeMenuOnSelect={false}
-            components={animatedComponents}
             options={options}
-            isMulti
             name="interest"
-            onChange={(values) => {
-              setInterest(values);
-            }}
-
           />
           <TextArea
             autoCapitalize="none"
@@ -100,14 +93,14 @@ const FormStepOne = ({ setStep, currentStep, setData, data }) => {
             name="communityDescription"
             type="text"
             maxRows="5"
-            minRows="5"
+            minRows="3"
             style={{ width: "100%" }}
             className="p-4 mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Submit
-            className="w-full rounded-2xl text-base-100 text-md md:w-[30%]"
+            className="mt-4 w-full rounded-2xl text-base-100 text-md md:w-[30%]"
             title={isLoading ? <Loader /> : "Create Community and Continue"}
-          />{" "}
+          />
         </Form>
       </div>
     </>

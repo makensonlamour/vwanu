@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { AvatarGroup, Avatar } from "@mui/material";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../../assets/images/cover_group_random.png";
+import { useJoinCommunity } from "../../../features/community/communitySlice";
 
 const CardCommunity = ({ data }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
+
+  const handleJoin = async () => {
+    setIsLoading(true);
+    const dataObj = {
+      communityId: data?.id,
+    };
+
+    try {
+      let result = await joinCommunity.mutateAsync(dataObj);
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       {data && (
@@ -54,7 +74,14 @@ const CardCommunity = ({ data }) => {
                 <Avatar sx={{ width: 24, height: 24 }} alt="Travis Howard" src="https://randomuser.me/api/portraits/men/54.jpg" />
                 <Avatar sx={{ width: 24, height: 24 }} alt="Agnes Walker" src="https://randomuser.me/api/portraits/men/55.jpg" />
               </AvatarGroup>
-              <button className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white">{data?.statut}</button>
+              <button
+                onClick={() => {
+                  handleJoin();
+                }}
+                className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white"
+              >
+                {isLoading ? "Loading..." : "Join"}
+              </button>
             </div>
           </div>
         </div>
