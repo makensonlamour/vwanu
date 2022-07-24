@@ -94,9 +94,9 @@ const FormStepTwo = () => {
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="gender-error-message"
           options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "male", value: "m" },
-            { id: 2, name: "female", value: "f" },
+            { id: 0, label: "Not Specified", value: "" },
+            { id: 1, label: "male", value: "m" },
+            { id: 2, label: "female", value: "f" },
           ]}
         />
         <Select
@@ -107,9 +107,9 @@ const FormStepTwo = () => {
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="interestBy-error-message"
           options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "male", value: "m" },
-            { id: 2, name: "female", value: "f" },
+            { id: 0, label: "Not Specified", value: "" },
+            { id: 1, label: "male", value: "m" },
+            { id: 2, label: "female", value: "f" },
           ]}
         />
         <Select
@@ -120,9 +120,9 @@ const FormStepTwo = () => {
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="country-error-message"
           options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "United States Of America", value: "usa" },
-            { id: 2, name: "Dominican Republic", value: "do" },
+            { id: 0, label: "Not Specified", value: "" },
+            { id: 1, label: "United States Of America", value: "usa" },
+            { id: 2, label: "Dominican Republic", value: "do" },
           ]}
         />
         <Submit className="rounded-2xl text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />{" "}

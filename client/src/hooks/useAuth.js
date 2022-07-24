@@ -18,6 +18,7 @@ const useAuth = () => {
       const res = await register({ firstName, lastName, email, password, passwordConfirmation, termOfUse });
 
       //if success try login the user
+      console.log(res);
       if (res?.data) {
         const responseLogin = await client.authenticate({
           strategy: "local",
@@ -42,6 +43,8 @@ const useAuth = () => {
         setError(error.message);
         setLoading(false);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,10 +67,13 @@ const useAuth = () => {
         setError(null);
       }
     } catch (error) {
+      console.log(error);
       if (!isCancelled) {
         setLoading(false);
         setError(error.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 

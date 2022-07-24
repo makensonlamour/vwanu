@@ -13,3 +13,11 @@ export const useUpdateCommunity = (queryKey, communityId, oldData, newData) =>
   useUpdate(queryKey, `/communities/${communityId}`, (oldData, newData));
 
 export const updateGroupPicture = (data) => api.patch(`/communities/${data?.id}`, data.formData);
+
+export const useSendInvitation = (queryKey, oldData, newData) => usePost(queryKey, `/community-invitation-request`, (oldData, newData));
+
+export const useSendMessage = (queryKey, oldData, newData) => usePost(queryKey, `/community-message-request`, (oldData, newData));
+
+export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(queryKey, `/community-invitation-request`, (oldData, newData));
+
+export const useJoinCommunity = (queryKey, oldData, newData) => usePost(queryKey, `/community-join`, (oldData, newData));

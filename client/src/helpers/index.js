@@ -87,7 +87,7 @@ export function assignValue(obj) {
   const array = [];
 
   obj?.map((item) => {
-    return array?.push({ id: item?.id, value: item?.id, label: item?.name });
+    return array?.push({ id: item?.id, value: item?.id, label: item?.name, name: item?.name });
   });
 
   return array;

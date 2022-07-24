@@ -8,6 +8,9 @@ import UpdatesComponent from "../Newsfeed/UpdatesComponent";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../assets/images/cover_group_random.png";
 import ManageTabs from "./ManageTabs";
+import PostTab from "./CommunityTab/PostTab";
+import MembersTab from "./MembersTab";
+import SendInviteTabs from "./SendInviteTabs";
 
 //core components
 // import FriendRequestButton from "../../features/friend/component/FriendRequestButton";
@@ -172,17 +175,40 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
               <CommunityTabs user={user} otherUser={otherUser} />
               <div className="mt-8 px-2">
                 <Routes>
-                  <Route path={allTabs1[0]} element={<div>Feed</div>} />
-                  <Route path={allTabs1[1]} element={<div>Members</div>} />
+                  <Route
+                    path={allTabs1[0]}
+                    element={
+                      <div>
+                        <PostTab />
+                      </div>
+                    }
+                  />
+                  <Route
+                    path={allTabs1[1]}
+                    element={
+                      <div>
+                        <MembersTab />
+                      </div>
+                    }
+                  />
                   <Route path={allTabs1[2]} element={<div>Albums</div>} />
                   <Route path={allTabs1[3]} element={<div>Discussions</div>} />
-                  <Route path={allTabs1[4]} element={<div>Send Invites</div>} />
+                  <Route
+                    path={allTabs1[4]}
+                    element={
+                      <div>
+                        <SendInviteTabs />
+                      </div>
+                    }
+                  />
                   <Route path={allTabs1[5]} element={<div>Send Messages</div>} />
                   <Route
                     path={allTabs1[6]}
                     element={
                       <div>
-                        <ManageTabs />
+                        <div>
+                          <ManageTabs />
+                        </div>
                       </div>
                     }
                   />
