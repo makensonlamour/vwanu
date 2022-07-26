@@ -52,6 +52,12 @@ import registration from './communityRegistration/communityRegistration.service'
 
 import communityJoin from './community-join/community-join.service';
 
+import conversation from './conversation/conversation.service';
+
+import message from './message/message.service';
+
+import convesationUsers from './convesation-users/convesation-users.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -86,4 +92,7 @@ export default function (app: Application): void {
   app.configure(communityInvitationRequest);
   app.configure(registration);
   app.configure(communityJoin);
+  app.configure(conversation);
+  app.configure(message);
+  app.configure(convesationUsers);
 }

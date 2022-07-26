@@ -14,12 +14,14 @@ import album from './album';
 import Media from './media';
 import Korem from './korem';
 import friend from './Friends';
+import message from './message';
 import service from './service';
 import Visitors from './Visitors';
 import interest from './interest';
 import reaction from './reaction';
 import community from './communities';
 import discussion from './discussion';
+import conversation from './conversation';
 import notification from './notification';
 import BlogResponse from './blog-response';
 import refreshToken from './refresh-token';
@@ -36,12 +38,14 @@ const tables = [
   Korem,
   Media,
   friend,
+  message,
   service,
   interest,
   Visitors,
   reaction,
   community,
   discussion,
+  conversation,
   notification,
   BlogResponse,
   refreshToken,

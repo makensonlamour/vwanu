@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-
 import request from 'supertest';
 
 /** Local dependencies */
@@ -172,7 +171,6 @@ describe("'communityInvitationRequest' service", () => {
       .get(`${endpoint}/?hostId=${creator.id}`)
       .set('authorization', creator.accessToken);
     invitationsISent.body.forEach((invitation) => {
-      console.log(invitation);
       expect(invitation).toMatchObject({
         ...InvitationObJect,
 
@@ -223,12 +221,12 @@ describe("'communityInvitationRequest' service", () => {
       (inv) => inv.body.CommunityRoleId === memberRole.id
     );
     memberInvitation = memberInvitation?.body;
-    const newInviatation = await testServer
+    const newInvitation = await testServer
       .patch(`${endpoint}/${memberInvitation.id}`)
       .send({ CommunityRoleId: moderator.id })
       .set('authorization', creator.accessToken);
 
-    expect(newInviatation.body).toMatchObject({
+    expect(newInvitation.body).toMatchObject({
       ...InvitationObJect,
       ...{
         CommunityRole: {
