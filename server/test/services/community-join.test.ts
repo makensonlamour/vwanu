@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-
 import request from 'supertest';
 /** Local dependencies */
 import app from '../../src/app';
@@ -20,9 +19,9 @@ describe("'community-join ' service", () => {
   const invitationEndpoint = '/community-invitation-request';
   const endpoint = '/community-join';
 
-  // let privateCommunity;
+  let privateCommunity;
   let publicCommunity;
-  // let hiddenCommunity;
+  let hiddenCommunity;
 
   beforeAll(async () => {
     await app.get('sequelizeClient').sync({ force: true, logged: false });
@@ -67,7 +66,7 @@ describe("'community-join ' service", () => {
 
     communities = communities.map((community) => community.body);
 
-    [, publicCommunity, ] = communities;
+    [privateCommunity, publicCommunity, hiddenCommunity] = communities;
 
     invitations = await Promise.all(
       testUsers.map((guest, idx) =>
@@ -91,58 +90,65 @@ describe("'community-join ' service", () => {
 
   beforeAll(async () => {}, 1000);
 
-  it.skip('Public communities are auto-join', async () => {
+  it('Public communities are auto-join', async () => {
     const user = testUsers[0];
 
     const join = await testServer
       .post(endpoint)
       .send({
-        communityId: publicCommunity.id,
+        CommunityId: publicCommunity.id,
       })
       .set('authorization', user.accessToken);
 
     expect(join.body).toMatchObject({
-      msg: expect.any(String),
-      newMenber: {
-        id: expect.any(String),
-        canPost: expect.any(Boolean),
-        canUploadDoc: expect.any(Boolean),
-        canUploadVideo: expect.any(Boolean),
-        canUploadPhoto: expect.any(Boolean),
-        banned: expect.any(Boolean),
-        CommunityId: expect.any(String),
-        UserId: user.id,
-        CommunityRoleId: expect.any(String),
-        canInvite: expect.any(Boolean),
-        canMessageInGroup: expect.any(Boolean),
-        updatedAt: expect.any(String),
-        createdAt: expect.any(String),
-        bannedDate: null,
-      },
+      id: expect.any(String),
+      CommunityId: expect.any(String),
+      guestId: 3,
+      response: true,
+      responseDate: expect.any(String),
+      CommunityRoleId: expect.any(String),
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String),
+      email: null,
+      hostId: null,
     });
   });
-  it.skip('Hidden does not accept join request', async () => {
+  it('Hidden does not accept join request', async () => {
     const user = testUsers[0];
 
     const join = await testServer
       .post(endpoint)
       .send({
-        communityId: publicCommunity.id,
+        CommunityId: hiddenCommunity.id,
       })
       .set('authorization', user.accessToken);
 
-    expect(join.statusCode).toEqual(401);
+    expect(join.body).toMatchObject({
+      name: 'BadRequest',
+      message: 'Only public community can be joined',
+      code: 400,
+      className: 'bad-request',
+      errors: {},
+    });
+    expect(join.statusCode).toEqual(400);
   });
-  it.skip('Private communities are accepted-only', async () => {
+  it('Private communities are accepted-only', async () => {
     const user = testUsers[0];
 
     const join = await testServer
       .post(endpoint)
       .send({
-        communityId: publicCommunity.id,
+        CommunityId: privateCommunity.id,
       })
       .set('authorization', user.accessToken);
 
-    expect(join.statusCode).toEqual(401);
+    expect(join.body).toMatchObject({
+      name: 'BadRequest',
+      message: 'Only public community can be joined',
+      code: 400,
+      className: 'bad-request',
+      errors: {},
+    });
+    expect(join.statusCode).toEqual(400);
   });
 });
