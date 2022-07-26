@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 // import { IMAGE_PROXY, THEMES } from "../../shared/constants";
 
-import Spin from "react-cssfx-loading/src/Spin";
+// import Spin from "react-cssfx-loading/src/Spin";
 // import { useNavigate } from "react-router-dom";
 
 const CreateConversation = ({ setIsOpened }) => {
@@ -34,7 +34,7 @@ const CreateConversation = ({ setIsOpened }) => {
       onClick={() => setIsOpened(false)}
       className="fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]"
     >
-      <div onClick={(e) => e.stopPropagation()} className="bg-dark mx-3 w-full max-w-[500px] overflow-hidden rounded-lg">
+      <div onClick={(e) => e.stopPropagation()} className="bg-white mx-3 w-full max-w-[500px] overflow-hidden rounded-lg">
         <div className="border-dark-lighten flex items-center justify-between border-b py-3 px-3">
           <div className="flex-1"></div>
           <div className="flex flex-1 items-center justify-center">
@@ -47,9 +47,7 @@ const CreateConversation = ({ setIsOpened }) => {
           </div>
         </div>
         {loading ? (
-          <div className="flex h-96 items-center justify-center">
-            <Spin color="#0D90F3" />
-          </div>
+          <div className="flex h-96 items-center justify-center">Loading...</div>
         ) : error ? (
           <div className="flex h-96 items-center justify-center">
             <p className="text-center">Something went wrong</p>
