@@ -15,29 +15,31 @@ describe("'blogs ' service", () => {
   const userEndpoint = '/users';
   const endpoint = '/blogs';
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ alter: true, logged: false });
+    const sequelize = app.get('sequelizeClient');
+    sequelize.options.logging = false;
+    await sequelize.sync({ force: true, logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u) => {
         const user = u;
         delete user.id;
         return testServer.post(userEndpoint).send(user);
-      }, 10000)
+      })
     );
-  }, 100000);
+  }, 200000);
   it('registered the service', () => {
     const service = app.service('blogs');
     expect(service).toBeTruthy();
   });
-
   it('should be able to create new blogs', async () => {
     const newBlog = {
-      blogTitle: 'Title ew',
+      blogTitle: 'Title ewr',
       blogText: '<strong>Body text</strong><img src=x/>',
       interests: ['some', 'category'],
       publish: 'false',
     };
-    const fstBlogs: any = await Promise.all(
+
+    const fstBlogs = await Promise.all(
       testUsers.map(({ body }) =>
         testServer
           .post(endpoint)
@@ -228,7 +230,6 @@ describe("'blogs ' service", () => {
 
     expect(MyBlogs.body.some((blog) => blog.publish === false)).toBeTruthy();
   });
-
   it('only owner can review non-publish blog', async () => {
     const user0 = testUsers[0].body; // not the creator
     let mixedBlogs: any = await Promise.all(
