@@ -14,8 +14,6 @@ const associateModels = (include, context) => {
 
   (Array.isArray(include) ? include : [include]).forEach((assoc: any) => {
     const { as: associate, model, include: subInclude, ...rest } = assoc;
-    if (associate === 'Reaction')
-      console.log(context.app.service(model).Model.associations);
 
     if (associate in context.app.service(model).Model.associations) {
       const association: Assoc = {
@@ -28,7 +26,8 @@ const associateModels = (include, context) => {
         association.include = associateModels(subInclude, context);
 
       associations.push(association);
-    } else
+    } else {
+      // console.log('association', context.app.service(model).Model.associations);
       throw new Error(
         `Requested association '${assoc.as}' of model ${
           context.app.service(model).Model.name
@@ -36,6 +35,7 @@ const associateModels = (include, context) => {
           context.app.service(model).Model.associations
         }`
       );
+    }
   });
   return associations;
 };

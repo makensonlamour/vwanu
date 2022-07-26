@@ -125,8 +125,9 @@ describe("'communities ' service", () => {
       });
     });
   });
-  it('Users with invitation can choose not to become members', async () => {
-    let guest: any = getRandUser();
+  it.skip('Users with invitation can choose not to become members', async () => {
+    let guest: any = getRandUser(
+    );
     delete guest.id;
     guest = await testServer.post(userEndpoint).send(guest);
 
