@@ -35,6 +35,7 @@ export default (sequelize: any, DataTypes: any) => {
 
     static associate(models: any): void {
       Post.belongsTo(models.User);
+      Post.belongsTo(models.Community, { onDelete: 'CASCADE' });
       Post.belongsToMany(models.Media, {
         through: 'Post_Media',
       });
