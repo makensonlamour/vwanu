@@ -119,11 +119,11 @@ describe("'communityInvitationRequest' service", () => {
     invites = sendInvitation(testServer, endpoint);
   }, 100000);
 
-  it.skip('registered the service', () => {
+  it('registered the service', () => {
     const service = app.service('community-invitation-request');
     expect(service).toBeTruthy();
   });
-  it.skip('Creator can send invitation for any role', async () => {
+  it('Creator can send invitation for any role', async () => {
     invitations = await Promise.all(
       testUsers.map((guest, idx) =>
         invites({
@@ -135,12 +135,12 @@ describe("'communityInvitationRequest' service", () => {
       )
     );
 
-    const { CommunityInvitationRequest } = app.get('sequelizeClient').models;
-    // Invitation response
-    const amount = invitations.map(async (invitation: any, idx) => {
-      // expect(invitation.statusCode).toEqual(201);
+    invitations = invitations.map((invitation) => invitation.body);
 
-      expect(invitation.body).toMatchObject({
+    // const { CommunityInvitationRequest } = app.get('sequelizeClient').models;
+    // Invitation response
+    invitations.forEach((invitation, idx) => {
+      expect(invitation).toMatchObject({
         id: expect.any(String),
         guestId: testUsers[idx].id,
         CommunityRoleId: roles[idx].id,
@@ -150,23 +150,26 @@ describe("'communityInvitationRequest' service", () => {
         CommunityId: communities[idx].id,
         email: null,
       });
-
-      const guesses = await CommunityInvitationRequest.findOne({
-        where: {
-          hostId: creator.id,
-          guestId: testUsers[idx].id,
-          CommunityRoleId: roles[idx].id,
-        },
-      });
-
-      expect(guesses).toBeTruthy();
-
-      return 1;
     });
 
-    expect(amount.length);
+    // Invitation response
+
+    // const guesses = await CommunityInvitationRequest.findOne({
+    //   where: {
+    //     hostId: creator.id,
+    //     guestId: testUsers[idx].id,
+    //     CommunityRoleId: roles[idx].id,
+    //   },
+    // });
+
+    // expect(guesses).toBeTruthy();
+
+    // return 1;
+    // });
+
+    // expect(amount.length);
   });
-  it.skip('Authorized can see all invitation they sent', async () => {
+  it('Authorized can see all invitation they sent', async () => {
     const invitationsISent = await testServer
       .get(`${endpoint}/?hostId=${creator.id}`)
       .set('authorization', creator.accessToken);
@@ -187,7 +190,7 @@ describe("'communityInvitationRequest' service", () => {
     });
   });
   it.todo('should not see invitations sent to others unless admin');
-  it.skip('Guest can see all invitation they have received', async () => {
+  it('Guest can see all invitation they have received', async () => {
     let receivedInvitationForAll: any = await Promise.all(
       testUsers.map((user) =>
         testServer
