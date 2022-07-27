@@ -13,7 +13,7 @@ const attributes = [
   'profilePicture',
   'createdAt',
 ];
-const IncludeGuests = AddAssociations({
+export const IncludeGuests = AddAssociations({
   models: [
     {
       model: 'users',

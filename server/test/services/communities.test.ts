@@ -169,5 +169,131 @@ describe("'communities ' service", () => {
     expect(true).toBeTruthy();
   });
 
-  it.todo('Only the community creator can delete the community');
+  it('should create and list post in community', async () => {
+    const name = 'Public Community name';
+    const description = 'Public Community description';
+    // create a community
+    const community = await testServer
+      .post(endpoint)
+      .send({
+        name,
+        interests,
+        description,
+      })
+      .set('authorization', creator.accessToken);
+    expect(community.statusCode).toEqual(201);
+
+    // create a post with the community id
+    const post = await testServer
+      .post('/posts')
+      .send({
+        postText: 'I am a post in a community',
+        CommunityId: community.body.id,
+      })
+      .set('authorization', creator.accessToken);
+    expect(post.statusCode).toEqual(201);
+    expect(post.body).toMatchObject({
+      privacyType: 'public',
+      id: expect.any(Number),
+      postText: 'I am a post in a community',
+      CommunityId: community.body.id,
+      UserId: creator.id,
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String),
+      PostId: null,
+    });
+
+    // list all the post form the community
+
+    const posts = await testServer
+      .get(`/posts?CommunityId=${community.body.id}`)
+      .set('authorization', creator.accessToken);
+    expect(Array.isArray(posts.body)).toBeTruthy();
+    expect(posts.body.length).toEqual(1);
+    expect(posts.body[0]).toMatchObject({
+      ...post.body,
+    });
+
+    expect(posts.statusCode).toEqual(200);
+  });
+
+  it.todo('should like a community');
+  it.todo('list a community Like(s)');
+  it('should create and list forum/discussion in community', async () => {
+    const name = 'Public Community with discussion';
+    const description = 'Public Community with discussion';
+    // create a community
+
+    const community = await testServer
+      .post(endpoint)
+      .send({
+        name,
+        interests,
+        description,
+      })
+      .set('authorization', creator.accessToken);
+
+    expect(community.statusCode).toEqual(201);
+    // create a discussion in that community
+    const discussionObject = {
+      body: 'This is a discussion body',
+      title: 'This is a discussion title',
+      CommunityId: community.body.id,
+    };
+    const discussion = await testServer
+      .post('/discussion')
+      .send(discussionObject)
+      .set('authorization', creator.accessToken);
+    expect(discussion.statusCode).toEqual(201);
+    expect(discussion.body).toMatchObject({
+      ...discussionObject,
+      id: expect.any(String),
+      CommunityId: community.body.id,
+    });
+    // list discussions in that community
+    const discussionList = await testServer
+      .get(`/discussion?CommunityId=${community.body.id}`)
+      .set('authorization', creator.accessToken);
+
+    expect(discussionList.statusCode).toEqual(200);
+    discussionList.body.forEach((dis) => {
+      expect(dis.CommunityId).toEqual(community.body.id);
+    });
+  });
+
+  it.todo('Get all community except hidden ones');
+  it('Only the community creator can delete the community', async () => {
+    const name = 'Community to delete';
+    const description = 'This community will be deleted';
+    // create a community
+    const community = await testServer
+      .post(endpoint)
+      .send({
+        name,
+        interests,
+        description,
+      })
+      .set('authorization', creator.accessToken);
+    expect(community.statusCode).toEqual(201);
+    // Fail to delete the community with another user
+
+    const failDelete = await testServer
+      .delete(`${endpoint}/${community.body.id}`)
+      .set('authorization', testUsers[0].accessToken);
+
+    expect(failDelete.statusCode).toEqual(400);
+    expect(failDelete.body).toMatchObject({
+      name: 'BadRequest',
+      message: 'Not authorized',
+      code: 400,
+      className: 'bad-request',
+      errors: {},
+    });
+    // delete the community with the creator
+    const deletedCommunity = await testServer
+      .delete(`${endpoint}/${community.body.id}`)
+      .set('authorization', creator.accessToken);
+
+    expect(deletedCommunity.statusCode).toEqual(200);
+  });
 });
