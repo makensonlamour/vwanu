@@ -26,9 +26,11 @@ export class CommunitiesRegistration extends Service {
       }
     );
 
+    if (!invitation) throw new Error('Invitation not found');
+
     // Adding the response and the date responded to the invitation.
 
-    await invitation.update({ ...data, responseDate: new Date() });
+    await invitation?.update({ ...data, responseDate: new Date() });
 
     const hasAccess = (row, role) => {
       switch (row) {

@@ -126,7 +126,6 @@ describe("'communities ' service", () => {
     });
   });
   it.skip('Users with invitation can choose not to become members', async () => {
-
     let guest: any = getRandUser();
 
     delete guest.id;
@@ -150,7 +149,7 @@ describe("'communities ' service", () => {
       })
       .set('authorization', guest.accessToken);
 
-      console.log(response.body);
+    console.log(response.body);
     expect(response.body).toMatchObject({
       message: expect.any(String),
       newMember: null,
