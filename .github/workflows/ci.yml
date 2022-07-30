@@ -122,10 +122,11 @@ jobs:
 
           script: |
             cd vwanu
+            #git checkout development
             git pull
-            # docker-compose down 
+            #docker-compose down 
             # docker-compose -f docker-compose.stage.yml build
-            docker-compose -f docker-compose.stage.yml up --build -d
+            docker-compose -f docker-compose.nginx.yml up --build -d
 
       - name: Deploy to Production
         if: github.event_name == 'push' && github.base_ref == 'master'
