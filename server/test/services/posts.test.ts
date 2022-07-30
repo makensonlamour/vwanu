@@ -62,6 +62,7 @@ describe('Posts services', () => {
       .set('authorization', token);
 
     thePost = response.body;
+
     expect(response.statusCode).toBe(StatusCodes.CREATED);
     expect(thePost).toEqual(
       expect.objectContaining({
