@@ -69,7 +69,8 @@ jobs:
         run: npm run install-all-deps
       - name: Running docker
         if: github.event_name == 'pull_request'
-        run: npm run docker-compose -f docker-compose.react.yml up -d
+        run: docker-compose -f docker-compose.react.yml up -d
+
       - name: Check linting
         if: github.event_name == 'pull_request'
         run: npm run lint
