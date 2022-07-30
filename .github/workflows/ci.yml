@@ -70,6 +70,7 @@ jobs:
       - name: Running docker
         if: github.event_name == 'pull_request'
         run: docker-compose -f docker-compose.react.yml up -d
+
       - name: Check linting
         if: github.event_name == 'pull_request'
         run: npm run lint
