@@ -42,9 +42,11 @@ export default (sequelize: any, DataTypes: any) => {
 
     firstName: string;
 
-    followPrivacy: boolean;
+    followPrivacy: string;
 
-    friendPrivacy: boolean;
+    friendPrivacy: string;
+
+    friendListPrivacy: string;
 
     gender: string;
 
@@ -111,6 +113,8 @@ export default (sequelize: any, DataTypes: any) => {
     workingLink: string;
 
     youtube: string;
+
+    showLastSeen: boolean;
 
     static associate(models: any) {
       // User.hasMany(models.Page, {
@@ -198,6 +202,19 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: true,
         unique: true,
+      },
+
+      friendPrivacy: {
+        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friend'),
+        defaultValue: 'everyone',
+      },
+      friendListPrivacy: {
+        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friend'),
+        defaultValue: 'everyone',
+      },
+      followPrivacy: {
+        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friends'),
+        defaultValue: 'everyone',
       },
 
       wechat: {
@@ -332,6 +349,11 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      showLastSeen: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
+
       active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
