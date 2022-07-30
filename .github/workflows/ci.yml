@@ -54,12 +54,22 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '16.6.1'
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
       - name: Installing basic Dependencies
         if: github.event_name == 'pull_request'
-        run: npm i
+        run: npm ci --ignore-scripts
       - name: Installing all the dependencies
         if: github.event_name == 'pull_request'
         run: npm run install-all-deps
+      - name: Running docker
+        if: github.event_name == 'pull_request'
+        run: npm run docker-compose -f docker-compose.react.yml up -d
       - name: Check linting
         if: github.event_name == 'pull_request'
         run: npm run lint
