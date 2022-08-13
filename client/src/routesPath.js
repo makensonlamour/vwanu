@@ -24,7 +24,7 @@ let routesPath = {
   MY_GROUPS: "/mygroups",
   GROUPS: "/groups",
   VIEW_GROUPS: "/groups/:id/*",
-  ADD_GROUPS: "/groups/add/:id/*",
+  ADD_GROUPS: "/groups/add/",
   MY_PAGES: "/mypages",
   BLOG: "/blogs",
   VIEW_BLOG: "/blogs/:id/*",
