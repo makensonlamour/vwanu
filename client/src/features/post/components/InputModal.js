@@ -31,7 +31,7 @@ const postError = () =>
     position: "top-center",
   });
 
-const InputModal = ({ reference }) => {
+const InputModal = ({ reference, communityId }) => {
   const user = useOutletContext();
   const UserId = user?.id;
   const [showModal, setShowModal] = useState(false);
@@ -83,7 +83,6 @@ const InputModal = ({ reference }) => {
   });
 
   //const [createPost, { isSuccess }] = useCreatePostMutation();
-  console.log(files);
   const mutationAdd = useCreatePost(["post", "home"], (oldData, newData) => [...oldData, newData]);
 
   let formData = new FormData();
@@ -93,12 +92,12 @@ const InputModal = ({ reference }) => {
         formData.append("postImage", file);
       });
     }
-    formData.append("postText", credentials.postText);
-    formData.append("UserId", credentials.UserId);
-    formData.append("privacyType", privacyText);
 
     //request for post newsfeed
     if (_.isEqual(reference, "newsfeed")) {
+      formData.append("postText", credentials.postText);
+      formData.append("UserId", credentials.UserId);
+      formData.append("privacyType", privacyText);
       try {
         await mutationAdd.mutateAsync(formData);
         postSuccess();
@@ -113,6 +112,9 @@ const InputModal = ({ reference }) => {
       setBlobFile([]);
       //request for post profile
     } else if (_.isEqual(reference, "profilefeed")) {
+      formData.append("postText", credentials.postText);
+      formData.append("UserId", credentials.UserId);
+      formData.append("privacyType", privacyText);
       try {
         await mutationAdd.mutateAsync(formData);
         postSuccess();
@@ -123,7 +125,9 @@ const InputModal = ({ reference }) => {
       setShowModal(false);
 
       //request for post group
-    } else if (_.isEqual(reference, "groupfeed")) {
+    } else if (_.isEqual(reference, "communityFeed")) {
+      formData.append("postText", credentials.postText);
+      formData.append("CommunityId", communityId);
       try {
         await mutationAdd.mutateAsync(formData);
         postSuccess();
@@ -392,6 +396,7 @@ const InputModal = ({ reference }) => {
 
 InputModal.propTypes = {
   reference: PropTypes.string.isRequired,
+  communityId: PropTypes.string,
 };
 
 export default InputModal;
