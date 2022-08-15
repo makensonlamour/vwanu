@@ -22,7 +22,7 @@ const Community = () => {
           <div className="flex justify-between items-center pb-4">
             <p className="font-bold text-3xl">Community</p>
             <Link
-              to={"../../groups/add/new"}
+              to={"../../groups/add"}
               className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
             >
               Create Community

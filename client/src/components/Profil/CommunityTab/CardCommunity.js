@@ -12,13 +12,20 @@ const CardCommunity = ({ data }) => {
 
   const handleJoin = async () => {
     setIsLoading(true);
+    console.log(data?.id);
     const dataObj = {
       communityId: data?.id,
     };
 
     try {
-      let result = await joinCommunity.mutateAsync(dataObj);
-      console.log(result);
+      if (data?.privacyType === "public") {
+        let result = await joinCommunity.mutateAsync(dataObj);
+        console.log(result);
+      } else if (data?.privacyType === "private") {
+        console.log("private");
+      } else {
+        console.log("hidden");
+      }
     } catch (e) {
       console.log(e);
     } finally {

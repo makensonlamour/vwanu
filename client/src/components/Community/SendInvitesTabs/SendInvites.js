@@ -103,13 +103,15 @@ const SendInvites = () => {
                           <div className="">{member?.firstName + " " + member?.lastName}</div>
                         </div>
                       )}
-                      <div className="">
-                        {isIntoArray(member) ? (
-                          <button onClick={handleDelete(member)}>remove</button>
-                        ) : (
-                          <button onClick={() => handleAdd(member)}>add</button>
-                        )}
-                      </div>
+                      {user?.id !== member?.id && (
+                        <div className="">
+                          {isIntoArray(member) ? (
+                            <button onClick={handleDelete(member)}>remove</button>
+                          ) : (
+                            <button onClick={() => handleAdd(member)}>add</button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}

@@ -6,6 +6,7 @@ export { default as TextArea } from "./TextArea";
 export { default as Telephone } from "./Telephone";
 export { default as Checkbox } from "./Checkbox";
 export { default as Select } from "./Select";
+export { default as MultiSelect } from "./MultiSelect";
 export { default as UploadAvatar } from "./UploadAvatar";
 export { default as Error } from "./Error";
 

@@ -7,3 +7,7 @@ export const useGetMyBlogList = (queryKey, enabled = true, userId) => useFetch(q
 export const useGetBlog = (queryKey, enabled = true, blogId) => useFetch(queryKey, enabled, `/blogs/${blogId}`);
 
 export const useCreateBlog = (queryKey, oldData, newData) => usePost(queryKey, `/blogs`, (oldData, newData));
+
+export const useCreateResponse = (queryKey, oldData, newData) => usePost(queryKey, `/blogResponse`, (oldData, newData));
+
+export const useGetAllResponse = (queryKey, enabled = true, blogId) => useFetch(queryKey, enabled, `/blogResponse?BlogId=${blogId}`);

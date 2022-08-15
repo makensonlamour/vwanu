@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useGetBlog, useGetBlogList } from "../../features/blog/blogSlice";
 import parse from "html-react-parser";
@@ -6,11 +6,40 @@ import { Chip, Stack } from "@mui/material";
 import { GoComment } from "react-icons/go";
 import SingleBlogRelated from "../../components/Blog/SingleBlogRelated";
 import SingleResponse from "../../components/Blog/SingleResponse";
+import { useCreateResponse, useGetAllResponse } from "../../features/blog/blogSlice";
 
 const ViewBlog = () => {
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [responseText, setResponseText] = useState("");
   const { data: blog } = useGetBlog(["blog", id], id?.toString() !== "undefined" ? true : false, id);
   const { data: blogList } = useGetBlogList(["blog", "all"], true);
+  const { data: listResponse } = useGetAllResponse(["blog", "response", "all"], id?.toString() !== "undefined" ? true : false, id);
+  const createResponse = useCreateResponse(["blog", "response", "all"]);
+
+  const handleChange = (e) => {
+    setResponseText(e.target.value);
+  };
+
+  const handleResponse = async () => {
+    setIsLoading(true);
+
+    try {
+      const dataObj = {
+        BlogId: id,
+        responseText,
+      };
+
+      let result = await createResponse.mutateAsync(dataObj);
+
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+      setResponseText("");
+    }
+  };
 
   return (
     <>
@@ -106,12 +135,21 @@ const ViewBlog = () => {
                 <textarea
                   className="w-full border border-gray-300 rounded-xl p-4 mt-3 h-28"
                   row={"8"}
+                  name="responseText"
+                  onChange={handleChange}
                   placeholder="Write a response..."
                 ></textarea>
-                <button className="ml-auto px-6 py-1 bg-primary text-white hover:bg-secondary rounded-xl mt-4">Publish</button>
+                <button
+                  onClick={() => {
+                    handleResponse();
+                  }}
+                  className="ml-auto px-6 py-1 bg-primary text-white hover:bg-secondary rounded-xl mt-4"
+                >
+                  {isLoading ? "Loading..." : "Publish"}
+                </button>
               </div>
               <div className="">
-                <SingleResponse blog={blog} />
+                <SingleResponse blogs={listResponse?.data} />
               </div>
             </div>
           </div>
