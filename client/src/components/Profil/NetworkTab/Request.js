@@ -5,6 +5,8 @@ import { useGetListFriendReceive } from "../../../features/friend/friendSlice";
 const Friends = ({ fn }) => {
   const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
 
+  console.log(listFriendReceive?.data);
+
   fn(listFriendReceive?.data?.length);
 
   return (

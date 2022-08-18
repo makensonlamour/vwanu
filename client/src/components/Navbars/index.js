@@ -50,7 +50,7 @@ const Navbar = ({ user }) => {
     { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
     { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
     { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: routesPath?.GROUPS },
-    { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: "#" },
+    { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
     { title: "Blog", icon: <RiPagesLine size={24} className="mx-auto" />, path: routesPath?.BLOG },
   ];
 
@@ -132,9 +132,11 @@ const Navbar = ({ user }) => {
             <div className="flex justify-between md:justify-end items-center">
               <BsSearch size="24px" className="text-black mr-4" />
               <div className="h-6 bg-black w-[1px] mr-4"></div>
-              <Badge badgeContent={1} color="primary" className="mr-4">
-                <AiOutlineInbox size="24px" className="text-black" />
-              </Badge>
+              <Link to={routesPath?.MESSAGE}>
+                <Badge badgeContent={1} color="primary" className="mr-4">
+                  <AiOutlineInbox size="24px" className="text-black" />
+                </Badge>
+              </Link>
               <p className="">
                 <FriendsPreview />
               </p>

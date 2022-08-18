@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
@@ -6,7 +7,7 @@ import { useGetListFollowers } from "../../../features/follower/followerSlice";
 
 const Followers = ({ fn }) => {
   const { id } = useParams();
-  const { data: listFollowers } = useGetListFollowers(["user", "followers"], id === "undefined" ? false : true, id);
+  const { data: listFollowers } = useGetListFollowers(["user", "followers"], true);
 
   fn(listFollowers?.data?.length);
 
