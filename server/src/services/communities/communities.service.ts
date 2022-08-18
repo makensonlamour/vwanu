@@ -10,6 +10,9 @@ import hooks from './communities.hooks';
 import registrationHooks from '../communityRegistration/registration.hooks';
 import adminHooks from './community-admin.hooks';
 
+import { profilesStorage } from '../../cloudinary';
+import fileToFeathers from '../../middleware/PassFilesToFeathers/file-to-feathers.middleware';
+
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
@@ -26,7 +29,15 @@ export default function (app: Application): void {
   };
 
   // Initialize our service with any options it requires
-  app.use('/communities', new Communities(options, app));
+  app.use(
+    '/communities',
+    profilesStorage.fields([
+      { name: 'profilePicture', maxCount: 1 },
+      { name: 'coverPicture', maxCount: 1 },
+    ]),
+    fileToFeathers,
+    new Communities(options, app)
+  );
   app.use(
     '/communities-registrations',
     new CommunitiesRegistration(options, app)
