@@ -145,25 +145,25 @@ const ManageTabs = () => {
             </div>
             <div className="basis-[80%]">
               <TabPanel value="1">
-                <DetailsTab user={user} communityData={communityData} />
+                <DetailsTab user={user} communityData={communityData?.data} />
               </TabPanel>
               <TabPanel value="2">
-                <SettingsTab user={user} communityData={communityData} />
+                <SettingsTab user={user} communityData={communityData?.data} />
               </TabPanel>
               <TabPanel value="3">
-                <ProfilePhotoTab user={user} communityData={communityData} />
+                <ProfilePhotoTab user={user} communityData={communityData?.data} />
               </TabPanel>
               <TabPanel value="4">
-                <CoverPhotoTab user={user} communityData={communityData} />
+                <CoverPhotoTab user={user} communityData={communityData?.data} />
               </TabPanel>
               <TabPanel value="5">
-                <MembersTab user={user} communityData={communityData} />
+                <MembersTab user={user} communityData={communityData?.data} />
               </TabPanel>
               <TabPanel value="6">
-                <ForumTab user={user} communityData={communityData} />
+                <ForumTab user={user} communityData={communityData?.data} />
               </TabPanel>
               <TabPanel value="7">
-                <DeleteTab user={user} communityData={communityData} />
+                <DeleteTab user={user} communityData={communityData?.data} />
               </TabPanel>
             </div>
           </TabContext>

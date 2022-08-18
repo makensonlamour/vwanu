@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
-import { Field, TextArea, Select, Form, Submit } from "../../../components/form";
+import { Field, TextArea, MultiSelect, Form, Submit } from "../../../components/form";
 // import Select from "react-select";
 // import makeAnimated from "react-select/animated";
 import { assignValue } from "../../../helpers/index";
@@ -24,7 +24,7 @@ const updateError = () =>
 
 const FormStepOne = ({ setStep, currentStep, setData }) => {
   const [isLoading, setIsLoading] = useState(false);
-  // const [interest, setInterest] = useState([]);
+  const [interest, setInterest] = useState([]);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
   const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
   const options = assignValue(interestList?.data);
@@ -39,13 +39,21 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
 
   const ValidationSchema = Yup.object().shape({
     communityName: Yup.string().required().label("Community Name"),
-    interest: Yup.string().label("Interest"),
+    interest: Yup.array().label("Interest"),
     communityDescription: Yup.string().label("Community Description"),
   });
 
-  const handleSubmit = async (dataObj) => {
-    console.log("submit");
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setInterest(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
 
+  const handleSubmit = async (dataObj) => {
     setIsLoading(true);
     const data = {
       name: dataObj?.communityName,
@@ -80,11 +88,14 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
             type="text"
             className="w-full mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
-          <Select
+          <MultiSelect
             label="Interest"
             className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
             placeholder={"Select the category..."}
+            multiple
             options={options}
+            fn={handleChange}
+            val={interest}
             name="interest"
           />
           <TextArea

@@ -8,6 +8,8 @@ export const useGetPost = (queryKey, enabled = true, PostId) => useFetch(queryKe
 
 export const useCreatePost = (queryKey, oldData, newData) => usePost(queryKey, `/posts`, (oldData, newData));
 
+export const useGetCommunityPostList = (queryKey, CommunityId) => useLoadMore(queryKey, `/posts?CommunityId=${CommunityId}`);
+
 //export const useDeletePost = (id) => useDelete(`/post?UserId=${dataObj?.UserId}`);
 
 // export const useUpdatePost = (oldData, newData, dataObj) => useUpdate(`/post?UserId=${dataObj?.UserId}`, dataObj, oldData, newData);

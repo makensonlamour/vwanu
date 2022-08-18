@@ -11,7 +11,7 @@ console.log(baseUrl);
 console.log(url);
 export const api = {
   get: async (url, params = {}) =>
-    axios.get(baseUrl + "/api" + url, {
+    axios.get(baseUrl + "" + url, {
       headers: {
         "x-auth-token": token, //add here to search token in localstorage if user rememberMe: Cookies.get("token")
         authorization: token,
