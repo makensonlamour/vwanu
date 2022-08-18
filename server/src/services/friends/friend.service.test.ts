@@ -18,7 +18,7 @@ let notFriend;
 describe('friend service', () => {
   let testServer;
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true, logged: false });
+    await app.get('sequelizeClient').sync({ logged: false });
     testServer = request(app);
     // create the users
     createdTestUsers = await Promise.all(

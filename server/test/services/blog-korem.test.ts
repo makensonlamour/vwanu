@@ -16,7 +16,7 @@ describe("'BlogKorem' service", () => {
   beforeAll(async () => {
     const sequelize = app.get('sequelizeClient');
     sequelize.options.logging = false;
-    await sequelize.sync({ force: true, logged: false });
+    await sequelize.sync({  logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u) => {

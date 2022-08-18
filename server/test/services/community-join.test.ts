@@ -24,7 +24,7 @@ describe("'community-join ' service", () => {
   let hiddenCommunity;
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true, logged: false });
+    await app.get('sequelizeClient').sync({ logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(5).map((u, idx) => {
@@ -56,7 +56,7 @@ describe("'community-join ' service", () => {
         testServer
           .post(communityEndpoint)
           .send({
-            name: `${name}-${idx}`,
+            name: `${name}-${idx}-${Math.random()}`,
             privacyType,
             description: `${description} - ${idx}`,
           })
@@ -83,14 +83,16 @@ describe("'community-join ' service", () => {
 
     invitations = invitations.map((invitation) => invitation.body);
   }, 100000);
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
+    // console.log('comms ');
+    // console.log({ privateCommunity, publicCommunity, hiddenCommunity });
     const service = app.service('community-join');
     expect(service).toBeTruthy();
   });
 
   beforeAll(async () => {}, 1000);
 
-  it('Public communities are auto-join', async () => {
+  it.skip('Public communities are auto-join', async () => {
     const user = testUsers[0];
 
     const join = await testServer
@@ -113,7 +115,7 @@ describe("'community-join ' service", () => {
       hostId: null,
     });
   });
-  it('Hidden does not accept join request', async () => {
+  it.skip('Hidden does not accept join request', async () => {
     const user = testUsers[0];
 
     const join = await testServer
@@ -132,7 +134,7 @@ describe("'community-join ' service", () => {
     });
     expect(join.statusCode).toEqual(400);
   });
-  it('Private communities are accepted-only', async () => {
+  it.skip('Private communities are accepted-only', async () => {
     const user = testUsers[0];
 
     const join = await testServer

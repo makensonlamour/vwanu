@@ -27,7 +27,7 @@ describe("'communities ' service", () => {
   let creator;
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true, logged: false });
+    await app.get('sequelizeClient').sync({  logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(5).map((u, idx) => {
@@ -149,7 +149,7 @@ describe("'communities ' service", () => {
       })
       .set('authorization', guest.accessToken);
 
-    console.log(response.body);
+    // console.log(response.body);
     expect(response.body).toMatchObject({
       message: expect.any(String),
       newMember: null,

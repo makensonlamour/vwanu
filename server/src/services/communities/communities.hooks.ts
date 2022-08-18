@@ -12,6 +12,35 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
+const Autojoin = async (context) => {
+  // console.log(Object.keys(context));
+
+  const { params, app, result } = context;
+  const {
+    User: { id },
+  } = params;
+
+  const roles = await app.service('community-role').find({
+    query: {
+      name: 'admin',
+      $select: ['id'],
+    },
+  });
+
+  const adminRole = roles[0].id;
+  await app.service('community-users').create({
+    UserId: id,
+    CommunityId: result.id,
+    CommunityRoleId: adminRole,
+    canPost: true,
+    canInvite: true,
+    canUploadDoc: true,
+    canUploadVideo: true,
+    canUploadPhoto: true,
+    canMessageInGroup: true,
+  });
+  return context;
+};
 const { authenticate } = authentication.hooks;
 export default {
   before: {
@@ -25,6 +54,7 @@ export default {
     get: [],
     create: [
       AutoOwn,
+
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
     ],
@@ -41,6 +71,7 @@ export default {
     find: [],
     get: [],
     create: [
+      Autojoin,
       SaveAndAttachInterests({
         entityName: 'Community',
         relationTableName: 'Community_Interest',

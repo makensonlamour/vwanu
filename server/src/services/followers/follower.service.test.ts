@@ -14,7 +14,7 @@ const userEndpoint = '/users';
 describe('Friend service, ', () => {
   let testServer;
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true, logged: false });
+    await app.get('sequelizeClient').sync({ logged: false });
     testServer = request(app);
 
     createdTestUsers = await Promise.all(
@@ -149,26 +149,26 @@ describe('Friend service, ', () => {
     );
   });
 
-    it('should get a list of people someone else is following', async () => {
-      const peopleWithFollower = createdTestUsers[1].body;
-      const user = createdTestUsers[3].body;
-      const response = await testServer
-        .get(
-          `${endpoint}/?action=people-who-follow-me&UserId=${peopleWithFollower.id}`
-        )
-        .set('authorization', user.accessToken);
+  it('should get a list of people someone else is following', async () => {
+    const peopleWithFollower = createdTestUsers[1].body;
+    const user = createdTestUsers[3].body;
+    const response = await testServer
+      .get(
+        `${endpoint}/?action=people-who-follow-me&UserId=${peopleWithFollower.id}`
+      )
+      .set('authorization', user.accessToken);
 
-      expect(response.status).toBe(StatusCodes.OK);
-      expect(response.body).toEqual(
-        expect.arrayContaining([
-          {
-            id: expect.any(Number),
-            firstName: expect.any(String),
-            lastName: expect.any(String),
-            profilePicture: expect.any(String),
-            User_Follower: expect.any(Object),
-          },
-        ])
-      );
-    });
+    expect(response.status).toBe(StatusCodes.OK);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        {
+          id: expect.any(Number),
+          firstName: expect.any(String),
+          lastName: expect.any(String),
+          profilePicture: expect.any(String),
+          User_Follower: expect.any(Object),
+        },
+      ])
+    );
+  });
 });

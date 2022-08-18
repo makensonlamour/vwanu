@@ -9,6 +9,8 @@
     "config": "config/"
   },
   "scripts": {
+    "migrate": "sequelize db:migrate",
+    "seed": "sequelize db:seed:all",
     "dev": "nodemon",
     "test:local": "jest --watch --no-cache --detectOpenHandles",
     "test": "jest --coverage --passWithNoTests --detectOpenHandles --verbose",
@@ -43,6 +45,7 @@
     "@jackywxd/feathers-refresh-token": "^0.2.0",
     "@sequelize/core": "^7.0.0-alpha.10",
     "@types/morgan": "^1.9.3",
+    "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.28.1",
     "config": "^3.3.7",
@@ -84,6 +87,7 @@
     "slugify": "^1.6.5",
     "socket.io": "^4.4.1",
     "socketio-jwt-auth": "^0.2.1",
+    "uuidv4": "^6.2.13",
     "winston": "^3.4.0",
     "zod": "^3.11.6"
   },

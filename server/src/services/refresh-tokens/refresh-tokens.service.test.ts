@@ -13,7 +13,7 @@ const endpoint = '/refresh-tokens';
 describe('Refresh tokens service', () => {
   let testServer;
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true, logged: false });
+    await app.get('sequelizeClient').sync({  logged: false });
 
     testServer = request(app);
   }, 50000);
