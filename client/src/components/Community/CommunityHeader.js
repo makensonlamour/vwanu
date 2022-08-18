@@ -11,6 +11,7 @@ import ManageTabs from "./ManageTabs";
 import PostTab from "./CommunityTab/PostTab";
 import MembersTab from "./MembersTab";
 import SendInviteTabs from "./SendInviteTabs";
+import { Chip, Stack } from "@mui/material";
 
 //core components
 // import FriendRequestButton from "../../features/friend/component/FriendRequestButton";
@@ -35,6 +36,7 @@ import SendInviteTabs from "./SendInviteTabs";
 const CommunityHeader = ({ user, communityData, notificationList }) => {
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
+  const [over, setOver] = useState(false);
 
   const percentage = 73;
 
@@ -134,20 +136,41 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                     )*/}
                 </div>
               </div>
-              <div className="rounded-b-lg border border-gray-300 bg-white pt-[0px] lg:pt-3 min-h-[220px]">
+              <div className="rounded-b-lg border border-gray-300 bg-white pt-[0px] lg:pt-3 min-h-[250px]">
                 <div className="py-4 relative">
-                  <div className="absolute left-[13.5rem]">
+                  <div className="lg:w-[65%] xl:w-[75%] absolute left-[13.5rem]">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex items-center justify-between">
                         <h1 className="font-mock text-2xl font-semibold inline mr-2">{communityData?.name}</h1>
-                        <p className="mx-2 bg-secondary px-2 py-[0.15rem] rounded-lg text-white">{communityData?.interests}</p>
-                        <p className="ml-2">{communityData?.privacyType}</p>
+                        <p className="mx-2 bg-secondary px-2 pb-[0.25rem] rounded-lg text-white text-md align-middle">
+                          {communityData?.privacyType}
+                        </p>
                       </div>
-                      <button className="px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white">
-                        {user?.id === communityData?.UserId ? "Creator" : "Member"}
-                      </button>
+                      {over ? (
+                        <button
+                          onMouseOut={() => setOver(false)}
+                          className="flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
+                        >
+                          {"Leave Group"}
+                        </button>
+                      ) : (
+                        <button
+                          onMouseOver={() => setOver(true)}
+                          className="flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
+                        >
+                          {user?.id === communityData?.UserId ? "Creator" : "Member"}
+                        </button>
+                      )}
                     </div>
-                    <p className="py-2 w-[45%] text-sm">{communityData?.description}</p>
+                    <p className="pb-1 pt-3 flex items-center lg:w-[65%] xl:w-[75%]">
+                      <Stack direction="row" spacing={1}>
+                        {communityData?.Interests?.length > 0 &&
+                          communityData?.Interests?.map((interest) => {
+                            return <Chip key={interest?.id} label={interest?.name} size="small" />;
+                          })}
+                      </Stack>
+                    </p>
+                    <p className="py-2 w-[60%] text-sm">{communityData?.description}</p>
                     <p className="py-2 flex items-center">
                       {"Organizer:"}
                       <span className="ml-4">
@@ -172,7 +195,7 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                 </div>
               </div>
                   {*/}
-              <CommunityTabs user={user} otherUser={otherUser} />
+              <CommunityTabs communityData={communityData} user={user} otherUser={otherUser} />
               <div className="mt-8 px-2">
                 <Routes>
                   <Route
@@ -202,16 +225,18 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                     }
                   />
                   <Route path={allTabs1[5]} element={<div>Send Messages</div>} />
-                  <Route
-                    path={allTabs1[6]}
-                    element={
-                      <div>
+                  {user?.id.toString() === communityData?.UserId?.toString() && (
+                    <Route
+                      path={allTabs1[6]}
+                      element={
                         <div>
-                          <ManageTabs />
+                          <div>
+                            <ManageTabs />
+                          </div>
                         </div>
-                      </div>
-                    }
-                  />
+                      }
+                    />
+                  )}
                 </Routes>
               </div>
             </div>

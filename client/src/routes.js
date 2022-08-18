@@ -17,6 +17,9 @@ import Member from "./pages/Member/Member";
 import AddCommunity from "./pages/Community/AddCommunity";
 import ViewCommunity from "./pages/Community/ViewCommunity";
 import Community from "./pages/Community/Community";
+import Forum from "./pages/Forum/Forum";
+import ViewForum from "./pages/Forum/ViewForum";
+import ForumList from "./pages/Forum/ForumList";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
@@ -136,6 +139,24 @@ let routes = [
     path: routesPath.VIEW_GROUPS,
     name: "View Community",
     element: ViewCommunity,
+    access: role.USER,
+  },
+  {
+    path: routesPath.FORUMS,
+    name: "Forums",
+    element: Forum,
+    access: role.USER,
+  },
+  {
+    path: routesPath.VIEW_FORUMS,
+    name: "View Forums",
+    element: ViewForum,
+    access: role.USER,
+  },
+  {
+    path: routesPath.VIEW_LIST_FORUMS,
+    name: "View List Forums",
+    element: ForumList,
     access: role.USER,
   },
   {
