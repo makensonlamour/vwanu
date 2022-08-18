@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { AvatarGroup, Avatar } from "@mui/material";
+import { AvatarGroup, Avatar, Chip, Stack } from "@mui/material";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../../assets/images/cover_group_random.png";
 import { useJoinCommunity } from "../../../features/community/communitySlice";
@@ -33,6 +33,8 @@ const CardCommunity = ({ data }) => {
     }
   };
 
+  console.log(data);
+
   return (
     <>
       {data && (
@@ -56,17 +58,22 @@ const CardCommunity = ({ data }) => {
               </div>
             </div>
           </div>
-          <div className="px-4 pt-14">
-            <Link to={"../../groups/" + data?.id} className="flex justify-center text-center text-xl font-semibold hover:text-primary">
+          <div className="flex justify-center items-center px-4 pt-14 pb-4">
+            <Link
+              to={"../../groups/" + data?.id}
+              className="flex justify-center text-center items-center text-xl font-semibold hover:text-primary mr-2"
+            >
               {data?.name}
             </Link>
+            <p className="mx-1 bg-secondary px-2 pb-[0.25rem] rounded-lg text-white text-sm align-middle">{data?.privacyType}</p>
           </div>
-          <div className="px-4 pt-2">
-            <p className="text-center text-sm text-gray-500">
-              <span className="">{data?.privacyType}</span>
-              <span className="">{" • "}</span>
-              <span className="">{data?.privacyType}</span>
-            </p>
+          <div className="flex justify-center px-4 pt-2">
+            <Stack direction="row" spacing={1}>
+              {data?.Interests?.length > 0 &&
+                data?.Interests?.map((interest) => {
+                  return <Chip key={interest?.id} label={interest?.name} size="small" />;
+                })}
+            </Stack>
           </div>
           <div className="pt-8 px-4 pb-4">
             <div className="flex justify-between">

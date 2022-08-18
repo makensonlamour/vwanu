@@ -22,8 +22,6 @@ const ProfileFeed = () => {
     window.location.reload();
   }
 
-  console.log("post community", list);
-
   let content;
   if (isLoading) {
     content = <Facebook foregroundColor="#fff" />;

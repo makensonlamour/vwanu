@@ -26,7 +26,7 @@ function FormSelectMulti({ name, label, options, className, testId, link, isMult
         >
           {options?.map((option) => {
             return !_.isEqual(option?.label, "Not Specified") ? (
-              <MenuItem key={option?.id} value={option?.value}>
+              <MenuItem key={option?.id} value={option?.label}>
                 {option?.label}
               </MenuItem>
             ) : (

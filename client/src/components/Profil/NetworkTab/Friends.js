@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
@@ -6,14 +7,12 @@ import ViewFriend from "../ViewFriend";
 
 const Friends = ({ fn }) => {
   const { id } = useParams();
-  const { data: listFriend } = useGetListFriend(["user", "friend"], id === "undefined" ? false : true, id);
+  const { data: listFriend } = useGetListFriend(["user", "friend"], true);
   fn(listFriend?.data?.length);
-
-  console.log(listFriend?.data);
 
   return (
     <>
-      <ViewFriend data={listFriend?.data} noDataLabel={"No Friends"} />
+      <ViewFriend data={listFriend?.data} types={"followings"} noDataLabel={"No Friends"} />
     </>
   );
 };
