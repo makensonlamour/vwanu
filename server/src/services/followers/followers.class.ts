@@ -7,6 +7,7 @@ import { BadRequest } from '@feathersjs/errors';
 
 /** Local dependencies */
 import { Application } from '../../declarations';
+import UrlToMedia from '../../lib/utils/UrlToMedia';
 
 // eslint-disable-next-line import/prefer-default-export
 export class Followers extends Service {
@@ -18,7 +19,7 @@ export class Followers extends Service {
   }
 
   async find(params: Params) {
-    if (!params.provider) return super.create(params);
+    if (!params.provider) return super.find(params);
 
     let response = [];
     const UserModel = this.app.service('users').Model;
@@ -65,6 +66,16 @@ export class Followers extends Service {
       default:
         throw new BadRequest('This action is not supported');
     }
+
+    response = response.map((user) => ({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      profilePicture: UrlToMedia(user.profilePicture),
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    }));
+
     return Promise.resolve(response);
   }
 

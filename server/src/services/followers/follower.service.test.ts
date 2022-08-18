@@ -123,8 +123,12 @@ describe('Friend service, ', () => {
           id: expect.any(Number),
           firstName: expect.any(String),
           lastName: expect.any(String),
-          profilePicture: expect.any(String),
-          User_Follower: expect.any(Object),
+          profilePicture: expect.objectContaining({
+            medium: expect.any(String),
+            tiny: expect.any(String),
+            small: expect.any(String),
+            original: expect.any(String),
+          }),
         },
       ])
     );
@@ -142,8 +146,13 @@ describe('Friend service, ', () => {
           id: expect.any(Number),
           firstName: expect.any(String),
           lastName: expect.any(String),
-          profilePicture: expect.any(String),
-          User_Following: expect.any(Object),
+          profilePicture: expect.objectContaining({
+            medium: expect.any(String),
+            tiny: expect.any(String),
+            small: expect.any(String),
+            original: expect.any(String),
+          }),
+       
         },
       ])
     );
@@ -165,8 +174,12 @@ describe('Friend service, ', () => {
           id: expect.any(Number),
           firstName: expect.any(String),
           lastName: expect.any(String),
-          profilePicture: expect.any(String),
-          User_Follower: expect.any(Object),
+          profilePicture: expect.objectContaining({
+            medium: expect.any(String),
+            tiny: expect.any(String),
+            small: expect.any(String),
+            original: expect.any(String),
+          }),
         },
       ])
     );
