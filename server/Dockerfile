@@ -5,5 +5,7 @@ FROM node:16.6.1-alpine3.14
 WORKDIR /app
 COPY package.json .
 RUN npm install
+RUN apk update && apk add bash
+RUN apk add --no-cache bash
 COPY . .
 CMD ["npm","run","dev"]

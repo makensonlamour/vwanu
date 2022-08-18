@@ -42,7 +42,7 @@ describe('/authmanagement service', () => {
   let act;
   const createdTestEmailsTemplates = [];
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true, logged: false });
+    await app.get('sequelizeClient').sync({ logged: false });
     testServer = request(app);
     user = (await testServer.post(userEndpoint).send(goodUser)).body;
   }, 20000);

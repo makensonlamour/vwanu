@@ -14,7 +14,7 @@ describe("'interests' service", () => {
   const endpoint = '/interests';
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true, logged: false });
+    await app.get('sequelizeClient').sync({  logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u, idx) => {

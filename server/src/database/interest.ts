@@ -3,6 +3,7 @@
 
 import { Model } from 'sequelize';
 
+
 export interface InterestInterface {
   id: string;
   name: string;
