@@ -12,10 +12,11 @@ describe("'communities ' service", () => {
   let testServer;
   let communities;
   let sameNameCommunities;
-  const communitiesCreated = [];
+
   const userEndpoint = '/users';
   const endpoint = '/communities';
   const interests = ['sport', 'education'];
+  let communityModel;
   const CommunityBasicDetails = {
     id: expect.any(String),
     name: 'unique',
@@ -36,12 +37,13 @@ describe("'communities ' service", () => {
   };
   beforeAll(async () => {
     await app.get('sequelizeClient').sync();
+    communityModel = app.get('sequelizeClient').models.Community;
+    await communityModel.sync({ force: true });
 
     testServer = request(app);
-
     // Creating test users
     testUsers = await Promise.all(
-      getRandUsers(4).map((u, idx) => {
+      getRandUsers(2).map((u, idx) => {
         let user = { ...u, admin: false };
         if (idx === 1) user = { ...user, admin: true };
         delete user.id;
@@ -52,14 +54,6 @@ describe("'communities ' service", () => {
     creator = testUsers.shift();
   }, 100000);
   afterAll(async () => {
-    await Promise.all(
-      communitiesCreated.map(({ id }) =>
-        testServer
-          .delete(`${endpoint}/${id}`)
-          .set('authorization', ` ${creator.accessToken}`)
-      )
-    );
-
     await Promise.all(
       testUsers.map((user) =>
         testServer
@@ -90,7 +84,6 @@ describe("'communities ' service", () => {
 
     sameNameCommunities.forEach(({ body }, idx) => {
       if (idx === 0) {
-        communitiesCreated.push(body);
         expect(body).toMatchObject({
           ...CommunityBasicDetails,
           privacyType: 'public',
@@ -133,8 +126,6 @@ describe("'communities ' service", () => {
     );
 
     communities.forEach(({ body }, idx) => {
-      const { id } = body;
-      communitiesCreated.push({ id });
       expect(body).toMatchObject({
         ...CommunityBasicDetails,
         name: expect.stringContaining(name),
@@ -154,7 +145,6 @@ describe("'communities ' service", () => {
       })
       .set('authorization', creator.accessToken);
 
-    communitiesCreated.push({ id: publicCommunity.body.id });
     expect(publicCommunity.body).toMatchObject({
       ...CommunityBasicDetails,
       name: 'community',
@@ -206,7 +196,6 @@ describe("'communities ' service", () => {
       .set('authorization', creator.accessToken);
     expect(community.statusCode).toEqual(201);
 
-    communitiesCreated.push({ id: community.body.id });
     // create a post with the community id
     const post = await testServer
       .post('/posts')
@@ -257,7 +246,6 @@ describe("'communities ' service", () => {
       })
       .set('authorization', creator.accessToken);
 
-    communitiesCreated.push({ id: community.body.id });
     expect(community.statusCode).toEqual(201);
     // create a discussion in that community
     const discussionObject = {
