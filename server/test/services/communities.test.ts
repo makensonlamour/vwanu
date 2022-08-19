@@ -63,12 +63,12 @@ describe("'communities ' service", () => {
     );
   });
 
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('communities');
     expect(service).toBeTruthy();
   });
 
-  it('should not create communities with the same name', async () => {
+  it.skip('should not create communities with the same name', async () => {
     sameNameCommunities = await Promise.all(
       ['unique', 'unique'].map((name, idx) =>
         testServer
@@ -107,7 +107,7 @@ describe("'communities ' service", () => {
       }
     });
   });
-  it('Users can create any community ', async () => {
+  it.skip('Users can create any community ', async () => {
     const name = 'y community';
     const description = 'Unique description required';
     const privacyTypes = ['private', 'public', 'hidden'];
@@ -136,7 +136,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('communities are public by default', async () => {
+  it.skip('communities are public by default', async () => {
     const publicCommunity = await testServer
       .post(endpoint)
       .send({
@@ -154,7 +154,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('Community creator can edit the community details', async () => {
+  it.skip('Community creator can edit the community details', async () => {
     const name = `Brand new name -${Math.random()}`;
     const description = `Description Has Changed -- ${Math.random()}`;
     const communityToChange = communities[0].body;
@@ -182,7 +182,7 @@ describe("'communities ' service", () => {
     expect(true).toBeTruthy();
   });
 
-  it('should create and list post in community', async () => {
+  it.skip('should create and list post in community', async () => {
     const name = 'Public Community name';
     const description = 'Public Community description';
     // create a community
@@ -232,7 +232,7 @@ describe("'communities ' service", () => {
 
   it.todo('should like a community');
   it.todo('list a community Like(s)');
-  it('should create and list forum/discussion in community', async () => {
+  it.skip('should create and list forum/discussion in community', async () => {
     const name = 'Public Community with discussion';
     const description = 'Public Community with discussion';
     // create a community
@@ -275,7 +275,7 @@ describe("'communities ' service", () => {
   });
 
   it.todo('Get all community except hidden ones');
-  it('Only the community creator can delete the community', async () => {
+  it.skip('Only the community creator can delete the community', async () => {
     const name = 'Community to delete';
     const description = 'This community will be deleted';
     // create a community
