@@ -35,7 +35,7 @@ describe("'communities ' service", () => {
     defaultInvitationEmail: null,
   };
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
+    await app.get('sequelizeClient').sync();
 
     testServer = request(app);
 
