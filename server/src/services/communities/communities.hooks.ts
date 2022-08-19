@@ -12,7 +12,7 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
-const Autojoin = async (context) => {
+const AutoJoin = async (context) => {
   // console.log(Object.keys(context));
 
   const { params, app, result } = context;
@@ -41,6 +41,11 @@ const Autojoin = async (context) => {
   });
   return context;
 };
+const AutoAdmin = (context) => {
+  context.data.numAdmins = 1;
+  return context;
+};
+
 const { authenticate } = authentication.hooks;
 export default {
   before: {
@@ -54,7 +59,7 @@ export default {
     get: [],
     create: [
       AutoOwn,
-
+      AutoAdmin,
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
     ],
@@ -71,7 +76,7 @@ export default {
     find: [],
     get: [],
     create: [
-      Autojoin,
+      AutoJoin,
       SaveAndAttachInterests({
         entityName: 'Community',
         relationTableName: 'Community_Interest',

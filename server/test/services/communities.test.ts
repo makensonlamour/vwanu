@@ -11,10 +11,12 @@ describe("'communities ' service", () => {
   let testUsers;
   let testServer;
   let communities;
+  let sameNameCommunities;
 
   const userEndpoint = '/users';
   const endpoint = '/communities';
   const interests = ['sport', 'education'];
+  let communityModel;
   const CommunityBasicDetails = {
     id: expect.any(String),
     name: 'unique',
@@ -23,7 +25,7 @@ describe("'communities ' service", () => {
     createdAt: expect.any(String),
     updatedAt: expect.any(String),
     numMembers: 0,
-    numAdmins: 0,
+    numAdmins: 1,
     haveDiscussionForum: true,
     canInvite: 'E',
     canInPost: 'E',
@@ -34,12 +36,14 @@ describe("'communities ' service", () => {
     defaultInvitationEmail: null,
   };
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
-    testServer = request(app);
+    await app.get('sequelizeClient').sync();
+    communityModel = app.get('sequelizeClient').models.Community;
+    await communityModel.sync({ force: true });
 
+    testServer = request(app);
     // Creating test users
     testUsers = await Promise.all(
-      getRandUsers(4).map((u, idx) => {
+      getRandUsers(2).map((u, idx) => {
         let user = { ...u, admin: false };
         if (idx === 1) user = { ...user, admin: true };
         delete user.id;
@@ -49,6 +53,15 @@ describe("'communities ' service", () => {
     testUsers = testUsers.map((testUser) => testUser.body);
     creator = testUsers.shift();
   }, 100000);
+  afterAll(async () => {
+    await Promise.all(
+      testUsers.map((user) =>
+        testServer
+          .delete(`${userEndpoint}/${user.id}`)
+          .set('authorization', ` ${user.accessToken}`)
+      )
+    );
+  });
 
   it.skip('registered the service', () => {
     const service = app.service('communities');
@@ -56,7 +69,7 @@ describe("'communities ' service", () => {
   });
 
   it.skip('should not create communities with the same name', async () => {
-    const commutes = await Promise.all(
+    sameNameCommunities = await Promise.all(
       ['unique', 'unique'].map((name, idx) =>
         testServer
           .post(endpoint)
@@ -69,7 +82,7 @@ describe("'communities ' service", () => {
       )
     );
 
-    commutes.forEach(({ body }, idx) => {
+    sameNameCommunities.forEach(({ body }, idx) => {
       if (idx === 0) {
         expect(body).toMatchObject({
           ...CommunityBasicDetails,
