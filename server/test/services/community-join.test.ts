@@ -58,7 +58,7 @@ describe("'community-join ' service", () => {
           .send({
             name: `${name}-${idx}-${Math.random()}`,
             privacyType,
-            description: `${description} - ${idx}`,
+            description: `${description} - ${idx}-${Math.random()}`,
           })
           .set('authorization', creator.accessToken)
       )
@@ -83,16 +83,12 @@ describe("'community-join ' service", () => {
 
     invitations = invitations.map((invitation) => invitation.body);
   }, 100000);
-  it.skip('registered the service', () => {
-    // console.log('comms ');
-    // console.log({ privateCommunity, publicCommunity, hiddenCommunity });
+  it('registered the service', () => {
     const service = app.service('community-join');
     expect(service).toBeTruthy();
   });
 
-  beforeAll(async () => {}, 1000);
-
-  it.skip('Public communities are auto-join', async () => {
+  it('Public communities are auto-join', async () => {
     const user = testUsers[0];
 
     const join = await testServer
@@ -105,7 +101,7 @@ describe("'community-join ' service", () => {
     expect(join.body).toMatchObject({
       id: expect.any(String),
       CommunityId: expect.any(String),
-      guestId: 3,
+      guestId: user.id,
       response: true,
       responseDate: expect.any(String),
       CommunityRoleId: expect.any(String),
@@ -114,8 +110,28 @@ describe("'community-join ' service", () => {
       email: null,
       hostId: null,
     });
+    const foundUser = await app
+      .get('sequelizeClient')
+      .models.CommunityUsers.findOne({
+        where: { CommunityId: publicCommunity.id, UserId: user.id },
+      });
+
+    expect(foundUser).toMatchObject({
+      id: expect.any(String),
+      canPost: true,
+      canInvite: false,
+      canUploadDoc: true,
+      canUploadVideo: true,
+      canUploadPhoto: true,
+      canMessageInGroup: true,
+      banned: true,
+      bannedDate: null,
+      CommunityId: expect.any(String),
+      UserId: user.id,
+      CommunityRoleId: expect.any(String),
+    });
   });
-  it.skip('Hidden does not accept join request', async () => {
+  it('Hidden does not accept join request', async () => {
     const user = testUsers[0];
 
     const join = await testServer
@@ -134,7 +150,7 @@ describe("'community-join ' service", () => {
     });
     expect(join.statusCode).toEqual(400);
   });
-  it.skip('Private communities are accepted-only', async () => {
+  it('Private communities are accepted-only', async () => {
     const user = testUsers[0];
 
     const join = await testServer
