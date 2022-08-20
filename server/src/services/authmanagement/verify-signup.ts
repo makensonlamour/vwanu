@@ -43,7 +43,7 @@ export async function verifySignup(
   if (!Object.keys(tokens).every((key) => tokens[key] === user1[key])) {
     await eraseVerifyProps(user1, user1.verified);
 
-    throw new BadRequest('Invalid token. Get for a new one.');
+    throw new BadRequest('Invalid token. Get  a new one.');
   }
 
   const user2 = await eraseVerifyProps(user1, true, user1.verifyChanges || {});
