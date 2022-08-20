@@ -11,6 +11,7 @@ const PublicCommunityOnly = async (context) => {
   const { data, app } = context;
   let community = null;
 
+  console.log(data);
   community = await app.service('communities').get(data.CommunityId);
 
   if (community.privacyType !== 'public')
@@ -31,12 +32,42 @@ const AttachingRole = (role) => async (context) => {
   data.CommunityRoleId = memberRole[0].id;
   return context;
 };
+
+const addUserToCommunity = async (context) => {
+  const { app, data } = context;
+  const { id } = context.params.User;
+  const { CommunityId } = data;
+
+  const memberRole = await app
+    .service('community-role')
+    .find({ query: { name: 'member', $select: ['id'] } });
+
+  const role = memberRole[0].id;
+
+  const alreadyMember = await app.service('community-users').find({
+    query: { CommunityId, UserId: id },
+  });
+
+  if (alreadyMember.length)
+    throw new BadRequest('You are already a member of this community');
+  await app.service('community-users').create({
+    CommunityId,
+    UserId: id,
+    CommunityRoleId: role,
+  });
+
+  return context;
+};
 export default {
   before: {
     all: [authenticate('jwt'), IncludeGuests],
     find: [],
     get: [],
-    create: [PublicCommunityOnly, AttachingRole({ name: 'member' })],
+    create: [
+      PublicCommunityOnly,
+      AttachingRole({ name: 'member' }),
+      addUserToCommunity,
+    ],
     update: [],
     patch: [],
     remove: [],
