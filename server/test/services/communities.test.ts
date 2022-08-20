@@ -68,7 +68,7 @@ describe("'communities ' service", () => {
     expect(service).toBeTruthy();
   });
 
-  it.skip('should not create communities with the same name', async () => {
+  it('should not create communities with the same name', async () => {
     sameNameCommunities = await Promise.all(
       ['unique', 'unique'].map((name, idx) =>
         testServer
@@ -107,7 +107,7 @@ describe("'communities ' service", () => {
       }
     });
   });
-  it.skip('Users can create any community ', async () => {
+  it('Users can create any community ', async () => {
     const name = 'y community';
     const description = 'Unique description required';
     const privacyTypes = ['private', 'public', 'hidden'];
@@ -136,7 +136,68 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip('communities are public by default', async () => {
+  it('Community automatically set creator as first admin', async () => {
+    const name = 'Auto admin community ';
+    const description =
+      'Each community automatically set creator as first admin';
+    const privacyTypes = ['private', 'public', 'hidden'];
+
+    let newAdmins = await Promise.all(
+      getRandUsers(3).map((u) => {
+        const user = u;
+        delete user.id;
+        return testServer.post(userEndpoint).send(user);
+      }, 10000)
+    );
+
+    newAdmins = newAdmins.map((user) => user.body);
+
+    const autoAdminCommunities = await Promise.all(
+      newAdmins.map((user, idx) =>
+        testServer
+          .post(endpoint)
+          .send({
+            name: `${name}-${idx}`,
+            privacyType: privacyTypes[idx],
+            interests,
+            description: `${description} - ${idx}`,
+          })
+          .set('authorization', user.accessToken)
+      )
+    );
+    autoAdminCommunities.forEach(({ body }, idx) => {
+      expect(body).toMatchObject({
+        ...CommunityBasicDetails,
+        name: expect.stringContaining(name),
+        privacyType: privacyTypes[idx],
+        UserId: newAdmins[idx].id,
+        description: expect.stringContaining(description),
+        numAdmins: 1,
+      });
+    });
+
+    // Check if creator is first admin
+    let communityUsers = await Promise.all(
+      autoAdminCommunities.map(({ body: { id } }) =>
+        testServer
+          .get(`/community-users?CommunityId=${id}`)
+          .set('authorization', creator.accessToken)
+      )
+    );
+    communityUsers = communityUsers.map((communityUser) => communityUser.body);
+    communityUsers.forEach((communityUser, idx) => {
+      console.log(communityUser);
+      expect(communityUser[0].UserId).toBe(newAdmins[idx].id);
+      expect(communityUser[0].User).toMatchObject({
+        firstName: newAdmins[idx].firstName,
+        lastName: newAdmins[idx].lastName,
+        id: newAdmins[idx].id,
+        createdAt: newAdmins[idx].createdAt,
+      });
+    });
+  });
+
+  it('communities are public by default', async () => {
     const publicCommunity = await testServer
       .post(endpoint)
       .send({
@@ -154,7 +215,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip('Community creator can edit the community details', async () => {
+  it('Community creator can edit the community details', async () => {
     const name = `Brand new name -${Math.random()}`;
     const description = `Description Has Changed -- ${Math.random()}`;
     const communityToChange = communities[0].body;
@@ -182,7 +243,7 @@ describe("'communities ' service", () => {
     expect(true).toBeTruthy();
   });
 
-  it.skip('should create and list post in community', async () => {
+  it('should create and list post in community', async () => {
     const name = 'Public Community name';
     const description = 'Public Community description';
     // create a community
@@ -232,7 +293,7 @@ describe("'communities ' service", () => {
 
   it.todo('should like a community');
   it.todo('list a community Like(s)');
-  it.skip('should create and list forum/discussion in community', async () => {
+  it('should create and list forum/discussion in community', async () => {
     const name = 'Public Community with discussion';
     const description = 'Public Community with discussion';
     // create a community
@@ -275,7 +336,7 @@ describe("'communities ' service", () => {
   });
 
   it.todo('Get all community except hidden ones');
-  it.skip('Only the community creator can delete the community', async () => {
+  it('Only the community creator can delete the community', async () => {
     const name = 'Community to delete';
     const description = 'This community will be deleted';
     // create a community
