@@ -33,6 +33,7 @@ export async function resetPassword(
     resetAttempts: null,
     resetToken: null,
     resetShortToken: null,
+    resetPasswordKey: null,
   });
 
   try {
@@ -76,14 +77,6 @@ export async function resetPwdWithShortToken(
   //   ensureValuesAreStrings(resetShortToken, password);
   //   ensureObjPropsValid(identifyUser, options.identifyUserProps);
 
-  console.log({
-    options,
-    resetShortToken,
-    identifyUser,
-    password,
-
-    notifierOptions,
-  });
   return Promise.reject();
   // return resetPassword(
   //   options,
