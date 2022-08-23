@@ -136,6 +136,67 @@ describe("'communities ' service", () => {
     });
   });
 
+  it.skip('Community automatically set creator as first admin', async () => {
+    const name = 'Auto admin community ';
+    const description =
+      'Each community automatically set creator as first admin';
+    const privacyTypes = ['private', 'public', 'hidden'];
+
+    let newAdmins = await Promise.all(
+      getRandUsers(3).map((u) => {
+        const user = u;
+        delete user.id;
+        return testServer.post(userEndpoint).send(user);
+      }, 10000)
+    );
+
+    newAdmins = newAdmins.map((user) => user.body);
+
+    const autoAdminCommunities = await Promise.all(
+      newAdmins.map((user, idx) =>
+        testServer
+          .post(endpoint)
+          .send({
+            name: `${name}-${idx}`,
+            privacyType: privacyTypes[idx],
+            interests,
+            description: `${description} - ${idx}`,
+          })
+          .set('authorization', user.accessToken)
+      )
+    );
+    autoAdminCommunities.forEach(({ body }, idx) => {
+      expect(body).toMatchObject({
+        ...CommunityBasicDetails,
+        name: expect.stringContaining(name),
+        privacyType: privacyTypes[idx],
+        UserId: newAdmins[idx].id,
+        description: expect.stringContaining(description),
+        numAdmins: 1,
+      });
+    });
+
+    // Check if creator is first admin
+    let communityUsers = await Promise.all(
+      autoAdminCommunities.map(({ body: { id } }) =>
+        testServer
+          .get(`/community-users?CommunityId=${id}`)
+          .set('authorization', creator.accessToken)
+      )
+    );
+    communityUsers = communityUsers.map((communityUser) => communityUser.body);
+    communityUsers.forEach((communityUser, idx) => {
+      console.log(communityUser);
+      expect(communityUser[0].UserId).toBe(newAdmins[idx].id);
+      expect(communityUser[0].User).toMatchObject({
+        firstName: newAdmins[idx].firstName,
+        lastName: newAdmins[idx].lastName,
+        id: newAdmins[idx].id,
+        createdAt: newAdmins[idx].createdAt,
+      });
+    });
+  });
+
   it.skip('communities are public by default', async () => {
     const publicCommunity = await testServer
       .post(endpoint)
