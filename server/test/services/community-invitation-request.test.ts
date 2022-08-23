@@ -114,11 +114,11 @@ describe("'communityInvitationRequest' service", () => {
     invites = sendInvitation(testServer, endpoint);
   }, 100000);
 
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('community-invitation-request');
     expect(service).toBeTruthy();
   });
-  it('Creator can send invitation for any role', async () => {
+  it.skip('Creator can send invitation for any role', async () => {
     invitations = await Promise.all(
       testUsers.map((guest, idx) =>
         invites({
@@ -191,7 +191,7 @@ describe("'communityInvitationRequest' service", () => {
       return 1;
     });
   });
-  it('Authorized can see all invitation they sent', async () => {
+  it.skip('Authorized can see all invitation they sent', async () => {
     const invitationsISent = await testServer
       .get(`${endpoint}/?hostId=${creator.id}`)
       .set('authorization', creator.accessToken);
@@ -212,7 +212,7 @@ describe("'communityInvitationRequest' service", () => {
     });
   });
   it.todo('should not see invitations sent to others unless admin');
-  it('Guest can see all invitation they have received', async () => {
+  it.skip('Guest can see all invitation they have received', async () => {
     let receivedInvitationForAll: any = await Promise.all(
       testUsers.map((user) =>
         testServer
@@ -239,7 +239,7 @@ describe("'communityInvitationRequest' service", () => {
       });
     });
   });
-  it("Authorized can update invitation's role", async () => {
+  it.skip("Authorized can update invitation's role", async () => {
     const memberRole = roles.find((role) => role.name === 'member');
 
     const moderator = roles.find((role) => role.name === 'moderator');
@@ -264,7 +264,7 @@ describe("'communityInvitationRequest' service", () => {
   });
   it.todo('Guest cannot receive two different invitations');
   it.todo('Only the one who invited can modify or delete the invitation');
-  it('Admin and  creator can remove invitation for any role', async () => {
+  it.skip('Admin and  creator can remove invitation for any role', async () => {
     let responses = await Promise.all(
       invitations.map((invitation) =>
         testServer
