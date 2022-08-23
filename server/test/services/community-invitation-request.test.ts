@@ -90,26 +90,21 @@ describe("'communityInvitationRequest' service", () => {
     const adminUser = testUsers.shift();
     creator = testUsers.shift();
 
-    roles = await Promise.all(
-      ['admin', 'moderator', 'member'].map((name) =>
-        testServer
-          .post(rolesEndpoint)
-          .send({ name })
-          .set('authorization', adminUser.accessToken)
-      )
-    );
-    roles = roles.map((role) => role.body);
+    roles = await testServer
+      .get(rolesEndpoint)
+      .set('authorization', adminUser.accessToken);
+    roles = roles.body;
 
-    const name = 'New community';
-    const description = 'Unique description required';
+    const name = 'Community with invitation';
+    const description = 'Community with invitation description';
     communities = await Promise.all(
-      ['private', 'public', 'hidden'].map((privacyType, idx) =>
+      ['private', 'public', 'hidden'].map((privacyType) =>
         testServer
           .post(communityEndpoint)
           .send({
-            name: `${name}-${idx}`,
+            name: `${name}-${privacyType}-${Math.random()}`,
             privacyType,
-            description: `${description} - ${idx}`,
+            description: `${privacyType}-${description} - ${Math.random()}`,
           })
           .set('authorization', creator.accessToken)
       )
@@ -119,7 +114,7 @@ describe("'communityInvitationRequest' service", () => {
     invites = sendInvitation(testServer, endpoint);
   }, 100000);
 
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('community-invitation-request');
     expect(service).toBeTruthy();
   });
@@ -137,9 +132,9 @@ describe("'communityInvitationRequest' service", () => {
 
     invitations = invitations.map((invitation) => invitation.body);
 
-    // const { CommunityInvitationRequest } = app.get('sequelizeClient').models;
+    const { CommunityInvitationRequest } = app.get('sequelizeClient').models;
     // Invitation response
-    invitations.forEach((invitation, idx) => {
+    invitations.map(async (invitation, idx) => {
       expect(invitation).toMatchObject({
         id: expect.any(String),
         guestId: testUsers[idx].id,
@@ -150,26 +145,53 @@ describe("'communityInvitationRequest' service", () => {
         CommunityId: communities[idx].id,
         email: null,
       });
+      // Checking the guest request exist in the database
+      const guest = await CommunityInvitationRequest.findOne({
+        where: {
+          hostId: creator.id,
+          guestId: testUsers[idx].id,
+          CommunityRoleId: roles[idx].id,
+        },
+      });
+      expect(guest).toMatchObject({
+        id: invitation.id,
+        email: null,
+        response: null,
+        responseDate: null,
+        CommunityId: invitation.CommunityId,
+        guestId: testUsers[idx].id,
+        hostId: creator.id,
+        CommunityRoleId: roles[idx].id,
+      });
+      const invitationRecords = await testServer
+        .get(`${endpoint}?guestId=${testUsers[idx].id}`)
+        .set('authorization', testUsers[idx].accessToken);
+
+      expect(invitationRecords.body.length).toBe(1);
+      expect(invitationRecords.body[0]).toMatchObject({
+        ...InvitationObJect,
+
+        guest: expect.objectContaining({
+          firstName: testUsers[idx].firstName,
+          lastName: testUsers[idx].lastName,
+          id: testUsers[idx].id,
+          createdAt: testUsers[idx].createdAt,
+        }),
+        host: expect.objectContaining({
+          firstName: creator.firstName,
+          lastName: creator.lastName,
+          id: creator.id,
+          createdAt: creator.createdAt,
+        }),
+        CommunityRole: expect.objectContaining({
+          ...roles[idx],
+        }),
+      });
+
+      return 1;
     });
-
-    // Invitation response
-
-    // const guesses = await CommunityInvitationRequest.findOne({
-    //   where: {
-    //     hostId: creator.id,
-    //     guestId: testUsers[idx].id,
-    //     CommunityRoleId: roles[idx].id,
-    //   },
-    // });
-
-    // expect(guesses).toBeTruthy();
-
-    // return 1;
-    // });
-
-    // expect(amount.length);
   });
-  it('Authorized can see all invitation they sent', async () => {
+  it.skip('Authorized can see all invitation they sent', async () => {
     const invitationsISent = await testServer
       .get(`${endpoint}/?hostId=${creator.id}`)
       .set('authorization', creator.accessToken);
@@ -190,7 +212,7 @@ describe("'communityInvitationRequest' service", () => {
     });
   });
   it.todo('should not see invitations sent to others unless admin');
-  it('Guest can see all invitation they have received', async () => {
+  it.skip('Guest can see all invitation they have received', async () => {
     let receivedInvitationForAll: any = await Promise.all(
       testUsers.map((user) =>
         testServer
@@ -219,11 +241,12 @@ describe("'communityInvitationRequest' service", () => {
   });
   it.skip("Authorized can update invitation's role", async () => {
     const memberRole = roles.find((role) => role.name === 'member');
+
     const moderator = roles.find((role) => role.name === 'moderator');
-    let memberInvitation = invitations.find(
-      (inv) => inv.body.CommunityRoleId === memberRole.id
+    const memberInvitation = invitations.find(
+      (inv) => inv.CommunityRoleId === memberRole.id
     );
-    memberInvitation = memberInvitation?.body;
+
     const newInvitation = await testServer
       .patch(`${endpoint}/${memberInvitation.id}`)
       .send({ CommunityRoleId: moderator.id })
@@ -242,13 +265,26 @@ describe("'communityInvitationRequest' service", () => {
   it.todo('Guest cannot receive two different invitations');
   it.todo('Only the one who invited can modify or delete the invitation');
   it.skip('Admin and  creator can remove invitation for any role', async () => {
-    const cnv = invitations[0].body;
-
-    const response = await testServer
-      .delete(`${endpoint}/${cnv.id}`)
-      .set('authorization', creator.accessToken);
-
-    expect(response.body).toMatchObject(cnv);
+    let responses = await Promise.all(
+      invitations.map((invitation) =>
+        testServer
+          .delete(`${endpoint}/${invitation.id}`)
+          .set('authorization', creator.accessToken)
+      )
+    );
+    responses = responses.map((response) => response.body);
+    responses.forEach((response, idx) => {
+      expect(response).toMatchObject({
+        id: invitations[idx].id,
+        guestId: invitations[idx].guestId,
+        CommunityRoleId: expect.any(String),
+        hostId: invitations[idx].hostId,
+        updatedAt: expect.any(String),
+        createdAt: expect.any(String),
+        CommunityId: expect.any(String),
+        email: null,
+      });
+    });
   });
 });
 
