@@ -5,6 +5,7 @@ import { AvatarGroup, Avatar, Chip, Stack } from "@mui/material";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../../assets/images/cover_group_random.png";
 import { useJoinCommunity } from "../../../features/community/communitySlice";
+// import { isMember } from "../../../helpers/index";
 
 const CardCommunity = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,15 +15,13 @@ const CardCommunity = ({ data }) => {
     setIsLoading(true);
     console.log(data?.id);
     const dataObj = {
-      communityId: data?.id,
+      CommunityId: data?.id,
     };
 
     try {
-      if (data?.privacyType === "public") {
+      if (data?.privacyType === "public" || data?.privacyType === "private") {
         let result = await joinCommunity.mutateAsync(dataObj);
         console.log(result);
-      } else if (data?.privacyType === "private") {
-        console.log("private");
       } else {
         console.log("hidden");
       }
@@ -88,6 +87,7 @@ const CardCommunity = ({ data }) => {
                 <Avatar sx={{ width: 24, height: 24 }} alt="Travis Howard" src="https://randomuser.me/api/portraits/men/54.jpg" />
                 <Avatar sx={{ width: 24, height: 24 }} alt="Agnes Walker" src="https://randomuser.me/api/portraits/men/55.jpg" />
               </AvatarGroup>
+
               <button
                 onClick={() => {
                   handleJoin();

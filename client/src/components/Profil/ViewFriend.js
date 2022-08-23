@@ -22,15 +22,15 @@ const ViewFriend = ({ data, types = "", noDataLabel }) => {
                 >
                   <img
                     className="object-cover w-28 h-28 mask mask-squircle mx-auto mb-2"
-                    src={friend?.profilePicture?.original}
+                    src={friend?.profilePicture?.original || friend?.User?.profilePicture}
                     alt="_profile"
                   />
                   <Link to={`../../profile/${friend?.id}`} className="hover:text-primary">
                     <p className="mx-auto py-3 font-semibold text-lg text-gray-900 text-center">
-                      {friend?.firstName + " " + friend?.lastName}
+                      {(friend?.firstName || friend?.User?.firstName) + " " + (friend?.lastName || friend?.User?.lastName)}
                     </p>
                   </Link>
-                  <p className="mx-auto font-normal text-sm text-gray-400 text-center">{"Joined Apr 2022"}</p>
+                  <p className="mx-auto font-normal text-sm text-gray-400 text-center">{friend?.createdAt}</p>
                   <p className="mx-auto py-1 font-normal text-sm text-gray-400 text-center">{"14 followers"}</p>
                   <div className="px-4">
                     {user?.id?.toString() === friend?.id?.toString() ? (

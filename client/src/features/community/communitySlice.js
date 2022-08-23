@@ -21,3 +21,11 @@ export const useSendMessage = (queryKey, oldData, newData) => usePost(queryKey, 
 export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(queryKey, `/community-invitation-request`, (oldData, newData));
 
 export const useJoinCommunity = (queryKey, oldData, newData) => usePost(queryKey, `/community-join`, (oldData, newData));
+
+export const useGetAllMembersCommunity = (queryKey, enabled = true, communityId) =>
+  useFetch(queryKey, enabled, `/community-users?CommunityId=${communityId}`);
+
+export const useGetCommunityRole = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/community-role`);
+
+export const useGetCommunityMemberByUser = (queryKey, enabled = true, userId) =>
+  useFetch(queryKey, enabled, `/community-users?UserId=${userId}`);

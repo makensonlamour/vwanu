@@ -1,21 +1,16 @@
-import { Link, useParams } from "react-router-dom";
-
+/*eslint-disable */
+import { Link, useParams, useOutletContext } from "react-router-dom";
 import React from "react";
 import PropTypes from "prop-types";
-// import { IMAGE_PROXY } from "../../shared/constants";
 import { Skeleton } from "@mui/material";
-// import { useLastMessage } from "../../hooks/useLastMessage";
 
-const SelectConversation = ({ conversation, conversationId }) => {
-  // const users = [];
-  const loading = true;
+const SelectConversation = ({ setSelectedConversation, setCreateConversationOpened, conversation, conversationId }) => {
+  /* const loading = true;
   // const currentUser = {};
 
   // const filtered = users?.filter((user) => user.id !== currentUser?.uid);
 
   const { id } = useParams();
-
-  // const lastMessage = {};
 
   if (loading)
     return (
@@ -27,7 +22,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
         </div>
       </div>
     );
-
+*/
   /*
   if (conversation.users.length === 2)
     return (
@@ -58,7 +53,66 @@ const SelectConversation = ({ conversation, conversationId }) => {
       </Link>
     );
 */
+
+  const { id } = useParams();
+  const user = useOutletContext();
+
+  const filtered = conversation?.Users?.filter((item) => item.id !== user?.id);
+
   return (
+    <>
+      <div className="overflow-auto">
+        {conversation?.Users?.length > 2 ? (
+          <Link
+            onClick={() => {
+              setSelectedConversation(true);
+              setCreateConversationOpened(false);
+            }}
+            to={`../messages/${conversationId}`}
+            className={`mx-2 rounded-xl hover:bg-dark-lighten group relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${
+              conversationId === id ? "bg-placeholder-color" : ""
+            }`}
+          >
+            <div className="flex items-center">
+              <div className="mr-2">
+                <img
+                  className="mask mask-squircle w-10 h-10"
+                  src={filtered[Math.floor(Math.random() * filtered.length)]?.profilePicture}
+                  alt=""
+                />
+              </div>
+              <p className="">
+                {filtered
+                  ?.map((item) => item?.firstName)
+                  .slice(0, 3)
+                  .join(", ")}
+              </p>
+            </div>
+          </Link>
+        ) : (
+          <Link
+            key={conversationId}
+            to={`../messages/${conversationId}`}
+            className={`mx-2 rounded-xl hover:bg-dark-lighten group relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${
+              conversationId === id ? "bg-placeholder-color" : ""
+            }`}
+          >
+            <div className="flex items-center">
+              <div className="mr-2">
+                <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
+              </div>
+              {filtered?.map((item) => {
+                return (
+                  <p key={item?.firstName + "ml-2 align-center items-center " + item?.lastName} className="">
+                    {item?.firstName + " " + item?.lastName}
+                  </p>
+                );
+              })}
+            </div>
+          </Link>
+        )}
+      </div>
+      {/*}
     <Link
       to={`/${conversationId}`}
       className={`hover:bg-dark-lighten group relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${
@@ -81,7 +135,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
             }`}
             src={IMAGE_PROXY(filtered?.[1]?.data()?.photoURL)}
             alt=""
-          /> {*/}
+          /> }
         </div>
       )}
       <div className="flex flex-grow flex-col items-start gap-1 py-1">
@@ -101,7 +155,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
             {lastMessage?.message}
           </p>
         )}
-        {*/}
+        
       </div>
       {/*}
       {!lastMessageLoading && (
@@ -112,14 +166,17 @@ const SelectConversation = ({ conversation, conversationId }) => {
        
         </>
       )}
-         {*/}
     </Link>
+          {*/}
+    </>
   );
 };
 
 SelectConversation.propTypes = {
   conversation: PropTypes.object,
   conversationId: PropTypes.string,
+  setSelectedConversation: PropTypes.func,
+  setCreateConversationOpened: PropTypes.func,
 };
 
 export default SelectConversation;

@@ -1,19 +1,39 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
-import { useGetListFriend } from "../../../features/friend/friendSlice";
+import { useGetAllMembersCommunity } from "../../../features/community/communitySlice";
 import ViewFriend from "../../Profil/ViewFriend";
+import { assignCommunityMember } from "../../../helpers/index";
 
 const Member = () => {
   const { id } = useParams();
-  const { data: listFriend } = useGetListFriend(["user", "friend"], id === "undefined" ? false : true, id);
+  const { data: listFriend } = useGetAllMembersCommunity(["user", "friend"], id === "undefined" ? false : true, id);
   //   fn(listFriend?.data?.length);
 
   console.log(listFriend?.data);
 
   return (
     <>
-      <ViewFriend data={listFriend?.data} noDataLabel={"No Member"} />
+      {assignCommunityMember(listFriend?.data, "admin")?.length > 0 && (
+        <>
+          <p className="text-xl">Administrators</p>
+          <ViewFriend data={assignCommunityMember(listFriend?.data, "admin")} noDataLabel={"No Member"} />
+        </>
+      )}
+
+      {assignCommunityMember(listFriend?.data, "moderator")?.length > 0 && (
+        <>
+          <p className="text-xl">Moderators</p>
+          <ViewFriend data={assignCommunityMember(listFriend?.data, "moderator")} noDataLabel={"No Member"} />
+        </>
+      )}
+
+      {assignCommunityMember(listFriend?.data, "member")?.length > 0 && (
+        <>
+          <p className="text-xl">Members</p>
+          <ViewFriend data={assignCommunityMember(listFriend?.data, "member")} noDataLabel={"No Member"} />
+        </>
+      )}
     </>
   );
 };
