@@ -1,9 +1,10 @@
 import * as authentication from '@feathersjs/authentication';
-
 import { BadRequest } from '@feathersjs/errors';
+
 /** Local dependencies */
 import AutoAssign from '../../Hooks/AutoAssign.hook';
 import { AddAssociations } from '../../Hooks';
+import UrlToMedia from '../../lib/utils/UrlToMedia';
 
 const { authenticate } = authentication.hooks;
 const attributes = [
@@ -32,12 +33,27 @@ export const IncludeGuests = AddAssociations({
   ],
 });
 
+export const TransformProfilePicture = (context) => {
+  const { result } = context;
+  let newGuestObject;
+  let newHostObject;
+
+  if (result[0].guest) {
+    newGuestObject.profilePicture = UrlToMedia(result.guest.profilePicture);
+  }
+  if (result[0].host) {
+    newHostObject.profilePicture = UrlToMedia(result[0].host.profilePicture);
+  }
+
+  return context;
+};
 const noDuplicateInvitation = async (context) => {
   const { app, data } = context;
   const { guestId, hostId, CommunityId } = data;
-  const existingInvitation = await app
-    .service('community-invitation-request')
-    .find({
+
+  try {
+    const { CommunityInvitationRequest } = app.get('sequelizeClient').models;
+    const existingInvitation = await CommunityInvitationRequest.findOne({
       where: {
         guestId,
         hostId,
@@ -45,11 +61,13 @@ const noDuplicateInvitation = async (context) => {
         response: null,
       },
     });
-
-  if (existingInvitation.length)
-    throw new BadRequest(
-      'This person already has an invitation for this community'
-    );
+    if (existingInvitation)
+      throw new BadRequest(
+        'This person already has an invitation for this community'
+      );
+  } catch (e) {
+    throw new BadRequest(e);
+  }
 
   return context;
 };
