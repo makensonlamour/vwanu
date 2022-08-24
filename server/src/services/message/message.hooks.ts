@@ -4,6 +4,7 @@ import * as authentication from '@feathersjs/authentication';
 
 import {
   AddSender,
+  PublishMessage,
   AdjustReadAndReceivedDate,
   IncludeSenderAndConversation,
   AdjustAmountMessagesInConversation,
@@ -30,9 +31,10 @@ export default {
     create: [
       AdjustAmountMessagesInConversation,
       AdjustUnreadMessageInConversation,
+      PublishMessage,
     ],
     update: [],
-    patch: [AdjustUnreadMessageInConversation],
+    patch: [AdjustUnreadMessageInConversation, PublishMessage],
     remove: [AdjustAmountMessagesInConversation],
   },
 
