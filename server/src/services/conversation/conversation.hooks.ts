@@ -1,16 +1,18 @@
 /* eslint-disable no-case-declarations */
-// import { HookContext } from '@feathersjs/feathers';
-// import { BadRequest } from '@feathersjs/errors';
+
 import * as authentication from '@feathersjs/authentication';
-// Don't remove this comment. It's needed to format import lines nicely.
 
 import {
   AddTalker,
   // AutoOwn,
   // LimitToOwner,
-  // IncludeAssociations,
-  AddAssociations,
 } from '../../Hooks';
+
+import {
+  FilterConversations,
+  LimitToTalkersOnly,
+  IncludeUserAndLastMessage,
+} from './hook';
 
 // const isDirect = (conversation) =>
 //   conversation.name === 'direct' && conversation.name !== null;
@@ -60,32 +62,22 @@ const { authenticate } = authentication.hooks;
 
 export default {
   before: {
-    all: [
-      authenticate('jwt'),
-      AddAssociations({
-        models: [
-          {
-            model: 'users',
-            attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
-          },
-        ],
-      }),
-    ],
-    find: [],
-    get: [],
+    all: [authenticate('jwt'), IncludeUserAndLastMessage],
+    find: [FilterConversations],
+    get: [LimitToTalkersOnly],
     create: [],
     update: [],
-    patch: [],
-    remove: [],
+    patch: [LimitToTalkersOnly],
+    remove: [LimitToTalkersOnly],
   },
 
   after: {
     all: [],
     find: [
-      /* setConversationName */
+      /* Todo setConversationName */
     ],
     get: [
-      /* setConversationName */
+      /* Todo setConversationName  */
     ],
     create: [AddTalker],
     update: [],
