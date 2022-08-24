@@ -5,6 +5,7 @@ export interface ConversationInterface {
   id: string;
   amountOfPeople: number;
   amountOfMessages: number;
+  amountOfUnreadMessages: number;
   type: string;
   name: string;
 }
@@ -19,6 +20,8 @@ export default (sequelize: any, DataTypes: any) => {
 
     amountOfMessages: number;
 
+    amountOfUnreadMessages: number;
+
     type: string;
 
     name: string;
@@ -27,9 +30,7 @@ export default (sequelize: any, DataTypes: any) => {
       Conversation.belongsToMany(models.User, {
         through: 'Conversation_Users',
       });
-      Conversation.hasMany(models.Message, {
-        as: 'Conversation_Message',
-      });
+      Conversation.hasMany(models.Message);
     }
   }
   Conversation.init(
@@ -52,6 +53,7 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: true,
       },
       amountOfMessages: { type: DataTypes.INTEGER, defaultValue: 0 },
+      amountOfUnreadMessages: { type: DataTypes.INTEGER, defaultValue: 0 },
     },
 
     {
