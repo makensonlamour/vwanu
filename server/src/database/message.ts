@@ -25,7 +25,7 @@ export default (sequelize: any, DataTypes: any) => {
     receivedDate: Date;
 
     static associate(models: any): void {
-      Message.hasOne(models.User, { as: 'sender' });
+      Message.belongsTo(models.User, { as: 'sender' });
       Message.belongsTo(models.Conversation);
       Message.belongsToMany(models.Media, { through: 'Message_Media' });
     }

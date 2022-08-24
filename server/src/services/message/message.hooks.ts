@@ -2,16 +2,24 @@
 import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
 
+import {
+  AddSender,
+  AdjustReadAndReceivedDate,
+  IncludeSenderAndConversation,
+  AdjustAmountMessagesInConversation,
+  AdjustUnreadMessageInConversation,
+} from './hooks';
+
 const { authenticate } = authentication.hooks;
 
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt'), IncludeSenderAndConversation],
     find: [],
     get: [],
-    create: [],
+    create: [AddSender],
     update: [],
-    patch: [],
+    patch: [AdjustReadAndReceivedDate],
     remove: [],
   },
 
@@ -19,10 +27,13 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      AdjustAmountMessagesInConversation,
+      AdjustUnreadMessageInConversation,
+    ],
     update: [],
-    patch: [],
-    remove: [],
+    patch: [AdjustUnreadMessageInConversation],
+    remove: [AdjustAmountMessagesInConversation],
   },
 
   error: {
