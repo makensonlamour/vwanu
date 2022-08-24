@@ -1,53 +1,31 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
 import Loader from "../../../components/common/Loader";
 import { TextArea, Submit, Form } from "../../../components/form";
 import Chip from "@mui/material/Chip";
 import { useGetAllMembers } from "../../../features/user/userSlice";
+import { useGetAllMembersCommunity, useSendInvitation, useGetCommunityRole } from "../../../features/community/communitySlice";
+import { isMember } from "../../../helpers/index";
+import InputSearch from "../../../features/search/components/InputSearch";
 
 const SendInvites = () => {
   const user = useOutletContext();
+  const { id } = useParams();
   const { data: members } = useGetAllMembers(["members", "all"]);
+  const { data: listMemberCommunity } = useGetAllMembersCommunity(["user", "community", "all"], id === "undefined" ? false : true, id);
+  const sendInvitation = useSendInvitation(["community", "invittaion"]);
+  const { data: roles } = useGetCommunityRole(["roles", "all"]);
   const [isLoading, setIsLoading] = useState(false);
-
-  // const members = [
-  //   {
-  //     id: 0,
-  //     profilePicture: "",
-  //     name: "Adele",
-  //   },
-  //   {
-  //     id: 1,
-  //     profilePicture: "",
-  //     name: "Alyssa",
-  //   },
-  //   {
-  //     id: 2,
-  //     profilePicture: "",
-  //     name: "Arianna",
-  //   },
-  //   {
-  //     id: 3,
-  //     profilePicture: "",
-  //     name: "Charles",
-  //   },
-  //   {
-  //     id: 4,
-  //     profilePicture: "",
-  //     name: "Maverick",
-  //   },
-  //   {
-  //     id: 5,
-  //     profilePicture: "",
-  //     name: "Neville",
-  //   },
-  // ];
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  console.log(isSearchOpen);
 
   const initialValues = {
     message: "",
   };
+
+  console.log(roles?.data);
 
   const ValidationSchema = Yup.object().shape({
     message: Yup.string().label("Community Name"),
@@ -55,7 +33,7 @@ const SendInvites = () => {
 
   const [selectMember, setSelectMember] = useState([]);
 
-  const handleDelete = (chipToDelete) => () => {
+  const handleRemove = (chipToDelete) => () => {
     setSelectMember((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
   };
 
@@ -65,14 +43,34 @@ const SendInvites = () => {
     setIsLoading(false);
   };
 
-  const handleSubmit = (data) => {
-    console.log(data);
+  const handleSubmit = async () => {
+    console.log(id);
+    setIsLoading(true);
+    try {
+      let roleCommunityId;
+      roles?.data?.map((role) => {
+        if (role?.name === "member") {
+          return (roleCommunityId = role?.id);
+        }
+      });
+      const dataObj = {
+        guestId: selectMember,
+        CommunityRoleId: roleCommunityId,
+        CommunityId: id,
+      };
+
+      let result = await sendInvitation.mutateAsync(dataObj);
+
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   function isIntoArray(data) {
     let memb = selectMember?.filter((member) => member?.id === data?.id);
-    console.log(memb);
-
     return memb?.length === 0 ? false : true;
   }
 
@@ -85,34 +83,42 @@ const SendInvites = () => {
               <p className="text-lg font-semibold p-4">Members</p>
               <div className="w-full h-[1px] bg-gray-300"></div>
               <div className="py-4 px-6">
-                <input className="w-full outline-0 py-2 px-4 border border-gray-300 rounded-lg" placeholder="Search Members" />
+                <InputSearch
+                  setIsSearchOpen={setIsSearchOpen}
+                  placeholder="Search members"
+                  handleAdd={handleAdd}
+                  handleRemove={handleRemove}
+                  selectMember={selectMember}
+                />
               </div>
               <div className="py-4 px-6">
                 {members?.data?.data?.map((member) => {
                   return (
-                    <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
-                      {user?.id !== member?.id && (
-                        <div className="flex justify-evenly items-center">
-                          <div className="mr-4">
-                            <img
-                              src={member?.profilePicture?.original}
-                              alt="profile_img"
-                              className="bg-gray-100 mask mask-squircle w-10 h-10"
-                            />
+                    !isMember(listMemberCommunity?.data, member) && (
+                      <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
+                        {user?.id !== member?.id && (
+                          <div className="flex justify-evenly items-center">
+                            <div className="mr-4">
+                              <img
+                                src={member?.profilePicture?.original}
+                                alt="profile_img"
+                                className="bg-gray-100 mask mask-squircle w-10 h-10"
+                              />
+                            </div>
+                            <div className="">{member?.firstName + " " + member?.lastName}</div>
                           </div>
-                          <div className="">{member?.firstName + " " + member?.lastName}</div>
-                        </div>
-                      )}
-                      {user?.id !== member?.id && (
-                        <div className="">
-                          {isIntoArray(member) ? (
-                            <button onClick={handleDelete(member)}>remove</button>
-                          ) : (
-                            <button onClick={() => handleAdd(member)}>add</button>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                        )}
+                        {user?.id !== member?.id && (
+                          <div className="">
+                            {isIntoArray(member) ? (
+                              <button onClick={handleRemove(member)}>remove</button>
+                            ) : (
+                              <button onClick={() => handleAdd(member)}>add</button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )
                   );
                 })}
               </div>
@@ -128,7 +134,7 @@ const SendInvites = () => {
                   {selectMember?.map((data) => {
                     return (
                       <div className="mr-2 mb-2" key={data?.id}>
-                        <Chip label={data.firstName + " " + data?.lastName} onDelete={handleDelete(data)} />
+                        <Chip label={data.firstName + " " + data?.lastName} onDelete={handleRemove(data)} />
                       </div>
                     );
                   })}

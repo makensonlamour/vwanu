@@ -92,3 +92,40 @@ export function assignValue(obj) {
 
   return array;
 }
+
+//assign value for interest
+export function assignCommunityMember(obj, types) {
+  if (obj?.length === 0 || types === "") return;
+  const array = [];
+
+  obj?.map((item) => {
+    if (item?.CommunityRole?.name === types) {
+      return array?.push({
+        id: item?.id,
+        CommunityId: item?.CommunityId,
+        CommunityRole: item?.CommunityRole,
+        CommunityRoleId: item?.CommunityRoleId,
+        User: item?.User,
+        UserId: item?.UserId,
+        banned: item?.banned,
+        bannedDate: item?.bannedDate,
+        canInvite: item?.canInvite,
+        canMessageInGroup: item?.canMessageInGroup,
+        canPost: item?.canPost,
+        canUploadDoc: item?.canUploadDoc,
+        canUploadPhoto: item?.canUploadPhoto,
+        canUploadVideo: item?.canUploadVideo,
+        createdAt: item?.createdAt,
+        updatedAt: item?.updatedAt,
+      });
+    }
+  });
+
+  return array;
+}
+
+export function isMember(listMembers, data) {
+  let memb = listMembers?.filter((member) => member?.UserId === data?.id);
+
+  return memb?.length === 0 ? false : true;
+}

@@ -1,96 +1,70 @@
-import React from "react";
+/*eslint-disable */
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import InputSearch from "../../../search/components/InputSearch";
+import Chip from "@mui/material/Chip";
+import { BsSearch } from "react-icons/bs";
+
 // import { IMAGE_PROXY, THEMES } from "../../shared/constants";
 
 // import Spin from "react-cssfx-loading/src/Spin";
 // import { useNavigate } from "react-router-dom";
+// import { cleanup } from "@testing-library/react";
+import InputMessage from "./../message/InputMessage";
 
 const CreateConversation = ({ setIsOpened }) => {
-  //   const data = [];
-  const error = null;
-  const loading = false;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [selectMember, setSelectMember] = useState([]);
+  const handleRemove = (chipToDelete) => () => {
+    setSelectMember((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
+  };
 
-  //   const [isCreating, setIsCreating] = useState(false);
-
-  //   const currentUser = {};
-  //   const [selected, setSelected] = useState([]);
-
-  //   const navigate = useNavigate();
-
-  //   const handleToggle = (uid) => {
-  //     if (selected.includes(uid)) {
-  //       setSelected(selected.filter((item) => item !== uid));
-  //     } else {
-  //       setSelected([...selected, uid]);
-  //     }
-  //   };
-
-  //   const handleCreateConversation = async () => {
-  //     console.log("create conversation");
-  //   };
+  const handleAdd = (data) => {
+    setIsLoading(true);
+    setSelectMember((selectMember) => [...selectMember, data]);
+    setIsLoading(false);
+  };
 
   return (
-    <div
-      onClick={() => setIsOpened(false)}
-      className="fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]"
-    >
-      <div onClick={(e) => e.stopPropagation()} className="bg-white mx-3 w-full max-w-[500px] overflow-hidden rounded-lg">
-        <div className="border-dark-lighten flex items-center justify-between border-b py-3 px-3">
-          <div className="flex-1"></div>
-          <div className="flex flex-1 items-center justify-center">
-            <h1 className="whitespace-nowrap text-center text-2xl">New conversation</h1>
-          </div>
-          <div className="flex flex-1 items-center justify-end">
-            <button onClick={() => setIsOpened(false)} className="bg-dark-lighten flex h-8 w-8 items-center justify-center rounded-full">
-              <i className="bx bx-x text-2xl"></i>
-            </button>
-          </div>
+    <>
+      <div className="w-full relative">
+        <div className="py-[1.60rem] px-10">
+          <p className="text-xl font-semibold">New Message</p>
         </div>
-        {loading ? (
-          <div className="flex h-96 items-center justify-center">Loading...</div>
-        ) : error ? (
-          <div className="flex h-96 items-center justify-center">
-            <p className="text-center">Something went wrong</p>
-          </div>
-        ) : (
-          <>
-            {/*}
-            {isCreating && (
-              <div className="absolute top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]">
-                <Spin color="#0D90F3" />
-              </div>
-                              )}
-            {*/}
-            <div className="flex h-96 flex-col items-stretch gap-2 overflow-y-auto py-2">
-              {/*}
-              {data?.docs
-                .filter((doc) => doc.data().uid !== currentUser?.uid)
-                .map((doc) => (
-                  <div
-                    key={doc.data().uid}
-                    onClick={() => handleToggle(doc.data().uid)}
-                    className="hover:bg-dark-lighten flex cursor-pointer items-center gap-2 px-5 py-2 transition"
-                  >
-                    <input className="flex-shrink-0 cursor-pointer" type="checkbox" checked={selected.includes(doc.data().uid)} readOnly />
-                    <img className="h-8 w-8 flex-shrink-0 rounded-full object-cover" src={IMAGE_PROXY(doc.data().photoURL)} alt="" />
-                    <p>{doc.data().displayName}</p>
+        <div className="h-[1px] w-full bg-gray-200"></div>
+        <div className="py-4 px-6">
+          <div className="flex justify-between items-center">
+            <div className="flex flex-wrap px-4 mt-2">
+              {selectMember?.map((data) => {
+                return (
+                  <div className="mr-2 mb-2" key={data?.id}>
+                    <Chip label={data.firstName + " " + data?.lastName} onDelete={handleRemove(data)} />
                   </div>
-                ))}
-                {*/}
+                );
+              })}
             </div>
-            <div className="border-dark-lighten flex justify-end border-t p-3">
-              {/*}  <button
-                disabled={selected.length === 0}
-                onClick={handleCreateConversation}
-                className="bg-dark-lighten rounded-lg py-2 px-3 transition duration-300 hover:brightness-125 disabled:!brightness-[80%]"
-              >
-                Start conversation
-            </button> {*/}
-            </div>
-          </>
-        )}
+            {!(selectMember?.length == 0 || isSearchOpen) && (
+              <button className="text-gray-400" onClick={() => setIsSearchOpen(true)}>
+                <BsSearch size={"24px"} className="" />
+              </button>
+            )}
+          </div>
+          {(selectMember?.length == 0 || isSearchOpen) && (
+            <InputSearch
+              setIsSearchOpen={setIsSearchOpen}
+              placeholder={"Type to search a friend"}
+              handleAdd={handleAdd}
+              handleRemove={handleRemove}
+              selectMember={selectMember}
+            />
+          )}
+        </div>
+        <div className="absolute bottom-0 w-full">
+          <InputMessage type={"new_conversation"} selectMember={selectMember} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

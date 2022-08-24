@@ -10,9 +10,11 @@ function TextArea({ name, maxRows, minRows, label, onKeyDown, className, testId,
 
   return (
     <>
-      <label className="label">
-        <span className="label-text text-md text-secondary font-semibold -mb-2 mt-4">{label}</span>
-      </label>
+      {label && (
+        <label className="label">
+          <span className="label-text text-md text-secondary font-semibold -mb-2 mt-4">{label}</span>
+        </label>
+      )}
       <TextareaAutosize
         className={" " + className}
         type="text"

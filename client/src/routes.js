@@ -112,6 +112,12 @@ let routes = [
     access: role.USER,
   },
   {
+    path: routesPath.VIEW_MESSAGE,
+    name: "View Message",
+    element: Message,
+    access: role.USER,
+  },
+  {
     path: routesPath.POST,
     name: "Post",
     element: ViewPost,

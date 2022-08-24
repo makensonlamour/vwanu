@@ -10,6 +10,7 @@ import random_cover from "../../assets/images/cover_group_random.png";
 import ManageTabs from "./ManageTabs";
 import PostTab from "./CommunityTab/PostTab";
 import MembersTab from "./MembersTab";
+import DiscussionTabs from "./DiscussionTabs";
 import SendInviteTabs from "./SendInviteTabs";
 import { Chip, Stack } from "@mui/material";
 
@@ -215,7 +216,14 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                     }
                   />
                   <Route path={allTabs1[2]} element={<div>Albums</div>} />
-                  <Route path={allTabs1[3]} element={<div>Discussions</div>} />
+                  <Route
+                    path={allTabs1[3]}
+                    element={
+                      <div>
+                        <DiscussionTabs />{" "}
+                      </div>
+                    }
+                  />
                   <Route
                     path={allTabs1[4]}
                     element={
