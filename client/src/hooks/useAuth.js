@@ -39,6 +39,7 @@ const useAuth = () => {
       }
     } catch (error) {
       console.error(error);
+      setError(error.message);
       if (!isCancelled) {
         setError(error.message);
         setLoading(false);
@@ -68,6 +69,7 @@ const useAuth = () => {
       }
     } catch (error) {
       console.log(error);
+      setError(error.message);
       if (!isCancelled) {
         setLoading(false);
         setError(error.message);

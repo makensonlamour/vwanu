@@ -52,10 +52,14 @@ const ListMessage = () => {
           <div className="h-[1px] w-full bg-gray-200"></div>
           <div className="h-[47vh] overflow-auto">
             {listMessage?.data?.length > 0 &&
-              listMessage?.data?.map((message, idx) => {
+              listMessage?.data?.map((message) => {
                 return (
                   <div key={message.id} className="px-5 py-2">
-                    <SingleMessage sender={idx % 2 === 0 ? true : false} listMessage={message} />
+                    <SingleMessage
+                      groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
+                      sender={user?.id === message?.senderId ? true : false}
+                      listMessage={message}
+                    />
                   </div>
                 );
               })}
