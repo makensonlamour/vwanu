@@ -23,10 +23,10 @@ export default function (app: Application): void {
       app.channel('authenticated').join(connection);
       // Joining all chat rooms for updates of new messages
 
-      const { user } = connection;
+      const { User } = connection;
       app
         .service('conversation-users')
-        .find({ query: { userId: user.id } })
+        .find({ query: { UserId: User.id } })
         .then((conversationUsers: any) => {
           conversationUsers.forEach((conversationUser: any) => {
             app
@@ -35,8 +35,8 @@ export default function (app: Application): void {
           });
         });
 
-      app.channel(`emails/${user.email}`).join(connection);
-      app.channel(`userIds/${user.id}`).join(connection);
+      app.channel(`emails/${User.email}`).join(connection);
+      app.channel(`userIds/${User.id}`).join(connection);
     }
   });
 

@@ -53,8 +53,12 @@ const SendInvites = () => {
           return (roleCommunityId = role?.id);
         }
       });
+      console.log(selectMember);
+      let guest = selectMember?.map((mem) => {
+        return mem?.id;
+      });
       const dataObj = {
-        guestId: selectMember,
+        guestId: guest,
         CommunityRoleId: roleCommunityId,
         CommunityId: id,
       };
