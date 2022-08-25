@@ -12,6 +12,7 @@ export default function (options: any = {}) {
         const newModel = { ...model };
 
         newModel.model = context.app.services[model.model].Model;
+       
         return newModel;
       })
     );

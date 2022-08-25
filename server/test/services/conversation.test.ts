@@ -22,7 +22,7 @@ describe("'conversation' service", () => {
   let randomUser1;
   let randomUser2;
   const userEndpoint = '/users';
-  // const endpoint = '/conversation';
+  const endpoint = '/conversation';
   const conversationUsers = '/conversation-users';
   let publicConversation;
   beforeAll(async () => {
@@ -62,12 +62,35 @@ describe("'conversation' service", () => {
       .get(`${conversationUsers}/?UserId=${randomUser1.id}`)
       .set('authorization', randomUser1.accessToken);
 
+    // console.log(list.body);
     list.body.forEach((conversation) => {
       expect(conversation).toEqual(
         expect.objectContaining({
           id: expect.any(String),
           amountOfMessages: expect.any(Number),
           amountOfPeople: 2,
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          Users: expect.any(Array),
+        })
+      );
+      expect(
+        conversation.Users.some((User) => User.id === randomUser1.id)
+      ).toBeTruthy();
+    });
+  });
+
+  it('Should list all conversation created or part of via the conversation endpoint', async () => {
+    const myConversations = await testServer
+      .get(endpoint)
+      .set('authorization', randomUser1.accessToken);
+
+    myConversations.body.forEach((conversation) => {
+      expect(conversation).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          amountOfMessages: expect.any(Number),
+          amountOfPeople: expect.any(Number),
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
           Users: expect.any(Array),
@@ -112,6 +135,47 @@ describe("'conversation' service", () => {
           readDate: null,
         })
       );
+    });
+    const pulled = await testServer
+      .get(`${conversationUsers}/?ConversationId=${publicConversation.id}`)
+      .set('authorization', randomUser1.accessToken);
+
+    pulled.body.forEach((conversation) => {
+      expect(conversation).toMatchObject({
+        id: publicConversation.id,
+        amountOfPeople: 2,
+        type: 'direct',
+        name: null,
+        amountOfMessages: 2,
+        amountOfUnreadMessages: 2,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        Users: expect.any(Array),
+        Messages: [
+          {
+            id: expect.any(String),
+            messageText: 'test message1',
+            received: false,
+            read: false,
+            receivedDate: null,
+            readDate: null,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            UserId: null,
+            senderId: randomUser1.id,
+            ConversationId: publicConversation.id,
+            sender: {
+              id: randomUser1.id,
+              firstName: randomUser1.firstName,
+              lastName: randomUser1.lastName,
+              profilePicture: expect.any(String),
+            },
+          },
+        ],
+      });
+      expect(
+        conversation.Users.some((User) => User.id === randomUser1.id)
+      ).toBeTruthy();
     });
   });
 

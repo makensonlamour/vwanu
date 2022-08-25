@@ -27,7 +27,7 @@ const associateModels = (include, context) => {
 
       associations.push(association);
     } else {
-      // console.log('association', context.app.service(model).Model.associations);
+      console.log('association', context.app.service(model).Model.associations);
       throw new Error(
         `Requested association '${assoc.as}' of model ${
           context.app.service(model).Model.name
