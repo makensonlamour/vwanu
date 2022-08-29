@@ -11,6 +11,7 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 // const verifyHooks = authMan.hooks;
+import { SaveAddress, IncludeAddress, AddVisitor } from './hook';
 
 const { hashPassword, protect } = local.hooks;
 const { authenticate } = feathersAuthentication.hooks;
@@ -75,40 +76,10 @@ export default {
       MediaStringToMediaObject(['profilePicture', 'coverPicture']),
     ],
     find: [],
-    get: [
-      async (context) => {
-        if (
-          !context.params.provider ||
-          !context.params.User ||
-          !context.id ||
-          context.params.User.id === context.id
-        )
-          return context;
-
-        try {
-          await context.app.service('userVisitor').create({
-            UserId: context.id,
-            VisitorId: context.params.User.id,
-          });
-
-          await context.app.service('notification').create({
-            UserId: context.params.User.id,
-            to: context.id,
-            message: 'Visited your profile',
-            type: 'direct',
-            entityName: 'users',
-            entityId: context.id,
-          });
-        } catch (error) {
-          throw new Error(error);
-        }
-
-        return context;
-      },
-    ],
-    create: [AutoLogin],
+    get: [IncludeAddress, AddVisitor],
+    create: [SaveAddress, AutoLogin, IncludeAddress],
     update: [],
-    patch: [],
+    patch: [SaveAddress, IncludeAddress],
     remove: [],
   },
 

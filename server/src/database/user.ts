@@ -133,6 +133,10 @@ export default (sequelize: any, DataTypes: any) => {
       User.hasMany(models.Blog, {
         onDelete: 'CASCADE',
       });
+      User.belongsToMany(models.Address, {
+        through: 'EntityAddress',
+        as: 'addresses',
+      });
       User.belongsToMany(models.User, {
         as: 'Follower',
         through: 'User_Follower',
