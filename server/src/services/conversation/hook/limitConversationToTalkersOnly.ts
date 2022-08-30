@@ -21,7 +21,7 @@ export default async (context: HookContext) => {
   });
   if (!result)
     throw new BadRequest('You are not allowed to access this conversation.');
-  context.result = result;
+  // context.result = result;
 
   return context;
 };
