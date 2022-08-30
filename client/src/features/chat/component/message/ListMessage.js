@@ -37,6 +37,7 @@ const ListMessage = () => {
             ) : (
               <div className="flex items-center">
                 <div className="mr-2">
+                  {console.log(filtered[0])}
                   <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
                 </div>
                 {filtered?.map((item) => {

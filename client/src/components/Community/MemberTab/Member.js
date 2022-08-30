@@ -10,8 +10,6 @@ const Member = () => {
   const { data: listFriend } = useGetAllMembersCommunity(["user", "friend"], id === "undefined" ? false : true, id);
   //   fn(listFriend?.data?.length);
 
-  console.log(listFriend?.data);
-
   return (
     <>
       {assignCommunityMember(listFriend?.data, "admin")?.length > 0 && (

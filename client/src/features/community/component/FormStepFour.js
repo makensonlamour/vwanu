@@ -124,7 +124,7 @@ const FormStepFour = ({ setStep, currentStep, data, setData }) => {
                     onClick={handleSave}
                     className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
                   >
-                    Save
+                    {isLoading ? <Loader /> : "Save"}
                   </button>
                 </div>
               </div>
