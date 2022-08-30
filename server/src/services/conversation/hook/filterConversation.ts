@@ -15,9 +15,8 @@ export default async (context: HookContext) => {
       query: { UserId: User.id },
     });
 
-    context.result = result;
+    context.result = result || [];
   } catch (err) {
-    console.log(err)
     throw new GeneralError(
       `We could not find your conversation due to ${err.message}`
     );
