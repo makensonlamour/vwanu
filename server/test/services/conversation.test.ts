@@ -21,6 +21,7 @@ describe("'conversation' service", () => {
   let testServer;
   let randomUser1;
   let randomUser2;
+  let myConversations;
   const userEndpoint = '/users';
   const endpoint = '/conversation';
   const conversationUsers = '/conversation-users';
@@ -81,10 +82,11 @@ describe("'conversation' service", () => {
   });
 
   it('Should list all conversation created or part of via the conversation endpoint', async () => {
-    const myConversations = await testServer
+    myConversations = await testServer
       .get(endpoint)
       .set('authorization', randomUser1.accessToken);
 
+    console.log(myConversations.body);
     myConversations.body.forEach((conversation) => {
       expect(conversation).toEqual(
         expect.objectContaining({
@@ -102,6 +104,26 @@ describe("'conversation' service", () => {
     });
   });
 
+  it('should be able to fetch one conversation', async () => {
+    const fetchedConv = await testServer
+      .get(`${endpoint}/${myConversations.body[0].id}`)
+      .set('authorization', randomUser1.accessToken);
+
+    console.log('Here is the conversation fetched');
+    console.log(fetchedConv.body);
+    expect(fetchedConv.body).toEqual({
+      id: expect.any(String),
+      amountOfPeople: 2,
+      type: 'direct',
+      name: null,
+      amountOfMessages: 0,
+      amountOfUnreadMessages: 0,
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
+      Users: expect.any(Array),
+      Messages: expect.any(Array),
+    });
+  });
   it('Should create a new message in a conversation', async () => {
     publicConversation = await createConversation(
       [randomUser2.id],

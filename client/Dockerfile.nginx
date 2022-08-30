@@ -1,14 +1,13 @@
 FROM node:alpine As build-stage
 WORKDIR /app
+ARG REACT_APP_API_URL
 COPY package.json ./
 COPY package-lock.json ./
 COPY ./ ./
 # COPY node_modules ./
 
 RUN npm i --legacy-peer-deps
-ENV REACT_APP_API_URL=143.244.157.80
-
-#RUN npx run prettier --fix; 
+ENV REACT_APP_API_URL=$REACT_APP_API_URL 
 RUN npm run build; 
 
 
