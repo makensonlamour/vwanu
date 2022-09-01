@@ -1,5 +1,5 @@
 import { HookContext } from '@feathersjs/feathers';
-import { BadRequest } from '@feathersjs/errors';
+import { BadRequest, GeneralError } from '@feathersjs/errors';
 import AdjustCount from './AdjustCount';
 
 export default async (context: HookContext) => {
@@ -28,7 +28,12 @@ export default async (context: HookContext) => {
     incremental: addedUser.length,
   });
 
-  await updateUserCount(context);
+  try {
+    await updateUserCount(context);
+    context.result.amountOfPeople = addedUser.length;
+  } catch (e) {
+    throw new GeneralError(e.message);
+  }
   //   console.log('users updated');
 
   return context;
