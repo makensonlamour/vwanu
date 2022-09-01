@@ -2,7 +2,10 @@
 import request from 'supertest';
 import app from '../../src/app';
 
-import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
+import {
+  getRandUser,
+  getRandUsers,
+} from '../../src/lib/utils/generateFakeUser';
 
 const createConversation = async (
   userIds: string[],
@@ -51,14 +54,14 @@ describe("'conversation' service", () => {
       expect.objectContaining({
         id: expect.any(String),
         amountOfMessages: 0,
-        amountOfPeople: expect.any(Number),
+        amountOfPeople: 2,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         type: 'direct',
       })
     );
   });
-  it('Should be able to list all conversation created or part of', async () => {
+  it.skip('Should be able to list all conversation created or part of', async () => {
     const list = await testServer
       .get(`${conversationUsers}/?UserId=${randomUser1.id}`)
       .set('authorization', randomUser1.accessToken);
@@ -82,37 +85,105 @@ describe("'conversation' service", () => {
   });
 
   it('Should list all conversation created or part of via the conversation endpoint', async () => {
+    // The first user involve can see his conversations
     myConversations = await testServer
       .get(endpoint)
       .set('authorization', randomUser1.accessToken);
 
-    console.log(myConversations.body);
     myConversations.body.forEach((conversation) => {
       expect(conversation).toEqual(
         expect.objectContaining({
           id: expect.any(String),
-          amountOfMessages: expect.any(Number),
-          amountOfPeople: expect.any(Number),
+          amountOfMessages: 0,
+          amountOfPeople: 2,
+          type: 'direct',
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
           Users: expect.any(Array),
+          Messages: expect.any(Array),
         })
       );
+
+      conversation.Users.forEach((user) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            firstName: expect.any(String),
+            lastName: expect.any(String),
+            profilePicture: expect.any(String),
+          })
+        );
+      });
+      expect(conversation.Messages.length).toBe(0);
+
       expect(
         conversation.Users.some((User) => User.id === randomUser1.id)
       ).toBeTruthy();
+      expect(
+        conversation.Users.some((User) => User.id === randomUser2.id)
+      ).toBeTruthy();
     });
-  });
+
+    // The second user request should see the same conversations
+
+    const secondUserCheckingConversation = await testServer
+      .get(endpoint)
+      .set('authorization', randomUser2.accessToken);
+
+    secondUserCheckingConversation.body.forEach((conversation) => {
+      expect(conversation).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          amountOfMessages: 0,
+          amountOfPeople: 2,
+          type: 'direct',
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          Users: expect.any(Array),
+          Messages: expect.any(Array),
+        })
+      );
+
+      conversation.Users.forEach((user) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            firstName: expect.any(String),
+            lastName: expect.any(String),
+            profilePicture: expect.any(String),
+          })
+        );
+      });
+      expect(conversation.Messages.length).toBe(0);
+
+      expect(
+        conversation.Users.some((User) => User.id === randomUser1.id)
+      ).toBeTruthy();
+      expect(
+        conversation.Users.some((User) => User.id === randomUser2.id)
+      ).toBeTruthy();
+    });
+
+    // This user will have no conversations at all
+    const newUserObject = getRandUser();
+    delete newUserObject.id;
+
+    const { body: newUser } = await testServer
+      .post(userEndpoint)
+      .send(newUserObject);
+
+    const { body: newConversation } = await testServer
+      .get(endpoint)
+      .set('authorization', newUser.accessToken);
+    // This user have not created any conversation
+    expect(newConversation.length).toBe(0);
+  }, 15000);
 
   it('should be able to fetch one conversation', async () => {
-    const fetchedConv = await testServer
+    const { body: fetchedConversation } = await testServer
       .get(`${endpoint}/${myConversations.body[0].id}`)
       .set('authorization', randomUser1.accessToken);
 
-    console.log('Here is the conversation fetched');
-    console.log(fetchedConv.body);
-    expect(fetchedConv.body).toEqual({
-      id: expect.any(String),
+    expect(fetchedConversation).toEqual({
+      id: myConversations.body[0].id,
       amountOfPeople: 2,
       type: 'direct',
       name: null,
@@ -122,6 +193,41 @@ describe("'conversation' service", () => {
       updatedAt: expect.any(String),
       Users: expect.any(Array),
       Messages: expect.any(Array),
+    });
+
+    const { Users } = fetchedConversation;
+    expect(Users.length).toBe(2);
+    expect(Users.some((User) => User.id === randomUser1.id)).toBeTruthy();
+    expect(Users.some((User) => User.id === randomUser2.id)).toBeTruthy();
+  });
+
+  it('Only users of a conversation should fetch it', async () => {
+    const newUserObject = getRandUser();
+    delete newUserObject.id;
+    const { body: newUser } = await testServer
+      .post(userEndpoint)
+      .send(newUserObject);
+
+    const some1ElseConversation = await testServer
+      .get(`${endpoint}/${myConversations.body[0].id}`)
+      .set('authorization', newUser.accessToken);
+
+    expect(some1ElseConversation.status).toBe(400);
+    let ourConversation = await Promise.all(
+      [randomUser1.accessToken, randomUser2.accessToken].map((participant) =>
+        testServer
+          .get(`${endpoint}/${myConversations.body[0].id}`)
+          .set('authorization', participant)
+      )
+    );
+
+    ourConversation.forEach((conversation) => {
+      expect(conversation.status).toBe(200);
+    });
+    ourConversation = ourConversation.map((conversation) => conversation.body);
+
+    ourConversation.forEach((conversation) => {
+      expect(conversation.id).toBeDefined();
     });
   });
   it('Should create a new message in a conversation', async () => {
@@ -158,50 +264,50 @@ describe("'conversation' service", () => {
         })
       );
     });
-    const pulled = await testServer
-      .get(`${conversationUsers}/?ConversationId=${publicConversation.id}`)
+  });
+  it('should be able to fetch one conversation and see last message it contains', async () => {
+    const { body: fetchedConversation } = await testServer
+      .get(`${endpoint}/${publicConversation.id}`)
       .set('authorization', randomUser1.accessToken);
 
-    pulled.body.forEach((conversation) => {
-      expect(conversation).toMatchObject({
-        id: publicConversation.id,
-        amountOfPeople: 2,
-        type: 'direct',
-        name: null,
-        amountOfMessages: 2,
-        amountOfUnreadMessages: 2,
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
-        Users: expect.any(Array),
-        Messages: [
-          {
-            id: expect.any(String),
-            messageText: 'test message1',
-            received: false,
-            read: false,
-            receivedDate: null,
-            readDate: null,
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
-            UserId: null,
-            senderId: randomUser1.id,
-            ConversationId: publicConversation.id,
-            sender: {
-              id: randomUser1.id,
-              firstName: randomUser1.firstName,
-              lastName: randomUser1.lastName,
-              profilePicture: expect.any(String),
-            },
+    expect(fetchedConversation).toMatchObject({
+      id: publicConversation.id,
+      amountOfPeople: 2,
+      type: 'direct',
+      name: null,
+      amountOfMessages: 2,
+      amountOfUnreadMessages: 2,
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
+      Users: expect.any(Array),
+      Messages: [
+        {
+          id: expect.any(String),
+          messageText: 'test message1',
+          received: false,
+          read: false,
+          receivedDate: null,
+          readDate: null,
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          UserId: null,
+          senderId: randomUser1.id,
+          ConversationId: publicConversation.id,
+          sender: {
+            id: randomUser1.id,
+            firstName: randomUser1.firstName,
+            lastName: randomUser1.lastName,
+            profilePicture: expect.any(String),
           },
-        ],
-      });
-      expect(
-        conversation.Users.some((User) => User.id === randomUser1.id)
-      ).toBeTruthy();
+        },
+      ],
     });
+    const { Users } = fetchedConversation;
+    expect(Users.some((User) => User.id === randomUser1.id)).toBeTruthy();
+    expect(Users.some((User) => User.id === randomUser2.id)).toBeTruthy();
   });
 
-  it('user should fetch all message of a conversation', async () => {
+  it.skip('user should fetch all message of a conversation', async () => {
     const messages = await testServer
       .get(`/message/?ConversationId=${publicConversation.id}`)
       .set('authorization', randomUser1.accessToken);
