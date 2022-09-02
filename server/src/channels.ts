@@ -15,6 +15,8 @@ export default function (app: Application): void {
   });
 
   app.on('login', (authResult: any, { connection }: any): void => {
+    console.log('\n\n\n login triggered');
+
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
     if (connection) {
@@ -24,19 +26,25 @@ export default function (app: Application): void {
       // Joining all chat rooms for updates of new messages
 
       const { User } = connection;
+
       app
-        .service('conversation-users')
-        .find({ query: { UserId: User.id } })
+        .service('conversation')
+        .find({
+          query: {},
+          paginate: false,
+          User,
+        })
         .then((conversationUsers: any) => {
           conversationUsers.forEach((conversationUser: any) => {
             app
-              .channel(`conversation-${conversationUser.conversationId}`)
+              .channel(`conversation-${conversationUser.ConversationId}`)
               .join(connection);
           });
         });
 
-      app.channel(`emails/${User.email}`).join(connection);
-      app.channel(`userIds/${User.id}`).join(connection);
+      app
+        .channel(`emails/${User.email}`, `userIds/${User.id}`)
+        .join(connection);
     }
   });
 

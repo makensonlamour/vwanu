@@ -29,11 +29,13 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened }) => {
       setNotificationList((notificationList) => [...notificationList, notification]);
     }*/
   };
-  const notificationService = client.service("message");
+  const notificationService = client.service("conversation");
+  const messageService = client.service("message");
 
   const nots = async () => {
     // const notifications = await notificationService.find({ query: { to: user.id } });
     // notifications.forEach(onCreatedListener);
+    messageService.on("created", onCreatedListener);
     notificationService.on("created", onCreatedListener);
 
     notificationService.on("updated", onCreatedListener);

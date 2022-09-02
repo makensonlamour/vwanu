@@ -14,50 +14,31 @@ import {
   IncludeUserAndLastMessage,
 } from './hook';
 
-// const isDirect = (conversation) =>
-//   conversation.name === 'direct' && conversation.name !== null;
+const NotifyUsers = async (context) => {
+  const { app, data, result } = context;
+  console.log('\n\n NotifyUsers');
+  console.log('User ids');
+  console.log(data.userIds);
+  try {
+    const connections = [...data.userIds].map(
+      (userId) => app.channel(`userIds/${userId}`).connections
+    );
+    connections.forEach((connection) => {
+      app.channel(`conversation-${result.id}`).join(connection);
+      // app.service('conversation').publish('created', (v) =>
+      //   app.channel(`conversation-${result.id}`).send({
+      //     name: 'data.name',
+      //     v,
+      //   })
+      // );
+    });
+  } catch (error) {
+    console.log('soem error notifying them');
+    console.log(error);
+  }
 
-// const setName = (conversation, users, against) => {
-//   const name = users
-//     .filter((user) => {
-//       if (user.id !== against) return `${user.firstName} ${user.lastName[0]}`;
-//       return null;
-//     })
-//     .split(' , ');
-//   return { ...conversation, name };
-// };
-
-// const setConversationName = (ctx) => {
-//   const { type, result, method, params } = ctx;
-
-//   if (
-//     type === 'before' ||
-//     !result ||
-//     !['find', 'get'].some((val) => val === method)
-//   )
-//     return ctx;
-//   switch (method) {
-//     case 'get':
-//       if (!isDirect(result)) return ctx;
-//       const name = setName(result, result.Users, params.User.id);
-
-//       break;
-
-//     case 'find':
-//       const newData = result.map((res) => {
-//         // if (isDirect(result)) return ctx;
-//         const names = setName(res, res.Users, params.User.id);
-
-//         return name;
-//       });
-//       break;
-//     default:
-//       break;
-//   }
-
-//   return ctx;
-// };
-
+  return context;
+};
 const { authenticate } = authentication.hooks;
 
 export default {
@@ -79,7 +60,7 @@ export default {
     get: [
       /* Todo setConversationName  */
     ],
-    create: [AddTalker],
+    create: [AddTalker, NotifyUsers],
     update: [],
     patch: [],
     remove: [],
