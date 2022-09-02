@@ -36,14 +36,13 @@ export default function (app: Application): void {
         })
         .then((conversationUsers: any) => {
           conversationUsers.forEach((conversationUser: any) => {
-            app
-              .channel(`conversation-${conversationUser.ConversationId}`)
-              .join(connection);
+            app.channel(`conversation-${conversationUser.id}`).join(connection);
+
           });
         });
 
       app
-        .channel(`emails/${User.email}`, `userIds/${User.id}`)
+        .channel(`userIds-${User.id}`)
         .join(connection);
     }
   });

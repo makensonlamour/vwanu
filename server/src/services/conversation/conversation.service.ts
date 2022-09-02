@@ -8,14 +8,14 @@ import hooks from './conversation.hooks';
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
   interface ServiceTypes {
-    'conversation': Conversation & ServiceAddons<any>;
+    conversation: Conversation & ServiceAddons<any>;
   }
 }
 
 export default function (app: Application): void {
   const options = {
     Model: app.get('sequelizeClient').models.Conversation,
-    paginate: app.get('paginate')
+    paginate: app.get('paginate'),
   };
 
   // Initialize our service with any options it requires
@@ -23,6 +23,11 @@ export default function (app: Application): void {
 
   // Get our initialized service so that we can register hooks
   const service = app.service('conversation');
-
+  // Sending notification to the receivers or the conversation
+  service.publish((conversation, context) =>
+    app
+      .channel(`conversation-${conversation.id}`)
+      .filter((connection) => connection.User.id !== context.params.User.id)
+  );
   service.hooks(hooks);
 }
