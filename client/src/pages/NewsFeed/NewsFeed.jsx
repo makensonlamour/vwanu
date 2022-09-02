@@ -28,7 +28,6 @@ const NewsFeed = () => {
   const { data: blogList } = useGetBlogList(["blog", "all"], true);
 
   const onCreatedListener = (notification) => {
-    console.log("created", notification);
     if (notification.to.toString() === user.id.toString() && notification?.UserId?.toString() !== user.id.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
     }

@@ -20,6 +20,7 @@ import Community from "./pages/Community/Community";
 import Forum from "./pages/Forum/Forum";
 import ViewForum from "./pages/Forum/ViewForum";
 import ForumList from "./pages/Forum/ForumList";
+import CallScreen from "./pages/Call/CallScreen";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
@@ -27,6 +28,7 @@ let role = {
   PUBLIC: "public",
   USER: "user",
   AUTH: "auth",
+  CALL: "call",
 };
 
 //Define all routes on the app
@@ -110,6 +112,12 @@ let routes = [
     name: "Message",
     element: Message,
     access: role.USER,
+  },
+  {
+    path: routesPath.VOICE_CALL,
+    name: "Call",
+    element: CallScreen,
+    access: role.CALL,
   },
   {
     path: routesPath.VIEW_MESSAGE,

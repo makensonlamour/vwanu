@@ -1,8 +1,26 @@
 /*eslint-disable */
 import { Link, useParams, useOutletContext } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Skeleton } from "@mui/material";
+import { BsArrowReturnRight } from "react-icons/bs";
+import { parseISO, formatRelative } from "date-fns";
+import { enUS } from "date-fns/esm/locale";
+import { GoPrimitiveDot } from "react-icons/go";
+
+const formatRelativeLocale = {
+  lastWeek: "eeee",
+  yesterday: "Yesterday",
+  today: "p",
+  tomorrow: "'tomorrow at' p",
+  nextWeek: "eeee 'at' p",
+  other: "P", // Difference: Add time to the date
+};
+
+const locale = {
+  ...enUS,
+  formatRelative: (token) => formatRelativeLocale[token],
+};
 
 const SelectConversation = ({ setSelectedConversation, setCreateConversationOpened, conversation, conversationId }) => {
   /* const loading = true;
@@ -58,6 +76,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
   const user = useOutletContext();
 
   const filtered = conversation?.Users?.filter((item) => item.id !== user?.id);
+  // console.log(conversation);
 
   return (
     <>
@@ -73,20 +92,43 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
               conversationId === id ? "bg-placeholder-color" : ""
             }`}
           >
-            <div className="flex items-center">
-              <div className="mr-2">
-                <img
-                  className="mask mask-squircle w-10 h-10"
-                  src={filtered[Math.floor(Math.random() * filtered.length)]?.profilePicture}
-                  alt=""
-                />
+            <div className="basis-full">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-start">
+                  <div className="mr-2">
+                    <img
+                      className="mask mask-squircle w-10 h-10"
+                      src={filtered[Math.floor(Math.random() * filtered.length)]?.profilePicture}
+                      alt=""
+                    />
+                  </div>
+                  <div className="">
+                    <p className="font-semibold">
+                      {filtered
+                        ?.map((item) => item?.firstName)
+                        .slice(0, 3)
+                        .join(", ")}
+                    </p>
+                    <div className="flex justify-start pt-1 items-center">
+                      {conversation?.Messages[0]?.senderId === user?.id ? (
+                        <BsArrowReturnRight className="mr-1" size={"14px"} />
+                      ) : (
+                        <p className="font-semibold text-xs pr-1">{conversation?.Messages[0]?.sender?.firstName + ":"}</p>
+                      )}
+                      <p className="text-xs">{conversation?.Messages[0]?.messageText}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-xs flex justify-between">
+                  <div className="">{formatRelative(parseISO(conversation?.Messages[0]?.createdAt), new Date(), { locale })}</div>
+                  {conversation?.amountOfUnreadMessages > 0 && (
+                    <button className="text-primary">
+                      <GoPrimitiveDot size={"20px"} />
+                      {/*}  <AiOutlineEye size={"20px"} /> {*/}
+                    </button>
+                  )}
+                </div>
               </div>
-              <p className="">
-                {filtered
-                  ?.map((item) => item?.firstName)
-                  .slice(0, 3)
-                  .join(", ")}
-              </p>
             </div>
           </Link>
         ) : (
@@ -97,17 +139,40 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
               conversationId === id ? "bg-placeholder-color" : ""
             }`}
           >
-            <div className="flex items-center">
-              <div className="mr-2">
-                <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
+            <div className="basis-full">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-start">
+                  {" "}
+                  <div className="mr-2">
+                    <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
+                  </div>
+                  <div className="">
+                    {filtered?.map((item) => {
+                      return (
+                        <p key={item?.firstName + "ml-2 align-center items-center " + item?.lastName} className="font-semibold">
+                          {item?.firstName + " " + item?.lastName}
+                        </p>
+                      );
+                    })}
+
+                    <div className="flex justify-between pt-1 items-center">
+                      {conversation?.Messages[0]?.senderId === user?.id ? <BsArrowReturnRight className="mr-1" size={"14px"} /> : null}
+                      <p className="text-xs">{conversation?.Messages[0]?.messageText}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-xs flex justify-between">
+                  <div className="">{conversation?.Messages[0]?.createdAt}</div>
+                  {/* {console.log(conversation?.Messages[0]?.createdAt)} */}
+                  {/* <div className="">{formatRelative(parseISO(conversation?.Messages[0]?.createdAt), new Date(), { locale })}</div> */}
+                  {conversation?.amountOfUnreadMessages > 0 && (
+                    <button className="text-primary">
+                      <GoPrimitiveDot size={"20px"} />
+                      {/*}  <AiOutlineEye size={"20px"} /> {*/}
+                    </button>
+                  )}
+                </div>
               </div>
-              {filtered?.map((item) => {
-                return (
-                  <p key={item?.firstName + "ml-2 align-center items-center " + item?.lastName} className="">
-                    {item?.firstName + " " + item?.lastName}
-                  </p>
-                );
-              })}
             </div>
           </Link>
         )}

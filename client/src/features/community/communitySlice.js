@@ -29,3 +29,9 @@ export const useGetCommunityRole = (queryKey, enabled = true) => useFetch(queryK
 
 export const useGetCommunityMemberByUser = (queryKey, enabled = true, userId) =>
   useFetch(queryKey, enabled, `/community-users?UserId=${userId}`);
+
+export const useGetCommunityInvitation = (queryKey, enabled = true, userId) =>
+  useFetch(queryKey, enabled, `/community-invitation-request?hostId=${userId}`);
+
+export const useGetMyCommunityInvitation = (queryKey, enabled = true, userId) =>
+  useFetch(queryKey, enabled, `/community-invitation-request?guestId=${userId}`);
