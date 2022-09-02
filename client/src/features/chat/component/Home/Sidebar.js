@@ -1,21 +1,51 @@
 /*eslint-disable */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useListConversation } from "../../messageSlice";
 import ClickAwayListener from "../utils/ClickAwayListener";
 import { IoCreateOutline } from "react-icons/io5";
 import CreateConversation from "./CreateConversation";
 import SelectConversation from "./SelectConversation";
+import client from "../../../feathers/index";
 
 const SideBar = ({ setSelectedConversation, setCreateConversationOpened }) => {
   //random data
 
-  const { data: listConversation, isLoading } = useListConversation(["user", "conversation", "all"], true, 1);
+  const user = useOutletContext();
+  const { data: listConversation, isLoading } = useListConversation(
+    ["user", "conversation", "all"],
+    user?.id !== "undefined" ? true : false,
+    user?.id
+  );
   const error = null;
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const onCreatedListener = (notification) => {
+    console.log("message from On create listenner", notification);
+    /*  if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
+      setNotificationList((notificationList) => [...notificationList, notification]);
+    }*/
+  };
+  const notificationService = client.service("message");
+
+  const nots = async () => {
+    // const notifications = await notificationService.find({ query: { to: user.id } });
+    // notifications.forEach(onCreatedListener);
+    notificationService.on("created", onCreatedListener);
+
+    notificationService.on("updated", onCreatedListener);
+
+    // return () => {
+    //   notificationService.removeListener("created", onCreatedListener);
+    // };
+  };
+
+  useEffect(() => {
+    nots();
+  }, []);
 
   return (
     <>

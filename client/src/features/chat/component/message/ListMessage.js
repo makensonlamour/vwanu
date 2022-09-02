@@ -1,9 +1,11 @@
-import React from "react";
+/*eslint-disable */
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext, useParams } from "react-router-dom";
 import InputMessage from "./InputMessage";
 import { useListMessageOfConversation, useGetConversation } from "../../messageSlice";
 import SingleMessage from "./SingleMessage";
+import { IoVideocamOutline, IoCallOutline } from "react-icons/io5";
 
 const ListMessage = () => {
   const { id } = useParams();
@@ -11,6 +13,8 @@ const ListMessage = () => {
   const { data: conversationData, isLoading } = useGetConversation(["conversation", id], id ? true : false, id);
   const user = useOutletContext();
   const filtered = conversationData?.data?.Users?.filter((item) => item.id !== user?.id);
+  const [messagesList, setMessagesList] = useState([]);
+
   return (
     <>
       {isLoading ? (
@@ -27,7 +31,7 @@ const ListMessage = () => {
                     alt=""
                   />
                 </div>
-                <p className="">
+                <p className="font-semibold">
                   {filtered
                     ?.map((item) => item?.firstName + " " + item?.lastName)
                     .slice(0, 3)
@@ -35,18 +39,37 @@ const ListMessage = () => {
                 </p>
               </div>
             ) : (
-              <div className="flex items-center">
-                <div className="mr-2">
-                  {console.log(filtered[0])}
-                  <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
+              <div className="flex items-center justify-between basis-full">
+                <div className="flex items-center">
+                  <div className="mr-2">
+                    <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
+                  </div>
+                  {filtered?.map((item) => {
+                    return (
+                      <p key={item?.firstName + "ml-2 align-center items-center " + item?.lastName} className="font-semibold">
+                        {item?.firstName + " " + item?.lastName}
+                      </p>
+                    );
+                  })}
                 </div>
-                {filtered?.map((item) => {
-                  return (
-                    <p key={item?.firstName + "ml-2 align-center items-center " + item?.lastName} className="">
-                      {item?.firstName + " " + item?.lastName}
-                    </p>
-                  );
-                })}
+                <div className="flex justify-between">
+                  <button
+                    onClick={() =>
+                      window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
+                    }
+                    className="mr-2"
+                  >
+                    <IoVideocamOutline size={"22px"} className="hover:text-secondary" />
+                  </button>
+                  <button
+                    onClick={() =>
+                      window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
+                    }
+                    className="ml-2"
+                  >
+                    <IoCallOutline size={"22px"} className="hover:text-secondary" />
+                  </button>
+                </div>
               </div>
             )}
           </div>

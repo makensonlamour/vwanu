@@ -39,6 +39,8 @@ let routesPath = {
   FRIENDS_REQUESTS: "/friends/requests",
   PRIVACY_SETTINGS: "/privacy-settings",
   GENERAL_SETTINGS: "/general-settings",
+  VOICE_CALL: "/call",
+  VIDEO_CALL: "/general-settings",
 };
 
 export default routesPath;
