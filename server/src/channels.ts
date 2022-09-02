@@ -37,6 +37,7 @@ export default function (app: Application): void {
         .then((conversationUsers: any) => {
           conversationUsers.forEach((conversationUser: any) => {
             app.channel(`conversation-${conversationUser.id}`).join(connection);
+
           });
         });
 
