@@ -12,6 +12,7 @@
     "@feathersjs/feathers": "^4.5.15",
     "@feathersjs/socketio-client": "^4.5.15",
     "@headlessui/react": "^1.5.0",
+    "@mantine/hooks": "^5.2.5",
     "@mui/icons-material": "^5.8.2",
     "@mui/lab": "^5.0.0-alpha.77",
     "@mui/material": "^5.5.3",

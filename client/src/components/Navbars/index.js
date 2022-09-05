@@ -20,7 +20,7 @@ import useAuth from "../../hooks/useAuth";
 import { deleteToken } from "../../helpers/index";
 
 // import client from "../../features/feathers";
-const Navbar = ({ user }) => {
+const Navbar = ({ user, countMessage }) => {
   // const nots = async () => {
   //   console.log("here are the services");
   //   console.log(Object.keys(client.services));
@@ -133,7 +133,7 @@ const Navbar = ({ user }) => {
               <BsSearch size="24px" className="text-black mr-4" />
               <div className="h-6 bg-black w-[1px] mr-4"></div>
               <Link to={routesPath?.MESSAGE}>
-                <Badge badgeContent={1} color="primary" className="mr-4">
+                <Badge badgeContent={countMessage} color="primary" className="mr-4">
                   <AiOutlineInbox size="24px" className="text-black" />
                 </Badge>
               </Link>
@@ -239,6 +239,6 @@ const Navbar = ({ user }) => {
   );
 };
 
-Navbar.propTypes = { user: PropTypes.object.isRequired };
+Navbar.propTypes = { user: PropTypes.object.isRequired, countMessage: PropTypes.number.isRequired };
 
 export default Navbar;

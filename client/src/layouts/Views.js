@@ -1,8 +1,9 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { routes, role } from "../routes";
 import callRing from "../assets/sounds/phonecall.mp3";
+import { useQueryClient } from "react-query";
 
 //Container
 import LayoutUser from "./LayoutUser/index";
@@ -15,13 +16,34 @@ import NotFound from "../pages/NotFound/index";
 import useAuthContext from "../hooks/useAuthContext";
 import ReceivedDialog from "../pages/Call/components/ReceivedDialog";
 import { Peer } from "peerjs";
+import client from "../features/feathers/index";
+import { MessageContext } from "../context/MessageContext";
+import { useListConversation } from "../features/chat/messageSlice";
 
 const Views = () => {
+  const queryClient = useQueryClient();
   const user = useAuthContext();
   const [calling, setCalling] = useState(false);
   const [incoming, setIncoming] = useState(true);
   const [peer, setPeer] = useState(null);
   const me = user?.user?.id + "vwanu";
+
+  const { data: listConversation } = useListConversation(
+    ["user", "conversation", "all"],
+    user?.id !== "undefined" ? true : false,
+    user?.id
+  );
+
+  console.log(listConversation);
+
+  const onCreatedListener = () => {
+    queryClient.invalidateQueries(["user", "conversation", "all"]);
+  };
+  const messageService = client.service("message");
+
+  const messageFn = async () => {
+    messageService.on("created", onCreatedListener);
+  };
 
   function denyCall() {
     console.log("deny call");
@@ -54,7 +76,14 @@ const Views = () => {
     });
   }
 
+  const { countUnreadMessageConversation } = useContext(MessageContext);
+
   useEffect(() => {
+    countUnreadMessageConversation(listConversation?.data);
+  }, [listConversation?.data]);
+
+  useEffect(() => {
+    messageFn();
     ConnectPeer();
   }, []);
 

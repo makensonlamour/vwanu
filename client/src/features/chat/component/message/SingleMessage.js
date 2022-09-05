@@ -23,14 +23,14 @@ const locale = {
 const SingleMessage = ({ groups, sender, listMessage }) => {
   // console.log(listMessage);
   const readMessage = useReadMessage(["message", "read", listMessage?.id], undefined, undefined);
-  const handleRead = () => {
+  const handleRead = async () => {
     try {
       const dataObj = {
         read: true,
         id: listMessage?.id,
       };
       if (!sender && listMessage?.read === false) {
-        let result = readMessage.mutateAsync(dataObj);
+        let result = await readMessage.mutateAsync(dataObj);
         console.log(result);
       }
     } catch (e) {
@@ -93,7 +93,7 @@ const SingleMessage = ({ groups, sender, listMessage }) => {
           </div>
         </div>
       ) : (
-        <div className="bg-placeholder-color p-2 rounded-xl w-max max-w-[50%]">
+        <div className="bg-placeholder-color p-2 rounded-xl w-max max-w-[50%] pl-5">
           <p className="pb-1 text-sm">{listMessage?.messageText}</p>
           <p className="text-xs text-gray-600">{formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}</p>
         </div>

@@ -8,6 +8,8 @@ import { IoCreateOutline } from "react-icons/io5";
 import CreateConversation from "./CreateConversation";
 import SelectConversation from "./SelectConversation";
 import client from "../../../feathers/index";
+// import { useQueryClient } from "react-query";
+// import { MessageContext } from "../context/MessageContext";
 
 const SideBar = ({ setSelectedConversation, setCreateConversationOpened }) => {
   //random data
@@ -22,32 +24,6 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened }) => {
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  const onCreatedListener = (notification) => {
-    console.log("message from On create listenner", notification);
-    /*  if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
-      setNotificationList((notificationList) => [...notificationList, notification]);
-    }*/
-  };
-  const notificationService = client.service("conversation");
-  const messageService = client.service("message");
-
-  const nots = async () => {
-    // const notifications = await notificationService.find({ query: { to: user.id } });
-    // notifications.forEach(onCreatedListener);
-    messageService.on("created", onCreatedListener);
-    notificationService.on("created", onCreatedListener);
-
-    notificationService.on("updated", onCreatedListener);
-
-    // return () => {
-    //   notificationService.removeListener("created", onCreatedListener);
-    // };
-  };
-
-  useEffect(() => {
-    nots();
-  }, []);
 
   return (
     <>

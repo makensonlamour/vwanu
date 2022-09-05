@@ -115,7 +115,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
                       ) : (
                         <p className="font-semibold text-xs pr-1">{conversation?.Messages[0]?.sender?.firstName + ":"}</p>
                       )}
-                      <p className="text-xs">{conversation?.Messages[0]?.messageText}</p>
+                      <p className="text-xs line-clamp-1">{conversation?.Messages[0]?.messageText}</p>
                     </div>
                   </div>
                 </div>
@@ -139,11 +139,11 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
               conversationId === id ? "bg-placeholder-color" : ""
             }`}
           >
-            <div className="basis-full">
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center justify-start">
+            <div className="">
+              <div className="flex">
+                <div className="flex justify-start ">
                   {" "}
-                  <div className="mr-2">
+                  <div className="mr-2 w-10 h-10">
                     <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
                   </div>
                   <div className="">
@@ -155,22 +155,22 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
                       );
                     })}
 
-                    <div className="flex justify-between pt-1 items-center">
+                    <div className="flex justify-start pt-1 items-center basis-[20%]">
                       {conversation?.Messages[0]?.senderId === user?.id ? <BsArrowReturnRight className="mr-1" size={"14px"} /> : null}
-                      <p className="text-xs">{conversation?.Messages[0]?.messageText}</p>
+                      <p className="text-xs line-clamp-1 w-[50%]">{conversation?.Messages[0]?.messageText}</p>
                     </div>
                   </div>
                 </div>
-                <div className="text-xs flex justify-between">
+                <div className="text-xs flex justify-start">
                   <div className="">{conversation?.Messages[0]?.createdAt}</div>
                   {/* {console.log(conversation?.Messages[0]?.createdAt)} */}
                   {/* <div className="">{formatRelative(parseISO(conversation?.Messages[0]?.createdAt), new Date(), { locale })}</div> */}
-                  {conversation?.amountOfUnreadMessages > 0 && (
+                  {/* {conversation?.amountOfUnreadMessages > 0 ? (
                     <button className="text-primary">
                       <GoPrimitiveDot size={"20px"} />
-                      {/*}  <AiOutlineEye size={"20px"} /> {*/}
+                      {/*}  <AiOutlineEye size={"20px"} /> }
                     </button>
-                  )}
+                  ) : null} */}
                 </div>
               </div>
             </div>

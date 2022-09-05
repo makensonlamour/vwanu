@@ -33,8 +33,6 @@ const ViewDrawerLike = (props) => {
     setOpen(newOpen);
   };
 
-  console.log(reactions);
-
   // This is used only for the example
   const container = window !== undefined ? () => window().document.body : undefined;
 

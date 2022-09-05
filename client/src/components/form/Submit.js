@@ -8,7 +8,7 @@ function SubmitBtn({ title, onKeyDown, className, ...otherProps }) {
   return (
     <button
       type="submit"
-      className={"btn btn-primary mt-4 normal-case text-base-100 hover:bg-secondary " + className}
+      className={"bg-primary px-6 py-2 mt-2 normal-case text-base-100 hover:bg-secondary " + className}
       {...otherProps}
       onClick={handleSubmit}
       onKeyDown={onKeyDown ? handleSubmit : null}
