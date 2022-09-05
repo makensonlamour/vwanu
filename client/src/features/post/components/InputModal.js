@@ -89,6 +89,7 @@ const InputModal = ({ reference, communityId }) => {
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
+    if (credentials?.postText === "") return alert("The post can't be empty.");
     setLoading(true);
     try {
       if (files?.length) {
@@ -388,7 +389,7 @@ const InputModal = ({ reference, communityId }) => {
                     <div>
                       <SubmitPost
                         title={loading ? <Loader /> : "Post"}
-                        disabled={loading || initialValues?.postText === "" ? true : false}
+                        disabled={loading ? true : false}
                         className="bg-primary hover:bg-secondary py-3 px-5 rounded-lg  border-0 text-base-100 float-right text-md leading-none font-semibold outline-none focus:outline-none ease-linear transition-all duration-150"
                       />
                     </div>

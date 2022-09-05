@@ -4,6 +4,7 @@ import { TabPanel, TabContext, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import { useGetCommunityList, useGetMyCommunityList } from "../../features/community/communitySlice";
 import CommunityList from "../../features/community/component/CommunityList";
+import InvitationTabs from "./../../components/Community/Invitation/InvitationTabs";
 
 const Community = () => {
   const user = useOutletContext();
@@ -90,8 +91,10 @@ const Community = () => {
                 </div>
               </TabPanel>
               <TabPanel value="3">
-                <div className="mt-4">
-                  <div className="flex">Invitations</div>
+                <div className="mt-4 w-full">
+                  <div className="flex">
+                    <InvitationTabs />
+                  </div>
                 </div>
               </TabPanel>
             </div>
