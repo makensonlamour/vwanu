@@ -1,12 +1,12 @@
 import { HookContext } from '@feathersjs/feathers';
-import { BadRequest, GeneralError } from '@feathersjs/errors';
+import { GeneralError } from '@feathersjs/errors';
+import isNill from 'lodash/isNil';
 import AdjustCount from './AdjustCount';
 
 export default async (context: HookContext) => {
-  //   console.log('context');
   const { data } = context;
-  if (!data.userIds) throw new BadRequest('userIds is required');
-  //   console.log(' Here we have');
+  if (isNill(data.userIds)) return context;
+
   const addedUser = await Promise.all(
     [...data.userIds, context.params.User.id].map((userId) =>
       context.app
@@ -19,7 +19,7 @@ export default async (context: HookContext) => {
         })
     )
   );
-  //   console.log('users added');
+
   const updateUserCount = AdjustCount({
     model: 'Conversation',
     field: 'amountOfPeople',
@@ -34,7 +34,6 @@ export default async (context: HookContext) => {
   } catch (e) {
     throw new GeneralError(e.message);
   }
-  //   console.log('users updated');
 
   return context;
 };
