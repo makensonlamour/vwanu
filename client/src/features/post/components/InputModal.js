@@ -14,6 +14,7 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
+import Loader from "../../../components/common/Loader";
 import { Popover } from "@mui/material";
 import { useCreatePost } from "../postSlice";
 import Picker from "emoji-picker-react";
@@ -48,6 +49,7 @@ const InputModal = ({ reference, communityId }) => {
   // const [textEditor, setTextEditor] = useState(null);
   const [files, setFiles] = useState([]);
   const [blobFile, setBlobFile] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -87,65 +89,72 @@ const InputModal = ({ reference, communityId }) => {
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
-    if (files?.length) {
-      files?.map((file) => {
-        formData.append("postImage", file);
-      });
+    setLoading(true);
+    try {
+      if (files?.length) {
+        files?.map((file) => {
+          formData.append("postImage", file);
+        });
+      }
+
+      //request for post newsfeed
+      if (_.isEqual(reference, "newsfeed")) {
+        formData.append("postText", credentials.postText);
+        formData.append("UserId", credentials.UserId);
+        formData.append("privacyType", privacyText);
+        try {
+          await mutationAdd.mutateAsync(formData);
+          postSuccess();
+          // reloadPage();
+        } catch (e) {
+          console.log(e);
+          postError();
+        }
+        setImage(null);
+        setShowModal(false);
+        setFiles([]);
+        setBlobFile([]);
+        //request for post profile
+      } else if (_.isEqual(reference, "profilefeed")) {
+        formData.append("postText", credentials.postText);
+        formData.append("UserId", credentials.UserId);
+        formData.append("privacyType", privacyText);
+        try {
+          await mutationAdd.mutateAsync(formData);
+          postSuccess();
+        } catch (e) {
+          console.log(e);
+          postError();
+        }
+        setShowModal(false);
+
+        //request for post group
+      } else if (_.isEqual(reference, "communityFeed")) {
+        formData.append("postText", credentials.postText);
+        formData.append("CommunityId", communityId);
+        try {
+          await mutationAdd.mutateAsync(formData);
+          postSuccess();
+        } catch (e) {
+          console.log(e);
+        }
+        setShowModal(false);
+        //request for post pages
+      } else if (_.isEqual(reference, "pagefeed")) {
+        try {
+          await mutationAdd.mutateAsync(formData);
+          postSuccess();
+        } catch (e) {
+          console.log(e);
+          postError();
+        }
+        setShowModal(false);
+      } else setShowModal(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
     }
-
-    //request for post newsfeed
-    if (_.isEqual(reference, "newsfeed")) {
-      formData.append("postText", credentials.postText);
-      formData.append("UserId", credentials.UserId);
-      formData.append("privacyType", privacyText);
-      try {
-        await mutationAdd.mutateAsync(formData);
-        postSuccess();
-        // reloadPage();
-      } catch (e) {
-        console.log(e);
-        postError();
-      }
-      setImage(null);
-      setShowModal(false);
-      setFiles([]);
-      setBlobFile([]);
-      //request for post profile
-    } else if (_.isEqual(reference, "profilefeed")) {
-      formData.append("postText", credentials.postText);
-      formData.append("UserId", credentials.UserId);
-      formData.append("privacyType", privacyText);
-      try {
-        await mutationAdd.mutateAsync(formData);
-        postSuccess();
-      } catch (e) {
-        console.log(e);
-        postError();
-      }
-      setShowModal(false);
-
-      //request for post group
-    } else if (_.isEqual(reference, "communityFeed")) {
-      formData.append("postText", credentials.postText);
-      formData.append("CommunityId", communityId);
-      try {
-        await mutationAdd.mutateAsync(formData);
-        postSuccess();
-      } catch (e) {
-        console.log(e);
-      }
-      setShowModal(false);
-      //request for post pages
-    } else if (_.isEqual(reference, "pagefeed")) {
-      try {
-        await mutationAdd.mutateAsync(formData);
-        postSuccess();
-      } catch (e) {
-        console.log(e);
-        postError();
-      }
-      setShowModal(false);
-    } else setShowModal(false);
   };
 
   return (
@@ -378,7 +387,8 @@ const InputModal = ({ reference, communityId }) => {
                     {*/}
                     <div>
                       <SubmitPost
-                        title="Post"
+                        title={loading ? <Loader /> : "Post"}
+                        disabled={loading || initialValues?.postText === "" ? true : false}
                         className="bg-primary hover:bg-secondary py-3 px-5 rounded-lg  border-0 text-base-100 float-right text-md leading-none font-semibold outline-none focus:outline-none ease-linear transition-all duration-150"
                       />
                     </div>

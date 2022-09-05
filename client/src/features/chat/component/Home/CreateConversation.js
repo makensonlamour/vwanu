@@ -28,12 +28,44 @@ const CreateConversation = ({ setIsOpened }) => {
 
   return (
     <>
-      <div className="w-full relative">
+      <div className="w-full">
         <div className="py-[1.60rem] px-10">
           <p className="text-xl font-semibold">New Message</p>
         </div>
         <div className="h-[1px] w-full bg-gray-200"></div>
-        <div className="py-4 px-6">
+        <div className="grid grid-rows-4 max-h-full h-full">
+          <div className="overflow-auto row-span-3">
+            <div className="flex justify-between items-center">
+              <div className="flex flex-wrap px-4 mt-2">
+                {selectMember?.map((data) => {
+                  return (
+                    <div className="mr-2 mb-2" key={data?.id}>
+                      <Chip label={data.firstName + " " + data?.lastName} onDelete={handleRemove(data)} />
+                    </div>
+                  );
+                })}
+              </div>
+              {!(selectMember?.length == 0 || isSearchOpen) && (
+                <button className="text-gray-400" onClick={() => setIsSearchOpen(true)}>
+                  <BsSearch size={"24px"} className="" />
+                </button>
+              )}
+            </div>
+            {(selectMember?.length == 0 || isSearchOpen) && (
+              <InputSearch
+                setIsSearchOpen={setIsSearchOpen}
+                placeholder={"Type to search a friend"}
+                handleAdd={handleAdd}
+                handleRemove={handleRemove}
+                selectMember={selectMember}
+              />
+            )}
+          </div>
+          <div className="row-span-1">
+            <InputMessage type={"new_conversation"} selectMember={selectMember} />
+          </div>
+        </div>
+        {/* <div className="mt-10 py-4 px-6">
           <div className="flex justify-between items-center">
             <div className="flex flex-wrap px-4 mt-2">
               {selectMember?.map((data) => {
@@ -62,7 +94,7 @@ const CreateConversation = ({ setIsOpened }) => {
         </div>
         <div className="absolute bottom-0 w-full">
           <InputMessage type={"new_conversation"} selectMember={selectMember} />
-        </div>
+        </div> */}
       </div>
     </>
   );
