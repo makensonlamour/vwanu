@@ -91,7 +91,6 @@ const InputModal = ({ reference, communityId }) => {
   const handleSubmit = async (credentials) => {
     if (credentials?.postText === "") return alert("The post can't be empty.");
     setLoading(true);
-
     try {
       if (files?.length) {
         files?.map((file) => {
