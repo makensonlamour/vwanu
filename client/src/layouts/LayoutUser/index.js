@@ -10,6 +10,7 @@ import MobileSidebar from "../../components/Sidebars/Left/MobileSidebar";
 import routesPath from "../../routesPath";
 import { BottomMenuContext } from "../../context/BottomMenuContext";
 import useAuthContext from "../../hooks/useAuthContext";
+import { MessageContext } from "../../context/MessageContext";
 //Styles for components
 
 const Item = styled(Paper)(() => ({
@@ -17,6 +18,7 @@ const Item = styled(Paper)(() => ({
 }));
 const LayoutUser = () => {
   const { user } = useAuthContext();
+  const { countMessage } = useContext(MessageContext);
   const location = useLocation();
   const navigate = useNavigate();
   const { isSidebarOpen } = useContext(BottomMenuContext);
@@ -41,7 +43,7 @@ const LayoutUser = () => {
             ) : (
               <>
                 {" "}
-                <Navbar user={user ? user : undefined} />
+                <Navbar countMessage={countMessage} user={user ? user : undefined} />
                 <Item elevation={0} className="max-w-screen-xxl w-[100vw] sm:w-[90vw] mx-auto">
                   {user && !user?.birthday && <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />}
 

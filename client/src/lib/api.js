@@ -6,9 +6,6 @@ export const url = process.env.REACT_APP_API_URL || "localhost:4000";
 export const token = getToken("feathers-jwt");
 
 const baseUrl = `http://${url}`;
-console.log("Dumpping the base url");
-console.log(baseUrl);
-console.log(url);
 export const api = {
   get: async (url, params = {}) =>
     axios.get(baseUrl + "" + url, {
