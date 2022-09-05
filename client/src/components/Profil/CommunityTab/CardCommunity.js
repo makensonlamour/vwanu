@@ -13,7 +13,6 @@ const CardCommunity = ({ data }) => {
 
   const handleJoin = async () => {
     setIsLoading(true);
-    console.log(data?.id);
     const dataObj = {
       CommunityId: data?.id,
     };

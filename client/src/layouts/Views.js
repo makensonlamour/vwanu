@@ -36,8 +36,9 @@ const Views = () => {
 
   console.log(listConversation);
 
-  const onCreatedListener = () => {
+  const onCreatedListener = (message) => {
     queryClient.invalidateQueries(["user", "conversation", "all"]);
+    queryClient.invalidateQueries(["message", message?.ConversationId]);
   };
   const messageService = client.service("message");
 
@@ -79,13 +80,13 @@ const Views = () => {
   const { countUnreadMessageConversation } = useContext(MessageContext);
 
   useEffect(() => {
-    countUnreadMessageConversation(listConversation?.data);
-  }, [listConversation?.data]);
-
-  useEffect(() => {
     messageFn();
     ConnectPeer();
   }, []);
+
+  useEffect(() => {
+    countUnreadMessageConversation(listConversation?.data);
+  }, [listConversation?.data]);
 
   return (
     <>
