@@ -37,12 +37,14 @@ const Views = () => {
   console.log(listConversation);
 
   const onCreatedListener = (message) => {
+    console.log("cncreated", message);
     queryClient.invalidateQueries(["user", "conversation", "all"]);
     queryClient.invalidateQueries(["message", message?.ConversationId]);
   };
   const messageService = client.service("message");
 
   const messageFn = async () => {
+    console.log("messsageFn fired");
     messageService.on("created", onCreatedListener);
   };
 
