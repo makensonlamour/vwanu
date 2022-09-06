@@ -52,12 +52,12 @@ const FormStepTwo = () => {
   const ValidationSchema = Yup.object().shape({
     country: Yup.string().required().label("Country"),
     states: Yup.string().label("States"),
-    city: Yup.string().required().label("City"),
-    street: Yup.string().required().label("Street"),
-    zipCode: Yup.string().required().label("Zip Code"),
+    city: Yup.string().label("City"),
+    street: Yup.string().label("Street"),
+    zipCode: Yup.string().label("Zip Code"),
     gender: Yup.string().required().label("Gender"),
     interestedBy: Yup.string().required().label("Interest By"),
-    interest: Yup.array().required().label("Interest"),
+    interest: Yup.array().label("Interest"),
     birthday: Yup.date()
       .test(
         "birthday",
