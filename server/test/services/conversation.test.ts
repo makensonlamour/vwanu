@@ -65,7 +65,7 @@ describe("'conversation' service", () => {
       })
     );
   });
-  it.skip('should not create a second conversation with the same users', async () => {
+  it('should not create a second conversation with the same users', async () => {
     const response = await createConversation([randomUser2.id], randomUser1);
 
     expect(response).toEqual(

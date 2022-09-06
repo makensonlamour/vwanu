@@ -8,7 +8,7 @@ import {
   LimitToTalkersOnly,
   FilterConversations,
   IncludeUserAndLastMessage,
-  // LimitDirectConversations,
+  LimitDirectConversations,
 } from './hook';
 
 const NotifyUsers = async (context) => {
@@ -31,7 +31,7 @@ export default {
     all: [authenticate('jwt'), IncludeUserAndLastMessage],
     find: [FilterConversations],
     get: [LimitToTalkersOnly],
-    create: [SetType],
+    create: [SetType, LimitDirectConversations],
     update: [],
     patch: [LimitToTalkersOnly],
     remove: [LimitToTalkersOnly],
