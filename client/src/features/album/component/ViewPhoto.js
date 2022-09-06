@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useOutletContext, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import CommentForm from "../../comment/component/CommentForm";
+// import { useGetComment } from "../../comment/commentSlice";
 
 const ViewPhoto = ({ photo, imgComponent }) => {
-  const user = useOutletContext();
+  // const user = useOutletContext();
   const [showModal, setShowModal] = useState(false);
+  // const { data: listComment } = useGetComment(["comments", "all", photo?.id], photo?.id !== "undefined" ? true : false, photo?.id);
   return (
     <>
       <button onClick={() => setShowModal(true)} className="">
@@ -40,21 +43,26 @@ const ViewPhoto = ({ photo, imgComponent }) => {
                 </div>
                 <div className="basis-[40%] bg-white">
                   <div className="px-4 py-2">
-                    <div className="flex items-center">
+                    <div className="flex items-center mb-3">
                       <img
-                        src={user?.profilePicture?.original}
+                        src={photo?.User?.profilePicture}
                         className="w-[38px] h-[38px] mask mask-squircle object-cover mr-2"
-                        alt={"_profile" + user?.firstName}
+                        alt={"_profile" + photo?.User?.firstName}
                       />
                       <div className="">
-                        <Link to={"../../profile/" + user?.id} className="text-primary">
-                          {user?.firstName + " " + user?.lastName} <span className="text-gray-800">{" posted an update"}</span>
+                        <Link to={"../../profile/" + photo?.User?.id} className="text-primary">
+                          {photo?.User?.firstName + " " + photo?.User?.lastName}{" "}
+                          <span className="text-gray-800">{" posted an update"}</span>
                         </Link>
                         <div className="">
-                          <span className="">{format(new Date(user?.createdAt), "MMM dd, yyyy")}</span>{" "}
+                          <span className="">{format(new Date(photo?.createdAt), "MMM dd, yyyy")}</span>{" "}
                           <span className="">{" • Public"}</span>
                         </div>
                       </div>
+                    </div>
+                    <div className="w-full h-[1px] bg-gray-200"></div>
+                    <div className="">
+                      <CommentForm PostId={photo?.id} />
                     </div>
                   </div>
                 </div>

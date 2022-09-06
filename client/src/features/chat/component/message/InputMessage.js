@@ -7,6 +7,8 @@ import { useCreateConversation, useCreateNewMessage } from "../../messageSlice";
 
 const InputMessage = ({ selectMember, type }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [focus, setFocus] = useState(true);
+
   let initialValues = {
     message: "",
   };
@@ -23,7 +25,9 @@ const InputMessage = ({ selectMember, type }) => {
   );
 
   const handleSubmit = async (data) => {
+    if (data?.message === "") return alert("You can't send an empty message");
     setIsLoading(true);
+    setFocus(false);
     try {
       if (type === "new_conversation") {
         let receiver = selectMember?.map((data) => {
@@ -43,6 +47,7 @@ const InputMessage = ({ selectMember, type }) => {
     } finally {
       data.message = "";
       setIsLoading(false);
+      setFocus(true);
     }
   };
 
@@ -52,6 +57,7 @@ const InputMessage = ({ selectMember, type }) => {
       <div className="">
         <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
           <TextArea
+            autofocus={focus}
             isableUnderline={true}
             autoCapitalize="none"
             placeholder="Type message"

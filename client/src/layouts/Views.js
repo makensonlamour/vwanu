@@ -1,8 +1,9 @@
 /*eslint-disable*/
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Route, Routes } from "react-router-dom";
 import { routes, role } from "../routes";
 import callRing from "../assets/sounds/phonecall.mp3";
+import { Howl } from "howler";
 import { useQueryClient } from "react-query";
 
 //Container
@@ -27,25 +28,35 @@ const Views = () => {
   const [incoming, setIncoming] = useState(true);
   const [peer, setPeer] = useState(null);
   const me = user?.user?.id + "vwanu";
+  const sound = new Howl({
+    src: [callRing],
+  });
+  const newMessageRef = useRef(null);
 
   const { data: listConversation } = useListConversation(
     ["user", "conversation", "all"],
-    user?.id !== "undefined" ? true : false,
-    user?.id
+    user?.user?.id !== "undefined" ? true : false,
+    user?.user?.id
   );
 
-  console.log(listConversation);
-
   const onCreatedListener = (message) => {
-    console.log("cncreated", message);
+    sound.play();
+    window.document.title = `You have a new message || Vwanu`;
     queryClient.invalidateQueries(["user", "conversation", "all"]);
     queryClient.invalidateQueries(["message", message?.ConversationId]);
   };
+
+  const onPatchedListener = (message) => {
+    queryClient.invalidateQueries(["user", "conversation", "all"]);
+    queryClient.invalidateQueries(["message", message?.ConversationId]);
+  };
+
   const messageService = client.service("message");
 
   const messageFn = async () => {
     console.log("messsageFn fired");
     messageService.on("created", onCreatedListener);
+    messageService.on("patched", onPatchedListener);
   };
 
   function denyCall() {
@@ -92,6 +103,13 @@ const Views = () => {
 
   return (
     <>
+      <button
+        ref={newMessageRef}
+        onClick={() => {
+          console.log("audio played");
+        }}
+        className="hidden"
+      ></button>
       {calling && (
         <>
           <audio autoplay={true} loop={true}>
