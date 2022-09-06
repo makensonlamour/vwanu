@@ -1,13 +1,13 @@
 /* eslint-disable no-case-declarations */
 import * as authentication from '@feathersjs/authentication';
-import isNill from 'lodash/isNil';
+
 import { AddTalker } from '../../Hooks';
+
 
 
 import {
   SetType,
   UnreadMessage,
-  FilterConversations,
   LimitToTalkersOnly,
   FilterConversations,
   IncludeUserAndLastMessage,
@@ -17,6 +17,7 @@ import {
 const NotifyUsers = async (context) => {
 
   const { app, data, result } = context;
+  if(!data?.userIds) return context;
   // console.log('\n\n NotifyUsers');
   // console.log('User ids');
   // console.log(data.userIds);
