@@ -268,7 +268,7 @@ describe("'conversation' service", () => {
   it('should be able to fetch one conversation and see last message it contains', async () => {
     const { body: fetchedConversation } = await testServer
       .get(`${endpoint}/${publicConversation.id}`)
-      .set('authorization', randomUser1.accessToken);
+      .set('authorization', randomUser2.accessToken);
 
     expect(fetchedConversation).toMatchObject({
       id: publicConversation.id,
@@ -307,6 +307,21 @@ describe("'conversation' service", () => {
     expect(Users.some((User) => User.id === randomUser2.id)).toBeTruthy();
   });
 
+  it('When a conversation is fetch it should tell the requester his amount of unread messages', async () => {
+    let conversations = await Promise.all(
+      [randomUser1.accessToken, randomUser2.accessToken].map((participant) =>
+        testServer
+          .get(`${endpoint}/${publicConversation.id}`)
+          .set('authorization', participant)
+      )
+    );
+    conversations = conversations.map((conversation) => conversation.body);
+
+    // Because the messages where sent by user 1
+    const [user1Conversation, user2Conversation] = conversations;
+    expect(user1Conversation.amountOfUnreadMessages).toBe(0);
+    expect(user2Conversation.amountOfUnreadMessages).toBe(2);
+  });
   it.skip('user should fetch all message of a conversation', async () => {
     const messages = await testServer
       .get(`/message/?ConversationId=${publicConversation.id}`)

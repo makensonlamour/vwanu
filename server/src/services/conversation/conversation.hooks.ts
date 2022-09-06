@@ -9,6 +9,7 @@ import {
 } from '../../Hooks';
 
 import {
+  UnreadMessage,
   FilterConversations,
   LimitToTalkersOnly,
   IncludeUserAndLastMessage,
@@ -16,12 +17,12 @@ import {
 
 const NotifyUsers = async (context) => {
   const { app, data, result } = context;
-  console.log('\n\n NotifyUsers');
-  console.log('User ids');
-  console.log(data.userIds);
+  // console.log('\n\n NotifyUsers');
+  // console.log('User ids');
+  // console.log(data.userIds);
   try {
     const connections = [...data.userIds].map(
-      (userId) => app.channel(`userIds/${userId}`).connections
+      (userId) => app.channel(`userIds-${userId}`).connections
     );
     connections.forEach((connection) => {
       app.channel(`conversation-${result.id}`).join(connection);
@@ -58,6 +59,7 @@ export default {
       /* Todo setConversationName */
     ],
     get: [
+      UnreadMessage,
       /* Todo setConversationName  */
     ],
     create: [AddTalker, NotifyUsers],
