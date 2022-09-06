@@ -29,7 +29,11 @@ describe("'conversation' service", () => {
   const endpoint = '/conversation';
   const conversationUsers = '/conversation-users';
   let publicConversation;
+  let previousConversation;
   beforeAll(async () => {
+    app.get('sequelizeClient').options.log = true;
+    // await Message.sync({ force: true });
+    // await User.sync({ force: true });
     testServer = request(app);
     // create two users
     const users = await Promise.all(
@@ -49,7 +53,7 @@ describe("'conversation' service", () => {
   it.todo('Should not be able to create conversation if not friend');
   it('Should be able to create a direct conversation', async () => {
     const response = await createConversation([randomUser2.id], randomUser1);
-
+    previousConversation = response;
     expect(response).toEqual(
       expect.objectContaining({
         id: expect.any(String),
@@ -61,6 +65,21 @@ describe("'conversation' service", () => {
       })
     );
   });
+  it('should not create a second conversation with the same users', async () => {
+    const response = await createConversation([randomUser2.id], randomUser1);
+
+    expect(response).toEqual(
+      expect.objectContaining({
+        id: previousConversation.id,
+        amountOfMessages: 0,
+        amountOfPeople: 2,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        type: 'direct',
+      })
+    );
+  });
+
   it.skip('Should be able to list all conversation created or part of', async () => {
     const list = await testServer
       .get(`${conversationUsers}/?UserId=${randomUser1.id}`)
@@ -113,6 +132,7 @@ describe("'conversation' service", () => {
           })
         );
       });
+
       expect(conversation.Messages.length).toBe(0);
 
       expect(
@@ -152,6 +172,7 @@ describe("'conversation' service", () => {
           })
         );
       });
+
       expect(conversation.Messages.length).toBe(0);
 
       expect(
@@ -174,6 +195,7 @@ describe("'conversation' service", () => {
       .get(endpoint)
       .set('authorization', newUser.accessToken);
     // This user have not created any conversation
+
     expect(newConversation.length).toBe(0);
   }, 15000);
 
