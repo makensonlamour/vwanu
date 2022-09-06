@@ -25,7 +25,7 @@ const ViewDiscussion = ({ data }) => {
                 <div key={item?.title} className="hover:shadow-lg">
                   <div className="flex px-6 py-6">
                     <div className="mr-4">
-                      <img alt={item?.title} src={item?.profilePicture} className="w-12 h-12 mask mask-squircle" />
+                      <img alt={item?.title} src={item?.User?.profilePicture} className="w-12 h-12 mask mask-squircle" />
                     </div>
                     <div className="">
                       <Link to={`./${item?.id}`} className="font-semibold hover:text-primary">

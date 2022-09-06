@@ -3,8 +3,11 @@ import * as authentication from '@feathersjs/authentication';
 import isNill from 'lodash/isNil';
 import { AddTalker } from '../../Hooks';
 
+
 import {
   SetType,
+  UnreadMessage,
+  FilterConversations,
   LimitToTalkersOnly,
   FilterConversations,
   IncludeUserAndLastMessage,
@@ -12,14 +15,28 @@ import {
 } from './hook';
 
 const NotifyUsers = async (context) => {
-  const { app, data, result, params } = context;
-  if (isNill(data.userIds)) return context;
-  const connections = [...data.userIds, params.User.id].map(
-    (userId) => app.channel(`userIds/${userId}`).connections
-  );
-  connections.forEach((connection) => {
-    app.channel(`conversation-${result.id}`).join(connection);
-  });
+
+  const { app, data, result } = context;
+  // console.log('\n\n NotifyUsers');
+  // console.log('User ids');
+  // console.log(data.userIds);
+  try {
+    const connections = [...data.userIds].map(
+      (userId) => app.channel(`userIds-${userId}`).connections
+    );
+    connections.forEach((connection) => {
+      app.channel(`conversation-${result.id}`).join(connection);
+      // app.service('conversation').publish('created', (v) =>
+      //   app.channel(`conversation-${result.id}`).send({
+      //     name: 'data.name',
+      //     v,
+      //   })
+      // );
+    });
+  } catch (error) {
+    console.log('soem error notifying them');
+    console.log(error);
+  }
 
   return context;
 };
@@ -43,6 +60,7 @@ export default {
       /* Todo setConversationName */
     ],
     get: [
+      UnreadMessage,
       /* Todo setConversationName  */
     ],
     create: [AddTalker, NotifyUsers],

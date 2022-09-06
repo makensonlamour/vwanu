@@ -4,18 +4,20 @@ import { useFormikContext } from "formik";
 
 import Error from "./Error";
 
-function FormField({ name, label, className, testId, showPassword, labelFor, ...otherProps }) {
+function FormField({ name, label, className, containerClassName, testId, showPassword, labelFor, ...otherProps }) {
   const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
   const [show, setShow] = useState(false);
 
   return (
     <>
-      <div className="form-control">
-        {label && (
-          <label className="label">
-            <span className="label-text text-md text-secondary font-semibold -mb-2 mt-4">{label}</span>
-          </label>
-        )}
+      <div className={"form-control " + containerClassName}>
+        <div className="-mb-4">
+          {label && (
+            <label className="label">
+              <span className="label-text text-md text-secondary font-semibold mt-1 pb-4">{label}</span>
+            </label>
+          )}
+        </div>
         <input
           className={"input " + className}
           value={values[name]}
@@ -47,6 +49,7 @@ FormField.propTypes = {
   appendText: PropTypes.string,
   label: PropTypes.string,
   className: PropTypes.string,
+  containerClassName: PropTypes.string,
   testId: PropTypes.string,
   showPassword: PropTypes.bool,
   labelFor: PropTypes.string,

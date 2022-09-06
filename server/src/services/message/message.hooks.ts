@@ -4,6 +4,7 @@ import * as authentication from '@feathersjs/authentication';
 
 import {
   AddSender,
+  NewestFirst,
   PublishMessage,
   AdjustReadAndReceivedDate,
   IncludeSenderAndConversation,
@@ -16,7 +17,7 @@ const { authenticate } = authentication.hooks;
 export default {
   before: {
     all: [authenticate('jwt'), IncludeSenderAndConversation],
-    find: [],
+    find: [NewestFirst],
     get: [],
     create: [AddSender],
     update: [],

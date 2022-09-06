@@ -8,6 +8,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { history } from "./components/common/Alert/_helpers";
 import { AuthContextProvider } from "./context/AuthContext";
+import { MessageContextProvider } from "./context/MessageContext";
 import { IntlProvider } from "react-intl";
 import lan_en from "./translations/en.json";
 import lan_fr from "./translations/fr.json";
@@ -34,9 +35,11 @@ root.render(
     <BrowserRouter history={history}>
       <div>
         <AuthContextProvider>
-          <IntlProvider locale={language} messages={languages[language]}>
-            <App />
-          </IntlProvider>
+          <MessageContextProvider>
+            <IntlProvider locale={language} messages={languages[language]}>
+              <App />
+            </IntlProvider>
+          </MessageContextProvider>
         </AuthContextProvider>
       </div>
     </BrowserRouter>

@@ -24,11 +24,11 @@ export default function (app: Application): void {
   // Get our initialized service so that we can register hooks
   const service = app.service('message');
   // Sending notification only to the receivers of the conversation
-  service.publish((message, context) =>
-    app
-      .channel(`conversation-${message.ConversationId}`)
-      .filter((connection) => connection.User.id !== context.params.User.id)
-  );
+  // service.publish((message, context) =>
+  //   app
+  //     .channel(`conversation-${message.ConversationId}`)
+  //     .filter((connection) => connection.User.id !== context.params.User.id)
+  // );
 
   service.hooks(hooks);
 }

@@ -14,8 +14,6 @@ const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIs
     return memb?.length === 0 ? false : true;
   }
 
-  console.log(selectMember);
-
   return (
     <>
       <div className="flex flex-wrap p-4 mt-4">

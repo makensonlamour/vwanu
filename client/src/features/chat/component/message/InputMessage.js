@@ -7,6 +7,8 @@ import { useCreateConversation, useCreateNewMessage } from "../../messageSlice";
 
 const InputMessage = ({ selectMember, type }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [focus, setFocus] = useState(true);
+
   let initialValues = {
     message: "",
   };
@@ -16,10 +18,16 @@ const InputMessage = ({ selectMember, type }) => {
   });
 
   const createConversation = useCreateConversation(["conversation", "new"], undefined, undefined);
-  const sendMessage = useCreateNewMessage(["message", "new"], undefined, undefined);
+  const sendMessage = useCreateNewMessage(
+    type === "new_conversation" ? ["message", "new"] : ["message", selectMember?.id],
+    undefined,
+    undefined
+  );
 
   const handleSubmit = async (data) => {
+    if (data?.message === "") return alert("You can't send an empty message");
     setIsLoading(true);
+    setFocus(false);
     try {
       if (type === "new_conversation") {
         let receiver = selectMember?.map((data) => {
@@ -27,20 +35,19 @@ const InputMessage = ({ selectMember, type }) => {
         });
         const dataObjConversation = { userIds: receiver };
         let resultConversation = await createConversation.mutateAsync(dataObjConversation);
-        console.log("send new conversation", resultConversation);
         const dataMessage = { messageText: data?.message, ConversationId: resultConversation?.data?.id };
-        let resultMessage = await sendMessage.mutateAsync(dataMessage);
-        console.log("send new message", resultMessage);
+        await sendMessage.mutateAsync(dataMessage);
+        window.location.href = `../../messages/${resultConversation?.data?.id}`;
       } else {
         const messageObj = { messageText: data?.message, ConversationId: selectMember?.id };
-        let result = await sendMessage.mutateAsync(messageObj);
-        console.log("send message", result);
+        await sendMessage.mutateAsync(messageObj);
       }
     } catch (e) {
       console.log(e);
     } finally {
       data.message = "";
       setIsLoading(false);
+      setFocus(true);
     }
   };
 
@@ -50,6 +57,7 @@ const InputMessage = ({ selectMember, type }) => {
       <div className="">
         <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
           <TextArea
+            autofocus={focus}
             isableUnderline={true}
             autoCapitalize="none"
             placeholder="Type message"
@@ -63,9 +71,11 @@ const InputMessage = ({ selectMember, type }) => {
                 border: "none",
               },
             }}
-            className="appearance-none mb-4 p-2 outline-0 text-secondary placeholder:text-gray-300 focus:border-0 rounded-2xl border-0"
+            className="appearance-none mb-1 p-2 outline-0 text-secondary placeholder:text-gray-300 focus:border-0 rounded-2xl border-0"
           />
-          <Submit className="w-full rounded-2xl text-base-100 text-md md:w-max" title={isLoading ? <Loader /> : "Send"} />{" "}
+          <div className="flex justify-end">
+            <Submit className="w-full rounded-2xl text-base-100 text-md md:w-max" title={isLoading ? <Loader /> : "Send"} />
+          </div>
         </Form>
       </div>
     </>

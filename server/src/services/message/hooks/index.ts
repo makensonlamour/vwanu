@@ -4,3 +4,4 @@ export { default as AdjustReadAndReceivedDate } from './AdjustReadAndReceivedDat
 export { default as AdjustUnreadMessageInConversation } from './AdjustUnreadMessages';
 export { default as IncludeSenderAndConversation } from './includeSenderAndConversation';
 export { default as AdjustAmountMessagesInConversation } from './incrementDecrementMessageInConversation';
+export { default as NewestFirst } from './newestFirst';

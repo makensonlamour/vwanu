@@ -64,7 +64,7 @@ const ViewFriend = ({ data, types = "", noDataLabel }) => {
               );
             })
           ) : (
-            <div className="flex w-52 p-10 mx-auto">
+            <div className="flex w-full p-10 mx-auto">
               <p>{noDataLabel}</p>
             </div>
           )}

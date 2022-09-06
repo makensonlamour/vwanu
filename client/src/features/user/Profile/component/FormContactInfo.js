@@ -72,6 +72,7 @@ const FormContactInfo = ({ user }) => {
           label="Telephone"
           name="telephone"
           countryCode={user?.country}
+          containerClassName="my-4"
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
@@ -80,6 +81,7 @@ const FormContactInfo = ({ user }) => {
           placeholder="Facebook"
           name="facebook"
           type="text"
+          containerClassName="my-4"
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
@@ -88,6 +90,7 @@ const FormContactInfo = ({ user }) => {
           placeholder="Twitter"
           name="twitter"
           type="text"
+          containerClassName="my-4"
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
@@ -96,6 +99,7 @@ const FormContactInfo = ({ user }) => {
           placeholder="Instagram"
           name="instagram"
           type="text"
+          containerClassName="my-4"
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
@@ -104,6 +108,7 @@ const FormContactInfo = ({ user }) => {
           placeholder="Website"
           name="website"
           type="text"
+          containerClassName="my-4"
           className="mt-1 mb-4 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/5 mt-2" title={isLoading ? <Loader /> : "Save"} />{" "}

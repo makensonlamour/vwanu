@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useFormikContext } from "formik";
 import { TextareaAutosize } from "@mui/material";
 
 import Error from "./Error";
 
-function TextArea({ name, maxRows, minRows, label, onKeyDown, className, testId, ...otherProps }) {
+function TextArea({ name, maxRows, minRows, label, onKeyDown, className, testId, autofocus = false, ...otherProps }) {
   const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
-
+  const inputMessageRef = useRef(null);
+  useEffect(() => {
+    if (autofocus) {
+      inputMessageRef.current.focus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autofocus]);
   return (
     <>
       {label && (
@@ -16,6 +22,7 @@ function TextArea({ name, maxRows, minRows, label, onKeyDown, className, testId,
         </label>
       )}
       <TextareaAutosize
+        ref={inputMessageRef}
         className={" " + className}
         type="text"
         value={values[name]}
@@ -39,6 +46,7 @@ TextArea.propTypes = {
   maxRows: PropTypes.number,
   minRows: PropTypes.number,
   onKeyDown: PropTypes.func,
+  autofocus: PropTypes.bool,
 };
 
 export default TextArea;

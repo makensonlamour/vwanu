@@ -6,6 +6,7 @@ import { TabPanel, TabContext, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import CommunityList from "../../features/community/component/CommunityList";
 import { useGetMyCommunityList } from "../../features/community/communitySlice";
+import InvitationTabs from "./../Community/Invitation/InvitationTabs";
 
 const CommunityTab = ({ user }) => {
   const { id } = useParams();
@@ -73,7 +74,9 @@ const CommunityTab = ({ user }) => {
                 </div>
               </TabPanel>
               <TabPanel value="2">
-                <div className="mt-4"></div>
+                <div className="mt-4">
+                  <InvitationTabs />
+                </div>
               </TabPanel>
             </div>
           </TabContext>

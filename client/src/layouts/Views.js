@@ -1,8 +1,10 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Route, Routes } from "react-router-dom";
 import { routes, role } from "../routes";
-import callRing from "../assets/sounds/phonecall.mp3";
+import messageRing from "../assets/sounds/messageNotif.mp3";
+import { Howl } from "howler";
+import { useQueryClient } from "react-query";
 
 //Container
 import LayoutUser from "./LayoutUser/index";
@@ -15,13 +17,46 @@ import NotFound from "../pages/NotFound/index";
 import useAuthContext from "../hooks/useAuthContext";
 import ReceivedDialog from "../pages/Call/components/ReceivedDialog";
 import { Peer } from "peerjs";
+import client from "../features/feathers/index";
+import { MessageContext } from "../context/MessageContext";
+import { useListConversation } from "../features/chat/messageSlice";
 
 const Views = () => {
+  const queryClient = useQueryClient();
   const user = useAuthContext();
   const [calling, setCalling] = useState(false);
   const [incoming, setIncoming] = useState(true);
   const [peer, setPeer] = useState(null);
   const me = user?.user?.id + "vwanu";
+  const sound = new Howl({
+    src: [messageRing],
+  });
+  const newMessageRef = useRef(null);
+
+  const { data: listConversation } = useListConversation(
+    ["user", "conversation", "all"],
+    user?.user?.id !== "undefined" ? true : false,
+    user?.user?.id
+  );
+
+  const onCreatedListener = (message) => {
+    sound.play();
+    window.document.title = `You have a new message || Vwanu`;
+    queryClient.invalidateQueries(["user", "conversation", "all"]);
+    queryClient.invalidateQueries(["message", message?.ConversationId]);
+  };
+
+  const onPatchedListener = (message) => {
+    queryClient.invalidateQueries(["user", "conversation", "all"]);
+    queryClient.invalidateQueries(["message", message?.ConversationId]);
+  };
+
+  const messageService = client.service("message");
+
+  const messageFn = async () => {
+    messageService.on("created", onCreatedListener);
+    messageService.on("patched", onPatchedListener);
+  };
 
   function denyCall() {
     console.log("deny call");
@@ -54,17 +89,21 @@ const Views = () => {
     });
   }
 
+  const { countUnreadMessageConversation } = useContext(MessageContext);
+
   useEffect(() => {
+    messageFn();
     ConnectPeer();
   }, []);
+
+  useEffect(() => {
+    countUnreadMessageConversation(listConversation?.data);
+  }, [listConversation?.data]);
 
   return (
     <>
       {calling && (
         <>
-          <audio autoplay={true} loop={true}>
-            <source src={callRing} type="audio/mp3" />
-          </audio>
           <ReceivedDialog denyCall={denyCall} answerCall={answerCall} setIsCalling={setCalling} open={calling} caller={{}} />
         </>
       )}
