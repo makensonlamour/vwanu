@@ -64,6 +64,7 @@ const FormResetPassword = () => {
           placeholder="New Password"
           name="password"
           autoComplete="new-email"
+          containerClassName="my-4"
           className="mr-1 mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="password-error-message"
           showPassword={true}
@@ -76,6 +77,7 @@ const FormResetPassword = () => {
           placeholder="Password Confirmation"
           name="passwordConfirmation"
           autoComplete="new-email"
+          containerClassName="my-4"
           className="mr-1 mt-1 mb-2 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="passwordConfirmation-error-message"
           showPassword={true}

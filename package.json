@@ -37,6 +37,7 @@
     "@feathersjs/transport-commons": "^5.0.0-pre.20",
     "@jackywxd/feathers-refresh-token": "^0.2.0",
     "howler": "^2.2.3",
+    "json-query": "^2.2.2",
     "pg-tsquery": "^8.3.0",
     "slate-html-serializer": "^0.8.13"
   }

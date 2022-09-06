@@ -56,6 +56,7 @@ const FormForgotPassword = () => {
           name="email"
           type="email"
           autoComplete="new-email"
+          containerClassName="my-4"
           className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-600 autofill:text-secondary autofill:bg-blue-200"
           testId="email-error-message"
         />
