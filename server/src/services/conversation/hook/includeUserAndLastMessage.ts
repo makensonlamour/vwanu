@@ -10,7 +10,8 @@ const includeUsersAndLastMessage = IncludeAssociations({
     {
       model: 'conversation',
       as: 'Messages',
-      order: [['createdAt', 'ASC']],
+      order: [['createdAt', 'desc']],
+
       limit: 1,
       include: [
         {
