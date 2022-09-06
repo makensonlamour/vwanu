@@ -6,7 +6,7 @@ import { Badge, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/materia
 import logo from "../../assets/images/Asset_2.png";
 import { IoIosArrowDown } from "react-icons/io";
 import { BsSearch } from "react-icons/bs";
-import { AiOutlineInbox } from "react-icons/ai";
+import { AiOutlineInbox, AiOutlineClose } from "react-icons/ai";
 import { FiActivity } from "react-icons/fi";
 import { FaUserAlt } from "react-icons/fa";
 import { BiUserCircle, BiMessageDetail } from "react-icons/bi";
@@ -18,30 +18,12 @@ import FriendsPreview from "./Friends/FriendsPreview";
 import NotificationPreview from "./Notification/NotificationPreview";
 import useAuth from "../../hooks/useAuth";
 import { deleteToken } from "../../helpers/index";
+import { Search } from "../../components/form/index";
 
 // import client from "../../features/feathers";
 const Navbar = ({ user, countMessage }) => {
-  // const nots = async () => {
-  //   console.log("here are the services");
-  //   console.log(Object.keys(client.services));
-  //   try {
-  //     const notifs = await client.service("notification").find();
-  //     console.log("Notifs --");
-  //     console.log({ notifs });
-  //     client.service("notification").on("created", (m) => {
-  //       console.log("something");
-  //       console.log(m);
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   nots();
-  // }, []);
-
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [search, setSearch] = useState(false);
   const { logout } = useAuth();
 
   const { toggleSidebar, isSidebarOpen } = useContext(BottomMenuContext);
@@ -101,36 +83,46 @@ const Navbar = ({ user, countMessage }) => {
               </div>
             </Link>
           </div>
-          <div className="md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
-            <div className="hidden xl:flex items-center justify-evenly py-2">
-              {pages?.map((page) => (
-                <NavLink
-                  to={page?.path}
-                  key={page?.title + " title"}
-                  activeClassName="text-secondary"
-                  className=" text-primary hover:text-secondary active:text-secondary"
-                >
-                  {page?.title}
-                </NavLink>
-              ))}
+          {search ? (
+            <div className="z-50 md:basis-[30%] xl:basis-2/4 flex-none md:block items-center">
+              <Search placeholder={`Search a members`} setIsSearchOpen={setSearch} />
             </div>
-            <div className="hidden md:flex xl:hidden">
-              {pages?.map((page) => (
-                <Tooltip key={page + " icon"} title={page?.title}>
+          ) : (
+            <div className="md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
+              <div className="hidden xl:flex items-center justify-evenly py-2">
+                {pages?.map((page) => (
                   <NavLink
                     to={page?.path}
+                    key={page?.title + " title"}
                     activeClassName="text-secondary"
-                    className="mx-auto px-1 flex text-primary hover:text-secondary active:text-secondary"
+                    className=" text-primary hover:text-secondary active:text-secondary"
                   >
-                    {page?.icon}
+                    {page?.title}
                   </NavLink>
-                </Tooltip>
-              ))}
+                ))}
+              </div>
+              <div className="hidden md:flex xl:hidden">
+                {pages?.map((page) => (
+                  <Tooltip key={page + " icon"} title={page?.title}>
+                    <NavLink
+                      to={page?.path}
+                      activeClassName="text-secondary"
+                      className="mx-auto px-1 flex text-primary hover:text-secondary active:text-secondary"
+                    >
+                      {page?.icon}
+                    </NavLink>
+                  </Tooltip>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div className="basis-[35%] lg:basis-[30%] flex-none">
             <div className="flex justify-between md:justify-end items-center">
-              <BsSearch size="24px" className="text-black mr-4" />
+              {search ? (
+                <AiOutlineClose onClick={() => setSearch(false)} size="24px" className="text-black mr-4" />
+              ) : (
+                <BsSearch onClick={() => setSearch(true)} size="24px" className="text-black mr-4" />
+              )}
               <div className="h-6 bg-black w-[1px] mr-4"></div>
               <Link to={routesPath?.MESSAGE}>
                 <Badge badgeContent={countMessage} color="primary" className="mr-4">
