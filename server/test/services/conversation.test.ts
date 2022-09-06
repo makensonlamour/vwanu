@@ -283,7 +283,7 @@ describe("'conversation' service", () => {
       Messages: [
         {
           id: expect.any(String),
-          messageText: 'test message1',
+          messageText: 'test message2',
           received: false,
           read: false,
           receivedDate: null,

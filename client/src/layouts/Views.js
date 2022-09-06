@@ -54,6 +54,7 @@ const Views = () => {
   const messageService = client.service("message");
 
   const messageFn = async () => {
+    console.log("messsageFn fired");
     messageService.on("created", onCreatedListener);
     messageService.on("patched", onPatchedListener);
   };
