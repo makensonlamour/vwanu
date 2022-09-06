@@ -1,4 +1,4 @@
-/*eslint-disable */
+/*eslint-disable*/
 import React, { useState } from "react";
 import * as Yup from "yup";
 import routesPath from "../../../routesPath";
@@ -6,9 +6,16 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { useUpdateUser } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
+import { useGetInterestList } from "../../interest/interestSlice";
+import { assignValue } from "../../../helpers/index";
+import countries from "../../../data/countries.json";
+import states from "../../../data/states.json";
+// import cities from "../../../data/cities.json";
+import { assignValueCountries, assignValueStates } from "../../../helpers/index";
+import jsonQuery from "json-query";
 
 // Core components
-import { Field, Select, Form, Submit } from "../../../components/form";
+import { Field, Select, MultiSelect, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 import { differenceInYears } from "date-fns";
 
@@ -18,18 +25,39 @@ const FormStepTwo = () => {
   const navigate = useNavigate();
   const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
   const [isLoading, setIsLoading] = useState(false);
+  const { data: interestList } = useGetInterestList(["interest", "all"]);
+  const options = assignValue(interestList?.data);
+  const [interest, setInterest] = useState([]);
+  const [countryCode, setCountryCode] = useState("");
+  const [stateCode, setStateCode] = useState("");
+
+  console.log(stateCode);
+
+  const optionsCountry = assignValueCountries(countries);
+  const stateList = jsonQuery(`[*country_code=${countryCode}]`, { data: states });
+  const optionsState = assignValueStates(stateList?.value);
 
   const initialValues = {
     country: "",
+    states: "",
+    city: "",
+    street: "",
+    zipCode: "",
     gender: "",
     interestedBy: "",
+    interest: "",
     birthday: "",
   };
 
   const ValidationSchema = Yup.object().shape({
     country: Yup.string().required().label("Country"),
+    states: Yup.string().label("States"),
+    city: Yup.string().required().label("City"),
+    street: Yup.string().required().label("Street"),
+    zipCode: Yup.string().required().label("Zip Code"),
     gender: Yup.string().required().label("Gender"),
     interestedBy: Yup.string().required().label("Interest By"),
+    interest: Yup.array().required().label("Interest"),
     birthday: Yup.date()
       .test(
         "birthday",
@@ -47,6 +75,7 @@ const FormStepTwo = () => {
       gender: credentials?.gender,
       interestedBy: credentials?.interestedBy,
       birthday: credentials?.birthday,
+      interests: interest,
       id: idUser,
     };
 
@@ -66,6 +95,16 @@ const FormStepTwo = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setInterest(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
   };
 
   return (
@@ -112,20 +151,74 @@ const FormStepTwo = () => {
             { id: 2, label: "female", value: "f" },
           ]}
         />
+        <MultiSelect
+          label="Interest In"
+          className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
+          placeholder={"Select the category..."}
+          multiple
+          options={options}
+          fn={handleChange}
+          val={interest}
+          name="interest"
+        />
         <Select
           required
           label="Country"
           placeholder="Country"
           name="country"
+          style={{ width: "100%" }}
+          fn={setCountryCode}
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="country-error-message"
-          options={[
-            { id: 0, label: "Not Specified", value: "" },
-            { id: 1, label: "United States Of America", value: "usa" },
-            { id: 2, label: "Dominican Republic", value: "do" },
-          ]}
+          options={optionsCountry}
         />
-        <Submit className="rounded-2xl text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />{" "}
+        <div className="flex justify-center w-full">
+          <Select
+            required
+            label="States"
+            placeholder="States"
+            name="states"
+            className="mr-2 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            testId="state-error-message"
+            fn={setStateCode}
+            options={optionsState}
+          />
+          <Select
+            required
+            label="City"
+            placeholder="City"
+            name="city"
+            style={{ width: "100%" }}
+            className="ml-2 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            testId="city-error-message"
+            options={[
+              { id: 0, label: "Not Specified", value: "" },
+              { id: 1, label: "United States Of America", value: "usa" },
+              { id: 2, label: "Dominican Republic", value: "do" },
+            ]}
+          />
+        </div>
+        <div className="flex w-full">
+          <Field
+            label="Street"
+            placeholder="Street Address"
+            name="street"
+            type="text"
+            containerClassName="w-full"
+            className="w-full mr-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          />
+          <Field
+            label="Zip Code"
+            placeholder="Zip Code"
+            name="zipCode"
+            type="text"
+            containerClassName=""
+            className="w-full ml-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          />
+        </div>
+        <div className="mt-2">
+          <Submit className="rounded-2xl text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />
+        </div>
       </Form>
     </>
   );

@@ -93,6 +93,28 @@ export function assignValue(obj) {
   return array;
 }
 
+export function assignValueCountries(obj) {
+  if (obj?.length === 0) return;
+  const array = [];
+
+  obj?.map((item) => {
+    return array?.push({ id: item?.id, value: item?.iso2, name: item?.name, label: item?.name, ...item });
+  });
+
+  return array;
+}
+
+export function assignValueStates(obj) {
+  if (obj?.length === 0) return;
+  const array = [];
+
+  obj?.map((item) => {
+    return array?.push({ id: item?.id, value: item?.state_code, name: item?.name, label: item?.name, ...item });
+  });
+
+  return array;
+}
+
 //assign value for interest
 export function assignCommunityMember(obj, types) {
   if (obj?.length === 0 || types === "") return;

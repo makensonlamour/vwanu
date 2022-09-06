@@ -22,7 +22,8 @@ const CreateConversation = ({ setIsOpened }) => {
 
   const handleAdd = (data) => {
     setIsLoading(true);
-    setSelectMember((selectMember) => [...selectMember, data]);
+    setSelectMember((selectMember) => [data]);
+    // setSelectMember((selectMember) => [...selectMember, data]);
     setIsLoading(false);
   };
 

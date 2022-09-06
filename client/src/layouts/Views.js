@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Route, Routes } from "react-router-dom";
 import { routes, role } from "../routes";
-import callRing from "../assets/sounds/phonecall.mp3";
+import messageRing from "../assets/sounds/messageNotif.mp3";
 import { Howl } from "howler";
 import { useQueryClient } from "react-query";
 
@@ -29,7 +29,7 @@ const Views = () => {
   const [peer, setPeer] = useState(null);
   const me = user?.user?.id + "vwanu";
   const sound = new Howl({
-    src: [callRing],
+    src: [messageRing],
   });
   const newMessageRef = useRef(null);
 
@@ -54,7 +54,6 @@ const Views = () => {
   const messageService = client.service("message");
 
   const messageFn = async () => {
-    console.log("messsageFn fired");
     messageService.on("created", onCreatedListener);
     messageService.on("patched", onPatchedListener);
   };
@@ -103,18 +102,8 @@ const Views = () => {
 
   return (
     <>
-      <button
-        ref={newMessageRef}
-        onClick={() => {
-          console.log("audio played");
-        }}
-        className="hidden"
-      ></button>
       {calling && (
         <>
-          <audio autoplay={true} loop={true}>
-            <source src={callRing} type="audio/mp3" />
-          </audio>
           <ReceivedDialog denyCall={denyCall} answerCall={answerCall} setIsCalling={setCalling} open={calling} caller={{}} />
         </>
       )}
