@@ -1,5 +1,6 @@
 import config from 'config';
 import { Response, Request, NextFunction } from 'express';
+import isValidUrl from './validUrl';
 
 const Common = {
   getTokenFromRequest: async (request: Request) => {
@@ -106,14 +107,21 @@ const Common = {
     const data = request;
 
     const documentFiles = request.UploadedMedia;
+    data.Media = [];
+    if (data.mediaLinks) {
+      data.mediaLinks.forEach((link: string) => {
+        if (isValidUrl(link)) {
+          data.Media.push({
+            original: link,
+            media: link,
+            tiny: link,
+            UserId: data.UserId,
+          });
+        }
+      });
+    }
 
-    console.log(mediaArray);
-    console.log(documentFiles);
     if (documentFiles && mediaArray.some((media) => documentFiles[media])) {
-      console.log(' In ');
-      // if (documentFiles?.postImage || documentFiles?.postVideo) {
-      data.Media = [];
-
       mediaArray.forEach((mediaGroup) => {
         if (documentFiles[mediaGroup]) {
           documentFiles[mediaGroup].forEach((doc) => {
