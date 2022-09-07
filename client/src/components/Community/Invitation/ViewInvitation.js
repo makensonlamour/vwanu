@@ -1,34 +1,69 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Loader from "../../common/Loader";
-import { useJoinCommunity } from "../../../features/community/communitySlice";
+import toast, { Toaster } from "react-hot-toast";
+import { useQueryClient } from "react-query";
+import { useAcceptInvitation } from "../../../features/community/communitySlice";
+
+const AcceptInvitationSuccess = () =>
+  toast.success("You accepted the invitation", {
+    position: "top-center",
+  });
+
+const AcceptInvitationError = () =>
+  toast.error("Sorry. Error on accepting invitation!", {
+    position: "top-center",
+  });
+
+const declineInvitationSuccess = () =>
+  toast.success("You declined the invitation", {
+    position: "top-center",
+  });
+
+const declineInvitationError = () =>
+  toast.error("Sorry. Error on declining invitation!", {
+    position: "top-center",
+  });
 
 const ViewInvitation = ({ member }) => {
-  console.log(member);
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
-  const acceptInvitation = useJoinCommunity(["invitation", "accept"], undefined, undefined);
+  const acceptInvitation = useAcceptInvitation(["invitation", "accept"], undefined, undefined);
 
   const handleAccept = async () => {
     setLoading(true);
     try {
       const dataObj = {
-        CommunityId: member?.CommunityId,
+        invitationId: member?.id,
+        response: true,
       };
       let result = await acceptInvitation.mutateAsync(dataObj);
-      console.log(result);
+      AcceptInvitationSuccess();
+      if (result?.data?.message === "Your response have been recorded") {
+        window.location.href = `../groups/${member?.CommmunityId}`;
+      }
     } catch (e) {
+      AcceptInvitationError();
       console.log(e);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDecline = () => {
+  const handleDecline = async () => {
     setLoading(true);
     try {
-      console.log("accept");
+      const dataObj = {
+        invitationId: member?.id,
+        response: false,
+      };
+      let result = await acceptInvitation.mutateAsync(dataObj);
+      declineInvitationSuccess();
+      if (result?.data?.message === "Your response have been recorded") {
+        queryClient.invalidateQueries(["community", "invitation", "all"]);
+      }
     } catch (e) {
+      declineInvitationError();
       console.log(e);
     } finally {
       setLoading(false);
@@ -36,6 +71,7 @@ const ViewInvitation = ({ member }) => {
   };
   return (
     <>
+      <Toaster />
       <div key={member?.id} className="border border-gray-200 p-4 w-full">
         <p className="pb-2">
           {member?.host?.firstName +
@@ -67,7 +103,7 @@ const ViewInvitation = ({ member }) => {
                 {loading ? <Loader /> : "Decline Invitation"}
               </button>
             </div>
-            <p classNAme="">
+            <p className="">
               <span className="">{member?.createdAt}</span>
             </p>
           </div>

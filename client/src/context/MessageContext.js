@@ -24,7 +24,7 @@ export const MessageContextProvider = ({ children }) => {
 
     //calculate unread message for all conversaion
     const unread = arrayObj?.map((item) => {
-      return item?.amountOfMessages + item?.amountOfUnreadMessages;
+      return item?.amountOfUnreadMessages;
     });
 
     setCountMessage(SumArray(unread));

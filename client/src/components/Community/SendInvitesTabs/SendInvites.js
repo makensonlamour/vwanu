@@ -9,6 +9,17 @@ import { useGetAllMembers } from "../../../features/user/userSlice";
 import { useGetAllMembersCommunity, useSendInvitation, useGetCommunityRole } from "../../../features/community/communitySlice";
 import { isMember } from "../../../helpers/index";
 import InputSearch from "../../../features/search/components/InputSearch";
+import toast, { Toaster } from "react-hot-toast";
+
+const sendInvitationSuccess = () =>
+  toast.success("You sent the invitation", {
+    position: "top-center",
+  });
+
+const sendInvitationError = () =>
+  toast.error("Sorry. Error on sending the invitation!", {
+    position: "top-center",
+  });
 
 const SendInvites = () => {
   const user = useOutletContext();
@@ -44,7 +55,6 @@ const SendInvites = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(id);
     setIsLoading(true);
     try {
       let roleCommunityId;
@@ -63,10 +73,11 @@ const SendInvites = () => {
         CommunityId: id,
       };
 
-      let result = await sendInvitation.mutateAsync(dataObj);
-
-      console.log(result);
+      await sendInvitation.mutateAsync(dataObj);
+      sendInvitationSuccess();
+      setSelectMember([]);
     } catch (e) {
+      sendInvitationError();
       console.log(e);
     } finally {
       setIsLoading(false);
@@ -80,6 +91,7 @@ const SendInvites = () => {
 
   return (
     <>
+      <Toaster />
       <div>
         <div className="border border-gray-300 rounded-lg">
           <div className="grid grid-cols-2">

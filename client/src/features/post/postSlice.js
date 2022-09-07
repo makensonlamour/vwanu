@@ -10,6 +10,8 @@ export const useCreatePost = (queryKey, oldData, newData) => usePost(queryKey, `
 
 export const useGetCommunityPostList = (queryKey, CommunityId) => useLoadMore(queryKey, `/posts?CommunityId=${CommunityId}`);
 
+export const useUploadGiph = (queryKey, oldData, newData) => usePost(queryKey, `/medias`, (oldData, newData));
+
 //export const useDeletePost = (id) => useDelete(`/post?UserId=${dataObj?.UserId}`);
 
 // export const useUpdatePost = (oldData, newData, dataObj) => useUpdate(`/post?UserId=${dataObj?.UserId}`, dataObj, oldData, newData);
