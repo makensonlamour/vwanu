@@ -1,22 +1,23 @@
 /* eslint-disable no-case-declarations */
-
 import * as authentication from '@feathersjs/authentication';
 
-import {
-  AddTalker,
-  // AutoOwn,
-  // LimitToOwner,
-} from '../../Hooks';
+import { AddTalker } from '../../Hooks';
+
+
 
 import {
+  SetType,
   UnreadMessage,
-  FilterConversations,
   LimitToTalkersOnly,
+  FilterConversations,
   IncludeUserAndLastMessage,
+  LimitDirectConversations,
 } from './hook';
 
 const NotifyUsers = async (context) => {
+
   const { app, data, result } = context;
+  if(!data?.userIds) return context;
   // console.log('\n\n NotifyUsers');
   // console.log('User ids');
   // console.log(data.userIds);
@@ -40,14 +41,15 @@ const NotifyUsers = async (context) => {
 
   return context;
 };
-const { authenticate } = authentication.hooks;
 
+const { authenticate } = authentication.hooks;
+/* LimitDirectConversations */
 export default {
   before: {
     all: [authenticate('jwt'), IncludeUserAndLastMessage],
     find: [FilterConversations],
     get: [LimitToTalkersOnly],
-    create: [],
+    create: [SetType, LimitDirectConversations],
     update: [],
     patch: [LimitToTalkersOnly],
     remove: [LimitToTalkersOnly],
