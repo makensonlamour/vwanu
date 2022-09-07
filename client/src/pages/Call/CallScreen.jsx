@@ -207,6 +207,7 @@ function CallScreen() {
   };
   return (
     <div>
+      
       <div>
         <button onClick={() => answerCall()}>Answer</button>
         <button onClick={() => denyCall()}>Deny {friendId}</button>

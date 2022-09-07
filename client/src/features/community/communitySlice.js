@@ -18,7 +18,7 @@ export const useSendInvitation = (queryKey, oldData, newData) => usePost(queryKe
 
 export const useSendMessage = (queryKey, oldData, newData) => usePost(queryKey, `/community-message-request`, (oldData, newData));
 
-export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(queryKey, `/community-invitation-request`, (oldData, newData));
+export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(queryKey, `/communities-registrations`, (oldData, newData));
 
 export const useJoinCommunity = (queryKey, oldData, newData) => usePost(queryKey, `/community-join`, (oldData, newData));
 
@@ -35,3 +35,6 @@ export const useGetCommunityInvitation = (queryKey, enabled = true, userId) =>
 
 export const useGetMyCommunityInvitation = (queryKey, enabled = true, userId) =>
   useFetch(queryKey, enabled, `/community-invitation-request?guestId=${userId}`);
+
+export const useCheckIfMember = (queryKey, enabled = true, communityId, userId) =>
+  useFetch(queryKey, enabled, `/community-users/?CommunityId=${communityId}&UserId=${userId}`);

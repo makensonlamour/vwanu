@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { AvatarGroup, Avatar, Chip, Stack } from "@mui/material";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../../assets/images/cover_group_random.png";
-import { useJoinCommunity } from "../../../features/community/communitySlice";
+import { useJoinCommunity, useCheckIfMember } from "../../../features/community/communitySlice";
 // import { isMember } from "../../../helpers/index";
 
 const CardCommunity = ({ data }) => {
+  const user = useOutletContext();
   const [isLoading, setIsLoading] = useState(false);
   const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
+
+  const { data: checkMember } = useCheckIfMember(
+    ["community", "member", data?.id],
+    data?.id !== "undefined" && user?.id !== "undefined" ? true : false,
+    data?.id,
+    user?.id
+  );
 
   const handleJoin = async () => {
     setIsLoading(true);
@@ -30,8 +38,6 @@ const CardCommunity = ({ data }) => {
       setIsLoading(false);
     }
   };
-
-  console.log(data);
 
   return (
     <>
@@ -93,7 +99,7 @@ const CardCommunity = ({ data }) => {
                 }}
                 className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white"
               >
-                {isLoading ? "Loading..." : "Join"}
+                {isLoading ? "Loading..." : checkMember?.data?.length > 0 ? `${checkMember?.data[0]?.CommunityRole?.name}` : "Join"}
               </button>
             </div>
           </div>

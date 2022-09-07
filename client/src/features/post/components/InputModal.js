@@ -8,17 +8,18 @@ import _ from "lodash";
 import { useOutletContext } from "react-router-dom";
 import { InputField, SubmitPost, Form } from "../../../components/form";
 //import { FcGallery } from "react-icons/fc";
-import { MdAlternateEmail } from "react-icons/md";
-import { RiHashtag } from "react-icons/ri";
-import { BsEmojiSmile } from "react-icons/bs";
+// import { MdAlternateEmail } from "react-icons/md";
+// import { RiHashtag } from "react-icons/ri";
+// import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
 import Loader from "../../../components/common/Loader";
-import { Popover } from "@mui/material";
+// import { Popover } from "@mui/material";
 import { useCreatePost } from "../postSlice";
-import Picker from "emoji-picker-react";
+// import Picker from "emoji-picker-react";
 import InputPhoto from "./InputPhoto";
+import BoxGif from "../../../components/common/BoxGif";
 // import Editor from "../../../components/form/Post/InputField/Editor.js";
 
 //Functions for notification after actions
@@ -50,6 +51,7 @@ const InputModal = ({ reference, communityId }) => {
   const [files, setFiles] = useState([]);
   const [blobFile, setBlobFile] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedGif, setSelectedGif] = useState("");
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -86,6 +88,7 @@ const InputModal = ({ reference, communityId }) => {
 
   //const [createPost, { isSuccess }] = useCreatePostMutation();
   const mutationAdd = useCreatePost(["post", "home"], (oldData, newData) => [...oldData, newData]);
+  // const mutationAddGiph = useUploadGiph(["post", "home"], (oldData, newData) => [...oldData, newData]);
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
@@ -97,6 +100,19 @@ const InputModal = ({ reference, communityId }) => {
           formData.append("postImage", file);
         });
       }
+      let dataObj={};
+      if (selectedGif !== "") {
+        const arrayGif = [];
+        arrayGif.push(selectedGif);
+        console.log(arrayGif);
+        dataObj = {
+          postText: credentials.postText,
+          UserId: credentials.UserId,
+          privacyType: privacyText,
+          mediaLinks: arrayGif,
+        };
+        // formData.append("mediaLinks", arrayGif);
+      }
 
       //request for post newsfeed
       if (_.isEqual(reference, "newsfeed")) {
@@ -104,7 +120,7 @@ const InputModal = ({ reference, communityId }) => {
         formData.append("UserId", credentials.UserId);
         formData.append("privacyType", privacyText);
         try {
-          await mutationAdd.mutateAsync(formData);
+          await mutationAdd.mutateAsync(selectedGif !== "" ? dataObj : formData);
           postSuccess();
           // reloadPage();
         } catch (e) {
@@ -251,7 +267,7 @@ const InputModal = ({ reference, communityId }) => {
                   <div>{/* add photo */}</div>
                   <div>{/* add video */}</div>
                   <div>{/* add gif */}</div>
-                  <div className="flex">
+                  {/* <div className="flex">
                     <span className="ml-auto">
                       <button onClick={() => setHashTag(true)} className="text-right px-3 py-1 lg:mt-0 cursor-pointer hover:bg-gray-50">
                         {" "}
@@ -288,7 +304,7 @@ const InputModal = ({ reference, communityId }) => {
                         <Picker onEmojiClick={onEmojiClick} />
                       </Popover>
                     </span>
-                  </div>
+                  </div> */}
                   {openUploadPhoto && (
                     <div className="flex">
                       <div className="w-full">
@@ -317,6 +333,11 @@ const InputModal = ({ reference, communityId }) => {
                           </div>
                         )}
                       </div>
+                    </div>
+                  )}
+                  {selectedGif && (
+                    <div className="">
+                      <img src={selectedGif} className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle" alt={"_gif"} />
                     </div>
                   )}
                 </div>
@@ -356,7 +377,8 @@ const InputModal = ({ reference, communityId }) => {
                       >
                         <AiOutlineVideoCamera size={"24px"} />
                       </button>
-                      <button
+                      <BoxGif setSelectedGif={setSelectedGif} label={<AiOutlineGif size={"24px"} />} />
+                      {/* <button
                         onClick={() => {
                           setOpenUploadGif(!openUploadGif);
                           setOpenUploadPhoto(false);
@@ -365,7 +387,7 @@ const InputModal = ({ reference, communityId }) => {
                         className="mr-4"
                       >
                         <AiOutlineGif size={"24px"} />
-                      </button>
+                      </button> */}
                     </div>
                     {/*}
                     <div>

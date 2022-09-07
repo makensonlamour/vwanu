@@ -109,11 +109,19 @@ const Common = {
 
     console.log(mediaArray);
     console.log(documentFiles);
-    if (documentFiles && mediaArray.some((media) => documentFiles[media])) {
+    if (
+      (documentFiles && mediaArray.some((media) => documentFiles[media])) ||
+      data.mediaLinks
+    ) {
       console.log(' In ');
       // if (documentFiles?.postImage || documentFiles?.postVideo) {
       data.Media = [];
 
+      if (data.mediaLinks) {
+        data.mediaLinks.forEach((link: string) => {
+          if (link) data.Media.push({ original: link, UserId: data.UserId });
+        });
+      }
       mediaArray.forEach((mediaGroup) => {
         if (documentFiles[mediaGroup]) {
           documentFiles[mediaGroup].forEach((doc) => {
