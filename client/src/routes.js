@@ -21,6 +21,7 @@ import Forum from "./pages/Forum/Forum";
 import ViewForum from "./pages/Forum/ViewForum";
 import ForumList from "./pages/Forum/ForumList";
 import CallScreen from "./pages/Call/CallScreen";
+// import TestSingleComponents from "./pages/TestSingleComponents/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
 //define access roles
@@ -197,5 +198,11 @@ let routes = [
     element: StepFour,
     access: role.AUTH,
   },
+  // {
+  //   path: routesPath.TEST_PAGE,
+  //   name: "Test page",
+  //   element: TestSingleComponents,
+  //   access: role.CALL,
+  // },
 ];
 export { routes, role };

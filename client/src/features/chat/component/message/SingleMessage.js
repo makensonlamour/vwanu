@@ -5,6 +5,7 @@ import { enUS } from "date-fns/esm/locale";
 import { GrFormView } from "react-icons/gr";
 import { IoIosSend } from "react-icons/io";
 import { useReadMessage } from "../../messageSlice";
+import { transformHashtagAndLink } from "../../../../helpers/index";
 
 const formatRelativeLocale = {
   lastWeek: "P ' at ' p",
@@ -78,9 +79,15 @@ const SingleMessage = ({ groups, sender, listMessage }) => {
         )
       ) : sender ? (
         <div className="flex flex-wrap justify-end">
-          <div className="bg-orange-100 p-2 rounded-xl w-max max-w-[50%]">
-            <p className="pb-1 text-sm">{listMessage?.messageText}</p>
-            <p className="text-xs text-gray-700 align-middle">
+          <div className="bg-orange-100 px-2 py-1 rounded-xl w-max max-w-[70%]">
+            {listMessage?.messageText?.split("\n").map((text) => {
+              return (
+                <p key={text} className="text-sm">
+                  {transformHashtagAndLink(text)}
+                </p>
+              );
+            })}
+            <p className="text-xs text-gray-700 align-middle text-right">
               {formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}
               <span className="inline">
                 {listMessage?.read ? (
@@ -93,9 +100,15 @@ const SingleMessage = ({ groups, sender, listMessage }) => {
           </div>
         </div>
       ) : (
-        <div className="bg-placeholder-color p-2 rounded-xl w-max max-w-[50%] pl-5">
-          <p className="pb-1 text-sm">{listMessage?.messageText}</p>
-          <p className="text-xs text-gray-600">{formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}</p>
+        <div className="bg-placeholder-color px-2 py-1 rounded-xl w-max max-w-[70%] lg:pl-5">
+          {listMessage?.messageText?.split("\n").map((text) => {
+            return (
+              <p key={text} className="text-sm">
+                {transformHashtagAndLink(text)}
+              </p>
+            );
+          })}{" "}
+          <p className="text-xs text-gray-600 text-right">{formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}</p>
         </div>
       )}
     </>

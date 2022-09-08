@@ -1,4 +1,4 @@
-// import React from "react";
+import React from "react";
 import jwtDecode from "jwt-decode";
 import _ from "lodash";
 
@@ -120,6 +120,7 @@ export function assignCommunityMember(obj, types) {
   if (obj?.length === 0 || types === "") return;
   const array = [];
 
+  // eslint-disable-next-line array-callback-return
   obj?.map((item) => {
     if (item?.CommunityRole?.name === types) {
       return array?.push({
@@ -150,4 +151,28 @@ export function isMember(listMembers, data) {
   let memb = listMembers?.filter((member) => member?.UserId === data?.id);
 
   return memb?.length === 0 ? false : true;
+}
+
+export function transformHashtagAndLink(strText) {
+  strText = strText.split(" ").map((str) => {
+    if (str.startsWith("https")) {
+      return (
+        <a rel="noopener noreferrer" target="_blank" href={`${str}`} className="font-bold hover:text-primary">
+          {str}
+        </a>
+      );
+    } else if (str.startsWith("#")) {
+      return <p className="font-bold">{str}</p>;
+    } else if (str.startsWith("www.")) {
+      return (
+        <a rel="noopener noreferrer" target="_blank" href={`https://${str}`} className="font-bold hover:text-primary">
+          {str}
+        </a>
+      );
+    } else {
+      return str + " ";
+    }
+  });
+
+  return strText;
 }

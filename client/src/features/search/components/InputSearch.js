@@ -16,7 +16,7 @@ const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIs
 
   return (
     <>
-      <div className="flex flex-wrap p-4 mt-4">
+      <div className="flex flex-wrap p-2 lg:p-4 mt-2 lg:mt-4">
         <div className="w-full relative text-gray-400 focus-within:text-gray-400">
           <span className="absolute inset-y-0 right-0 flex items-center pr-2">
             <button onClick={() => setIsSearchOpen(false)} className="">
@@ -37,12 +37,12 @@ const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIs
           <p className="text-center py-4 text-lg">{`Sorry, Something went wrong ;(`}</p>
         ) : (
           <>
-            <div className="py-4">
+            <div className="py-2 lg:py-4">
               {filterData?.data?.length > 0 &&
                 filterData?.data?.slice(0, 10)?.map((data) => {
                   return (
                     <>
-                      <div className="flex justify-between items-center p-2 hover:bg-placeholder-color rounded-xl">
+                      <div className="flex justify-between items-center px-2 py-2 lg:p-2 hover:bg-placeholder-color rounded-xl">
                         <div className="basis-[80%] flex items-center">
                           <div className="mr-4">
                             <img

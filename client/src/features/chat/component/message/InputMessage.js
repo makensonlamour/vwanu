@@ -63,11 +63,11 @@ const InputMessage = ({ selectMember, type }) => {
   return (
     <>
       <div className="h-[1px] w-full bg-gray-200"></div>
-      <div className="">
+      <div className="bg-white z-50">
         <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
           {openUploadPhoto && (
             <div className="flex">
-              <div className="w-full">
+              <div className="w-full px-2">
                 {files?.length === 0 ? (
                   <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
                     <InputPhoto fn={setFiles} maxFiles={4} />
@@ -108,7 +108,7 @@ const InputMessage = ({ selectMember, type }) => {
             placeholder="Type message"
             name="message"
             type="text"
-            maxRows="5"
+            maxRows="4"
             minRows="1"
             style={{ width: "100%", border: "none" }}
             sx={{
@@ -118,8 +118,8 @@ const InputMessage = ({ selectMember, type }) => {
             }}
             className="appearance-none mb-1 p-2 outline-0 text-secondary placeholder:text-gray-300 focus:border-0 rounded-2xl border-0"
           />
-          <div className="flex justify-between border-gray-300 bg-placeholder-color">
-            <div className="border-t  text-left py-4 px-4">
+          <div className="px-2 flex justify-between border-gray-300 bg-placeholder-color">
+            <div className="flex justify-between border-t text-left py-2 lg:py-4 lg:px-4">
               <button
                 onClick={() => {
                   if (selectedGif !== "") {
@@ -143,7 +143,7 @@ const InputMessage = ({ selectMember, type }) => {
 
               <BoxGif label={<AiOutlineGif size={"24px"} />} setSelectedGif={setSelectedGif} />
             </div>
-            <Submit className="w-full rounded-2xl text-base-100 text-md md:w-max" title={isLoading ? <Loader /> : "Send"} />
+            <Submit className="my-1 px-4 lg:px-6 lg:py-2 w-fit lg:w-full rounded-xl text-md" title={isLoading ? <Loader /> : "Send"} />
           </div>
         </Form>
       </div>

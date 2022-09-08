@@ -118,7 +118,13 @@ const MenuButton = ({ otherUser }) => {
                     <VscMegaphone size={"18px"} className="mr-1 items-center align-middle" />
                     Follow
                   </MenuItem>
-                  <MenuItem className="text-black  rounded-xl hover:text-primary" onClick={handleClose}>
+                  <MenuItem
+                    className="text-black  rounded-xl hover:text-primary"
+                    onClick={() => {
+                      window.location.href = `../../messages?newMessage=true&otherUserId=${otherUser?.id}`;
+                      handleClose();
+                    }}
+                  >
                     {" "}
                     <AiOutlineMail size={"18px"} className="mr-1 items-center align-middle" />
                     Send Message
