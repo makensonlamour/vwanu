@@ -41,7 +41,12 @@ const ViewFriend = ({ data, types = "", noDataLabel }) => {
                         View Profile
                       </Link>
                     ) : (
-                      <button className="capitalize mt-4 mb-8 rounded-xl px-3 btn btn-sm bg-white w-full border border-gray-300 text-gray-900 hover:text-base-100 hover:bg-primary hover:border-0">
+                      <button
+                        onClick={() => {
+                          window.location.href = `../../messages?newMessage=true&otherUserId=${friend?.id}`;
+                        }}
+                        className="capitalize mt-4 mb-8 rounded-xl px-3 btn btn-sm bg-white w-full border border-gray-300 text-gray-900 hover:text-base-100 hover:bg-primary hover:border-0"
+                      >
                         Send Message
                       </button>
                     )}

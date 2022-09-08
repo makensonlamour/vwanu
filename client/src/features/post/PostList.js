@@ -4,7 +4,7 @@ import { formatDistance, parseISO } from "date-fns";
 import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
 import reactions from "../../data/reactions";
-import { likeArray } from "../../helpers/index";
+import { likeArray, transformHashtagAndLink } from "../../helpers/index";
 import { RiShareForwardLine } from "react-icons/ri";
 import { BiComment } from "react-icons/bi";
 import MediaPost from "../../components/form/Post/MediaPost";
@@ -60,7 +60,7 @@ const PostList = ({ post, pageTitle }) => {
           <Toaster />
           <div className="border-[0.5px] border-slate-200 pb-3 mb-5 mt-4 rounded-lg shadow-md lg:w-full bg-white">
             <div className="pt-3 pb-1 px-3">
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap mb-1">
                 <div>
                   {" "}
                   <img alt="" className="object-cover object-center w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
@@ -74,7 +74,7 @@ const PostList = ({ post, pageTitle }) => {
                         : `profile/${post?.User?.id}`
                     }
                   >
-                    <span className="ml-3 text-md font-bold text-primary">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
+                    <span className="ml-3 text-md font-bold hover:text-primary">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
                     <span className="text-md font-light ml-2"> {" posted an update"}</span>
                   </Link>
                   <p className="ml-3 font-medium text-sm text-gray-900">
@@ -92,7 +92,6 @@ const PostList = ({ post, pageTitle }) => {
                     <button
                       label="Test"
                       onClick={() => {
-                        console.log("open", open);
                         handleClickOpen();
                       }}
                       className="flex justify-center items-center"
@@ -113,8 +112,8 @@ const PostList = ({ post, pageTitle }) => {
               </div>
               {post?.postText?.split("\n").map((text) => {
                 return (
-                  <p key={text} className="card-text pt-2 w-[100%] font-semibold">
-                    {text}
+                  <p key={text} className="card-text pt-0 w-[100%] font-normal">
+                    {transformHashtagAndLink(text)}
                   </p>
                 );
               })}

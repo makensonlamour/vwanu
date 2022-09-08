@@ -1,26 +1,18 @@
-/* eslint-disable */
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import _ from "lodash";
-//import FormPost from "../FormPost";
 import { useOutletContext } from "react-router-dom";
 import { InputField, SubmitPost, Form } from "../../../components/form";
-//import { FcGallery } from "react-icons/fc";
-// import { MdAlternateEmail } from "react-icons/md";
-// import { RiHashtag } from "react-icons/ri";
-// import { BsEmojiSmile } from "react-icons/bs";
+import { MdPhotoSizeSelectActual, MdVideoLibrary } from "react-icons/md";
 import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
 import Loader from "../../../components/common/Loader";
-// import { Popover } from "@mui/material";
 import { useCreatePost } from "../postSlice";
-// import Picker from "emoji-picker-react";
 import InputPhoto from "./InputPhoto";
 import BoxGif from "../../../components/common/BoxGif";
-// import Editor from "../../../components/form/Post/InputField/Editor.js";
 
 //Functions for notification after actions
 const postSuccess = () =>
@@ -40,34 +32,18 @@ const InputModal = ({ reference, communityId }) => {
   const [openPrivacy, setOpenPrivacy] = useState(false);
   const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
   const [openUploadVideo, setOpenUploadVideo] = useState(false);
-  const [openUploadGif, setOpenUploadGif] = useState(false);
-  // const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
   const [privacyText, setPrivacyText] = useState("public");
-  const [hashTag, setHashTag] = useState(false);
-  const [image, setImage] = useState(null);
-  const [chosenEmoji, setChosenEmoji] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
-  // const [textEditor, setTextEditor] = useState(null);
   const [files, setFiles] = useState([]);
-  const [blobFile, setBlobFile] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
+  const [type, setType] = useState("photo");
 
-  const onEmojiClick = (event, emojiObject) => {
-    setChosenEmoji(emojiObject);
-    console.log(chosenEmoji);
+  const handleOpenGif = (url) => {
+    setSelectedGif(url);
+    setOpenUploadPhoto(false);
+    setOpenUploadVideo(false);
+    setFiles([]);
   };
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
   //Dialog functions
   const handleClickOpen = () => {
@@ -78,6 +54,7 @@ const InputModal = ({ reference, communityId }) => {
   const initialValues = {
     postText: "",
     postImage: "",
+    postVideo: "",
     UserId,
   };
 
@@ -86,9 +63,7 @@ const InputModal = ({ reference, communityId }) => {
     postImage: Yup.mixed().label("Image"),
   });
 
-  //const [createPost, { isSuccess }] = useCreatePostMutation();
   const mutationAdd = useCreatePost(["post", "home"], (oldData, newData) => [...oldData, newData]);
-  // const mutationAddGiph = useUploadGiph(["post", "home"], (oldData, newData) => [...oldData, newData]);
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
@@ -96,22 +71,26 @@ const InputModal = ({ reference, communityId }) => {
     setLoading(true);
     try {
       if (files?.length) {
-        files?.map((file) => {
-          formData.append("postImage", file);
-        });
+        if (type === "photo") {
+          files?.map((file) => {
+            formData.append("postImage", file);
+          });
+        } else {
+          files?.map((file) => {
+            formData.append("postVideo", file);
+          });
+        }
       }
-      let dataObj={};
+      let dataObj = {};
       if (selectedGif !== "") {
         const arrayGif = [];
         arrayGif.push(selectedGif);
-        console.log(arrayGif);
         dataObj = {
           postText: credentials.postText,
           UserId: credentials.UserId,
           privacyType: privacyText,
           mediaLinks: arrayGif,
         };
-        // formData.append("mediaLinks", arrayGif);
       }
 
       //request for post newsfeed
@@ -122,23 +101,34 @@ const InputModal = ({ reference, communityId }) => {
         try {
           await mutationAdd.mutateAsync(selectedGif !== "" ? dataObj : formData);
           postSuccess();
+          setShowModal(false);
+          setFiles([]);
+          setSelectedGif("");
+          setOpenUploadPhoto(false);
+          setOpenUploadVideo(false);
           // reloadPage();
         } catch (e) {
           console.log(e);
           postError();
         }
-        setImage(null);
         setShowModal(false);
         setFiles([]);
-        setBlobFile([]);
+        setSelectedGif("");
+        setOpenUploadPhoto(false);
+        setOpenUploadVideo(false);
         //request for post profile
       } else if (_.isEqual(reference, "profilefeed")) {
         formData.append("postText", credentials.postText);
         formData.append("UserId", credentials.UserId);
         formData.append("privacyType", privacyText);
         try {
-          await mutationAdd.mutateAsync(formData);
+          await mutationAdd.mutateAsync(selectedGif !== "" ? dataObj : formData);
           postSuccess();
+          setShowModal(false);
+          setFiles([]);
+          setSelectedGif("");
+          setOpenUploadPhoto(false);
+          setOpenUploadVideo(false);
         } catch (e) {
           console.log(e);
           postError();
@@ -150,8 +140,13 @@ const InputModal = ({ reference, communityId }) => {
         formData.append("postText", credentials.postText);
         formData.append("CommunityId", communityId);
         try {
-          await mutationAdd.mutateAsync(formData);
+          await mutationAdd.mutateAsync(selectedGif !== "" ? dataObj : formData);
           postSuccess();
+          setShowModal(false);
+          setFiles([]);
+          setSelectedGif("");
+          setOpenUploadPhoto(false);
+          setOpenUploadVideo(false);
         } catch (e) {
           console.log(e);
         }
@@ -159,8 +154,13 @@ const InputModal = ({ reference, communityId }) => {
         //request for post pages
       } else if (_.isEqual(reference, "pagefeed")) {
         try {
-          await mutationAdd.mutateAsync(formData);
+          await mutationAdd.mutateAsync(selectedGif !== "" ? dataObj : formData);
           postSuccess();
+          setShowModal(false);
+          setFiles([]);
+          setSelectedGif("");
+          setOpenUploadPhoto(false);
+          setOpenUploadVideo(false);
         } catch (e) {
           console.log(e);
           postError();
@@ -261,56 +261,26 @@ const InputModal = ({ reference, communityId }) => {
                       name="postText"
                       className="basis-full text-lg appearance-none text-secondary placeholder:text-gray-600 font-light border-none "
                       testId="post-error-message"
-                      hashtagSymbol={hashTag}
                     />
                   </div>
-                  <div>{/* add photo */}</div>
-                  <div>{/* add video */}</div>
-                  <div>{/* add gif */}</div>
-                  {/* <div className="flex">
-                    <span className="ml-auto">
-                      <button onClick={() => setHashTag(true)} className="text-right px-3 py-1 lg:mt-0 cursor-pointer hover:bg-gray-50">
-                        {" "}
-                        <RiHashtag size={20} className="inline mr-1" />
-                      </button>
-                      <button className="text-right px-3 py-1 lg:mt-0 cursor-pointer hover:bg-gray-50">
-                        {" "}
-                        <MdAlternateEmail size={20} className="inline mr-1" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleClick}
-                        aria-describedby={id}
-                        className="text-right px-3 py-1 lg:mt-0 cursor-pointer hover:bg-gray-50"
-                      >
-                        <BsEmojiSmile size={20} className="inline mr-1" />
-                      </button>
-                      <Popover
-                        id={id}
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handleClose}
-                        onMouseDown={handleClose}
-                        onMouseLeave={handleClose}
-                        anchorOrigin={{
-                          vertical: "center",
-                          horizontal: "center",
-                        }}
-                        transformOrigin={{
-                          vertical: "center",
-                          horizontal: "center",
-                        }}
-                      >
-                        <Picker onEmojiClick={onEmojiClick} />
-                      </Popover>
-                    </span>
-                  </div> */}
+
                   {openUploadPhoto && (
                     <div className="flex">
                       <div className="w-full">
                         {files?.length === 0 ? (
                           <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
-                            <InputPhoto fn={setFiles} maxFiles={4} />
+                            <InputPhoto
+                              label={
+                                <Fragment>
+                                  <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                  <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                  <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                </Fragment>
+                              }
+                              type={type}
+                              fn={setFiles}
+                              maxFiles={4}
+                            />
                           </div>
                         ) : null}
                         {files?.length > 0 && (
@@ -318,15 +288,81 @@ const InputModal = ({ reference, communityId }) => {
                             <>
                               <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
                                 {" "}
-                                <InputPhoto fn={setFiles} />
+                                <InputPhoto
+                                  label={
+                                    <Fragment>
+                                      <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                      <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                      <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                    </Fragment>
+                                  }
+                                  type={type}
+                                  fn={setFiles}
+                                />
                               </div>
                               {files?.map((file) => {
                                 return (
                                   <img
+                                    key={file?.preview}
                                     src={file?.preview}
                                     className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
                                     alt={file?.path}
                                   />
+                                );
+                              })}
+                            </>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {openUploadVideo && (
+                    <div className="flex">
+                      <div className="w-full">
+                        {files?.length === 0 ? (
+                          <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
+                            <InputPhoto
+                              label={
+                                <Fragment>
+                                  <MdVideoLibrary size={"28px"} className="text-center mx-auto" />
+                                  <p className="text-center text-md font-semibold">{"Add Video"}</p>
+                                  <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                </Fragment>
+                              }
+                              type={type}
+                              fn={setFiles}
+                              maxFiles={1}
+                            />
+                          </div>
+                        ) : null}
+                        {files?.length > 0 && (
+                          <div className="flex flex-wrap mt-2 overflow-auto scrollbar h-36">
+                            <>
+                              <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
+                                {" "}
+                                <InputPhoto
+                                  label={
+                                    <Fragment>
+                                      <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                      <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                      <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                    </Fragment>
+                                  }
+                                  type={type}
+                                  fn={setFiles}
+                                />
+                              </div>
+                              {files?.map((file) => {
+                                return (
+                                  <video
+                                    key={file?.preview}
+                                    className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
+                                    controls
+                                    alt={file?.path}
+                                  >
+                                    <source alt={file?.path} src={file?.preview} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                  </video>
                                 );
                               })}
                             </>
@@ -345,23 +381,13 @@ const InputModal = ({ reference, communityId }) => {
                 <div className="rounded-b-lg border-t border-solid border-gray-300 bg-placeholder-color px-4">
                   <div className="flex font-semibold text-sm justify-between items-center">
                     <div className=" text-left py-4 px-4">
-                      {/*}  <p className="inline-flex pr-4 -pt-10">
-                        <InputImage
-                          label=""
-                          name="postImage"
-                          id="img"
-                          stateFile={setImage}
-                          accept="image/png,image/jpg,image/jpeg"
-                          icon={<AiOutlineCamera size="24px" className="text-gray-800 inline -pt-10" />}
-                          autoComplete="new-file"
-                          className="text-secondary font-semibold rounded-full px-6 input-primary -pt-10 border-none w-1/2 ml-auto hidden pr-2"
-                        />
-                    </p> {*/}
                       <button
                         onClick={() => {
                           setOpenUploadPhoto(!openUploadPhoto);
+                          setType("photo");
                           setOpenUploadVideo(false);
-                          setOpenUploadGif(false);
+                          setFiles([]);
+                          setSelectedGif("");
                         }}
                         className="mr-4"
                       >
@@ -370,44 +396,18 @@ const InputModal = ({ reference, communityId }) => {
                       <button
                         onClick={() => {
                           setOpenUploadVideo(!openUploadVideo);
-                          setOpenUploadGif(false);
+                          setType("video");
                           setOpenUploadPhoto(false);
+                          setFiles([]);
+                          setSelectedGif("");
                         }}
                         className="mr-4"
                       >
                         <AiOutlineVideoCamera size={"24px"} />
                       </button>
-                      <BoxGif setSelectedGif={setSelectedGif} label={<AiOutlineGif size={"24px"} />} />
-                      {/* <button
-                        onClick={() => {
-                          setOpenUploadGif(!openUploadGif);
-                          setOpenUploadPhoto(false);
-                          setOpenUploadVideo(false);
-                        }}
-                        className="mr-4"
-                      >
-                        <AiOutlineGif size={"24px"} />
-                      </button> */}
+                      <BoxGif setSelectedGif={handleOpenGif} label={<AiOutlineGif size={"24px"} />} />
                     </div>
-                    {/*}
-                    <div>
-                      <span className="inline float-left text-left rounded-lg mx-2 py-1 px-2 my-2 basis-full bg-gray-200 hover:bg-gray-50">
-                        <InputImage
-                          label="Upload Photo"
-                          name="postImage"
-                          id="img"
-                          stateFile={setImage}
-                          accept="image/png,image/jpg,image/jpeg"
-                          icon={<RiImageAddFill size="22px" className="text-gray-800 inline" />}
-                          autoComplete="new-file"
-                          className="text-secondary font-semibold rounded-full px-6 input-primary border-none w-1/2 ml-auto hidden"
-                        />
-                      </span>
-                      <span className="float-right text-left rounded-lg mx-2 my-2 basis-full py-1 px-2 bg-gray-200 hover:bg-gray-50">
-                        <MdMyLocation size={22} className="inline mr-2 text-red-500" /> Location
-                      </span>
-                    </div>
-                    {*/}
+
                     <div>
                       <SubmitPost
                         title={loading ? <Loader /> : "Post"}

@@ -9,8 +9,8 @@ import { enUS } from "date-fns/esm/locale";
 import { GoPrimitiveDot } from "react-icons/go";
 
 const formatRelativeLocale = {
-  lastWeek: "eeee",
-  yesterday: "Yesterday",
+  lastWeek: "eeee p",
+  yesterday: "Yesterday p",
   today: "p",
   tomorrow: "'tomorrow at' p",
   nextWeek: "eeee 'at' p",
@@ -88,7 +88,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
               setCreateConversationOpened(false);
             }}
             to={`../messages/${conversationId}`}
-            className={`mx-2 rounded-xl hover:bg-dark-lighten group relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${
+            className={`lg:mx-2 rounded-xl hover:bg-dark-lighten group relative flex items-stretch gap-2 py-2 px-2 lg:px-5 transition duration-300 ${
               conversationId === id ? "bg-placeholder-color" : ""
             }`}
           >
@@ -135,44 +135,51 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
           <Link
             key={conversationId}
             to={`../messages/${conversationId}`}
-            className={`mx-2 rounded-xl hover:bg-dark-lighten group relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${
+            className={`w-full lg:mx-2 rounded-xl hover:bg-dark-lighten flex items-stretch gap-2 py-2 px-2 lg:px-5 transition duration-300 ${
               conversationId === id ? "bg-placeholder-color" : ""
             }`}
           >
-            <div className="">
-              <div className="flex">
-                <div className="flex justify-start ">
-                  {" "}
-                  <div className="mr-2 w-10 h-10">
-                    <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
-                  </div>
-                  <div className="">
-                    {filtered?.map((item) => {
-                      return (
-                        <p key={item?.firstName + "ml-2 align-center items-center " + item?.lastName} className="font-semibold">
-                          {item?.firstName + " " + item?.lastName}
-                        </p>
-                      );
-                    })}
+            <div className="flex justify-between items-center w-full">
+              <div className="flex justify-start w-full">
+                {" "}
+                <div className="mr-2 w-10 h-10">
+                  <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
+                </div>
+                <div className="w-[78%]">
+                  {filtered?.map((item) => {
+                    return (
+                      <p
+                        key={item?.firstName + "ml-2 align-center items-center " + item?.lastName}
+                        className="font-semibold w-full line-clamp-1"
+                      >
+                        {item?.firstName + " " + item?.lastName}
+                      </p>
+                    );
+                  })}
 
-                    <div className="flex justify-start pt-1 items-center basis-[20%]">
-                      {conversation?.Messages[0]?.senderId === user?.id ? <BsArrowReturnRight className="mr-1" size={"14px"} /> : null}
-                      <p className="text-xs line-clamp-1 w-[50%]">{conversation?.Messages[0]?.messageText}</p>
-                    </div>
+                  <div className="flex justify-start pt-0 items-center w-[100%]">
+                    {conversation?.Messages[0]?.senderId === user?.id ? (
+                      <div className="">
+                        <BsArrowReturnRight className="mr-1" size={"14px"} />
+                      </div>
+                    ) : null}
+                    <p className="text-sm line-clamp-1 w-full">{conversation?.Messages[0]?.messageText}</p>
                   </div>
                 </div>
-                <div className="text-xs flex justify-start">
-                  <div className="">{conversation?.Messages[0]?.createdAt}</div>
-                  {/* {console.log(conversation?.Messages[0]?.createdAt)} */}
-                  {/* <div className="">{formatRelative(parseISO(conversation?.Messages[0]?.createdAt), new Date(), { locale })}</div> */}
-                  {/* {conversation?.amountOfUnreadMessages > 0 ? (
+              </div>
+              <div className="flex items-center justify-end w-[50%]">
+                <p className="text-xs text-right">
+                  {formatRelative(parseISO(conversation?.Messages[0]?.createdAt), new Date(), { locale })}
+                </p>
+              </div>
+              {/* {console.log(conversation?.Messages[0]?.createdAt)} */}
+              {/* <div className="">{formatRelative(parseISO(conversation?.Messages[0]?.createdAt), new Date(), { locale })}</div> */}
+              {/* {conversation?.amountOfUnreadMessages > 0 ? (
                     <button className="text-primary">
                       <GoPrimitiveDot size={"20px"} />
                       {/*}  <AiOutlineEye size={"20px"} /> }
                     </button>
                   ) : null} */}
-                </div>
-              </div>
             </div>
           </Link>
         )}

@@ -33,21 +33,21 @@ const BoxGif = ({ setSelectedGif, label }) => {
       </button>
       <Popover
         className="my-2"
-        style={{ marginTop: "10px", marginBottom: "10px", padding: "20px" }}
+        style={{ marginTop: "10px", marginBottom: "10px", padding: "20px", height: "70vh" }}
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "center",
+          vertical: "top",
           horizontal: "center",
         }}
         transformOrigin={{
-          vertical: "center",
+          vertical: "top",
           horizontal: "center",
         }}
       >
-        <div className="my-5">
+        <div style={{ height: "100vh" }} className="my-5">
           <input
             onChange={(e) => setKeyword(e?.target?.value)}
             style={{
@@ -69,7 +69,8 @@ const BoxGif = ({ setSelectedGif, label }) => {
           <div style={{ overscrollBehavior: "auto" }} className="overscroll-auto h-[50vh]">
             <Grid
               width={400}
-              columns={3}
+              height={50}
+              columns={2}
               gutter={6}
               fetchGifs={keyword === "" ? fetchTrends : fetchGifs}
               key={keyword}

@@ -32,6 +32,7 @@
     "babel-eslint": "^10.1.0",
     "daisyui": "^1.22.0",
     "date-fns": "^2.28.0",
+    "ecclesia-link-preview": "^0.0.15",
     "emoji-picker-react": "^3.5.1",
     "formik": "^2.2.9",
     "howler": "^2.2.3",
