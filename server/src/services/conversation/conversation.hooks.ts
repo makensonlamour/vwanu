@@ -1,9 +1,7 @@
 /* eslint-disable no-case-declarations */
 import * as authentication from '@feathersjs/authentication';
-
+import OrderBy from '../../Hooks/OrderBy.hooks';
 import { AddTalker } from '../../Hooks';
-
-
 
 import {
   SetType,
@@ -15,9 +13,8 @@ import {
 } from './hook';
 
 const NotifyUsers = async (context) => {
-
   const { app, data, result } = context;
-  if(!data?.userIds) return context;
+  if (!data?.userIds) return context;
   // console.log('\n\n NotifyUsers');
   // console.log('User ids');
   // console.log(data.userIds);
@@ -47,7 +44,7 @@ const { authenticate } = authentication.hooks;
 export default {
   before: {
     all: [authenticate('jwt'), IncludeUserAndLastMessage],
-    find: [FilterConversations],
+    find: [FilterConversations, OrderBy({ updateAt: -1 })],
     get: [LimitToTalkersOnly],
     create: [SetType, LimitDirectConversations],
     update: [],

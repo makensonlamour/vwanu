@@ -75,7 +75,7 @@ export default {
         ],
       }),
     ],
-    find: [onlyPublic, OrderBy],
+    find: [onlyPublic, OrderBy({ createdAt: -1 })],
     get: [],
     create: [],
     update: [],

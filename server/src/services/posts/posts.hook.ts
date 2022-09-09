@@ -87,7 +87,7 @@ export default {
           },
         ],
       }),
-      OrderBy,
+      OrderBy({ createdAt: -1 }),
     ],
     get: [],
     create: [
