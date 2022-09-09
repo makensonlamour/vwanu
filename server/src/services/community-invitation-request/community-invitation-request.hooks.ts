@@ -32,6 +32,9 @@ export const IncludeGuests = AddAssociations({
     {
       model: 'community-role',
     },
+    {
+      model: 'communities',
+    },
   ],
 });
 
