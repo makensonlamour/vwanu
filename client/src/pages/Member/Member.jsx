@@ -39,6 +39,7 @@ const Member = () => {
                 aria-label="secondary TabList  example"
                 variant="scrollable"
                 scrollButtons="auto"
+                allowScrollButtonsMobile
               >
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`Members`} />
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`friends (${totalFriend})`} />

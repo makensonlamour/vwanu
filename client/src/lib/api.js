@@ -11,7 +11,7 @@ export const api = {
     axios.get(baseUrl + "" + url, {
       headers: {
         "x-auth-token": token, //add here to search token in localstorage if user rememberMe: Cookies.get("token")
-        authorization: token,
+        authorization: token || token === null ? getToken("feathers-jwt") : null,
       },
       ...params,
     }),

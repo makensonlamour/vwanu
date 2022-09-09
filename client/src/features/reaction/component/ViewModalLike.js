@@ -1,6 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { Backdrop, Box, Modal, Fade, Typography } from "@mui/material/";
+import { useId } from "@mantine/hooks";
 
 const style = {
   position: "absolute",
@@ -17,6 +18,8 @@ const ViewModalLike = ({ reactions, label }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const uuid = useId();
 
   return (
     <div>
@@ -43,7 +46,10 @@ const ViewModalLike = ({ reactions, label }) => {
               {reactions?.map((reaction, idx) => {
                 return (
                   <>
-                    <li key={idx} style={{ display: "flex", justifyContent: "between", padding: "5px", borderBottom: "1px solid #efefef" }}>
+                    <li
+                      key={`${uuid}-${idx}`}
+                      style={{ display: "flex", justifyContent: "between", padding: "5px", borderBottom: "1px solid #efefef" }}
+                    >
                       <div style={{ marginRight: "20px", alignItems: "center" }}>{reaction?.node} </div>
                       <div style={{ marginRight: "20px", alignItems: "center" }}>
                         <img

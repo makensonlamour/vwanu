@@ -72,43 +72,50 @@ const ViewInvitation = ({ member }) => {
   return (
     <>
       <Toaster />
-      <div key={member?.id} className="border border-gray-200 p-4 w-full">
-        <p className="pb-2">
-          {member?.host?.firstName +
-            " " +
-            member?.host?.lastName +
-            " sent you an invitation to be a " +
-            member?.CommunityRole?.name +
-            " of"}
-        </p>
+      {member?.response === "null" && (
+        <div key={member?.id} className="border border-gray-200 p-4 w-full">
+          <p className="pb-2 text-sm md:text-lg">
+            {member?.host?.firstName +
+              " " +
+              member?.host?.lastName +
+              " sent you an invitation to be a " +
+              member?.CommunityRole?.name +
+              " of"}
+          </p>
 
-        <div className="flex justify-start items-center">
-          <div className="mr-3">
-            <img src={member?.guest?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
-          </div>
-          <div className="text-md">
-            <p className="">{member?.guest?.firstName + " " + member?.guest?.lastName}</p>
-
-            <div className="py-2 flex justify-start">
-              <button
-                onClick={() => handleAccept()}
-                className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
-              >
-                {loading ? <Loader /> : "Accept Invitation"}
-              </button>
-              <button
-                onClick={() => handleDecline()}
-                className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
-              >
-                {loading ? <Loader /> : "Decline Invitation"}
-              </button>
+          <div className="flex justify-start items-center">
+            <div className="mr-3">
+              <img src={member?.guest?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
             </div>
-            <p className="">
-              <span className="">{member?.createdAt}</span>
-            </p>
+            <div className="text-md ">
+              <p className="font-semibold">
+                {member?.Community?.name}
+                <span className="ml-2 text-xs w-fit bg-gray-300 text-white px-2 mr-2 py-[0.1rem] rounded-md hover:bg-primary">
+                  {member?.Community?.privacyType}
+                </span>
+              </p>
+
+              <div className="py-2 flex justify-start">
+                <button
+                  onClick={() => handleAccept()}
+                  className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
+                >
+                  {loading ? <Loader /> : "Accept"}
+                </button>
+                <button
+                  onClick={() => handleDecline()}
+                  className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
+                >
+                  {loading ? <Loader /> : "Decline"}
+                </button>
+              </div>
+              <p className="">
+                <span className="text-sm md:text-md">{member?.createdAt}</span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

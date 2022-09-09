@@ -56,11 +56,9 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
     if (run === false) {
       return () => {
         // cancel the subscription
-        console.log("cancel subscription", run);
       };
     }
   }, [otherUserId, newMessage]);
-  console.log(location.pathname);
 
   return (
     <>

@@ -30,7 +30,7 @@ const FollowingPreview = ({ data }) => {
                     <div className="w-[3.5rem] mx-[0.15rem]">
                       <img
                         className="object-cover mask mask-squircle w-[3rem] h-16 rounded-lg"
-                        src={following?.profilePicture}
+                        src={following?.profilePicture?.original}
                         alt={following?.firstName + " " + following?.lastName}
                       />
                     </div>

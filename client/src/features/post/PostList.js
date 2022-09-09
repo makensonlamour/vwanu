@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import cryptoRandomString from "crypto-random-string";
 import PropTypes from "prop-types";
 import { formatDistance, parseISO } from "date-fns";
 import { Link, useOutletContext } from "react-router-dom";
@@ -65,17 +66,16 @@ const PostList = ({ post, pageTitle }) => {
                   {" "}
                   <img alt="" className="object-cover object-center w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
                 </div>
-                <div className="block">
+                <div className="block w-[80%]">
                   <Link
-                    className="flex flex-wrap mb-1"
+                    className="flex flex-nowrap mb-1"
                     to={
                       _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
                         ? `../../profile/${post?.User?.id}`
                         : `profile/${post?.User?.id}`
                     }
                   >
-                    <span className="ml-3 text-md font-bold hover:text-primary">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
-                    <span className="text-md font-light ml-2"> {" posted an update"}</span>
+                    <span className="ml-3 text-md font-bold hover:text-primary line-clamp-1 w-[80%]">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
                   </Link>
                   <p className="ml-3 font-medium text-sm text-gray-900">
                     {formatDistance(parseISO(post?.createdAt), new Date(), [
@@ -112,7 +112,7 @@ const PostList = ({ post, pageTitle }) => {
               </div>
               {post?.postText?.split("\n").map((text) => {
                 return (
-                  <p key={text} className="card-text pt-0 w-[100%] font-normal">
+                  <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
                     {transformHashtagAndLink(text)}
                   </p>
                 );

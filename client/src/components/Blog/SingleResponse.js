@@ -15,13 +15,13 @@ const SingleResponse = ({ blogs }) => {
                   <div className="flex justify-between items-center">
                     <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
                       <img
-                        className="w-[3rem] h-[3rem] mask mask-squircle"
+                        className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
                         src={blog?.User?.profilePicture}
                         alt={"img_" + blog?.User?.firstName}
                       />
                       <div className="ml-4">
-                        <p className="font-semibold text-left">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
-                        <p className="text-gray-400">{blog?.createdAt}</p>
+                        <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
+                        <p className="text-gray-400 text-sm">{blog?.createdAt}</p>
                       </div>
                     </Link>
                     <div className="">

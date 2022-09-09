@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Tab } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
+import { useSearchParams } from "react-router-dom";
 import FormOverview from "./FormOverview";
 import FormContactInfo from "./FormContactInfo";
 import FormPlaceLived from "./FormPlaceLived";
@@ -10,10 +11,48 @@ import FormBiography from "./FormBiography";
 
 const EditProfileTabs = ({ user }) => {
   const [value, setValue] = useState("one");
+  const [searchParams] = useSearchParams();
+  // const urlTabs = searchParams.get("subTabs");
+  const editTabs = searchParams.get("subtabs");
+  let run = true;
+
+  const handleUrlChange = () => {
+    if (editTabs === "general" && run) {
+      run = false;
+      setValue("one");
+    } else if (editTabs === "contact" && run) {
+      run = false;
+      setValue("two");
+    } else if (editTabs === "place" && run) {
+      run = false;
+      setValue("three");
+    } else if (editTabs === "work" && run) {
+      run = false;
+      setValue("four");
+    } else if (editTabs === "biography" && run) {
+      run = false;
+      setValue("five");
+    } else {
+      run = false;
+      setValue("one");
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    if (editTabs && run) {
+      handleUrlChange();
+    }
+    if (!run) {
+      return () => {
+        // cancel the subscription
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editTabs]);
 
   return (
     <>

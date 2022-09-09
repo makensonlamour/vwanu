@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Stack, styled, Paper, Tabs, Tab } from "@mui/material";
+import { Stack, styled, Paper, Tab } from "@mui/material";
+import { TabPanel, TabContext, TabList } from "@mui/lab";
 
 const GroupsPreview = ({ data }) => {
   const Item = styled(Paper)(() => ({
@@ -18,18 +19,32 @@ const GroupsPreview = ({ data }) => {
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">
         <h2 className="my-5 text-xl font-medium">Groups</h2>
-        <Tabs
-          sx={{ marginBottom: "1rem" }}
-          value={value}
-          onChange={handleChange}
-          textColor="primary"
-          indicatorColor="primary"
-          aria-label="secondary tabs example"
-        >
-          <Tab sx={{ textTransform: "capitalize" }} value="one" label="Newest" />
-          <Tab sx={{ textTransform: "capitalize" }} value="two" label="Popular" />
-          <Tab sx={{ textTransform: "capitalize" }} value="three" label="Suggested" />
-        </Tabs>
+        <TabContext value={value}>
+          <div>
+            <TabList
+              sx={{ marginBottom: "1rem" }}
+              value={value}
+              onChange={handleChange}
+              textColor="primary"
+              indicatorColor="primary"
+              aria-label="secondary tabs example"
+            >
+              <Tab sx={{ textTransform: "capitalize" }} value="one" label="Newest" />
+              <Tab sx={{ textTransform: "capitalize" }} value="two" label="Popular" />
+              <Tab sx={{ textTransform: "capitalize" }} value="three" label="Suggested" />
+            </TabList>
+          </div>
+          <TabPanel value="one">
+            <div>one</div>
+          </TabPanel>
+          <TabPanel value="two">
+            <div>two</div>
+          </TabPanel>
+          <TabPanel value="three">
+            <div>three</div>
+          </TabPanel>
+        </TabContext>
+
         <Stack spacing={1}>
           {data.map((group, idx) => {
             return (

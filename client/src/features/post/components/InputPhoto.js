@@ -13,10 +13,9 @@ const InputPhoto = ({
     </Fragment>
   ),
   fn,
-  maxFiles,
+  maxFiles = 1,
   type = "photo",
 }) => {
-  console.log(type);
   const { fileRejections, getRootProps, getInputProps, open } = useDropzone({
     maxFiles: maxFiles,
     accept:
@@ -28,13 +27,12 @@ const InputPhoto = ({
             "video/*": [".mp4", ".m4v"],
           },
     onDrop: (acceptedFiles) => {
-      fn(
-        acceptedFiles?.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
+      let currentFiles = acceptedFiles?.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
       );
+      fn((oldFiles) => [...oldFiles, currentFiles[0]]);
     },
     // Disable click and keydown behavior
     noClick: true,

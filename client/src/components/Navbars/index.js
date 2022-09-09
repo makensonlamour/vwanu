@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import cryptoRandomString from "crypto-random-string";
 import { Link, NavLink } from "react-router-dom";
 import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
@@ -8,10 +9,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineInbox, AiOutlineClose } from "react-icons/ai";
 import { FiActivity } from "react-icons/fi";
-import { FaUserAlt } from "react-icons/fa";
-import { BiUserCircle, BiMessageDetail } from "react-icons/bi";
+import { FaUserAlt, FaBlog } from "react-icons/fa";
+import { BiUserCircle } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
-import { RiPagesLine } from "react-icons/ri";
 import { CgMenuLeft } from "react-icons/cg";
 import { BottomMenuContext } from "../../context/BottomMenuContext";
 import FriendsPreview from "./Friends/FriendsPreview";
@@ -32,8 +32,8 @@ const Navbar = ({ user, countMessage }) => {
     { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
     { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
     { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: routesPath?.GROUPS },
-    { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
-    { title: "Blog", icon: <RiPagesLine size={24} className="mx-auto" />, path: routesPath?.BLOG },
+    // { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
+    { title: "Blog", icon: <FaBlog size={24} className="mx-auto" />, path: routesPath?.BLOG },
   ];
 
   const settings = [
@@ -93,8 +93,8 @@ const Navbar = ({ user, countMessage }) => {
                 {pages?.map((page) => (
                   <NavLink
                     to={page?.path}
-                    key={page?.title + " title"}
-                    activeClassName="text-secondary"
+                    key={cryptoRandomString({ length: 10 })}
+                    activeclassname="text-secondary"
                     className=" text-primary hover:text-secondary active:text-secondary"
                   >
                     {page?.title}
@@ -103,10 +103,10 @@ const Navbar = ({ user, countMessage }) => {
               </div>
               <div className="hidden md:flex xl:hidden">
                 {pages?.map((page) => (
-                  <Tooltip key={page + " icon"} title={page?.title}>
+                  <Tooltip key={cryptoRandomString({ length: 10 })} title={page?.title}>
                     <NavLink
                       to={page?.path}
-                      activeClassName="text-secondary"
+                      activeclassname="text-secondary"
                       className="mx-auto px-1 flex text-primary hover:text-secondary active:text-secondary"
                     >
                       {page?.icon}
@@ -129,12 +129,12 @@ const Navbar = ({ user, countMessage }) => {
                   <AiOutlineInbox size="24px" className="text-black" />
                 </Badge>
               </Link>
-              <p className="">
+              <div className="">
                 <FriendsPreview />
-              </p>
-              <p className="mr-2">
+              </div>
+              <div className="mr-2">
                 <NotificationPreview />
-              </p>
+              </div>
 
               <span className="hidden sm:block">
                 <Tooltip title="Open profile">
@@ -181,7 +181,7 @@ const Navbar = ({ user, countMessage }) => {
                     onClick={handleCloseUserMenu}
                   >
                     <Link to={"../../profile/" + user?.id}>
-                      <p
+                      <div
                         className=""
                         style={{
                           display: "flex",
@@ -199,12 +199,12 @@ const Navbar = ({ user, countMessage }) => {
                           />
                         </p>
                         <p className="align-middle pl-3">{user?.firstName}</p>
-                      </p>
+                      </div>
                     </Link>
                   </MenuItem>
                   {settings.map((setting) => (
                     <MenuItem
-                      key={setting}
+                      key={cryptoRandomString({ length: 10 })}
                       onClick={handleCloseUserMenu}
                       sx={{ py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
                     >

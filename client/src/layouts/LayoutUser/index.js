@@ -31,7 +31,7 @@ const LayoutUser = () => {
   return (
     <>
       <div className="mx-auto">
-        <div className="flex overflow-auto">
+        <div className="flex overflow-y-auto">
           <div className="grow hidden md:block">
             <SidebarLeft user={user ? user : undefined} />
           </div>

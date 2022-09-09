@@ -1,4 +1,5 @@
 import React from "react";
+import cryptoRandomString from "crypto-random-string";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Stack, styled, Paper } from "@mui/material";
@@ -18,7 +19,7 @@ const BlogComponent = ({ data }) => {
               if (idx < 6) {
                 return (
                   <Item
-                    key={blog?.blogTitle}
+                    key={cryptoRandomString({ length: 10 })}
                     elevation={0}
                     style={{
                       paddingTop: "0.5rem",

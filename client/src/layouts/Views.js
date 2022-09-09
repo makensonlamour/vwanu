@@ -1,5 +1,6 @@
 /*eslint-disable*/
 import React, { useState, useEffect, useContext, useRef } from "react";
+import cryptoRandomString from "crypto-random-string";
 import { Route, Routes } from "react-router-dom";
 import { routes, role } from "../routes";
 import messageRing from "../assets/sounds/messageNotif.mp3";
@@ -31,11 +32,12 @@ const Views = () => {
   const sound = new Howl({
     src: [messageRing],
   });
+
   const newMessageRef = useRef(null);
 
   const { data: listConversation } = useListConversation(
     ["user", "conversation", "all"],
-    user?.user?.id !== "undefined" ? true : false,
+    user?.user?.id !== undefined ? true : false,
     user?.user?.id
   );
 
@@ -110,37 +112,37 @@ const Views = () => {
       <div className="mx-auto bg-placeholder-color">
         <Routes>
           !user?
-          <Route key={0} element={<LayoutPublic />}>
-            {routes.map((route, idx) => {
-              return (
-                <>{route.access === role.PUBLIC ? <Route key={idx} path={route.path} element={<route.element exact={true} />} /> : null}</>
-              );
+          <Route key={cryptoRandomString({ length: 10 })} element={<LayoutPublic />}>
+            {routes.map((route) => {
+              return route.access === role.PUBLIC ? (
+                <Route key={cryptoRandomString({ length: 10 })} path={route.path} element={<route.element exact={true} />} />
+              ) : null;
             })}
           </Route>
           :
           <>
-            <Route key={1} path="/" element={<LayoutUser />}>
-              {routes.map((route, idx) => {
-                return (
-                  <>{route.access === role.USER ? <Route key={idx} path={route.path} element={<route.element />} exact={true} /> : null}</>
-                );
+            <Route key={cryptoRandomString({ length: 10 })} path="/" element={<LayoutUser />}>
+              {routes.map((route) => {
+                return route.access === role.USER ? (
+                  <Route key={cryptoRandomString({ length: 10 })} path={route.path} element={<route.element />} exact={true} />
+                ) : null;
               })}
             </Route>
-            <Route key={2} path="/" element={<LayoutAuth />}>
-              {routes.map((route, idx) => {
-                return (
-                  <>{route.access === role.AUTH ? <Route key={idx} path={route.path} element={<route.element />} exact={true} /> : null}</>
-                );
+            <Route key={cryptoRandomString({ length: 10 })} path="/" element={<LayoutAuth />}>
+              {routes.map((route) => {
+                return route.access === role.AUTH ? (
+                  <Route key={cryptoRandomString({ length: 10 })} path={route.path} element={<route.element />} exact={true} />
+                ) : null;
               })}
             </Route>
-            <Route key={1} path="/" element={<LayoutCall />}>
-              {routes.map((route, idx) => {
-                return (
-                  <>{route.access === role.CALL ? <Route key={idx} path={route.path} element={<route.element />} exact={true} /> : null}</>
-                );
+            <Route key={cryptoRandomString({ length: 10 })} path="/" element={<LayoutCall />}>
+              {routes.map((route) => {
+                return route.access === role.CALL ? (
+                  <Route key={cryptoRandomString({ length: 10 })} path={route.path} element={<route.element />} exact={true} />
+                ) : null;
               })}
             </Route>
-            <Route key={3} path="*" element={<NotFound />} />
+            <Route key={cryptoRandomString({ length: 10 })} path="*" element={<NotFound />} />
           </>
         </Routes>
       </div>

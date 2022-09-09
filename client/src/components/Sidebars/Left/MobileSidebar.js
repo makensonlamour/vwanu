@@ -6,10 +6,12 @@ import PropTypes from "prop-types";
 // import { ItemSidebarLeft } from "./ItemSidebarLeft";
 import routesPath from "../../../routesPath";
 import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
-import { MdGroups } from "react-icons/md";
-import { VscCommentDiscussion } from "react-icons/vsc";
-import { RiPagesLine } from "react-icons/ri";
+import { FaBlog } from "react-icons/fa";
+import { BiUserCircle } from "react-icons/bi";
+import { HiUsers } from "react-icons/hi";
+import { MdGroups, MdPhotoLibrary, MdPhotoSizeSelectActual } from "react-icons/md";
 import { BottomMenuContext } from "../../../context/BottomMenuContext";
+import { deleteToken } from "../../../helpers/index";
 
 const SidebarLeft = ({ user }) => {
   const { closeSidebar, isSidebarOpen } = useContext(BottomMenuContext);
@@ -24,7 +26,22 @@ const SidebarLeft = ({ user }) => {
     backgroundColor: "inherit",
   };
 
+  function Logout() {
+    deleteToken("feathers-jwt");
+    window.location.reload();
+  }
+
   const ItemSidebarLeft = [
+    {
+      menuTitle: "General",
+      menuItems: [
+        { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
+        { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
+        { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: routesPath?.GROUPS },
+        // { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
+        { title: "Blog", icon: <FaBlog size={24} className="mx-auto" />, path: routesPath?.BLOG },
+      ],
+    },
     {
       menuTitle: "Personal",
       menuItems: [
@@ -49,24 +66,29 @@ const SidebarLeft = ({ user }) => {
       menuTitle: "Community",
       menuItems: [
         {
-          title: "My Groups",
-          path: routesPath.MY_GROUPS,
+          title: "My Community",
+          path: routesPath.GROUPS + "?tabs=myCommunity",
           icon: <MdGroups size={"24px"} />,
         },
         {
           title: "My Network",
-          path: routesPath.FRIENDS,
+          path: "/profile/" + user?.id + "/network?tabs=network&subTabs=friends",
           icon: <MdGroups size={"24px"} />,
         },
         {
-          title: "My Discussions",
-          path: routesPath.MY_INTERESTS,
-          icon: <VscCommentDiscussion size={"24px"} />,
+          title: "My Album",
+          path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=album",
+          icon: <MdPhotoLibrary size={"24px"} />,
         },
         {
-          title: "My Pages",
-          path: routesPath.MY_PAGES,
-          icon: <RiPagesLine size={"24px"} />,
+          title: "My Photo",
+          path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=photo",
+          icon: <MdPhotoSizeSelectActual size={"24px"} />,
+        },
+        {
+          title: "My Blog",
+          path: "/profile/" + user?.id + "/blog?tabs=blog&subTabs=friends",
+          icon: <FaBlog size={"24px"} />,
         },
       ],
     },
@@ -105,9 +127,9 @@ const SidebarLeft = ({ user }) => {
         </div>
 
         <div
-          className={`"block w-full md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-auto md:fixed sm:relative w-92`}
+          className={`"block w-full md:block h-screen bg-white transition-all delay-700 duration-700 space-y-2 overflow-auto md:fixed sm:relative w-92 mb-5`}
         >
-          <div className="px-4 space-y-2">
+          <div className="px-4 space-y-2 mb-5">
             {ItemSidebarLeft.map((item) => {
               return (
                 <>
@@ -142,6 +164,12 @@ const SidebarLeft = ({ user }) => {
                 </>
               );
             })}
+          </div>
+          <div
+            onClick={() => Logout()}
+            className="text-white mx-2 relative items-center bg-red-500 hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
+          >
+            <p className="text-lg text-center">Logout</p>
           </div>
         </div>
       </div>

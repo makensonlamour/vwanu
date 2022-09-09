@@ -19,7 +19,7 @@ function SubmitBtn({ title, onKeyDown, className, ...otherProps }) {
 }
 
 SubmitBtn.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired || PropTypes.element.isRequired,
   className: PropTypes.string,
   onKeyDown: PropTypes.bool,
 };
