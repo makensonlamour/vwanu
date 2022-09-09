@@ -20,6 +20,7 @@
   "multerSetting": {},
   "JWT_SECRET": "StageSecretIsREal",
   "maxPostImages": 4,
+  "maxMessageImages": 4,
   "maxPostVideos": 1,
   "maxPostAudios": 1,
   "BASE_URL": "http//localhost:",
