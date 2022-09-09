@@ -90,6 +90,16 @@ describe("'communityInvitationRequest' service", () => {
     const adminUser = testUsers.shift();
     creator = testUsers.shift();
 
+    roles = await Promise.all(
+      ['admin', 'member', 'moderator'].map((name) =>
+        testServer
+          .post(rolesEndpoint)
+          .send({ name })
+          .set('authorization', adminUser.accessToken)
+      )
+    );
+    roles = roles.map((role) => role.body);
+
     roles = await testServer
       .get(rolesEndpoint)
       .set('authorization', adminUser.accessToken);
