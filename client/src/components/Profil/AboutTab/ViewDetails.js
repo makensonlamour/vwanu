@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import routesPath from "../../../routesPath";
 
-const ViewDetails = ({ title, user }) => {
+const ViewDetails = ({ title, user, substabs }) => {
   const userMe = useOutletContext();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -19,7 +19,7 @@ const ViewDetails = ({ title, user }) => {
             <button
               onClick={() => {
                 setEdit(true);
-                navigate("../.." + routesPath.PROFILE_EDIT, { state: { edit } });
+                navigate("../.." + routesPath.PROFILE_EDIT + "?tabs=edit&subtabs=" + substabs, { state: { edit } });
               }}
               className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
             >
@@ -47,6 +47,7 @@ const ViewDetails = ({ title, user }) => {
 ViewDetails.propTypes = {
   title: PropTypes.string,
   user: PropTypes.object,
+  substabs: PropTypes.string,
 };
 
 export default ViewDetails;

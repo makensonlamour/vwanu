@@ -46,9 +46,9 @@ const CardCommunity = ({ data }) => {
           <div className="relative">
             <div className="bg-gray-700 rounded-t-xl">
               {data?.coverPicture !== null ? (
-                <img src={data?.coverPicture} alt={data?.name} className="w-full h-36 object-cover rounded-t-xl" />
+                <img src={data?.coverPicture} alt={data?.name} className="w-full h-32 md:h-36 object-cover rounded-t-xl" />
               ) : (
-                <img src={random_cover} alt={data?.name} className="w-full h-36 object-cover rounded-t-xl" />
+                <img src={random_cover} alt={data?.name} className="w-full h-32 md:h-36 object-cover rounded-t-xl" />
               )}
             </div>
 
@@ -62,16 +62,16 @@ const CardCommunity = ({ data }) => {
               </div>
             </div>
           </div>
-          <div className="flex justify-center items-center px-4 pt-14 pb-4">
+          <div className="flex justify-center items-center px-4 pt-14 pb-2 md:pb-4">
             <Link
               to={"../../groups/" + data?.id}
-              className="flex justify-center text-center items-center text-xl font-semibold hover:text-primary mr-2"
+              className="flex justify-center text-center items-center text-lg md:text-xl font-semibold hover:text-primary mr-2"
             >
               {data?.name}
             </Link>
             <p className="mx-1 bg-secondary px-2 pb-[0.25rem] rounded-lg text-white text-sm align-middle">{data?.privacyType}</p>
           </div>
-          <div className="flex justify-center px-4 pt-2">
+          <div className="flex justify-center px-4 pt-1 md:pt-2">
             <Stack direction="row" spacing={1}>
               {data?.Interests?.length > 0 &&
                 data?.Interests?.map((interest) => {
@@ -79,7 +79,7 @@ const CardCommunity = ({ data }) => {
                 })}
             </Stack>
           </div>
-          <div className="pt-8 px-4 pb-4">
+          <div className="pt-6 md:pt-8 px-4 pb-4">
             <div className="flex justify-between">
               <AvatarGroup
                 sx={{

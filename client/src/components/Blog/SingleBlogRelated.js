@@ -8,37 +8,41 @@ import { Chip, Stack } from "@mui/material";
 const SingleBlogRelated = ({ blog }) => {
   return (
     <>
-      <div className="bg-white shadow-sm hover:shadow-xl w-full rounded-xl pb-6 mb-10">
+      <div className="bg-white shadow-sm w-full rounded-xl pb-0 lg:pb-6 mb-68 lg:mb-10">
         {blog?.coverPicture !== "undefined" && (
           <div className="">
-            <img className="w-full h-64 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
+            <img className="w-full h-44 lg:h-64 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
           </div>
         )}
         {blog?.Interests?.length > 0 && (
-          <div className="px-8 mt-5">
-            <Stack direction="row" style={{ display: "flex", flexWrap: "wrap" }} spacing={1}>
+          <div className="px-4 lg:px-8 mt-5">
+            <Stack direction="row" spacing={1}>
               {blog?.Interests?.length > 0 &&
                 blog?.Interests?.map((interest) => {
-                  return <Chip style={{ marginBottom: "1rem" }} key={interest?.id} label={interest?.name} size="small" />;
+                  return <Chip key={interest?.id} label={interest?.name} size="small" />;
                 })}
             </Stack>
           </div>
         )}
-        <div className="px-8 mt-7">
-          <Link to={`../../blogs/${blog?.id}`} className="text-2xl font-semibold hover:text-primary">
+        <div className="px-4 lg:px-8 mt-3 lg:mt-7">
+          <Link to={`../../blogs/${blog?.id}`} className="text-md lg:text-2xl font-semibold hover:text-primary line-clamp-2">
             {blog?.blogTitle}
           </Link>
-          <p className="mt-7 line-clamp-3">{parse(blog?.blogText)}</p>
-          <div className="flex mt-7 mb-4 justify-between items-center">
+          <p className="text-sm mt-3 lg:mt-7 line-clamp-3">{parse(blog?.blogText)}</p>
+          <div className="flex mt-4 lg:mt-7 mb-2 lg:mb-4 justify-between items-center">
             <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
-              <img className="w-[3rem] h-[3rem] mask mask-squircle" src={blog?.User?.profilePicture} alt={"img_" + blog?.User?.firstName} />
+              <img
+                className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
+                src={blog?.User?.profilePicture}
+                alt={"img_" + blog?.User?.firstName}
+              />
               <div className="ml-4">
-                <p className="font-semibold text-left">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
-                <p className="text-gray-400">{blog?.createdAt}</p>
+                <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
+                <p className="text-gray-400 text-xs">{blog?.createdAt}</p>
               </div>
             </Link>
             <div className="">
-              <Link to={`../../blogs/${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color rounded-lg flex items-center">
+              <Link to={`../../blogs/${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color text-md rounded-lg">
                 {blog?.Response?.length} <GoComment size={"18px"} className="ml-2" />
               </Link>
             </div>

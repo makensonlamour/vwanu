@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import React, { useState, Fragment, useEffect } from "react";
+import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import { useGetCommunityList, useGetMyCommunityList } from "../../features/community/communitySlice";
@@ -9,6 +9,10 @@ import InvitationTabs from "./../../components/Community/Invitation/InvitationTa
 const Community = () => {
   const user = useOutletContext();
   const [value, setValue] = useState("1");
+  const [searchParams] = useSearchParams();
+  const tabsUrl = searchParams.get("tabs");
+  let run = true;
+
   const { data: communityList } = useGetCommunityList(["community", "all"]);
   const { data: myCommunityList } = useGetMyCommunityList(["community", "me"], user?.id !== undefined ? true : false, user?.id);
 
@@ -16,15 +20,34 @@ const Community = () => {
     setValue(newValue);
   };
 
+  const handleUrlChange = () => {
+    if (tabsUrl === "myCommunity" && run) {
+      run = false;
+      setValue("2");
+    }
+  };
+
+  useEffect(() => {
+    if (tabsUrl && run) {
+      handleUrlChange();
+    }
+    if (!run) {
+      return () => {
+        // cancel the subscription
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabsUrl]);
+
   return (
     <>
-      <div className="">
-        <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
+      <div className="max-w-[1450px]">
+        <div className="bg-white border border-gray-300 w-full rounded-lg p-2 md:p-4 my-2">
           <div className="flex justify-between items-center pb-4">
-            <p className="font-bold text-3xl">Community</p>
+            <p className="font-bold text-lg md:text-3xl">Community</p>
             <Link
               to={"../../groups/add"}
-              className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
+              className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-1 md:py-2 px-4 md:px-6 font-semibold"
             >
               Create Community
             </Link>
@@ -37,6 +60,8 @@ const Community = () => {
                 orientation="horizontal"
                 onChange={handleChange}
                 aria-label="lab API tabs example"
+                scrollButtons={true}
+                allowScrollButtonsMobile
               >
                 <Tab
                   style={{ heigth: "150px" }}
@@ -81,12 +106,12 @@ const Community = () => {
                 />
               </TabList>
               <TabPanel value="1">
-                <div className="mt-8 w-full">
+                <div className="lg:mt-8 w-full">
                   <CommunityList communityList={communityList} />
                 </div>
               </TabPanel>
               <TabPanel value="2">
-                <div className="mt-8 w-full">
+                <div className="lg:mt-8 w-full">
                   <CommunityList communityList={myCommunityList} />
                 </div>
               </TabPanel>

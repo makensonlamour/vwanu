@@ -15,7 +15,7 @@ import PostTab from "./PostTab";
 import AlbumTab from "./AlbumTab";
 import NetworkTab from "./NetworkTab";
 import BlogTab from "./BlogTab";
-import CommunityTab from "./CommunityTab"
+import CommunityTab from "./CommunityTab";
 import { allTabs1 } from "./Tablink.data";
 import { checkFriendList } from "../../helpers/index";
 import { FaUserEdit, FaUserAlt } from "react-icons/fa";
@@ -195,8 +195,15 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                       </div>
                     }
                   />
-                  <Route path={allTabs1[5]} element={<div><CommunityTab user={otherUser ? otherUser : user} /></div>} />
-                  <Route path={allTabs1[6]} element={<div>Forum</div>} />
+                  <Route
+                    path={allTabs1[5]}
+                    element={
+                      <div>
+                        <CommunityTab user={otherUser ? otherUser : user} />
+                      </div>
+                    }
+                  />
+                  {/* <Route path={allTabs1[6]} element={<div>Forum</div>} /> */}
                 </Routes>
               </div>
             </div>

@@ -10,7 +10,7 @@ import { BsPower } from "react-icons/bs";
 
 const Dropdown = ({ user }) => {
   function Logout() {
-    deleteToken();
+    deleteToken("feathers-jwt");
     window.location.reload();
   }
 

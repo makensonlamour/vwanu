@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useState, Fragment } from "react";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
@@ -6,7 +7,7 @@ import _ from "lodash";
 import { useOutletContext } from "react-router-dom";
 import { InputField, SubmitPost, Form } from "../../../components/form";
 import { MdPhotoSizeSelectActual, MdVideoLibrary } from "react-icons/md";
-import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
+import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif, AiOutlineDelete } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
 import Loader from "../../../components/common/Loader";
@@ -174,13 +175,14 @@ const InputModal = ({ reference, communityId }) => {
     }
   };
 
+  const handleRemove = (itemToRemove) => {
+    setFiles((files) => files.filter((f) => f.name !== itemToRemove.name));
+  };
+
   return (
     <>
       <Toaster />
-      <button
-        onClick={() => setShowModal(true)}
-        className="rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color"
-      >
+      <div onClick={() => setShowModal(true)} className="rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color">
         <div className="flex items-center px-4 pb-4">
           {" "}
           <Link className="w-14 h-14 mx-auto " to={"../profile/" + user?.id}>
@@ -206,7 +208,7 @@ const InputModal = ({ reference, communityId }) => {
             <AiOutlineGif size={"24px"} />
           </button>
         </div>
-      </button>
+      </div>
 
       {showModal ? (
         <>
@@ -270,6 +272,7 @@ const InputModal = ({ reference, communityId }) => {
                         {files?.length === 0 ? (
                           <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
                             <InputPhoto
+                              files={files}
                               label={
                                 <Fragment>
                                   <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
@@ -286,28 +289,39 @@ const InputModal = ({ reference, communityId }) => {
                         {files?.length > 0 && (
                           <div className="flex flex-wrap mt-2 overflow-auto scrollbar h-36">
                             <>
-                              <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
-                                {" "}
-                                <InputPhoto
-                                  label={
-                                    <Fragment>
-                                      <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
-                                      <p className="text-center text-md font-semibold">{"Add Photos"}</p>
-                                      <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
-                                    </Fragment>
-                                  }
-                                  type={type}
-                                  fn={setFiles}
-                                />
-                              </div>
+                              {files?.length < 4 && (
+                                <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
+                                  {" "}
+                                  <InputPhoto
+                                    files={files}
+                                    maxFiles={4 - files?.length}
+                                    label={
+                                      <Fragment>
+                                        <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                        <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                        <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                      </Fragment>
+                                    }
+                                    type={type}
+                                    fn={setFiles}
+                                  />
+                                </div>
+                              )}
                               {files?.map((file) => {
                                 return (
-                                  <img
-                                    key={file?.preview}
-                                    src={file?.preview}
-                                    className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
-                                    alt={file?.path}
-                                  />
+                                  <div key={file?.preview} className="w-32 relative">
+                                    <img
+                                      src={file?.preview}
+                                      className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
+                                      alt={file?.path}
+                                    />
+                                    <button
+                                      onClick={() => handleRemove(file)}
+                                      className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                                    >
+                                      <AiOutlineDelete size={"24px"} className="" />
+                                    </button>
+                                  </div>
                                 );
                               })}
                             </>
@@ -338,31 +352,37 @@ const InputModal = ({ reference, communityId }) => {
                         {files?.length > 0 && (
                           <div className="flex flex-wrap mt-2 overflow-auto scrollbar h-36">
                             <>
-                              <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
-                                {" "}
-                                <InputPhoto
-                                  label={
-                                    <Fragment>
-                                      <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
-                                      <p className="text-center text-md font-semibold">{"Add Photos"}</p>
-                                      <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
-                                    </Fragment>
-                                  }
-                                  type={type}
-                                  fn={setFiles}
-                                />
-                              </div>
+                              {files?.length < 1 && (
+                                <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
+                                  <InputPhoto
+                                    label={
+                                      <Fragment>
+                                        <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                        <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                        <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                      </Fragment>
+                                    }
+                                    type={type}
+                                    fn={setFiles}
+                                  />
+                                </div>
+                              )}
                               {files?.map((file) => {
                                 return (
-                                  <video
-                                    key={file?.preview}
-                                    className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
-                                    controls
-                                    alt={file?.path}
-                                  >
-                                    <source alt={file?.path} src={file?.preview} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                  </video>
+                                  <div key={file?.preview} className="w-32 relative">
+                                    <div>
+                                      <video className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle" controls alt={file?.path}>
+                                        <source alt={file?.path} src={file?.preview} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                      </video>
+                                    </div>
+                                    <button
+                                      onClick={() => handleRemove(file)}
+                                      className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                                    >
+                                      <AiOutlineDelete size={"24px"} className="" />
+                                    </button>
+                                  </div>
                                 );
                               })}
                             </>

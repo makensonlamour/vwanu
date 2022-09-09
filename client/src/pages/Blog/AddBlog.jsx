@@ -48,12 +48,13 @@ const AddBlog = () => {
       } else {
         formData.append("publish", false);
       }
-      await createBlog.mutateAsync(formData);
+      let result = await createBlog.mutateAsync(formData);
       blogSuccess();
       setText(null);
       setCover([]);
       setBlogTitle(null);
       setInterest([]);
+      window.location.href = "../../blogs/" + result?.data?.id;
     } catch (e) {
       console.log(e);
       blogError();
@@ -65,9 +66,9 @@ const AddBlog = () => {
   return (
     <>
       <Toaster />
-      <div className="my-6">
-        <h4 className="text-3xl font-semibold">Create New Blog</h4>
-        <div className="mt-10 w-2/3">
+      <div className="my-6 mx-2 lg:mx-0 bg-white rounded-xl border border-gray-200 p-4">
+        <h4 className="text-lg md:text-3xl font-semibold">Create New Blog</h4>
+        <div className="mt-5 lg:mt-10 w-[100%] lg:w-2/3">
           <div className="my-4">
             <p className="text-lg font-semibold pb-3">Cover Picture</p>
             <InputCover fn={setCover} />

@@ -8,10 +8,10 @@ const CommunityList = ({ communityList }) => {
     <>
       <div className="">
         {communityList?.data?.length > 0 ? (
-          <div className="flex flex-wrap lg:justify-start py-2">
+          <div className="flex flex-wrap lg:justify-start py-2 w-full">
             {communityList?.data?.map((item) => {
               return (
-                <div key={item?.name} className="w-[32%] m-2">
+                <div key={item?.name} className="w-[100%] md:w-[45%] lg:w-[31%] m-2">
                   <CardCommunity data={item} />
                 </div>
               );

@@ -91,19 +91,19 @@ const AboutTab = ({ user }) => {
   return (
     <>
       <div className="mb-10">
-        <ViewDetails title="General Information" user={objectDetails} />
+        <ViewDetails substabs={"general"} title="General Information" user={objectDetails} />
       </div>
       <div className="mb-10">
-        <ViewDetails title="Contact Info" user={objectContact} />
+        <ViewDetails substabs={"contact"} title="Contact Info" user={objectContact} />
       </div>
       <div className="mb-10">
-        <ViewDetails title="Places Lived" user={objectPlaces} />
+        <ViewDetails substabs={"place"} title="Places Lived" user={objectPlaces} />
       </div>
       <div className="mb-10">
-        <ViewDetails title="Work Experience" user={objectWorkedExperience} />
+        <ViewDetails substabs={"work"} title="Work Experience" user={objectWorkedExperience} />
       </div>
       <div className="mb-10">
-        <ViewDetails title="Biography" user={objectBiography} />
+        <ViewDetails substabs={"biography"} title="Biography" user={objectBiography} />
       </div>
     </>
   );

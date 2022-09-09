@@ -30,6 +30,7 @@
     "@udecode/plate-ui-alignment": "^11.2.1",
     "axios": "^0.24.0",
     "babel-eslint": "^10.1.0",
+    "crypto-random-string": "^5.0.0",
     "daisyui": "^1.22.0",
     "date-fns": "^2.28.0",
     "ecclesia-link-preview": "^0.0.15",

@@ -8,22 +8,21 @@ import { useGetMyBlogList } from "../../features/blog/blogSlice";
 const BlogTab = () => {
   const { id } = useParams();
   const { data: blogList } = useGetMyBlogList(["blog", id], id?.toString() !== "undefined" ? true : false, id);
-  console.log(blogList);
   return (
     <>
-      <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl">
+      <div className=" my-4 bg-white border border-gray-300 py-5 md:py-10 px-2 md:px-16 rounded-xl">
         <div className="flex justify-between items-center pb-4">
-          <h4 className="text-xl font-semibold">Blog</h4>
+          <h4 className="text-lg md:text-xl font-semibold">Blog</h4>
           <Link
             to={"../../blogs/add"}
-            className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
+            className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-1 md:py-2 px-4 md:px-6 font-semibold"
           >
             Create Blog
           </Link>
         </div>
         <div className="">
           <div className="flex justify-between">
-            {blogList?.data?.length > 0 &&
+            {blogList?.data?.length > 0 ? (
               blogList?.data?.map((blog, idx) => {
                 if (idx < 2) {
                   return (
@@ -35,7 +34,10 @@ const BlogTab = () => {
                 } else {
                   return null;
                 }
-              })}
+              })
+            ) : (
+              <p className="">No blogs to show</p>
+            )}
           </div>
         </div>
       </div>

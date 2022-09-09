@@ -1,4 +1,5 @@
 import React from "react";
+import cryptoRandomString from "crypto-random-string";
 import jwtDecode from "jwt-decode";
 import _ from "lodash";
 
@@ -24,6 +25,7 @@ export function deleteToken(name) {
 
 export function getToken(name = null) {
   if (name) return localStorage.getItem(name);
+
   return localStorage.getItem("token");
 }
 
@@ -157,15 +159,31 @@ export function transformHashtagAndLink(strText) {
   strText = strText.split(" ").map((str) => {
     if (str.startsWith("https")) {
       return (
-        <a rel="noopener noreferrer" target="_blank" href={`${str}`} className="font-bold hover:text-primary">
+        <a
+          key={cryptoRandomString({ length: 10 })}
+          rel="noopener noreferrer"
+          target="_blank"
+          href={`${str}`}
+          className="font-bold hover:text-primary"
+        >
           {str}
         </a>
       );
     } else if (str.startsWith("#")) {
-      return <p className="font-bold">{str}</p>;
+      return (
+        <span key={cryptoRandomString({ length: 10 })} className="font-bold">
+          {str}
+        </span>
+      );
     } else if (str.startsWith("www.")) {
       return (
-        <a rel="noopener noreferrer" target="_blank" href={`https://${str}`} className="font-bold hover:text-primary">
+        <a
+          key={cryptoRandomString({ length: 10 })}
+          rel="noopener noreferrer"
+          target="_blank"
+          href={`https://${str}`}
+          className="font-bold hover:text-primary"
+        >
           {str}
         </a>
       );

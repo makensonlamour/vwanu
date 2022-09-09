@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import cryptoRandomString from "crypto-random-string";
 import { Link, useOutletContext } from "react-router-dom";
 // import { Paper, styled } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
@@ -49,21 +50,10 @@ const NewsFeed = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const list = [];
-
-  // const isLoading = false,
-  //   fetchNextPage = () => {},
-  //   hasNextPage = false,
-  //   isError = false;
-
   function reloadPage() {
     window.location.reload();
   }
-  /*
-  const Item = styled(Paper)(() => ({
-    backgroundColor: "inherit",
-  }));
-*/
+
   const blogs = [
     {
       title: "Tackle Your closest Spring cleaning",
@@ -162,7 +152,7 @@ const NewsFeed = () => {
         >
           {list?.pages.map((page) => {
             return page?.data?.map((post) => {
-              return <PostList key={post.id} post={post} pageTitle={""} />;
+              return <PostList key={cryptoRandomString({ length: 10 })} post={post} pageTitle={""} />;
             });
           })}
         </InfiniteScroll>
@@ -193,8 +183,8 @@ const NewsFeed = () => {
       <div className="mx-auto mt-6 max-w-screen-3xl">
         <div className="flex justify-evenly">
           <div className="basis-[25%] hidden xl:block">
-            <BlogComponent data={blogList?.data} />
-            <FollowingPreview data={listFollowing?.data} />
+            <BlogComponent data={blogList?.data || []} />
+            <FollowingPreview data={listFollowing?.data || []} />
           </div>
           <div className="basis-full lg:basis-[56%] ">
             <div className="px-3">
@@ -205,16 +195,16 @@ const NewsFeed = () => {
           </div>
           <div className="basis-[22%] hidden lg:block">
             <span className="block xl:hidden">
-              <BlogComponent data={blogs} />
+              <BlogComponent data={blogs || []} />
             </span>
             <span className="block xl:hidden">
-              <FollowingPreview data={listFollowing?.data} />
+              <FollowingPreview data={listFollowing?.data || []} />
             </span>
 
             <CompleteProfile percentage={percentage} data={steps} />
-            <UpdatesComponent data={notificationList} />
-            <RecentlyActive data={recentlyActive} />
-            <GroupsPreview data={groups} />
+            <UpdatesComponent data={notificationList || []} />
+            <RecentlyActive data={recentlyActive || []} />
+            <GroupsPreview data={groups || []} />
           </div>
         </div>
       </div>
