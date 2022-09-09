@@ -1,9 +1,16 @@
 /* eslint-disable no-unused-vars */
 // Initializes the `message` service on path `/message`
+import config from 'config';
 import { ServiceAddons } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
+
 import { Message } from './message.class';
 import hooks from './message.hooks';
+
+/** Local dependencies */
+
+import { messageStorage } from '../../cloudinary';
+import transferUploadedFilesToFeathers from '../../middleware/PassFilesToFeathers/file-to-feathers.middleware';
 
 // Add this service to the service type index
 declare module '../../declarations' {
@@ -19,7 +26,16 @@ export default function (app: Application): void {
   };
 
   // Initialize our service with any options it requires
-  app.use('/message', new Message(options, app));
+  app.use(
+    '/message',
+    messageStorage.fields([
+      {
+        name: 'messageImage',
+        maxCount: config.get<number>('maxMessageImages'),
+      },
+    ]),
+    new Message(options, app)
+  );
 
   // Get our initialized service so that we can register hooks
   const service = app.service('message');

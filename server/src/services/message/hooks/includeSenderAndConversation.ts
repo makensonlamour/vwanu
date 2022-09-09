@@ -14,6 +14,7 @@ const IncludeSenderAndConversation = AddAssociations({
       ],
     },
     { model: 'conversation' },
+    { model: 'medias' },
   ],
 });
 

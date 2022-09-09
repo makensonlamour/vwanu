@@ -87,24 +87,6 @@ export default {
           },
         ],
       }),
-      // (context) => {
-      //   const sequelize = context.params.sequelize || {};
-      //   sequelize.raw = false;
-      //   sequelize.include = [
-      //     {
-      //       model: context.app.services.users.Model,
-      //       attributes: [
-      //         'firstName',
-      //         'lastName',
-      //         'id',
-      //         'profilePicture',
-      //         'createdAt',
-      //       ],
-      //     },
-      //   ];
-      //   return context;
-      // },
-
       OrderBy,
     ],
     get: [],

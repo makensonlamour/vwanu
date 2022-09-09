@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
 /** #region customs dependencies */
@@ -10,19 +11,23 @@ describe("'message' service", () => {
   let testServer;
   let testMessages;
   let testConversation;
+  let pulledMessage;
   const userEndpoint = '/users';
   const endpoint = '/message';
   const conversationsEndpoint = '/conversation';
   /** #endregion */
   /** #region before and after Each functions */
   beforeAll(async () => {
-    const { Message, User, Conversation } = app.get('sequelizeClient').models;
+    const { Message, User, Conversation, Conversation_Users } =
+      app.get('sequelizeClient').models;
 
     await app.get('sequelizeClient').sync({ logged: false });
 
     await Message.sync({ force: true });
     await User.sync({ force: true });
     await Conversation.sync({ force: true });
+    // eslint-disable-next-line camelcase
+    await Conversation_Users.sync({ force: true });
 
     testServer = request(app);
     testUsers = await Promise.all(
@@ -33,6 +38,7 @@ describe("'message' service", () => {
       })
     );
     testUsers = testUsers.map((testUser) => testUser.body);
+
     const conversationStarter = testUsers[0];
     testConversation = await testServer
       .post(conversationsEndpoint)
@@ -58,9 +64,27 @@ describe("'message' service", () => {
       .set('authorization', testUsers[0].accessToken);
     testMessages = testMessages.body;
 
-    let pulledMessage = await testServer
+    expect(testMessages).toMatchObject({
+      id: expect.any(String),
+      received: false,
+      read: false,
+      ConversationId: expect.any(String),
+      messageText: 'test',
+      senderId: 1,
+      Media: [],
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String),
+      receivedDate: null,
+      readDate: null,
+      UserId: null,
+    });
+  });
+
+  it('a user should be able pull a particular message', async () => {
+    pulledMessage = await testServer
       .get(`${endpoint}/${testMessages.id}`)
       .set('authorization', testUsers[0].accessToken);
+
     pulledMessage = pulledMessage.body;
     expect(pulledMessage).toMatchObject({
       id: testMessages.id,
@@ -91,17 +115,9 @@ describe("'message' service", () => {
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
       }),
+      Media: [],
     });
   }, 10000);
-
-
-
-
-
-
-
-
-
 
   it.todo('should be able to send media in a conversation');
   it('Should Mark Message as read, received, receivedDate, readDate are automatically set', async () => {
