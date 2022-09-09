@@ -114,11 +114,11 @@ describe("'communityInvitationRequest' service", () => {
     invites = sendInvitation(testServer, endpoint);
   }, 100000);
 
-  it.skip('registered the service', () => {
+  it('registered the service', () => {
     const service = app.service('community-invitation-request');
     expect(service).toBeTruthy();
   });
-  it.skip('Creator can send invitation for any role', async () => {
+  it('Creator can send invitation for any role', async () => {
     invitations = await Promise.all(
       testUsers.map((guest, idx) =>
         invites({
@@ -185,6 +185,12 @@ describe("'communityInvitationRequest' service", () => {
         }),
         CommunityRole: expect.objectContaining({
           ...roles[idx],
+        }),
+
+        Community: expect.objectContaining({
+          id: expect.any(String),
+          name: expect.any(String),
+          description: expect.any(String),
         }),
       });
 
