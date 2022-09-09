@@ -6,6 +6,8 @@ import AutoAssign from '../../Hooks/AutoAssign.hook';
 import { AddAssociations } from '../../Hooks';
 import UrlToMedia from '../../lib/utils/UrlToMedia';
 
+import { OnlyNotResponded } from './hook';
+
 const { authenticate } = authentication.hooks;
 const attributes = [
   'firstName',
@@ -74,7 +76,7 @@ const noDuplicateInvitation = async (context) => {
 export default {
   before: {
     all: [authenticate('jwt'), IncludeGuests],
-    find: [],
+    find: [OnlyNotResponded],
     get: [],
     create: [AutoAssign({ hostId: null }), noDuplicateInvitation],
     update: [],
