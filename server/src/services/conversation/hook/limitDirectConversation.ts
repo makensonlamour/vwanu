@@ -1,31 +1,30 @@
-import { Op } from '@sequelize/core';
+import { QueryTypes } from '@sequelize/core';
 import { HookContext } from '@feathersjs/feathers';
 
 export default async (context: HookContext) => {
   const { data } = context;
   if (data?.type !== 'direct') return context;
   const { userIds } = data;
-  const { Conversation, User: ConversationUsers } =
-    context.app.get('sequelizeClient').models;
+  const Sequelize = context.app.get('sequelizeClient');
 
   const {
     params: { User },
   } = context;
 
   try {
-    const existingConversation = await Conversation.findOne({
-      where: { type: 'direct' },
-      include: [
-        {
-          model: ConversationUsers,
-          where: { id: { [Op.or]: [...userIds, User.id] } },
-          attributes: ['id'],
-        },
-      ],
-    });
+    const existingConversation = await Sequelize.query(
+      `SELECT "ConversationId" FROM "Conversation_Users" WHERE "UserId" IN (${[
+        ...userIds,
+        User.id,
+      ]}) 
+      GROUP BY "ConversationId"
+      HAVING COUNT("ConversationId") > 1`,
+      { type: QueryTypes.SELECT }
+    );
 
-    if (existingConversation) {
-      context.result = existingConversation;
+    if (existingConversation.length > 0) {
+      // eslint-disable-next-line prefer-destructuring
+      context.result = existingConversation[0];
       context.data.userIds = null;
     }
   } catch (err) {

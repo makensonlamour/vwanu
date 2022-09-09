@@ -24,10 +24,11 @@ describe("'conversation' service", () => {
   let testServer;
   let randomUser1;
   let randomUser2;
+  let randomUser3;
   let myConversations;
   const userEndpoint = '/users';
   const endpoint = '/conversation';
-  const conversationUsers = '/conversation-users';
+  // const conversationUsers = '/conversation-users';
   let publicConversation;
   let previousConversation;
   beforeAll(async () => {
@@ -37,13 +38,15 @@ describe("'conversation' service", () => {
     testServer = request(app);
     // create two users
     const users = await Promise.all(
-      getRandUsers(2).map((u) => {
+      getRandUsers(3).map((u) => {
         const user = u;
         delete user.id;
         return testServer.post(userEndpoint).send(user);
       })
     );
-    [randomUser1, randomUser2] = users.map((testUser) => testUser.body);
+    [randomUser1, randomUser2, randomUser3] = users.map(
+      (testUser) => testUser.body
+    );
   });
   it('registered the service', () => {
     const service = app.service('conversation');
@@ -65,12 +68,12 @@ describe("'conversation' service", () => {
       })
     );
   });
-  it('should not create a second conversation with the same users', async () => {
-    const response = await createConversation([randomUser2.id], randomUser1);
+  it('Should be able to create another conversation with a third  user', async () => {
+    const response = await createConversation([randomUser3.id], randomUser1);
 
     expect(response).toEqual(
       expect.objectContaining({
-        id: previousConversation.id,
+        id: expect.any(String),
         amountOfMessages: 0,
         amountOfPeople: 2,
         createdAt: expect.any(String),
@@ -80,27 +83,14 @@ describe("'conversation' service", () => {
     );
   });
 
-  it.skip('Should be able to list all conversation created or part of', async () => {
-    const list = await testServer
-      .get(`${conversationUsers}/?UserId=${randomUser1.id}`)
-      .set('authorization', randomUser1.accessToken);
+  it('should not create a second conversation with the same users', async () => {
+    const response = await createConversation([randomUser2.id], randomUser1);
 
-    // console.log(list.body);
-    list.body.forEach((conversation) => {
-      expect(conversation).toEqual(
-        expect.objectContaining({
-          id: expect.any(String),
-          amountOfMessages: expect.any(Number),
-          amountOfPeople: 2,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          Users: expect.any(Array),
-        })
-      );
-      expect(
-        conversation.Users.some((User) => User.id === randomUser1.id)
-      ).toBeTruthy();
-    });
+    expect(response).toEqual(
+      expect.objectContaining({
+        ConversationId: previousConversation.id,
+      })
+    );
   });
 
   it('Should list all conversation created or part of via the conversation endpoint', async () => {
@@ -137,9 +127,6 @@ describe("'conversation' service", () => {
 
       expect(
         conversation.Users.some((User) => User.id === randomUser1.id)
-      ).toBeTruthy();
-      expect(
-        conversation.Users.some((User) => User.id === randomUser2.id)
       ).toBeTruthy();
     });
 
@@ -260,7 +247,7 @@ describe("'conversation' service", () => {
 
     const newMessage = {
       messageText: 'test message',
-      ConversationId: publicConversation.id,
+      ConversationId: publicConversation.ConversationId,
     };
 
     const response: any = await Promise.all(
@@ -279,7 +266,7 @@ describe("'conversation' service", () => {
           received: false,
           read: false,
           messageText: `test message${idx + 1}`,
-          ConversationId: publicConversation.id,
+          ConversationId: publicConversation.ConversationId,
           createdAt: expect.any(String),
           receivedDate: null,
           readDate: null,
@@ -289,11 +276,11 @@ describe("'conversation' service", () => {
   });
   it('should be able to fetch one conversation and see last message it contains', async () => {
     const { body: fetchedConversation } = await testServer
-      .get(`${endpoint}/${publicConversation.id}`)
+      .get(`${endpoint}/${publicConversation.ConversationId}`)
       .set('authorization', randomUser2.accessToken);
 
     expect(fetchedConversation).toMatchObject({
-      id: publicConversation.id,
+      id: publicConversation.ConversationId,
       amountOfPeople: 2,
       type: 'direct',
       name: null,
@@ -314,7 +301,7 @@ describe("'conversation' service", () => {
           updatedAt: expect.any(String),
           UserId: null,
           senderId: randomUser1.id,
-          ConversationId: publicConversation.id,
+          ConversationId: publicConversation.ConversationId,
           sender: {
             id: randomUser1.id,
             firstName: randomUser1.firstName,
@@ -333,7 +320,7 @@ describe("'conversation' service", () => {
     let conversations = await Promise.all(
       [randomUser1.accessToken, randomUser2.accessToken].map((participant) =>
         testServer
-          .get(`${endpoint}/${publicConversation.id}`)
+          .get(`${endpoint}/${publicConversation.ConversationId}`)
           .set('authorization', participant)
       )
     );
@@ -344,15 +331,16 @@ describe("'conversation' service", () => {
     expect(user1Conversation.amountOfUnreadMessages).toBe(0);
     expect(user2Conversation.amountOfUnreadMessages).toBe(2);
   });
-  it.skip('user should fetch all message of a conversation', async () => {
+  it('user should fetch all message of a conversation', async () => {
     const messages = await testServer
-      .get(`/message/?ConversationId=${publicConversation.id}`)
+      .get(`/message/?ConversationId=${publicConversation.ConversationId}`)
       .set('authorization', randomUser1.accessToken);
 
     expect(Array.isArray(messages.body)).toBeTruthy();
     expect(
       messages.body.every(
-        (message) => message.ConversationId === publicConversation.id
+        (message) =>
+          message.ConversationId === publicConversation.ConversationId
       )
     ).toBeTruthy();
 
@@ -363,7 +351,7 @@ describe("'conversation' service", () => {
           received: false,
           read: false,
           messageText: expect.any(String),
-          ConversationId: publicConversation.id,
+          ConversationId: publicConversation.ConversationId,
           createdAt: expect.any(String),
           receivedDate: null,
           readDate: null,
