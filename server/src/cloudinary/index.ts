@@ -27,8 +27,9 @@ const profilePictures = new CloudinaryStorage({
 const postImages = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', "m4v"],
+    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
     folder: 'vwanu/post',
+    resource_type: 'auto',
   },
 });
 const blogImages = new CloudinaryStorage({
