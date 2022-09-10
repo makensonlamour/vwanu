@@ -4,7 +4,7 @@ import { QueryTypes } from 'sequelize';
 
 export default (options: any) => async (ctx: HookContext) => {
   // Postgres is not used in testing mode therefore the functions are not available
-  if (process.env.NODE_ENV === 'test') return ctx;
+  // if (process.env.NODE_ENV === 'test') return ctx;
 
   if (!options.searchColumn)
     throw new GeneralError(
@@ -27,7 +27,7 @@ export default (options: any) => async (ctx: HookContext) => {
     .join('||');
 
   const query = `
-    UPDATE "${options.model.tableName}" SET "${options.searchColumn}" = (${setLevel})WHERE "id"=${id} RETURNING ${options.searchColumn};`;
+    UPDATE "${options.model.tableName}" SET "${options.searchColumn}" = (${setLevel})WHERE "id"='${id}' RETURNING ${options.searchColumn};`;
 
   // we now await the query update and do a SQL-safe injection through the bind option in sequelize.  This replaces the $1 and $2 etc. in the UPDATE statement with the values from our input data.
   await sequelize
@@ -41,7 +41,9 @@ export default (options: any) => async (ctx: HookContext) => {
       ctx.result[options.searchColumn] = r[0][0][options.searchColumn];
     })
     // since the data has already been mutated/deleted, we shouldn't throw an error to the end user, but log it for internal tracking
-    .catch((e: any) => console.error(e));
+    .catch((e: any) => {
+      console.error(e.message);
+    });
 
   return ctx;
 };

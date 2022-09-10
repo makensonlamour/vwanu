@@ -5,6 +5,7 @@ import { Blogs } from './blogs.class';
 import hooks from './blogs.hooks';
 import fileToFeathers from '../../middleware/PassFilesToFeathers/file-to-feathers.middleware';
 import { blogStorage } from '../../cloudinary';
+import updateTheTSVector from '../search/tsquery-and-search.hook';
 // Add this service to the service type index
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
@@ -14,8 +15,10 @@ declare module '../../declarations' {
 }
 
 export default function (app: Application): void {
+   const sequelize = app.get('sequelizeClient');
+   const BlogModel = sequelize.models.Blog;
   const options = {
-    Model: app.get('sequelizeClient').models.Blog,
+    Model: BlogModel,
     paginate: app.get('paginate'),
   };
 
@@ -28,5 +31,29 @@ export default function (app: Application): void {
   );
   // Get our initialized service so that we can register hooks
   const service = app.service('blogs');
-  service.hooks(hooks);
+  service.hooks({
+    before: { ...hooks.before },
+    after: {
+      ...hooks.after,
+      create: [
+        ...hooks.after.create,
+        updateTheTSVector({
+          model: BlogModel,
+          searchColumn: 'search_vector',
+        }),
+      ],
+      update: [
+        updateTheTSVector({
+          model: BlogModel,
+          searchColumn: 'search_vector',
+        }),
+      ],
+      patch: [
+        updateTheTSVector({
+          model: BlogModel,
+          searchColumn: 'search_vector',
+        }),
+      ],
+    },
+  });
 }

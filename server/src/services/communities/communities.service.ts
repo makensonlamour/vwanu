@@ -13,6 +13,8 @@ import adminHooks from './community-admin.hooks';
 import { profilesStorage } from '../../cloudinary';
 import fileToFeathers from '../../middleware/PassFilesToFeathers/file-to-feathers.middleware';
 
+import updateTheTSVector from '../search/tsquery-and-search.hook';
+
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
@@ -23,8 +25,10 @@ declare module '../../declarations' {
 }
 
 export default function (app: Application): void {
+  const sequelize = app.get('sequelizeClient');
+  const CommunityModel = sequelize.models.Community;
   const options = {
-    Model: app.get('sequelizeClient').models.Community,
+    Model: CommunityModel,
     paginate: app.get('paginate'),
   };
 
@@ -46,7 +50,31 @@ export default function (app: Application): void {
 
   // Get our initialized service so that we can register hooks
   const service = app.service('communities');
-  service.hooks(hooks);
+  service.hooks({
+    before: { ...hooks.before },
+    after: {
+      ...hooks.after,
+      create: [
+        ...hooks.after.create,
+        updateTheTSVector({
+          model: CommunityModel,
+          searchColumn: 'search_vector',
+        }),
+      ],
+      update: [
+        updateTheTSVector({
+          model: CommunityModel,
+          searchColumn: 'search_vector',
+        }),
+      ],
+      patch: [
+        updateTheTSVector({
+          model: CommunityModel,
+          searchColumn: 'search_vector',
+        }),
+      ],
+    },
+  });
   const registrationService = app
     .service('communities-registrations')
     .hooks(registrationHooks);

@@ -186,7 +186,6 @@ describe("'communities ' service", () => {
     );
     communityUsers = communityUsers.map((communityUser) => communityUser.body);
     communityUsers.forEach((communityUser, idx) => {
-      console.log(communityUser);
       expect(communityUser[0].UserId).toBe(newAdmins[idx].id);
       expect(communityUser[0].User).toMatchObject({
         firstName: newAdmins[idx].firstName,
