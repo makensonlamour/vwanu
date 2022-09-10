@@ -40,7 +40,7 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
         run = false;
         resultConversation = await createConversation.mutateAsync(dataObj);
       }
-      navigate(`../../messages/${resultConversation?.data?.id}`);
+      navigate(`../../messages/${resultConversation?.data?.ConversationId || resultConversation?.data?.id}`);
     } catch (e) {
       console.log(e);
     } finally {

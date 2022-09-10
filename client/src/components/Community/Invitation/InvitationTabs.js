@@ -11,14 +11,12 @@ const InvitationTabs = () => {
     user?.id
   );
 
-  const filteredData = listInvitation?.data?.filter((item) => item?.response === "null");
-
   return (
     <>
       <div className="w-full">
         <div className="w-full">
-          {filteredData?.data?.length > 0 ? (
-            filteredData?.data?.map((member) => {
+          {listInvitation?.data?.length > 0 ? (
+            listInvitation?.data?.map((member) => {
               return <ViewInvitation key={member?.id} member={member} />;
             })
           ) : (

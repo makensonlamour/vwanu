@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import ViewPhoto from "../../../features/album/component/ViewPhoto";
+import MediaPreview from "./MediaPreview";
 
-const MediaPost = ({ medias, sender }) => {
+const MediaMessage = ({ medias, sender }) => {
   const [type, setType] = useState("photo");
 
   const checkType = () => {
@@ -22,13 +22,14 @@ const MediaPost = ({ medias, sender }) => {
   if (type === "video") {
     contentVideo = (
       <div className="bg-black rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
-        <ViewPhoto
+        <MediaPreview
+          sender={sender}
           type={type}
           photo={medias[0]}
           imgComponent={
             <div>
               <video
-                className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
+                className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full rounded-lg"
                 controls
                 alt={medias[0]?.original}
               >
@@ -45,13 +46,14 @@ const MediaPost = ({ medias, sender }) => {
   if (medias?.length === 1) {
     content = (
       <div className="bg-black rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
-        <ViewPhoto
+        <MediaPreview
+          sender={sender}
           photo={medias[0]}
           imgComponent={
             <img
               src={medias[0]?.original}
               alt={"post_image_" + medias[0]?.id}
-              className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
+              className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full rounded-lg"
             />
           }
         />
@@ -59,19 +61,20 @@ const MediaPost = ({ medias, sender }) => {
     );
   } else if (medias?.length === 2) {
     content = (
-      <div className="grid grid-cols-2 gap-2 pt-5">
+      <div className="grid grid-cols-2 gap-2 pt-3">
         {" "}
         {medias?.map((media) => {
           return (
             <>
               <div className="flex w-full ">
-                <ViewPhoto
+                <MediaPreview
+                  sender={sender}
                   photo={media}
                   imgComponent={
                     <img
                       src={media?.original}
                       alt={"post_image_" + media?.id}
-                      className=" flex-wrap inline object-cover h-[100%] w-96 object-top rounded-lg"
+                      className=" flex-wrap inline object-cover h-[130px] w-96 object-top rounded-lg"
                     />
                   }
                 />
@@ -83,38 +86,24 @@ const MediaPost = ({ medias, sender }) => {
     );
   } else if (medias?.length === 3) {
     content = (
-      <div className="grid grid-cols-3 rounded pt-5">
+      <div className="grid grid-cols-2 gap-2 pt-3">
         {" "}
-        {medias.map((media, idx) => {
+        {medias.map((media) => {
           return (
             <>
-              {idx === 1 ? (
-                <div className={"w-full col-span-2 p-1 row-span-2"}>
-                  <ViewPhoto
-                    photo={media}
-                    imgComponent={
-                      <img
-                        src={media?.original}
-                        alt={"post_image_" + media?.id}
-                        className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
-                      />
-                    }
-                  />
-                </div>
-              ) : (
-                <div className={"w-full p-1"}>
-                  <ViewPhoto
-                    photo={media}
-                    imgComponent={
-                      <img
-                        src={media?.original}
-                        alt={"post_image_" + media?.id}
-                        className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
-                      />
-                    }
-                  />
-                </div>
-              )}
+              <div className="flex w-full ">
+                <MediaPreview
+                  sender={sender}
+                  photo={media}
+                  imgComponent={
+                    <img
+                      src={media?.original}
+                      alt={"post_image_" + media?.id}
+                      className=" flex-wrap inline object-cover h-[130px] w-96 object-top rounded-lg"
+                    />
+                  }
+                />
+              </div>
             </>
           );
         })}
@@ -122,19 +111,20 @@ const MediaPost = ({ medias, sender }) => {
     );
   } else if (medias?.length === 4) {
     content = (
-      <div className="grid grid-rows-2 grid-flow-col gap-2 pt-5">
+      <div className="grid grid-cols-2 gap-2 pt-3 ">
         {" "}
-        {medias?.map((media) => {
+        {medias.map((media) => {
           return (
             <>
-              <div className="flex w-full">
-                <ViewPhoto
+              <div className="flex w-full ">
+                <MediaPreview
+                  sender={sender}
                   photo={media}
                   imgComponent={
                     <img
                       src={media?.original}
                       alt={"post_image_" + media?.id}
-                      className=" flex-wrap inline object-cover object-center w-full rounded-lg"
+                      className=" flex-wrap inline object-cover h-[130px] w-96 object-top rounded-lg"
                     />
                   }
                 />
@@ -146,12 +136,13 @@ const MediaPost = ({ medias, sender }) => {
     );
   } else {
     content = (
-      <div className="grid grid-rows-3 grid-flow-col gap-2 pt-5">
+      <div className="grid grid-rows-3 grid-flow-col gap-2 pt-3">
         {medias?.map((media) => {
           return (
             <>
               <div className="flex w-full">
-                <ViewPhoto
+                <MediaPreview
+                  sender={sender}
                   photo={media}
                   imgComponent={
                     <img
@@ -171,11 +162,11 @@ const MediaPost = ({ medias, sender }) => {
 
   return (
     <>
-      <div>{type === "photo" ? content : contentVideo}</div>
+      <div className="pb-2">{type === "photo" ? content : contentVideo}</div>
     </>
   );
 };
 
-MediaPost.propTypes = { medias: PropTypes.array.isRequired, sender: PropTypes.string };
+MediaMessage.propTypes = { medias: PropTypes.array.isRequired, sender: PropTypes.string };
 
-export default MediaPost;
+export default MediaMessage;

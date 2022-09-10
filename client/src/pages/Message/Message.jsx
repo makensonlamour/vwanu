@@ -12,8 +12,6 @@ const Message = () => {
   const { id } = useParams();
   const matches = useMediaQuery("(max-width: 1024px)");
 
-  console.log(matches);
-
   useEffect(() => {
     id ? setSelectedConversation(true) : setSelectedConversation(false);
   }, [id]);
