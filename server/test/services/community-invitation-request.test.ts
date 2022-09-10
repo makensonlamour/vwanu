@@ -207,10 +207,11 @@ describe("'communityInvitationRequest' service", () => {
       return 1;
     });
   });
-  it.skip('Authorized can see all invitation they sent', async () => {
+  it('Authorized can see all invitation they sent', async () => {
     const invitationsISent = await testServer
       .get(`${endpoint}/?hostId=${creator.id}`)
       .set('authorization', creator.accessToken);
+
     invitationsISent.body.forEach((invitation) => {
       expect(invitation).toMatchObject({
         ...InvitationObJect,
@@ -228,7 +229,7 @@ describe("'communityInvitationRequest' service", () => {
     });
   });
   it.todo('should not see invitations sent to others unless admin');
-  it.skip('Guest can see all invitation they have received', async () => {
+  it('Guest can see all invitation they have received', async () => {
     let receivedInvitationForAll: any = await Promise.all(
       testUsers.map((user) =>
         testServer
@@ -255,7 +256,7 @@ describe("'communityInvitationRequest' service", () => {
       });
     });
   });
-  it.skip("Authorized can update invitation's role", async () => {
+  it("Authorized can update invitation's role", async () => {
     const memberRole = roles.find((role) => role.name === 'member');
 
     const moderator = roles.find((role) => role.name === 'moderator');
@@ -280,7 +281,7 @@ describe("'communityInvitationRequest' service", () => {
   });
   it.todo('Guest cannot receive two different invitations');
   it.todo('Only the one who invited can modify or delete the invitation');
-  it.skip('Admin and  creator can remove invitation for any role', async () => {
+  it('Admin and  creator can remove invitation for any role', async () => {
     let responses = await Promise.all(
       invitations.map((invitation) =>
         testServer
