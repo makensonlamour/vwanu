@@ -12,6 +12,7 @@ export interface BlogInterface {
   slug: string;
   amountOfLikes: number;
   amountOfComments: number;
+  search_vector: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Blog extends Model<BlogInterface> implements BlogInterface {
@@ -30,6 +31,8 @@ export default (sequelize: any, DataTypes: any) => {
     amountOfLikes: number;
 
     amountOfComments: number;
+
+    search_vector: string;
 
     static associate(models: any): void {
       Blog.belongsTo(models.User);
@@ -59,20 +62,30 @@ export default (sequelize: any, DataTypes: any) => {
       slug: {
         type: DataTypes.TEXT,
         allowNull: true,
+        // @ts-ignore
+        level: 'B',
       },
       blogText: {
         type: DataTypes.TEXT,
         allowNull: true,
+        // @ts-ignore
+        level: 'C',
       },
       blogTitle: {
         type: DataTypes.TEXT,
         allowNull: false,
+        // @ts-ignore
+        level: 'A',
       },
       amountOfLikes: { type: DataTypes.INTEGER, defaultValue: 0 },
       amountOfComments: { type: DataTypes.INTEGER, defaultValue: 0 },
       publish: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      search_vector: {
+        type: DataTypes.TSVECTOR,
+        allowNull: true,
       },
     },
 
