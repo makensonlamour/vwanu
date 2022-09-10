@@ -1,5 +1,4 @@
-/*eslint-disable */
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext, useParams, Link, useNavigate } from "react-router-dom";
 import InputMessage from "./InputMessage";
@@ -16,12 +15,11 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
   const { data: conversationData, isLoading } = useGetConversation(["conversation", id], id ? true : false, id);
   const user = useOutletContext();
   const filtered = conversationData?.data?.Users?.filter((item) => item.id !== user?.id);
-  const [messagesList, setMessagesList] = useState([]);
   const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView({ duration: 0 });
 
   useEffect(() => {
     scrollIntoView();
-    console.log("scroll");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listMessage]);
 
   return (
@@ -105,6 +103,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                   return (
                     <div key={message.id} className="px-2 lg:px-5 py-1">
                       <SingleMessage
+                        conversation={conversationData?.data}
                         groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
                         sender={user?.id === message?.senderId ? true : false}
                         listMessage={message}
@@ -114,7 +113,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                 })}
               <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
             </div>
-            <div className="z-50 row-span-1 max-h-[10vh] h-[10vh]">
+            <div className="z-40 row-span-1 max-h-[10vh] h-[10vh]">
               <InputMessage type={""} selectMember={conversationData?.data} />
             </div>
           </div>

@@ -34,6 +34,7 @@ export default function (app: Application): void {
         maxCount: config.get<number>('maxMessageImages'),
       },
     ]),
+    transferUploadedFilesToFeathers,
     new Message(options, app)
   );
 

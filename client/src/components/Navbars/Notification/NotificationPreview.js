@@ -52,7 +52,7 @@ const NotificationPreview = () => {
           {notificationList?.length > 0 ? (
             <>
               <div className="flex justify-between mb-4 m-2">
-                <h4 className="text-lg font-semibold">Notifications</h4>
+                <h4 className="text-lg font-semibold px-2">Notifications</h4>
                 <button className="text-sm text-primary font-[400]">Mark all as read</button>
               </div>
 
@@ -62,7 +62,7 @@ const NotificationPreview = () => {
                     <Link
                       key={idx}
                       to={"../../profile/" + notification?.UserId}
-                      className="text-base my-1 py-2 hover:bg-placeholder-color px-2 rounded-xl"
+                      className="mx-2 text-base my-1 py-2 hover:bg-placeholder-color px-2 rounded-xl"
                     >
                       <div className="flex items-center align-middle justify-between">
                         <div className="w-12">

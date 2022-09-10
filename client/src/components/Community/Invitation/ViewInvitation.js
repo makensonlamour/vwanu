@@ -72,54 +72,52 @@ const ViewInvitation = ({ member }) => {
   return (
     <>
       <Toaster />
-      {member?.response === "null" && (
-        <div key={member?.id} className="border border-gray-200 p-4 w-full">
-          <p className="pb-2 text-sm md:text-lg">
-            {member?.host?.firstName +
-              " " +
-              member?.host?.lastName +
-              " sent you an invitation to be a " +
-              member?.CommunityRole?.name +
-              " of"}
-          </p>
+      <div key={member?.id} className="border border-gray-200 p-4 w-full">
+        <p className="pb-2 text-sm md:text-lg">
+          {member?.host?.firstName +
+            " " +
+            member?.host?.lastName +
+            " sent you an invitation to be a " +
+            member?.CommunityRole?.name +
+            " of"}
+        </p>
 
-          <div className="flex justify-start items-center">
-            <div className="mr-3">
-              <img src={member?.guest?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
-            </div>
-            <div className="text-md ">
-              <p className="font-semibold">
-                {member?.Community?.name}
-                <span className="ml-2 text-xs w-fit bg-gray-300 text-white px-2 mr-2 py-[0.1rem] rounded-md hover:bg-primary">
-                  {member?.Community?.privacyType}
-                </span>
-              </p>
+        <div className="flex justify-start items-center">
+          <div className="mr-3">
+            <img src={member?.Community?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
+          </div>
+          <div className="text-md ">
+            <p className="font-semibold">
+              {member?.Community?.name}
+              <span className="ml-2 text-xs w-fit bg-gray-200 border-gray-200 border text-black px-2 mr-2 py-[0.1rem] rounded-md">
+                {member?.Community?.privacyType}
+              </span>
+            </p>
 
-              <div className="py-2 flex justify-start">
-                <button
-                  onClick={() => handleAccept()}
-                  className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
-                >
-                  {loading ? <Loader /> : "Accept"}
-                </button>
-                <button
-                  onClick={() => handleDecline()}
-                  className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
-                >
-                  {loading ? <Loader /> : "Decline"}
-                </button>
-              </div>
-              <p className="">
-                <span className="text-sm md:text-md">{member?.createdAt}</span>
-              </p>
+            <div className="py-2 flex justify-start">
+              <button
+                onClick={() => handleAccept()}
+                className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
+              >
+                {loading ? <Loader /> : "Accept"}
+              </button>
+              <button
+                onClick={() => handleDecline()}
+                className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary "
+              >
+                {loading ? <Loader /> : "Decline"}
+              </button>
             </div>
+            <p className="">
+              <span className="text-sm md:text-md">{member?.createdAt}</span>
+            </p>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };
 
-ViewInvitation.propTypes = { member: PropTypes.array.isRequired };
+ViewInvitation.propTypes = { member: PropTypes.object.isRequired };
 
 export default ViewInvitation;

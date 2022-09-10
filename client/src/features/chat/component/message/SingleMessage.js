@@ -6,6 +6,7 @@ import { GrFormView } from "react-icons/gr";
 import { IoIosSend } from "react-icons/io";
 import { useReadMessage } from "../../messageSlice";
 import { transformHashtagAndLink } from "../../../../helpers/index";
+import MediaMessage from "./MediaMessage";
 
 const formatRelativeLocale = {
   lastWeek: "P ' at ' p",
@@ -21,7 +22,7 @@ const locale = {
   formatRelative: (token) => formatRelativeLocale[token],
 };
 
-const SingleMessage = ({ groups, sender, listMessage }) => {
+const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
   // console.log(listMessage);
   const readMessage = useReadMessage(["message", "read", listMessage?.id], undefined, undefined);
   const handleRead = async () => {
@@ -79,7 +80,7 @@ const SingleMessage = ({ groups, sender, listMessage }) => {
         )
       ) : sender ? (
         <div className="flex flex-wrap justify-end">
-          <div className="bg-orange-100 px-2 py-1 rounded-xl w-max max-w-[70%]">
+          <div className="bg-orange-100 px-2 py-1 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl w-max max-w-[70%]">
             {listMessage?.messageText?.split("\n").map((text) => {
               return (
                 <p key={text} className="text-sm">
@@ -87,27 +88,26 @@ const SingleMessage = ({ groups, sender, listMessage }) => {
                 </p>
               );
             })}
+            {listMessage?.Media?.length > 0 ? <MediaMessage sender={listMessage?.sender} medias={listMessage?.Media} /> : null}
             <p className="text-xs text-gray-700 align-middle text-right">
               {formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}
               <span className="inline">
-                {listMessage?.read ? (
-                  <GrFormView size={"20px"} className="pl-1 items-center inline align-middle" />
-                ) : (
-                  <IoIosSend size={"20px"} className="pl-1 items-center inline align-middle" />
-                )}
+                {conversation?.Messages[0]?.id === listMessage?.id &&
+                  (listMessage?.read ? <span className="">{` • Read`}</span> : <span className="">{` • Sent`}</span>)}
               </span>
             </p>
           </div>
         </div>
       ) : (
-        <div className="bg-placeholder-color px-2 py-1 rounded-xl w-max max-w-[70%] lg:pl-5">
+        <div className="bg-placeholder-color px-2 py-1 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl w-max max-w-[70%] lg:pl-5">
           {listMessage?.messageText?.split("\n").map((text) => {
             return (
               <p key={text} className="text-sm">
                 {transformHashtagAndLink(text)}
               </p>
             );
-          })}{" "}
+          })}
+          {listMessage?.Media?.length > 0 ? <MediaMessage sender={listMessage?.sender} medias={listMessage?.Media} /> : null}
           <p className="text-xs text-gray-600 text-right">{formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}</p>
         </div>
       )}
