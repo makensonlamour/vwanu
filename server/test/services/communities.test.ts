@@ -63,12 +63,12 @@ describe("'communities ' service", () => {
     );
   });
 
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('communities');
     expect(service).toBeTruthy();
   });
 
-  it('should not create communities with the same name', async () => {
+  it.skip('should not create communities with the same name', async () => {
     sameNameCommunities = await Promise.all(
       ['unique', 'unique'].map((name, idx) =>
         testServer
@@ -107,7 +107,7 @@ describe("'communities ' service", () => {
       }
     });
   });
-  it('Users can create any community ', async () => {
+  it.skip('Users can create any community ', async () => {
     const name = 'y community';
     const description = 'Unique description required';
     const privacyTypes = ['private', 'public', 'hidden'];
@@ -136,7 +136,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('Community automatically set creator as first admin', async () => {
+  it.skip('Community automatically set creator as first admin', async () => {
     const name = 'Auto admin community ';
     const description =
       'Each community automatically set creator as first admin';
@@ -196,7 +196,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('communities are public by default', async () => {
+  it.skip('communities are public by default', async () => {
     const publicCommunity = await testServer
       .post(endpoint)
       .send({
