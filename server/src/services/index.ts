@@ -74,6 +74,8 @@ import userAddress from './user-address/user-address.service';
 
 import searchBlog from './search-blog/search-blog.service';
 
+import searchCommunity from './search-community/search-community.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -119,4 +121,5 @@ export default function (app: Application): void {
   app.configure(addressTypes);
   app.configure(userAddress);
   app.configure(searchBlog);
+  app.configure(searchCommunity);
 }

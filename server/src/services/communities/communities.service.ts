@@ -26,7 +26,7 @@ declare module '../../declarations' {
 
 export default function (app: Application): void {
   const sequelize = app.get('sequelizeClient');
-  const CommunityModel = sequelize.models.Blog;
+  const CommunityModel = sequelize.models.Community;
   const options = {
     Model: CommunityModel,
     paginate: app.get('paginate'),
