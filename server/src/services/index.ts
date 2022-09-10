@@ -72,6 +72,8 @@ import addressTypes from './address-types/address-types.service';
 
 import userAddress from './user-address/user-address.service';
 
+import searchBlog from './search-blog/search-blog.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(post);
@@ -116,4 +118,5 @@ export default function (app: Application): void {
   app.configure(address);
   app.configure(addressTypes);
   app.configure(userAddress);
+  app.configure(searchBlog);
 }

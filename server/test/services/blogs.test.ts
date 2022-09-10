@@ -16,8 +16,10 @@ describe("'blogs ' service", () => {
   const endpoint = '/blogs';
   beforeAll(async () => {
     const sequelize = app.get('sequelizeClient');
+    const { Blog } = sequelize.models;
+    await Blog.sync({ force: true });
     sequelize.options.logging = false;
-    await sequelize.sync({  logged: false });
+    await sequelize.sync({ logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u) => {
@@ -53,7 +55,7 @@ describe("'blogs ' service", () => {
         blogText: sanitizeHtml(newBlog.blogText),
         blogTitle: sanitizeHtml(newBlog.blogTitle),
         id: expect.any(String),
-        UserId: expect.any(Number),
+        // UserId: expect.any(Number),
         publish: false,
         updatedAt: expect.any(String),
         createdAt: expect.any(String),
@@ -69,7 +71,7 @@ describe("'blogs ' service", () => {
             accessible: true,
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
-            UserId: expect.any(Number),
+            // UserId: expect.any(Number),
             Blog_Interest: expect.any(Object),
           },
           {
@@ -79,7 +81,7 @@ describe("'blogs ' service", () => {
             accessible: true,
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
-            UserId: expect.any(Number),
+            // UserId: expect.any(Number),
             Blog_Interest: expect.any(Object),
           },
         ],
@@ -100,12 +102,12 @@ describe("'blogs ' service", () => {
       interests: ['more', 'some', 'category'],
     };
     const user = testUsers[0].body;
-    const modifiedBlog = await testServer
+    const { body: modifiedBlog } = await testServer
       .patch(`${endpoint}/${firstBlogs[0].id}`)
       .send(modifications)
       .set('authorization', user.accessToken);
 
-    expect(modifiedBlog.body).toMatchObject({
+    expect(modifiedBlog).toMatchObject({
       blogText: sanitizeHtml(modifications.blogText),
       blogTitle: sanitizeHtml(modifications.blogTitle),
       id: expect.any(String),
@@ -116,46 +118,28 @@ describe("'blogs ' service", () => {
       slug: expect.any(String),
       amountOfLikes: 0,
       amountOfComments: 0,
-
-      Interests: [
-        {
-          id: expect.any(String),
-          name: expect.any(String),
-          approved: false,
-          accessible: true,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          UserId: expect.any(Number),
-          Blog_Interest: expect.any(Object),
-        },
-        {
-          id: expect.any(String),
-          name: expect.any(String),
-          approved: false,
-          accessible: true,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          UserId: expect.any(Number),
-          Blog_Interest: expect.any(Object),
-        },
-        {
-          id: expect.any(String),
-          name: expect.any(String),
-          approved: false,
-          accessible: true,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          UserId: expect.any(Number),
-          Blog_Interest: expect.any(Object),
-        },
-      ],
-      User: {
+      Interests: expect.any(Array),
+      User: expect.objectContaining({
         firstName: expect.any(String),
         lastName: expect.any(String),
         id: expect.any(Number),
         profilePicture: expect.any(String),
         createdAt: expect.any(String),
-      },
+      }),
+    });
+
+    const { Interests } = modifiedBlog;
+    Interests.forEach((interest) => {
+      expect(interest).toMatchObject({
+        id: expect.any(String),
+        name: expect.any(String),
+        approved: false,
+        accessible: true,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        UserId: null,
+        Blog_Interest: expect.any(Object),
+      });
     });
   });
   it('should be able to delete his own blog', async () => {
