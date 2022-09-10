@@ -11,6 +11,8 @@ export interface CommunityInterface {
 
   description: string;
 
+  search_vector: string;
+
   profilePicture: string;
 
   UserId: number;
@@ -47,6 +49,8 @@ export default (sequelize: any, DataTypes: any) => {
     name: string;
 
     coverPicture: string;
+
+    search_vector: string;
 
     description: string;
 
@@ -121,12 +125,16 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        // @ts-ignore
+        level: 'A',
       },
 
       privacyType: {
         type: DataTypes.ENUM('public', 'hidden', 'private'),
         defaultValue: 'public',
         allowNull: false,
+        // @ts-ignore
+        level: 'C',
       },
       coverPicture: {
         type: DataTypes.STRING,
@@ -137,6 +145,8 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.TEXT,
         allowNull: false,
         unique: true,
+        // @ts-ignore
+        level: 'B',
       },
       profilePicture: {
         type: DataTypes.STRING,
@@ -185,6 +195,10 @@ export default (sequelize: any, DataTypes: any) => {
       haveDiscussionForum: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
+      },
+      search_vector: {
+        type: DataTypes.TSVECTOR,
+        allowNull: true,
       },
     },
 
