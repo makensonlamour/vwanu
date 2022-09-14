@@ -7,9 +7,9 @@ import * as schema from '../../schema/user';
 import isSelf from '../../Hooks/isSelf.hook';
 import AutoLogin from '../../Hooks/AutoLoginHooks';
 import validateResource from '../../middleware/validateResource';
-import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
-import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
+import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
+import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
 // const verifyHooks = authMan.hooks;
 import { SaveAddress, IncludeAddress, AddVisitor } from './hook';
 
