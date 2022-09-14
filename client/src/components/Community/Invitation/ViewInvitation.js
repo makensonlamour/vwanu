@@ -4,6 +4,7 @@ import Loader from "../../common/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { useQueryClient } from "react-query";
 import { useAcceptInvitation } from "../../../features/community/communitySlice";
+import { useOutletContext } from "react-router-dom";
 
 const AcceptInvitationSuccess = () =>
   toast.success("You accepted the invitation", {
@@ -26,11 +27,13 @@ const declineInvitationError = () =>
   });
 
 const ViewInvitation = ({ member }) => {
+  const user = useOutletContext();
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const acceptInvitation = useAcceptInvitation(["invitation", "accept"], undefined, undefined);
 
   const handleAccept = async () => {
+    let CommunityId = member?.CommunityId;
     setLoading(true);
     try {
       const dataObj = {
@@ -40,7 +43,7 @@ const ViewInvitation = ({ member }) => {
       let result = await acceptInvitation.mutateAsync(dataObj);
       AcceptInvitationSuccess();
       if (result?.data?.message === "Your response have been recorded") {
-        window.location.href = `../groups/${member?.CommmunityId}`;
+        window.location.href = `../groups/${CommunityId}`;
       }
     } catch (e) {
       AcceptInvitationError();
@@ -74,12 +77,9 @@ const ViewInvitation = ({ member }) => {
       <Toaster />
       <div key={member?.id} className="border border-gray-200 p-4 w-full">
         <p className="pb-2 text-sm md:text-lg">
-          {member?.host?.firstName +
-            " " +
-            member?.host?.lastName +
-            " sent you an invitation to be a " +
-            member?.CommunityRole?.name +
-            " of"}
+          {`${member?.host?.firstName} ${member?.host?.lastName}  sent ${
+            user?.id === member?.guest?.id ? "you" : member?.guest?.firstName + " " + member?.guest?.lastName
+          } an invitation to be a ${member?.CommunityRole?.name} of`}
         </p>
 
         <div className="flex justify-start items-center">

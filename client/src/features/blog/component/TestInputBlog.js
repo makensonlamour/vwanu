@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
 import {
@@ -41,6 +42,7 @@ import {
   indent,
   outdentList,
   serializeHtml,
+  deserializeHtmlNode,
   createPlateEditor,
 } from "@udecode/plate";
 import { PLUGINS } from "./plugins";
@@ -141,7 +143,7 @@ const BasicMarkToolbarButtons = () => {
   );
 };
 
-const InputBlog = ({ fn }) => {
+const InputBlog = ({ fn, editData }) => {
   const editableProps = {
     placeholder: "Write the blog text here...",
   };
@@ -156,6 +158,7 @@ const InputBlog = ({ fn }) => {
       ],
     },
   ];
+  const editText = editData ? deserializeHtmlNode(editData) : "";
 
   const plugins = createPlugins(
     [
@@ -167,6 +170,7 @@ const InputBlog = ({ fn }) => {
       createExitBreakPlugin(CONFIG.exitBreak),
       createBasicMarksPlugin(),
       createAlignPlugin({
+        serializeHtml: (props, value) => <p className="bg-red-500">{props.children}</p>,
         inject: {
           props: {
             validTypes: [ELEMENT_PARAGRAPH, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6],
@@ -209,7 +213,6 @@ const InputBlog = ({ fn }) => {
     plugins: plugins,
     components: CONFIG.components,
   });
-
   return (
     <>
       <div>
@@ -221,12 +224,18 @@ const InputBlog = ({ fn }) => {
         </HeadingToolbar>
         <Plate
           editableProps={editableProps}
-          initialValue={initialValue}
+          initialValue={editData ? editText : initialValue}
           plugins={plugins}
           onChange={(newValue) => {
+            console.log(newValue);
             const htmlText = serializeHtml(editor, {
+              plugins: plugins,
               nodes: newValue,
+              stripDataAttributes: true,
+              convertNewLinesToHtmlBr: true,
             });
+            console.log(htmlText);
+
             fn(htmlText);
           }}
         />
@@ -237,6 +246,7 @@ const InputBlog = ({ fn }) => {
 
 InputBlog.propTypes = {
   fn: PropTypes.func,
+  fn: PropTypes.string,
 };
 
 export default InputBlog;

@@ -36,8 +36,6 @@ const SendInvites = () => {
     message: "",
   };
 
-  console.log(roles?.data);
-
   const ValidationSchema = Yup.object().shape({
     message: Yup.string().label("Community Name"),
   });
@@ -176,7 +174,10 @@ const SendInvites = () => {
                     }}
                     className="mt-1 p-2 mb-4 outline-0 text-secondary placeholder:text-gray-300 focus:border-0  rounded-2xl input-secondary border-0"
                   />
-                  <Submit className="w-full rounded-2xl text-base-100 text-md md:w-[30%]" title={isLoading ? <Loader /> : "Send Invites"} />{" "}
+                  <Submit
+                    className="w-full lg:w-fit py-2 px-4 rounded-2xl text-base-100 text-md md:w-[30%]"
+                    title={isLoading ? <Loader /> : "Send Invites"}
+                  />{" "}
                 </Form>
               </div>
             </div>

@@ -68,15 +68,15 @@ const InputMessage = ({ selectMember, type }) => {
         const dataObjConversation = { userIds: receiver };
         let resultConversation = await createConversation.mutateAsync(dataObjConversation);
         if (files?.length > 0) {
-          formData.append("ConversationId", resultConversation?.data?.id);
+          formData.append("ConversationId", resultConversation?.data?.ConversationId);
         } else {
-          dataMessage = { messageText: data?.message, ConversationId: resultConversation?.data?.id };
+          dataMessage = { messageText: data?.message, ConversationId: resultConversation?.data?.ConversationId };
         }
         if (selectedGif !== "") {
           dataMessage.mediaLinks = arrayGif;
         }
         await sendMessage.mutateAsync(files?.length > 0 ? formData : dataMessage);
-        window.location.href = `../../messages/${resultConversation?.data?.id}`;
+        window.location.href = `../../messages/${resultConversation?.data?.ConversationId}`;
       } else {
         if (files?.length > 0) {
           formData.append("ConversationId", selectMember?.id);

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Box, Tab } from "@mui/material";
 import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
@@ -12,6 +12,33 @@ export default function CommunityTabs({ communityData, user }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [searchParams] = useSearchParams();
+  const urlTabs = searchParams.get("tabs");
+  // const editTabs = searchParams.get("subtabs");
+  let run = true;
+
+  const handleUrlChange = () => {
+    if (urlTabs === "invites" && run) {
+      run = false;
+      setValue("5");
+    } else {
+      run = false;
+      setValue("1");
+    }
+  };
+
+  useEffect(() => {
+    if (urlTabs && run) {
+      handleUrlChange();
+    }
+    if (!run) {
+      return () => {
+        // cancel the subscription
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlTabs]);
 
   // const allTabs = [".", "./about", "./friends", "./Albums", "./Likes", "./Groups"];
 

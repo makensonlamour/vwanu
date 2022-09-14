@@ -19,10 +19,17 @@ import CommunityTab from "./CommunityTab";
 import { allTabs1 } from "./Tablink.data";
 import { checkFriendList } from "../../helpers/index";
 import { FaUserEdit, FaUserAlt } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
 import EditProfile from "../../pages/Profil/EditProfile";
-import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
-import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
+import { useGetListFollowing } from "../../features/follower/followerSlice";
+import { useGetBlogList } from "../../features/blog/blogSlice";
+import InputModal from "../../features/post/components/InputModal";
+import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
+import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
+// import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
+import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
+import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { format } from "date-fns";
@@ -31,45 +38,55 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
 
-  const percentage = 73;
+  const { data: blogList } = useGetBlogList(["blog", "all"], true);
 
-  const steps = [
-    { title: "General Information", total: 6, complete: 5 },
-    { title: "Work Experience", total: 3, complete: 1 },
-    { title: "Profile Photo", total: 1, complete: 1 },
-    { title: "Cover Photo", total: 1, complete: 1 },
+  // const percentage = 73;
+
+  // const steps = [
+  //   { title: "General Information", total: 6, complete: 5 },
+  //   { title: "Work Experience", total: 3, complete: 1 },
+  //   { title: "Profile Photo", total: 1, complete: 1 },
+  //   { title: "Cover Photo", total: 1, complete: 1 },
+  // ];
+
+  const recentlyActive = [
+    { image: "https://picsum.photos/200/300?image=0" },
+    { image: "https://picsum.photos/200/300?image=1" },
+    { image: "https://picsum.photos/200/300?image=2" },
+    { image: "https://picsum.photos/200/300?image=3" },
+    { image: "https://picsum.photos/200/300?image=4" },
+    { image: "https://picsum.photos/200/300?image=8" },
+    { image: "https://picsum.photos/200/300?image=9" },
+    { image: "https://picsum.photos/200/300?image=10" },
+    { image: "https://picsum.photos/200/300?image=11" },
+    { image: "https://picsum.photos/200/300?image=12" },
   ];
 
-  const latestUpdates = [
+  const groups = [
     {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "10 months ago",
-      where: "",
+      name: "Mountain Riders",
+      image: "https://picsum.photos/200/300?image=0",
+      members: "20",
     },
     {
-      avatar: "https://picsum.photos/200/300?image=3",
-      name: "Adele",
-      date: "10 months ago",
-      where: "",
+      name: "Graphic Design",
+      image: "https://picsum.photos/200/300?image=1",
+      members: "20",
     },
     {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
+      name: "Nature Lovers",
+      image: "https://picsum.photos/200/300?image=2",
+      members: "19",
     },
     {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "in the group Coffee Addicts",
+      name: "Coffee Addicts",
+      image: "https://picsum.photos/200/300?image=3",
+      members: "19",
     },
     {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
+      name: "Architecture",
+      image: "https://picsum.photos/200/300?image=4",
+      members: "17",
     },
   ];
 
@@ -89,15 +106,33 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
                       className="mx-auto max-h-64 w-full object-cover lg:h-[250px]"
                       alt="cover_profile"
                     />
+                    {!otherUser && (
+                      <button
+                        onClick={() => (window.location.href = "../../me/profile/edit?tabs=cover")}
+                        className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                      >
+                        <MdEdit size={"24px"} className="" />
+                      </button>
+                    )}
                   </div>
                   <div className="transform translate-y-1/4 absolute w-full left-0 bottom-0 z-30 flex justify-center">
                     <div className="flex items-center justify-center mask mask-squircle w-[126px] h-[126px] bg-gray-100">
                       {otherUser?.profilePicture?.original !== "null" || user?.profilePicture?.original !== "null" ? (
-                        <img
-                          src={otherUser ? otherUser?.profilePicture?.original : user?.profilePicture?.original}
-                          className="object-cover mask mask-squircle w-[120px] h-[120px]"
-                          alt="profile_picture"
-                        />
+                        <div className="relative">
+                          <img
+                            src={otherUser ? otherUser?.profilePicture?.original : user?.profilePicture?.original}
+                            className="object-cover mask mask-squircle w-[120px] h-[120px]"
+                            alt="profile_picture"
+                          />
+                          {!otherUser && (
+                            <button
+                              onClick={() => (window.location.href = "../../me/profile/edit?tabs=profile")}
+                              className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                            >
+                              <MdEdit size={"24px"} className="" />
+                            </button>
+                          )}
+                        </div>
                       ) : (
                         <FaUserAlt size="78px" className="" />
                       )}
@@ -209,11 +244,14 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
             </div>
 
             <div className="hidden lg:block basis-[20%] ml-auto mx-2 mt-8">
-              <CompleteProfile percentage={percentage} data={steps} />
+              <BlogComponent data={blogList?.data || []} />
+              <RecentlyActive data={recentlyActive || []} />
+              <GroupsPreview data={groups || []} />
+              {/* <CompleteProfile percentage={percentage} data={steps} /> */}
               <div className="block xl:hidden">
                 <FollowingPreview data={listFollowing} />
               </div>
-              <div className="block xl:hidden">
+              <div className="block xl:hidden mb-2">
                 <UpdatesComponent data={notificationList} />
               </div>
             </div>

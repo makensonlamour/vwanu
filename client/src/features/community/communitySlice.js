@@ -16,6 +16,9 @@ export const updateGroupPicture = (data) => api.patch(`/communities/${data?.id}`
 
 export const useSendInvitation = (queryKey, oldData, newData) => usePost(queryKey, `/community-invitation-request`, (oldData, newData));
 
+export const useUpdateInvitation = (queryKey, guestId, oldData, newData) =>
+  useUpdate(queryKey, `/community-invitation-request/${guestId}`, (oldData, newData));
+
 export const useSendMessage = (queryKey, oldData, newData) => usePost(queryKey, `/community-message-request`, (oldData, newData));
 
 export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(queryKey, `/communities-registrations`, (oldData, newData));
@@ -30,8 +33,8 @@ export const useGetCommunityRole = (queryKey, enabled = true) => useFetch(queryK
 export const useGetCommunityMemberByUser = (queryKey, enabled = true, userId) =>
   useFetch(queryKey, enabled, `/community-users?UserId=${userId}`);
 
-export const useGetCommunityInvitation = (queryKey, enabled = true, userId) =>
-  useFetch(queryKey, enabled, `/community-invitation-request?hostId=${userId}`);
+export const useGetCommunityInvitation = (queryKey, enabled = true, CommunityId) =>
+  useFetch(queryKey, enabled, `/community-invitation-request?CommunityId=${CommunityId}`);
 
 export const useGetMyCommunityInvitation = (queryKey, enabled = true, userId) =>
   useFetch(queryKey, enabled, `/community-invitation-request?guestId=${userId}`);

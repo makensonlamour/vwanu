@@ -5,7 +5,7 @@ import FormStepTwo from "../../features/community/component/FormStepTwo";
 import FormStepThree from "../../features/community/component/FormStepThree";
 import FormStepFour from "../../features/community/component/FormStepFour";
 import FormStepFive from "../../features/community/component/FormStepFive";
-import FormStepSix from "../../features/community/component/FormStepSix";
+// import FormStepSix from "../../features/community/component/FormStepSix";
 
 const AddCommunity = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -17,7 +17,7 @@ const AddCommunity = () => {
     <FormStepThree key={"2_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
     <FormStepFour key={"3_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
     <FormStepFive key={"4_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
-    <FormStepSix key={"5_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
+    // <FormStepSix key={"5_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
   ];
   return (
     <>
