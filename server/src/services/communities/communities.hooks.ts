@@ -1,5 +1,3 @@
-
-
 import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -61,7 +59,11 @@ export default {
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
     ],
-    update: [LimitToOwner],
+    update: [
+      () => {
+        console.log('I was called update');
+      },
+    ],
     patch: [
       LimitToOwner,
       saveProfilePicture(['profilePicture', 'coverPicture']),

@@ -14,6 +14,9 @@ describe("'communities ' service", () => {
   let sameNameCommunities;
   let communityWithPosts;
   let communityWithForum;
+  let users;
+  let firstCreator;
+  let distinctCommunities;
 
   const userEndpoint = '/users';
   const endpoint = '/communities';
@@ -63,6 +66,31 @@ describe("'communities ' service", () => {
           .set('authorization', creator.accessToken)
       )
     );
+
+    users = await Promise.all(
+      getRandUsers(3).map((u, idx) => {
+        let user = { ...u, admin: false };
+        if (idx === 1) user = { ...user, admin: true };
+        delete user.id;
+        return testServer.post(userEndpoint).send(user);
+      }, 10000)
+    );
+    users = users.map((user) => user.body);
+    firstCreator = users.shift();
+    distinctCommunities = await Promise.all(
+      ['private', 'public', 'hidden'].map((p) =>
+        testServer
+          .post(endpoint)
+          .send({
+            name: `community-${p}`,
+            privacyType: p,
+            interests,
+            description: `description-${p}`,
+          })
+          .set('authorization', firstCreator.accessToken)
+      )
+    );
+    distinctCommunities = distinctCommunities.map((c) => c.body);
   }, 100000);
   afterAll(async () => {
     await Promise.all(
@@ -225,10 +253,11 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip('Community creator can edit the community details', async () => {
+  it('Community creator can edit the community details', async () => {
     const name = `Brand new name -${Math.random()}`;
     const description = `Description Has Changed -- ${Math.random()}`;
     const communityToChange = communities[0].body;
+
     const editedCommunity = await testServer
       .patch(`${endpoint}/${communityToChange.id}`)
       .send({
@@ -279,35 +308,6 @@ describe("'communities ' service", () => {
     });
   });
   describe('Communities Access', () => {
-    let users;
-    let firstCreator;
-    let distinctCommunities;
-    beforeAll(async () => {
-      users = await Promise.all(
-        getRandUsers(3).map((u, idx) => {
-          let user = { ...u, admin: false };
-          if (idx === 1) user = { ...user, admin: true };
-          delete user.id;
-          return testServer.post(userEndpoint).send(user);
-        }, 10000)
-      );
-      users = users.map((user) => user.body);
-      firstCreator = users.shift();
-      distinctCommunities = await Promise.all(
-        ['private', 'public', 'hidden'].map((p) =>
-          testServer
-            .post(endpoint)
-            .send({
-              name: `community-${p}`,
-              privacyType: p,
-              interests,
-              description: `description-${p}`,
-            })
-            .set('authorization', firstCreator.accessToken)
-        )
-      );
-      distinctCommunities = distinctCommunities.map((c) => c.body);
-    });
     it('should not see community private and Hidden community details when not member', async () => {
       let accessToCommunities = await Promise.all(
         distinctCommunities.map((com) =>
@@ -353,6 +353,7 @@ describe("'communities ' service", () => {
       });
     });
   });
+
   describe('Communities posts and forums', () => {
     it.todo('Only authorized members can post in community');
 
@@ -478,7 +479,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip('Only the community creator can delete the community', async () => {
+  it('Only the community creator can delete the community', async () => {
     const name = 'Community to delete';
     const description = 'This community will be deleted';
     // create a community
