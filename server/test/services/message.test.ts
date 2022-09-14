@@ -70,7 +70,7 @@ describe("'message' service", () => {
       read: false,
       ConversationId: expect.any(String),
       messageText: 'test',
-      senderId: 1,
+      senderId: testUsers[0].id,
       Media: [],
       updatedAt: expect.any(String),
       createdAt: expect.any(String),
@@ -141,7 +141,7 @@ describe("'message' service", () => {
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
       UserId: null,
-      senderId: 1,
+      senderId: testUsers[0].id,
       ConversationId: testConversation.id,
       sender: {
         firstName: testUsers[0].firstName,

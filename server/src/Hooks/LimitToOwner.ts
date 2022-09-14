@@ -2,6 +2,7 @@
 import { HookContext } from '@feathersjs/feathers';
 import { BadRequest } from '@feathersjs/errors';
 
+
 export default async (context: HookContext) => {
   const { params, id, service } = context;
 

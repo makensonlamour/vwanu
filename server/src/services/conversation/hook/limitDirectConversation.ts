@@ -16,7 +16,7 @@ export default async (context: HookContext) => {
       `SELECT "ConversationId" FROM "Conversation_Users" WHERE "UserId" IN (${[
         ...userIds,
         User.id,
-      ]}) 
+      ].map((id) => `'${id}'`)}) 
       GROUP BY "ConversationId"
       HAVING COUNT("ConversationId") > 1`,
       { type: QueryTypes.SELECT }
@@ -28,6 +28,7 @@ export default async (context: HookContext) => {
       context.data.userIds = null;
     }
   } catch (err) {
+    console.log('Here is where the error occured');
     throw new Error(err.message);
   }
   return context;
