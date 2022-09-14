@@ -11,6 +11,7 @@ import { formatDistance, parseISO } from "date-fns";
 // import routesPath from "../../../routesPath";
 import client from "../../../features/feathers";
 import useAuthContext from "../../../hooks/useAuthContext";
+import { useReadNotification } from "./../../../features/notification/notificationSlice";
 
 const NotificationPreview = () => {
   const { user } = useAuthContext();
@@ -33,9 +34,23 @@ const NotificationPreview = () => {
     };
   };
 
+  const readNotification = useReadNotification(["notification", "read"], undefined, undefined);
+
+  const handleRead = async (notificationId,idLink,entityName) => {
+    try {
+      const dataObj = { id: notificationId,view:true };
+      await readNotification.mutateAsync(dataObj);
+      window.location.href = "../../profile/" + idLink;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     nots();
   }, []);
+
+  console.log(notificationList);
 
   return (
     <>
@@ -61,7 +76,12 @@ const NotificationPreview = () => {
                   return (
                     <Link
                       key={idx}
-                      to={"../../profile/" + notification?.UserId}
+                      to={"#"}
+                      onClick={() => {
+                        if (!notification?.view) {
+                          handleRead(notification?.id,notification?.UserId);
+                        }
+                      }}
                       className="mx-2 text-base my-1 py-2 hover:bg-placeholder-color px-2 rounded-xl"
                     >
                       <div className="flex items-center align-middle justify-between">
