@@ -8,7 +8,7 @@ import { UpUserInterface as UserInterface } from '../schema/user';
 
 export default (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
-    id: number;
+    id: string;
 
     about: string;
 

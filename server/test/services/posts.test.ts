@@ -67,7 +67,7 @@ describe('Posts services', () => {
     expect(thePost).toEqual(
       expect.objectContaining({
         postText: expect.any(String),
-        id: expect.any(Number),
+        id: expect.any(String),
         privacyType: 'public',
         UserId: newUser.id,
         audioCount: 0,
@@ -158,7 +158,7 @@ describe('Posts services', () => {
 
     const deletedPost = deletedPostResponse.body;
     expect(deletedPost.id).toEqual(thePost.id);
- 
+
     const retrievePostResponse = await testServer
       .get(`${endpoint}/${thePost.id}`)
       .set('authorization', token);

@@ -385,7 +385,7 @@ describe("'communities ' service", () => {
       expect(post.statusCode).toEqual(201);
       expect(post.body).toMatchObject({
         privacyType: 'public',
-        id: expect.any(Number),
+        id: expect.any(String),
         postText: 'I am a post in a community',
         CommunityId: communityWithPosts.body.id,
         UserId: creator.id,
@@ -402,7 +402,7 @@ describe("'communities ' service", () => {
       expect(posts.length).toEqual(1);
       posts.forEach((p) => {
         expect(p).toMatchObject({
-          id: 1,
+          id: expect.any(String),
           multiImage: false,
           multiAudio: false,
           multiVideo: false,
