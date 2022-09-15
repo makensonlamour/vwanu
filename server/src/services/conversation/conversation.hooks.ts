@@ -32,8 +32,7 @@ const NotifyUsers = async (context) => {
       // );
     });
   } catch (error) {
-    console.log('soem error notifying them');
-    console.log(error);
+    console.error(error);
   }
 
   return context;

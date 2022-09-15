@@ -4,7 +4,6 @@ export default (context: HookContext) => {
   const { result } = context;
 
   const { ConversationId } = result;
-  console.log(ConversationId);
   if (!ConversationId) return context;
   // app
   //   .service('message')

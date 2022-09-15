@@ -14,7 +14,7 @@ const modify = { country: 'United States', gender: 'f' };
 let createdTestUsers = [];
 
 const expectedUser = {
-  id: expect.any(Number),
+  id: expect.any(String),
   email: expect.any(String),
   gender: expect.any(String),
   admin: expect.any(Boolean),
@@ -36,7 +36,10 @@ const expectedUser = {
 describe('/users service', () => {
   let testServer;
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
+    const sq = app.get('sequelizeClient');
+    const { User } = sq.models;
+    await User.sync({ force: true });
+    await sq.sync({ logged: false, force: true });
     testServer = request(app);
   }, 20000);
 

@@ -11,10 +11,10 @@ const PublicCommunityOnly = async (context) => {
   const { data, app } = context;
   let community = null;
 
-  console.log(data);
-  community = await app.service('communities').get(data.CommunityId);
+  // eslint-disable-next-line no-underscore-dangle
+  community = await app.service('communities')._get(data.CommunityId);
 
-  if (community.privacyType !== 'public')
+  if (community?.privacyType !== 'public')
     throw new BadRequest('Only public community can be joined');
   data.guestId = context.params.User.id;
   data.response = true;
@@ -65,6 +65,7 @@ export default {
     get: [],
     create: [
       PublicCommunityOnly,
+
       AttachingRole({ name: 'member' }),
       addUserToCommunity,
     ],

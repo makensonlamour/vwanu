@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ServiceAddons, Params } from '@feathersjs/feathers';
 import {
   AuthenticationService,
@@ -24,7 +25,6 @@ declare module './declarations' {
 class AnonymousStrategy extends AuthenticationBaseStrategy {
   // eslint-disable-next-line class-methods-use-this
   async authenticate(authentication: AuthenticationResult, params: Params) {
-    console.log({ authentication, params });
     return {
       anonymous: true,
     };

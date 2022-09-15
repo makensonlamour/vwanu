@@ -110,7 +110,7 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       UserId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       numMembers: {
