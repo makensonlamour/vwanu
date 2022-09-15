@@ -114,7 +114,7 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                       <img src={random_cover} className="mx-auto max-h-64 w-full object-cover lg:h-[450px]" alt="cover_profile" />
                     )}
                   </div>
-                  <div className="transform translate-y-2/4 lg:translate-y-3/4 absolute w-[20%] left-10 bottom-0 z-30 flex justify-center lg:justify-start">
+                  <div className="transform translate-y-2/4 lg:translate-y-3/4 absolute lg:w-[20%] inset-x-1/2 lg:left-10 bottom-0 z-30 flex justify-center lg:justify-start">
                     <div className="flex items-center justify-center mask mask-squircle w-[200px] h-[200px] lg:w-[156px] lg:h-[156px] bg-gray-100">
                       {communityData?.profilePicture !== null ? (
                         <img
@@ -123,7 +123,7 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                           alt="profile_picture"
                         />
                       ) : (
-                        <MdGroups size="78px" className="text-gray-300" />
+                        <MdGroups size="92px" className="text-gray-300" />
                       )}
                     </div>
                   </div>
@@ -137,33 +137,35 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                     )*/}
                 </div>
               </div>
-              <div className="rounded-b-lg border border-gray-300 bg-white pt-[0px] lg:pt-3 min-h-[250px]">
+              <div className="rounded-b-lg border border-gray-300 bg-white pt-12 lg:pt-3 min-h-[250px]">
                 <div className="py-4 relative">
-                  <div className="lg:w-[65%] xl:w-[75%] absolute left-[13.5rem]">
-                    <div className="flex flex-row items-center justify-between">
+                  <div className="w-full lg:w-[65%] xl:w-[75%] absolute lg:left-[13.5rem]">
+                    <div className="flex flex-row items-center justify-center">
                       <div className="flex items-center justify-between">
-                        <h1 className="font-mock text-2xl font-semibold inline mr-2">{communityData?.name}</h1>
-                        <p className="mx-2 bg-secondary px-2 pb-[0.25rem] rounded-lg text-white text-md align-middle">
+                        <h1 className="font-mock text-lg lg:text-2xl text-center lg:text-left font-semibold inline mr-2">
+                          {communityData?.name}
+                        </h1>
+                        <p className="mx-2 bg-secondary px-2 pb-1 lg:pb-[0.25rem] rounded-lg text-white text-sm lg:text-md align-middle">
                           {communityData?.privacyType}
                         </p>
                       </div>
                       {over ? (
                         <button
                           onMouseOut={() => setOver(false)}
-                          className="flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
+                          className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
                         >
                           {"Leave Group"}
                         </button>
                       ) : (
                         <button
                           onMouseOver={() => setOver(true)}
-                          className="flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
+                          className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
                         >
                           {user?.id === communityData?.UserId ? "Creator" : "Member"}
                         </button>
                       )}
                     </div>
-                    <p className="pb-1 pt-3 flex items-center lg:w-[65%] xl:w-[75%]">
+                    <p className="pb-1 pt-5 lg:pt-3 flex items-center justify-center lg:justify-start lg:w-[65%] xl:w-[75%]">
                       <Stack direction="row" spacing={1}>
                         {communityData?.Interests?.length > 0 &&
                           communityData?.Interests?.map((interest) => {
@@ -171,13 +173,32 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                           })}
                       </Stack>
                     </p>
-                    <p className="py-2 w-[60%] text-sm">{communityData?.description}</p>
-                    <p className="py-2 flex items-center">
-                      {"Organizer:"}
-                      <span className="ml-4">
-                        <img src={user?.profilePicture?.original} className="mask mask-squircle w-8 h-8" />
-                      </span>
-                    </p>
+                    <p className="py-3 lg:py-2 w-full lg:w-[60%] text-sm text-center lg:text-left">{communityData?.description}</p>
+                    <div className="lg:flex-none flex justify-between items-center px-2">
+                      <p className=" lg:px-0 py-2 flex items-center text-sm lg:text-md">
+                        {"Organizer:"}
+                        <span className="ml-4">
+                          <img src={user?.profilePicture?.original} className="mask mask-squircle w-8 h-8" />
+                        </span>
+                      </p>
+                      <div className="lg:hidden">
+                        {over ? (
+                          <button
+                            onMouseOut={() => setOver(false)}
+                            className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white"
+                          >
+                            {"Leave Group"}
+                          </button>
+                        ) : (
+                          <button
+                            onMouseOver={() => setOver(true)}
+                            className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white"
+                          >
+                            {user?.id === communityData?.UserId ? "Creator" : "Member"}
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

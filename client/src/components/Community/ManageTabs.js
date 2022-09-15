@@ -37,6 +37,7 @@ const ManageTabs = () => {
                   aria-label="lab API tabs example"
                   variant="scrollable"
                   scrollButtons="auto"
+                  allowScrollButtonsMobile
                 >
                   <Tab
                     style={{ heigth: "150px", alignItems: "self-start", justifyContent: "flex-start" }}
@@ -71,7 +72,7 @@ const ManageTabs = () => {
                     value="2"
                   />
                   <Tab
-                    style={{ alignItems: "self-start", justifyContent: "flex-sta rt" }}
+                    style={{ alignItems: "self-start", justifyContent: "flex-start" }}
                     sx={{ textTransform: "capitalize" }}
                     label={
                       <Fragment>

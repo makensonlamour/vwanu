@@ -77,7 +77,6 @@ const EditPost = ({ setShowModal, post }) => {
   return (
     <>
       <Toaster />
-
       <>
         <Form
           validationSchema={ValidationSchema}
