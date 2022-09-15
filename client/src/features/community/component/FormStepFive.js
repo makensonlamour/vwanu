@@ -94,7 +94,7 @@ const FormStepFive = ({ setStep, currentStep, data, setData }) => {
   return (
     <>
       <div className="py-2 lg:mx-24">
-        <Form className="w-full">
+        <Form className="w-full px-4 pb-2">
           <Toaster />
 
           <div className="px-4 pb-6 pt-4 w-full">
@@ -137,13 +137,13 @@ const FormStepFive = ({ setStep, currentStep, data, setData }) => {
           <div className="flex justify-between">
             <button
               onClick={() => handlePrevious()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Previous Step"}
             </button>
             <button
               onClick={() => handleNext()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Finish"}
             </button>

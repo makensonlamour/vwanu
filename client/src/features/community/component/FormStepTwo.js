@@ -65,12 +65,12 @@ const FormStepTwo = ({ setStep, currentStep, data, setData }) => {
   return (
     <>
       <div className="py-2 lg:mx-24">
-        <Form className="w-full">
+        <Form className="w-full px-4 pb-2">
           <Toaster />
 
           {/*Privacy Options*/}
           <div className="mb-4">
-            <p className="text-xl font-semibold">{"Privacy Options"}</p>
+            <p className="pt-2 text-lg text-center lg:text-xl font-semibold">{"Privacy Options"}</p>
             <div className="w-full h-[1px] bg-gray-300 my-4"></div>
             <RadioGroup
               onChange={(e) => setPrivacyType(e.target.value)}
@@ -170,13 +170,13 @@ const FormStepTwo = ({ setStep, currentStep, data, setData }) => {
           <div className="flex justify-between">
             <button
               onClick={() => handlePrevious()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-2 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Previous Step"}
             </button>
             <button
               onClick={() => handleNext()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-2 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Next Step"}
             </button>

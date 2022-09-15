@@ -79,7 +79,7 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
   return (
     <>
       <div className="py-2 lg:mx-24">
-        <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
+        <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full px-4 pb-2">
           <Toaster />
           <Field
             autoCapitalize="none"

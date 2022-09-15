@@ -15,7 +15,6 @@ const Community = () => {
 
   const { data: communityList } = useGetCommunityList(["community", "all"]);
   const { data: myCommunityList } = useGetMyCommunityList(["community", "me"], user?.id !== undefined ? true : false, user?.id);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

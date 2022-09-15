@@ -35,6 +35,7 @@ import { Chip, Stack } from "@mui/material";
 // import { format } from "date-fns";
 
 const CommunityHeader = ({ user, communityData, notificationList }) => {
+  console.log("data", communityData);
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
   const [over, setOver] = useState(false);
@@ -103,27 +104,27 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
             <div className="w-[100vw] lg:w-[65vw] lg:basis-[72%]">
               <div className="border-gray-700 bg-white">
                 <div className="relative w-full lg:w-[65vw]">
-                  <div className="bg-gray-700 bg-repeat h-64">
-                    {communityData?.coverPicture !== null ? (
+                  <div className="bg-gray-700 bg-repeat h-52 lg:h-64">
+                    {communityData?.coverPicture !== null || communityData?.coverPicture !== undefined ? (
+                      <img src={random_cover} className="mx-auto max-h-64 w-full object-cover lg:h-[450px]" alt="cover_profile" />
+                    ) : (
                       <img
                         src={communityData?.coverPicture}
                         className="mx-auto max-h-64 w-full object-cover lg:h-[450px]"
                         alt="cover_profile"
                       />
-                    ) : (
-                      <img src={random_cover} className="mx-auto max-h-64 w-full object-cover lg:h-[450px]" alt="cover_profile" />
                     )}
                   </div>
                   <div className="transform translate-y-2/4 lg:translate-y-3/4 absolute lg:w-[20%] inset-x-1/2 lg:left-10 bottom-0 z-30 flex justify-center lg:justify-start">
-                    <div className="flex items-center justify-center mask mask-squircle w-[200px] h-[200px] lg:w-[156px] lg:h-[156px] bg-gray-100">
-                      {communityData?.profilePicture !== null ? (
+                    <div className="flex items-center justify-center mask mask-squircle w-[156px] h-[156px] bg-gray-100">
+                      {communityData?.profilePicture !== null || communityData?.profilePicture !== undefined ? (
+                        <MdGroups size="92px" className="text-gray-300" />
+                      ) : (
                         <img
                           src={communityData?.profilePicture}
-                          className="object-cover mask mask-squircle w-[200px] h-[200px] lg:w-[150px] lg:h-[150px]"
+                          className="object-cover mask mask-squircle w-[120px] h-[120px] lg:w-[150px] lg:h-[150px]"
                           alt="profile_picture"
                         />
-                      ) : (
-                        <MdGroups size="92px" className="text-gray-300" />
                       )}
                     </div>
                   </div>
@@ -194,7 +195,7 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                             onMouseOver={() => setOver(true)}
                             className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white"
                           >
-                            {user?.id === communityData?.UserId ? "Creator" : "Member"}
+                            {communityData?.IsMember !== null ? communityData?.IsMember?.role : "Join"}
                           </button>
                         )}
                       </div>
@@ -253,7 +254,7 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                       </div>
                     }
                   />
-                  <Route path={allTabs1[5]} element={<div>Send Messages</div>} />
+                  {/* <Route path={allTabs1[5]} element={<div>Send Messages</div>} /> */}
                   {user?.id.toString() === communityData?.UserId?.toString() && (
                     <Route
                       path={allTabs1[6]}

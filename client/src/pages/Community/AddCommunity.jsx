@@ -23,7 +23,7 @@ const AddCommunity = () => {
     <>
       <div className="mt-10 mx-10 mb-10">
         <div className="bg-white rounded-xl border border-gray-300 w-full">
-          <p className="text-3xl text-center font-bold pt-12 pb-6">Create A New Community</p>
+          <p className="text-lg lg:text-3xl text-center font-bold py-6 lg:pt-12 lg:pb-6">Create A New Community</p>
           <div className="bg-placeholder-color border-b border-t  border-gray-300 w-full">
             <Step steps={steps} currentStep={currentStep} />
           </div>

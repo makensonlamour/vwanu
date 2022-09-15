@@ -33,9 +33,9 @@ const FormLogin = () => {
           password: "",
         }}
         onSubmit={handleLogin}
-        className="mt-4 lg:mt-0 lg:mx-2 xl:mx-14 3xl:mx-64"
+        className="px-2 mt-4 lg:mt-4 lg:mx-2 xl:mx-14 3xl:mx-64"
       >
-        <h1 className="card-title text-primary font-bold text-xl lg:text-2xl">Sign in to Vwanu</h1>
+        <h1 className="card-title pb-2 text-primary font-bold text-xl lg:text-2xl">Sign in to Vwanu</h1>
         <Alert />
         <Field
           required
@@ -45,7 +45,7 @@ const FormLogin = () => {
           type="email"
           autoComplete="new-email"
           containerClassName="my-3"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-2 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="email-error-message"
         />
         <Field
@@ -56,7 +56,7 @@ const FormLogin = () => {
           name="password"
           autoComplete="new-email"
           containerClassName="my-3"
-          className="mt-1 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="mt-2 lg:mt-2 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="password-error-message"
           showPassword={true}
         />
@@ -70,7 +70,7 @@ const FormLogin = () => {
           }
           className=""
         />
-        <Submit data-testid="loginBtn" className="rounded-full text-md btn-md" title={isLoading ? <Loader /> : "Login"} />
+        <Submit data-testid="loginBtn" className="mt-2 rounded-full text-md btn-md" title={isLoading ? <Loader /> : "Login"} />
         <div className="mt-9 text-center">
           <span className="text-blue-600 text-center inline text-md md:text-lg">
             {` Or sign in with `}
