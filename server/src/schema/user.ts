@@ -33,7 +33,7 @@ export const UserSchema = z.object({
 });
 
 export const UpUser = object({
-  id: z.number(),
+  id: z.string(),
   address: string(),
   avatar: string(),
   activationKey: z.string(),

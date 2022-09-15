@@ -3,7 +3,7 @@
 import { Model } from 'sequelize';
 
 export interface PostInterface {
-  id: number;
+  id: string;
   multiImage: boolean;
   imageCount: number;
   multiVideo: boolean;
@@ -15,7 +15,7 @@ export interface PostInterface {
 }
 export default (sequelize: any, DataTypes: any) => {
   class Post extends Model<PostInterface> implements PostInterface {
-    id: number;
+    id: string;
 
     multiImage: boolean;
 
@@ -50,9 +50,10 @@ export default (sequelize: any, DataTypes: any) => {
   Post.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
       },
       multiImage: {
         type: DataTypes.BOOLEAN,

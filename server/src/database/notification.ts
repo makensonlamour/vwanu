@@ -37,12 +37,13 @@ export default (sequelize: any, DataTypes: any) => {
   Notification.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
       },
       to: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
       },
 
       message: {
@@ -59,7 +60,7 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       entityId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
       },
       view: {
         type: DataTypes.BOOLEAN,

@@ -34,7 +34,7 @@ export class CommunityAdmin extends Service {
     let postulant;
     switch (action) {
       case 'register-admin':
-        console.log('Proposition');
+      
         if (params.User.id !== community.UserId)
           throw new BadRequest('Only admins can propose new administrators');
 

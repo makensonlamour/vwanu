@@ -36,20 +36,20 @@ const InvitationObJect = {
   createdAt: expect.any(String),
   updatedAt: expect.any(String),
   CommunityId: expect.any(String),
-  guestId: expect.any(Number),
-  hostId: expect.any(Number),
+  guestid: expect.any(String),
+  hostid: expect.any(String),
   CommunityRoleId: expect.any(String),
   guest: {
     firstName: expect.any(String),
     lastName: expect.any(String),
-    id: expect.any(Number),
+    id: expect.any(String),
     profilePicture: expect.any(String),
     createdAt: expect.any(String),
   },
   host: {
     firstName: expect.any(String),
     lastName: expect.any(String),
-    id: expect.any(Number),
+    id: expect.any(String),
     profilePicture: expect.any(String),
     createdAt: expect.any(String),
   },
@@ -176,10 +176,12 @@ describe("'communityInvitationRequest' service", () => {
       const invitationRecords = await testServer
         .get(`${endpoint}?guestId=${testUsers[idx].id}`)
         .set('authorization', testUsers[idx].accessToken);
-
+      const inv = InvitationObJect;
+      delete inv.guestid;
+      delete inv.hostid;
       expect(invitationRecords.body.length).toBe(1);
       expect(invitationRecords.body[0]).toMatchObject({
-        ...InvitationObJect,
+        ...inv,
 
         guest: expect.objectContaining({
           firstName: testUsers[idx].firstName,
@@ -211,11 +213,12 @@ describe("'communityInvitationRequest' service", () => {
     const invitationsISent = await testServer
       .get(`${endpoint}/?hostId=${creator.id}`)
       .set('authorization', creator.accessToken);
-
+    const inv = InvitationObJect;
+    delete inv.guestid;
+    delete inv.hostid;
     invitationsISent.body.forEach((invitation) => {
       expect(invitation).toMatchObject({
-        ...InvitationObJect,
-
+        ...inv,
         ...{
           host: {
             firstName: creator.firstName,
@@ -258,7 +261,6 @@ describe("'communityInvitationRequest' service", () => {
   });
   it("Authorized can update invitation's role", async () => {
     const memberRole = roles.find((role) => role.name === 'member');
-
     const moderator = roles.find((role) => role.name === 'moderator');
     const memberInvitation = invitations.find(
       (inv) => inv.CommunityRoleId === memberRole.id
@@ -268,9 +270,11 @@ describe("'communityInvitationRequest' service", () => {
       .patch(`${endpoint}/${memberInvitation.id}`)
       .send({ CommunityRoleId: moderator.id })
       .set('authorization', creator.accessToken);
-
+    const invitation = InvitationObJect;
+    delete invitation.guestid;
+    delete invitation.hostid;
     expect(newInvitation.body).toMatchObject({
-      ...InvitationObJect,
+      ...invitation,
       ...{
         CommunityRole: {
           id: moderator.id,

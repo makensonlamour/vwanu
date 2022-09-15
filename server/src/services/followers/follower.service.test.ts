@@ -120,7 +120,7 @@ describe('Friend service, ', () => {
     expect(response.body).toEqual(
       expect.arrayContaining([
         {
-          id: expect.any(Number),
+          id: expect.any(String),
           firstName: expect.any(String),
           lastName: expect.any(String),
           profilePicture: expect.objectContaining({
@@ -143,7 +143,7 @@ describe('Friend service, ', () => {
     expect(response.body).toEqual(
       expect.arrayContaining([
         {
-          id: expect.any(Number),
+          id: expect.any(String),
           firstName: expect.any(String),
           lastName: expect.any(String),
           profilePicture: expect.objectContaining({
@@ -152,7 +152,6 @@ describe('Friend service, ', () => {
             small: expect.any(String),
             original: expect.any(String),
           }),
-       
         },
       ])
     );
@@ -171,7 +170,7 @@ describe('Friend service, ', () => {
     expect(response.body).toEqual(
       expect.arrayContaining([
         {
-          id: expect.any(Number),
+          id: expect.any(String),
           firstName: expect.any(String),
           lastName: expect.any(String),
           profilePicture: expect.objectContaining({

@@ -13,14 +13,14 @@ describe("'community-users ' service", () => {
   const interests = ['sport', 'education'];
   const userEndpoint = '/users';
   const communityEndpoint = '/communities';
-
+  const rolesEndpoint = '/community-role';
   beforeAll(async () => {
     testServer = request(app);
     await app.get('sequelizeClient').sync({ logged: false });
 
     // Creating test users
     testUsers = await Promise.all(
-      getRandUsers(4).map((u, idx) => {
+      getRandUsers(5).map((u, idx) => {
         let user = { ...u, admin: false };
         if (idx === 1) user = { ...user, admin: true };
         delete user.id;
@@ -28,6 +28,15 @@ describe("'community-users ' service", () => {
       }, 10000)
     );
     testUsers = testUsers.map((testUser) => testUser.body);
+    const adminUser = testUsers.shift();
+    await Promise.all(
+      ['admin', 'member', 'moderator'].map((name) =>
+        testServer
+          .post(rolesEndpoint)
+          .send({ name })
+          .set('authorization', adminUser.accessToken)
+      )
+    );
 
     creator = testUsers.shift();
 
@@ -45,7 +54,7 @@ describe("'community-users ' service", () => {
     const service = app.service('community-users');
     expect(service).toBeTruthy();
   });
-  it('should show amount of members of the community', async () => {
+  it('Should return the users of a given community', async () => {
     let users = await testServer
       .get(`${endpoint}/?CommunityId=${community.body.id}`)
       .set('authorization', creator.accessToken);
@@ -74,7 +83,7 @@ describe("'community-users ' service", () => {
       expect(foundUser.CommunityRole.name).toBe('admin');
     });
   });
-  it('should verify if the user is a member of the community', async () => {
+  it.skip('should verify if the user is a member of the community', async () => {
     const noneMemberId = 1;
     let possibleMember = await testServer
       .get(

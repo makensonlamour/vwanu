@@ -49,7 +49,6 @@ describe("'timeline ' service", () => {
       .get(endpoint)
       .set('authorization', user.accessToken);
 
-    console.log(timeline.body);
     createdTestUser.forEach((u) => {
       const post = timeline.body.find((p) =>
         p.postText.includes(u.body.firstName)

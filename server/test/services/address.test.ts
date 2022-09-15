@@ -98,8 +98,8 @@ describe("'address' service", () => {
     };
 
     const newUser = { ...getRandUser(), address };
-    const { body } = await testServer.post(userEndpoint).send(newUser);
-    console.log(body);
+    await testServer.post(userEndpoint).send(newUser);
+
     // console.log(body.errors[0].instance);
 
     // expect(body).toEqual(address);

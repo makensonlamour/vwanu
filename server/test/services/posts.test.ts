@@ -15,7 +15,7 @@ describe('Posts services', () => {
   const endpoint = '/posts';
   const userEndpoint = '/users';
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({  logged: false });
+    await app.get('sequelizeClient').sync({ logged: false });
     testServer = request(app);
 
     const responses = await Promise.all(
@@ -67,7 +67,7 @@ describe('Posts services', () => {
     expect(thePost).toEqual(
       expect.objectContaining({
         postText: expect.any(String),
-        id: expect.any(Number),
+        id: expect.any(String),
         privacyType: 'public',
         UserId: newUser.id,
         audioCount: 0,
@@ -91,8 +91,6 @@ describe('Posts services', () => {
       .set('authorization', token);
 
     const samePost = samePostResponse.body;
-    // console.log('\n\n\n The comment on the post');
-    // console.log(samePost.Comments);
     expect(samePost.id).toEqual(thePost.id);
     expect(samePost.postText).toEqual(thePost.postText);
     expect(samePost.Comments).toBeDefined();
@@ -101,19 +99,13 @@ describe('Posts services', () => {
   }, 3000);
 
   it('should retrieve all post by userId', async () => {
-    // const page = 0;
-    // const size = 5;
     const allPostResponse = await testServer
       .get(`${endpoint}?UserId=${newUser.id}`)
       .set('authorization', `Bearer ${token}`);
-
-    // console.log('All post made');
-    // console.log(allPostResponse.body);
     const allPost = allPostResponse.body;
     expect(allPostResponse.status).toBe(StatusCodes.OK);
 
     expect(allPost.length).toBeLessThanOrEqual(postMade);
-    // // expect(allPost.every((post) => post.User.id === newUser.id)).toBeTruthy();
   });
   it('should create comment for a post', async () => {
     const commentResponse = await testServer
@@ -133,15 +125,12 @@ describe('Posts services', () => {
       .get(`${endpoint}/${thePost.id}`)
       .set('authorization', token);
 
-    // console.log(samePostResponse.body);
     const samePost = samePostResponse.body;
     const firstComment = samePost.Comments[0];
-    // console.log('\n\n\nfirstComment');
-    // console.log(firstComment);
+
     expect(samePost.id).toEqual(thePost.id);
     expect(samePost.postText).toEqual(thePost.postText);
     expect(samePost.Comments).toBeDefined();
-    // expect(Array.isArray(samePost.Comments)).toBeTruthy();
     expect(samePost.Comments.length).toBe(1);
 
     expect(firstComment.User).toBeDefined();
@@ -169,7 +158,7 @@ describe('Posts services', () => {
 
     const deletedPost = deletedPostResponse.body;
     expect(deletedPost.id).toEqual(thePost.id);
-    // todo test the comment were also removed
+
     const retrievePostResponse = await testServer
       .get(`${endpoint}/${thePost.id}`)
       .set('authorization', token);

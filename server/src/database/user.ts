@@ -8,7 +8,7 @@ import { UpUserInterface as UserInterface } from '../schema/user';
 
 export default (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
-    id: number;
+    id: string;
 
     about: string;
 
@@ -185,9 +185,10 @@ export default (sequelize: any, DataTypes: any) => {
   User.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
       },
       resetAttempts: {
         type: DataTypes.INTEGER,

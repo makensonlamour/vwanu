@@ -12,6 +12,7 @@ const onlyPublic = (context) => {
   const { params } = context;
   const { query } = params;
   query.PostId = null;
+  query.CommunityId = null;
   query.privacyType = 'public';
   return context;
 };
