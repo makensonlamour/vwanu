@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React, { useState, Fragment } from "react";
 import cryptoRandomString from "crypto-random-string";
 import PropTypes from "prop-types";
@@ -13,11 +14,12 @@ import CommentList from "../comment/component/CommentList";
 import CommentForm from "../comment/component/CommentForm";
 import ReusableDialog from "../../components/common/ReusableDialog";
 import ViewLikeButton from "../reaction/component/ViewLikeButton";
-import { BsThreeDots } from "react-icons/bs";
+// import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
 import { ReactionCounter } from "@charkour/react-reactions";
 
 import Reaction from "../reaction/component/Reaction";
+import MenuPost from "./components/MenuPost";
 // import routesPath from "../../../routesPath";
 
 const notify = () =>
@@ -89,15 +91,16 @@ const PostList = ({ post, pageTitle }) => {
                 </div>
                 <span className="ml-auto mt-2">
                   {post?.User?.id === user?.id && (
-                    <button
-                      label="Test"
-                      onClick={() => {
-                        handleClickOpen();
-                      }}
-                      className="flex justify-center items-center"
-                    >
-                      <BsThreeDots className="h-6 w-6 hover:bg-gray-200" />
-                    </button>
+                    <MenuPost post={post} />
+                    // <button
+                    //   label="Test"
+                    //   onClick={() => {
+                    //     handleClickOpen();
+                    //   }}
+                    //   className="flex justify-center items-center"
+                    // >
+                    //   <BsThreeDots className="h-6 w-6 hover:bg-gray-200" />
+                    // </button>
                   )}
                 </span>
                 <ReusableDialog
@@ -174,12 +177,12 @@ const PostList = ({ post, pageTitle }) => {
                 {/*Comments*/}
                 <button
                   onClick={() => setCommentPrev(!commentPrev)}
-                  className="ml-auto mt-2 text-md font-semibold text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
+                  className="ml-auto mt-2 text-md text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
                 >
                   <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" />
                   {" Comment"}
                 </button>
-                <button className="ml-auto mt-2 text-md font-semibold text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2">
+                <button className="ml-auto mt-2 text-md text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2">
                   <RiShareForwardLine size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" />
                   {" Share"}
                 </button>

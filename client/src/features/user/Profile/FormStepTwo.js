@@ -7,11 +7,10 @@ import { useUpdateUser } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import { useGetInterestList } from "../../interest/interestSlice";
-import { assignValue } from "../../../helpers/index";
 import countries from "../../../data/countries.json";
 import states from "../../../data/states.json";
 // import cities from "../../../data/cities.json";
-import { assignValueCountries, assignValueStates } from "../../../helpers/index";
+import { assignValueCountries, assignValueStates, assignValue } from "../../../helpers/index";
 import jsonQuery from "json-query";
 
 // Core components
@@ -31,11 +30,11 @@ const FormStepTwo = () => {
   const [countryCode, setCountryCode] = useState("");
   const [stateCode, setStateCode] = useState("");
 
-  console.log(stateCode);
-
   const optionsCountry = assignValueCountries(countries);
   const stateList = jsonQuery(`[*country_code=${countryCode}]`, { data: states });
   const optionsState = assignValueStates(stateList?.value);
+
+  console.log(stateList);
 
   const initialValues = {
     country: "",
@@ -103,7 +102,7 @@ const FormStepTwo = () => {
     } = event;
     setInterest(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      typeof value === "string" ? value?.split(",") : value
     );
   };
 
@@ -113,7 +112,7 @@ const FormStepTwo = () => {
         validationSchema={ValidationSchema}
         initialValues={initialValues}
         onSubmit={handleStepTwo}
-        className="mt-4 lg:shadow-2xl border bg-white border-gray-300 lg:rounded-t-3xl md:px-24 lg:px-10"
+        className="p-4 mt-4 lg:shadow-2xl border bg-white border-gray-300 lg:rounded-t-3xl md:px-24 lg:px-10"
       >
         <h1 className="card-title text-black text-center">Create your profile</h1>
         <Alert />
@@ -216,8 +215,8 @@ const FormStepTwo = () => {
             className="w-full ml-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
         </div>
-        <div className="mt-2">
-          <Submit className="rounded-2xl text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />
+        <div className="mt-6">
+          <Submit className="rounded-xl py-2 text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />
         </div>
       </Form>
     </>

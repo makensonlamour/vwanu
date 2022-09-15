@@ -4,6 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-circular-progressbar/dist/styles.css";
+import "react-quill/dist/quill.snow.css";
+// import "quill-emoji/dist/quill-emoji.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { history } from "./components/common/Alert/_helpers";

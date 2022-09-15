@@ -8,6 +8,7 @@ import { TabPanel, TabContext, TabList } from "@mui/lab";
 // import Followers from "./NetworkTab/Followers";
 // import FormStepSix from "./../../features/community/component/FormStepSix";
 import SendInvites from "./SendInvitesTabs/SendInvites";
+import PendingInvites from "./SendInvitesTabs/PendingInvites";
 
 const SendInviteTabs = ({ user }) => {
   const me = useOutletContext();
@@ -24,7 +25,7 @@ const SendInviteTabs = ({ user }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl">
+      <div className="mb-3 bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl">
         <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`My Network`}</h4>
         <TabContext value={value}>
           <div>
@@ -68,7 +69,7 @@ const SendInviteTabs = ({ user }) => {
             <SendInvites />
           </TabPanel>
           <TabPanel value="2">
-            <div>Pending Invites</div>
+            <PendingInvites />
             {/* <Followers user={user} fn={setTotalFollowers} /> */}
           </TabPanel>
         </TabContext>

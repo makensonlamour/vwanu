@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import SingleBlog from "../../components/Blog/SingleBlog";
 import { useGetBlogList } from "../../features/blog/blogSlice";
+import { FaBlog } from "react-icons/fa";
+import EmptyComponent from "../../components/common/EmptyComponent";
 
 const Blog = () => {
   const { data: blogList } = useGetBlogList(["blog", "all"], true);
@@ -23,7 +25,13 @@ const Blog = () => {
               return <SingleBlog key={blog?.id} blog={blog} />;
             })
           ) : (
-            <div className="">No blog to show</div>
+            <div className="flex justify-center w-full">
+              <EmptyComponent
+                icon={<FaBlog size={"32px"} className="" />}
+                placeholder={"There's no blog published yet."}
+                tips={"Here, Be the first one to create a blog by just click on the button Create New Article."}
+              />
+            </div>
           )}
         </div>
       </div>

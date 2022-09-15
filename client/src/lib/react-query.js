@@ -72,9 +72,9 @@ export const useDelete = (queryKey, url, params, updater) => {
   return useGenericMutation(
     (data) => {
       if (data?.id) {
-        return api.delete((`${url}/${data?.id}`, data), queryKey, url, params, updater);
+        return api.delete(`${url}/${data?.id}`, data);
       } else {
-        return api.delete((`${url}`, data), queryKey, url, params, updater);
+        return api.delete(`${url}`, data);
       }
     },
     queryKey,

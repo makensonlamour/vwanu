@@ -49,14 +49,14 @@ const FormStepThree = ({ setStep, currentStep, data, setData }) => {
   return (
     <>
       <div className="py-2 lg:mx-24">
-        <Form className="w-full">
+        <Form className="w-full px-4 pb-2">
           <Toaster />
 
           {/*Privacy Options*/}
           <div className="mb-4">
-            <p className="text-xl font-semibold">{"Group Forum"}</p>
+            <p className="text-lg lg:text-xl font-semibold">{"Group Forum"}</p>
 
-            <p className="text-lg py-4">
+            <p className="text-md lg:text-lg py-4">
               {"Create a discussion forum to allow members of this group to communicate in a structured, bulletin-board style fashion."}
             </p>
             <FormGroup>
@@ -71,13 +71,13 @@ const FormStepThree = ({ setStep, currentStep, data, setData }) => {
           <div className="flex justify-between">
             <button
               onClick={() => handlePrevious()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Previous Step"}
             </button>
             <button
               onClick={() => handleNext()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Next Step"}
             </button>

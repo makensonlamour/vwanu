@@ -1,4 +1,4 @@
-import { useFetch, usePost, useLoadMore } from "../../lib/react-query";
+import { useFetch, usePost, useLoadMore, useDelete, useUpdate } from "../../lib/react-query";
 
 export const useGetPostsList = (queryKey, UserId) => useLoadMore(queryKey, `/timeline?UserId=${UserId}`);
 
@@ -12,6 +12,6 @@ export const useGetCommunityPostList = (queryKey, CommunityId) => useLoadMore(qu
 
 export const useUploadGiph = (queryKey, oldData, newData) => usePost(queryKey, `/medias`, (oldData, newData));
 
-//export const useDeletePost = (id) => useDelete(`/post?UserId=${dataObj?.UserId}`);
+export const useDeletePost = (queryKey, oldData, newData) => useDelete(queryKey, `/posts`, (oldData, newData));
 
-// export const useUpdatePost = (oldData, newData, dataObj) => useUpdate(`/post?UserId=${dataObj?.UserId}`, dataObj, oldData, newData);
+export const useUpdatePost = (queryKey, oldData, newData) => useUpdate(queryKey, `/posts`, (oldData, newData));

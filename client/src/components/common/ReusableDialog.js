@@ -1,9 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-//import { deleteComment } from "../utils/postActions";
 
-function ReusableDialog({ title, action, item, open, handleClose, handleAgree, handleDisagree }) {
+function ReusableDialog({ title, action, item, open, handleClose, handleDisagree, handleAgree }) {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogTitle id="alert-dialog-title">{`${title}`}</DialogTitle>
@@ -11,10 +10,10 @@ function ReusableDialog({ title, action, item, open, handleClose, handleAgree, h
         <DialogContentText id="alert-dialog-description">{`Are you sure you want to ${action} this ${item}?`}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button sx={{ color: "red" }} onClick={handleDisagree}>
+        <Button sx={{ color: "red" }} onClick={() => handleDisagree()}>
           No
         </Button>
-        <Button sx={{ color: "green" }} onClick={handleAgree}>
+        <Button sx={{ color: "green" }} onClick={() => handleAgree()}>
           Yes
         </Button>
       </DialogActions>
@@ -30,6 +29,7 @@ ReusableDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleAgree: PropTypes.func.isRequired,
   handleDisagree: PropTypes.func.isRequired,
+  post: PropTypes.string,
 };
 
 export default ReusableDialog;

@@ -72,7 +72,7 @@ const Reaction = ({ post }) => {
       <Button
         onClick={handleClick}
         aria-describedby={id}
-        className="text-left mt-2 text-md font-semibold hover:bg-gray-200 hover:rounded-lg px-2 py-2 lg:px-5 lg:py-2 normal-case"
+        className="text-left mt-2 text-md hover:bg-gray-200 hover:rounded-lg px-2 py-2 lg:px-5 lg:py-2 normal-case"
       >
         <p
           style={{ alignItems: "center", display: "flex", textAlign: "left" }}

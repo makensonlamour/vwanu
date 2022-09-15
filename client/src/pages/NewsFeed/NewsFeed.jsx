@@ -17,7 +17,7 @@ import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
-import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
+// import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
 import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
 import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 
@@ -53,34 +53,6 @@ const NewsFeed = () => {
   function reloadPage() {
     window.location.reload();
   }
-
-  const blogs = [
-    {
-      title: "Tackle Your closest Spring cleaning",
-      date: "May 14, 2019",
-      image: "https://res.cloudinary.com/dnesmf7ah/image/upload/v1651626639/vwanu/profile/kma3lennundnkiacntoq.jpg",
-    },
-    {
-      title: "The Truth About Business Blogging",
-      date: "May 14, 2019",
-      image: "https://picsum.photos/200/300?image=0",
-    },
-    {
-      title: "10 Tips to stay healthy when you're not alone",
-      date: "May 14, 2019",
-      image: "https://picsum.photos/200/300?image=1",
-    },
-    {
-      title: "Visiting Amsterdam on a Budget",
-      date: "May 8, 2019",
-      image: "https://picsum.photos/200/300?image=2",
-    },
-    {
-      title: `OMA completes renovation of Sotheby's New things appeared for a reason`,
-      date: "May 8, 2019",
-      image: "https://picsum.photos/200/300?image=3",
-    },
-  ];
 
   const recentlyActive = [
     { image: "https://picsum.photos/200/300?image=0" },
@@ -123,14 +95,14 @@ const NewsFeed = () => {
     },
   ];
 
-  const percentage = 73;
+  // const percentage = 73;
 
-  const steps = [
-    { title: "General Information", total: 6, complete: 5 },
-    { title: "Work Experience", total: 3, complete: 1 },
-    { title: "Profile Photo", total: 1, complete: 1 },
-    { title: "Cover Photo", total: 1, complete: 1 },
-  ];
+  // const steps = [
+  //   { title: "General Information", total: 6, complete: 5 },
+  //   { title: "Work Experience", total: 3, complete: 1 },
+  //   { title: "Profile Photo", total: 1, complete: 1 },
+  //   { title: "Cover Photo", total: 1, complete: 1 },
+  // ];
 
   let content;
   if (isLoading) {
@@ -195,13 +167,13 @@ const NewsFeed = () => {
           </div>
           <div className="basis-[22%] hidden lg:block">
             <span className="block xl:hidden">
-              <BlogComponent data={blogs || []} />
+              <BlogComponent data={blogList?.data || []} />
             </span>
             <span className="block xl:hidden">
               <FollowingPreview data={listFollowing?.data || []} />
             </span>
 
-            <CompleteProfile percentage={percentage} data={steps} />
+            {/* <CompleteProfile percentage={percentage} data={steps} /> */}
             <UpdatesComponent data={notificationList || []} />
             <RecentlyActive data={recentlyActive || []} />
             <GroupsPreview data={groups || []} />

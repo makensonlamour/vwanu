@@ -15,7 +15,6 @@ const Community = () => {
 
   const { data: communityList } = useGetCommunityList(["community", "all"]);
   const { data: myCommunityList } = useGetMyCommunityList(["community", "me"], user?.id !== undefined ? true : false, user?.id);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -106,12 +105,12 @@ const Community = () => {
                 />
               </TabList>
               <TabPanel value="1">
-                <div className="lg:mt-8 w-full">
+                <div className="lg:mt-4 w-full">
                   <CommunityList communityList={communityList} />
                 </div>
               </TabPanel>
               <TabPanel value="2">
-                <div className="lg:mt-8 w-full">
+                <div className="lg:mt-4 w-full">
                   <CommunityList communityList={myCommunityList} />
                 </div>
               </TabPanel>

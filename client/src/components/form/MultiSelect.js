@@ -8,13 +8,13 @@ import Error from "./Error";
 
 function FormSelectMulti({ name, label, options, className, testId, link, isMulti, fn, val, ...otherProps }) {
   const { setFieldTouched, setFieldValue, handleChange, errors, touched } = useFormikContext();
-
   return (
     <>
       <div className="form-control mt-3">
         <span className="label-text text-md text-secondary font-semibold">{label}</span>
         <Select
           className={"select w-full " + className}
+          placeholder={"Select " + label}
           value={val}
           onBlur={() => setFieldTouched(name)}
           onChange={(e) => {
@@ -24,15 +24,18 @@ function FormSelectMulti({ name, label, options, className, testId, link, isMult
           }}
           {...otherProps}
         >
-          {options?.map((option) => {
-            return !_.isEqual(option?.label, "Not Specified") ? (
-              <MenuItem key={option?.id} value={option?.label}>
-                {option?.label}
-              </MenuItem>
-            ) : (
-              ""
-            );
-          })}
+          <MenuItem>{"Not specified"}</MenuItem>
+          {options?.length > 0
+            ? options?.map((option) => {
+                return !_.isEqual(option?.label, "Not Specified") ? (
+                  <MenuItem key={option?.id} value={option?.label}>
+                    {option?.label}
+                  </MenuItem>
+                ) : (
+                  ""
+                );
+              })
+            : ""}
         </Select>
         <Error testId={testId} error={errors[name]} visible={touched[name]} />
       </div>

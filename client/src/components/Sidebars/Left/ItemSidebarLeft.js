@@ -29,11 +29,6 @@ export const ItemSidebarLeft = [
         path: routesPath.MESSAGE,
         icon: <FiInbox size={"24px"} />,
       },
-    ],
-  },
-  {
-    menuTitle: "Community",
-    menuItems: [
       {
         title: "My Groups",
         path: routesPath.MY_GROUPS,
@@ -55,5 +50,30 @@ export const ItemSidebarLeft = [
         icon: <RiPagesLine size={"24px"} />,
       },
     ],
+    // },
+    // {
+    //   menuTitle: "Community",
+    //   menuItems: [
+    //     {
+    //       title: "My Groups",
+    //       path: routesPath.MY_GROUPS,
+    //       icon: <MdGroups size={"24px"} />,
+    //     },
+    //     {
+    //       title: "My Network",
+    //       path: routesPath.FRIENDS,
+    //       icon: <MdGroups size={"24px"} />,
+    //     },
+    //     {
+    //       title: "My Discussions",
+    //       path: routesPath.MY_INTERESTS,
+    //       icon: <VscCommentDiscussion size={"24px"} />,
+    //     },
+    //     {
+    //       title: "My Pages",
+    //       path: routesPath.MY_PAGES,
+    //       icon: <RiPagesLine size={"24px"} />,
+    //     },
+    //   ],
   },
 ];

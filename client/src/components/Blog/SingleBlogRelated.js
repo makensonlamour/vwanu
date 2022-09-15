@@ -8,7 +8,7 @@ import { Chip, Stack } from "@mui/material";
 const SingleBlogRelated = ({ blog }) => {
   return (
     <>
-      <div className="bg-white shadow-sm w-full rounded-xl pb-0 lg:pb-6 mb-68 lg:mb-10">
+      <div className="bg-white shadow-sm w-full rounded-xl pb-2 mb-5 lg:pb-6 mb-68 lg:mb-10">
         {blog?.coverPicture !== "undefined" && (
           <div className="">
             <img className="w-full h-44 lg:h-64 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
@@ -43,7 +43,7 @@ const SingleBlogRelated = ({ blog }) => {
             </Link>
             <div className="">
               <Link to={`../../blogs/${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color text-md rounded-lg">
-                {blog?.Response?.length} <GoComment size={"18px"} className="ml-2" />
+                {blog?.Response?.length} <GoComment size={"18px"} className="ml-2 mr-1 inline" /> {blog?.amountOfComments}
               </Link>
             </div>
           </div>

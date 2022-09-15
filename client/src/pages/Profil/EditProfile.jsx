@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import { FiUser, FiEdit } from "react-icons/fi";
 import { BsCardImage } from "react-icons/bs";
 import { ImProfile } from "react-icons/im";
@@ -20,6 +20,36 @@ const EditProfile = () => {
     setValue(newValue);
   };
 
+  const [searchParams] = useSearchParams();
+  const urlTabs = searchParams.get("tabs");
+  // const editTabs = searchParams.get("subtabs");
+  let run = true;
+
+  const handleUrlChange = () => {
+    if (urlTabs === "profile" && run) {
+      run = false;
+      setValue("2");
+    } else if (urlTabs === "cover" && run) {
+      run = false;
+      setValue("3");
+    } else {
+      run = false;
+      setValue("1");
+    }
+  };
+
+  useEffect(() => {
+    if (urlTabs && run) {
+      handleUrlChange();
+    }
+    if (!run) {
+      return () => {
+        // cancel the subscription
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlTabs]);
+
   return (
     <>
       <div className="mt-8 mb-6 px-2">
@@ -27,7 +57,7 @@ const EditProfile = () => {
           <h4 className="text-3xl font-bold">Edit Profile</h4>
           <Link
             to={"../../profile/" + user?.id}
-            className="btn align-middle btn-sm bg-gray-300 border-0 hover:bg-primary hover:text-base-100 px-5 py-2 capitalize"
+            className="text-black btn align-middle btn-sm bg-gray-300 border-0 hover:bg-primary hover:text-base-100 px-5 py-2 capitalize"
           >
             <FiUser size={"18px"} className="mr-1" /> View My Profile
           </Link>

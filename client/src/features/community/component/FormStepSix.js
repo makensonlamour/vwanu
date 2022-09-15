@@ -12,7 +12,7 @@ const FormStepSix = ({ setStep, currentStep, data }) => {
 
   const handleNext = async () => {
     setIsLoading(true);
-    navigate("../../groups/" + data?.id);
+    navigate("../../groups/" + data?.id + "?tabs=invites");
     setIsLoading(false);
   };
   const handlePrevious = () => {

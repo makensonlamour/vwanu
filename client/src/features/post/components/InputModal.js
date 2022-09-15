@@ -68,7 +68,7 @@ const InputModal = ({ reference, communityId }) => {
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
-    if (credentials?.postText === "") return alert("The post can't be empty.");
+    if (credentials?.postText === "" || selectedGif !== "" || files.length < 1) return alert("The post can't be empty.");
     setLoading(true);
     try {
       if (files?.length) {
@@ -261,7 +261,7 @@ const InputModal = ({ reference, communityId }) => {
                       autoCapitalize="none"
                       placeholder={`Share what's on your mind, ${user?.firstName}...`}
                       name="postText"
-                      className="basis-full text-lg appearance-none text-secondary placeholder:text-gray-600 font-light border-none "
+                      className="mt-3 basis-full text-lg appearance-none text-secondary placeholder:text-gray-600 font-light border-none "
                       testId="post-error-message"
                     />
                   </div>

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext, useParams, Link, useNavigate } from "react-router-dom";
@@ -27,97 +28,102 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
       {isLoading ? (
         <p className="text-lg font-bold">Loading...</p>
       ) : (
-        <div className="w-full h-[90vh] max-h-[90vh]">
-          <div className="flex py-2 lg:py-4">
-            {conversationData?.data?.Users?.length > 2 ? (
-              <div className="flex items-center">
-                <div className="mr-2">
-                  <img
-                    className="mask mask-squircle w-10 h-10"
-                    src={filtered[Math.floor(Math.random() * filtered.length)]?.profilePicture}
-                    alt=""
-                  />
-                </div>
-                <p className="font-semibold">
-                  {filtered
-                    ?.map((item) => item?.firstName + " " + item?.lastName)
-                    .slice(0, 3)
-                    .join(", ")}
-                </p>
-              </div>
-            ) : (
-              <div className="flex items-center justify-between basis-full px-2 lg:mx-5">
+        filtered && (
+          <div className="w-full h-full">
+            <div className="w-full flex py-2 lg:pt-3">
+              {conversationData?.data?.Users?.length > 2 ? (
                 <div className="flex items-center">
-                  <button
-                    onClick={() => {
-                      setSelectedConversation(false);
-                      setCreateConversationOpened(false);
-                      navigate("../../messages");
-                    }}
-                    className="lg:hidden mr-4 px-1 py-1 rounded-xl border border-gray-200 hover:bg-primary"
-                  >
-                    <BiArrowBack className="inline mr-1" size={"20px"} />
-                    Back
-                  </button>
                   <div className="mr-2">
-                    <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
+                    <img
+                      className="mask mask-squircle w-10 h-10"
+                      src={filtered[Math.floor(Math.random() * filtered.length)]?.profilePicture}
+                      alt=""
+                    />
                   </div>
-                  {filtered?.map((item) => {
-                    return (
-                      <Link
-                        to={`../../profile/` + item?.id}
-                        key={item?.firstName + "ml-2 align-center items-center " + item?.lastName}
-                        className="font-semibold hover:text-primary"
-                      >
-                        {item?.firstName + " " + item?.lastName}
-                      </Link>
-                    );
-                  })}
+                  <p className="font-semibold">
+                    {filtered
+                      ?.map((item) => item?.firstName + " " + item?.lastName)
+                      .slice(0, 3)
+                      .join(", ")}
+                  </p>
                 </div>
-                <div className="flex justify-between">
-                  <button
-                    onClick={() =>
-                      window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
-                    }
-                    className="mr-2"
-                  >
-                    <IoVideocamOutline size={"22px"} className="hover:text-secondary" />
-                  </button>
-                  <button
-                    onClick={() =>
-                      window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
-                    }
-                    className="ml-2"
-                  >
-                    <IoCallOutline size={"22px"} className="hover:text-secondary" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="h-[1px] w-full bg-gray-200"></div>
-          <div className="grid grid-rows-4 max-h-full h-full">
-            <div ref={scrollableRef} className="overflow-auto row-span-3 max-h-[65vh] h-[65vh]">
-              {listMessage?.data?.length > 0 &&
-                listMessage?.data?.map((message) => {
-                  return (
-                    <div key={message.id} className="px-2 lg:px-5 py-1">
-                      <SingleMessage
-                        conversation={conversationData?.data}
-                        groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
-                        sender={user?.id === message?.senderId ? true : false}
-                        listMessage={message}
+              ) : (
+                <div className="flex items-center justify-between w-full px-2 lg:mx-0 pb-3 border-b">
+                  <div className="flex items-center">
+                    <button
+                      onClick={() => {
+                        setSelectedConversation(false);
+                        setCreateConversationOpened(false);
+                        navigate("../../messages");
+                      }}
+                      className="lg:hidden mr-4 px-1 py-1 rounded-xl border border-gray-200 hover:bg-primary"
+                    >
+                      <BiArrowBack className="inline mr-1" size={"20px"} />
+                      Back
+                    </button>
+                    <div className="mr-2">
+                      <img
+                        className="mask mask-squircle w-10 h-10"
+                        src={filtered !== "undefined" ? filtered[0]?.profilePicture : ""}
+                        alt=""
                       />
                     </div>
-                  );
-                })}
-              <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
+                    {filtered?.map((item) => {
+                      return (
+                        <Link
+                          to={`../../profile/` + item?.id}
+                          key={item?.firstName + "ml-2 align-center items-center " + item?.lastName}
+                          className="font-semibold hover:text-primary"
+                        >
+                          {item?.firstName + " " + item?.lastName}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <button
+                      onClick={() =>
+                        window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
+                      }
+                      className="mr-2"
+                    >
+                      <IoVideocamOutline size={"22px"} className="hover:text-secondary" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
+                      }
+                      className="ml-2"
+                    >
+                      <IoCallOutline size={"22px"} className="hover:text-secondary" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="z-40 row-span-1 max-h-[10vh] h-[10vh]">
-              <InputMessage type={""} selectMember={conversationData?.data} />
+            <div className="flex flex-col flex-nowrap h-[79.50vh] lg:h-[81.75vh] xl:h-[80.15vh] justify-between">
+              <div ref={scrollableRef} className="w-full overflow-y-auto">
+                {listMessage?.data?.length > 0 &&
+                  listMessage?.data?.map((message) => {
+                    return (
+                      <div key={message.id} className="px-2 lg:px-5 py-1">
+                        <SingleMessage
+                          conversation={conversationData?.data}
+                          groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
+                          sender={user?.id === message?.senderId ? true : false}
+                          listMessage={message}
+                        />
+                      </div>
+                    );
+                  })}
+                <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
+              </div>
+              <div className="z-40 w-full h-fit">
+                <InputMessage type={""} selectMember={conversationData?.data} />
+              </div>
             </div>
           </div>
-        </div>
+        )
       )}
     </>
   );

@@ -64,13 +64,13 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
     <>
       {!loading ? (
         <div
-          className={`rounded-lr-xl border-dark-lighten lg:h-[80vh] flex-shrink-0 overflow-y-auto overflow-x-none border-r ${
+          className={`rounded-lr-xl w-full border-dark-lighten h-full flex-shrink-0 overflow-y-auto border-r ${
             location.pathname !== "/messages" || selectedConversation || createConversationOpened
-              ? "hidden w-[350px] lg:!block"
-              : "w-full lg:!w-[350px]"
+              ? "hidden w-full lg:!block"
+              : "w-full lg:!w-full"
           }`}
         >
-          <div className="border-dark-lighten flex h-20 items-center justify-between px-2 lg:px-6">
+          <div className="border-dark-lighten flex h-16 items-center justify-between px-2 lg:px-3">
             <h1 className="text-lg">Messages</h1>
 
             <div className="flex items-center gap-1">
@@ -108,7 +108,7 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
               </button>
             </div>
           ) : (
-            <div>
+            <div className="w-full">
               {isLoading ? (
                 <p className="text-lg font-bold">Loading...</p>
               ) : (

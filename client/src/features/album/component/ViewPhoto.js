@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import CommentForm from "../../comment/component/CommentForm";
+import ReactPlayer from "react-player";
+
 // import { useGetComment } from "../../comment/commentSlice";
 
 const ViewPhoto = ({ photo, imgComponent, type = "photo" }) => {
@@ -35,14 +37,15 @@ const ViewPhoto = ({ photo, imgComponent, type = "photo" }) => {
                   </div>
                 ) : (
                   <div>
-                    <video
+                    <ReactPlayer url={photo?.original} pip={true} playing={true} volume={1} playsinline={true} controls={true} />
+                    {/* <video
                       className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
                       controls
                       alt={photo.original}
                     >
                       <source alt={"videos_" + photo?.id} src={photo.original} type="video/mp4" />
                       Your browser does not support the video tag.
-                    </video>
+                    </video> */}
                   </div>
                 )}
                 {/*} <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-96 top-1/2">

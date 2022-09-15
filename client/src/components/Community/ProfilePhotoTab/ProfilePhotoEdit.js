@@ -23,7 +23,6 @@ const uploadProfileError = () =>
 const ProfilePhotoTab = ({ data, setData }) => {
   const user = useOutletContext();
   const { id } = useParams();
-  console.log(id);
   // const updateCommunity = updateGroupPicture(["community", data?.id], data?.id, undefined, undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [img, getImg] = useState([]);
