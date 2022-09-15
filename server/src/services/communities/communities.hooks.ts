@@ -59,11 +59,7 @@ export default {
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
     ],
-    update: [
-      () => {
-        console.log('I was called update');
-      },
-    ],
+    update: [],
     patch: [
       LimitToOwner,
       saveProfilePicture(['profilePicture', 'coverPicture']),

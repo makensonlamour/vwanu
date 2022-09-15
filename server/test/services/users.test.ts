@@ -109,7 +109,6 @@ describe('/users service', () => {
       .get(`${endpoint}/${profileRequesting.id}`)
       .set('authorization', requester.token);
 
-    console.log(userR.body);
     expect(userR.body.id).toEqual(profileRequesting.id);
     expect(userR.body.email).toEqual(profileRequesting.email);
   });

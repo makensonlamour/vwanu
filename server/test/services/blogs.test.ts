@@ -88,7 +88,7 @@ describe("'blogs ' service", () => {
         User: {
           firstName: expect.any(String),
           lastName: expect.any(String),
-          id: expect.any(Number),
+          id: expect.any(String),
           profilePicture: expect.any(String),
           createdAt: expect.any(String),
         },
@@ -111,7 +111,7 @@ describe("'blogs ' service", () => {
       blogText: sanitizeHtml(modifications.blogText),
       blogTitle: sanitizeHtml(modifications.blogTitle),
       id: expect.any(String),
-      UserId: expect.any(Number),
+      UserId: expect.any(String),
       publish: false,
       updatedAt: expect.any(String),
       createdAt: expect.any(String),
@@ -122,7 +122,7 @@ describe("'blogs ' service", () => {
       User: expect.objectContaining({
         firstName: expect.any(String),
         lastName: expect.any(String),
-        id: expect.any(Number),
+        id: expect.any(String),
         profilePicture: expect.any(String),
         createdAt: expect.any(String),
       }),
