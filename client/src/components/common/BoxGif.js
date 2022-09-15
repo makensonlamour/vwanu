@@ -28,7 +28,7 @@ const BoxGif = ({ setSelectedGif, label }) => {
   return (
     <>
       {/* <img src={selectedGif} width="480" height="446" alt="_" className="" allowFullScreen /> */}
-      <button onClick={handleClick} className="mr-4">
+      <button onClick={handleClick} className="inline-flex justify-center p-2 text-gray-900 rounded-lg cursor-pointer hover:text-primary">
         {label}
       </button>
       <Popover

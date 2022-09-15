@@ -114,12 +114,12 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                       <img src={random_cover} className="mx-auto max-h-64 w-full object-cover lg:h-[450px]" alt="cover_profile" />
                     )}
                   </div>
-                  <div className="transform translate-y-3/4 absolute w-[20%] left-10 bottom-0 z-30 flex justify-start">
-                    <div className="flex items-center justify-center mask mask-squircle w-[156px] h-[156px] bg-gray-100">
+                  <div className="transform translate-y-2/4 lg:translate-y-3/4 absolute w-[20%] left-10 bottom-0 z-30 flex justify-center lg:justify-start">
+                    <div className="flex items-center justify-center mask mask-squircle w-[200px] h-[200px] lg:w-[156px] lg:h-[156px] bg-gray-100">
                       {communityData?.profilePicture !== null ? (
                         <img
                           src={communityData?.profilePicture}
-                          className="object-cover mask mask-squircle w-[150px] h-[150px]"
+                          className="object-cover mask mask-squircle w-[200px] h-[200px] lg:w-[150px] lg:h-[150px]"
                           alt="profile_picture"
                         />
                       ) : (

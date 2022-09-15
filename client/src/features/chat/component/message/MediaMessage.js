@@ -29,7 +29,16 @@ const MediaMessage = ({ medias, sender }) => {
           photo={medias[0]}
           imgComponent={
             <div>
-              <ReactPlayer url={medias[0]?.original} pip={true} volume={1} playsinline={true} controls={true} light={true} />
+              <ReactPlayer
+                width="40vh"
+                className="w-full"
+                url={medias[0]?.original}
+                pip={true}
+                volume={1}
+                playsinline={true}
+                controls={true}
+                light={true}
+              />
               {/* <video
                 className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full rounded-lg"
                 controls

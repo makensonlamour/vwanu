@@ -54,6 +54,7 @@ export default function CommunityTabs({ communityData, user }) {
               aria-label="lab API tabs example"
               variant="scrollable"
               scrollButtons="auto"
+              allowScrollButtonsMobile
             >
               <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Feed" value="1" component={Link} to={allTabs[0]} />
               <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Members" value="2" component={Link} to={allTabs[1]} />

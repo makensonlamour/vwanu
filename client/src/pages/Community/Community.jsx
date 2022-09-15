@@ -106,12 +106,12 @@ const Community = () => {
                 />
               </TabList>
               <TabPanel value="1">
-                <div className="lg:mt-8 w-full">
+                <div className="lg:mt-4 w-full">
                   <CommunityList communityList={communityList} />
                 </div>
               </TabPanel>
               <TabPanel value="2">
-                <div className="lg:mt-8 w-full">
+                <div className="lg:mt-4 w-full">
                   <CommunityList communityList={myCommunityList} />
                 </div>
               </TabPanel>

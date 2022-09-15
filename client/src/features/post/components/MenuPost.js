@@ -30,6 +30,7 @@ const MenuPost = ({ post }) => {
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const anchorRef = useRef(null);
 
   const deletePost = useDeletePost(["post", "home", post?.id], undefined, undefined);
@@ -131,7 +132,17 @@ const MenuPost = ({ post }) => {
         handleDisagree={handleDisagree}
         handleClose={handleCloseDialog}
       />
-      <EditPost setOpenDialogEdit={setOpenDialogEdit} openDialogEdit={openDialogEdit} reference="" communityId={post?.id} />
+      {showModal ? (
+        <EditPost
+          post={post}
+          setShowModal={setShowModal}
+          setOpenDialogEdit={setOpenDialogEdit}
+          openDialogEdit={openDialogEdit}
+          reference=""
+          communityId={post?.id}
+        />
+      ) : null}
+
       <button
         ref={anchorRef}
         id="composition-button"
@@ -180,10 +191,11 @@ const MenuPost = ({ post }) => {
                     onClick={(e) => {
                       handleClickOpen(e);
                       handleClose(e);
+                      setShowModal(true);
                     }}
                   >
                     <VscEdit size={"18px"} className="mr-1 items-center align-middle inline" />
-                    Edit Post
+                    Edit
                   </MenuItem>
                   <MenuItem
                     className="text-black  rounded-xl hover:text-primary"
@@ -195,7 +207,7 @@ const MenuPost = ({ post }) => {
                   >
                     {" "}
                     <AiOutlineDelete size={"18px"} className="mr-1 items-center align-middle" />
-                    Delete Post
+                    Delete
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>
