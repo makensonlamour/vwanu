@@ -6,7 +6,7 @@ export default async (context: HookContext) => {
   const { app } = context;
   const Sequelize = app.get('sequelizeClient');
   const query = `
-        SELECT "C"."name","C"."description", "C"."privacyType","CU"."CommunityId" AS "id", "C"."UserId", 
+        SELECT "C"."name","C"."description", "C"."privacyType","C"."profilePicture", "C"."coverPicture",CU"."CommunityId" AS "id", "C"."UserId", 
         COUNT(DISTINCT CASE WHEN "CU"."CommunityId"="C"."id" THEN "CU"."UserId" END) As "amountOfMembers",
             (SELECT json_agg(
             json_build_object('id', "U"."id",
@@ -40,7 +40,7 @@ export default async (context: HookContext) => {
             INNER JOIN "Interests" AS "I" ON "I"."id" = "CI"."InterestId"
             INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
             WHERE  "C"."privacyType" <> 'hidden' OR ("CU"."UserId"='${context.params.User.id}' AND "C"."privacyType" = 'hidden')
-            GROUP BY "C"."name","C"."description", "C"."id" ,"CU"."CommunityId", "CU"."UserId", "U"."firstName", "U"."lastName" , "U"."profilePicture", "U"."createdAt","U"."updatedAt","CU"."CommunityRoleId"
+            GROUP BY "C"."name","C"."description", "C"."profilePicture", "C"."coverPicture", "C"."id" ,"CU"."CommunityId", "CU"."UserId", "U"."firstName", "U"."lastName" , "U"."profilePicture", "U"."createdAt","U"."updatedAt","CU"."CommunityRoleId"
              LIMIT 20`;
 
   try {

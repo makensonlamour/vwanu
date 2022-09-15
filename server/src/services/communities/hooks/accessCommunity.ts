@@ -7,7 +7,7 @@ export default async (context: HookContext) => {
   const Sequelize = app.get('sequelizeClient');
   const community = await Sequelize.query(
     `
-          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "CU"."banned","CU"."bannedDate",
+          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture","CU"."banned","CU"."bannedDate",
           (SELECT 
             json_build_object(
              'id', "CU"."UserId",
@@ -131,7 +131,7 @@ export default async (context: HookContext) => {
           INNER JOIN "Interests" AS "I" ON "I"."id" = "CI"."InterestId"
           WHERE "C"."id" = '${context.id}' AND ("C"."privacyType" = 'public' OR "CU"."UserId" = '${context.params.User.id}')
           
-           GROUP BY "C"."name","C"."description", "C"."id" ,"C"."privacyType" ,"CU"."CommunityId", "CU"."UserId","CU"."CommunityRoleId","CU"."banned","CU"."bannedDate","CR"."name","CR"."id"
+           GROUP BY "C"."name","C"."description", "C"."id" ,"C"."privacyType" , "C"."profilePicture", "C"."coverPicture","CU"."CommunityId", "CU"."UserId","CU"."CommunityRoleId","CU"."banned","CU"."bannedDate","CR"."name","CR"."id"
            LIMIT 1`,
     { name: 'Query', type: QueryTypes.SELECT }
   );
