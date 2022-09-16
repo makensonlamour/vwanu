@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
-
+import isNill from 'lodash/isNil';
 /** Local dependencies */
 import app from '../../src/app';
 import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
@@ -17,6 +17,7 @@ describe("'communities ' service", () => {
   let users;
   let firstCreator;
   let distinctCommunities;
+  let roles;
 
   const userEndpoint = '/users';
   const endpoint = '/communities';
@@ -47,7 +48,7 @@ describe("'communities ' service", () => {
 
     // Creating test users
     testUsers = await Promise.all(
-      getRandUsers(2).map((u, idx) => {
+      getRandUsers(3).map((u, idx) => {
         let user = { ...u, admin: false };
         if (idx === 1) user = { ...user, admin: true };
         delete user.id;
@@ -58,7 +59,7 @@ describe("'communities ' service", () => {
 
     creator = testUsers.shift();
 
-    await Promise.all(
+    roles = await Promise.all(
       ['admin', 'member', 'moderator'].map((name) =>
         testServer
           .post(rolesEndpoint)
@@ -67,6 +68,7 @@ describe("'communities ' service", () => {
       )
     );
 
+    roles = roles.map((role) => role.body);
     users = await Promise.all(
       getRandUsers(3).map((u, idx) => {
         let user = { ...u, admin: false };
@@ -274,6 +276,19 @@ describe("'communities ' service", () => {
   });
 
   it(' Any user can get all communities except hidden unless he is a member of it', async () => {
+    // Manually adding a user to a community
+    const newUser = testUsers[1];
+    const infiltratedCommunity = communities[0].body;
+    const role = roles[2];
+
+    const { CommunityUsers } = app.get('sequelizeClient').models;
+
+    await CommunityUsers.create({
+      CommunityId: infiltratedCommunity.id,
+      UserId: newUser.id,
+      CommunityRoleId: role.id,
+    });
+
     const { body: allCommunities } = await testServer
       .get(endpoint)
       .set('authorization', creator.accessToken);
@@ -285,17 +300,41 @@ describe("'communities ' service", () => {
         privacyType: expect.any(String),
         id: expect.any(String),
         UserId: expect.any(String),
-        amountOfMembers: '1',
+        amountOfMembers: expect.any(Number),
         members: expect.any(Array),
-        Interests: expect.any(Array),
+        profilePicture: null,
+        coverPicture: null,
       });
-      community.Interests.forEach((interest) => {
+      if (infiltratedCommunity.id === community.id) {
+        expect(community.members).toHaveLength(2);
+        expect(community.members.some((member) => member.id === newUser.id));
+      } else {
+        expect(community.members).toHaveLength(1);
+      }
+
+      // This community was created without endpoint
+      if (
+        community.name === 'community' &&
+        community.description === 'description'
+      ) {
+        expect(community.Interests).toBe(null);
+      }
+
+      if (community.privacyType === 'hidden') {
+        expect(
+          community.members.some((member) => member.id === creator.id)
+        ).toBe(true);
+      }
+      if (!isNill(community.Interests)) {
+        expect(community.Interests).toHaveLength(2);
+      }
+      community?.Interests?.forEach((interest) => {
         expect(interest).toMatchObject({
           name: expect.any(String),
           id: expect.any(String),
         });
       });
-      // expect(community.members).toHaveLength(1);
+
       if (community.UserId === creator.id) {
         expect(community.IsMember).toMatchObject({
           id: expect.any(String),
@@ -307,6 +346,7 @@ describe("'communities ' service", () => {
       }
     });
   });
+
   describe('Communities Access', () => {
     it('should not see community private and Hidden community details when not member', async () => {
       let accessToCommunities = await Promise.all(
@@ -333,7 +373,7 @@ describe("'communities ' service", () => {
             privacyType: expect.any(String),
             id: expect.any(String),
             UserId: firstCreator.id,
-            amountOfMembers: '1',
+            // amountOfMembers: '1',
             IsMember: null,
             canPost: true,
             canInvite: true,
