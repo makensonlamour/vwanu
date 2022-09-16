@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import "react-tabs/style/react-tabs.css";
@@ -31,6 +31,7 @@ const uploadProfileError = () =>
 
 const FormStepFive = ({ setStep, currentStep, data, setData }) => {
   const user = useOutletContext();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [img, getImg] = useState([]);
   //data
@@ -41,7 +42,8 @@ const FormStepFive = ({ setStep, currentStep, data, setData }) => {
 
     try {
       updateSuccess();
-      setStep(currentStep + 1);
+      navigate("../../groups/" + data?.id + "/send-invites?tabs=invites");
+      setIsLoading(false);
       //   window.location.reload();
     } catch (e) {
       console.log(e);
@@ -92,7 +94,7 @@ const FormStepFive = ({ setStep, currentStep, data, setData }) => {
   return (
     <>
       <div className="py-2 lg:mx-24">
-        <Form className="w-full">
+        <Form className="w-full px-4 pb-2">
           <Toaster />
 
           <div className="px-4 pb-6 pt-4 w-full">
@@ -135,15 +137,15 @@ const FormStepFive = ({ setStep, currentStep, data, setData }) => {
           <div className="flex justify-between">
             <button
               onClick={() => handlePrevious()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Previous Step"}
             </button>
             <button
               onClick={() => handleNext()}
-              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-1/5"
+              className="btn btn-primary mt-4 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
-              {isLoading ? <Loader /> : "Next Step"}
+              {isLoading ? <Loader /> : "Finish"}
             </button>
           </div>
         </Form>

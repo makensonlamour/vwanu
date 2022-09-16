@@ -44,7 +44,11 @@ const DeleteTab = () => {
             testId="consent-2-error-message"
           />
 
-          <Submit data-testid="deteGroup_btn" className="rounded-full text-md w-fit px-4" title={isLoading ? <Loader /> : "Delete Group"} />
+          <Submit
+            data-testid="deleteGroup_btn"
+            className="rounded-xl py-1 text-md w-fit px-4"
+            title={isLoading ? <Loader /> : "Delete Group"}
+          />
         </Form>
       </div>
     </>

@@ -2,6 +2,8 @@ import React from "react";
 import { useGetMyCommunityInvitation } from "../../../features/community/communitySlice";
 import { useOutletContext } from "react-router-dom";
 import ViewInvitation from "./ViewInvitation";
+import EmptyComponent from "../../common/EmptyComponent";
+import { FaUsersSlash } from "react-icons/fa";
 
 const InvitationTabs = () => {
   const user = useOutletContext();
@@ -21,7 +23,11 @@ const InvitationTabs = () => {
             })
           ) : (
             <div className="flex justify-center">
-              <p className="text-center text-lg font-semibold">No Invitations found.</p>
+              <EmptyComponent
+                icon={<FaUsersSlash size={"32px"} className="" />}
+                placeholder={"You don't have any community invitations yet."}
+                tips={"Here, you can see all the invitations that someone sent you to join a community!"}
+              />
             </div>
           )}
         </div>

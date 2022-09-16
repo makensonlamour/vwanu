@@ -85,7 +85,7 @@ export function checkFriendList(friends, userId) {
 
 //assign value for interest
 export function assignValue(obj) {
-  if (obj?.length === 0) return;
+  if (obj?.length === 0) return [];
   const array = [];
 
   obj?.map((item) => {

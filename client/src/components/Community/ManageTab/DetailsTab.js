@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
@@ -68,10 +68,22 @@ const DetailsTab = ({ communityData }) => {
     );
   };
 
+  console.log(interest);
+
+  useEffect(() => {
+    if (communityData?.Interests?.length > 0) {
+      communityData?.Interests?.map((item) => {
+        return setInterest((oldData) => [...oldData, item?.name]);
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [communityData]);
+
   return (
     <>
       <div className="bg-white border border-gray-300 py-4 px-2 md:px-6 rounded-xl w-full">
-        <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
+        <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full px-2">
           <Toaster />
           <Field
             autoCapitalize="none"
@@ -100,7 +112,7 @@ const DetailsTab = ({ communityData }) => {
             style={{ width: "100%" }}
             className="p-4 mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
-          <Submit className="w-full rounded-2xl text-base-100 text-md md:w-[30%]" title={isLoading ? <Loader /> : "Save changes"} />{" "}
+          <Submit className="w-full rounded-xl text-base-100 text-md md:w-[30%] py-2" title={isLoading ? <Loader /> : "Save changes"} />{" "}
         </Form>
       </div>
     </>

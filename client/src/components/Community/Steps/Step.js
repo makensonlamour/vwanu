@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 const Step = ({ steps, currentStep }) => {
   return (
     <>
-      <div className="py-3">
-        <p className="justify-center flex items-center">
+      <div className="py-3 w-full">
+        <p className="lg:justify-center justify-start flex items-center flex-wrap w-full px-2">
           {steps?.map((step, idx, steps) => {
             return (
               <div key={idx + "_" + step} className={`${currentStep >= idx + 1 ? "text-black" : "text-gray-500"} flex items-center `}>

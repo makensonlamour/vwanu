@@ -58,15 +58,15 @@ const SettingsTab = ({ communityData }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl w-full">
-        <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`Settings`}</h4>
+      <div className="bg-white border border-gray-300 py-5 lg:py-10 px-2 md:px-16 rounded-xl w-full">
+        <h4 className="md:text-left text-center mb-4 lg:mb-8 text-lg font-semibold">{`Settings`}</h4>
         <div className="py-2 lg:mx-0">
-          <Form className="w-full">
+          <Form className="w-full px-2">
             <Toaster />
 
             {/*Privacy Options*/}
             <div className="mb-4">
-              <p className="text-xl font-semibold">{"Privacy Options"}</p>
+              <p className="text-base lg:text-xl font-semibold">{"Privacy Options"}</p>
               <div className="w-full h-[1px] bg-gray-300 my-4"></div>
               <RadioGroup
                 onChange={(e) => setPrivacyType(e.target.value)}
@@ -75,19 +75,19 @@ const SettingsTab = ({ communityData }) => {
                 name="privacyType"
               >
                 <FormControlLabel value="public" control={<Radio />} label="This is a public group" />
-                <ul className="list-disc mb-4 ml-12 pl-1">
+                <ul className="list-disc text-sm lg:text-base mb-4 ml-12 pl-1">
                   <li>Any site member can join this group.</li>
                   <li>This group will be listed in the groups directory and in search results.</li>
                   <li>Group content and activity will be visible to any site member.</li>
                 </ul>
                 <FormControlLabel value="private" control={<Radio />} label="This is a private group" />
-                <ul className="list-disc mb-4 ml-12 pl-1">
+                <ul className="list-disc text-sm lg:text-base mb-4 ml-12 pl-1">
                   <li>Only people who request membership and are accepted can join the group.</li>
                   <li>This group will be listed in the groups directory and in search results.</li>
                   <li>Group content and activity will only be visible to members of the group.</li>
                 </ul>
                 <FormControlLabel value="hidden" control={<Radio />} label="This is a hidden group" />
-                <ul className="list-disc mb-4 ml-12 pl-1">
+                <ul className="list-disc text-sm lg:text-base mb-4 ml-12 pl-1">
                   <li>Only people who are invited can join the group.</li>
                   <li>This group will not be listed in the groups directory or search results.</li>
                   <li>This group will not be listed in the groups directory or search results.</li>
@@ -97,7 +97,7 @@ const SettingsTab = ({ communityData }) => {
 
             {/*Community Invitations*/}
             <div className="mb-10">
-              <p className="text-xl font-semibold">{"Community Invitations"}</p>
+              <p className="text-base lg:text-xl font-semibold">{"Community Invitations"}</p>
               <div className="w-full h-[1px] bg-gray-300 my-4"></div>
               <RadioGroup
                 onChange={(e) => setCanInvite(e.target.value)}
@@ -105,7 +105,7 @@ const SettingsTab = ({ communityData }) => {
                 defaultValue={canInvite}
                 name="canInvite"
               >
-                <p className="text-lg py-2">Which members of this group are allowed to invite others?</p>
+                <p className="lg:text-lg text-base py-2">Which members of this group are allowed to invite others?</p>
                 <FormControlLabel value="E" control={<Radio />} label="All group members" />
                 <FormControlLabel value="M" control={<Radio />} label="Organizers and Moderators only" />
                 <FormControlLabel value="A" control={<Radio />} label="Organizers only" />
@@ -114,7 +114,7 @@ const SettingsTab = ({ communityData }) => {
 
             {/*Activity Feeds*/}
             <div className="mb-10">
-              <p className="text-xl font-semibold">{"Activity Feeds"}</p>
+              <p className="text-base lg:text-xl font-semibold">{"Activity Feeds"}</p>
               <div className="w-full h-[1px] bg-gray-300 my-4"></div>
               <RadioGroup
                 onChange={(e) => setCanInPost(e.target.value)}
@@ -122,7 +122,7 @@ const SettingsTab = ({ communityData }) => {
                 defaultValue={canInPost}
                 name="canInPost"
               >
-                <p className="text-lg py-2">Which members of this group are allowed to post into the activity feed?</p>
+                <p className="lg:text-lg text-base py-2">Which members of this group are allowed to post into the activity feed?</p>
                 <FormControlLabel value="E" control={<Radio />} label="All group members" />
                 <FormControlLabel value="M" control={<Radio />} label="Organizers and Moderators only" />
                 <FormControlLabel value="A" control={<Radio />} label="Organizers only" />
@@ -131,7 +131,7 @@ const SettingsTab = ({ communityData }) => {
 
             {/*Group Medias*/}
             <div className="mb-10">
-              <p className="text-xl font-semibold">{"Group Medias"}</p>
+              <p className="text-base lg:text-xl font-semibold">{"Group Medias"}</p>
               <div className="w-full h-[1px] bg-gray-300 my-4"></div>
               <RadioGroup
                 onChange={(e) => setGroupMedia(e.target.value)}
@@ -139,7 +139,7 @@ const SettingsTab = ({ communityData }) => {
                 defaultValue={groupMedia}
                 name="groupMedias"
               >
-                <p className="text-lg py-2">Which members of this group are allowed to upload medias?</p>
+                <p className="lg:text-lg text-base py-2">Which members of this group are allowed to upload medias?</p>
                 <FormControlLabel value="E" control={<Radio />} label="All group members" />
                 <FormControlLabel value="M" control={<Radio />} label="Organizers and Moderators only" />
                 <FormControlLabel value="A" control={<Radio />} label="Organizers only" />
@@ -148,7 +148,7 @@ const SettingsTab = ({ communityData }) => {
 
             {/*Group Messages*/}
             <div className="mb-10">
-              <p className="text-xl font-semibold">{"Group Messages"}</p>
+              <p className="text-base lg:text-xl font-semibold">{"Group Messages"}</p>
               <div className="w-full h-[1px] bg-gray-300 my-4"></div>
               <RadioGroup
                 onChange={(e) => setCanMessageInGroup(e.target.value)}
@@ -156,7 +156,7 @@ const SettingsTab = ({ communityData }) => {
                 defaultValue={canMessageInGroup}
                 name="canMessageInGroup"
               >
-                <p className="text-lg py-2">Which members of this group are allowed to send group messages?</p>
+                <p className="lg:text-lg text-base py-2">Which members of this group are allowed to send group messages?</p>
                 <FormControlLabel value="E" control={<Radio />} label="All group members" />
                 <FormControlLabel value="M" control={<Radio />} label="Organizers and Moderators only" />
                 <FormControlLabel value="A" control={<Radio />} label="Organizers only" />
@@ -166,7 +166,7 @@ const SettingsTab = ({ communityData }) => {
             <div className="flex justify-between">
               <button
                 onClick={() => handleSubmit()}
-                className="btn btn-primary mt-4 normal-case hover:bg-secondary w-full rounded-2xl text-base-100 py-1 text-md md:w-2/5"
+                className="btn btn-primary mt-2 lg:mt-4 normal-case hover:bg-secondary w-full rounded-xl text-base-100 py-1 text-base md:w-2/5"
               >
                 {isLoading ? <Loader /> : "Save settings"}
               </button>

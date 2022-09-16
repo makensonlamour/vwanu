@@ -7,14 +7,14 @@ import { Chip, Stack } from "@mui/material";
 const SingleBlog = ({ blog }) => {
   return (
     <>
-      <div className="bg-white shadow-sm w-full rounded-xl pb-4 lg:pb-6 mb-8 lg:mb-10">
+      <div className={` bg-white shadow-sm w-full rounded-xl pb-4 lg:pb-6 mb-8 lg:mb-10 `}>
         {blog?.coverPicture !== "undefined" && (
           <div className="">
             <img className="w-full h-44 lg:h-64 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
           </div>
         )}
         {blog?.Interests?.length > 0 && (
-          <div className="px-4 lg:px-8 mt-5">
+          <div className={`${blog?.coverPicture === "undefined" ? "" : "pt-6"} px-4 lg:px-8 mt-5 pt-6`}>
             <Stack direction="row" spacing={1}>
               {blog?.Interests?.length > 0 &&
                 blog?.Interests?.map((interest) => {
@@ -42,7 +42,8 @@ const SingleBlog = ({ blog }) => {
             </Link>
             <div className="">
               <Link to={`./${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color text-md rounded-lg">
-                {blog?.Response?.length} Comments
+                {blog?.Response?.length}{" "}
+                {blog?.amountOfComments <= 1 ? blog?.amountOfComments + " Comment" : blog?.amountOfComments + " Comments"}
               </Link>
             </div>
           </div>

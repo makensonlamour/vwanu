@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineDelete } from "react-icons/ai";
 import "react-image-crop/dist/ReactCrop.css";
 
-const InputCover = ({ fn }) => {
+const InputCover = ({ fn, editData = false }) => {
   const [files, setFiles] = useState([]);
 
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -33,6 +33,14 @@ const InputCover = ({ fn }) => {
     noClick: true,
     noKeyboard: true,
   });
+
+  useEffect(() => {
+    if (editData) {
+      setFiles([{ preview: editData }]);
+    } else {
+      setFiles([]);
+    }
+  }, [editData]);
 
   return (
     <>
@@ -76,6 +84,7 @@ const InputCover = ({ fn }) => {
 
 InputCover.propTypes = {
   fn: PropTypes.func,
+  editData: PropTypes.string,
 };
 
 export default InputCover;

@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { parseISO, formatRelative } from "date-fns";
 import { enUS } from "date-fns/esm/locale";
 import { GrFormView } from "react-icons/gr";
+import { BsThreeDots } from "react-icons/bs";
 import { IoIosSend } from "react-icons/io";
 import { useReadMessage } from "../../messageSlice";
 import { transformHashtagAndLink } from "../../../../helpers/index";
 import MediaMessage from "./MediaMessage";
+import { Menu, MenuItem } from "@mui/material";
 
 const formatRelativeLocale = {
   lastWeek: "P ' at ' p",
@@ -23,7 +25,15 @@ const locale = {
 };
 
 const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
-  // console.log(listMessage);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const readMessage = useReadMessage(["message", "read", listMessage?.id], undefined, undefined);
   const handleRead = async () => {
     try {
@@ -40,6 +50,8 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
     }
   };
 
+  const [focus, setFocus] = useState(false);
+
   useEffect(() => {
     handleRead();
   }, []);
@@ -47,7 +59,7 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
     <>
       {groups ? (
         sender ? (
-          <div className="flex flex-wrap justify-end">
+          <div className="flex flex-wrap justify-end shadow-lg">
             <div className="bg-orange-100 p-2 rounded-xl w-max max-w-[50%]">
               <p className="pb-1 text-sm">{listMessage?.messageText}</p>
               <p className="text-xs text-gray-700 align-middle">
@@ -79,8 +91,29 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
           </>
         )
       ) : sender ? (
-        <div className="flex flex-wrap justify-end">
-          <div className="bg-orange-100 px-2 py-1 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl w-max max-w-[70%]">
+        <div
+          onMouseEnter={() => setFocus(true)}
+          onMouseLeave={() => setFocus(false)}
+          className="flex flex-wrap items-center justify-end py-1"
+        >
+          {focus && (
+            <div onClick={handleClick}>
+              <BsThreeDots size={"20px"} className="pr-1 items-center inline align-middle" />
+            </div>
+          )}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={handleClose}>Delete</MenuItem>
+            <MenuItem onClick={handleClose}>Forward</MenuItem>
+          </Menu>
+          <div className="bg-sky-100 px-2 py-1 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl w-max max-w-[70%] shadow">
             {listMessage?.messageText?.split("\n").map((text) => {
               return (
                 <p key={text} className="text-sm">
@@ -99,16 +132,35 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
           </div>
         </div>
       ) : (
-        <div className="bg-placeholder-color px-2 py-1 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl w-max max-w-[70%] lg:pl-5">
-          {listMessage?.messageText?.split("\n").map((text) => {
-            return (
-              <p key={text} className="text-sm">
-                {transformHashtagAndLink(text)}
-              </p>
-            );
-          })}
-          {listMessage?.Media?.length > 0 ? <MediaMessage sender={listMessage?.sender} medias={listMessage?.Media} /> : null}
-          <p className="text-xs text-gray-600 text-right">{formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}</p>
+        <div onMouseEnter={() => setFocus(true)} onMouseLeave={() => setFocus(false)} className="flex flex-wrap items-center">
+          <div className="shadow bg-orange-100 px-2 py-1 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl w-max max-w-[70%] lg:pl-2">
+            {listMessage?.messageText?.split("\n").map((text) => {
+              return (
+                <p key={text} className="text-left text-sm">
+                  {transformHashtagAndLink(text)}
+                </p>
+              );
+            })}
+            {listMessage?.Media?.length > 0 ? <MediaMessage sender={listMessage?.sender} medias={listMessage?.Media} /> : null}
+            <p className="text-xs text-gray-600 text-right">{formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}</p>
+          </div>
+          {focus && (
+            <div onClick={handleClick}>
+              <BsThreeDots size={"20px"} className="pl-1 items-center inline align-middle" />
+            </div>
+          )}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={handleClose}>Delete</MenuItem>
+            <MenuItem onClick={handleClose}>Forward</MenuItem>
+          </Menu>
         </div>
       )}
     </>

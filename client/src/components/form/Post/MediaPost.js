@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import ReactPlayer from "react-player";
 import PropTypes from "prop-types";
 import ViewPhoto from "../../../features/album/component/ViewPhoto";
 
-const MediaPost = ({ medias, sender }) => {
+const MediaPost = ({ medias }) => {
   const [type, setType] = useState("photo");
 
   const checkType = () => {
@@ -21,20 +22,30 @@ const MediaPost = ({ medias, sender }) => {
 
   if (type === "video") {
     contentVideo = (
-      <div className="bg-black rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
+      <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <ViewPhoto
           type={type}
           photo={medias[0]}
           imgComponent={
             <div>
-              <video
+              <ReactPlayer
+                className={"h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"}
+                url={medias[0]?.original}
+                muted={true}
+                pip={true}
+                volume={1}
+                playsinline={true}
+                controls={true}
+                light={true}
+              />
+              {/* <video
                 className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
                 controls
                 alt={medias[0]?.original}
               >
                 <source alt={"videos_" + sender?.firstName} src={medias[0]?.original} type="video/mp4" />
                 Your browser does not support the video tag.
-              </video>
+              </video> */}
             </div>
           }
         />
@@ -44,7 +55,7 @@ const MediaPost = ({ medias, sender }) => {
 
   if (medias?.length === 1) {
     content = (
-      <div className="bg-black rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
+      <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <ViewPhoto
           photo={medias[0]}
           imgComponent={

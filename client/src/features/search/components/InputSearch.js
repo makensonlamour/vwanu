@@ -51,7 +51,7 @@ const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIs
                               className="mask mask-squircle w-10 h-10"
                             />
                           </div>
-                          <p classsName="text-lg font-500 align-center">{data?.firstName + " " + data?.lastName}</p>
+                          <p className="text-lg font-500 align-center">{data?.firstName + " " + data?.lastName}</p>
                         </div>
                         {user?.id !== data?.id && (
                           <div className="">

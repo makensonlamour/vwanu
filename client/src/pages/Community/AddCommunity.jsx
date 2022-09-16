@@ -5,7 +5,7 @@ import FormStepTwo from "../../features/community/component/FormStepTwo";
 import FormStepThree from "../../features/community/component/FormStepThree";
 import FormStepFour from "../../features/community/component/FormStepFour";
 import FormStepFive from "../../features/community/component/FormStepFive";
-import FormStepSix from "../../features/community/component/FormStepSix";
+// import FormStepSix from "../../features/community/component/FormStepSix";
 
 const AddCommunity = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -17,13 +17,13 @@ const AddCommunity = () => {
     <FormStepThree key={"2_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
     <FormStepFour key={"3_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
     <FormStepFive key={"4_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
-    <FormStepSix key={"5_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
+    // <FormStepSix key={"5_element"} setStep={setCurrentStep} currentStep={currentStep} data={data} setData={setData} />,
   ];
   return (
     <>
       <div className="mt-10 mx-10 mb-10">
         <div className="bg-white rounded-xl border border-gray-300 w-full">
-          <p className="text-3xl text-center font-bold pt-12 pb-6">Create A New Community</p>
+          <p className="text-lg lg:text-3xl text-center font-bold py-6 lg:pt-12 lg:pb-6">Create A New Community</p>
           <div className="bg-placeholder-color border-b border-t  border-gray-300 w-full">
             <Step steps={steps} currentStep={currentStep} />
           </div>

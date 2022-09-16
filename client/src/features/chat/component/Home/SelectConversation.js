@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Skeleton } from "@mui/material";
 import { BsArrowReturnRight } from "react-icons/bs";
+// import { GrAttachment } from "react-icons/gr";
 import { parseISO, formatRelative } from "date-fns";
 import { enUS } from "date-fns/esm/locale";
 import { GoPrimitiveDot } from "react-icons/go";
@@ -31,7 +32,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
 
   return (
     <>
-      <div className="overflow-auto">
+      <div className="overflow-y-auto w-full h-full">
         {conversation?.Users?.length > 2 ? (
           <Link
             onClick={() => {
@@ -39,11 +40,11 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
               setCreateConversationOpened(false);
             }}
             to={`../messages/${conversationId}`}
-            className={`lg:mx-2 rounded-xl hover:bg-dark-lighten group relative flex items-stretch gap-2 py-2 px-2 lg:px-5 transition duration-300 ${
+            className={`w-full lg:mx-0 rounded-xl hover:bg-dark-lighten relative flex items-stretch gap-2 py-2 px-2 lg:px-0 transition duration-300 ${
               conversationId === id ? "bg-placeholder-color" : ""
             }`}
           >
-            <div className="basis-full">
+            <div className="w-full">
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center justify-start">
                   <div className="mr-2">
@@ -87,7 +88,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
             <Link
               key={conversationId}
               to={`../messages/${conversationId}`}
-              className={`w-full lg:mx-2 rounded-xl hover:bg-dark-lighten flex items-stretch gap-2 py-2 px-2 lg:px-5 transition duration-300 ${
+              className={`w-full hover:bg-dark-lighten flex items-stretch gap-2 py-2 px-2 lg:px-3 transition duration-300 ${
                 conversationId === id || conversation?.amountOfUnreadMessages > 0 ? "bg-placeholder-color" : ""
               }`}
             >
@@ -108,7 +109,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
                         </p>
                       );
                     })}
-
+                    {console.log(conversation)}
                     {conversation?.Messages?.length > 0 && (
                       <div className="flex justify-start pt-0 items-center w-[100%]">
                         {conversation?.Messages[0]?.senderId === user?.id ? (

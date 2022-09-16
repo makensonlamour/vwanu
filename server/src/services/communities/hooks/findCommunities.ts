@@ -6,6 +6,7 @@ export default async (context: HookContext) => {
   const { app } = context;
   const Sequelize = app.get('sequelizeClient');
 
+
   const query2 = `SELECT 
   "C"."name",
   "C"."description", 
@@ -62,6 +63,7 @@ INNER JOIN "CommunityUsers" as "CU" ON "CU"."CommunityId"="C"."id"
 GROUP BY "C"."name","C"."description", "C"."id" 
 LIMIT 20
   `;
+
 
   try {
     const communities = await Sequelize.query(query2, {

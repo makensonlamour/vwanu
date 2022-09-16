@@ -79,7 +79,7 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
   return (
     <>
       <div className="py-2 lg:mx-24">
-        <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
+        <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full px-4 pb-2">
           <Toaster />
           <Field
             autoCapitalize="none"
@@ -109,7 +109,7 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
             className="p-4 mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Submit
-            className="mt-4 w-full rounded-2xl text-base-100 text-md md:w-[30%]"
+            className="mt-4 py-3 px-4 w-full rounded-2xl text-base-100 text-md md:w-[30%]"
             title={isLoading ? <Loader /> : "Create Community and Continue"}
           />
         </Form>

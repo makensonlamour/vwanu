@@ -43,11 +43,6 @@ const SidebarLeft = ({ user }) => {
           path: routesPath.MESSAGE,
           icon: <FiInbox size={"24px"} />,
         },
-      ],
-    },
-    {
-      menuTitle: "Community",
-      menuItems: [
         {
           title: "My Community",
           path: routesPath.GROUPS + "?tabs=myCommunity",
@@ -75,6 +70,36 @@ const SidebarLeft = ({ user }) => {
         },
       ],
     },
+    // {
+    //   menuTitle: "Community",
+    //   menuItems: [
+    //     {
+    //       title: "My Community",
+    //       path: routesPath.GROUPS + "?tabs=myCommunity",
+    //       icon: <MdGroups size={"24px"} />,
+    //     },
+    //     {
+    //       title: "My Network",
+    //       path: "/profile/" + user?.id + "/network?tabs=network&subTabs=friends",
+    //       icon: <MdGroups size={"24px"} />,
+    //     },
+    //     {
+    //       title: "My Album",
+    //       path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=album",
+    //       icon: <MdPhotoLibrary size={"24px"} />,
+    //     },
+    //     {
+    //       title: "My Photo",
+    //       path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=photo",
+    //       icon: <MdPhotoSizeSelectActual size={"24px"} />,
+    //     },
+    //     {
+    //       title: "My Blog",
+    //       path: "/profile/" + user?.id + "/blog?tabs=blog&subTabs=friends",
+    //       icon: <FaBlog size={"24px"} />,
+    //     },
+    //   ],
+    // },
   ];
 
   return (
@@ -118,6 +143,10 @@ const SidebarLeft = ({ user }) => {
                       >
                         <Tooltip className={`${full ? "mr-3" : ""}`} title={it.title}>
                           <NavLink
+                            onClick={() => {
+                              setNavOpen(false);
+                              setFull(false);
+                            }}
                             key={cryptoRandomString({ length: 10 })}
                             to={it.path}
                             style={({ isActive }) => (isActive ? activeStyle : notActiveStyle)}

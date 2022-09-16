@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CardCommunity from "../../../components/Profil/CommunityTab/CardCommunity";
+import EmptyComponent from "../../../components/common/EmptyComponent";
+import { TiGroup } from "react-icons/ti";
 // import { format } from "date-fns";
 
 const CommunityList = ({ communityList }) => {
@@ -18,8 +20,12 @@ const CommunityList = ({ communityList }) => {
             })}
           </div>
         ) : (
-          <div className="">
-            <p className="">No Community</p>
+          <div className="flex justify-center">
+            <EmptyComponent
+              icon={<TiGroup size={"32px"} className="" />}
+              placeholder={"You don't have have any community yet."}
+              tips={"To create a community, you can just click on the button Create Community on top of this community."}
+            />
           </div>
         )}
       </div>

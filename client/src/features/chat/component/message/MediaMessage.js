@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import ReactPlayer from "react-player";
 import MediaPreview from "./MediaPreview";
 
 const MediaMessage = ({ medias, sender }) => {
@@ -28,14 +29,24 @@ const MediaMessage = ({ medias, sender }) => {
           photo={medias[0]}
           imgComponent={
             <div>
-              <video
+              <ReactPlayer
+                width="40vh"
+                className="w-full"
+                url={medias[0]?.original}
+                pip={true}
+                volume={1}
+                playsinline={true}
+                controls={true}
+                light={true}
+              />
+              {/* <video
                 className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full rounded-lg"
                 controls
                 alt={medias[0]?.original}
               >
                 <source alt={"videos_" + sender?.firstName} src={medias[0]?.original} type="video/mp4" />
                 Your browser does not support the video tag.
-              </video>
+              </video> */}
             </div>
           }
         />

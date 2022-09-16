@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { formatDistance, parseISO } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
+import MenuPost from "./../../post/components/MenuPost";
 
 const CommentList = ({ Comments, showAll }) => {
-  console.log(Comments);
+  const user = useOutletContext();
   return (
     <>
       {Comments?.length > 0
@@ -27,6 +28,7 @@ const CommentList = ({ Comments, showAll }) => {
                             },
                           ])}
                         </span>
+                        {user?.id === comment?.User?.id && <MenuPost post={comment} />}
                       </div>
 
                       <p className="text-gray-800 font-light" style={{ fontSize: "0.97rem" }}>
@@ -54,6 +56,7 @@ const CommentList = ({ Comments, showAll }) => {
                           },
                         ])}
                       </span>
+                      <div className="">{user?.id === comment?.User?.id && <MenuPost post={comment} />}</div>
                     </div>
 
                     <p className="text-gray-800 font-light" style={{ fontSize: "0.97rem" }}>
