@@ -3,12 +3,29 @@ import * as authentication from '@feathersjs/authentication';
 import AutoOwn from '../../Hooks/AutoOwn';
 import LimitToOwner from '../../Hooks/LimitToOwner';
 import LimitToAdminOrOwnerHook from '../../Hooks/LimitToAdminOrOwner.hook';
+import addAssociation from '../../Hooks/AddAssociations';
 
 const { authenticate } = authentication.hooks;
 
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [
+      authenticate('jwt'),
+      addAssociation({
+        models: [
+          {
+            model: 'users',
+            attributes: [
+              'firstName',
+              'lastName',
+              'id',
+              'profilePicture',
+              'createdAt',
+            ],
+          },
+        ],
+      }),
+    ],
     find: [],
     get: [],
     create: [AutoOwn],

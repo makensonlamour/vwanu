@@ -9,6 +9,7 @@ export interface DiscussionInterface {
   privacyType: string;
   banned: boolean;
   bannedReason: string;
+  locked: boolean;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Discussion
@@ -26,6 +27,8 @@ export default (sequelize: any, DataTypes: any) => {
     banned: boolean;
 
     bannedReason: string;
+
+    locked: boolean;
 
     static associate(models: any): void {
       Discussion.belongsTo(models.User);
@@ -57,6 +60,10 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       banned: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      locked: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
