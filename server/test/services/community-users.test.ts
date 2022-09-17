@@ -16,7 +16,7 @@ describe("'community-users ' service", () => {
   const rolesEndpoint = '/community-role';
   beforeAll(async () => {
     testServer = request(app);
-    await app.get('sequelizeClient').sync({ logged: false });
+    await app.get('sequelizeClient').sync({ logged: false, force: true });
 
     // Creating test users
     testUsers = await Promise.all(
@@ -65,9 +65,6 @@ describe("'community-users ' service", () => {
 
     // The community creator is automatically added to the community as an admin
     users.forEach((foundUser) => {
-      expect(foundUser.canPost).toBe(true);
-      expect(foundUser.canInvite).toBe(true);
-      expect(foundUser.canUploadDoc).toBe(true);
       expect(foundUser.User).toEqual(
         expect.objectContaining({
           id: creator.id,
@@ -77,14 +74,12 @@ describe("'community-users ' service", () => {
           createdAt: expect.any(String),
         })
       );
-      expect(foundUser.canUploadVideo).toBe(true);
-      expect(foundUser.canUploadPhoto).toBe(true);
-      expect(foundUser.canMessageInGroup).toBe(true);
+     
       expect(foundUser.CommunityRole.name).toBe('admin');
     });
   });
-  it.skip('should verify if the user is a member of the community', async () => {
-    const noneMemberId = 1;
+  it('should verify if the user is a member of the community', async () => {
+    const noneMemberId = testUsers[0].id;
     let possibleMember = await testServer
       .get(
         `${endpoint}/?CommunityId=${community.body.id}&UserId=${noneMemberId}`

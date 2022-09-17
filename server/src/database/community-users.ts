@@ -4,14 +4,9 @@ import { Model } from 'sequelize';
 
 export interface CommunityUsersInterface {
   id: string;
-  canPost: boolean;
-  canInvite: boolean;
-  canUploadDoc: boolean;
-  canUploadVideo: boolean;
-  canUploadPhoto: boolean;
-  canMessageInGroup: boolean;
   banned: boolean;
   bannedDate: Date;
+  untilDate: Date;
 }
 export default (sequelize: any, DataTypes: any) => {
   class CommunityUsers
@@ -20,21 +15,11 @@ export default (sequelize: any, DataTypes: any) => {
   {
     id: string;
 
-    canPost: boolean;
-
-    canInvite: boolean;
-
-    canUploadDoc: boolean;
-
-    canUploadVideo: boolean;
-
-    canUploadPhoto: boolean;
-
-    canMessageInGroup: boolean;
-
     banned: boolean;
 
     bannedDate: Date;
+
+    untilDate: Date;
 
     static associate(models: any): void {
       CommunityUsers.belongsTo(models.User);
@@ -54,35 +39,17 @@ export default (sequelize: any, DataTypes: any) => {
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
-      canPost: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
-      canInvite: {
+
+      banned: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      canUploadDoc: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
-      canUploadVideo: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
-      canUploadPhoto: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
-      canMessageInGroup: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
-      banned: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
       bannedDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+
+      untilDate: {
         type: DataTypes.DATE,
         allowNull: true,
       },

@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import request from 'supertest';
+import { Op } from '@sequelize/core';
 /** Local dependencies */
 import app from '../../src/app';
 import {
@@ -8,7 +9,7 @@ import {
   getRandUser,
 } from '../../src/lib/utils/generateFakeUser';
 
-describe("'communities ' service", () => {
+describe("'communities registration' service", () => {
   let roles;
   let testUsers;
   let testServer;
@@ -27,7 +28,7 @@ describe("'communities ' service", () => {
   let creator;
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({  logged: false });
+    await app.get('sequelizeClient').sync({ logged: false, force: true });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(5).map((u, idx) => {
@@ -59,9 +60,9 @@ describe("'communities ' service", () => {
         testServer
           .post(communityEndpoint)
           .send({
-            name: `${name}-${idx}`,
+            name: `${privacyType}-${name}-${idx}.`,
             privacyType,
-            description: `${description} - ${idx}`,
+            description: `This is a ${privacyType} Community. ${description} - ${idx}.`,
           })
           .set('authorization', creator.accessToken)
       )
@@ -87,12 +88,12 @@ describe("'communities ' service", () => {
 
   it('registered the service', () => {
     const service = app.service('communities-registrations');
-
     expect(service).toBeTruthy();
   });
 
-  it.skip('Users with invitation can respond and become members', async () => {
-    const resp = await Promise.all(
+  it('Accepts invitations', async () => {
+    // Accepting the invitations
+    const resp: any = await Promise.all(
       testUsers.map((user, idx) =>
         testServer
           .post(endpoint)
@@ -103,29 +104,42 @@ describe("'communities ' service", () => {
           .set('authorization', user.accessToken)
       )
     );
-    resp.forEach(({ body }, idx) => {
-      expect(body).toMatchObject({
+    // eslint-disable-next-line array-callback-return
+    resp.map(async ({ body: invitationAcceptResponse }, idx) => {
+      expect(invitationAcceptResponse).toMatchObject({
         message: 'Your response have been recorded',
         newMember: {
           id: expect.any(String),
-          canPost: true,
-          canUploadDoc: true,
-          canUploadVideo: true,
-          canUploadPhoto: true,
-          banned: true,
+          banned: false,
           CommunityId: expect.any(String),
           UserId: testUsers[idx].id,
           CommunityRoleId: expect.any(String),
-          canInvite: true,
-          canMessageInGroup: true,
           updatedAt: expect.any(String),
           createdAt: expect.any(String),
           bannedDate: null,
         },
       });
+      const { CommunityInvitationRequest, CommunityUsers } =
+        app.get('sequelizeClient').models;
+
+      const invitation = await CommunityInvitationRequest.findByPk(
+        invitations[idx].id
+      );
+      expect(invitation.response).toBe(true);
+      expect(invitation.responseDate).toBeDefined();
+
+      const communityUser = await CommunityUsers.findOne({
+        where: {
+          UserId: testUsers[idx].id,
+          CommunityId: invitations[idx].CommunityId,
+          untilDate: null,
+        },
+      });
+
+      expect(communityUser.id).toBeDefined();
     });
   });
-  it.skip('Users with invitation can choose not to become members', async () => {
+  it('Declines invitation', async () => {
     let guest: any = getRandUser();
 
     delete guest.id;
@@ -155,6 +169,124 @@ describe("'communities ' service", () => {
       newMember: null,
     });
   });
+  it('Accepts group membership promotion', async () => {
+    // Sending a request to promote a user
+    const userOBject = getRandUser();
+
+    delete userOBject.id;
+
+    const { body: guest } = await testServer
+      .post(userEndpoint)
+      .send(userOBject);
+
+    const adminRole = roles.find((role) => role.name === 'admin').id;
+    const memberRole = roles.find((role) => role.name === 'member').id;
+    const community = communities[0].id;
+
+    // Sending a memberRole invitation
+
+    const memberInvitation = await testServer
+      .post(invitationEndpoint)
+      .send({
+        guestId: guest.id,
+        CommunityRoleId: memberRole,
+        CommunityId: community,
+      })
+      .set('authorization', creator.accessToken);
+    expect(memberInvitation.statusCode).toEqual(201);
+
+    const { body: memberAcceptance } = await testServer
+      .post(endpoint)
+      .send({
+        invitationId: memberInvitation.body.id,
+        response: true,
+      })
+      .set('authorization', guest.accessToken);
+    expect(memberAcceptance).toMatchObject({
+      message: 'Your response have been recorded',
+      newMember: {
+        id: expect.any(String),
+        banned: false,
+        CommunityId: community,
+        UserId: guest.id,
+        CommunityRoleId: memberRole,
+        updatedAt: expect.any(String),
+        createdAt: expect.any(String),
+        bannedDate: null,
+      },
+    });
+    // const { body: fetchedCommunity } = await testServer
+    //   .get(`${communityEndpoint}/${community}`)
+    //   .set('authorization', creator.accessToken);
+
+    // console.log('t1', fetchedCommunity);
+    const promotionInvitation = await testServer
+      .post(invitationEndpoint)
+      .send({
+        guestId: guest.id,
+        CommunityRoleId: adminRole,
+        CommunityId: community,
+      })
+      .set('authorization', creator.accessToken);
+
+    expect(promotionInvitation.statusCode).toEqual(201);
+
+    // User accept the invitation
+
+    const { body: adminAcceptance } = await testServer
+      .post(endpoint)
+      .send({
+        invitationId: promotionInvitation.body.id,
+        response: true,
+      })
+      .set('authorization', guest.accessToken);
+
+    expect(adminAcceptance).toMatchObject({
+      message: 'Your response have been recorded',
+      newMember: {
+        id: expect.any(String),
+        banned: false,
+        CommunityId: community,
+        UserId: guest.id,
+        CommunityRoleId: adminRole,
+        updatedAt: expect.any(String),
+        createdAt: expect.any(String),
+        bannedDate: null,
+      },
+    });
+    // Verify the user is promoted and has a new role
+
+    const { CommunityInvitationRequest, CommunityUsers } =
+      app.get('sequelizeClient').models;
+    const invitation = await CommunityInvitationRequest.findByPk(
+      promotionInvitation.body.id
+    );
+    expect(invitation.response).toBe(true);
+    expect(invitation.responseDate).toBeDefined();
+
+    const communityUser = await CommunityUsers.findOne({
+      where: {
+        UserId: guest.id,
+        CommunityId: community,
+        CommunityRoleId: adminRole,
+        untilDate: null,
+      },
+    });
+
+    expect(communityUser.id).toBeDefined();
+    const oldRole = await CommunityUsers.findOne({
+      where: {
+        UserId: guest.id,
+        CommunityId: community,
+        CommunityRoleId: memberRole,
+        untilDate: { [Op.ne]: null },
+      },
+    });
+
+    expect(oldRole.id).toBeDefined();
+  });
+
+  it.todo('Denies group membership promotion');
 
   it.todo('User can become member if group is open without invitation');
 });
