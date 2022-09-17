@@ -5,8 +5,7 @@ import { HookContext } from '@feathersjs/feathers';
 export default async (context: HookContext) => {
   const { app } = context;
   const Sequelize = app.get('sequelizeClient');
-  const community = await Sequelize.query(
-    `
+  const query = `
           Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture","CU"."banned","CU"."bannedDate",
           (SELECT 
             json_build_object(
@@ -15,7 +14,7 @@ export default async (context: HookContext) => {
              'roleId',"CR"."id"
               ) from "CommunityUsers" as "CU" 
             INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
-            WHERE "CU"."CommunityId"="C"."id" and "CU"."UserId"='${context.params.User.id}'
+            WHERE "CU"."CommunityId"="C"."id" and "CU"."UserId"='${context.params.User.id}' AND "CU"."untilDate" IS NULL
               ) AS "IsMember",
           (CASE 
             WHEN "CR"."name"='admin' 
@@ -129,12 +128,14 @@ export default async (context: HookContext) => {
           INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
           INNER JOIN "Community_Interest" AS "CI" ON "CI"."CommunityId" = '${context.id}'
           INNER JOIN "Interests" AS "I" ON "I"."id" = "CI"."InterestId"
-          WHERE "C"."id" = '${context.id}' AND ("C"."privacyType" = 'public' OR "CU"."UserId" = '${context.params.User.id}')
+          WHERE "C"."id" = '${context.id}' AND ("C"."privacyType" = 'public' OR ("CU"."UserId" = '${context.params.User.id}' AND "CU"."untilDate" IS NULL))
           
            GROUP BY "C"."name","C"."description", "C"."id" ,"C"."privacyType" , "C"."profilePicture", "C"."coverPicture","CU"."CommunityId", "CU"."UserId","CU"."CommunityRoleId","CU"."banned","CU"."bannedDate","CR"."name","CR"."id"
-           LIMIT 1`,
-    { name: 'Query', type: QueryTypes.SELECT }
-  );
+           LIMIT 1`;
+  const community = await Sequelize.query(query, {
+    name: 'Query',
+    type: QueryTypes.SELECT,
+  });
   if (!community[0])
     throw new BadRequest(
       `Community with id ${context.id} not found or you have no access right to it`

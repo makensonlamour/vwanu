@@ -358,6 +358,7 @@ describe("'communities ' service", () => {
       );
       accessToCommunities = accessToCommunities.map((c) => c.body);
       accessToCommunities.forEach((com) => {
+       
         if (!com.privacyType && com?.privacyType !== 'public') {
           expect(com).toMatchObject({
             name: 'BadRequest',

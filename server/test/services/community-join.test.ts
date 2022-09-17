@@ -98,6 +98,7 @@ describe("'community-join ' service", () => {
       })
       .set('authorization', user.accessToken);
 
+
     expect(join.body).toMatchObject({
       id: expect.any(String),
       CommunityId: expect.any(String),
@@ -118,13 +119,7 @@ describe("'community-join ' service", () => {
 
     expect(foundUser).toMatchObject({
       id: expect.any(String),
-      canPost: true,
-      canInvite: false,
-      canUploadDoc: true,
-      canUploadVideo: true,
-      canUploadPhoto: true,
-      canMessageInGroup: true,
-      banned: true,
+      banned: false,
       bannedDate: null,
       CommunityId: expect.any(String),
       UserId: user.id,
