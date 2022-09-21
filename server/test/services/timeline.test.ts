@@ -50,7 +50,7 @@ describe("'timeline ' service", () => {
       .set('authorization', user.accessToken);
 
     createdTestUser.forEach((u) => {
-      const post = timeline.body.find((p) =>
+      const post = timeline.body.data.find((p) =>
         p.postText.includes(u.body.firstName)
       );
       expect(post.privacyType).toEqual('public');
@@ -58,6 +58,8 @@ describe("'timeline ' service", () => {
     });
 
     // despite a private post was a created it is not being pulled
-    expect(timeline.body.every((t) => t.privacyType === 'public')).toBeTruthy();
+    expect(
+      timeline.body.data.every((t) => t.privacyType === 'public')
+    ).toBeTruthy();
   });
 });
