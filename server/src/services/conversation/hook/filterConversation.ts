@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { HookContext } from '@feathersjs/feathers';
 import { GeneralError } from '@feathersjs/errors';
 import isNill from 'lodash/isNil';
@@ -9,8 +10,9 @@ export default async (context: HookContext) => {
   if (isNill(User))
     throw new Error('Only authenticated users can access this service.');
   try {
-    const result = await app.service('conversation-users').find({
+    const result = await app.service('conversation-users')._find({
       query: { UserId: User.id },
+      paginate: false,
     });
 
     context.result = result;
