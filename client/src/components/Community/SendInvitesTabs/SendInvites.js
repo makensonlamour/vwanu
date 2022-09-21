@@ -6,8 +6,13 @@ import Loader from "../../../components/common/Loader";
 import { TextArea, Submit, Form } from "../../../components/form";
 import Chip from "@mui/material/Chip";
 import { useGetAllMembers } from "../../../features/user/userSlice";
-import { useGetAllMembersCommunity, useSendInvitation, useGetCommunityRole } from "../../../features/community/communitySlice";
-import { isMember } from "../../../helpers/index";
+import {
+  useGetAllMembersCommunity,
+  useSendInvitation,
+  useGetCommunityRole,
+  useGetCommunityInvitation,
+} from "../../../features/community/communitySlice";
+import { isMember, isInvitation } from "../../../helpers/index";
 import InputSearch from "../../../features/search/components/InputSearch";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -26,12 +31,13 @@ const SendInvites = () => {
   const { id } = useParams();
   const { data: members } = useGetAllMembers(["members", "all"]);
   const { data: listMemberCommunity } = useGetAllMembersCommunity(["user", "community", "all"], id === "undefined" ? false : true, id);
-  const sendInvitation = useSendInvitation(["community", "invittaion"]);
+  const { data: listInvitation } = useGetCommunityInvitation(["community", "invitation", "all"], id !== "undefined" ? true : false, id);
+  const sendInvitation = useSendInvitation(["community", "invitation"]);
   const { data: roles } = useGetCommunityRole(["roles", "all"]);
   const [isLoading, setIsLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  console.log(isSearchOpen);
 
   const initialValues = {
     message: "",
@@ -62,12 +68,11 @@ const SendInvites = () => {
           return (roleCommunityId = role?.id);
         }
       });
-      console.log(selectMember);
       let guest = selectMember?.map((mem) => {
         return mem?.id;
       });
       const dataObj = {
-        guestId: guest,
+        guestId: guest[0],
         CommunityRoleId: roleCommunityId,
         CommunityId: id,
       };
@@ -117,32 +122,30 @@ const SendInvites = () => {
                     </div>
                     <div className="py-4 px-6">
                       {members?.data?.data?.map((member) => {
-                        return (
-                          !isMember(listMemberCommunity?.data, member) && (
-                            <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
-                              {user?.id !== member?.id && (
-                                <div className="flex justify-evenly items-center">
-                                  <div className="mr-4">
-                                    <img
-                                      src={member?.profilePicture?.original}
-                                      alt="profile_img"
-                                      className="bg-gray-100 mask mask-squircle w-10 h-10"
-                                    />
-                                  </div>
-                                  <div className="">{member?.firstName + " " + member?.lastName}</div>
+                        return !isMember(listMemberCommunity?.data, member) || !isInvitation(listInvitation?.data, member) ? null : (
+                          <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
+                            {user?.id !== member?.id && (
+                              <div className="flex justify-evenly items-center">
+                                <div className="mr-4">
+                                  <img
+                                    src={member?.profilePicture?.original}
+                                    alt="profile_img"
+                                    className="bg-gray-100 mask mask-squircle w-10 h-10"
+                                  />
                                 </div>
-                              )}
-                              {user?.id !== member?.id && (
-                                <div className="">
-                                  {isIntoArray(member) ? (
-                                    <button onClick={handleRemove(member)}>remove</button>
-                                  ) : (
-                                    <button onClick={() => handleAdd(member)}>add</button>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          )
+                                <div className="">{member?.firstName + " " + member?.lastName}</div>
+                              </div>
+                            )}
+                            {user?.id !== member?.id && (
+                              <div className="">
+                                {isIntoArray(member) ? (
+                                  <button onClick={handleRemove(member)}>remove</button>
+                                ) : (
+                                  <button onClick={() => handleAdd(member)}>add</button>
+                                )}
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
                     </div>

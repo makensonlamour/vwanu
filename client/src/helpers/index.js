@@ -151,8 +151,20 @@ export function assignCommunityMember(obj, types) {
 
 export function isMember(listMembers, data) {
   let memb = listMembers?.filter((member) => member?.UserId === data?.id);
+  return memb?.length === 0 ? false : true;
+}
+
+export function isInvitation(listMembers, data) {
+  let memb = listMembers?.filter((member) => member?.CommunityId === data?.id);
+  console.log("isInvite", memb);
 
   return memb?.length === 0 ? false : true;
+}
+
+export function isInvitationReceive(listMembers, data) {
+  let memb = listMembers?.filter((member) => member?.hostId === data?.id);
+
+  return memb?.length === 0 ? true : false;
 }
 
 export function transformHashtagAndLink(strText) {

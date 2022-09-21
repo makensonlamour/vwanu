@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import routesPath from "../../../routesPath";
 import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
 import { FaBlog } from "react-icons/fa";
-import { BiUserCircle } from "react-icons/bi";
+import { BiUserCircle, BiMessageDetail } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
 import { MdGroups, MdPhotoLibrary, MdPhotoSizeSelectActual } from "react-icons/md";
 import { BottomMenuContext } from "../../../context/BottomMenuContext";
@@ -38,7 +38,7 @@ const SidebarLeft = ({ user }) => {
         { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
         { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
         { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: routesPath?.GROUPS },
-        // { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
+        { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
         { title: "Blog", icon: <FaBlog size={24} className="mx-auto" />, path: routesPath?.BLOG },
       ],
     },

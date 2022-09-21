@@ -5,19 +5,16 @@ import { useParams, Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
-
-//Core components
-
 import PostList from "../../../features/post/PostList";
 import { useGetCommunityPostList } from "../../../features/post/postSlice";
+import { useGetCommunity } from "../../../features/community/communitySlice";
 import InputModal from "../../../features/post/components/InputModal";
 
 const ProfileFeed = () => {
   const { id } = useParams();
-  const UserId = id;
-
+  // const UserId = id;
+  const { data: community } = useGetCommunity(["community", id], id !== undefined ? true : false, id);
   const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetCommunityPostList(["post", "community", id], id);
-
   function reloadPage() {
     window.location.reload();
   }
@@ -70,7 +67,7 @@ const ProfileFeed = () => {
       <div className="mx-auto">
         <div className="pb-2 mx-auto align-items-center lg:w-full space-y-2">
           <div className="lg:basis-2/3">
-            <InputModal reference="communityFeed" communityId={id} />
+            <InputModal disabled={community?.data?.IsMember === null ? true : false} reference="communityFeed" communityId={id} />
           </div>
           <div className="lg:flex">
             <div className="w-full">{content}</div>

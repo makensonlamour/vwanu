@@ -79,7 +79,7 @@ const FormStepTwo = () => {
     };
 
     try {
-      await updateUser.mutateAsync(dataObj);
+      updateUser.mutateAsync(dataObj);
       navigate("../../" + routesPath.STEP_THREE);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";

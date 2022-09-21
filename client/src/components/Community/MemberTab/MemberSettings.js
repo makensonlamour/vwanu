@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext, useParams } from "react-router-dom";
-import { useUpdateInvitation, useGetCommunityRole } from "../../../features/community/communitySlice";
+import { useSendInvitation, useGetCommunityRole } from "../../../features/community/communitySlice";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
+import { useQueryClient } from "react-query";
 
 const sendInvitationSuccess = () =>
   toast.success("You sent the invitation", {
@@ -16,10 +17,12 @@ const sendInvitationError = () =>
   });
 
 const MemberSettings = ({ data }) => {
+  const queryClient = useQueryClient();
   const user = useOutletContext();
   const { id } = useParams();
-  const updateInvitation = useUpdateInvitation(["community", "invitaion"], id, undefined, undefined);
+  const sendInvitation = useSendInvitation(["community", "invitation"], undefined, undefined);
   const { data: roles } = useGetCommunityRole(["roles", "all"]);
+  console.log(roles?.data);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendAdmin = async (_id, _role) => {
@@ -35,9 +38,11 @@ const MemberSettings = ({ data }) => {
       const dataObj = {
         guestId: guest,
         CommunityRoleId: roleCommunityId,
+        CommunityId: id,
       };
 
-      await updateInvitation.mutateAsync(dataObj);
+      await sendInvitation.mutateAsync(dataObj);
+      queryClient.invalidateQueries(["community", "invitation"]);
       sendInvitationSuccess();
     } catch (e) {
       sendInvitationError();
@@ -62,9 +67,9 @@ const MemberSettings = ({ data }) => {
                   <div className="text-md">
                     <p className="">{member?.User?.firstName + " " + member?.User?.lastName}</p>
                     {user?.id !== member?.UserId && (
-                      <div className="py-2 flex justify-start">
+                      <div className="py-2 flex justify-start flex-wrap">
                         {member?.UserId !== user?.id && member?.CommunityRole?.name === "member" && (
-                          <button className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary">
+                          <button className="py-1 my-1 text-xs w-fit bg-secondary text-white px-2 mr-2 rounded-lg hover:bg-primary">
                             {"Kick & Ban"}
                           </button>
                         )}
@@ -78,7 +83,7 @@ const MemberSettings = ({ data }) => {
                                   return;
                                 }
                               }}
-                              className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
+                              className="py-1 my-1 text-xs w-fit bg-secondary text-white px-2 mr-2 rounded-lg hover:bg-primary"
                             >
                               {member?.CommunityRole?.name === "member" ? "Promote to Moderator" : "Demote to regular member"}
                             </button>
@@ -88,13 +93,13 @@ const MemberSettings = ({ data }) => {
                             onClick={() => {
                               handleSendAdmin(member?.UserId, "admin");
                             }}
-                            className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
+                            className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-1 my-1 rounded-lg hover:bg-primary"
                           >
                             {isLoading ? <Loader /> : "Promote to Administrator"}
                           </button>
                         )}
                         {user?.id !== member?.UserId && member?.CommunityRole?.name === "member" && (
-                          <button className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-[0.1rem] rounded-lg hover:bg-primary">
+                          <button className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-1 my-1 rounded-lg hover:bg-primary">
                             {"Remove from Group"}
                           </button>
                         )}

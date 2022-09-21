@@ -1,5 +1,6 @@
 import React from "react";
 import ViewDiscussion from "./../../components/Forum/ViewDiscussion";
+// import { useGetDiscussion } from "../../features/forum/forumSlice";
 
 const ForumList = () => {
   const data = {
@@ -44,15 +45,15 @@ const ForumList = () => {
   return (
     <>
       <div className="w-full">
-        <div className="w-full bg-cover bg-center h-80" style={{ backgroundImage: `url(${data?.coverPicture})` }}>
-          <div className="bg-black/[.3] h-80 flex">
+        <div className="w-full bg-cover bg-center h-64 lg:h-80" style={{ backgroundImage: `url(${data?.coverPicture})` }}>
+          <div className="bg-black/[.3] h-64 lg:h-80 flex">
             <div className="text-white self-end mb-10 ml-6">
-              <p className="pl-16 text-5xl text-left pb-6 font-semibold text-white align-text-bottom">{data?.name}</p>
+              <p className="pl-4 lg:pl-16 text-2xl lg:text-5xl text-left pb-6 font-semibold text-white align-text-bottom">{data?.name}</p>
             </div>
           </div>
         </div>
-        <div className="my-5 mx-32">
-          <ViewDiscussion data={data?.discussions} />
+        <div className="my-5 mx-2 lg:mx-32">
+          <ViewDiscussion data={data?.discussions} type="forum" />
         </div>
       </div>
     </>

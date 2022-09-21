@@ -12,6 +12,7 @@ const CommentList = ({ Comments, showAll }) => {
         ? Comments?.map((comment, idx) => {
             return showAll ? (
               <>
+                {console.log("test", comment?.createdAt)}
                 <div key={idx} className="flex items-start pr-3 mt-3">
                   <img src={comment?.User?.profilePicture} className="h-8 w-8 mr-2 mt-1 mask mask-squircle" alt="_profile_img" />
                   {/* extra div for flex of comment text div and the three dots  */}
@@ -46,7 +47,7 @@ const CommentList = ({ Comments, showAll }) => {
                 <div className="flex items-center flex-shrink">
                   <div className={`px-4 py-2 bg-gray-100 rounded-3xl items-center`}>
                     <div className="flex justify-between space-x-4">
-                      <Link to={`../../profile/${comment?.User?.id}`} className="text-secondary text-sm">
+                      <Link to={`../../profile/${comment?.User?.id}`} className="font-semibold hover:text-primary text-sm">
                         {`${comment?.User?.firstName} ${comment?.User?.lastName}`}
                       </Link>
                       <span className="text-gray-500 font-light text-xs" style={{ textDecoration: "none" }}>
@@ -58,7 +59,6 @@ const CommentList = ({ Comments, showAll }) => {
                       </span>
                       <div className="">{user?.id === comment?.User?.id && <MenuPost post={comment} />}</div>
                     </div>
-
                     <p className="text-gray-800 font-light" style={{ fontSize: "0.97rem" }}>
                       {comment?.postText}
                     </p>

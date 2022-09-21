@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext } from "react-router-dom";
@@ -6,7 +7,7 @@ import { useCreateReaction, useUpdateReaction, useDeleteReaction } from "../reac
 import { Button, Popover } from "@mui/material";
 import { ReactionBarSelector } from "@charkour/react-reactions";
 import _ from "lodash";
-import { FaThumbsUp } from "react-icons/fa";
+// import { FaThumbsUp } from "react-icons/fa";
 import reactions from "../../../data/reactions";
 
 const Reaction = ({ post }) => {
@@ -36,18 +37,28 @@ const Reaction = ({ post }) => {
     });
 
     if (react?.UserId === user?.id) {
-      if (react?.content === label) {
-        // if user like this post and click on same reaction, delete reaction
-        await deleteReaction.mutateAsync({ id: react?.id });
-        queryClient.invalidateQueries(["posts", react?.PostId]);
-      } else {
-        // if user like this post and click on different reaction, update reaction
-        await updateReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post?.id, id: react?.id });
-      }
+      console.log("unlike");
+      await deleteReaction.mutateAsync({ id: react?.id });
+      queryClient.invalidateQueries(["posts", react?.PostId]);
     } else {
-      // if user not like this post, create reaction
-      await createReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post.id });
+      console.log("like");
+      await createReaction.mutateAsync({ content: "like", UserId: user?.id, PostId: post?.id });
+      queryClient.invalidateQueries(["posts", react?.PostId]);
     }
+
+    // if (react?.UserId === user?.id) {
+    //   if (react?.content === label) {
+    //     // if user like this post and click on same reaction, delete reaction
+    //     await deleteReaction.mutateAsync({ id: react?.id });
+    //     queryClient.invalidateQueries(["posts", react?.PostId]);
+    //   } else {
+    //     // if user like this post and click on different reaction, update reaction
+    //     await updateReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post?.id, id: react?.id });
+    //   }
+    // } else {
+    //   // if user not like this post, create reaction
+    //   await createReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post.id });
+    // }
   };
 
   const isLike = () => {
@@ -70,17 +81,17 @@ const Reaction = ({ post }) => {
   return (
     <>
       <Button
-        onClick={handleClick}
+        onClick={handleReaction}
         aria-describedby={id}
         className="text-left mt-2 text-md hover:bg-gray-200 hover:rounded-lg px-2 py-2 lg:px-5 lg:py-2 normal-case"
       >
         <p
           style={{ alignItems: "center", display: "flex", textAlign: "left" }}
-          className={`text-left normal-case text-md align-middle ${like ? " text-secondary" : " text-gray-700"}`}
+          className={`text-left normal-case text-md align-middle ${like ? " text-primary font-semibold" : " text-gray-700"}`}
         >
           {like ? (
             <Fragment>
-              <p
+              {/* <p
                 style={{
                   width: "24px",
                   alignItems: "center",
@@ -91,20 +102,21 @@ const Reaction = ({ post }) => {
                 className="inline-flex text-lg items-center"
               >
                 {like?.node}
-              </p>{" "}
+              </p>{" "} */}
               <p style={{ textTransform: "capitalize" }} className="text-left align-middle">
                 {" "}
-                {like?.content}
+                {"Pa Korem"}
               </p>
             </Fragment>
           ) : (
             <Fragment>
-              <FaThumbsUp size={"24px"} className="bg-g-one/[0.3] p-1 mask mask-squircle inline mr-2" /> {" Like"}
+              {/* <FaThumbsUp size={"24px"} className="bg-g-one/[0.3] p-1 mask mask-squircle inline mr-2" /> */}
+              <span className="text-semibold hover:text-primary">{" Korem"}</span>
             </Fragment>
           )}
         </p>
       </Button>
-      <Popover
+      {/* <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -124,7 +136,7 @@ const Reaction = ({ post }) => {
             onSelect={(label) => handleReaction(label)}
           />
         </Fragment>
-      </Popover>
+      </Popover> */}
     </>
   );
 };

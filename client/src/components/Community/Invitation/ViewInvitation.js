@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useQueryClient } from "react-query";
 import { useAcceptInvitation } from "../../../features/community/communitySlice";
 import { useOutletContext } from "react-router-dom";
+import { MdGroups } from "react-icons/md";
 
 const AcceptInvitationSuccess = () =>
   toast.success("You accepted the invitation", {
@@ -84,7 +85,11 @@ const ViewInvitation = ({ member }) => {
 
         <div className="flex justify-start items-center">
           <div className="mr-3">
-            <img src={member?.Community?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
+            {member?.Community?.profilePicture !== null || member?.Community?.profilePicture !== undefined ? (
+              <MdGroups size="72px" className="text-gray-300 border border-gray-200 mask mask-squircle" />
+            ) : (
+              <img src={member?.Community?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
+            )}
           </div>
           <div className="text-md ">
             <p className="font-semibold">
