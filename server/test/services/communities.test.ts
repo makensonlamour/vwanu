@@ -69,6 +69,7 @@ describe("'communities ' service", () => {
     );
 
     roles = roles.map((role) => role.body);
+
     users = await Promise.all(
       getRandUsers(3).map((u, idx) => {
         let user = { ...u, admin: false };
@@ -124,6 +125,8 @@ describe("'communities ' service", () => {
     );
 
     sameNameCommunities.forEach(({ body }, idx) => {
+      console.log('returning communities');
+      console.log(body);
       if (idx === 0) {
         expect(body).toMatchObject({
           ...CommunityBasicDetails,
@@ -225,7 +228,9 @@ describe("'communities ' service", () => {
           .set('authorization', creator.accessToken)
       )
     );
-    communityUsers = communityUsers.map((communityUser) => communityUser.body);
+    communityUsers = communityUsers.map(
+      (communityUser) => communityUser.body.data
+    );
     communityUsers.forEach((communityUser, idx) => {
       expect(communityUser[0].UserId).toBe(newAdmins[idx].id);
       expect(communityUser[0].User).toMatchObject({
@@ -358,7 +363,6 @@ describe("'communities ' service", () => {
       );
       accessToCommunities = accessToCommunities.map((c) => c.body);
       accessToCommunities.forEach((com) => {
-       
         if (!com.privacyType && com?.privacyType !== 'public') {
           expect(com).toMatchObject({
             name: 'BadRequest',
@@ -439,9 +443,9 @@ describe("'communities ' service", () => {
       const { body: posts } = await testServer
         .get(`/posts?CommunityId=${communityWithPosts.body.id}`)
         .set('authorization', creator.accessToken);
-      expect(Array.isArray(posts)).toBeTruthy();
-      expect(posts.length).toEqual(1);
-      posts.forEach((p) => {
+      expect(Array.isArray(posts.data)).toBeTruthy();
+      expect(posts.data.length).toEqual(1);
+      posts.data.forEach((p) => {
         expect(p).toMatchObject({
           id: expect.any(String),
           multiImage: false,
@@ -515,8 +519,8 @@ describe("'communities ' service", () => {
       .set('authorization', creator.accessToken);
 
     expect(discussionList.statusCode).toEqual(200);
-    discussionList.body.forEach((dis) => {
-      expect(dis.CommunityId).toEqual(communityWithForum.id);
+    discussionList.body.data.forEach((dis) => {
+      expect(dis.locked).toBe(false);
     });
   });
 
