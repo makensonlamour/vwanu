@@ -15,7 +15,7 @@ describe('Posts services', () => {
   const endpoint = '/posts';
   const userEndpoint = '/users';
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
+    await app.get('sequelizeClient').sync({ logged: false, force: true });
     testServer = request(app);
 
     const responses = await Promise.all(
@@ -105,7 +105,7 @@ describe('Posts services', () => {
     const allPost = allPostResponse.body;
     expect(allPostResponse.status).toBe(StatusCodes.OK);
 
-    expect(allPost.length).toBeLessThanOrEqual(postMade);
+    expect(allPost.data.length).toBeLessThanOrEqual(postMade);
   });
   it('should create comment for a post', async () => {
     const commentResponse = await testServer
