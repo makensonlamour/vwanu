@@ -14,7 +14,7 @@ describe("'interests' service", () => {
   const endpoint = '/interests';
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({  logged: false });
+    await app.get('sequelizeClient').sync({ force: true, logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u, idx) => {
@@ -36,7 +36,7 @@ describe("'interests' service", () => {
 
   /** CRUD  */
 
-  it('Everyone can create new todo', async () => {
+  it('Anyone can create new interests', async () => {
     const content = 'interest';
     interests = await Promise.all(
       testUsers.map((user, idx) =>
@@ -120,7 +120,7 @@ describe("'interests' service", () => {
   it('Everyone can see all approved interest only', async () => {
     const allInterests: any = await testServer.get(endpoint);
 
-    allInterests.body.forEach((interest) => {
+    allInterests.body.data.forEach((interest) => {
       expect(interest).toMatchObject({
         id: expect.any(String),
         name: expect.any(String),
