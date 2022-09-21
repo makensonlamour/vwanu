@@ -1,21 +1,23 @@
 // import IncludeAssociations from '../../../Hooks/IncludeAssociations';
 import { QueryTypes } from '@sequelize/core';
-import isEmpty from 'lodash/isEmpty';
 import { BadRequest } from '@feathersjs/errors';
+import getPaginationDetails from '../../../lib/utils/getPaginationDetails';
+import getQueryParameters from '../../../lib/utils/getQueryParameters';
+import getPaginatedResponse from '../../../lib/utils/getPaginatedResponse';
 
 const IncludeLast = (single: boolean) => async (context) => {
-  const { app, params } = context;
+  const { app, params, service } = context;
   const { query = {} } = params;
-  let stringQuery = 'WHERE "D"."DiscussionId" IS NULL';
-  if (!isEmpty(params.query)) {
-    stringQuery = 'WHERE'.concat(
-      Object.keys(query)
-        .map((key) => `"D"."${key}"='${query[key]}'`)
-        .join('"AND"')
-    );
-  }
+  const stringQuery = getQueryParameters('D', 'DiscussionId', query);
+  let { $limit, $skip } = query;
+  let { max } = service.options.paginate;
   const Sequelize = app.get('sequelizeClient');
+  const INTERNAL_MAX = 50;
+  max = Number.parseInt(max, 10) || INTERNAL_MAX;
+  $limit = Number.parseInt($limit, 10) || max;
+  $skip = Number.parseInt($skip, 10) || 0;
 
+  const { offsetAndLimit } = getPaginationDetails({ $limit, $skip, max });
   const command = `SELECT 
   "D"."id", 
   "D"."title",
@@ -67,7 +69,8 @@ const IncludeLast = (single: boolean) => async (context) => {
     INNER JOIN "Users" AS "U" ON "D"."UserId" = "U"."id"
     ${single ? `WHERE "D"."id"='${context.id}'` : stringQuery}
     GROUP BY "D"."id","D"."title", "D"."body","U"."firstName" ,"U"."id", "U"."lastName","U"."profilePicture","U"."createdAt","U"."updatedAt"
-    LIMIT 50
+    LIMIT ${single ? 1 : offsetAndLimit.limit} 
+    OFFSET ${single ? 0 : offsetAndLimit.offset}
      `;
 
   try {
@@ -75,7 +78,9 @@ const IncludeLast = (single: boolean) => async (context) => {
       type: QueryTypes.SELECT,
     });
 
-    context.result = single ? discussionList[0] : discussionList;
+    context.result = single
+      ? discussionList[0]
+      : getPaginatedResponse({ $limit, $skip, data: discussionList, max });
   } catch (error) {
     if (error?.original?.code)
       switch (error?.original?.code) {
@@ -88,43 +93,5 @@ const IncludeLast = (single: boolean) => async (context) => {
   }
 
   return context;
-  // return IncludeAssociations({
-  //   include: [
-  //     {
-  //       model: 'discussion',
-  //       as: 'User',
-  //       // attributes: [
-  //       //   'id',
-  //       //   'firstName',
-  //       //   'lastName',
-  //       //   'profilePicture',
-  //       //   'createdAt',
-
-  //       // ],
-  //       attributes: {
-  //         include: [
-  //           [
-  //             Sequelize.fn('COUNT', Sequelize.col('discussion.id')),
-  //             'sensorCount',
-  //           ],
-  //         ],
-  //       },
-  //     },
-  //     // {
-  //     //   model: 'conversation',
-  //     //   as: 'Messages',
-  //     //   order: [['createdAt', 'desc']],
-
-  //     //   limit: 1,
-  //     //   include: [
-  //     //     {
-  //     //       model: 'message',
-  //     //       as: 'sender',
-  //     //       attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
-  //     //     },
-  //     //   ],
-  //     // },
-  //   ],
-  // })(context);
 };
 export default IncludeLast;

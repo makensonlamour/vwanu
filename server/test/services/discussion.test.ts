@@ -210,8 +210,8 @@ describe("'discussion ' service", () => {
       .get(endpoint)
       .set('authorization', testUsers[0].accessToken);
 
-    expect(discussionsList).toHaveLength(1);
-    expect(discussionsList[0].id).toEqual(discussion.id);
+    expect(discussionsList.data).toHaveLength(1);
+    expect(discussionsList.data[0].id).toEqual(discussion.id);
   });
   it('Should create a second discussion', async () => {
     const { body: discussion2 } = await testServer
@@ -229,8 +229,8 @@ describe("'discussion ' service", () => {
     const { body: discussionsList } = await testServer
       .get(endpoint)
       .set('authorization', testUsers[0].accessToken);
-    expect(discussionsList).toHaveLength(2);
-    discussionsList.forEach((dis) => {
+    expect(discussionsList.data).toHaveLength(2);
+    discussionsList.data.forEach((dis) => {
       expect(dis).toMatchObject({
         id: expect.any(String),
         title: expect.any(String),
@@ -269,7 +269,7 @@ describe("'discussion ' service", () => {
       .get(`${endpoint}?DiscussionId=${discussion.id}`)
       .set('authorization', testUsers[0].accessToken);
 
-    comments.forEach((com) => {
+    comments.data.forEach((com) => {
       expect(com).toMatchObject({
         id: expect.any(String),
         body: expect.any(String),
