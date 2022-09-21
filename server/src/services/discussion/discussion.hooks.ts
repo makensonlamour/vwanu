@@ -2,35 +2,20 @@ import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
 import AutoOwn from '../../Hooks/AutoOwn';
 import LimitToOwner from '../../Hooks/LimitToOwner';
-import LimitToAdminOrOwnerHook from '../../Hooks/LimitToAdminOrOwner.hook';
-import addAssociation from '../../Hooks/AddAssociations';
+import NoCommentOnLockParents from '../../Hooks/NoCommentOnLockParents';
+
+import { includeUserAndLastComment } from './hooks';
 
 const { authenticate } = authentication.hooks;
 
 export default {
   before: {
-    all: [
-      authenticate('jwt'),
-      addAssociation({
-        models: [
-          {
-            model: 'users',
-            attributes: [
-              'firstName',
-              'lastName',
-              'id',
-              'profilePicture',
-              'createdAt',
-            ],
-          },
-        ],
-      }),
-    ],
-    find: [],
-    get: [],
-    create: [AutoOwn],
+    all: [authenticate('jwt')],
+    find: [includeUserAndLastComment(false)],
+    get: [includeUserAndLastComment(true)],
+    create: [AutoOwn, NoCommentOnLockParents],
     update: [LimitToOwner],
-    patch: [LimitToAdminOrOwnerHook({})],
+    patch: [LimitToOwner],
     remove: [LimitToOwner],
   },
 
