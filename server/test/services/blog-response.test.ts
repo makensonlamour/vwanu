@@ -125,7 +125,7 @@ describe("'blogResponse ' service", () => {
       .get(`${endpoint}?BlogId=${blog.id}`)
       .set('authorization', user0.accessToken);
 
-    responses = responses.body;
+    responses = responses.body.data;
     expect(responses).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
