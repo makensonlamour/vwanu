@@ -59,7 +59,7 @@ describe("'community-users ' service", () => {
       .get(`${endpoint}/?CommunityId=${community.body.id}`)
       .set('authorization', creator.accessToken);
 
-    users = users.body;
+    users = users.body.data;
     expect(Array.isArray(users)).toBeTruthy();
     expect(users.length).toBe(1);
 
@@ -74,7 +74,7 @@ describe("'community-users ' service", () => {
           createdAt: expect.any(String),
         })
       );
-     
+
       expect(foundUser.CommunityRole.name).toBe('admin');
     });
   });
@@ -85,13 +85,13 @@ describe("'community-users ' service", () => {
         `${endpoint}/?CommunityId=${community.body.id}&UserId=${noneMemberId}`
       )
       .set('authorization', creator.accessToken);
-    possibleMember = possibleMember.body;
+    possibleMember = possibleMember.body.data;
     expect(possibleMember.length).toBe(0);
 
     possibleMember = await testServer
       .get(`${endpoint}/?CommunityId=${community.body.id}&UserId=${creator.id}`)
       .set('authorization', creator.accessToken);
-    possibleMember = possibleMember.body;
+    possibleMember = possibleMember.body.data;
     expect(possibleMember.length).toBe(1);
     expect(possibleMember[0].User).toEqual(
       expect.objectContaining({

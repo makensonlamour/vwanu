@@ -87,6 +87,7 @@ describe("'communityInvitationRequest' service", () => {
       })
     );
     testUsers = testUsers.map((testUser) => testUser.body);
+
     const adminUser = testUsers.shift();
     creator = testUsers.shift();
 
@@ -103,7 +104,7 @@ describe("'communityInvitationRequest' service", () => {
     roles = await testServer
       .get(rolesEndpoint)
       .set('authorization', adminUser.accessToken);
-    roles = roles.body;
+    roles = roles.body.data;
 
     const name = 'Community with invitation';
     const description = 'Community with invitation description';
@@ -179,8 +180,8 @@ describe("'communityInvitationRequest' service", () => {
       const inv = InvitationObJect;
       delete inv.guestid;
       delete inv.hostid;
-      expect(invitationRecords.body.length).toBe(1);
-      expect(invitationRecords.body[0]).toMatchObject({
+      expect(invitationRecords.body.data.length).toBe(1);
+      expect(invitationRecords.body.data[0]).toMatchObject({
         ...inv,
 
         guest: expect.objectContaining({
@@ -216,7 +217,7 @@ describe("'communityInvitationRequest' service", () => {
     const inv = InvitationObJect;
     delete inv.guestid;
     delete inv.hostid;
-    invitationsISent.body.forEach((invitation) => {
+    invitationsISent.body.data.forEach((invitation) => {
       expect(invitation).toMatchObject({
         ...inv,
         ...{
@@ -240,7 +241,9 @@ describe("'communityInvitationRequest' service", () => {
           .set('authorization', user.accessToken)
       )
     );
-    receivedInvitationForAll = receivedInvitationForAll.map(({ body }) => body);
+    receivedInvitationForAll = receivedInvitationForAll.map(
+      ({ body }) => body.data
+    );
 
     receivedInvitationForAll.forEach((inv, idx) => {
       inv.forEach((invitation) => {

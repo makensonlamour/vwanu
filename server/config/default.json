@@ -68,5 +68,9 @@
       "algorithm": "HS256",
       "expiresIn": "360d"
     }
+  },
+  "paginate": {
+    "default": 10,
+    "max": 25
   }
 }

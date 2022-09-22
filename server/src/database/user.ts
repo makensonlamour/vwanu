@@ -117,9 +117,6 @@ export default (sequelize: any, DataTypes: any) => {
     showLastSeen: boolean;
 
     static associate(models: any) {
-      // User.hasMany(models.Page, {
-      //   onDelete: 'CASCADE',
-      // });
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
       });

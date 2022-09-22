@@ -16,6 +16,7 @@ export default (sequelize: any, DataTypes: any) => {
     static associate(models: any): void {
       Reaction.belongsTo(models.User);
       Reaction.belongsTo(models.Post);
+      Reaction.belongsTo(models.Discussion);
     }
   }
   Reaction.init(
@@ -32,7 +33,6 @@ export default (sequelize: any, DataTypes: any) => {
     },
 
     {
-      
       sequelize,
       modelName: 'Reaction',
     }

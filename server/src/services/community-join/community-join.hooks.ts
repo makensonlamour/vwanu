@@ -27,7 +27,7 @@ const AttachingRole = (role) => async (context) => {
   const { app, data } = context;
   const memberRole = await app
     .service('community-role')
-    .find({ query: { ...role, $select: ['id'] } });
+    .find({ query: { ...role, $select: ['id'] }, paginate: false });
 
   data.CommunityRoleId = memberRole[0].id;
   return context;
@@ -40,7 +40,7 @@ const addUserToCommunity = async (context) => {
 
   const memberRole = await app
     .service('community-role')
-    .find({ query: { name: 'member', $select: ['id'] } });
+    .find({ query: { name: 'member', $select: ['id'] }, paginate: false });
 
   const role = memberRole[0].id;
 
