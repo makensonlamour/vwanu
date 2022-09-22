@@ -125,8 +125,6 @@ describe("'communities ' service", () => {
     );
 
     sameNameCommunities.forEach(({ body }, idx) => {
-      console.log('returning communities');
-      console.log(body);
       if (idx === 0) {
         expect(body).toMatchObject({
           ...CommunityBasicDetails,

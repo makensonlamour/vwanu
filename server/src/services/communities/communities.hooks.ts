@@ -72,9 +72,7 @@ export default {
     find: [],
     get: [],
     create: [
-      () => console.log('Before Joinning create'),
       AutoJoin,
-      () => console.log('After Joinning '),
       SaveAndAttachInterests({
         entityName: 'Community',
         relationTableName: 'Community_Interest',
