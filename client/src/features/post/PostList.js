@@ -77,9 +77,9 @@ const PostList = ({ post, pageTitle }) => {
                         : `profile/${post?.User?.id}`
                     }
                   >
-                    <span className="ml-3 text-md font-bold hover:text-primary line-clamp-1 w-[80%]">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
+                    <span className="ml-3 text-sm font-bold hover:text-primary line-clamp-1 w-[80%]">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
                   </Link>
-                  <p className="ml-3 font-medium text-sm text-gray-900">
+                  <p className="ml-3 font-medium text-xs text-gray-900">
                     {formatDistance(parseISO(post?.createdAt), new Date(), [
                       {
                         includeSeconds: true,
@@ -177,13 +177,13 @@ const PostList = ({ post, pageTitle }) => {
                 {/*Comments*/}
                 <button
                   onClick={() => setCommentPrev(!commentPrev)}
-                  className="ml-auto mt-2 text-md text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
+                  className="text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
                 >
-                  <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" />
+                  {/* <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
                   {" Comment"}
                 </button>
-                <button className="ml-auto mt-2 text-md text-secondary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2">
-                  <RiShareForwardLine size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" />
+                <button className="text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2">
+                  {/* <RiShareForwardLine size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
                   {" Share"}
                 </button>
               </div>

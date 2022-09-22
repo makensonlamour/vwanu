@@ -1,35 +1,46 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { BsThreeDots } from "react-icons/bs";
+import { IoMdShareAlt } from "react-icons/io";
 
-const ForumReply = () => {
+const ForumReply = ({ data }) => {
   const [over, setOver] = useState(false);
   return (
     <>
-      <div onMouseOver={() => setOver(true)} onMouseOut={() => setOver(false)} className="hover:bg-gray-100 px-4 py-6">
+      <div
+        onMouseOver={() => setOver(true)}
+        onMouseOut={() => setOver(false)}
+        className="hover:bg-gray-100 px-4 py-4 border-t border-gray-200"
+      >
         <div className="flex justify-between">
-          <div className="flex">
+          <div className="flex items-center">
             <div className="">
-              <img src={""} alt="_profile_picture" className="w-12 h-12 border mask mask-squircle" />
+              <img src={data?.User?.profilePicture} alt="_profile_picture" className="w-12 h-12 border mask mask-squircle" />
             </div>
             <div className="ml-2">
-              <p className="font-[400] align-middle">Joseph</p>
-              <p className=""></p>
+              <p className="font-[400] align-middle text-lg">{data?.User?.firstName + " " + data?.User?.lastName}</p>
+              <p className="">{data?.createdAt}</p>
             </div>
           </div>
           {over && (
             <div className="">
-              <button className="mr-2">share</button>
-              <button className="">more actions</button>
+              <button className="mr-2">
+                <IoMdShareAlt size={"24px"} className="inline" />
+              </button>
+              <button className="">
+                <BsThreeDots size={"24px"} className="inline" />
+              </button>
             </div>
           )}
         </div>
-        <div className="">
-          <p className="">{`You likely have Outlook assigned via Intune, and because the app deployment is managed via MDM, it’s removed when the device is unenrolled.
-
-There’s a new option to leave apps behind when unenrolled now. ‘uninstall on device removal’. You can choose yes or no on this when looking at your app assignment settings for outlook mobile.`}</p>
+        <div className="py-2">
+          <p className="">{data?.body}</p>
         </div>
       </div>
     </>
   );
 };
+
+ForumReply.propTypes = { data: PropTypes.object.isRequired };
 
 export default ForumReply;

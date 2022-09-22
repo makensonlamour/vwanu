@@ -26,7 +26,7 @@ const postError = () =>
     position: "top-center",
   });
 
-const InputModal = ({ reference, communityId }) => {
+const InputModal = ({ reference, communityId, disabled = false }) => {
   const user = useOutletContext();
   const UserId = user?.id;
   const [showModal, setShowModal] = useState(false);
@@ -68,7 +68,7 @@ const InputModal = ({ reference, communityId }) => {
 
   let formData = new FormData();
   const handleSubmit = async (credentials) => {
-    if (credentials?.postText === "" || selectedGif !== "" || files.length < 1) return alert("The post can't be empty.");
+    if (credentials?.postText === "" && selectedGif === "" && files.length < 1) return alert("The post can't be empty.");
     setLoading(true);
     try {
       if (files?.length) {
@@ -182,7 +182,10 @@ const InputModal = ({ reference, communityId }) => {
   return (
     <>
       <Toaster />
-      <div onClick={() => setShowModal(true)} className="rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color">
+      <div
+        onClick={() => setShowModal(true)}
+        className={`${disabled ? "hidden" : ""} rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color`}
+      >
         <div className="flex items-center px-4 pb-4">
           {" "}
           <Link className="w-14 h-14 mx-auto " to={"../profile/" + user?.id}>
@@ -450,6 +453,7 @@ const InputModal = ({ reference, communityId }) => {
 InputModal.propTypes = {
   reference: PropTypes.string.isRequired,
   communityId: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export default InputModal;

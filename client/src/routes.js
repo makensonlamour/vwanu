@@ -20,6 +20,7 @@ import Community from "./pages/Community/Community";
 import Forum from "./pages/Forum/Forum";
 import ViewForum from "./pages/Forum/ViewForum";
 import ForumList from "./pages/Forum/ForumList";
+import Notification from "./pages/Notification/Notification";
 import CallScreen from "./pages/Call/CallScreen";
 // import TestSingleComponents from "./pages/TestSingleComponents/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
@@ -172,6 +173,12 @@ let routes = [
     path: routesPath.VIEW_LIST_FORUMS,
     name: "View List Forums",
     element: ForumList,
+    access: role.USER,
+  },
+  {
+    path: routesPath.NOTIFICATIONS,
+    name: "Notifications",
+    element: Notification,
     access: role.USER,
   },
   {

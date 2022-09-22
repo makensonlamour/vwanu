@@ -5,24 +5,16 @@ import toast, { Toaster } from "react-hot-toast";
 import { useQueryClient } from "react-query";
 import { useAcceptInvitation } from "../../../features/community/communitySlice";
 import { useOutletContext } from "react-router-dom";
+import { MdGroups } from "react-icons/md";
+// import { isInvitationReceive } from "../../../helpers";
 
-const AcceptInvitationSuccess = () =>
-  toast.success("You accepted the invitation", {
+const AcceptInvitationSuccess = (_text) =>
+  toast.success("You" + _text + " the invitation.", {
     position: "top-center",
   });
 
-const AcceptInvitationError = () =>
-  toast.error("Sorry. Error on accepting invitation!", {
-    position: "top-center",
-  });
-
-const declineInvitationSuccess = () =>
-  toast.success("You declined the invitation", {
-    position: "top-center",
-  });
-
-const declineInvitationError = () =>
-  toast.error("Sorry. Error on declining invitation!", {
+const AcceptInvitationError = (_text) =>
+  toast.error("Sorry. Error on " + _text + " invitation!", {
     position: "top-center",
   });
 
@@ -32,59 +24,59 @@ const ViewInvitation = ({ member }) => {
   const [loading, setLoading] = useState(false);
   const acceptInvitation = useAcceptInvitation(["invitation", "accept"], undefined, undefined);
 
-  const handleAccept = async () => {
+  const handleAccept = async (_response) => {
     let CommunityId = member?.CommunityId;
     setLoading(true);
     try {
       const dataObj = {
         invitationId: member?.id,
-        response: true,
+        response: _response,
       };
       let result = await acceptInvitation.mutateAsync(dataObj);
-      AcceptInvitationSuccess();
+      if (_response) {
+        AcceptInvitationSuccess("accepted");
+      } else {
+        AcceptInvitationSuccess("declined");
+      }
+
+      queryClient.invalidateQueries();
       if (result?.data?.message === "Your response have been recorded") {
         window.location.href = `../groups/${CommunityId}`;
       }
     } catch (e) {
-      AcceptInvitationError();
+      if (_response) {
+        AcceptInvitationError("accepting");
+      } else {
+        AcceptInvitationError("declining");
+      }
+
       console.log(e);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDecline = async () => {
-    setLoading(true);
-    try {
-      const dataObj = {
-        invitationId: member?.id,
-        response: false,
-      };
-      let result = await acceptInvitation.mutateAsync(dataObj);
-      declineInvitationSuccess();
-      if (result?.data?.message === "Your response have been recorded") {
-        queryClient.invalidateQueries(["community", "invitation", "all"]);
-      }
-    } catch (e) {
-      declineInvitationError();
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
   return (
     <>
       <Toaster />
       <div key={member?.id} className="border border-gray-200 p-4 w-full">
-        <p className="pb-2 text-sm md:text-lg">
-          {`${member?.host?.firstName} ${member?.host?.lastName}  sent ${
-            user?.id === member?.guest?.id ? "you" : member?.guest?.firstName + " " + member?.guest?.lastName
-          } an invitation to be a ${member?.CommunityRole?.name} of`}
-        </p>
+        {member?.host?.id === member?.guest?.id ? (
+          <p className="pb-2 text-sm md:text-lg">{`You sent a request to be a ${member?.CommunityRole?.name} of`}</p>
+        ) : (
+          <p className="pb-2 text-sm md:text-lg">
+            {`${member?.host?.firstName} ${member?.host?.lastName}  sent ${
+              user?.id === member?.guest?.id ? "you" : member?.guest?.firstName + " " + member?.guest?.lastName
+            } an invitation to be a ${member?.CommunityRole?.name} of`}
+          </p>
+        )}
 
         <div className="flex justify-start items-center">
           <div className="mr-3">
-            <img src={member?.Community?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
+            {member?.Community?.profilePicture !== null || member?.Community?.profilePicture !== undefined ? (
+              <MdGroups size="72px" className="text-gray-300 border border-gray-200 mask mask-squircle" />
+            ) : (
+              <img src={member?.Community?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />
+            )}
           </div>
           <div className="text-md ">
             <p className="font-semibold">
@@ -93,21 +85,45 @@ const ViewInvitation = ({ member }) => {
                 {member?.Community?.privacyType}
               </span>
             </p>
+            {/* From pending Invitations */}
+            {member?.host?.id === member?.guest?.id && (
+              <div className="py-2 flex justify-start">
+                {member?.host?.id !== user?.id && (
+                  <button
+                    onClick={() => handleAccept(true)}
+                    className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
+                  >
+                    {loading ? <Loader /> : "Accept"}
+                  </button>
+                )}
+                <button
+                  onClick={() => handleAccept(false)}
+                  className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary "
+                >
+                  {loading ? <Loader /> : "Decline"}
+                </button>
+              </div>
+            )}
 
-            <div className="py-2 flex justify-start">
-              <button
-                onClick={() => handleAccept()}
-                className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
-              >
-                {loading ? <Loader /> : "Accept"}
-              </button>
-              <button
-                onClick={() => handleDecline()}
-                className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary "
-              >
-                {loading ? <Loader /> : "Decline"}
-              </button>
-            </div>
+            {/* From list invitations */}
+            {member?.host?.id !== member?.guest?.id && (
+              <div className="py-2 flex justify-start">
+                {member?.host?.id !== user?.id && (
+                  <button
+                    onClick={() => handleAccept(true)}
+                    className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary"
+                  >
+                    {loading ? <Loader /> : "Accept"}
+                  </button>
+                )}
+                <button
+                  onClick={() => handleAccept(false)}
+                  className="text-xs w-fit bg-secondary text-white px-4 mr-2 py-[0.1rem] rounded-lg hover:bg-primary "
+                >
+                  {loading ? <Loader /> : "Decline"}
+                </button>
+              </div>
+            )}
             <p className="">
               <span className="text-sm md:text-md">{member?.createdAt}</span>
             </p>

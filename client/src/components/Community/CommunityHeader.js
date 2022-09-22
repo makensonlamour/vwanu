@@ -1,11 +1,12 @@
 /*eslint-disable */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation, useOutletContext, useParams } from "react-router-dom";
 import CommunityTabs from "./CommunityTabs";
 import { allTabs1 } from "./Tablink.data";
 import UpdatesComponent from "../Newsfeed/UpdatesComponent";
 import { MdGroups } from "react-icons/md";
+import { ImSad } from "react-icons/im";
 import random_cover from "../../assets/images/cover_group_random.png";
 import ManageTabs from "./ManageTabs";
 import PostTab from "./CommunityTab/PostTab";
@@ -13,33 +14,43 @@ import MembersTab from "./MembersTab";
 import DiscussionTabs from "./DiscussionTabs";
 import SendInviteTabs from "./SendInviteTabs";
 import { Chip, Stack } from "@mui/material";
+import EmptyComponent from "./../common/EmptyComponent";
+import {
+  useSendInvitation,
+  useGetCommunityRole,
+  useJoinCommunity,
+  useGetMyCommunityInvitation,
+} from "../../features/community/communitySlice";
+import toast, { Toaster } from "react-hot-toast";
+import { isInvitation, isInvitationReceive } from "../../helpers/index";
 
-//core components
-// import FriendRequestButton from "../../features/friend/component/FriendRequestButton";
-// import FriendButton from "../../features/friend/component/FriendButton";
-// import MenuButton from "../../features/friend/component/MenuButton";
-// import Loader from "../common/Loader";
-// import ProfileTabs from "./ProfileTabs";
-// import UploadPhotoCrop from "../form/profile/UploadPhotoCrop";
-// import AboutTab from "./AboutTab";
-// import ViewFriend from "./ViewFriend";
-// import PostTab from "./PostTab";
-// import AlbumTab from "./AlbumTab";
-// import NetworkTab from "./NetworkTab";
-// import BlogTab from "./BlogTab";
-// import { checkFriendList } from "../../helpers/index";
-// import { FaUserEdit, FaUserAlt } from "react-icons/fa";
-// import EditProfile from "../../pages/Profil/EditProfile";
-// import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
-// import { BsFacebook } from "react-icons/bs";
-// import { format } from "date-fns";
+const sendInvitationSuccess = () =>
+  toast.success("You sent the invitation", {
+    position: "top-center",
+  });
 
-const CommunityHeader = ({ user, communityData, notificationList }) => {
-  console.log("data", communityData);
+const sendInvitationError = () =>
+  toast.error("Sorry. Error on sending the invitation!", {
+    position: "top-center",
+  });
+
+const CommunityHeader = ({ communityData, notificationList }) => {
+  const location = useLocation();
+  const data = location.state;
   const navigate = useNavigate();
+  const user = useOutletContext();
+  const { id } = useParams();
   const [edit, setEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [over, setOver] = useState(false);
-
+  const sendInvitation = useSendInvitation(["community", "invitation"], undefined, undefined);
+  const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
+  const { data: listInvitation } = useGetMyCommunityInvitation(
+    ["community", "invitation", user?.id],
+    user?.id !== undefined ? true : false,
+    user?.id
+  );
+  const { data: roles } = useGetCommunityRole(["roles", "all"]);
   const percentage = 73;
 
   const steps = [
@@ -94,8 +105,50 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
     userRole: "Organizer",
   };
 
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      let roleCommunityId;
+      roles?.data?.map((role) => {
+        if (role?.name === "member") {
+          return (roleCommunityId = role?.id);
+        }
+      });
+      // let guest = selectMember?.map((mem) => {
+      //   return mem?.id;
+      // });
+      const dataObj = {
+        CommunityId: id,
+      };
+
+      if (communityData?.privacy === "public" || data?.privacyType === "public") {
+        await joinCommunity.mutateAsync(dataObj);
+      } else if (data?.privacyType === "private" || communityData?.privacy === "private") {
+        dataObj.guestId = user?.id;
+        dataObj.CommunityRoleId = roleCommunityId;
+        await sendInvitation.mutateAsync(dataObj);
+      } else {
+        return;
+        // console.log("hidden");
+      }
+
+      sendInvitationSuccess();
+      window.location.reload();
+      // setSelectMember([]);
+    } catch (e) {
+      sendInvitationError();
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const invite = isInvitation(listInvitation?.data, user);
+  const inviteReceive = isInvitationReceive(listInvitation?.data, user);
+
   return (
     <>
+      <Toaster />
       {!user ? (
         <Loader />
       ) : (
@@ -121,60 +174,64 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                         <MdGroups size="92px" className="text-gray-300" />
                       ) : (
                         <img
-                          src={communityData?.profilePicture}
+                          src={communityData?.profilePicture || data?.profilePicture}
                           className="object-cover mask mask-squircle w-[120px] h-[120px] lg:w-[150px] lg:h-[150px]"
                           alt="profile_picture"
                         />
                       )}
                     </div>
                   </div>
-
-                  {/*otherUser ? null : (
-                      <UploadPhotoCrop
-                        fromButton="profile"
-                        id={user?.id}
-                        className="absolute bottom-[0%] right-[30%] lg:right-[0%] lg:bottom-[0%]"
-                      />
-                    )*/}
                 </div>
               </div>
               <div className="rounded-b-lg border border-gray-300 bg-white pt-12 lg:pt-3 min-h-[250px]">
                 <div className="py-4 relative">
                   <div className="w-full lg:w-[65%] xl:w-[75%] absolute lg:left-[13.5rem]">
-                    <div className="flex flex-row items-center justify-center">
+                    <div className="flex flex-row items-center justify-center lg:justify-between">
                       <div className="flex items-center justify-between">
                         <h1 className="font-mock text-lg lg:text-2xl text-center lg:text-left font-semibold inline mr-2">
-                          {communityData?.name}
+                          {communityData?.name || data?.name}
                         </h1>
                         <p className="mx-2 bg-secondary px-2 pb-1 lg:pb-[0.25rem] rounded-lg text-white text-sm lg:text-md align-middle">
-                          {communityData?.privacyType}
+                          {communityData?.privacyType || data?.privacyType}
                         </p>
                       </div>
-                      {over ? (
-                        <button
-                          onMouseOut={() => setOver(false)}
-                          className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
-                        >
-                          {"Leave Group"}
-                        </button>
+                      {communityData?.IsMember === null || data?.IsMember === null ? (
+                        !invite ? (
+                          <button
+                            onClick={handleSubmit}
+                            className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
+                          >
+                            {"Join"}
+                          </button>
+                        ) : (
+                          <button
+                            disabled={inviteReceive ? false : true}
+                            onClick={handleSubmit}
+                            className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white disabled:bg-placeholder-color disabled:text-black"
+                          >
+                            {inviteReceive ? "Accept Invitation" : "Request Sent"}
+                          </button>
+                        )
                       ) : (
-                        <button
-                          onMouseOver={() => setOver(true)}
-                          className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
-                        >
-                          {user?.id === communityData?.UserId ? "Creator" : "Member"}
+                        <button className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white">
+                          {communityData?.IsMember?.role}
                         </button>
                       )}
                     </div>
                     <p className="pb-1 pt-5 lg:pt-3 flex items-center justify-center lg:justify-start lg:w-[65%] xl:w-[75%]">
                       <Stack direction="row" spacing={1}>
-                        {communityData?.Interests?.length > 0 &&
+                        {((communityData?.Interests?.length > 0 || data?.Interests?.length > 0) &&
                           communityData?.Interests?.map((interest) => {
+                            return <Chip key={interest?.id} label={interest?.name} size="small" />;
+                          })) ||
+                          data?.Interests?.map((interest) => {
                             return <Chip key={interest?.id} label={interest?.name} size="small" />;
                           })}
                       </Stack>
                     </p>
-                    <p className="py-3 lg:py-2 w-full lg:w-[60%] text-sm text-center lg:text-left">{communityData?.description}</p>
+                    <p className="py-3 lg:py-2 w-full lg:w-[60%] text-sm text-center lg:text-left">
+                      {communityData?.description || data?.description}
+                    </p>
                     <div className="lg:flex-none flex justify-between items-center px-2">
                       <p className=" lg:px-0 py-2 flex items-center text-sm lg:text-md">
                         {"Organizer:"}
@@ -183,19 +240,26 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                         </span>
                       </p>
                       <div className="lg:hidden">
-                        {over ? (
-                          <button
-                            onMouseOut={() => setOver(false)}
-                            className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white"
-                          >
-                            {"Leave Group"}
-                          </button>
+                        {communityData?.IsMember === null || data?.IsMember === null ? (
+                          !invite ? (
+                            <button
+                              onClick={handleSubmit}
+                              className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white"
+                            >
+                              {"Join"}
+                            </button>
+                          ) : (
+                            <button
+                              disabled={inviteReceive ? false : true}
+                              onClick={handleSubmit}
+                              className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white disabled:bg-placeholder-color disabled:text-black"
+                            >
+                              {inviteReceive ? "Accept Invitation" : "Request Sent"}
+                            </button>
+                          )
                         ) : (
-                          <button
-                            onMouseOver={() => setOver(true)}
-                            className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white"
-                          >
-                            {communityData?.IsMember !== null ? communityData?.IsMember?.role : "Join"}
+                          <button className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white">
+                            {communityData?.IsMember?.role}
                           </button>
                         )}
                       </div>
@@ -203,72 +267,82 @@ const CommunityHeader = ({ user, communityData, notificationList }) => {
                   </div>
                 </div>
               </div>
-              {/*}
-              <div className="rounded-b-lg border border-gray-300 bg-white pt-[0px] lg:pt-8 min-h-[220px]">
-                <div className="py-4 text-center">
-                  <div className="mb-4 lg:mb-2 block">
-                    <h1 className="font-mock text-2xl font-semibold inline">{dataBlog?.name}</h1>
-                    <h4 className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
-                      {"From "}
-                      {user.country ? user.country : ""}
-                      <span className="px-2">•</span>
-                      <span>{"Joined "}</span>
-                    </h4>
-                  </div>
-                </div>
-              </div>
-                  {*/}
-              <CommunityTabs communityData={communityData} user={user} otherUser={otherUser} />
-              <div className="mt-8 px-2">
-                <Routes>
-                  <Route
-                    path={allTabs1[0]}
-                    element={
-                      <div>
-                        <PostTab />
-                      </div>
-                    }
-                  />
-                  <Route
-                    path={allTabs1[1]}
-                    element={
-                      <div>
-                        <MembersTab />
-                      </div>
-                    }
-                  />
-                  <Route path={allTabs1[2]} element={<div>Albums</div>} />
-                  <Route
-                    path={allTabs1[3]}
-                    element={
-                      <div>
-                        <DiscussionTabs />{" "}
-                      </div>
-                    }
-                  />
-                  <Route
-                    path={allTabs1[4]}
-                    element={
-                      <div>
-                        <SendInviteTabs />
-                      </div>
-                    }
-                  />
-                  {/* <Route path={allTabs1[5]} element={<div>Send Messages</div>} /> */}
-                  {user?.id.toString() === communityData?.UserId?.toString() && (
+
+              {communityData?.id && <CommunityTabs communityData={communityData} user={user} otherUser={otherUser} />}
+              {communityData?.id ? (
+                <div className="mt-8 px-2">
+                  <Routes>
                     <Route
-                      path={allTabs1[6]}
+                      path={allTabs1[0]}
                       element={
                         <div>
-                          <div>
-                            <ManageTabs />
-                          </div>
+                          <PostTab />
                         </div>
                       }
                     />
-                  )}
-                </Routes>
-              </div>
+                    <Route
+                      path={allTabs1[1]}
+                      element={
+                        <div>
+                          <MembersTab />
+                        </div>
+                      }
+                    />
+                    <Route path={allTabs1[2]} element={<div>Albums</div>} />
+                    <Route
+                      path={allTabs1[3]}
+                      element={
+                        <div>
+                          <DiscussionTabs />{" "}
+                        </div>
+                      }
+                    />
+                    <Route
+                      path={allTabs1[4]}
+                      element={
+                        <div>
+                          {communityData?.IsMember !== null ? (
+                            <SendInviteTabs />
+                          ) : (
+                            <div className="flex justify-center py-5">
+                              <EmptyComponent
+                                icon={<ImSad size={"32px"} className="" />}
+                                placeholder={"Sorry, You can't view this section of the community."}
+                                tips={
+                                  "To see this community section, you need to be a member of this community. You can be a member by simply click on the button Join."
+                                }
+                              />
+                            </div>
+                          )}
+                        </div>
+                      }
+                    />
+                    {/* <Route path={allTabs1[5]} element={<div>Send Messages</div>} /> */}
+                    {user?.id.toString() === communityData?.UserId?.toString() && (
+                      <Route
+                        path={allTabs1[6]}
+                        element={
+                          <div>
+                            <div>
+                              <ManageTabs />
+                            </div>
+                          </div>
+                        }
+                      />
+                    )}
+                  </Routes>
+                </div>
+              ) : (
+                <div className="flex justify-center py-5">
+                  <EmptyComponent
+                    icon={<ImSad size={"32px"} className="" />}
+                    placeholder={"Sorry, You can't view this community activities."}
+                    tips={
+                      "To see this community activities, you should make a request to join the community first by clicking on the button join."
+                    }
+                  />
+                </div>
+              )}
             </div>
 
             <div className="hidden lg:block basis-[20%] ml-auto mx-2 mt-8">

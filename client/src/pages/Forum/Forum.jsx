@@ -56,7 +56,7 @@ const Forum = () => {
           <div className="text-white py-20">
             <p className="text-3xl text-center pb-6">Community Forums</p>
             <div className="flex justify-center">
-              <p className="mb-2 text-center pb-6 text-lg w-[30%] font-light">
+              <p className="mb-2 text-center pb-6 text-lg w-full lg:w-[30%] font-light">
                 Find answers, ask questions, and connect with our community around the world.
               </p>
             </div>
@@ -68,7 +68,7 @@ const Forum = () => {
                   name="search"
                   id="search"
                   placeholder="Search..."
-                  className="form-input w-[40rem] h-14 border-[0.20px] appearance-none bg-white/[.20] border-white pl-12 text-white placeholder:text-white placeholder:font-light focus:outline-none rounded-lg"
+                  className="form-input w-full lg:w-[40rem] h-14 border-[0.20px] appearance-none bg-white/[.20] border-white pl-12 text-white placeholder:text-white placeholder:font-light focus:outline-none rounded-lg"
                 />
               </label>
             </div>

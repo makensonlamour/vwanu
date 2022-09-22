@@ -16,47 +16,62 @@ import { useReadNotification } from "./../../../features/notification/notificati
 const NotificationPreview = () => {
   const { user } = useAuthContext();
   const [notificationList, setNotificationList] = useState([]);
+  let run = false;
 
   const onCreatedListener = (notification) => {
     if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
+      console.log("check notif:", notification, notificationList);
       setNotificationList((notificationList) => [...notificationList, notification]);
     }
   };
   const notificationService = client.service("notification");
 
   const nots = async () => {
-    const notifications = await notificationService.find({ query: { to: user.id } });
-    notifications.forEach(onCreatedListener);
-    notificationService.on("created", onCreatedListener);
-
-    return () => {
-      notificationService.removeListener("created", onCreatedListener);
-    };
+    if (!run) {
+      run = true;
+      const notifications = await notificationService.find({ query: { to: user.id } });
+      notifications.forEach(onCreatedListener);
+      notificationService.on("created", onCreatedListener);
+    }
   };
 
   const readNotification = useReadNotification(["notification", "read"], undefined, undefined);
 
-  const handleRead = async (notificationId,idLink,entityName) => {
+  const handleRead = async (notificationId, idLink, entityName) => {
     try {
-      const dataObj = { id: notificationId,view:true };
+      const dataObj = { id: notificationId, view: true };
       await readNotification.mutateAsync(dataObj);
-      window.location.href = "../../profile/" + idLink;
+      if (entityName === "users") {
+        window.location.href = "../../profile/" + idLink;
+      } else if (entityName === "posts") {
+        window.location.href = "../../post/" + idLink;
+      } else {
+        return;
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    nots();
+    if (!run) {
+      nots();
+    }
+
+    if (run) {
+      return () => {
+        notificationService.removeListener("created", onCreatedListener);
+      };
+    }
   }, []);
 
-  console.log(notificationList);
+  const NotificationUnview = notificationList?.filter((item) => item?.view !== true);
 
   return (
     <>
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <Badge badgeContent={notificationList?.length} color="primary" className="">
+          <Badge badgeContent={NotificationUnview?.length} color="primary" className="">
             <IoMdNotificationsOutline size="24px" className="text-black" />
           </Badge>
         </label>
@@ -79,7 +94,13 @@ const NotificationPreview = () => {
                       to={"#"}
                       onClick={() => {
                         if (!notification?.view) {
-                          handleRead(notification?.id,notification?.UserId);
+                          if (entityName === "users") {
+                            handleRead(notification?.id, notification?.UserId, notification?.entityName);
+                          } else if (entityName === "posts") {
+                            handleRead(notification?.id, notification?.entityId, notification?.entityName);
+                          } else {
+                            return;
+                          }
                         }
                       }}
                       className="mx-2 text-base my-1 py-2 hover:bg-placeholder-color px-2 rounded-xl"
@@ -116,9 +137,7 @@ const NotificationPreview = () => {
                 }
               })}
               <li className="sticky border-t hover:text-primary mx-auto text-center -px-2 text-gray-900">
-                <Link to={""} onClick={() => console.log("view more Notifications")}>
-                  {"View Notifications >"}
-                </Link>
+                <Link to={"../../notifications"}>{"View Notifications >"}</Link>
               </li>
             </>
           ) : (

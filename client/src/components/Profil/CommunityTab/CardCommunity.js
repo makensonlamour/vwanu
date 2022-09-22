@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { AvatarGroup, Avatar, Chip, Stack } from "@mui/material";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../../assets/images/cover_group_random.png";
-import { useJoinCommunity } from "../../../features/community/communitySlice";
-// import { isMember } from "../../../helpers/index";
+import { useJoinCommunity, useGetMyCommunityInvitation } from "../../../features/community/communitySlice";
+import { isInvitation, isInvitationReceive } from "../../../helpers/index";
 
 const CardCommunity = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
+  const user = useOutletContext();
+
+  const { data: listInvitation } = useGetMyCommunityInvitation(
+    ["community", "invitation", user?.id],
+    user?.id !== undefined ? true : false,
+    user?.id
+  );
 
   const handleJoin = async () => {
     setIsLoading(true);
@@ -18,9 +25,11 @@ const CardCommunity = ({ data }) => {
     };
 
     try {
-      if (data?.privacyType === "public" || data?.privacyType === "private") {
+      if (data?.privacyType === "public") {
         let result = await joinCommunity.mutateAsync(dataObj);
         console.log(result);
+      } else if (data?.privacyType === "private") {
+        console.log("private");
       } else {
         console.log("hidden");
       }
@@ -30,6 +39,11 @@ const CardCommunity = ({ data }) => {
       setIsLoading(false);
     }
   };
+
+  const invite = isInvitation(listInvitation?.data, data);
+  const inviteReceive = isInvitationReceive(listInvitation?.data, user);
+
+  console.log(invite, inviteReceive, data?.id);
 
   return (
     <>
@@ -57,6 +71,7 @@ const CardCommunity = ({ data }) => {
           <div className="flex justify-center items-center px-4 pt-14 pb-2 md:pb-4">
             <Link
               to={"../../groups/" + data?.id}
+              state={data}
               className="flex justify-center text-center items-center text-lg md:text-xl font-semibold hover:text-primary mr-2"
             >
               {data?.name}
@@ -92,18 +107,28 @@ const CardCommunity = ({ data }) => {
                     );
                   })}
               </AvatarGroup>
-              <button
-                onClick={() => {
-                  handleJoin();
-                }}
-                className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white"
-              >
-                {isLoading
-                  ? "Loading..."
-                  : data?.IsMember !== null && Object.keys(data?.IsMember).length > 0
-                  ? `${data?.IsMember?.role}`
-                  : "Join"}
-              </button>
+              {data?.IsMember !== null && Object.keys(data?.IsMember).length > 0 ? (
+                <button className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white">{data?.IsMember?.role}</button>
+              ) : invite ? (
+                <button
+                  disabled={inviteReceive ? false : true}
+                  onClick={() => {
+                    handleJoin();
+                  }}
+                  className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white"
+                >
+                  {inviteReceive ? "Accept Invitation" : "Request Sent"}
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleJoin();
+                  }}
+                  className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white"
+                >
+                  {isLoading ? "Loading..." : "Join"}
+                </button>
+              )}
             </div>
           </div>
         </div>

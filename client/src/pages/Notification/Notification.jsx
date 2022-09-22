@@ -1,15 +1,7 @@
-/* eslint-disable array-callback-return */
+/*eslint-disable */
 import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { Stack, styled, Paper } from "@mui/material";
-import { formatDistance, parseISO } from "date-fns";
 
-const UpdatesComponent = ({ data }) => {
-  const Item = styled(Paper)(() => ({
-    backgroundColor: "inherit",
-  }));
-
+const Notification = () => {
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8 mb-8">
@@ -55,7 +47,7 @@ const UpdatesComponent = ({ data }) => {
               );
             }
           })}
-          {data?.length > 5 && (
+          {data?.length < 5 && (
             <Link to={"../../notifications"} className="text-sm mx-auto font-[500] hover:text-primary">
               View more updates
             </Link>
@@ -66,8 +58,4 @@ const UpdatesComponent = ({ data }) => {
   );
 };
 
-UpdatesComponent.propTypes = {
-  data: PropTypes.array.isRequired,
-};
-
-export default UpdatesComponent;
+export default Notification;

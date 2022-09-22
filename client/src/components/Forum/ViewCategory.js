@@ -5,14 +5,14 @@ import { Link } from "react-router-dom";
 const ViewCategory = ({ data }) => {
   return (
     <>
-      <div className="flex justify-evenly flex-wrap mx-36">
+      <div className="flex justify-evenly flex-wrap px-4 lg:mx-36">
         {data?.length > 0 &&
           data?.map((category) => {
             return (
               <Link
                 to={`../forums/${category?.name}`}
                 key={category?.name}
-                className="bg-white w-[30%] mb-6 rounded-xl border border-gray-100 hover:shadow-lg"
+                className="bg-white w-full lg:w-[30%] mb-6 rounded-xl border border-gray-100 hover:shadow-lg"
               >
                 <div className="bg-gray-700 rounded-t-xl">
                   {category?.coverPicture !== null && (

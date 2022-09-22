@@ -13,6 +13,7 @@ import { useGetListFollowing, useGetListFollowers } from "../../features/followe
 import ProfileHeader from "../../components/Profil/ProfileHeader";
 
 const Profil = () => {
+  let run = false;
   const queryClient = useQueryClient();
   const { id } = useParams();
   const user = useOutletContext();
@@ -39,16 +40,25 @@ const Profil = () => {
   const notificationService = client.service("notification");
 
   const nots = async () => {
-    const notifications = await notificationService.find({ query: { to: user?.id } });
-    notifications.forEach(onCreatedListener);
-
-    return () => {
-      notificationService.removeListener("created", onCreatedListener);
-    };
+    if (!run) {
+      run = true;
+      const notifications = await notificationService.find({ query: { to: user.id } });
+      notifications.forEach(onCreatedListener);
+      notificationService.on("created", onCreatedListener);
+    }
   };
 
   useEffect(() => {
-    nots();
+    if (!run) {
+      nots();
+    }
+
+    if (run) {
+      return () => {
+        console.log("listenner remove");
+        notificationService.removeListener("created", onCreatedListener);
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
