@@ -30,8 +30,6 @@ const AttachingRole = (role) => async (context) => {
     .find({ query: { ...role, $select: ['id'] }, paginate: false });
 
   data.CommunityRoleId = memberRole[0].id;
-  console.log('The memberrole ');
-  console.log(memberRole);
   return context;
 };
 
