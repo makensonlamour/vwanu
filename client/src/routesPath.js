@@ -41,6 +41,7 @@ let routesPath = {
   GENERAL_SETTINGS: "/general-settings",
   VOICE_CALL: "/call",
   VIDEO_CALL: "/general-settings",
+  NOTIFICATIONS: "/notifications",
   // TEST_PAGE: "/test",
 };
 

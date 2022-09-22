@@ -28,7 +28,6 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
   const user = useOutletContext();
 
   const filtered = conversation?.Users?.filter((item) => item.id !== user?.id);
-  // console.log(conversation);
 
   return (
     <>
@@ -94,11 +93,11 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
             >
               <div className="flex justify-between items-center w-full">
                 <div className="flex justify-start w-full">
-                  {" "}
                   <div className="mr-2 w-10 h-10">
                     <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
                   </div>
                   <div className="w-[78%]">
+                    {console.log(filtered)}
                     {filtered?.map((item) => {
                       return (
                         <p
