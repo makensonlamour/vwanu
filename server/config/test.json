@@ -3,11 +3,11 @@
     "logSuccess": true
   },
   "dbSettings": {
-    "username": "vwanu",
+    "username": "vwanu_test",
     "password": 123456,
     "host": "localhost",
     "port": 5432,
-    "database": "social_media",
+    "database": "social_media_test",
     "dialect": "postgres"
   }
 }
