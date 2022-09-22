@@ -6,6 +6,7 @@ import { Model } from 'sequelize';
 
 import { UpUserInterface as UserInterface } from '../schema/user';
 
+export const authorizationEnums = ['everyone', 'friend-of-friend', 'friend'];
 export default (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
     id: string;
@@ -117,9 +118,6 @@ export default (sequelize: any, DataTypes: any) => {
     showLastSeen: boolean;
 
     static associate(models: any) {
-      // User.hasMany(models.Page, {
-      //   onDelete: 'CASCADE',
-      // });
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
       });
@@ -149,7 +147,6 @@ export default (sequelize: any, DataTypes: any) => {
         through: 'User_Following',
       });
 
-      // User.hasMany(models.User, { as: 'friends' });
       User.belongsToMany(models.User, {
         through: 'User_friends',
         as: 'friends',
@@ -167,22 +164,6 @@ export default (sequelize: any, DataTypes: any) => {
         through: 'User_friends_undesired',
         as: 'undesiredFriends',
       });
-
-      // User.belongsToMany(models.User, {
-      //   through: 'User_visitors',
-      //   as: 'Visitor',
-      //   constraints: false,
-      //   unique: false,
-      // });
-
-      // User.belongsToMany(models.User, {
-      //   as: 'follower',
-      //   through: models.UserFollower,
-      // });
-      // User.belongsToMany(models.User, {
-      //   as: 'followed',
-      //   through: models.UserFollower,
-      // });
     }
   }
   User.init(
@@ -216,16 +197,43 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       friendPrivacy: {
-        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friend'),
+        type: DataTypes.STRING,
         defaultValue: 'everyone',
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for friendPrivacy`
+              );
+            }
+          },
+        },
       },
       friendListPrivacy: {
-        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friend'),
+        type: DataTypes.STRING,
         defaultValue: 'everyone',
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for friendPrivacy`
+              );
+            }
+          },
+        },
       },
       followPrivacy: {
-        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friends'),
+        type: DataTypes.STRING,
         defaultValue: 'everyone',
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for friendPrivacy`
+              );
+            }
+          },
+        },
       },
 
       wechat: {
@@ -320,7 +328,15 @@ export default (sequelize: any, DataTypes: any) => {
 
       gender: {
         type: DataTypes.STRING,
-        defaultValue: 'not specified',
+        defaultValue: 'Not specified',
+        validate: {
+          customValidator: (value) => {
+            const enums = ['male', 'female', 'not specified'];
+            if (!enums.includes(value)) {
+              throw new Error(`${value} is not a valid option for gender`);
+            }
+          },
+        },
       },
 
       google: {

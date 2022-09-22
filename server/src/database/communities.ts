@@ -39,6 +39,8 @@ export interface CommunityInterface {
 
   defaultInvitationEmail: string;
 }
+
+export const authorizationEnums = ['A', 'M', 'E'];
 export default (sequelize: any, DataTypes: any) => {
   class Community
     extends Model<CommunityInterface>
@@ -84,19 +86,7 @@ export default (sequelize: any, DataTypes: any) => {
       Community.belongsToMany(models.Interest, {
         through: 'Community_Interest',
       });
-      // Community.belongsToMany(models.User, {
-      //   as: 'members',
-      //   through: 'community-members',
-      // });
       Community.hasOne(models.User);
-      // Community.belongsToMany(models.User, {
-      //   as: 'moderators',
-      //   through: 'community-moderators',
-      // });
-      // Community.belongsToMany(models.User, {
-      //   as: 'administrators',
-      //   through: 'community-administrators',
-      // });
       Community.hasMany(models.CommunityInvitationRequest);
       Community.hasMany(models.CommunityUsers);
     }
@@ -130,11 +120,19 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       privacyType: {
-        type: DataTypes.ENUM('public', 'hidden', 'private'),
+        type: DataTypes.STRING,
         defaultValue: 'public',
         allowNull: false,
         // @ts-ignore
         level: 'C',
+        validate: {
+          customValidator: (value) => {
+            const enums = ['public', 'hidden', 'private'];
+            if (!enums.includes(value)) {
+              throw new Error(`${value} is not a valid option for privacyType`);
+            }
+          },
+        },
       },
       coverPicture: {
         type: DataTypes.STRING,
@@ -154,38 +152,88 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       canInvite: {
-        type: DataTypes.ENUM('A', 'M', 'E'),
+        type: DataTypes.STRING,
         defaultValue: 'E',
         allowNull: true,
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(`${value} is not a valid option for canInvite`);
+            }
+          },
+        },
       },
 
       canInPost: {
-        type: DataTypes.ENUM('A', 'M', 'E'),
+        type: DataTypes.STRING,
         defaultValue: 'E',
         allowNull: true,
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(`${value} is not a valid option for canInPost`);
+            }
+          },
+        },
       },
       canInUploadPhotos: {
-        type: DataTypes.ENUM('A', 'M', 'E'),
+        type: DataTypes.STRING,
         defaultValue: 'E',
         allowNull: true,
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for canInUploadPhotos`
+              );
+            }
+          },
+        },
       },
 
       canInUploadDoc: {
-        type: DataTypes.ENUM('A', 'M', 'E'),
+        type: DataTypes.STRING,
         defaultValue: 'E',
         allowNull: true,
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for canInUploadDoc`
+              );
+            }
+          },
+        },
       },
 
       canInUploadVideo: {
-        type: DataTypes.ENUM('A', 'M', 'E'),
+        type: DataTypes.STRING,
         defaultValue: 'E',
         allowNull: true,
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for canInUploadVideo`
+              );
+            }
+          },
+        },
       },
 
       canMessageInGroup: {
-        type: DataTypes.ENUM('A', 'M', 'E'),
+        type: DataTypes.STRING,
         defaultValue: 'E',
         allowNull: true,
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for canMessageInGroup`
+              );
+            }
+          },
+        },
       },
       defaultInvitationEmail: {
         type: DataTypes.TEXT,

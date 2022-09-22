@@ -29,15 +29,23 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       description: {
-        type: DataTypes.ENUM(
-          'Work',
-          'Home',
-          'Billing',
-          'Shipping',
-          'School',
-          'Other'
-        ),
+        type: DataTypes.STRING,
         defaultValue: 'Home',
+        validate: {
+          customValidator: (value) => {
+            const enums = [
+              'Work',
+              'Home',
+              'Billing',
+              'Shipping',
+              'School',
+              'Other',
+            ];
+            if (!enums.includes(value)) {
+              throw new Error(`${value} is not a valid option for description`);
+            }
+          },
+        },
       },
     },
 

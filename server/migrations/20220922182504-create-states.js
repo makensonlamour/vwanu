@@ -1,27 +1,25 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Interests', {
+    await queryInterface.createTable('State', {
       id: {
         type: Sequelize.UUID,
-        primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
+        primaryKey: true,
       },
+
       name: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },
-
-      approved: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+      initials: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      accessible: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
+      areaCode: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -31,10 +29,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+
+      CountryId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'Countries',
+          key: 'id',
+        },
+      },
     });
   },
-
   async down(queryInterface) {
-    await queryInterface.dropTable('Interest');
+    await queryInterface.dropTable('State');
   },
 };

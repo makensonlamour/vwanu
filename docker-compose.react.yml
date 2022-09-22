@@ -11,8 +11,8 @@ services:
       - ./server:/app
     environment:
       - PORT=4000
-      - PGDATABASE=social_media
-      - PGUSER=vwanu
+      - PGDATABASE=social_media_test
+      - PGUSER=vwanu_test
       - PGPASSWORD=123456
       - PGHOST=pg_db
       - NODE_ENV=development
@@ -28,12 +28,12 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_USER=vwanu
+      - POSTGRES_USER=vwanu_test
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=social_media
+      - POSTGRES_DB=social_media_test
       - POSTGRES_HOST_AUTH_METHOD=trust
-    volumes:
-      - nps_data:/var/lib/postgresql/data
+    # volumes:
+    # - test_data:/var/lib/postgresql/data
   # redis:
   #    image: 'redis:alpine'
   # image: redis:6.2-alpine
@@ -42,5 +42,5 @@ services:
   # network_mode: bridge
   # ports:
   #   - '6379:6379'
-volumes:
-  nps_data: {}
+# volumes:
+# test_data: {}
