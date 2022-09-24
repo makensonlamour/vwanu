@@ -443,6 +443,7 @@ describe("'communities ' service", () => {
         .set('authorization', creator.accessToken);
       expect(Array.isArray(posts.data)).toBeTruthy();
       expect(posts.data.length).toEqual(1);
+      console.log(posts.data);
       posts.data.forEach((p) => {
         expect(p).toMatchObject({
           id: expect.any(String),
@@ -450,12 +451,7 @@ describe("'communities ' service", () => {
           privacyType: 'public',
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
-          UserId: creator.id,
-          CommunityId: communityWithPosts.body.id,
-          mediaId: null,
-          PostId: null,
-          MediumId: null,
-          Comments: [],
+
           User: {
             firstName: creator.firstName,
             lastName: creator.lastName,
