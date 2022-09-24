@@ -1,20 +1,19 @@
 import * as authentication from '@feathersjs/authentication';
-
+import { disallow } from 'feathers-hooks-common';
 /** Local dependencies */
 import GetTimeline from './hooks/getTimeline';
 
 const { authenticate } = authentication.hooks;
 
-
 export default {
   before: {
     all: [authenticate('jwt')],
     find: [GetTimeline],
-    get: [GetTimeline],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
+    get: [disallow()],
+    create: [disallow()],
+    update: [disallow()],
+    patch: [disallow()],
+    remove: [disallow()],
   },
 
   after: {
