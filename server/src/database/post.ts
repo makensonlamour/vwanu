@@ -27,7 +27,13 @@ export default (sequelize: any, DataTypes: any) => {
         foreignKey: 'mediaId',
       });
       Post.hasMany(models.Post, { as: 'Comments' });
-      Post.hasMany(models.Reaction);
+      Post.hasMany(models.Reaction, {
+        foreignKey: 'entityId',
+        constraints: false,
+        scope: {
+          entityType: 'Post',
+        },
+      });
     }
   }
   Post.init(

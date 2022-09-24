@@ -37,7 +37,13 @@ export default (sequelize: any, DataTypes: any) => {
       });
       Discussion.belongsTo(models.Community);
       Discussion.hasMany(models.Discussion, { as: 'Comments' });
-      Discussion.hasMany(models.Reaction);
+      Discussion.hasMany(models.Reaction, {
+        foreignKey: 'entityId',
+        constraints: false,
+        scope: {
+          entityType: 'Discussion',
+        },
+      });
     }
   }
   Discussion.init(
