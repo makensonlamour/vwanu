@@ -70,14 +70,8 @@ describe('Posts services', () => {
         id: expect.any(String),
         privacyType: 'public',
         UserId: newUser.id,
-        audioCount: 0,
         createdAt: expect.any(String),
-        imageCount: 0,
-        multiAudio: false,
-        multiImage: false,
-        multiVideo: false,
         updatedAt: expect.any(String),
-        videoCount: 0,
       })
     );
     expect(response.header['content-type']).toEqual(

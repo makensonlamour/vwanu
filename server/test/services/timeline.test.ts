@@ -83,7 +83,7 @@ describe("'timeline ' service", () => {
     const { body: timeline } = await testServer
       .get(endpoint)
       .set('authorization', observer.accessToken);
-    console.log(timeline.data);
+
     expect(timeline.data).toHaveLength(4);
     expect(
       timeline.data.find((p) => p.postText === privatePost.postText)

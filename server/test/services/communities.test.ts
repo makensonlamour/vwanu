@@ -446,13 +446,7 @@ describe("'communities ' service", () => {
       posts.data.forEach((p) => {
         expect(p).toMatchObject({
           id: expect.any(String),
-          multiImage: false,
-          multiAudio: false,
-          multiVideo: false,
           postText: 'I am a post in a community',
-          imageCount: 0,
-          videoCount: 0,
-          audioCount: 0,
           privacyType: 'public',
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
