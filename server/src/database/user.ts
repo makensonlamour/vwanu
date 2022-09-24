@@ -42,6 +42,8 @@ export default (sequelize: any, DataTypes: any) => {
 
     firstName: string;
 
+    profilePrivacy: string;
+
     followPrivacy: string;
 
     friendPrivacy: string;
@@ -127,9 +129,7 @@ export default (sequelize: any, DataTypes: any) => {
         onDelete: 'CASCADE',
       });
 
-      User.hasMany(models.Interest, {
-        as: 'MyInterest',
-      });
+      User.hasMany(models.Interest);
       User.hasMany(models.Blog, {
         onDelete: 'CASCADE',
       });
@@ -223,6 +223,10 @@ export default (sequelize: any, DataTypes: any) => {
       followPrivacy: {
         type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friends'),
         defaultValue: 'everyone',
+      },
+      profilePrivacy: {
+        type: DataTypes.ENUM('private', 'public', 'friends'),
+        defaultValue: 'public',
       },
 
       wechat: {

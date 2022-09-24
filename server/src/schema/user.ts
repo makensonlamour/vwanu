@@ -158,6 +158,8 @@ export const UpUser = object({
   loginAttempts: z.number(),
   resetShortPasswordKey: z.string(),
   search_vector: z.string(),
+  profilePrivacy: z.string()
+
 });
 export const addOrRemoveFriendSchema = object({
   params: object({

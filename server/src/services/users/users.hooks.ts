@@ -8,10 +8,11 @@ import isSelf from '../../Hooks/isSelf.hook';
 import AutoLogin from '../../Hooks/AutoLoginHooks';
 import validateResource from '../../middleware/validateResource';
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
-import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
+// import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
 import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
 // const verifyHooks = authMan.hooks;
-import { SaveAddress, IncludeAddress, AddVisitor } from './hook';
+import { SaveAddress, IncludeAddress, AddVisitor, GetUser } from './hook';
+import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
 const { hashPassword, protect } = local.hooks;
 const { authenticate } = feathersAuthentication.hooks;
@@ -19,7 +20,7 @@ const { authenticate } = feathersAuthentication.hooks;
 export default {
   before: {
     all: [],
-    find: [authenticate('jwt')],
+    find: [authenticate('jwt'), GetUser],
     get: [authenticate('jwt')],
     create: [
       validateResource(schema.createUserSchema),
@@ -73,13 +74,30 @@ export default {
           'verifyExpires',
         ]
       ),
-      MediaStringToMediaObject(['profilePicture', 'coverPicture']),
+      // MediaStringToMediaObject(['profilePicture', 'coverPicture']),
     ],
     find: [],
     get: [IncludeAddress, AddVisitor],
-    create: [SaveAddress, AutoLogin, IncludeAddress],
+    create: [
+      SaveAddress,
+      AutoLogin,
+      IncludeAddress,
+      SaveAndAttachInterests({
+        entityName: 'User',
+        relationTableName: 'User_Interest',
+        foreignKey: 'UserId',
+      }),
+    ],
     update: [],
-    patch: [SaveAddress, IncludeAddress],
+    patch: [
+      SaveAddress,
+      IncludeAddress,
+      SaveAndAttachInterests({
+        entityName: 'User',
+        relationTableName: 'User_Interest',
+        foreignKey: 'UserId',
+      }),
+    ],
     remove: [],
   },
 
@@ -88,6 +106,7 @@ export default {
     find: [],
     get: [],
     create: [],
+
     update: [],
     patch: [],
     remove: [],
