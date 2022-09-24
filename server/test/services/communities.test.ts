@@ -296,7 +296,8 @@ describe("'communities ' service", () => {
       .get(endpoint)
       .set('authorization', creator.accessToken);
 
-    allCommunities.forEach((community) => {
+    console.log(allCommunities);
+    allCommunities.data.forEach((community) => {
       expect(community).toMatchObject({
         name: expect.any(String),
         description: expect.any(String),
@@ -443,7 +444,7 @@ describe("'communities ' service", () => {
         .set('authorization', creator.accessToken);
       expect(Array.isArray(posts.data)).toBeTruthy();
       expect(posts.data.length).toEqual(1);
-      console.log(posts.data);
+
       posts.data.forEach((p) => {
         expect(p).toMatchObject({
           id: expect.any(String),
