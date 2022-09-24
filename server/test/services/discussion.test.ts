@@ -55,6 +55,7 @@ describe("'discussion ' service", () => {
       body: discussion.body,
       activeParticipants: 0,
       amountOfComments: 0,
+      amountOfReactions: 0,
       lastComment: null,
       User: {
         firstName: testUsers[0].firstName,
@@ -99,6 +100,7 @@ describe("'discussion ' service", () => {
       },
       activeParticipants: 1,
       amountOfComments: 1,
+      amountOfReactions: 0,
       lastComment: {
         id: comment.id,
         title: comment.title,
@@ -172,7 +174,7 @@ describe("'discussion ' service", () => {
     expect(comment3.DiscussionId).toBe(discussion.id);
   });
 
-  it('discussion should show 3 comment and 2 participant', async () => {
+  it('discussion should show 3 comment and 2 participant and 0 reactions', async () => {
     const { body: discussionWithComment } = await testServer
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[1].accessToken);
@@ -191,6 +193,89 @@ describe("'discussion ' service", () => {
       },
       activeParticipants: 2,
       amountOfComments: 3,
+      amountOfReactions: 0,
+      lastComment: {
+        id: comment.id,
+        title: comment.title,
+        body: comment.body,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        UserId: testUsers[1].id,
+        commenterFirstName: testUsers[1].firstName,
+        commenterLastName: testUsers[1].lastName,
+        commenterProfilePicture: expect.any(String),
+      },
+    });
+  });
+  it('should react on a Discussion', async () => {
+    const { statusCode: reactionStatus } = await testServer
+      .post('/reactions')
+      .send({
+        entityId: discussion.id,
+        content: 'like',
+        entityType: 'Discussion',
+      })
+      .set('authorization', testUsers[2].accessToken);
+
+    expect(reactionStatus).toBe(201);
+  });
+
+  it('discussion should show 3 comment and 2 participant and 1 reactions but not reactor', async () => {
+    const { body: discussionWithCommentAndReaction } = await testServer
+      .get(`${endpoint}/${discussion.id}`)
+      .set('authorization', testUsers[1].accessToken);
+
+    expect(discussionWithCommentAndReaction).toMatchObject({
+      id: discussion.id,
+      title: discussion.title,
+      body: discussion.body,
+      User: {
+        id: testUsers[0].id,
+        firstName: testUsers[0].firstName,
+        lastName: testUsers[0].lastName,
+        profilePicture: expect.any(String),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      },
+      activeParticipants: 2,
+      amountOfComments: 3,
+      amountOfReactions: 1,
+      isReactor: null,
+      lastComment: {
+        id: comment.id,
+        title: comment.title,
+        body: comment.body,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        UserId: testUsers[1].id,
+        commenterFirstName: testUsers[1].firstName,
+        commenterLastName: testUsers[1].lastName,
+        commenterProfilePicture: expect.any(String),
+      },
+    });
+  });
+
+  it('discussion should show 3 comment and 2 participant and 1 reactions and is reactor', async () => {
+    const { body: discussionWithCommentAndReaction } = await testServer
+      .get(`${endpoint}/${discussion.id}`)
+      .set('authorization', testUsers[2].accessToken);
+
+    expect(discussionWithCommentAndReaction).toMatchObject({
+      id: discussion.id,
+      title: discussion.title,
+      body: discussion.body,
+      User: {
+        id: testUsers[0].id,
+        firstName: testUsers[0].firstName,
+        lastName: testUsers[0].lastName,
+        profilePicture: expect.any(String),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      },
+      activeParticipants: 2,
+      amountOfComments: 3,
+      amountOfReactions: 1,
+      isReactor: expect.any(Array),
       lastComment: {
         id: comment.id,
         title: comment.title,

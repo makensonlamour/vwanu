@@ -21,6 +21,12 @@ const IncludeLast = (single: boolean) => async (context) => {
       WHERE "DCC"."DiscussionId" = "Discussion"."id"
     )::int`;
 
+  const amountOfReactions = `(
+      SELECT 
+      COUNT("R"."id") 
+      FROM "Reactions" AS "R"
+      WHERE "R"."entityId" = "Discussion"."id" AND "R"."entityType"='Discussion'
+    )::int`;
   const lastComment = `(
     SELECT   
       json_build_object(
@@ -42,6 +48,20 @@ const IncludeLast = (single: boolean) => async (context) => {
       LIMIT 1
     ) `;
 
+  const isReactor = `(
+SELECT 
+  json_agg(
+    json_build_object(
+     'id', "R"."id",
+     'content',"R"."content",
+     'createdAt',"R"."createdAt",
+     'updatedAt',"R"."updatedAt"
+    ) 
+    ) 
+    FROM "Reactions" AS "R"
+    WHERE "R"."entityId"="Discussion"."id" AND  "R"."entityType"='Discussion' AND "R"."UserId"='${context.params.User.id}'
+  )`;
+
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
@@ -59,6 +79,8 @@ const IncludeLast = (single: boolean) => async (context) => {
         [Sequelize.literal(activeParticipants), 'activeParticipants'],
         [Sequelize.literal(amountOfComments), 'amountOfComments'],
         [Sequelize.literal(lastComment), 'lastComment'],
+        [Sequelize.literal(amountOfReactions), 'amountOfReactions'],
+        [Sequelize.literal(isReactor), 'isReactor'],
       ],
       exclude: ['DiscussionId', 'UserId', 'CommunityId'],
     },
