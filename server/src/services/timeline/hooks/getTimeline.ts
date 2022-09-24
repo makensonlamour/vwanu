@@ -51,8 +51,8 @@ SELECT
     ? */ {
     mediaId: null,
     MediumId: null,
-    ...where,
     PostId: null,
+    ...where,
     [Op.and]: {
       [Op.or]: [
         { privacyType: 'public' },
