@@ -6,6 +6,7 @@ import { Model } from 'sequelize';
 export interface ReactionInterface {
   id: number;
   content: string;
+  entityType: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Reaction extends Model<ReactionInterface> implements ReactionInterface {
@@ -13,10 +14,22 @@ export default (sequelize: any, DataTypes: any) => {
 
     content: string;
 
+    entityType: string;
+
     static associate(models: any): void {
       Reaction.belongsTo(models.User);
-      Reaction.belongsTo(models.Post);
-      Reaction.belongsTo(models.Discussion);
+      Reaction.belongsTo(models.Post, {
+        foreignKey: 'entityId',
+        constraints: false,
+      });
+      Reaction.belongsTo(models.Discussion, {
+        foreignKey: 'entityId',
+        constraints: false,
+      });
+      Reaction.belongsTo(models.Community, {
+        foreignKey: 'entityId',
+        constraints: false,
+      });
     }
   }
   Reaction.init(
@@ -27,6 +40,10 @@ export default (sequelize: any, DataTypes: any) => {
         primaryKey: true,
       },
       content: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      entityType: {
         type: DataTypes.STRING,
         allowNull: false,
       },

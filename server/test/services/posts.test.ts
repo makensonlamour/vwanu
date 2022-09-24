@@ -8,17 +8,20 @@ import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
 // export const createPost = (testServer) => {};
 describe('Posts services', () => {
   let testServer;
-  let newUser;
-  let token;
+  let observer;
+  let observerToken;
+  let postMaker;
+  let postMakerToken;
   let thePost;
-  const postMade = 1;
+  let commenter;
+  let commenterToken;
   const endpoint = '/posts';
   const userEndpoint = '/users';
   beforeAll(async () => {
     await app.get('sequelizeClient').sync({ logged: false, force: true });
     testServer = request(app);
 
-    const responses = await Promise.all(
+    let testUsers = await Promise.all(
       getRandUsers(4).map((u) => {
         const user = u;
         delete user.id;
@@ -26,8 +29,12 @@ describe('Posts services', () => {
       })
     );
 
-    newUser = responses[0].body;
-    token = responses[0].body.accessToken;
+    testUsers = testUsers.map((r) => r.body);
+    [observer, postMaker, commenter] = testUsers;
+
+    observerToken = observer.accessToken;
+    postMakerToken = postMaker.accessToken;
+    commenterToken = commenter.accessToken;
   }, 30000);
 
   it('should not create a post ', async () => {
@@ -39,7 +46,7 @@ describe('Posts services', () => {
 
     const responses = await Promise.all(
       badPosts.map((post) =>
-        testServer.post(endpoint).send(post).set('authorization', token)
+        testServer.post(endpoint).send(post).set('authorization', observerToken)
       )
     );
 
@@ -56,112 +63,174 @@ describe('Posts services', () => {
     });
   }, 3000);
   it('should create a new post', async () => {
-    const response = await testServer
+    const { statusCode, body: response } = await testServer
       .post(endpoint)
       .send({ postText: `I am a new post # 1` })
-      .set('authorization', token);
+      .set('authorization', postMakerToken);
 
-    thePost = response.body;
+    thePost = response;
 
-    expect(response.statusCode).toBe(StatusCodes.CREATED);
-    expect(thePost).toEqual(
-      expect.objectContaining({
-        postText: expect.any(String),
-        id: expect.any(String),
-        privacyType: 'public',
-        UserId: newUser.id,
-        audioCount: 0,
-        createdAt: expect.any(String),
-        imageCount: 0,
-        multiAudio: false,
-        multiImage: false,
-        multiVideo: false,
-        updatedAt: expect.any(String),
-        videoCount: 0,
-      })
-    );
-    expect(response.header['content-type']).toEqual(
-      expect.stringContaining('application/json')
-    );
-  }, 3000);
+    expect(statusCode).toBe(StatusCodes.CREATED);
+  });
+  it('should get one post', async () => {
+    const { body: post } = await testServer
+      .get(endpoint)
+      .set('authorization', observerToken);
+
+    expect(post.data).toHaveLength(1);
+  });
 
   it('should retrieve a post by its id', async () => {
-    const samePostResponse = await testServer
+    const retrievedPost = await testServer
       .get(`${endpoint}/${thePost.id}`)
-      .set('authorization', token);
-
-    const samePost = samePostResponse.body;
+      .set('authorization', observerToken);
+    const samePost = retrievedPost.body;
     expect(samePost.id).toEqual(thePost.id);
     expect(samePost.postText).toEqual(thePost.postText);
-    expect(samePost.Comments).toBeDefined();
-    expect(Array.isArray(samePost.Comments)).toBeTruthy();
-    expect(samePostResponse.statusCode).toBe(StatusCodes.OK);
+    expect(retrievedPost.statusCode).toBe(StatusCodes.OK);
   }, 3000);
 
-  it('should retrieve all post by userId', async () => {
-    const allPostResponse = await testServer
-      .get(`${endpoint}?UserId=${newUser.id}`)
-      .set('authorization', `Bearer ${token}`);
-    const allPost = allPostResponse.body;
-    expect(allPostResponse.status).toBe(StatusCodes.OK);
-
-    expect(allPost.data.length).toBeLessThanOrEqual(postMade);
-  });
   it('should create comment for a post', async () => {
-    const commentResponse = await testServer
-      .post('/comments')
-      .set('authorization', token)
+    const { statusCode: commentResponse } = await testServer
+      .post(endpoint)
+      .set('authorization', commenterToken)
       .send({
         postText: 'some message for my comment',
-        UserId: newUser.id,
         PostId: thePost.id,
       });
-
-    expect(commentResponse.statusCode);
+    expect(commentResponse).toBe(StatusCodes.CREATED);
   }, 3000);
 
-  it('should have at least one comment', async () => {
-    const samePostResponse = await testServer
+  it('should find one post with one comment', () => {
+    testServer
+      .get(endpoint)
+      .set('authorization', observerToken)
+      .expect(StatusCodes.OK)
+      .then(({ body: { data } }) => {
+        expect(data).toHaveLength(1);
+        expect(data[0].amountOfComments).toBe(1);
+      });
+  });
+  it('should find the post and have one comment', async () => {
+    const { body: foundPostWithComment } = await testServer
       .get(`${endpoint}/${thePost.id}`)
-      .set('authorization', token);
+      .set('authorization', observerToken);
 
-    const samePost = samePostResponse.body;
-    const firstComment = samePost.Comments[0];
+    expect(foundPostWithComment.amountOfComments).toEqual(1);
+  });
+  it('should react on the post', async () => {
+    const { statusCode: reactionResponse } = await testServer
+      .post('/reactions')
+      .set('authorization', commenterToken)
+      .send({
+        content: 'like',
+        entityId: thePost.id,
+        entityType: 'Post',
+      });
+    expect(reactionResponse).toBe(StatusCodes.CREATED);
+  });
+  it('should find one post with one comment,one reaction, and he is the reactor', () => {
+    testServer
+      .get(endpoint)
+      .set('authorization', commenterToken)
+      .expect(StatusCodes.OK)
+      .then(({ body: { data } }) => {
+        expect(data).toHaveLength(1);
+        expect(data[0].amountOfComments).toBe(1);
+        expect(data[0].amountOfReactions).toBe(1);
+        expect(data[0].isReactor).toHaveLength(1);
+      });
+  });
 
-    expect(samePost.id).toEqual(thePost.id);
-    expect(samePost.postText).toEqual(thePost.postText);
-    expect(samePost.Comments).toBeDefined();
-    expect(samePost.Comments.length).toBe(1);
+  it('should find one post with one comment,one reaction, and he is not the reactor', () => {
+    testServer
+      .get(endpoint)
+      .set('authorization', observerToken)
+      .expect(StatusCodes.OK)
+      .then(({ body: { data } }) => {
+        expect(data).toHaveLength(1);
+        expect(data[0].amountOfComments).toBe(1);
+        expect(data[0].amountOfReactions).toBe(1);
+        expect(data[0].isReactor).toBe(null);
+      });
+  });
 
-    expect(firstComment.User).toBeDefined();
-    expect(firstComment.User.id === newUser.id).toBeTruthy();
-    expect(firstComment.User.profilePicture).toBeDefined();
+  it('should find all comments on a post', async () => {
+    const { body: foundComments } = await testServer
+      .get(`${endpoint}?PostId=${thePost.id}`)
+      .set('authorization', observerToken);
+
+    expect(foundComments.data).toHaveLength(1);
+  });
+
+  it('should retrieve all post by userId', async () => {
+    const {
+      body: { data: observerPosts },
+    } = await testServer
+      .get(`${endpoint}?UserId=${observer.id}`)
+      .set('authorization', `Bearer ${observerToken}`);
+
+    expect(observerPosts).toHaveLength(0);
+
+    const {
+      body: { data: postMakerPosts },
+    } = await testServer
+      .get(`${endpoint}?UserId=${postMaker.id}`)
+      .set('authorization', `Bearer ${observerToken}`);
+
+    expect(postMakerPosts).toHaveLength(1);
+
+    const {
+      body: { data: commenterPosts },
+    } = await testServer
+      .get(`${endpoint}?UserId=${commenter.id}`)
+      .set('authorization', `Bearer ${observerToken}`);
+
+    expect(commenterPosts).toHaveLength(0);
   }, 3000);
 
-  it('should edit a post', async () => {
-    const editedPostResponse = await testServer
+  it('should not edit a post', async () => {
+    const { statusCode: editAttemptStatus } = await testServer
       .patch(`${endpoint}/${thePost.id}`)
-      .set('authorization', token)
+      .set('authorization', observerToken)
       .send({
         postText: 'I am a new string do yo like me',
       });
 
-    const editedLPost = editedPostResponse.body;
+    expect(editAttemptStatus).toEqual(StatusCodes.BAD_REQUEST);
+  }, 3000);
+
+  it('should edit a post', async () => {
+    const { body: editedLPost } = await testServer
+      .patch(`${endpoint}/${thePost.id}`)
+      .set('authorization', postMakerToken)
+      .send({
+        postText: 'I am a new string do yo like me',
+      });
+
     expect(editedLPost.id).toEqual(thePost.id);
     expect(editedLPost.postText).toEqual('I am a new string do yo like me');
     expect(editedLPost.UserId).toEqual(thePost.UserId);
   }, 3000);
+
+  it('should not delete a post', async () => {
+    const { statusCode: editAttemptStatus } = await testServer
+      .delete(`${endpoint}/${thePost.id}`)
+      .set('authorization', observerToken);
+
+    expect(editAttemptStatus).toEqual(StatusCodes.BAD_REQUEST);
+  }, 3000);
   it('should delete a post with all its comment', async () => {
     const deletedPostResponse = await testServer
       .delete(`${endpoint}/${thePost.id}`)
-      .set('authorization', token);
+      .set('authorization', postMakerToken);
 
     const deletedPost = deletedPostResponse.body;
     expect(deletedPost.id).toEqual(thePost.id);
 
     const retrievePostResponse = await testServer
       .get(`${endpoint}/${thePost.id}`)
-      .set('authorization', token);
+      .set('authorization', observerToken);
 
     expect(retrievePostResponse.statusCode).toBe(StatusCodes.NOT_FOUND);
   }, 3000);

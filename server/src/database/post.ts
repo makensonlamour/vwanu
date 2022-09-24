@@ -4,30 +4,13 @@ import { Model } from 'sequelize';
 
 export interface PostInterface {
   id: string;
-  multiImage: boolean;
-  imageCount: number;
-  multiVideo: boolean;
-  videoCount: number;
-  multiAudio: boolean;
-  audioCount: number;
+
   postText: string;
   privacyType: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Post extends Model<PostInterface> implements PostInterface {
     id: string;
-
-    multiImage: boolean;
-
-    imageCount: number;
-
-    multiVideo: boolean;
-
-    videoCount: number;
-
-    multiAudio: boolean;
-
-    audioCount: number;
 
     postText: string;
 
@@ -44,7 +27,13 @@ export default (sequelize: any, DataTypes: any) => {
         foreignKey: 'mediaId',
       });
       Post.hasMany(models.Post, { as: 'Comments' });
-      Post.hasMany(models.Reaction);
+      Post.hasMany(models.Reaction, {
+        foreignKey: 'entityId',
+        constraints: false,
+        scope: {
+          entityType: 'Post',
+        },
+      });
     }
   }
   Post.init(
@@ -55,41 +44,12 @@ export default (sequelize: any, DataTypes: any) => {
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
-      multiImage: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      multiAudio: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      multiVideo: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
 
       postText: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      imageCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      videoCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      audioCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
+
       privacyType: {
         type: DataTypes.STRING,
         defaultValue: 'public',
