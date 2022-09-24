@@ -12,11 +12,11 @@ export default (attachments: AttachInterest) => async (context: HookContext) => 
   if (!data.interests || !result) return context;
 
   try {
-    const { entityName, relationTableName, foreignKey } = attachments;
+    const { /* entityName */ relationTableName, foreignKey } = attachments;
     const {
-      [entityName]: entityModel,
+      // [entityName]: entityModel,
       [relationTableName]: relationTableModel,
-      User: UserModel,
+      // User: UserModel,
       Interest: InterestModel,
     } = app.get('sequelizeClient').models;
 
@@ -25,7 +25,7 @@ export default (attachments: AttachInterest) => async (context: HookContext) => 
         InterestModel.findOrCreate({
           where: { name },
           defaults: {
-            UserId: params.User.id,
+            UserId: params?.User?.id || result?.id,
           },
         })
       )
@@ -39,17 +39,21 @@ export default (attachments: AttachInterest) => async (context: HookContext) => 
       )
     );
 
-    const entity = await entityModel.findByPk(result.id, {
-      include: [
-        { model: InterestModel },
-        {
-          model: UserModel,
-          attributes: [],
-        },
-      ],
-    });
+    // const att =
+    //   UserModel !== entityModel
+    //     ? {
+    //         model: UserModel,
+    //         attributes: [],
+    //       }
+    //     : undefined;
 
-    context.result = entity;
+    // const include = [{ model: InterestModel }];
+    // if (att) include.push(att);
+
+    // const entity = await entityModel.findByPk(result.id, {
+    //   include: [{ model: InterestModel, required: true }],
+    // });
+
     return context;
   } catch (error) {
     throw new BadRequest(error);
