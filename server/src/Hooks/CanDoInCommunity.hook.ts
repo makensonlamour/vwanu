@@ -7,7 +7,9 @@ export default async (context: HookContext) => {
   if (isNill(data.CommunityId)) return context;
 
   const modelName = app.services[path].Model.name;
-  const community = await app.service('communities').get(data.CommunityId);
+  const community = await app
+    .service('communities')
+    .get(data.CommunityId, { User: context.params.User });
 
   switch (modelName) {
     case 'Post':
