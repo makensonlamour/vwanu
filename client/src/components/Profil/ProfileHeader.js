@@ -34,11 +34,20 @@ import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { format } from "date-fns";
 
-const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest, listFollowing, notificationList }) => {
+const ProfileHeader = ({
+  user,
+  otherUser,
+  loadingFollowing,
+  errorFollowing,
+  listFollowers,
+  listRequest,
+  listFollowing,
+  notificationList,
+}) => {
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
 
-  const { data: blogList } = useGetBlogList(["blog", "all"], true);
+  const { data: blogList, isError, isLoading } = useGetBlogList(["blog", "all"], true);
 
   // const percentage = 73;
 
@@ -89,7 +98,7 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
       members: "17",
     },
   ];
-
+  console.log(otherUser);
   return (
     <>
       {!user && !otherUser ? (
@@ -244,12 +253,12 @@ const ProfileHeader = ({ user, otherUser, listFriend, listFollowers, listRequest
             </div>
 
             <div className="hidden lg:block basis-[20%] ml-auto mx-2 mt-8">
-              <BlogComponent data={blogList?.data || []} />
+              <BlogComponent data={blogList || []} isLoading={isLoading} isError={isError} />
               <RecentlyActive data={recentlyActive || []} />
               <GroupsPreview data={groups || []} />
               {/* <CompleteProfile percentage={percentage} data={steps} /> */}
               <div className="block xl:hidden">
-                <FollowingPreview data={listFollowing} />
+                <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing} />
               </div>
               <div className="block xl:hidden mb-2">
                 <UpdatesComponent data={notificationList} />
@@ -271,6 +280,8 @@ ProfileHeader.propTypes = {
   listRequest: PropTypes.array,
   listFollowing: PropTypes.array,
   notificationList: PropTypes.array,
+  loadingFollowing: PropTypes.bool,
+  errorFollowing: PropTypes.bool,
 };
 
 export default ProfileHeader;

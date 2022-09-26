@@ -4,6 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { TextareaAutosize } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
 import { Facebook } from "react-content-loader";
+import { useQueryClient } from "react-query";
 
 import { useCreateComment } from "../../comment/commentSlice";
 
@@ -18,6 +19,7 @@ const commentError = () =>
   });
 
 const CommentForm = ({ PostId }) => {
+  const queryClient = useQueryClient();
   const user = useOutletContext();
   const UserId = user?.id;
   let buttonRef = useRef();
@@ -42,6 +44,8 @@ const CommentForm = ({ PostId }) => {
       await mutationAddComment.mutateAsync(objComment);
       setPostText("");
       commentSuccess();
+      queryClient.refetchQueries(["post", "home"]);
+      queryClient.refetchQueries(["post", PostId]);
     } catch (e) {
       console.log(e);
       commentError();
@@ -52,7 +56,7 @@ const CommentForm = ({ PostId }) => {
     <>
       <Toaster />
 
-      <div className="flex w-full space-x-2 items-center mt-4">
+      <div className="flex w-full space-x-2 items-center my-2">
         <img className="object-cover mask mask-squircle h-10 w-10" src={user?.profilePicture?.original} alt="_picture" />
         <form style={{ padding: ".85rem" }} className={`flex bg-gray-100 rounded-3xl items-center w-full`}>
           <TextareaAutosize

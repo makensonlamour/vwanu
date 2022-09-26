@@ -1,10 +1,10 @@
 import { useFetch, usePost, useLoadMore, useDelete, useUpdate } from "../../lib/react-query";
 
-export const useGetPostsList = (queryKey, UserId) => useLoadMore(queryKey, `/timeline?UserId=${UserId}`);
+export const useGetPostsList = (queryKey, enabled = true, UserId) => useLoadMore(queryKey, enabled, `/timeline?UserId=${UserId}`);
 
-export const useGetTimelineList = (queryKey) => useLoadMore(queryKey, `/timeline`);
+export const useGetTimelineList = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/timeline`);
 
-export const useGetPost = (queryKey, enabled = true, PostId) => useFetch(queryKey, enabled, `/timeline/${PostId}`);
+export const useGetPost = (queryKey, enabled = true, PostId) => useFetch(queryKey, enabled, `/posts/${PostId}`);
 
 export const useCreatePost = (queryKey, oldData, newData) => usePost(queryKey, `/posts`, (oldData, newData));
 

@@ -1,14 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Stack, styled, Paper, Tab } from "@mui/material";
+import { Tab } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
+import CardGroup from "./CardGroup";
 
-const GroupsPreview = ({ data }) => {
-  const Item = styled(Paper)(() => ({
-    backgroundColor: "inherit",
-  }));
-
+const GroupsPreview = ({ data, isError, isLoading }) => {
   const [value, setValue] = React.useState("one");
 
   const handleChange = (event, newValue) => {
@@ -17,12 +14,12 @@ const GroupsPreview = ({ data }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">
-        <h2 className="my-5 text-xl font-medium">Groups</h2>
+      <div className="mb-1 bg-white border border-gray-200 rounded-lg p-2 mt-8">
+        <h2 className="my-2 px-2 text-xl font-medium">Communities</h2>
         <TabContext value={value}>
           <div>
             <TabList
-              sx={{ marginBottom: "1rem" }}
+              sx={{ marginBottom: "0.1rem" }}
               value={value}
               onChange={handleChange}
               textColor="primary"
@@ -34,53 +31,22 @@ const GroupsPreview = ({ data }) => {
               <Tab sx={{ textTransform: "capitalize" }} value="three" label="Suggested" />
             </TabList>
           </div>
-          <TabPanel value="one">
-            <div>one</div>
+          <TabPanel sx={{ margin: "0px", padding: "0.25rem" }} value="one">
+            <div>
+              <CardGroup data={data} isError={isError} isLoading={isLoading} />
+            </div>
           </TabPanel>
-          <TabPanel value="two">
-            <div>two</div>
+          <TabPanel sx={{ margin: "0px", padding: "0.25rem" }} value="two">
+            <div>
+              <CardGroup data={data} isError={isError} isLoading={isLoading} />
+            </div>
           </TabPanel>
-          <TabPanel value="three">
-            <div>three</div>
+          <TabPanel sx={{ margin: "0px", padding: "0.25rem" }} value="three">
+            <div>
+              <CardGroup data={data} isError={isError} isLoading={isLoading} />
+            </div>
           </TabPanel>
         </TabContext>
-
-        <Stack spacing={1}>
-          {data.map((group, idx) => {
-            return (
-              <Item
-                key={group.name + "" + idx}
-                elevation={0}
-                style={{
-                  paddingTop: "0.5rem",
-                  paddingBottom: "0.5rem",
-                  display: "flex",
-                }}
-              >
-                <div className="w-[3rem]">
-                  <img
-                    className="mask mask-squircle items-center justify-center w-[5rem] h-10 rounded-lg"
-                    src={group.image}
-                    alt={group.name}
-                  />
-                </div>
-                <div>
-                  <p to="#" className=" text-sm line-clamp-2 max-w-[22ch] text-ellipsis whitespace-wrap overflow-hidden ml-2 pb-1">
-                    <Link className="hover:text-secondary" to="/">
-                      <span className="font-semibold">{group.name}</span>
-                      {group.where}
-                    </Link>
-                  </p>
-                  <p className=" text-gray-400 font-medium text-sm ml-2">
-                    {group.members}
-                    {" members"}
-                  </p>
-                </div>
-              </Item>
-            );
-          })}
-        </Stack>
-        <button className="my-4 bg-primary py-1 px-3 text-white rounded-lg hover:bg-secondary">See All</button>
       </div>
     </>
   );
@@ -88,6 +54,8 @@ const GroupsPreview = ({ data }) => {
 
 GroupsPreview.propTypes = {
   data: PropTypes.array.isRequired,
+  isError: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 export default GroupsPreview;

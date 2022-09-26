@@ -1,108 +1,48 @@
-/*eslint-disable */
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
+// import { useOutletContext } from "react-router-dom";
 import { useQueryClient } from "react-query";
-import { useCreateReaction, useUpdateReaction, useDeleteReaction } from "../reactionSlice";
-import { Button, Popover } from "@mui/material";
-import { ReactionBarSelector } from "@charkour/react-reactions";
-import _ from "lodash";
+import { useCreateReaction, useDeleteReaction } from "../reactionSlice";
+import { Button } from "@mui/material";
+// import { ReactionBarSelector } from "@charkour/react-reactions";
+// import _ from "lodash";
 // import { FaThumbsUp } from "react-icons/fa";
-import reactions from "../../../data/reactions";
+// import reactions from "../../../data/reactions";
 
 const Reaction = ({ post }) => {
   const queryClient = useQueryClient();
-  const user = useOutletContext();
-  const [like, setLike] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  // const user = useOutletContext();
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const createReaction = useCreateReaction(["post", "home", post?.id], (oldData, newData) => [...oldData, newData]);
+  // const updateReaction = useUpdateReaction(["post", "home", post.id], (oldData, newData) => [...oldData, newData]);
+  const deleteReaction = useDeleteReaction(["post", "home", post?.id]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
-
-  const createReaction = useCreateReaction(["post", post.id], (oldData, newData) => [...oldData, newData]);
-  const updateReaction = useUpdateReaction(["post", post.id], (oldData, newData) => [...oldData, newData]);
-  const deleteReaction = useDeleteReaction();
-
-  const handleReaction = async (label) => {
-    const react = _.find(post?.Reactions, function (o) {
-      return o.UserId === user?.id;
-    });
-
-    if (react?.UserId === user?.id) {
-      console.log("unlike");
-      await deleteReaction.mutateAsync({ id: react?.id });
-      queryClient.invalidateQueries(["posts", react?.PostId]);
+  const handleReaction = async () => {
+    if (post && post?.isReactor?.length === 1) {
+      await deleteReaction.mutateAsync({ id: post?.isReactor[0]?.id });
+      queryClient.invalidateQueries(["post", post?.id]);
     } else {
-      console.log("like");
-      await createReaction.mutateAsync({ content: "like", UserId: user?.id, PostId: post?.id });
-      queryClient.invalidateQueries(["posts", react?.PostId]);
+      await createReaction.mutateAsync({ content: "like", entityId: post?.id, entityType: "Post" });
+      queryClient.invalidateQueries(["post", post?.id]);
     }
 
-    // if (react?.UserId === user?.id) {
-    //   if (react?.content === label) {
-    //     // if user like this post and click on same reaction, delete reaction
-    //     await deleteReaction.mutateAsync({ id: react?.id });
-    //     queryClient.invalidateQueries(["posts", react?.PostId]);
-    //   } else {
-    //     // if user like this post and click on different reaction, update reaction
-    //     await updateReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post?.id, id: react?.id });
-    //   }
-    // } else {
-    //   // if user not like this post, create reaction
-    //   await createReaction.mutateAsync({ content: label, UserId: user?.id, PostId: post.id });
-    // }
+    queryClient.invalidateQueries(["post", "home"]);
   };
-
-  const isLike = () => {
-    const react = _.find(post?.Reactions, function (o) {
-      return o?.UserId === user?.id;
-    });
-
-    if (react?.UserId === user?.id) {
-      return setLike(react);
-    } else {
-      return setLike(false);
-    }
-  };
-
-  useEffect(() => {
-    isLike();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [post]);
 
   return (
     <>
       <Button
         onClick={handleReaction}
-        aria-describedby={id}
         className="text-left mt-2 text-md hover:bg-gray-200 hover:rounded-lg px-2 py-2 lg:px-5 lg:py-2 normal-case"
       >
         <p
           style={{ alignItems: "center", display: "flex", textAlign: "left" }}
-          className={`text-left normal-case text-md align-middle ${like ? " text-primary font-semibold" : " text-gray-700"}`}
+          className={`text-left normal-case text-md align-middle ${
+            post && post?.isReactor?.length === 1 ? " text-primary font-semibold" : " text-gray-700"
+          }`}
         >
-          {like ? (
+          {post && post?.isReactor?.length === 1 ? (
             <Fragment>
-              {/* <p
-                style={{
-                  width: "24px",
-                  alignItems: "center",
-                  alignContent: "left",
-                  marginRight: "0.5rem",
-                  fontSize: "2rem",
-                }}
-                className="inline-flex text-lg items-center"
-              >
-                {like?.node}
-              </p>{" "} */}
               <p style={{ textTransform: "capitalize" }} className="text-left align-middle">
                 {" "}
                 {"Pa Korem"}
@@ -116,27 +56,6 @@ const Reaction = ({ post }) => {
           )}
         </p>
       </Button>
-      {/* <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        onMouseDown={handleClose}
-        onMouseLeave={handleClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-      >
-        <Fragment>
-          <ReactionBarSelector
-            className="bg-secondary p-2"
-            iconSize={"28px"}
-            reactions={reactions}
-            onSelect={(label) => handleReaction(label)}
-          />
-        </Fragment>
-      </Popover> */}
     </>
   );
 };

@@ -105,7 +105,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
           {photos?.data?.Medias?.length > 0 ? (
             <div className="mx-auto w-full">
               <div className="flex flex-wrap justify-start">
-                {photos?.data?.Medias?.map((photo) => {
+                {photos?.Medias?.map((photo) => {
                   return (
                     <Link to={"#"} key={photo?.id} className="shadow-sm rounded-lg w-[130px] h-[130px] mx-3 mt-3 mb-3 hover:shadow-lg">
                       <ViewPhoto

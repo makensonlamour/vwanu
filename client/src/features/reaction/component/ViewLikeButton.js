@@ -3,22 +3,23 @@ import PropTypes from "prop-types";
 import ViewModalLike from "./ViewModalLike";
 import ViewDrawerLike from "./ViewDrawerLike";
 
-const ViewLikeButton = ({ reactions, label }) => {
+const ViewLikeButton = ({ postId, amountOfReactions, label }) => {
   return (
     <>
       <div className="hidden lg:inline">
-        <ViewModalLike reactions={reactions} label={label} />
+        <ViewModalLike amountOfReactions={amountOfReactions} postId={postId} label={label} />
       </div>
       <div className="lg:hidden">
-        <ViewDrawerLike reactions={reactions} label={label} />
+        <ViewDrawerLike amountOfReactions={amountOfReactions} postId={postId} label={label} />
       </div>
     </>
   );
 };
 
 ViewLikeButton.propTypes = {
-  reactions: PropTypes.array,
   label: PropTypes.any,
+  postId: PropTypes.string.isRequired,
+  amountOfReactions: PropTypes.number,
 };
 
 export default ViewLikeButton;

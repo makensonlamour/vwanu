@@ -40,10 +40,8 @@ const CardCommunity = ({ data }) => {
     }
   };
 
-  const invite = isInvitation(listInvitation?.data, data);
-  const inviteReceive = isInvitationReceive(listInvitation?.data, user);
-
-  console.log(invite, inviteReceive, data?.id);
+  const invite = isInvitation(listInvitation?.data?.data, data);
+  const inviteReceive = isInvitationReceive(listInvitation?.data?.data, user);
 
   return (
     <>

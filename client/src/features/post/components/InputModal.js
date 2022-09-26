@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import { useQueryClient } from "react-query";
 import { useOutletContext } from "react-router-dom";
 import { InputField, SubmitPost, Form } from "../../../components/form";
 import { MdPhotoSizeSelectActual, MdVideoLibrary } from "react-icons/md";
@@ -27,6 +28,7 @@ const postError = () =>
   });
 
 const InputModal = ({ reference, communityId, disabled = false }) => {
+  const queryClient = useQueryClient();
   const user = useOutletContext();
   const UserId = user?.id;
   const [showModal, setShowModal] = useState(false);
@@ -117,6 +119,7 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
         setSelectedGif("");
         setOpenUploadPhoto(false);
         setOpenUploadVideo(false);
+        queryClient.invalidateQueries(["post", "home"]);
         //request for post profile
       } else if (_.isEqual(reference, "profilefeed")) {
         formData.append("postText", credentials.postText);
@@ -184,7 +187,9 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
       <Toaster />
       <div
         onClick={() => setShowModal(true)}
-        className={`${disabled ? "hidden" : ""} rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color`}
+        className={`${
+          disabled ? "hidden" : ""
+        } cursor-pointer rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color`}
       >
         <div className="flex items-center px-4 pb-4">
           {" "}
@@ -200,7 +205,7 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
             {`Share what's on your mind, ${user?.firstName}...`}
           </p>
         </div>
-        <div className="border-t border-gray-300 bg-placeholder-color text-left py-4 px-4">
+        <div className="border-t rounded-b-lg border-gray-300 bg-placeholder-color text-left py-4 px-4">
           <button className="mr-4">
             <AiOutlineCamera size={"24px"} />
           </button>

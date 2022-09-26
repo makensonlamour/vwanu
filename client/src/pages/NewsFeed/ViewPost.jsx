@@ -11,7 +11,7 @@ const ViewPost = () => {
   // const UserId = user?.id;
   // console.log(UserId, id);
 
-  const { data: post, isSuccess, isError, isFetching } = useGetPost(["post", id], true, id);
+  const { data: post, isError, isFetching } = useGetPost(["post", id], true, id);
 
   function reloadPage() {
     window.location.reload();
@@ -22,8 +22,8 @@ const ViewPost = () => {
   let content;
   if (isFetching) {
     content = <Loader />;
-  } else if (isSuccess && post) {
-    content = <PostList pageTitle={"post"} post={post?.data} />;
+  } else if (post && Object.keys(post).length > 0) {
+    content = <PostList pageTitle={"post"} post={post} />;
   } else if (isError) {
     content = (
       <div className="my-4 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white shadow-md">

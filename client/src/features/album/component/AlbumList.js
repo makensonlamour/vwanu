@@ -5,14 +5,14 @@ import { format } from "date-fns";
 
 const AlbumList = ({ user, fn, setAlbumId, setAlbum }) => {
   const { data: albums } = useGetAlbumList(["user", "albums"], true, user?.id);
-
+  console.log(albums);
   return (
     <>
       <>
-        {albums?.data?.length > 0 ? (
+        {albums?.length > 0 ? (
           <div className="mx-auto w-full">
             <div className="flex flex-wrap justify-start">
-              {albums?.data?.map((album) => {
+              {albums?.map((album) => {
                 return (
                   <button
                     style={{ backgroundImage: `url('${album?.coverPicture}')` }}

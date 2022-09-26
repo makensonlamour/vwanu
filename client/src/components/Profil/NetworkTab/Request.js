@@ -1,18 +1,35 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useQueryClient } from "react-query";
+import { Link } from "react-router-dom";
 import { useGetListFriendReceive } from "../../../features/friend/friendSlice";
+import { ImSad } from "react-icons/im";
+import EmptyComponent from "../../common/EmptyComponent";
+import Loader from "../../common/Loader";
 
 const Friends = ({ fn }) => {
-  const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
+  const queryClient = useQueryClient();
+  const { data: listFriendReceive, isError, isLoading } = useGetListFriendReceive(["user", "received"], true);
 
-  fn(listFriendReceive?.data?.length);
+  fn(listFriendReceive?.length);
 
   return (
     <>
       <div className="my-2">
         <div className="flex flex-wrap lg:justify-between xl:justify-start py-2">
-          {listFriendReceive?.data?.length > 0 ? (
-            listFriendReceive?.data?.map((friend, idx) => {
+          {isLoading ? (
+            <div className="flex justify-center py-5">
+              <Loader color="black" />
+            </div>
+          ) : isError ? (
+            <div className="py-5 m-auto text-center px-2 lg:px-2">
+              {"There was an error while fetching the data. "}
+              <Link className="text-secondary hover:text-primary" to={""} onClick={() => queryClient.refetchQueries(["user", "received"])}>
+                Tap to retry
+              </Link>
+            </div>
+          ) : listFriendReceive?.length > 0 ? (
+            listFriendReceive?.map((friend, idx) => {
               return (
                 <div
                   key={idx}
@@ -41,8 +58,13 @@ const Friends = ({ fn }) => {
               );
             })
           ) : (
-            <div className="flex w-52 p-6 mx-auto">
-              <span>No Friends Request</span>
+            <div className="flex justify-center w-full">
+              <EmptyComponent
+                border={false}
+                icon={<ImSad size={"32px"} className="" />}
+                placeholder={"Sorry, You don't have any pending request."}
+                tips={""}
+              />
             </div>
           )}
         </div>
