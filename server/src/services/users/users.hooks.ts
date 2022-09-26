@@ -8,7 +8,7 @@ import isSelf from '../../Hooks/isSelf.hook';
 import AutoLogin from '../../Hooks/AutoLoginHooks';
 import validateResource from '../../middleware/validateResource';
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
-// import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
+import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
 import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
 // const verifyHooks = authMan.hooks;
 import { SaveAddress, IncludeAddress, AddVisitor, GetUser } from './hook';
@@ -74,7 +74,7 @@ export default {
           'verifyExpires',
         ]
       ),
-      // MediaStringToMediaObject(['profilePicture', 'coverPicture']),
+      MediaStringToMediaObject(['profilePicture', 'coverPicture']),
     ],
     find: [],
     get: [IncludeAddress, AddVisitor],
