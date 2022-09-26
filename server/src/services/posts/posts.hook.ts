@@ -6,6 +6,8 @@ import { LimitToOwner } from '../../Hooks';
 import * as schema from '../../schema/post';
 import GetTimeline from '../timeline/hooks/getTimeline';
 import validateResource from '../../middleware/validateResource';
+import CanPostInCommunity from '../../Hooks/CanDoInCommunity.hook';
+import CanComment from '../../Hooks/NoCommentOnLockParents';
 
 const { authenticate } = feathersAuthentication.hooks;
 
@@ -14,8 +16,13 @@ export default {
     all: [authenticate('jwt')],
     find: [GetTimeline],
     get: [GetTimeline],
-    create: [AutoOwn, validateResource(schema.createPostSchema)],
-    update: [],
+    create: [
+      AutoOwn,
+      validateResource(schema.createPostSchema),
+      CanPostInCommunity,
+      CanComment,
+    ],
+    update: [CanPostInCommunity],
     patch: [LimitToOwner],
     remove: [LimitToOwner],
   },

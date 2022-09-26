@@ -413,11 +413,13 @@ describe("'communities ' service", () => {
           name,
           interests,
           description,
+          canInPost: 'A', // only admins should post
         })
         .set('authorization', creator.accessToken);
+
       expect(communityWithPosts.statusCode).toEqual(201);
 
-      const post = await testServer
+      const postFromMember = await testServer
         .post('/posts')
         .send({
           postText: 'I am a post in a community',
@@ -425,8 +427,8 @@ describe("'communities ' service", () => {
         })
         .set('authorization', creator.accessToken);
 
-      expect(post.statusCode).toEqual(201);
-      expect(post.body).toMatchObject({
+      expect(postFromMember.statusCode).toEqual(201);
+      expect(postFromMember.body).toMatchObject({
         privacyType: 'public',
         id: expect.any(String),
         postText: 'I am a post in a community',
@@ -436,6 +438,18 @@ describe("'communities ' service", () => {
         createdAt: expect.any(String),
         PostId: null,
       });
+    });
+
+    it('should  not create post for non-member', async () => {
+      const nonMemberPost = await testServer
+        .post('/posts')
+        .send({
+          postText: 'I am a post in a community',
+          CommunityId: communityWithPosts.body.id,
+        })
+        .set('authorization', testUsers[1].accessToken);
+
+      expect(nonMemberPost.statusCode).toEqual(400);
     });
     it('Should list posts in communities', async () => {
       const { body: posts } = await testServer
@@ -492,6 +506,7 @@ describe("'communities ' service", () => {
       .post('/discussion')
       .send(discussionObject)
       .set('authorization', creator.accessToken);
+
     expect(discussion.statusCode).toEqual(201);
     expect(discussion.body).toMatchObject({
       ...discussionObject,
