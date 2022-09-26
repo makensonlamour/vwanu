@@ -137,16 +137,23 @@ describe('/users service', () => {
     expect(users).toHaveLength(10);
   }, 1000);
 
-  it.skip('should get a user by id ', async () => {
+  it('should get a user by id ', async () => {
     const requester = observer.body;
-    const profileRequesting = createdTestUsers[1]?.user;
+    const user = getRandUser();
+    delete user.id;
+    const { body: profileRequesting } = await testServer
+      .post(endpoint)
+      .send(user);
 
-    const userR = await testServer
+    const { body: userR } = await testServer
       .get(`${endpoint}/${profileRequesting.id}`)
       .set('authorization', requester.accessToken);
 
-    expect(userR.body.id).toEqual(profileRequesting.id);
-    expect(userR.body.email).toEqual(profileRequesting.email);
+    console.log(userR);
+
+    expect(userR.id).toEqual(profileRequesting.id);
+    expect(userR.email).toEqual(profileRequesting.email);
+    expect(userR.address).toHaveLength(0);
   });
 
   it.skip('should not update sensitive information', async () => {

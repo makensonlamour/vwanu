@@ -13,6 +13,7 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 // const verifyHooks = authMan.hooks;
 import { SaveAddress, IncludeAddress, AddVisitor, GetUser } from './hook';
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
+// import { IncludeAssociations } from '../../Hooks';
 
 const { hashPassword, protect } = local.hooks;
 const { authenticate } = feathersAuthentication.hooks;

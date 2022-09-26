@@ -76,5 +76,6 @@ export default async (context) => {
       if (modRes) context.result = modRes;
     }
   });
+  if (!context.result.address) context.result.address = [];
   return context;
 };
