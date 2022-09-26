@@ -1,9 +1,12 @@
 import { HookContext } from '@feathersjs/feathers';
+import isNill from 'lodash/isNil';
+
 import UrlToMedia from '../lib/utils/UrlToMedia';
 
 export default (fields: string[]) =>
   (context: HookContext): HookContext => {
-    // console.log('In there');
+    const { result } = context;
+    if (isNill(result)) return context;
     // const dataToChange = Array.isArray(context.result)
     //   ? context.result
     //   : context.result.data;

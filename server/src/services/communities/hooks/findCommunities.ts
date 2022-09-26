@@ -147,7 +147,7 @@ SELECT
   };
   params.sequelize = {
     where: clause,
-    logging: console.log,
+    // logging: console.log,
     attributes: {
       include: [
         [Sequelize.literal(isMember), 'IsMember'],

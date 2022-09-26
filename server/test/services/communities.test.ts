@@ -296,7 +296,6 @@ describe("'communities ' service", () => {
       .get(endpoint)
       .set('authorization', creator.accessToken);
 
-    console.log(allCommunities);
     allCommunities.data.forEach((community) => {
       expect(community).toMatchObject({
         name: expect.any(String),
