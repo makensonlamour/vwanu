@@ -11,12 +11,21 @@ export default function (app: Application): void {
   }
 
   app.on('connection', (connection: any): void => {
+  
     app.channel('anonymous').join(connection);
+  });
+  app.on('disconnect', (connection: any): void => {
+    if (connection) {
+      const { User } = connection;
+      if (User)
+        app
+          .service('users')
+          .patch(User.id, { online: false, lastSeen: Date.now() });
+    }
   });
 
   app.on('login', (authResult: any, { connection }: any): void => {
-    console.log('\n\n\n login triggered');
-
+  
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
     if (connection) {
@@ -28,6 +37,9 @@ export default function (app: Application): void {
       const { User } = connection;
 
       app
+        .service('users')
+        .patch(User.id, { online: true, lastSeen: Date.now() });
+      app
         .service('conversation')
         .find({
           query: {},
@@ -37,13 +49,10 @@ export default function (app: Application): void {
         .then((conversationUsers: any) => {
           conversationUsers.forEach((conversationUser: any) => {
             app.channel(`conversation-${conversationUser.id}`).join(connection);
-
           });
         });
 
-      app
-        .channel(`userIds-${User.id}`)
-        .join(connection);
+      app.channel(`userIds-${User.id}`).join(connection);
     }
   });
 
