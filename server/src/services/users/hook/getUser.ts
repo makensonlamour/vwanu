@@ -21,7 +21,7 @@ export default (context: HookContext) => {
       )`;
 
   delete where?.profilePrivacy;
-  const clause = {
+  let clause = {
     ...where,
     [Op.and]: {
       [Op.or]: [
@@ -33,6 +33,13 @@ export default (context: HookContext) => {
       ],
     },
   };
+  if (where.friends) {
+    delete where.friends;
+    clause = {
+      ...where,
+      [Op.and]: [Sequelize.literal(friends)],
+    };
+  }
 
   params.sequelize = {
     where: clause,

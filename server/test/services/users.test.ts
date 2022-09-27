@@ -14,28 +14,8 @@ const createdTestUsers = [];
 let observer;
 let privateUser;
 const endpoint = '/users';
-/* #region  Global variables Main */
 
 const modify = { country: 'United States', gender: 'f' };
-
-// const expectedUser = {
-//   id: expect.any(String),
-//   email: expect.any(String),
-//   gender: expect.any(String),
-//   admin: expect.any(Boolean),
-//   online: expect.any(Boolean),
-//   active: expect.any(Boolean),
-//   language: expect.any(String),
-//   lastName: expect.any(String),
-//   lastSeen: expect.any(String),
-//   verified: expect.any(Boolean),
-//   firstName: expect.any(String),
-//   createdAt: expect.any(String),
-//   updatedAt: expect.any(String),
-//   coverPicture: expect.any(Object),
-//   lastSeenPrivacy: expect.any(Boolean),
-// };
-/* #endregion */
 
 describe('/users service', () => {
   let testServer;
@@ -137,6 +117,75 @@ describe('/users service', () => {
     expect(users).toHaveLength(10);
   }, 1000);
 
+  it('should only find online users ', async () => {
+    const {
+      body: { data: users },
+    } = await testServer
+      .get(`${endpoint}?online=true`)
+      .set('authorization', `${observer.body.accessToken}`);
+
+    expect(users).toHaveLength(0);
+
+    // Creating 4 online users with
+    const responses = await Promise.all(
+      getRandUsers(4).map((u) => {
+        const user = { ...u, online: true };
+        delete user.id;
+        return testServer.post(endpoint).send(user);
+      })
+    );
+
+    responses.forEach(({ statusCode }) => {
+      expect(statusCode).toBe(201);
+    });
+
+    const {
+      body: { data: onlineUsers },
+    } = await testServer
+      .get(`${endpoint}?online=true`)
+      .set('authorization', `${observer.body.accessToken}`);
+
+    expect(onlineUsers).toHaveLength(4);
+  });
+  it('should only find online users witch are friends ', async () => {
+    const {
+      body: { data: users },
+    } = await testServer
+      .get(`${endpoint}?online=true&friends=true`)
+      .set('authorization', `${observer.body.accessToken}`);
+
+    expect(users).toHaveLength(0);
+
+    // Creating 4 future friend for the observer
+    const responses = await Promise.all(
+      getRandUsers(4).map((u) => {
+        const user = { ...u, online: true };
+        delete user.id;
+        return testServer.post(endpoint).send(user);
+      })
+    );
+
+    responses.forEach(({ statusCode }) => {
+      expect(statusCode).toBe(201);
+    });
+
+    // Make theme friends with the observer
+    const { User_friends: friends } = app.get('sequelizeClient').models;
+    await Promise.all(
+      responses.map(({ body }) =>
+        friends.create({ UserId: body.id, friendId: observer.body.id })
+      )
+    );
+
+    const {
+      body: { data: onlineUsers },
+    } = await testServer
+      .get(`${endpoint}?online=true&friends=true`)
+      .set('authorization', `${observer.body.accessToken}`);
+
+    expect(onlineUsers).toHaveLength(4);
+  });
+
   it('should get a user by id ', async () => {
     const requester = observer.body;
     const user = getRandUser();
@@ -149,13 +198,10 @@ describe('/users service', () => {
       .get(`${endpoint}/${profileRequesting.id}`)
       .set('authorization', requester.accessToken);
 
-    console.log(userR);
-
     expect(userR.id).toEqual(profileRequesting.id);
     expect(userR.email).toEqual(profileRequesting.email);
     expect(userR.address).toHaveLength(0);
   });
-
   it.skip('should not update sensitive information', async () => {
     const requester = createdTestUsers[0];
     [
