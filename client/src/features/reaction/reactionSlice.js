@@ -1,4 +1,7 @@
-import { usePost, useDelete, useUpdate } from "../../lib/react-query";
+import { usePost, useDelete, useUpdate, useLoadMore } from "../../lib/react-query";
+
+export const useGetReaction = (queryKey, enabled = false, entityType, entityId) =>
+  useLoadMore(queryKey, enabled, `/reactions?entityType=${entityType}&entityId=${entityId}`);
 
 export const useCreateReaction = (queryKey, oldData, newData, dataObj) => usePost(queryKey, `/reactions`, dataObj, (oldData, newData));
 

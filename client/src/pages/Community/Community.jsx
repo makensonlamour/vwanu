@@ -13,7 +13,7 @@ const Community = () => {
   const tabsUrl = searchParams.get("tabs");
   let run = true;
 
-  const { data: communityList } = useGetCommunityList(["community", "all"]);
+  const { data: communityList, isLoading, fetchNextPage, hasNextPage, isError } = useGetCommunityList(["community", "all"], true);
   const { data: myCommunityList } = useGetMyCommunityList(["community", "me"], user?.id !== undefined ? true : false, user?.id);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -106,12 +106,24 @@ const Community = () => {
               </TabList>
               <TabPanel value="1">
                 <div className="lg:mt-4 w-full">
-                  <CommunityList communityList={communityList} />
+                  <CommunityList
+                    communityList={communityList}
+                    isLoading={isLoading}
+                    isError={isError}
+                    hasNextPage={hasNextPage}
+                    fetchNextPage={fetchNextPage}
+                  />
                 </div>
               </TabPanel>
               <TabPanel value="2">
                 <div className="lg:mt-4 w-full">
-                  <CommunityList communityList={myCommunityList} />
+                  <CommunityList
+                    communityList={myCommunityList}
+                    isLoading={isLoading}
+                    isError={isError}
+                    hasNextPage={hasNextPage}
+                    fetchNextPage={fetchNextPage}
+                  />
                 </div>
               </TabPanel>
               <TabPanel value="3">

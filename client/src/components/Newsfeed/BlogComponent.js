@@ -3,17 +3,32 @@ import cryptoRandomString from "crypto-random-string";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Stack, styled, Paper } from "@mui/material";
+import { ImSad } from "react-icons/im";
+import EmptyComponent from "../common/EmptyComponent";
+import { useQueryClient } from "react-query";
+import Loader from "../common/Loader";
 
-const BlogComponent = ({ data }) => {
+const BlogComponent = ({ data, isError, isLoading }) => {
+  const queryClient = useQueryClient();
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
-
   return (
-    <>
+    <div>
       <div className="bg-white w-full 4xl:w-[70%] border border-gray-200 rounded-lg p-2 mb-8">
-        <h2 className="my-3 px-6 text-xl font-medium">Blog</h2>
-        {data?.length > 0 ? (
+        <h2 className="my-2 px-2 text-xl font-medium">Blog</h2>
+        {isLoading ? (
+          <div className="flex justify-center py-5">
+            <Loader color="black" />
+          </div>
+        ) : isError ? (
+          <div className="py-5 m-auto text-center px-2 lg:px-2">
+            {"There was an error while fetching the data. "}
+            <Link className="text-secondary hover:text-primary" to={""} onClick={() => queryClient.refetchQueries(["blog", "all"])}>
+              Tap to retry
+            </Link>
+          </div>
+        ) : data?.length > 0 ? (
           <Stack spacing={1}>
             {data?.map((blog, idx) => {
               if (idx < 6) {
@@ -52,17 +67,24 @@ const BlogComponent = ({ data }) => {
             })}
           </Stack>
         ) : (
-          <div className="">
-            <p className="">{"No Blog to show"}</p>
+          <div className="flex justify-center">
+            <EmptyComponent
+              border={false}
+              icon={<ImSad size={"32px"} className="" />}
+              placeholder={"Sorry, There's no blog."}
+              tips={"Here, you can see all the latest blog published on Vwanu,LLC."}
+            />
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
 BlogComponent.propTypes = {
   data: PropTypes.array.isRequired,
+  isError: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 export default BlogComponent;

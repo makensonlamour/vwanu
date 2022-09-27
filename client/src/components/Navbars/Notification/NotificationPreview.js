@@ -30,7 +30,7 @@ const NotificationPreview = () => {
     if (!run) {
       run = true;
       const notifications = await notificationService.find({ query: { to: user.id } });
-      notifications.forEach(onCreatedListener);
+      notifications?.data?.forEach(onCreatedListener);
       notificationService.on("created", onCreatedListener);
     }
   };

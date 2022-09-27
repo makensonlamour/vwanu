@@ -1,9 +1,11 @@
-import { useFetch, usePost, useUpdate } from "../../lib/react-query";
+import { useFetch, usePost, useUpdate, useLoadMore } from "../../lib/react-query";
 import { api } from "../../lib/api";
 
-export const useGetCommunityList = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/communities`);
+// export const useGetCommunityList = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/communities`);
 
-export const useGetMyCommunityList = (queryKey, enabled = true, userId) => useFetch(queryKey, enabled, `/communities?UserId=${userId}`);
+export const useGetCommunityList = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/communities`);
+
+export const useGetMyCommunityList = (queryKey, enabled = false, userId) => useFetch(queryKey, enabled, `/communities?UserId=${userId}`);
 
 export const useGetCommunity = (queryKey, enabled = true, communityId) => useFetch(queryKey, enabled, `/communities/${communityId}`);
 
@@ -37,7 +39,7 @@ export const useGetCommunityInvitation = (queryKey, enabled = true, CommunityId)
   useFetch(queryKey, enabled, `/community-invitation-request?CommunityId=${CommunityId}`);
 
 export const useGetMyCommunityInvitation = (queryKey, enabled = true, userId) =>
-  useFetch(queryKey, enabled, `/community-invitation-request?guestId=${userId}`);
+  useLoadMore(queryKey, enabled, `/community-invitation-request?guestId=${userId}`);
 
 export const useCheckIfMember = (queryKey, enabled = true, communityId, userId) =>
   useFetch(queryKey, enabled, `/community-users/?CommunityId=${communityId}&UserId=${userId}`);

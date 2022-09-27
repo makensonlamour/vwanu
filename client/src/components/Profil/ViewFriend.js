@@ -4,8 +4,11 @@ import PropTypes from "prop-types";
 import { Link, useOutletContext } from "react-router-dom";
 // import { checkFriendList } from "../../../helpers/index";
 // import FriendButton from "../../features/friend/component/FriendButton";
+import { useQueryClient } from "react-query";
+import Loader from "../common/Loader";
 
-const ViewFriend = ({ data, types = "", noDataLabel }) => {
+const ViewFriend = ({ data, types = "", noDataLabel, isLoading, isError, arrayQuery }) => {
+  const queryClient = useQueryClient();
   const user = useOutletContext();
   // const { data: listFriend } = useGetListFriend(["user", "friend"], true);
 
@@ -13,12 +16,23 @@ const ViewFriend = ({ data, types = "", noDataLabel }) => {
     <>
       <div className="my-2">
         <div className="flex flex-wrap lg:justify-between xl:justify-start py-2">
-          {data?.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-5">
+              <Loader color="black" />
+            </div>
+          ) : isError ? (
+            <div className="py-5 m-auto text-center px-2 lg:px-2">
+              {"There was an error while fetching the data. "}
+              <Link className="text-secondary hover:text-primary" to={""} onClick={() => queryClient.refetchQueries(arrayQuery)}>
+                Tap to retry
+              </Link>
+            </div>
+          ) : data?.length > 0 ? (
             data?.map((friend, idx) => {
               return (
                 <div
                   key={idx}
-                  className="bg-white w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:w-[32%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3"
+                  className="bg-white w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:w-[31%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3"
                 >
                   <img
                     className="object-cover w-28 h-28 mask mask-squircle mx-auto mb-2"
@@ -69,9 +83,7 @@ const ViewFriend = ({ data, types = "", noDataLabel }) => {
               );
             })
           ) : (
-            <div className="flex w-full p-10 mx-auto">
-              <p>{noDataLabel}</p>
-            </div>
+            <div className="flex w-full p-10 mx-auto">{noDataLabel}</div>
           )}
         </div>
       </div>
@@ -83,6 +95,9 @@ ViewFriend.propTypes = {
   data: PropTypes.array,
   noDataLabel: PropTypes.any,
   types: PropTypes.string,
+  isError: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  arrayQuery: PropTypes.array,
 };
 
 export default ViewFriend;

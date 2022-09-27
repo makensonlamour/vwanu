@@ -27,7 +27,7 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
   const [interest, setInterest] = useState([]);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
   const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
-  const options = assignValue(interestList?.data);
+  const options = assignValue(interestList);
 
   // const animatedComponents = makeAnimated();
 
@@ -61,7 +61,6 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
       privacyType: "public",
       description: dataObj?.communityDescription,
     };
-    console.log(data);
     try {
       let result = await createCommunity.mutateAsync(data);
       updateSuccess();

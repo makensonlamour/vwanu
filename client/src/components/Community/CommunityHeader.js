@@ -50,7 +50,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
     user?.id !== undefined ? true : false,
     user?.id
   );
-  const { data: roles } = useGetCommunityRole(["roles", "all"]);
+  const { data: roles } = useGetCommunityRole(["roles", "all"], true);
   const percentage = 73;
 
   const steps = [
@@ -143,8 +143,11 @@ const CommunityHeader = ({ communityData, notificationList }) => {
     }
   };
 
-  const invite = isInvitation(listInvitation?.data, user);
-  const inviteReceive = isInvitationReceive(listInvitation?.data, user);
+  // const invite = isInvitation(listInvitation, user);
+  // const inviteReceive = isInvitationReceive(listInvitation, user);
+
+  let invite = false;
+  let inviteReceive = false;
 
   return (
     <>

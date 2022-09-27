@@ -22,10 +22,10 @@ const updateError = () =>
 const DetailsTab = ({ communityData }) => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: interestList } = useGetInterestList(["interest", "all"]);
+  const { data: interestList } = useGetInterestList(["interest", "all"], true);
   const updateCommunity = useUpdateCommunity(["community", id], id, undefined, undefined);
   const [interest, setInterest] = useState([]);
-  const options = assignValue(interestList?.data);
+  const options = assignValue(interestList);
   const initialValues = {
     communityName: communityData?.name || "",
     interest: communityData?.Interests || "",

@@ -7,16 +7,18 @@ import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
 import reactions from "../../data/reactions";
 import { likeArray, transformHashtagAndLink } from "../../helpers/index";
-import { RiShareForwardLine } from "react-icons/ri";
-import { BiComment } from "react-icons/bi";
+// import { RiShareForwardLine } from "react-icons/ri";
+// import { BiComment } from "react-icons/bi";
 import MediaPost from "../../components/form/Post/MediaPost";
 import CommentList from "../comment/component/CommentList";
 import CommentForm from "../comment/component/CommentForm";
 import ReusableDialog from "../../components/common/ReusableDialog";
 import ViewLikeButton from "../reaction/component/ViewLikeButton";
+import Share from "../../components/Share/Share";
+
 // import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
-import { ReactionCounter } from "@charkour/react-reactions";
+// import { ReactionCounter } from "@charkour/react-reactions";
 
 import Reaction from "../reaction/component/Reaction";
 import MenuPost from "./components/MenuPost";
@@ -74,7 +76,7 @@ const PostList = ({ post, pageTitle }) => {
                     to={
                       _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
                         ? `../../profile/${post?.User?.id}`
-                        : `profile/${post?.User?.id}`
+                        : `../../profile/${post?.User?.id}`
                     }
                   >
                     <span className="ml-3 text-sm font-bold hover:text-primary line-clamp-1 w-[80%]">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
@@ -121,32 +123,38 @@ const PostList = ({ post, pageTitle }) => {
                 );
               })}
               {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} /> : null}
-              {post?.Reactions?.length || post?.Comments?.length || post?.Share?.length ? (
+              {post?.amountOfReactions !== 0 || post?.amountOfComments !== 0 ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
                   <div open={viewLike}>
                     <ViewLikeButton
-                      reactions={post?.Reactions}
+                      amountOfReactions={post?.amountOfReactions}
+                      postId={post?.id}
                       label={
                         <Fragment>
                           <p className="text-sm text-secondary">
-                            {post?.Reactions?.length > 0 ? (
+                            {post?.amountOfReactions > 0 ? (
                               <>
                                 <div className="flex text-primary items-center">
-                                  <ReactionCounter
-                                    reactions={likeArray(post?.Reactions, reactions)}
-                                    iconSize={20}
-                                    important={["Wadson Vaval"]}
-                                    user={user?.firstName + " " + user?.lastName}
-                                    style={{ fontSize: "5px" }}
-                                    className=" text-primary align-middle"
-                                    showOthersAlways={
-                                      likeArray(post?.Reactions).length > 0 && post?.Reactions?.UserId === user?.id ? true : false
-                                    }
-                                    onClick={() => {
-                                      setViewLike(!viewLike);
-                                      console.log("will show pop up of person who liked it");
-                                    }}
-                                  />
+                                  <p className="">
+                                    <span>
+                                      {post?.isReactor && post?.isReactor?.length === 1
+                                        ? post?.amountOfReactions - 1 === 0
+                                          ? "You react on this post"
+                                          : "You and "
+                                        : null}
+                                    </span>
+                                    <span>
+                                      {
+                                        post?.amountOfReactions === 0
+                                          ? null
+                                          : post?.amountOfReactions > 1 && post?.isReactor?.length === 1
+                                          ? post?.amountOfReactions - 1 + " other people" //I like and more than one like the post
+                                          : post?.isReactor && post?.isReactor?.length - 1 === 0
+                                          ? null
+                                          : post?.amountOfReactions + " other people" //I don't like and other people like
+                                      }
+                                    </span>
+                                  </p>
                                 </div>
                               </>
                             ) : null}
@@ -158,10 +166,14 @@ const PostList = ({ post, pageTitle }) => {
 
                   <p className="ml-auto">
                     <Link
-                      to={_.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed") ? "" : `post/${post?.id}`}
+                      to={_.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed") ? "" : `../../post/${post?.id}`}
                       className="ml-auto text-xs text-primary mr-2 hover:border-b hover:border-primary"
                     >
-                      {post?.Comments?.length ? post?.Comments?.length + " Comments" : null}
+                      {post?.amountOfComments === 0
+                        ? null
+                        : post?.amountOfComments === 1
+                        ? post?.amountOfComments + " Comment"
+                        : post?.amountOfComments + " Comments"}
                     </Link>
                     <button className="ml-auto text-xs text-primary hover:border-b hover:border-primary">
                       {post?.Shares?.length ? post?.Shares?.length + " shares" : null}
@@ -182,10 +194,7 @@ const PostList = ({ post, pageTitle }) => {
                   {/* <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
                   {" Comment"}
                 </button>
-                <button className="text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2">
-                  {/* <RiShareForwardLine size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
-                  {" Share"}
-                </button>
+                <Share post={post} label={" Share"} link={""} />
               </div>
               {/*Check if we are on post page to show all comments, if not show 3 comments*/}
               {_.isEqual(pageTitle, "post") ? (
@@ -193,23 +202,14 @@ const PostList = ({ post, pageTitle }) => {
                   <CommentForm PostId={post?.id} />
                   {/* checking if we're on postIdpage. If we're, then rendering all comments, otherwise rendering only 3 */}
 
-                  <CommentList showAll={true} Comments={post?.Comments} />
+                  <CommentList showAll={true} postId={post?.id} />
                 </div>
               ) : commentPrev ? (
                 <div className="border-t mt-3">
                   <CommentForm PostId={post?.id} />
-                  {/* checking if we're on postIdpage. If we're, then rendering all comments, otherwise rendering only 3 */}
+                  {/* checking if we're on postIdpage. If we're, then rendering all comment, otherwise rendering only 3 */}
 
-                  <CommentList showAll={false} Comments={post?.Comments} />
-                  {post?.Comments?.length > 3 ? (
-                    <>
-                      <div className="text-center text-sm mt-2">
-                        <Link className="text-primary hover:text-secondary" to={`post/${post?.id}`}>
-                          View more comments...
-                        </Link>
-                      </div>
-                    </>
-                  ) : null}
+                  <CommentList showAll={false} postId={post?.id} />
                 </div>
               ) : null}
             </div>

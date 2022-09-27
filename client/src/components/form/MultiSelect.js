@@ -3,8 +3,18 @@ import PropTypes from "prop-types";
 import { useFormikContext } from "formik";
 import _ from "lodash";
 import { Select, MenuItem } from "@mui/material";
-
 import Error from "./Error";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 function FormSelectMulti({ name, label, options, className, testId, link, isMulti, fn, val, ...otherProps }) {
   const { setFieldTouched, setFieldValue, handleChange, errors, touched } = useFormikContext();
@@ -22,6 +32,7 @@ function FormSelectMulti({ name, label, options, className, testId, link, isMult
             handleChange(name);
             fn(e);
           }}
+          MenuProps={MenuProps}
           {...otherProps}
         >
           <MenuItem>{"Not specified"}</MenuItem>

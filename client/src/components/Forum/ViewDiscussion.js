@@ -4,9 +4,18 @@ import { Link, useParams } from "react-router-dom";
 import InputDiscussion from "../Community/DiscussionTab/InputDiscussion";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
+import { useQueryClient } from "react-query";
+import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
+import Loader from "../../components/common/Loader";
 
-const ViewDiscussion = ({ data, type = "forum" }) => {
+const ViewDiscussion = ({ data, type = "forum", isLoading, isError, hasNextPage, fetchNextPage }) => {
   const id = useParams();
+  const queryClient = useQueryClient();
+
+  function reloadPage() {
+    queryClient.refetchQueries(["community", "discussion", "all"]);
+  }
+
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-xl w-full py-5">
@@ -21,39 +30,99 @@ const ViewDiscussion = ({ data, type = "forum" }) => {
         </div>
         <div className="w-full h-[1px] bg-gray-300 mt-4"></div>
         <div className="">
-          {data?.length > 0 ? (
-            data?.map((item) => {
-              return (
-                <div key={item?.title} className="hover:shadow-lg">
-                  <div className="flex lg:px-6 px-4 lg:py-6 py-4">
-                    <div className="mr-4">
-                      <img alt={item?.title} src={item?.User?.profilePicture} className="w-12 h-12 mask mask-squircle" />
-                    </div>
-                    <div className="">
-                      <Link to={type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`} className="font-semibold hover:text-primary">
-                        {item?.title}
-                      </Link>
-                      <p className="pt-2 text-sm text-gray-500">
-                        <span className="">{item?.lastReply + " replied " + item?.createdAt}</span>
-                        <span className="ml-2">{" " + item?.memberCount + " Members"}</span> ·
-                        <span className="">{" " + item?.replyCount + " Replies"}</span>
-                      </p>
-                    </div>
-                  </div>
+          {isLoading ? (
+            <div className="flex justify-center py-5">
+              <Loader color="black" />
+            </div>
+          ) : isError ? (
+            <div className="py-5 m-auto text-center px-2">
+              {"There was an error while fetching the data. "}{" "}
+              <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
+                Tap to retry
+              </Link>{" "}
+            </div>
+          ) : data?.pages && data?.pages?.length > 0 ? (
+            <InfiniteScroll
+              fetchMore={fetchNextPage}
+              isError={isError}
+              isLoading={isLoading}
+              hasNext={hasNextPage}
+              refetch={() => queryClient.invalidateQueries(["community", "discussion", "all"])}
+              container={true}
+              classNameContainer={"overflow-y-auto h-[46vh]"}
+              loader={
+                <div className="flex justify-center py-5">
+                  <Loader color="black" />
                 </div>
-              );
-            })
+              }
+              errorRender={
+                <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+                  {"There was an error while fetching the data. "}{" "}
+                  <Link
+                    className="text-secondary hover:text-primary"
+                    to={""}
+                    onClick={() => reloadPage(["community", "discussion", "all"])}
+                  >
+                    Tap to retry
+                  </Link>{" "}
+                </div>
+              }
+            >
+              {data?.pages.map((page) => {
+                return page?.data?.data?.map((item) => {
+                  return (
+                    <div key={item?.title} className="hover:shadow-lg">
+                      <div className="flex lg:px-6 px-4 lg:py-6 py-4">
+                        <div className="mr-4">
+                          <img alt={item?.title} src={item?.User?.profilePicture} className="w-12 h-12 mask mask-squircle" />
+                        </div>
+                        <div className="">
+                          <Link to={type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`} className="font-semibold hover:text-primary">
+                            {item?.title}
+                          </Link>
+                          <p className="pt-2 text-sm text-gray-500">
+                            {item?.lastComment !== null && (
+                              <span className="">
+                                {item?.lastComment[0]?.User?.firstName + " replied on " + item?.lastComment[0]?.createdAt}
+                              </span>
+                            )}
+                            {item?.lastComment === null && (
+                              <span className="">
+                                {item?.User?.firstName + " " + item?.User?.lastName + " created on " + item?.createdAt}
+                              </span>
+                            )}
+                            <span className="mx-2">
+                              {" " + item?.activeParticipants === 0
+                                ? "0 Member"
+                                : item?.activeParticipants > 1
+                                ? item?.activeParticipants + " Members"
+                                : item?.activeParticipants + " Member"}
+                            </span>
+                            •
+                            <span className="mx-2">
+                              {" " + item?.amountOfComments === 0
+                                ? "0 Reply"
+                                : item?.amountOfComments > 1
+                                ? item?.amountOfComments + " Replies"
+                                : item?.amountOfComments + " Reply"}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                });
+              })}
+            </InfiniteScroll>
           ) : (
-            <>
-              <div className="flex justify-center">
-                <EmptyComponent
-                  border={false}
-                  icon={<ImSad size={"32px"} className="" />}
-                  placeholder={"Sorry, There were no discussions found."}
-                  tips={"You can be the first to ccreate a discussion in this forum by clicking on the new discussion button."}
-                />
-              </div>
-            </>
+            <div className="flex justify-center">
+              <EmptyComponent
+                border={false}
+                icon={<ImSad size={"32px"} className="" />}
+                placeholder={"Sorry, There were no discussions found."}
+                tips={"You can be the first to ccreate a discussion in this forum by clicking on the new discussion button."}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -62,8 +131,12 @@ const ViewDiscussion = ({ data, type = "forum" }) => {
 };
 
 ViewDiscussion.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
   type: PropTypes.string,
+  isLoading: PropTypes.bool,
+  isError: PropTypes.bool,
+  hasNextPage: PropTypes.bool,
+  fetchNextPage: PropTypes.func,
 };
 
 export default ViewDiscussion;
