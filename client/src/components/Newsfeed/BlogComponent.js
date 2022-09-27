@@ -13,6 +13,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
+  console.log(data);
   return (
     <div>
       <div className="bg-white w-full 4xl:w-[70%] border border-gray-200 rounded-lg p-2 mb-8">

@@ -9,7 +9,7 @@ import EmptyComponent from "../../common/EmptyComponent";
 
 const Friends = ({ fn }) => {
   const { id } = useParams();
-  const { data: listFriend, isError, isLoading } = useGetListFriend(["user", "friend"], true);
+  const { data: listFriend, isError, isLoading, hasNextPage, fetchNextPage } = useGetListFriend(["user", "friend"], true);
   fn(listFriend?.length || 0);
 
   return (
@@ -20,6 +20,8 @@ const Friends = ({ fn }) => {
         isError={isError}
         isLoading={isLoading}
         arrayQuery={["user", "friend"]}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
         noDataLabel={
           <div className="flex justify-center w-full">
             <EmptyComponent

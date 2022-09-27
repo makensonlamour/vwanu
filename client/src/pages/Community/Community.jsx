@@ -105,7 +105,7 @@ const Community = () => {
                 />
               </TabList>
               <TabPanel value="1">
-                <div className="lg:mt-4 w-full">
+                <div className="lg:mt-0 w-full">
                   <CommunityList
                     communityList={communityList}
                     isLoading={isLoading}
@@ -116,7 +116,7 @@ const Community = () => {
                 </div>
               </TabPanel>
               <TabPanel value="2">
-                <div className="lg:mt-4 w-full">
+                <div className="lg:mt-0 w-full">
                   <CommunityList
                     communityList={myCommunityList}
                     isLoading={isLoading}
@@ -127,7 +127,7 @@ const Community = () => {
                 </div>
               </TabPanel>
               <TabPanel value="3">
-                <div className="mt-4 w-full">
+                <div className="mt-0 w-full">
                   <div className="flex">
                     <InvitationTabs />
                   </div>

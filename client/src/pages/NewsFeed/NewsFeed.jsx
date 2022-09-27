@@ -186,8 +186,12 @@ const NewsFeed = () => {
       <div className="mx-auto mt-6 max-w-screen-3xl">
         <div className="flex justify-evenly">
           <div className="basis-[25%] hidden xl:block">
-            <BlogComponent data={blogList || []} isLoading={loadingBlog} isError={errorBlog} />
-            <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing || []} />
+            <BlogComponent data={blogList?.pages[0]?.data || []} isLoading={loadingBlog} isError={errorBlog} />
+            <FollowingPreview
+              isLoading={loadingFollowing}
+              isError={errorFollowing}
+              data={listFollowing?.pages ? listFollowing?.pages[0]?.data?.data : []}
+            />
           </div>
           <div className="basis-full lg:basis-[56%] ">
             <div className="px-3">
@@ -198,10 +202,14 @@ const NewsFeed = () => {
           </div>
           <div className="basis-[22%] hidden lg:block">
             <span className="block xl:hidden">
-              <BlogComponent data={blogList || []} isLoading={loadingBlog} isError={errorBlog} />
+              <BlogComponent data={blogList?.pages[0]?.data || []} isLoading={loadingBlog} isError={errorBlog} />
             </span>
             <span className="block xl:hidden">
-              <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing || []} />
+              <FollowingPreview
+                isLoading={loadingFollowing}
+                isError={errorFollowing}
+                data={listFollowing?.pages ? listFollowing?.pages[0]?.data?.data : []}
+              />
             </span>
 
             {/* <CompleteProfile percentage={percentage} data={steps} /> */}

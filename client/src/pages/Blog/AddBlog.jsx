@@ -70,7 +70,7 @@ const AddBlog = () => {
     }
   };
 
-  const options = assignValue(interestList?.data);
+  const options = assignValue(interestList);
 
   useEffect(() => {
     setBlogTitle(editData?.blogTitle);

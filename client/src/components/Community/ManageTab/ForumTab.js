@@ -11,6 +11,12 @@ const ForumTab = () => {
               "Connect a discussion forum to allow members of this group to communicate in a structured, bulletin-board style fashion. Unchecking this option will not delete existing forum content."
             }
           </p>
+          <div className="flex mt-6">
+            <label className="flex items-center">
+              <input type="checkbox" className="checked:bg-green-500 cursor-pointer w-12 h-12 border-3 border-rose-500 rounded-lg" />
+              <span className="ml-2">Discussion Forum</span>
+            </label>
+          </div>
         </div>
       </div>
     </>

@@ -12,7 +12,7 @@ const FollowingPreview = ({ data, isError, isLoading }) => {
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
-
+  console.log(data);
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">

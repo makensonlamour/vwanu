@@ -7,10 +7,14 @@ import { GoComment } from "react-icons/go";
 import SingleBlogRelated from "../../components/Blog/SingleBlogRelated";
 import SingleResponse from "../../components/Blog/SingleResponse";
 import { useCreateResponse, useGetAllResponse } from "../../features/blog/blogSlice";
+import { FaBlog } from "react-icons/fa";
 import "./testcss.css";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import SocialMediaShare from "../../components/common/SocialMediaShare";
+import EmptyComponent from "../../components/common/EmptyComponent";
+import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
+import Loader from "../../components/common/Loader";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -31,10 +35,14 @@ const ViewBlog = () => {
   const queryClient = useQueryClient();
   const { data: blog } = useGetBlog(["blog", id], id?.toString() !== "undefined" ? true : false, id);
   const { data: blogList } = useGetBlogList(["blog", "all"], true);
-  const { data: listResponse } = useGetAllResponse(["blog", "response", "all"], id?.toString() !== "undefined" ? true : false, id);
+  const {
+    data: listResponse,
+    isLoading: responseLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetAllResponse(["blog", "response", "all"], id?.toString() !== "undefined" ? true : false, id);
   const createResponse = useCreateResponse(["blog", "response", "all"]);
-
-  console.log(blog);
 
   const handleChange = (e) => {
     setResponseText(e.target.value);
@@ -62,6 +70,73 @@ const ViewBlog = () => {
       setResponseText("");
     }
   };
+
+  let content;
+  function reloadPage() {
+    queryClient.refetchQueries(["blog", "all"]);
+  }
+  if (isLoading) {
+    content = (
+      <div className="flex justify-center py-5">
+        <Loader color="black" />
+      </div>
+    );
+  } else if (listResponse?.pages?.length > 0 && listResponse?.pages[0]?.data?.total > 0) {
+    content = (
+      <>
+        <InfiniteScroll
+          fetchMore={fetchNextPage}
+          isError={isError}
+          isLoading={responseLoading}
+          hasNext={hasNextPage}
+          container={false}
+          classNameContainer={"overflow-y-auto h-[60vh]"}
+          refetch={() => queryClient.invalidateQueries(["blog"])}
+          loader={
+            <div className="flex justify-center py-5">
+              <Loader color="black" />
+            </div>
+          }
+          errorRender={
+            <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+              {"There was an error while fetching the data. "}{" "}
+              <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["blog", "all"])}>
+                Tap to retry
+              </Link>{" "}
+            </div>
+          }
+        >
+          <div className="flex flex-wrap lg:justify-start py-2 w-full">
+            {listResponse?.pages?.map((page) => {
+              return page?.data?.data?.map((blog) => {
+                return <SingleResponse key={blog?.id} blog={blog} />;
+                // return <PostList key={cryptoRandomString({ length: 10 })} post={post} pageTitle={""} />;
+              });
+            })}
+          </div>
+        </InfiniteScroll>
+      </>
+    );
+  } else if (isError) {
+    content = (
+      <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+        {"Failed to load post. "}{" "}
+        <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
+          Reload the page
+        </Link>{" "}
+      </div>
+    );
+  } else {
+    content = (
+      <div className="flex justify-center w-full">
+        <EmptyComponent
+          icon={<FaBlog size={"32px"} className="" />}
+          placeholder={"There's no blog published yet."}
+          tips={"Here, Be the first one to create a blog by just click on the button Create New Article."}
+        />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -193,8 +268,9 @@ const ViewBlog = () => {
                   {isLoading ? "Loading..." : "Publish"}
                 </button>
               </div>
-              <div className="mx-2">
-                <SingleResponse blogs={listResponse?.data} />
+              <div className="mx-2 w-full">
+                {content}
+                {/* <SingleResponse blogs={listResponse} /> */}
               </div>
             </div>
           </div>

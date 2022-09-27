@@ -72,7 +72,7 @@ const ViewInvitation = ({ member }) => {
 
         <div className="flex justify-start items-center">
           <div className="mr-3">
-            {member?.Community?.profilePicture !== null || member?.Community?.profilePicture !== undefined ? (
+            {member?.Community?.profilePicture === null || member?.Community?.profilePicture === undefined ? (
               <MdGroups size="72px" className="text-gray-300 border border-gray-200 mask mask-squircle" />
             ) : (
               <img src={member?.Community?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-16 h-16" />

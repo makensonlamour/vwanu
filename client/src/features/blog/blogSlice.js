@@ -1,6 +1,6 @@
-import { useFetch, usePost, useUpdate, useDelete } from "../../lib/react-query";
+import { useFetch, usePost, useUpdate, useDelete, useLoadMore } from "../../lib/react-query";
 
-export const useGetBlogList = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/blogs`);
+export const useGetBlogList = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/blogs`);
 
 export const useGetMyBlogList = (queryKey, enabled = true, userId) => useFetch(queryKey, enabled, `/blogs?UserId=${userId}`);
 
@@ -14,4 +14,4 @@ export const useDeleteBlog = (queryKey, oldData, newData) => useDelete(queryKey,
 
 export const useCreateResponse = (queryKey, oldData, newData) => usePost(queryKey, `/blogResponse`, (oldData, newData));
 
-export const useGetAllResponse = (queryKey, enabled = true, blogId) => useFetch(queryKey, enabled, `/blogResponse?BlogId=${blogId}`);
+export const useGetAllResponse = (queryKey, enabled = true, blogId) => useLoadMore(queryKey, enabled, `/blogResponse?BlogId=${blogId}`);

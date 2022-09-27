@@ -9,7 +9,7 @@ import EmptyComponent from "../../common/EmptyComponent";
 
 const Followers = ({ fn }) => {
   const { id } = useParams();
-  const { data: listFollowers, isLoading, isError } = useGetListFollowers(["user", "followers"], true);
+  const { data: listFollowers, isLoading, isError, hasNextPage, fetchNextPage } = useGetListFollowers(["user", "followers"], true);
 
   fn(listFollowers?.length || 0);
 
@@ -20,6 +20,8 @@ const Followers = ({ fn }) => {
         isError={isError}
         isLoading={isLoading}
         arrayQuery={["user", "followers"]}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
         noDataLabel={
           <div className="flex justify-center w-full">
             <EmptyComponent
