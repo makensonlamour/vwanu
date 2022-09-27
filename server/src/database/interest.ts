@@ -3,7 +3,6 @@
 
 import { Model } from 'sequelize';
 
-
 export interface InterestInterface {
   id: string;
   name: string;
@@ -21,6 +20,7 @@ export default (sequelize: any, DataTypes: any) => {
     accessible: boolean;
 
     static associate(models: any): void {
+      Interest.hasMany(models.Interest, { as: 'subInterest' });
       Interest.belongsToMany(models.User, { through: 'User_Interest' });
       Interest.hasMany(models.Blog);
       // Interest.belongsToMany(models.Page, { through: 'Page_Interest' });

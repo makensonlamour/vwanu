@@ -16,7 +16,7 @@ export default function (app: Application): void {
   const { models } = app.get('sequelizeClient');
   const options = {
     Model: models.Interest,
-    paginate: app.get('paginate'),
+    // paginate: app.get('paginate'),
   };
 
   // Initialize our service with any options it requires
