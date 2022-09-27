@@ -161,7 +161,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
               <div className="border-gray-700 bg-white">
                 <div className="relative w-full lg:w-[65vw]">
                   <div className="bg-gray-700 bg-repeat h-52 lg:h-64">
-                    {communityData?.coverPicture !== null || communityData?.coverPicture !== undefined ? (
+                    {communityData?.coverPicture === null || communityData?.coverPicture === undefined ? (
                       <img src={random_cover} className="mx-auto max-h-64 w-full object-cover lg:h-[450px]" alt="cover_profile" />
                     ) : (
                       <img
@@ -173,7 +173,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                   </div>
                   <div className="transform translate-y-2/4 lg:translate-y-3/4 absolute lg:w-[20%] inset-x-1/2 lg:left-10 bottom-0 z-30 flex justify-center lg:justify-start">
                     <div className="flex items-center justify-center mask mask-squircle w-[156px] h-[156px] bg-gray-100">
-                      {communityData?.profilePicture !== null || communityData?.profilePicture !== undefined ? (
+                      {communityData?.profilePicture === null || communityData?.profilePicture === undefined ? (
                         <MdGroups size="92px" className="text-gray-300" />
                       ) : (
                         <img

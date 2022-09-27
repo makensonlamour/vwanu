@@ -1,7 +1,6 @@
-/*eslint-disable*/
 import React from "react";
 import PropTypes from "prop-types";
-import useInfiniteScroll from "./useInfiniteScroll";
+// import useInfiniteScroll from "./useInfiniteScroll";
 import { Facebook } from "react-content-loader";
 import { PullToRefresh, PullDownContent, ReleaseContent, RefreshContent } from "react-js-pull-to-refresh";
 import { BottomScrollListener } from "react-bottom-scroll-listener";
@@ -18,6 +17,7 @@ const InfiniteScroll = ({
   container = false,
   classNameContainer,
   isLoading,
+  style,
 }) => {
   // eslint-disable-next-line no-unused-vars
   // const [isFetching, setIsFetching] = useInfiniteScroll(fetchMore, hasNext);
@@ -44,13 +44,13 @@ const InfiniteScroll = ({
               }}
             >
               {(scrollRef) => (
-                <div ref={scrollRef} className={classNameContainer || ""}>
+                <div style={style} ref={scrollRef} className={"w-full " + classNameContainer || ""}>
                   {children}
                 </div>
               )}
             </BottomScrollListener>
           ) : (
-            <div>{children}</div>
+            <div className="w-full">{children}</div>
           )}
           {container ? null : (
             <BottomScrollListener
@@ -81,6 +81,7 @@ InfiniteScroll.propTypes = {
   isLoading: PropTypes.bool,
   container: PropTypes.bool,
   classNameContainer: PropTypes.string,
+  style: PropTypes.object,
 };
 
 export default InfiniteScroll;

@@ -58,7 +58,7 @@ const SettingsTab = ({ communityData }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-300 py-5 lg:py-10 px-2 md:px-16 rounded-xl w-full">
+      <div className="bg-white border border-gray-300 py-5 lg:py-10 px-2 md:px-10 rounded-xl w-full">
         <h4 className="md:text-left text-center mb-4 lg:mb-8 text-lg font-semibold">{`Settings`}</h4>
         <div className="py-2 lg:mx-0">
           <Form className="w-full px-2">

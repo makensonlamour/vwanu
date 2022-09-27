@@ -87,11 +87,13 @@ const FriendRequestButton = ({ otherUser }) => {
     }
   };
 
+  console.log(listFriendReceive, checkFriendRequest(listFriendSent, otherUser?.id));
+
   return (
     <>
       <Toaster />
       {otherUser &&
-        (checkFriendList(listFriendship?.data, otherUser?.id) ? (
+        (checkFriendList(listFriendship, otherUser?.id) ? (
           <button
             onClick={handleRemoveFriend}
             onMouseEnter={() => {
@@ -116,7 +118,7 @@ const FriendRequestButton = ({ otherUser }) => {
               </>
             )}
           </button>
-        ) : checkFriendRequest(listFriendSent?.data, otherUser?.id) ? (
+        ) : checkFriendRequest(listFriendSent, otherUser?.id) ? (
           <button
             onClick={handleCancelFriendRequest}
             onMouseEnter={() => {
@@ -141,7 +143,7 @@ const FriendRequestButton = ({ otherUser }) => {
               </>
             )}
           </button>
-        ) : checkFriendList(listFriendReceive?.data, otherUser?.id) ? (
+        ) : checkFriendList(listFriendReceive, otherUser?.id) ? (
           <AcceptFriendRequestButton otherUser={otherUser} />
         ) : (
           <button

@@ -48,7 +48,7 @@ const Member = () => {
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="five" label={`Request (${totalRequest})`} />
               </TabList>
             </div>
-            <TabPanel value="one">
+            <TabPanel value="one" sx={{ width: "100%" }}>
               <MemberList user={user} fn={setTotalMember} />
             </TabPanel>
             <TabPanel value="two">

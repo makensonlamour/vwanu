@@ -15,7 +15,6 @@ const ViewDiscussion = ({ data, type = "forum", isLoading, isError, hasNextPage,
   function reloadPage() {
     queryClient.refetchQueries(["community", "discussion", "all"]);
   }
-
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-xl w-full py-5">
@@ -41,7 +40,7 @@ const ViewDiscussion = ({ data, type = "forum", isLoading, isError, hasNextPage,
                 Tap to retry
               </Link>{" "}
             </div>
-          ) : data?.pages && data?.pages?.length > 0 ? (
+          ) : data?.pages && data?.pages?.length > 0 && data?.pages[0]?.data?.total > 0 ? (
             <InfiniteScroll
               fetchMore={fetchNextPage}
               isError={isError}

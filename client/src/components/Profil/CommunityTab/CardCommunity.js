@@ -1,22 +1,17 @@
+/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useOutletContext } from "react-router-dom";
 import { AvatarGroup, Avatar, Chip, Stack } from "@mui/material";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../../assets/images/cover_group_random.png";
-import { useJoinCommunity, useGetMyCommunityInvitation } from "../../../features/community/communitySlice";
-import { isInvitation, isInvitationReceive } from "../../../helpers/index";
+import { useJoinCommunity } from "../../../features/community/communitySlice";
+// import { isInvitation, isInvitationReceive } from "../../../helpers/index";
 
 const CardCommunity = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
   const user = useOutletContext();
-
-  const { data: listInvitation } = useGetMyCommunityInvitation(
-    ["community", "invitation", user?.id],
-    user?.id !== undefined ? true : false,
-    user?.id
-  );
 
   const handleJoin = async () => {
     setIsLoading(true);
@@ -40,16 +35,13 @@ const CardCommunity = ({ data }) => {
     }
   };
 
-  const invite = isInvitation(listInvitation?.data?.data, data);
-  const inviteReceive = isInvitationReceive(listInvitation?.data?.data, user);
-
   return (
     <>
       {data && (
         <div className="border border-gray-300 rounded-xl w-full">
           <div className="relative">
             <div className="bg-gray-700 rounded-t-xl">
-              {data?.coverPicture !== null || data?.coverPicture !== undefined ? (
+              {data?.coverPicture === null || data?.coverPicture === undefined ? (
                 <img src={random_cover} alt={data?.name} className="w-full h-32 md:h-36 object-cover rounded-t-xl" />
               ) : (
                 <img src={data?.coverPicture} alt={data?.name} className="w-full h-32 md:h-36 object-cover rounded-t-xl" />
@@ -58,7 +50,7 @@ const CardCommunity = ({ data }) => {
 
             <div className="transform translate-y-2/4 absolute w-full left-0 bottom-0 z-30 flex justify-center">
               <div className="flex items-center justify-center mask mask-squircle w-[86px] h-[86px] bg-gray-100">
-                {data?.profilePicture !== null || data?.profilePicture !== undefined ? (
+                {data?.profilePicture === null || data?.profilePicture === undefined ? (
                   <MdGroups size="60px" className="text-gray-300" />
                 ) : (
                   <img src={data?.profilePicture} className="object-cover mask mask-squircle w-[80px] h-[80px]" alt="profile_picture" />
@@ -107,15 +99,15 @@ const CardCommunity = ({ data }) => {
               </AvatarGroup>
               {data?.IsMember !== null && Object.keys(data?.IsMember).length > 0 ? (
                 <button className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white">{data?.IsMember?.role}</button>
-              ) : invite ? (
+              ) : data?.pendingInvitation && data?.pendingInvitation?.length === 1 ? (
                 <button
-                  disabled={inviteReceive ? false : true}
+                  disabled={data?.pendingInvitation[0]?.id ? false : true}
                   onClick={() => {
                     handleJoin();
                   }}
                   className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white"
                 >
-                  {inviteReceive ? "Accept Invitation" : "Request Sent"}
+                  {data?.pendingInvitation[0]?.id ? "Accept Invitation" : "Request Sent"}
                 </button>
               ) : (
                 <button

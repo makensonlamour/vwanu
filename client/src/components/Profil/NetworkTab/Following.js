@@ -6,7 +6,7 @@ import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
 const Following = ({ fn }) => {
-  const { data: listFollowing, isError, isLoading } = useGetListFollowing(["user", "following"], true);
+  const { data: listFollowing, isError, isLoading, hasNextPage, fetchNextPage } = useGetListFollowing(["user", "following"], true);
 
   fn(listFollowing?.length || 0);
 
@@ -18,6 +18,8 @@ const Following = ({ fn }) => {
         isError={isError}
         isLoading={isLoading}
         arrayQuery={["user", "following"]}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
         noDataLabel={
           <div className="flex justify-center w-full">
             <EmptyComponent
