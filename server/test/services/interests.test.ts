@@ -120,7 +120,7 @@ describe("'interests' service", () => {
   it('Everyone can see all approved interest only', async () => {
     const allInterests: any = await testServer.get(endpoint);
 
-    allInterests.body.data.forEach((interest) => {
+    allInterests.body.forEach((interest) => {
       expect(interest).toMatchObject({
         id: expect.any(String),
         name: expect.any(String),
