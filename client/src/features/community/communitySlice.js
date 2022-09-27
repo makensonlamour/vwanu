@@ -5,7 +5,7 @@ import { api } from "../../lib/api";
 
 export const useGetCommunityList = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/communities`);
 
-export const useGetMyCommunityList = (queryKey, enabled = true, userId) => useFetch(queryKey, enabled, `/communities?UserId=${userId}`);
+export const useGetMyCommunityList = (queryKey, enabled = false, userId) => useFetch(queryKey, enabled, `/communities?UserId=${userId}`);
 
 export const useGetCommunity = (queryKey, enabled = true, communityId) => useFetch(queryKey, enabled, `/communities/${communityId}`);
 

@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ForumReply from "./ForumReply";
-import EmptyComponent from "../common/EmptyComponent";
-import { ImSad } from "react-icons/im";
 import { useGetListDiscussionReplies, useUpdateDiscussion } from "../../features/forum/forumSlice";
 import { BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
@@ -22,11 +20,13 @@ const discussionError = () =>
 
 const ViewSingleDiscussion = ({ data, type = "forum" }) => {
   // const queryClient = useQueryClient();
-  const { data: listReply } = useGetListDiscussionReplies(
-    ["community", "reply", data?.id],
-    data?.id !== undefined ? true : false,
-    data?.id
-  );
+  const {
+    data: listReply,
+    isError,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetListDiscussionReplies(["community", "reply", data?.id], data?.id !== undefined ? true : false, data?.id);
   const updateDiscussion = useUpdateDiscussion(["community", "discussion", data?.id], undefined, undefined);
 
   const handleUpdate = async (locked) => {
@@ -53,7 +53,7 @@ const ViewSingleDiscussion = ({ data, type = "forum" }) => {
     <>
       <Toaster />
       {data !== null || (data !== undefined && Object.keys(data) > 0) ? (
-        <div className="bg-white border border-gray-200 rounded-xl w-full mr-10">
+        <div className="bg-white border border-gray-200 rounded-xl w-full">
           <div className={`flex ${type === "forum" ? "justify-between" : "justify-end"} px-6 py-4`}>
             {type === "forum" && (
               <button className="text-sm bg-white px-6 py-2 border border-gray-200 rounded-lg hover:text-white hover:bg-primary">
@@ -80,13 +80,43 @@ const ViewSingleDiscussion = ({ data, type = "forum" }) => {
           </p>
           <p className="px-6 py-2">{data?.body}</p>
           <p className="pb-4 px-6 text-sm text-gray-500">
-            <span className="">{data?.lastReply + " replied " + data?.createdAt}</span>
-            <span className="ml-2">{" " + data?.memberCount + " Members"}</span> ·
-            <span className="">{" " + data?.replyCount + " Replies"}</span>
+            {data?.lastComment !== null && (
+              <span className="">
+                {data?.lastComment?.commenterFirstName +
+                  " " +
+                  data?.lastComment?.commenterLastName +
+                  " replied on " +
+                  data?.lastComment?.createdAt}
+              </span>
+            )}
+            {data?.lastComment === null && (
+              <span className="">{data?.User?.firstName + " " + data?.User?.lastName + " created on " + data?.createdAt}</span>
+            )}
+            <span className="mx-2">
+              {data?.activeParticipants === 0
+                ? "0 Member"
+                : data?.activeParticipants > 1
+                ? data?.activeParticipants + " Members"
+                : data?.activeParticipants + " Member"}
+            </span>{" "}
+            •
+            <span className="mx-2">
+              {data?.amountOfComments === 0
+                ? "0 Reply"
+                : data?.amountOfComments > 1
+                ? data?.amountOfComments + " Replies"
+                : data?.amountOfComments + " Reply"}
+            </span>
           </p>
           <div className="w-full h-[1px] bg-gray-300"></div>
           <div className="flex justify-between w-full items-center">
-            <p className="font-semibold py-6 px-4">{data?.replyCount + " Replies"}</p>
+            <p className="font-semibold py-6 px-4">
+              {data?.amountOfComments === 0
+                ? "0 Reply"
+                : data?.amountOfComments > 1
+                ? data?.amountOfComments + " Replies"
+                : data?.amountOfComments + " Reply"}
+            </p>
             {!data?.locked && (
               <div className="">
                 {/* <button className="text-white bg-primary px-8 py-2 border border-gray-200 rounded-lg mr-2 w-48"> */}
@@ -97,24 +127,17 @@ const ViewSingleDiscussion = ({ data, type = "forum" }) => {
           </div>
 
           <div className="w-full h-[1px] bg-gray-200"></div>
-          {listReply?.data?.length > 0 ? (
-            listReply?.data?.map((reply) => {
-              return (
-                <div key={"1"} className="">
-                  <ForumReply data={reply} />
-                </div>
-              );
-            })
-          ) : (
-            <div className="flex justify-center">
-              <EmptyComponent
-                border={false}
-                icon={<ImSad size={"32px"} className="" />}
-                placeholder={"Sorry, There were no replies found."}
-                tips={"You can be the first to reply to this discussion by clicking on the reply button."}
-              />
-            </div>
-          )}
+
+          <div key={"1"} className="">
+            <ForumReply
+              data={listReply}
+              isLoading={isLoading}
+              isError={isError}
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+              id={data?.id}
+            />
+          </div>
         </div>
       ) : (
         <p>Error, please reload the page</p>

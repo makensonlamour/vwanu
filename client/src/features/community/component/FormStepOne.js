@@ -27,7 +27,7 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
   const [interest, setInterest] = useState([]);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
   const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
-  const options = assignValue(interestList?.data?.data);
+  const options = assignValue(interestList);
 
   // const animatedComponents = makeAnimated();
 

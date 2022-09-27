@@ -6,9 +6,9 @@ import CardCommunity from "../../../components/Profil/CommunityTab/CardCommunity
 import EmptyComponent from "../../../components/common/EmptyComponent";
 import { TiGroup } from "react-icons/ti";
 // import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
-import { Facebook } from "react-content-loader";
-import { FiRefreshCcw } from "react-icons/fi";
+// import { Facebook } from "react-content-loader";
 import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
+import Loader from "../../../components/common/Loader";
 import { useQueryClient } from "react-query";
 // import { format } from "date-fns";
 
@@ -20,8 +20,12 @@ const CommunityList = ({ communityList, isLoading, isError, hasNextPage, fetchNe
     queryClient.refetchQueries(arrayQueryKey);
   }
   if (isLoading) {
-    content = <Facebook foregroundColor="#fff" />;
-  } else if (communityList?.pages?.length > 0) {
+    content = (
+      <div className="flex justify-center py-5">
+        <Loader color="black" />
+      </div>
+    );
+  } else if (communityList?.pages?.length > 0 && communityList?.pages[0]?.data?.total > 0) {
     content = (
       <>
         <InfiniteScroll
@@ -30,8 +34,8 @@ const CommunityList = ({ communityList, isLoading, isError, hasNextPage, fetchNe
           hasNext={hasNextPage}
           refetch={() => queryClient.invalidateQueries(["post", "home"])}
           loader={
-            <div className="py-10">
-              <Facebook foregroundColor="#000" />
+            <div className="flex justify-center py-5">
+              <Loader color="black" />
             </div>
           }
           errorRender={
@@ -42,15 +46,10 @@ const CommunityList = ({ communityList, isLoading, isError, hasNextPage, fetchNe
               </Link>{" "}
             </div>
           }
-          noDataRender={
-            <div className="py-4 my-4 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white shadow-lg rounded-lg">
-              {"No more posts"}{" "}
-            </div>
-          }
         >
           <div className="flex flex-wrap lg:justify-start py-2 w-full">
-            {communityList?.pages.map((page) => {
-              return page?.data?.map((community) => {
+            {communityList?.pages?.map((page) => {
+              return page?.data?.data?.map((community) => {
                 return (
                   <div key={community?.id} className="w-[100%] md:w-[45%] lg:w-[31%] m-2">
                     <CardCommunity data={community} />
@@ -61,11 +60,6 @@ const CommunityList = ({ communityList, isLoading, isError, hasNextPage, fetchNe
             })}
           </div>
         </InfiniteScroll>
-        <div className="w-full mt-6 mb-6 mx-auto text-center">
-          <button className="" onClick={() => reloadPage()}>
-            <FiRefreshCcw className="h-7 mx-auto" />
-          </button>
-        </div>
       </>
     );
   } else if (isError) {
@@ -91,18 +85,7 @@ const CommunityList = ({ communityList, isLoading, isError, hasNextPage, fetchNe
   }
   return (
     <>
-      <div className="">
-        {/* <div className="flex flex-wrap lg:justify-start py-2 w-full"> */}
-        {content}
-        {/* {communityList?.pages?.map((page) => {
-              return (
-                <div key={page?.name} className="w-[100%] md:w-[45%] lg:w-[31%] m-2">
-                  <CardCommunity data={page?.data} />
-                </div>
-              );
-            })} */}
-        {/* </div> */}
-      </div>
+      <div className="">{content}</div>
     </>
   );
 };

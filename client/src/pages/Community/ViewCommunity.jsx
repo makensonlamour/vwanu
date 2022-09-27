@@ -35,7 +35,7 @@ const ViewCommunity = () => {
     if (!run) {
       run = true;
       const notifications = await notificationService.find({ query: { to: user.id } });
-      notifications.forEach(onCreatedListener);
+      notifications?.data?.forEach(onCreatedListener);
       notificationService.on("created", onCreatedListener);
     }
   };
@@ -58,7 +58,7 @@ const ViewCommunity = () => {
     <>
       <div className=" max-w-screen-2xl">
         <div className="lg:mx-1">
-          {<CommunityHeader user={user} communityData={community?.data} otherUser={null} notificationList={notificationList} />}
+          {<CommunityHeader user={user} communityData={community} otherUser={null} notificationList={notificationList} />}
         </div>
       </div>
     </>

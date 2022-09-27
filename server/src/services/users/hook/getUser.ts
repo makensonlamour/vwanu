@@ -14,7 +14,6 @@ export default (context: HookContext) => {
     .service(context.path)
     .filterQuery(context.params);
 
-  console.log({ id: params?.User?.id, met: context.method });
   const friends = `(
        EXISTS(
         SELECT 1 FROM "User_friends" WHERE "User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${params.User.id}'
@@ -35,8 +34,8 @@ export default (context: HookContext) => {
     },
   };
 
-    params.sequelize = {
-      where: clause,
-    };
+  params.sequelize = {
+    where: clause,
+  };
   return context;
 };

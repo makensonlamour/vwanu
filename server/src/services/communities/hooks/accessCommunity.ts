@@ -6,7 +6,7 @@ export default async (context: HookContext) => {
   const { app } = context;
   const Sequelize = app.get('sequelizeClient');
   const query = `
-          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture","CU"."banned","CU"."bannedDate",
+          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","CU"."banned","CU"."bannedDate", 
           (SELECT 
             json_build_object(
              'id', "CU"."UserId",

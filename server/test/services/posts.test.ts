@@ -213,6 +213,26 @@ describe('Posts services', () => {
     expect(editedLPost.UserId).toEqual(thePost.UserId);
   }, 3000);
 
+  it('should lock post', async () => {
+    const { body: lockedPost } = await testServer
+      .patch(`${endpoint}/${thePost.id}`)
+      .send({ locked: true })
+      .set('authorization', postMakerToken);
+    expect(lockedPost.locked).toBe(true);
+  });
+
+  it('Cannot comment on a locked Post', async () => {
+    const commentAttempt = await testServer
+      .post(endpoint)
+      .send({
+        postText: 'Commenting on a locked discussion',
+        PostId: thePost.id,
+      })
+      .set('authorization', postMakerToken);
+
+    expect(commentAttempt.statusCode).toBe(400);
+  });
+
   it('should not delete a post', async () => {
     const { statusCode: editAttemptStatus } = await testServer
       .delete(`${endpoint}/${thePost.id}`)

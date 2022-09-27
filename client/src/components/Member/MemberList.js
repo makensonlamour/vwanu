@@ -14,7 +14,7 @@ const MemberList = ({ fn }) => {
   return (
     <>
       <ViewFriend
-        data={listMember?.data}
+        data={listMember}
         isError={isError}
         isLoading={isLoading}
         arrayQuery={["user", "members"]}

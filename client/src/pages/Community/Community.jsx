@@ -13,7 +13,7 @@ const Community = () => {
   const tabsUrl = searchParams.get("tabs");
   let run = true;
 
-  const { data: communityList, isLoading, fetchNextPage, hasNextPage, isError } = useGetCommunityList(["community", "all"]);
+  const { data: communityList, isLoading, fetchNextPage, hasNextPage, isError } = useGetCommunityList(["community", "all"], true);
   const { data: myCommunityList } = useGetMyCommunityList(["community", "me"], user?.id !== undefined ? true : false, user?.id);
   const handleChange = (event, newValue) => {
     setValue(newValue);

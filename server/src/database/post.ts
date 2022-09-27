@@ -4,9 +4,9 @@ import { Model } from 'sequelize';
 
 export interface PostInterface {
   id: string;
-
   postText: string;
   privacyType: string;
+  locked: boolean;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Post extends Model<PostInterface> implements PostInterface {
@@ -15,6 +15,8 @@ export default (sequelize: any, DataTypes: any) => {
     postText: string;
 
     privacyType: string;
+
+    locked: boolean;
 
     static associate(models: any): void {
       Post.belongsTo(models.User);
@@ -53,6 +55,11 @@ export default (sequelize: any, DataTypes: any) => {
       privacyType: {
         type: DataTypes.STRING,
         defaultValue: 'public',
+      },
+
+      locked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
 

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import { useParams, useOutletContext } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { useParams, useOutletContext, Link } from "react-router-dom";
 import Loader from "../../../components/common/Loader";
 import { TextArea, Submit, Form } from "../../../components/form";
+import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 import Chip from "@mui/material/Chip";
 import { useGetAllMembers } from "../../../features/user/userSlice";
 import {
@@ -29,7 +31,7 @@ const sendInvitationError = () =>
 const SendInvites = () => {
   const user = useOutletContext();
   const { id } = useParams();
-  const { data: members } = useGetAllMembers(["members", "all"]);
+  const { data: members, isLoading: loadingMember, isError, hasNextPage, fetchNextPage } = useGetAllMembers(["members", "all"]);
   const { data: listMemberCommunity } = useGetAllMembersCommunity(["user", "community", "all"], id === "undefined" ? false : true, id);
   const { data: listInvitation } = useGetCommunityInvitation(["community", "invitation", "all"], id !== "undefined" ? true : false, id);
   const sendInvitation = useSendInvitation(["community", "invitation"]);
@@ -38,7 +40,7 @@ const SendInvites = () => {
   // eslint-disable-next-line no-unused-vars
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
+  const queryClient = useQueryClient();
   const initialValues = {
     message: "",
   };
@@ -46,6 +48,10 @@ const SendInvites = () => {
   const ValidationSchema = Yup.object().shape({
     message: Yup.string().label("Community Name"),
   });
+
+  function reloadPage() {
+    queryClient.refetchQueries(["members", "all"]);
+  }
 
   const [selectMember, setSelectMember] = useState([]);
 
@@ -72,9 +78,9 @@ const SendInvites = () => {
         return mem?.id;
       });
       const dataObj = {
-        guestId: guest[0],
         CommunityRoleId: roleCommunityId,
         CommunityId: id,
+        guestId: guest,
       };
 
       await sendInvitation.mutateAsync(dataObj);
@@ -121,33 +127,71 @@ const SendInvites = () => {
                       />
                     </div>
                     <div className="py-4 px-6">
-                      {members?.data?.data?.map((member) => {
-                        return !isMember(listMemberCommunity?.data, member) || !isInvitation(listInvitation?.data, member) ? null : (
-                          <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
-                            {user?.id !== member?.id && (
-                              <div className="flex justify-evenly items-center">
-                                <div className="mr-4">
-                                  <img
-                                    src={member?.profilePicture?.original}
-                                    alt="profile_img"
-                                    className="bg-gray-100 mask mask-squircle w-10 h-10"
-                                  />
+                      {loadingMember ? (
+                        <div className="flex justify-center py-5">
+                          <Loader color="black" />
+                        </div>
+                      ) : isError ? (
+                        <div className="py-5 m-auto text-center px-2">
+                          {"There was an error while fetching the data. "}{" "}
+                          <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
+                            Tap to retry
+                          </Link>{" "}
+                        </div>
+                      ) : members?.pages && members?.pages?.length > 0 ? (
+                        <InfiniteScroll
+                          fetchMore={fetchNextPage}
+                          isError={isError}
+                          isLoading={loadingMember}
+                          hasNext={hasNextPage}
+                          refetch={() => queryClient.invalidateQueries(["members", "all"])}
+                          container={true}
+                          classNameContainer={"overflow-y-auto h-[20vh]"}
+                          loader={
+                            <div className="flex justify-center py-5">
+                              <Loader color="black" />
+                            </div>
+                          }
+                          errorRender={
+                            <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+                              {"There was an error while fetching the data. "}{" "}
+                              <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["members", "all"])}>
+                                Tap to retry
+                              </Link>{" "}
+                            </div>
+                          }
+                        >
+                          {members?.pages.map((page) => {
+                            return page?.data?.data?.map((member) => {
+                              return !isMember(listMemberCommunity, member) || !isInvitation(listInvitation, member) ? null : (
+                                <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
+                                  {user?.id !== member?.id && (
+                                    <div className="flex justify-evenly items-center">
+                                      <div className="mr-4">
+                                        <img
+                                          src={member?.profilePicture?.original}
+                                          alt="profile_img"
+                                          className="bg-gray-100 mask mask-squircle w-10 h-10"
+                                        />
+                                      </div>
+                                      <div className="">{member?.firstName + " " + member?.lastName}</div>
+                                    </div>
+                                  )}
+                                  {user?.id !== member?.id && (
+                                    <div className="">
+                                      {isIntoArray(member) ? (
+                                        <button onClick={handleRemove(member)}>remove</button>
+                                      ) : (
+                                        <button onClick={() => handleAdd(member)}>add</button>
+                                      )}
+                                    </div>
+                                  )}
                                 </div>
-                                <div className="">{member?.firstName + " " + member?.lastName}</div>
-                              </div>
-                            )}
-                            {user?.id !== member?.id && (
-                              <div className="">
-                                {isIntoArray(member) ? (
-                                  <button onClick={handleRemove(member)}>remove</button>
-                                ) : (
-                                  <button onClick={() => handleAdd(member)}>add</button>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                              );
+                            });
+                          })}
+                        </InfiniteScroll>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -173,35 +217,73 @@ const SendInvites = () => {
                 />
               </div>
               <div className="py-4 px-6">
-                {members?.data?.data?.map((member) => {
-                  return (
-                    !isMember(listMemberCommunity?.data, member) && (
-                      <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
-                        {user?.id !== member?.id && (
-                          <div className="flex justify-evenly items-center">
-                            <div className="mr-4">
-                              <img
-                                src={member?.profilePicture?.original}
-                                alt="profile_img"
-                                className="bg-gray-100 mask mask-squircle w-10 h-10"
-                              />
-                            </div>
-                            <div className="">{member?.firstName + " " + member?.lastName}</div>
-                          </div>
-                        )}
-                        {user?.id !== member?.id && (
-                          <div className="">
-                            {isIntoArray(member) ? (
-                              <button onClick={handleRemove(member)}>remove</button>
-                            ) : (
-                              <button onClick={() => handleAdd(member)}>add</button>
+                {loadingMember ? (
+                  <div className="flex justify-center py-5">
+                    <Loader color="black" />
+                  </div>
+                ) : isError ? (
+                  <div className="py-5 m-auto text-center px-2">
+                    {"There was an error while fetching the data. "}{" "}
+                    <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
+                      Tap to retry
+                    </Link>{" "}
+                  </div>
+                ) : members?.pages && members?.pages?.length > 0 ? (
+                  <InfiniteScroll
+                    fetchMore={fetchNextPage}
+                    isError={isError}
+                    isLoading={loadingMember}
+                    hasNext={hasNextPage}
+                    refetch={() => queryClient.invalidateQueries(["members", "all"])}
+                    container={true}
+                    classNameContainer={"overflow-y-auto h-[20vh]"}
+                    loader={
+                      <div className="flex justify-center py-5">
+                        <Loader color="black" />
+                      </div>
+                    }
+                    errorRender={
+                      <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+                        {"There was an error while fetching the data. "}{" "}
+                        <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["members", "all"])}>
+                          Tap to retry
+                        </Link>{" "}
+                      </div>
+                    }
+                  >
+                    {members?.pages.map((page) => {
+                      return page?.data?.data?.map((member) => {
+                        console.log(!isMember(listMemberCommunity?.data, member), !isInvitation(listInvitation?.data, member));
+
+                        return isMember(listMemberCommunity?.data, member) || isInvitation(listInvitation?.data, member) ? null : (
+                          <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
+                            {user?.id !== member?.id && (
+                              <div className="flex justify-evenly items-center">
+                                <div className="mr-4">
+                                  <img
+                                    src={member?.profilePicture?.original}
+                                    alt="profile_img"
+                                    className="bg-gray-100 mask mask-squircle w-10 h-10"
+                                  />
+                                </div>
+                                <div className="">{member?.firstName + " " + member?.lastName}</div>
+                              </div>
+                            )}
+                            {user?.id !== member?.id && (
+                              <div className="">
+                                {isIntoArray(member) ? (
+                                  <button onClick={handleRemove(member)}>remove</button>
+                                ) : (
+                                  <button onClick={() => handleAdd(member)}>add</button>
+                                )}
+                              </div>
                             )}
                           </div>
-                        )}
-                      </div>
-                    )
-                  );
-                })}
+                        );
+                      });
+                    })}
+                  </InfiniteScroll>
+                ) : null}
               </div>
             </div>
             <div className="">

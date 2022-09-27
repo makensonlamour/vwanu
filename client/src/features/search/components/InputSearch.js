@@ -38,8 +38,8 @@ const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIs
         ) : (
           <>
             <div className="py-2 lg:py-4">
-              {filterData?.data?.length > 0 &&
-                filterData?.data?.slice(0, 10)?.map((data) => {
+              {filterData?.length > 0 &&
+                filterData?.slice(0, 10)?.map((data) => {
                   return (
                     <>
                       <div className="flex justify-between items-center px-2 py-2 lg:p-2 hover:bg-placeholder-color rounded-xl">
