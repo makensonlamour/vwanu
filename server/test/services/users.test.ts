@@ -147,7 +147,7 @@ describe('/users service', () => {
 
     expect(onlineUsers).toHaveLength(4);
   });
-  it('should only find online users witch are friends ', async () => {
+  it('should only find online users witch are friends and mark as friends', async () => {
     const {
       body: { data: users },
     } = await testServer
@@ -183,6 +183,9 @@ describe('/users service', () => {
       .get(`${endpoint}?online=true&friends=true`)
       .set('authorization', `${observer.body.accessToken}`);
 
+    onlineUsers.forEach((user) => {
+      expect(user.isFriend).toBe(true);
+    });
     expect(onlineUsers).toHaveLength(4);
   });
 
