@@ -10,7 +10,7 @@ export default (queries) => (context: HookContext) => {
 
   const data = context?.result?.data ? context?.result?.data : context?.result;
 
-  context.result = data.filter((item) => {
+  context.result.data = data.filter((item) => {
     if (params.User.id === item.UserId) return true;
     return Object.keys(queries).every((key) => item[key] === queries[key]);
   });
