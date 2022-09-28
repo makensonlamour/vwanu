@@ -13,7 +13,7 @@ export default async (context: HookContext) => {
 
   switch (modelName) {
     case 'Post':
-      if (!community.canPost)
+      if (!community.canUserPost)
         throw new BadRequest('You can not post in this community');
       break;
 

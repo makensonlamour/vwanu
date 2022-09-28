@@ -6,7 +6,7 @@ export default async (context: HookContext) => {
   const { app } = context;
   const Sequelize = app.get('sequelizeClient');
   const query = `
-          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","CU"."banned","CU"."bannedDate", 
+          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","C"."canInvite", "C"."canInPost","C"."canInUploadPhotos","C"."canInUploadDoc","C"."canInUploadVideo","C"."canMessageInGroup", "C"."haveDiscussionForum","CU"."banned","CU"."bannedDate", 
           (SELECT 
             json_build_object(
              'id', "CU"."UserId",
@@ -16,6 +16,21 @@ export default async (context: HookContext) => {
             INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
             WHERE "CU"."CommunityId"="C"."id" and "CU"."UserId"='${context.params.User.id}' AND "CU"."untilDate" IS NULL
               ) AS "IsMember",
+              (
+                SELECT 
+                 json_agg(
+                  json_build_object(
+                    'id', "INV"."id",
+                    'role',"R"."name",
+                    'roleId',"R"."id",
+                    'createdAt',"INV"."createdAt",
+                    'updatedAt',"INV"."updatedAt",
+                    'hostId',"INV"."hostId",
+                    'guestId',"INV"."guestId")
+                    ) FROM "CommunityInvitationRequests" AS "INV" 
+                    INNER JOIN "CommunityRoles" AS "R" ON "R"."id" = "INV"."CommunityRoleId"
+                    WHERE "INV"."CommunityId"="C"."id" AND "INV"."guestId"='${context.params.User.id}' AND "INV"."response" IS NULL
+                    )AS "pendingInvitation",
           (CASE 
             WHEN "CR"."name"='admin' 
              AND "CR"."id" = "CU"."CommunityRoleId" 
@@ -31,7 +46,7 @@ export default async (context: HookContext) => {
              AND "CU"."UserId"='${context.params.User.id}' THEN true
            ELSE false
            END
-           ) AS "canPost",
+           ) AS "canUserPost",
 
           (CASE 
             WHEN "CR"."name"='admin' 
@@ -48,7 +63,7 @@ export default async (context: HookContext) => {
              AND "CU"."UserId"='${context.params.User.id}' THEN true
            ELSE false
            END
-           ) AS "canInvite",
+           ) AS "canUserInvite",
 
           (CASE 
             WHEN "CR"."name"='admin' 
@@ -65,7 +80,7 @@ export default async (context: HookContext) => {
              AND "CU"."UserId"='${context.params.User.id}' THEN true
            ELSE false
            END
-           ) AS "canInUploadDoc",
+           ) AS "canUserUploadDoc",
 
           (CASE 
             WHEN "CR"."name"='admin' 
@@ -82,7 +97,7 @@ export default async (context: HookContext) => {
              AND "CU"."UserId"='${context.params.User.id}' THEN true
            ELSE false
            END
-           ) AS "canInUploadPhotos",
+           ) AS "canUserUploadPhotos",
 
           (CASE 
             WHEN "CR"."name"='admin' 
@@ -99,7 +114,7 @@ export default async (context: HookContext) => {
              AND "CU"."UserId"='${context.params.User.id}' THEN true
            ELSE false
            END
-           ) AS "canInUploadVideo",
+           ) AS "canUserUploadVideo",
           (CASE 
             WHEN "CR"."name"='admin' 
              AND "CR"."id" = "CU"."CommunityRoleId" 
@@ -115,7 +130,7 @@ export default async (context: HookContext) => {
              AND "CU"."UserId"='${context.params.User.id}' THEN true
            ELSE false
            END
-           ) AS "canMessageInGroup",
+           ) AS "canMessageUserInGroup",
 
           COUNT(DISTINCT CASE WHEN "CU"."CommunityId"='${context.id}' THEN "CU"."UserId" END) As "amountOfMembers",  
           json_agg( 
