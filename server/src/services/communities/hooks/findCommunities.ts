@@ -124,7 +124,9 @@ SELECT
       'role',"R"."name",
       'roleId',"R"."id",
       'createdAt',"INV"."createdAt",
-      'updatedAt',"INV"."updatedAt"
+      'updatedAt',"INV"."updatedAt",
+      'hostId',"INV"."hostId",
+      'guestId',"INV"."guestId"
       )
       )
      FROM "CommunityInvitationRequests" AS "INV" 
