@@ -76,9 +76,8 @@ export const defaultOptions = {
 
   allowedAttributes: {
     a: ['href', 'name', 'target'],
-    // We don't currently allow img itself by default, but
-    // these attributes would make sense if we did.
     img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
+    '*': ['class', 'id', 'style'],
   },
   // Lots of these won't come up by default because we don't allow them
   selfClosing: [

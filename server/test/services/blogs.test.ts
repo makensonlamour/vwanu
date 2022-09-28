@@ -33,10 +33,11 @@ describe("'blogs ' service", () => {
     const service = app.service('blogs');
     expect(service).toBeTruthy();
   });
-  it.skip('should be able to create new blogs', async () => {
+  it('should be able to create new blogs', async () => {
     const newBlog = {
       blogTitle: 'Title ewr',
-      blogText: '<strong>Body text</strong><img src=x/>',
+      blogText:
+        '<strong><p class="color" style="color:red;">Body tex</p></strong>',
       interests: ['some', 'category'],
       publish: 'false',
     };
@@ -51,6 +52,7 @@ describe("'blogs ' service", () => {
     );
     firstBlogs = fstBlogs.map((blog) => blog.body);
     firstBlogs.forEach((firstBlog) => {
+      console.log(firstBlog);
       expect(firstBlog).toMatchObject({
         blogText: sanitizeHtml(newBlog.blogText),
         blogTitle: sanitizeHtml(newBlog.blogTitle),
@@ -95,7 +97,7 @@ describe("'blogs ' service", () => {
       });
     });
   });
-  it.skip('should be able to edit his blogs', async () => {
+  it('should be able to edit his blogs', async () => {
     const modifications = {
       blogTitle: 'Better Title',
       blogText: 'Bigger Body, text',
@@ -137,12 +139,12 @@ describe("'blogs ' service", () => {
         accessible: true,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
-        UserId: null,
+
         Blog_Interest: expect.any(Object),
       });
     });
   });
-  it.skip('should be able to delete his own blog', async () => {
+  it('should be able to delete his own blog', async () => {
     const user = testUsers[0].body;
     await testServer
       .delete(`${endpoint}/${firstBlogs[0].id}`)
@@ -153,7 +155,7 @@ describe("'blogs ' service", () => {
       .models.Blog.findOne({ where: { id: firstBlogs[0].id } });
     expect(proof).toEqual(null);
   });
-  it.skip('should not be able to modify some1 else blog', async () => {
+  it('should not be able to modify some1 else blog', async () => {
     const modifications = {
       blogTitle: 'Better Title',
       blogText: 'Bigger Body, text',
@@ -169,7 +171,7 @@ describe("'blogs ' service", () => {
       expect.stringContaining('Not authorized')
     );
   });
-  it.skip('should not be able to delete some1 else blog', async () => {
+  it('should not be able to delete some1 else blog', async () => {
     const user = testUsers[0].body;
     const modifiedBlog = await testServer
       .delete(`${endpoint}/${firstBlogs[1].id}`)
@@ -179,7 +181,7 @@ describe("'blogs ' service", () => {
       expect.stringContaining('Not authorized')
     );
   });
-  it.skip('should only show public blogs if not owner', async () => {
+  it('should only show public blogs if not owner', async () => {
     const user1 = testUsers[1].body;
     const user0 = testUsers[0].body;
     blogs = await Promise.all(
@@ -200,7 +202,8 @@ describe("'blogs ' service", () => {
     let user0Blogs = await testServer
       .get(`${endpoint}?UserId=${user1.id}`)
       .set('authorization', user0.accessToken);
-    user0Blogs = user0Blogs.body.map((blog) => blog);
+
+    user0Blogs = user0Blogs.body.data.map((blog) => blog);
 
     user0Blogs.forEach((blog) => {
       expect(blog.publish).toBeTruthy();
