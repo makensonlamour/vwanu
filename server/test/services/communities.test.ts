@@ -395,6 +395,65 @@ describe("'communities ' service", () => {
         }
       });
     });
+    it('should only return communities created by the user', async () => {
+      const {
+        body: { data: creatorCommunities },
+      } = await testServer
+        .get(`${endpoint}?UserId=${creator.id}`)
+        .set('authorization', firstCreator.accessToken);
+
+      creatorCommunities.forEach((community) =>
+        expect(community.UserId).toBe(creator.id)
+      );
+
+      const {
+        body: { data: firstCreatorCommunities },
+      } = await testServer
+        .get(`${endpoint}?UserId=${firstCreator.id}`)
+        .set('authorization', creator.accessToken);
+
+      firstCreatorCommunities.forEach((community) =>
+        expect(community.UserId).toBe(firstCreator.id)
+      );
+    });
+
+    it('should return newest communities first', async () => {
+      const {
+        body: { data: newestFirst },
+      } = await testServer
+        .get(`${endpoint}?$sort[createdAt]=-1`)
+        .set('authorization', firstCreator.accessToken);
+
+      const {
+        body: { data: oldestFirst },
+      } = await testServer
+        .get(`${endpoint}?$sort[createdAt]=1`)
+        .set('authorization', firstCreator.accessToken);
+
+      expect(newestFirst).toBe(newestFirst);
+      expect(newestFirst).not.toBe(oldestFirst);
+      expect(newestFirst[0]).not.toBe(oldestFirst[0]);
+    });
+
+    it('should return communities with most members first', async () => {
+      const {
+        body: { data: popularFirst },
+      } = await testServer
+        .get(`${endpoint}?$sort[amountOfMembers]=-1`)
+        .set('authorization', firstCreator.accessToken);
+
+      expect(popularFirst[0].amountOfMembers).toBeGreaterThan(
+        popularFirst[1].amountOfMembers
+      );
+      const {
+        body: { data: unpopular },
+      } = await testServer
+        .get(`${endpoint}?$sort[amountOfMembers]=1`)
+        .set('authorization', firstCreator.accessToken);
+      expect(popularFirst[0].amountOfMembers).toBeGreaterThan(
+        unpopular[0].amountOfMembers
+      );
+    });
   });
 
   describe('Communities posts and forums', () => {
