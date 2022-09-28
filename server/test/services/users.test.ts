@@ -183,6 +183,7 @@ describe('/users service', () => {
       .get(`${endpoint}?online=true&friends=true`)
       .set('authorization', `${observer.body.accessToken}`);
 
+    // console.log(onlineUsers[0]);
     onlineUsers.forEach((user) => {
       expect(user.isFriend).toBe(true);
     });
@@ -201,6 +202,8 @@ describe('/users service', () => {
       .get(`${endpoint}/${profileRequesting.id}`)
       .set('authorization', requester.accessToken);
 
+    console.log('One user');
+    console.log(userR);
     expect(userR.id).toEqual(profileRequesting.id);
     expect(userR.email).toEqual(profileRequesting.email);
     expect(userR.address).toHaveLength(0);

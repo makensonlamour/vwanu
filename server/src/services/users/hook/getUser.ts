@@ -35,6 +35,7 @@ export default (context: HookContext) => {
     SELECT  1 FROM "User_friends_request" WHERE ("User_friends_request"."friendsRequestId" = '${params.User.id}' AND "User_friends_request"."UserId" = "User"."id" )
       ))`;
 
+  if (context.method === 'get') where.id = context.id;
   const attributes = {
     include: [
       [Sequelize.literal(isFriend), 'isFriend'],

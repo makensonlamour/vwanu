@@ -22,7 +22,7 @@ export default {
   before: {
     all: [],
     find: [authenticate('jwt'), GetUser],
-    get: [authenticate('jwt')],
+    get: [authenticate('jwt'), GetUser],
     create: [
       validateResource(schema.createUserSchema),
       saveProfilePicture(['profilePicture', 'coverPicture']),
