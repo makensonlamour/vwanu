@@ -5,10 +5,10 @@ import { AddTalker } from '../../Hooks';
 
 import {
   SetType,
-  UnreadMessage,
+  // UnreadMessage,
   LimitToTalkersOnly,
   FilterConversations,
-  IncludeUserAndLastMessage,
+  // IncludeUserAndLastMessage,
   LimitDirectConversations,
 } from './hook';
 
@@ -42,9 +42,9 @@ const { authenticate } = authentication.hooks;
 /* LimitDirectConversations */
 export default {
   before: {
-    all: [authenticate('jwt'), IncludeUserAndLastMessage],
-    find: [FilterConversations, OrderBy({ updateAt: -1 })],
-    get: [LimitToTalkersOnly],
+    all: [authenticate('jwt')],
+    find: [FilterConversations, OrderBy({ updatedAt: -1 })],
+    get: [FilterConversations],
     create: [SetType, LimitDirectConversations],
     update: [],
     patch: [LimitToTalkersOnly],
@@ -53,13 +53,8 @@ export default {
 
   after: {
     all: [],
-    find: [
-      /* Todo setConversationName */
-    ],
-    get: [
-      UnreadMessage,
-      /* Todo setConversationName  */
-    ],
+    find: [],
+    get: [],
     create: [AddTalker, NotifyUsers],
     update: [],
     patch: [],

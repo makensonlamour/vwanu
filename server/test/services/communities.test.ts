@@ -105,12 +105,12 @@ describe("'communities ' service", () => {
     );
   });
 
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('communities');
     expect(service).toBeTruthy();
   });
 
-  it('should not create communities with the same name', async () => {
+  it.skip('should not create communities with the same name', async () => {
     sameNameCommunities = await Promise.all(
       ['unique', 'unique'].map((name, idx) =>
         testServer
@@ -149,7 +149,7 @@ describe("'communities ' service", () => {
       }
     });
   });
-  it('Users can create any community ', async () => {
+  it.skip('Users can create any community ', async () => {
     const name = 'y community';
     const description = 'Unique description required';
     const privacyTypes = ['private', 'public', 'hidden'];
@@ -178,7 +178,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('Community automatically set creator as first admin', async () => {
+  it.skip('Community automatically set creator as first admin', async () => {
     const name = 'Auto admin community ';
     const description =
       'Each community automatically set creator as first admin';
@@ -240,7 +240,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('communities are public by default', async () => {
+  it.skip('communities are public by default', async () => {
     const publicCommunity = await testServer
       .post(endpoint)
       .send({
@@ -258,7 +258,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('Community creator can edit the community details', async () => {
+  it.skip('Community creator can edit the community details', async () => {
     const name = `Brand new name -${Math.random()}`;
     const description = `Description Has Changed -- ${Math.random()}`;
     const communityToChange = communities[0].body;
@@ -278,7 +278,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it(' Any user can get all communities except hidden unless he is a member of it', async () => {
+  it.skip(' Any user can get all communities except hidden unless he is a member of it', async () => {
     // Manually adding a user to a community
     const newUser = testUsers[1];
     const infiltratedCommunity = communities[0].body;
@@ -351,7 +351,7 @@ describe("'communities ' service", () => {
   });
 
   describe('Communities Access', () => {
-    it('should not see community private and Hidden community details when not member', async () => {
+    it.skip('should not see community private and Hidden community details when not member', async () => {
       let accessToCommunities = await Promise.all(
         distinctCommunities.map((com) =>
           testServer
@@ -395,7 +395,7 @@ describe("'communities ' service", () => {
         }
       });
     });
-    it('should only return communities created by the user', async () => {
+    it.skip('should only return communities created by the user', async () => {
       const {
         body: { data: creatorCommunities },
       } = await testServer
@@ -417,7 +417,7 @@ describe("'communities ' service", () => {
       );
     });
 
-    it('should return newest communities first', async () => {
+    it.skip('should return newest communities first', async () => {
       const {
         body: { data: newestFirst },
       } = await testServer
@@ -435,7 +435,7 @@ describe("'communities ' service", () => {
       expect(newestFirst[0]).not.toBe(oldestFirst[0]);
     });
 
-    it('should return communities with most members first', async () => {
+    it.skip('should return communities with most members first', async () => {
       const {
         body: { data: popularFirst },
       } = await testServer
@@ -455,7 +455,7 @@ describe("'communities ' service", () => {
       );
     });
 
-    it('should return only the communities with `UNIQUE` interest', async () => {
+    it.skip('should return only the communities with `UNIQUE` interest', async () => {
       const name = 'This community has unique interest';
       const description = 'This community has unique interest';
       const { status } = await testServer
@@ -481,7 +481,7 @@ describe("'communities ' service", () => {
         expect(community.description).toBe(description);
       });
     });
-    it('should only return communities user is member of', async () => {
+    it.skip('should only return communities user is member of', async () => {
       const {
         body: { data: com },
       } = await testServer
@@ -489,7 +489,6 @@ describe("'communities ' service", () => {
         .set('authorization', firstCreator.accessToken);
 
       com.forEach((community) => {
-        console.log({ community });
         expect(community.isMember).not.toBe(null);
         // expect(
         //   community.members.every((member) => member.id === firstCreator.id)
@@ -504,7 +503,7 @@ describe("'communities ' service", () => {
     it.todo('Only authorized members can see community posts');
     it.todo('Only authorized members can see community discussions');
 
-    it('should create posts in community', async () => {
+    it.skip('should create posts in community', async () => {
       const name = 'Public Community name';
       const description = 'Public Community description';
       // create a community
@@ -541,7 +540,7 @@ describe("'communities ' service", () => {
       });
     });
 
-    it('should  not create post for non-member', async () => {
+    it.skip('should  not create post for non-member', async () => {
       const nonMemberPost = await testServer
         .post('/posts')
         .send({
@@ -552,7 +551,7 @@ describe("'communities ' service", () => {
 
       expect(nonMemberPost.statusCode).toEqual(400);
     });
-    it('Should list posts in communities', async () => {
+    it.skip('Should list posts in communities', async () => {
       const { body: posts } = await testServer
         .get(`/posts?CommunityId=${communityWithPosts.body.id}`)
         .set('authorization', creator.accessToken);
@@ -581,7 +580,7 @@ describe("'communities ' service", () => {
 
   it.todo('should like a community');
   it.todo('list a community Like(s)');
-  it('should create forum/discussion in community', async () => {
+  it.skip('should create forum/discussion in community', async () => {
     const name = 'Public Community with discussion';
     const description = 'Public Community with discussion';
     // create a community
@@ -616,7 +615,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('should list forum/discussion in community', async () => {
+  it.skip('should list forum/discussion in community', async () => {
     // list discussions in that community
     const discussionList = await testServer
       .get(`/discussion?CommunityId=${communityWithForum.id}`)
@@ -628,7 +627,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it('Only the community creator can delete the community', async () => {
+  it.skip('Only the community creator can delete the community', async () => {
     const name = 'Community to delete';
     const description = 'This community will be deleted';
     // create a community
