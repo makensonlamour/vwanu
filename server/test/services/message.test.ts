@@ -80,6 +80,31 @@ describe("'message' service", () => {
     });
   });
 
+  it('a user should be able to pull all messages from a conversation', async () => {
+    const {
+      body: { data: pulledMessages },
+    } = await testServer
+      .get(`${endpoint}?ConversationId=${testConversation.id}`)
+      .set('authorization', testUsers[0].accessToken);
+
+    pulledMessages.forEach((msg) => {
+      expect(msg).toMatchObject({
+        id: expect.any(String),
+        received: false,
+        read: false,
+        ConversationId: expect.any(String),
+        messageText: 'test',
+        senderId: testUsers[0].id,
+        Media: [],
+        updatedAt: expect.any(String),
+        createdAt: expect.any(String),
+        receivedDate: null,
+        readDate: null,
+        UserId: null,
+      });
+    });
+  });
+
   it('a user should be able pull a particular message', async () => {
     pulledMessage = await testServer
       .get(`${endpoint}/${testMessages.id}`)
