@@ -26,6 +26,25 @@ export default async (context: HookContext) => {
     });
   }
 
+  const OnlyInterests = (interest) =>
+    `(
+  EXISTS(
+    SELECT 1 FROM "Interests" AS "I" 
+    INNER JOIN "Community_Interest" AS "CI" ON "CI"."InterestId"="I"."id" AND "CI"."CommunityId"="Community"."id"
+    WHERE "I"."name"= '${interest}' )
+  
+  )`;
+
+  let interests;
+  if (where.interests) {
+    interests = where.interests;
+    delete where.interests;
+  }
+  let participate;
+  if (where.participate) {
+    participate = where.participate;
+    delete where.participate;
+  }
   const isMember = `(
   SELECT 
     json_build_object(
@@ -98,21 +117,35 @@ SELECT
   const clause = {
     // loging: console.log,
     ...where,
-    [Op.and]: {
-      [Op.or]: [
-        { privacyType: { [Op.ne]: 'hidden' } },
-        {
-          [Op.and]: [
-            { privacyType: 'hidden' },
-            Sequelize.where(Sequelize.literal(isParticipant), true),
-          ],
-        },
-      ],
-    },
+
+    [Op.and]: [
+      {
+        [Op.or]: [
+          { privacyType: { [Op.ne]: 'hidden' } },
+          {
+            [Op.and]: [
+              { privacyType: 'hidden' },
+              Sequelize.where(Sequelize.literal(isParticipant), true),
+            ],
+          },
+        ],
+      },
+    ],
   };
+
+  if (interests) {
+    clause[Op.and].push(
+      Sequelize.where(Sequelize.literal(OnlyInterests(interests)), true)
+    );
+  }
+  if (participate) {
+    clause[Op.and].push(
+      Sequelize.where(Sequelize.literal(isParticipant), true)
+    );
+  }
   params.sequelize = {
     where: clause,
-    // logging: console.log,
+    logging: interests ? console.log : null,
     attributes: {
       include: [
         [Sequelize.literal(isMember), 'IsMember'],

@@ -454,6 +454,48 @@ describe("'communities ' service", () => {
         unpopular[0].amountOfMembers
       );
     });
+
+    it('should return only the communities with `UNIQUE` interest', async () => {
+      const name = 'This community has unique interest';
+      const description = 'This community has unique interest';
+      const { status } = await testServer
+        .post(endpoint)
+        .set('authorization', creator.accessToken)
+        .send({
+          interests: ['unique'],
+          name,
+          description,
+        });
+
+      expect(status).toBe(201);
+
+      const {
+        body: { data: com },
+      } = await testServer
+        .get(`${endpoint}?interests=unique`)
+        .set('authorization', firstCreator.accessToken);
+
+      expect(com).toHaveLength(1);
+      com.forEach((community) => {
+        expect(community.name).toBe(name);
+        expect(community.description).toBe(description);
+      });
+    });
+    it('should only return communities user is member of', async () => {
+      const {
+        body: { data: com },
+      } = await testServer
+        .get(`${endpoint}?participate=true`)
+        .set('authorization', firstCreator.accessToken);
+
+      com.forEach((community) => {
+        console.log({ community });
+        expect(community.isMember).not.toBe(null);
+        // expect(
+        //   community.members.every((member) => member.id === firstCreator.id)
+        // ).toBe(true);
+      });
+    });
   });
 
   describe('Communities posts and forums', () => {
