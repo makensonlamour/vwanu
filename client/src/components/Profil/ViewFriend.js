@@ -8,7 +8,7 @@ import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
 import InfiniteScroll from "../InfiniteScroll/InfiniteScroll";
 
-const ViewFriend = ({ data, types = "", noDataLabel, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery }) => {
+const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery }) => {
   const queryClient = useQueryClient();
   const user = useOutletContext();
   // const { data: listFriend } = useGetListFriend(["user", "friend"], true);
@@ -94,12 +94,12 @@ const ViewFriend = ({ data, types = "", noDataLabel, isLoading, isError, hasNext
                       </div>
                       {user?.id?.toString() !== friend?.id?.toString() && (
                         <div className="flex border border-gray-300 rounded-b-xl -px-6 justify-around bg-placeholder-color">
-                          {types === "friends" || types === "followings" ? (
+                          {friend?.isFollowYou ? (
                             <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Unfollow</button>
                           ) : (
                             <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Follow</button>
                           )}
-                          {types === "friends" || types === "followings" ? (
+                          {friend?.isFriend ? (
                             <button className="basis-1/2 py-3 border-l border-gray-300 hover:bg-gray-100">Unconnect</button>
                           ) : (
                             <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Connect</button>

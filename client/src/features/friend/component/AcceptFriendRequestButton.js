@@ -79,7 +79,7 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
     try {
       await declineFriendRequest.mutateAsync({ friendId: otherUser?.id, accept: false });
       //add query to fetch
-      // window.location.reload();
+      window.location.reload();
     } catch (e) {
       console.log(e);
       declineFriendRequestError();

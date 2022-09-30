@@ -8,3 +8,5 @@ export const updateProfilePicture = (data) => api.patch(`/users/${data?.id}`, da
 export const useGetOtherProfile = (queryKey, enabled, id) => useFetch(queryKey, enabled, `/users/${id}`);
 
 export const useGetAllMembers = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/users`);
+
+export const useGetOnline = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/users?online=true&friends=true`);

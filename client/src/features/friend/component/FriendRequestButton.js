@@ -1,6 +1,7 @@
+/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import { FiUserX, FiUserPlus } from "react-icons/fi";
@@ -20,6 +21,7 @@ const FriendRequestButton = ({ otherUser }) => {
   const { id } = useParams();
   const [loading, setIsLoading] = useState(false);
   const [isEnter, setIsEnter] = useState(false);
+  // const user = useOutletContext();
 
   //error dialog
   const friendRequestError = () =>
@@ -37,12 +39,12 @@ const FriendRequestButton = ({ otherUser }) => {
       position: "top-center",
     });
 
-  const { data: listFriendSent } = useGetListFriendRequestSent(["user", "sent"], true);
-  const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
-  const { data: listFriendship } = useGetListFriend(["user", "friend"], id === "undefined" ? false : true, id);
+  // const { data: listFriendSent } = useGetListFriendRequestSent(["user", "sent"], true);
+  // const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
+  // const { data: listFriendship } = useGetListFriend(["user", "friend"], id === "undefined" ? false : true, id);
 
   const sendFriendRequest = useSendFriendRequest(["user", "request"]);
-  const cancelFriendRequest = useCancelFriendRequest(["user", "request"]);
+  const cancelFriendRequest = useCancelFriendRequest(["user", "request"], otherUser?.id);
   const unfriend = useUnfriendUser(["user", "friend"], otherUser?.id);
 
   const handleFriendRequest = async (e) => {
@@ -87,13 +89,11 @@ const FriendRequestButton = ({ otherUser }) => {
     }
   };
 
-  console.log(listFriendReceive, checkFriendRequest(listFriendSent, otherUser?.id));
-
   return (
     <>
       <Toaster />
       {otherUser &&
-        (checkFriendList(listFriendship, otherUser?.id) ? (
+        (otherUser?.isFriend ? (
           <button
             onClick={handleRemoveFriend}
             onMouseEnter={() => {
@@ -118,7 +118,7 @@ const FriendRequestButton = ({ otherUser }) => {
               </>
             )}
           </button>
-        ) : checkFriendRequest(listFriendSent, otherUser?.id) ? (
+        ) : otherUser?.hasSentFriendRequest ? (
           <button
             onClick={handleCancelFriendRequest}
             onMouseEnter={() => {
@@ -143,7 +143,7 @@ const FriendRequestButton = ({ otherUser }) => {
               </>
             )}
           </button>
-        ) : checkFriendList(listFriendReceive, otherUser?.id) ? (
+        ) : otherUser?.hasReceivedFriendRequest ? (
           <AcceptFriendRequestButton otherUser={otherUser} />
         ) : (
           <button

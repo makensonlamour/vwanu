@@ -62,7 +62,7 @@ export default function CommunityTabs({ communityData }) {
               {communityData?.haveDiscussionForum && (
                 <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Discussions" value="4" component={Link} to={allTabs[3]} />
               )}
-              {communityData?.canInvite && (
+              {communityData?.canUserInvite && (
                 <Tab
                   style={{ textTransform: "capitalize", fontSize: 15 }}
                   label="Send Invites"

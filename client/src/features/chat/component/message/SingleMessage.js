@@ -55,6 +55,7 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
   useEffect(() => {
     handleRead();
   }, []);
+
   return (
     <>
       {groups ? (

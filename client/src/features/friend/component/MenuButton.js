@@ -6,20 +6,28 @@ import { BsThreeDots } from "react-icons/bs";
 import { VscMegaphone } from "react-icons/vsc";
 import { BiBlock } from "react-icons/bi";
 import { AiOutlineMail } from "react-icons/ai";
+import { RiUserUnfollowLine } from "react-icons/ri";
 import Loader from "../../../components/common/Loader";
 import { ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList } from "@mui/material";
-import { useUnfriendUser } from "../friendSlice";
+import { useSendFollow } from "../../follower/followerSlice";
 
 const MenuButton = ({ otherUser }) => {
   const [open, setOpen] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const anchorRef = useRef(null);
 
-  const unfriend = useUnfriendUser(["user", "request"]);
+  const follow = useSendFollow(["user", "request"]);
+
+  console.log(otherUser);
 
   //error dialog
-  const unFriendRequestError = () =>
-    toast.error("Sorry. Error on unFriend this user!", {
+  const FollowRequestError = () =>
+    toast.error("Sorry. Error on unfollow this user!", {
+      position: "top-center",
+    });
+
+  const FollowRequestSuccess = () =>
+    toast.success("You follow this user", {
       position: "top-center",
     });
 
@@ -54,14 +62,22 @@ const MenuButton = ({ otherUser }) => {
     prevOpen.current = open;
   }, [open]);
 
-  const handleUnfriend = async (e) => {
-    e.preventDefault();
+  const handleFollow = async (e, type) => {
+    // e.preventDefault();
     setIsLoading(true);
     try {
-      await unfriend.mutateAsync({ friendId: otherUser?.id });
+      if (type === "follow") {
+        console.log("ok");
+        await follow.mutateAsync({ UserId: otherUser?.id });
+      } else {
+        console.log("ok");
+        await follow.mutateAsync({ UserId: otherUser?.id });
+      }
+      FollowRequestSuccess();
+      // window.location.reload();
     } catch (e) {
-      unFriendRequestError();
       console.log(e);
+      FollowRequestError();
     } finally {
       setIsLoading(false);
     }
@@ -113,10 +129,29 @@ const MenuButton = ({ otherUser }) => {
                   zIndex="tooltip"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem className="text-black rounded-xl hover:text-primary" onClick={handleClose}>
+                  <MenuItem
+                    onClick={(e) => {
+                      if (otherUser?.isFriend) {
+                        handleFollow(e, "unfollow");
+                      } else {
+                        handleFollow(e, "follow");
+                      }
+                      // handleClose(e);
+                    }}
+                    className="text-black rounded-xl hover:text-primary"
+                  >
                     {" "}
-                    <VscMegaphone size={"18px"} className="mr-1 items-center align-middle" />
-                    Follow
+                    {otherUser?.isFriend ? (
+                      <>
+                        <VscMegaphone size={"18px"} className="mr-1 items-center align-middle" />
+                        {"Unfollow"}
+                      </>
+                    ) : (
+                      <>
+                        <RiUserUnfollowLine size={"18px"} className="mr-1 items-center align-middle" />
+                        {"Follow"}
+                      </>
+                    )}
                   </MenuItem>
                   <MenuItem
                     className="text-black  rounded-xl hover:text-primary"
@@ -130,16 +165,6 @@ const MenuButton = ({ otherUser }) => {
                     Send Message
                   </MenuItem>
 
-                  {/*}
-                  <MenuItem
-                    onClick={() => {
-                      handleUnfriend();
-                      handleClose();
-                    }}
-                  >
-                    Unfriend
-                  </MenuItem>
-                  {*/}
                   <MenuItem className="text-black rounded-xl hover:text-primary" onClick={handleClose}>
                     {" "}
                     <BiBlock size={"18px"} className="mr-1 items-center align-middle" />

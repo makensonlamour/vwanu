@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useGetBlog, useGetBlogList } from "../../features/blog/blogSlice";
-import parse from "html-react-parser";
+// import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
 import { GoComment } from "react-icons/go";
 import SingleBlogRelated from "../../components/Blog/SingleBlogRelated";
 import SingleResponse from "../../components/Blog/SingleResponse";
 import { useCreateResponse, useGetAllResponse } from "../../features/blog/blogSlice";
 import { FaBlog } from "react-icons/fa";
-import "./testcss.css";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import SocialMediaShare from "../../components/common/SocialMediaShare";
 import EmptyComponent from "../../components/common/EmptyComponent";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.core.css";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -183,7 +184,8 @@ const ViewBlog = () => {
             </div>
           </div>
           <div className="mt-5 lg:mt-6 px-4 lg:px-28">
-            <p className="">{parse(`${blog?.blogText}`)}</p>
+            <div className="view ql-editor" dangerouslySetInnerHTML={{ __html: blog?.blogText }}></div>
+            {/* <p className="">{parse(`${blog?.blogText}`)}</p> */}
           </div>
           <SocialMediaShare
             className={"m-1"}
@@ -268,10 +270,7 @@ const ViewBlog = () => {
                   {isLoading ? "Loading..." : "Publish"}
                 </button>
               </div>
-              <div className="mx-2 w-full">
-                {content}
-                {/* <SingleResponse blogs={listResponse} /> */}
-              </div>
+              <div className="mx-2 w-full">{content}</div>
             </div>
           </div>
         </div>

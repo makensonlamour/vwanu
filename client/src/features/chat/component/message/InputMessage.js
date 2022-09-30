@@ -1,8 +1,6 @@
 import React, { useState, Fragment, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import TextareaAutosize from "react-autosize-textarea";
-// import { TextArea, Submit, Form } from "../../../../components/form";
-// import * as Yup from "yup";
 import Loader from "../../../../components/common/Loader";
 import BoxGif from "../../../../components/common/BoxGif";
 import BoxEmoji from "../../../../components/common/BoxEmoji";
@@ -72,12 +70,13 @@ const InputMessage = ({ selectMember, type }) => {
       }
       let dataMessage = {};
       let messageObj = {};
-
+      let arrayReceiver = [];
       if (type === "new_conversation") {
         let receiver = selectMember?.map((data) => {
           return data?.id;
         });
-        const dataObjConversation = { userIds: receiver };
+        arrayReceiver.push(receiver);
+        const dataObjConversation = { userIds: arrayReceiver };
         let resultConversation = await createConversation.mutateAsync(dataObjConversation);
         if (files?.length > 0) {
           formData.append("ConversationId", resultConversation?.data?.ConversationId);
@@ -91,7 +90,6 @@ const InputMessage = ({ selectMember, type }) => {
           dataMessage.mediaLinks = arrayGif;
         }
         await sendMessage.mutateAsync(files?.length > 0 ? formData : dataMessage);
-        console.log(resultConversation?.data, resultConversation?.data?.ConversationId || resultConversation?.data?.id);
         window.location.href = `../../messages/${resultConversation?.data?.ConversationId || resultConversation?.data?.id}`;
       } else {
         if (files?.length > 0) {

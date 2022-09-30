@@ -20,7 +20,6 @@ const NotificationPreview = () => {
 
   const onCreatedListener = (notification) => {
     if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
-      console.log("check notif:", notification, notificationList);
       setNotificationList((notificationList) => [...notificationList, notification]);
     }
   };

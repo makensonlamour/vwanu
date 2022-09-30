@@ -26,8 +26,7 @@ const locale = {
 const SelectConversation = ({ setSelectedConversation, setCreateConversationOpened, conversation, conversationId }) => {
   const { id } = useParams();
   const user = useOutletContext();
-
-  const filtered = conversation?.Users?.filter((item) => item.id !== user?.id);
+  const filtered = conversation?.Users?.filter((item) => item?.id !== user?.id);
 
   return (
     <>
@@ -83,7 +82,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
             </div>
           </Link>
         ) : (
-          conversation?.Messages?.length > 0 && (
+          Object.keys(conversation?.lastMessage).length > 0 && (
             <Link
               key={conversationId}
               to={`../messages/${conversationId}`}
@@ -97,7 +96,6 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
                     <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
                   </div>
                   <div className="w-[78%]">
-                    {console.log(filtered)}
                     {filtered?.map((item) => {
                       return (
                         <p
@@ -108,23 +106,22 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
                         </p>
                       );
                     })}
-                    {console.log(conversation)}
-                    {conversation?.Messages?.length > 0 && (
+                    {Object.keys(conversation?.lastMessage).length > 0 && (
                       <div className="flex justify-start pt-0 items-center w-[100%]">
-                        {conversation?.Messages[0]?.senderId === user?.id ? (
+                        {conversation?.lastMessage?.senderId === user?.id ? (
                           <div className="">
                             <BsArrowReturnRight className="mr-1" size={"14px"} />
                           </div>
                         ) : null}
-                        <p className="text-sm line-clamp-1 w-full">{conversation?.Messages[0]?.messageText}</p>
+                        <p className="text-sm line-clamp-1 w-full">{conversation?.lastMessage?.messageText}</p>
                       </div>
                     )}
                   </div>
                 </div>
-                {conversation?.Messages?.length > 0 && (
+                {Object.keys(conversation?.lastMessage).length > 0 && (
                   <div className="flex items-center justify-end w-[50%]">
                     <p className="text-xs text-right">
-                      {formatRelative(parseISO(conversation?.Messages[0]?.createdAt), new Date(), { locale })}
+                      {formatRelative(parseISO(conversation?.lastMessage?.createdAt), new Date(), { locale })}
                     </p>
                   </div>
                 )}

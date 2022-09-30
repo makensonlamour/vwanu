@@ -8,17 +8,22 @@ import { IoCreateOutline } from "react-icons/io5";
 import CreateConversation from "./CreateConversation";
 import SelectConversation from "./SelectConversation";
 import client from "../../../feathers/index";
-// import { useQueryClient } from "react-query";
+import Loader from "../../../../components/common/Loader";
+import { useQueryClient } from "react-query";
+import { FaLaptopHouse } from "react-icons/fa";
+import InfiniteScroll from "../../../../components/InfiniteScroll/InfiniteScroll";
 // import { MessageContext } from "../context/MessageContext";
 
 const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selectedConversation, createConversationOpened }) => {
   //random data
-
+  const queryClient = useQueryClient();
   const user = useOutletContext();
   const {
     data: listConversation,
     isLoading,
     isError,
+    hasNextPage,
+    fetchNextPage,
   } = useListConversation(["user", "conversation", "all"], user?.id !== "undefined" ? true : false, user?.id);
   const [searchParams] = useSearchParams();
   const otherUserId = searchParams.get("otherUserId");
@@ -32,10 +37,11 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
   let run = true;
   async function handleCreateConversation() {
     setLoading(true);
+    let arrayReceiver = [];
     try {
-      const dataObj = { userIds: otherUserId };
+      arrayReceiver.push(otherUserId);
+      const dataObj = { userIds: arrayReceiver };
       let resultConversation;
-      console.log(newMessage, otherUserId, run, newMessage && otherUserId && run);
       if (newMessage && otherUserId && run) {
         run = false;
         resultConversation = await createConversation.mutateAsync(dataObj);
@@ -46,6 +52,10 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
     } finally {
       setLoading(false);
     }
+  }
+
+  function reloadPage() {
+    queryClient.refetchQueries(["user", "conversation", "all"]);
   }
 
   useEffect(() => {
@@ -88,45 +98,88 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
           </div>
 
           {isLoading ? (
-            <div className="my-6 flex justify-center">Loading...{/*} <Spin /> {*/}</div>
-          ) : isError ? (
-            <div className="my-6 flex justify-center">
-              <p className="text-center">Something went wrong</p>
+            // <div className="my-6 flex justify-center">Loading...{/*} <Spin /> {*/}</div>
+            <div className="flex justify-center py-5">
+              <Loader color="black" />
             </div>
-          ) : listConversation?.data?.length === 0 ? (
-            <div className="my-6 flex flex-col items-center justify-center">
-              <p className="text-center">No conversation found</p>
-              <button
-                onClick={() => {
-                  setCreateConversationOpened(true);
-                  setSelectedConversation(false);
-                  navigate("../messages");
-                }}
-                className="text-primary text-center"
-              >
-                Create one
-              </button>
+          ) : isError ? (
+            <div className="py-5 m-auto text-center px-2">
+              {"There was an error while fetching the data. "}{" "}
+              <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
+                Tap to retry
+              </Link>{" "}
+            </div>
+          ) : listConversation?.pages && listConversation?.pages?.length > 0 && listConversation?.pages[0]?.data?.total > 0 ? (
+            <div className="w-full">
+              {isLoading ? (
+                <div className="flex justify-center py-5">
+                  <Loader color="black" />
+                </div>
+              ) : (
+                <InfiniteScroll
+                  fetchMore={fetchNextPage}
+                  isError={isError}
+                  isLoading={isLoading}
+                  hasNext={hasNextPage}
+                  refetch={() => queryClient.invalidateQueries(["user", "conversation", "all"])}
+                  container={FaLaptopHouse}
+                  classNameContainer={"overflow-y-auto h-[46vh]"}
+                  loader={
+                    <div className="flex justify-center py-5">
+                      <Loader color="black" />
+                    </div>
+                  }
+                  errorRender={
+                    <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+                      {"There was an error while fetching the data. "}{" "}
+                      <Link
+                        className="text-secondary hover:text-primary"
+                        to={""}
+                        onClick={() => reloadPage(["user", "conversation", "all"])}
+                      >
+                        Tap to retry
+                      </Link>{" "}
+                    </div>
+                  }
+                >
+                  {listConversation?.pages.map((page) => {
+                    return page?.data?.data?.map((item) => {
+                      return (
+                        <SelectConversation
+                          setSelectedConversation={setSelectedConversation}
+                          setCreateConversationOpened={setCreateConversationOpened}
+                          key={item?.id}
+                          conversation={item}
+                          conversationId={item?.id}
+                        />
+                      );
+                    });
+                  })}
+                </InfiniteScroll>
+              )}
             </div>
           ) : (
             <div className="w-full">
-              {isLoading ? (
-                <p className="text-lg font-bold">Loading...</p>
-              ) : (
-                listConversation?.data?.map((item) => (
-                  <SelectConversation
-                    setSelectedConversation={setSelectedConversation}
-                    setCreateConversationOpened={setCreateConversationOpened}
-                    key={item.id}
-                    conversation={item}
-                    conversationId={item.id}
-                  />
-                ))
-              )}
+              <div className="my-6 flex flex-col items-center justify-center">
+                <p className="text-center">No conversation found</p>
+                <button
+                  onClick={() => {
+                    setCreateConversationOpened(true);
+                    setSelectedConversation(false);
+                    navigate("../messages");
+                  }}
+                  className="text-primary text-center"
+                >
+                  Create one
+                </button>
+              </div>
             </div>
           )}
         </div>
       ) : (
-        <p>Loading...</p>
+        <div className="flex justify-center py-5">
+          <Loader color="black" />
+        </div>
       )}
     </>
   );

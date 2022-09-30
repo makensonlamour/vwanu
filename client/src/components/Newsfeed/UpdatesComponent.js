@@ -14,7 +14,7 @@ const UpdatesComponent = ({ data }) => {
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-6 mb-8">
-        <h2 className="my-2 px-2 text-xl font-medium">Latest updates</h2>
+        <h2 className="my-2 px-2 text-md font-medium">Latest updates</h2>
         {data?.length > 0 ? (
           <Stack spacing={1}>
             {data?.map((latest, idx) => {
@@ -58,7 +58,7 @@ const UpdatesComponent = ({ data }) => {
               }
             })}
             {data?.length > 5 && (
-              <Link to={"../../notifications"} className="text-sm mx-auto font-[500] hover:text-primary">
+              <Link to={"../../notifications"} className="text-xs mx-auto font-[500] hover:text-primary">
                 View more updates
               </Link>
             )}
