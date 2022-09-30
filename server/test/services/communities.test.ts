@@ -1,9 +1,16 @@
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
 import isNill from 'lodash/isNil';
 /** Local dependencies */
 import app from '../../src/app';
-import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
+import {
+  getRandUsers,
+  getRandUser,
+} from '../../src/lib/utils/generateFakeUser';
+
+const cleanup = (server) => (endpoint, id, token) =>
+  server.delete(`${endpoint}/${id}`).set('Authorization', token).expect(200);
 
 describe("'communities ' service", () => {
   // eslint-disable-next-line no-unused-vars
@@ -95,22 +102,13 @@ describe("'communities ' service", () => {
     );
     distinctCommunities = distinctCommunities.map((c) => c.body);
   }, 100000);
-  afterAll(async () => {
-    await Promise.all(
-      testUsers.map((user) =>
-        testServer
-          .delete(`${userEndpoint}/${user.id}`)
-          .set('authorization', ` ${user.accessToken}`)
-      )
-    );
-  });
 
-  it.skip('registered the service', () => {
+  it('registered the service', () => {
     const service = app.service('communities');
     expect(service).toBeTruthy();
   });
 
-  it.skip('should not create communities with the same name', async () => {
+  it('should not create communities with the same name', async () => {
     sameNameCommunities = await Promise.all(
       ['unique', 'unique'].map((name, idx) =>
         testServer
@@ -148,8 +146,13 @@ describe("'communities ' service", () => {
         });
       }
     });
+    await cleanup(testServer)(
+      endpoint,
+      sameNameCommunities[0].body.id,
+      creator.accessToken
+    );
   });
-  it.skip('Users can create any community ', async () => {
+  it('Users can create any community ', async () => {
     const name = 'y community';
     const description = 'Unique description required';
     const privacyTypes = ['private', 'public', 'hidden'];
@@ -176,89 +179,48 @@ describe("'communities ' service", () => {
         description: expect.stringContaining(description),
       });
     });
+    // await Promise.all(
+    //   communities.map((c) =>
+    //     cleanup(testServer)(endpoint, c.body.id, creator.accessToken)
+    //   )
+    // );
   });
 
-  it.skip('Community automatically set creator as first admin', async () => {
-    const name = 'Auto admin community ';
-    const description =
-      'Each community automatically set creator as first admin';
-    const privacyTypes = ['private', 'public', 'hidden'];
+  it('Community automatically set creator as first admin and by default are public', async () => {
+    const name = 'Auto admin';
+    const description = 'Auto Public';
 
-    let newAdmins = await Promise.all(
-      getRandUsers(3).map((u) => {
-        const user = u;
-        delete user.id;
-        return testServer.post(userEndpoint).send(user);
-      }, 10000)
-    );
+    const { body: adminOfPublicCommunity } = await testServer
+      .post(userEndpoint)
+      .send({ ...getRandUser(), id: undefined });
 
-    newAdmins = newAdmins.map((user) => user.body);
-
-    const autoAdminCommunities = await Promise.all(
-      newAdmins.map((user, idx) =>
-        testServer
-          .post(endpoint)
-          .send({
-            name: `${name}-${idx}`,
-            privacyType: privacyTypes[idx],
-            interests,
-            description: `${description} - ${idx}`,
-          })
-          .set('authorization', user.accessToken)
-      )
-    );
-    autoAdminCommunities.forEach(({ body }, idx) => {
-      expect(body).toMatchObject({
-        ...CommunityBasicDetails,
-        name: expect.stringContaining(name),
-        privacyType: privacyTypes[idx],
-        UserId: newAdmins[idx].id,
-        description: expect.stringContaining(description),
-        numAdmins: 1,
-      });
+    const { body: publicAutoAdminCommunity } = await testServer
+      .post(endpoint)
+      .send({
+        name,
+        interests,
+        description,
+      })
+      .set('authorization', adminOfPublicCommunity.accessToken);
+    expect(publicAutoAdminCommunity).toMatchObject({
+      ...CommunityBasicDetails,
+      name,
+      privacyType: 'public',
+      UserId: adminOfPublicCommunity.id,
+      description,
     });
 
     // Check if creator is first admin
-    let communityUsers = await Promise.all(
-      autoAdminCommunities.map(({ body: { id } }) =>
-        testServer
-          .get(`/community-users?CommunityId=${id}`)
-          .set('authorization', creator.accessToken)
-      )
-    );
-    communityUsers = communityUsers.map(
-      (communityUser) => communityUser.body.data
-    );
-    communityUsers.forEach((communityUser, idx) => {
-      expect(communityUser[0].UserId).toBe(newAdmins[idx].id);
-      expect(communityUser[0].User).toMatchObject({
-        firstName: newAdmins[idx].firstName,
-        lastName: newAdmins[idx].lastName,
-        id: newAdmins[idx].id,
-        createdAt: newAdmins[idx].createdAt,
-      });
-    });
+    const {
+      body: { data: communityUsers },
+    } = await testServer
+      .get(`/community-users?CommunityId=${publicAutoAdminCommunity.id}`)
+      .set('authorization', adminOfPublicCommunity.accessToken);
+
+    expect(communityUsers[0].UserId).toBe(adminOfPublicCommunity.id);
   });
 
-  it.skip('communities are public by default', async () => {
-    const publicCommunity = await testServer
-      .post(endpoint)
-      .send({
-        name: `community`,
-        description: 'description',
-      })
-      .set('authorization', creator.accessToken);
-
-    expect(publicCommunity.body).toMatchObject({
-      ...CommunityBasicDetails,
-      name: 'community',
-      privacyType: 'public',
-      UserId: creator.id,
-      description: 'description',
-    });
-  });
-
-  it.skip('Community creator can edit the community details', async () => {
+  it('Community creator can edit the community details', async () => {
     const name = `Brand new name -${Math.random()}`;
     const description = `Description Has Changed -- ${Math.random()}`;
     const communityToChange = communities[0].body;
@@ -278,7 +240,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip(' Any user can get all communities except hidden unless he is a member of it', async () => {
+  it(' Any user can get all communities except hidden unless he is a member of it', async () => {
     // Manually adding a user to a community
     const newUser = testUsers[1];
     const infiltratedCommunity = communities[0].body;
@@ -351,7 +313,7 @@ describe("'communities ' service", () => {
   });
 
   describe('Communities Access', () => {
-    it.skip('should not see community private and Hidden community details when not member', async () => {
+    it('should not see community private and Hidden community details when not member', async () => {
       let accessToCommunities = await Promise.all(
         distinctCommunities.map((com) =>
           testServer
@@ -395,7 +357,7 @@ describe("'communities ' service", () => {
         }
       });
     });
-    it.skip('should only return communities created by the user', async () => {
+    it('should only return communities created by the user', async () => {
       const {
         body: { data: creatorCommunities },
       } = await testServer
@@ -417,7 +379,7 @@ describe("'communities ' service", () => {
       );
     });
 
-    it.skip('should return newest communities first', async () => {
+    it('should return newest communities first', async () => {
       const {
         body: { data: newestFirst },
       } = await testServer
@@ -435,7 +397,7 @@ describe("'communities ' service", () => {
       expect(newestFirst[0]).not.toBe(oldestFirst[0]);
     });
 
-    it.skip('should return communities with most members first', async () => {
+    it('should return communities with most members first', async () => {
       const {
         body: { data: popularFirst },
       } = await testServer
@@ -455,7 +417,7 @@ describe("'communities ' service", () => {
       );
     });
 
-    it.skip('should return only the communities with `UNIQUE` interest', async () => {
+    it('should return only the communities with `UNIQUE` interest', async () => {
       const name = 'This community has unique interest';
       const description = 'This community has unique interest';
       const { status } = await testServer
@@ -481,7 +443,7 @@ describe("'communities ' service", () => {
         expect(community.description).toBe(description);
       });
     });
-    it.skip('should only return communities user is member of', async () => {
+    it('should only return communities user is member of', async () => {
       const {
         body: { data: com },
       } = await testServer
@@ -498,12 +460,10 @@ describe("'communities ' service", () => {
   });
 
   describe('Communities posts and forums', () => {
-    it.todo('Only authorized members can post in community');
-
     it.todo('Only authorized members can see community posts');
     it.todo('Only authorized members can see community discussions');
 
-    it.skip('should create posts in community', async () => {
+    it('should create posts in community', async () => {
       const name = 'Public Community name';
       const description = 'Public Community description';
       // create a community
@@ -540,7 +500,7 @@ describe("'communities ' service", () => {
       });
     });
 
-    it.skip('should  not create post for non-member', async () => {
+    it('should  not create post for non-member', async () => {
       const nonMemberPost = await testServer
         .post('/posts')
         .send({
@@ -551,7 +511,7 @@ describe("'communities ' service", () => {
 
       expect(nonMemberPost.statusCode).toEqual(400);
     });
-    it.skip('Should list posts in communities', async () => {
+    it('Should list posts in communities', async () => {
       const { body: posts } = await testServer
         .get(`/posts?CommunityId=${communityWithPosts.body.id}`)
         .set('authorization', creator.accessToken);
@@ -580,7 +540,7 @@ describe("'communities ' service", () => {
 
   it.todo('should like a community');
   it.todo('list a community Like(s)');
-  it.skip('should create forum/discussion in community', async () => {
+  it('should create forum/discussion in community', async () => {
     const name = 'Public Community with discussion';
     const description = 'Public Community with discussion';
     // create a community
@@ -615,7 +575,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip('should list forum/discussion in community', async () => {
+  it('should list forum/discussion in community', async () => {
     // list discussions in that community
     const discussionList = await testServer
       .get(`/discussion?CommunityId=${communityWithForum.id}`)
@@ -627,7 +587,7 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip('Only the community creator can delete the community', async () => {
+  it('Only the community creator can delete the community', async () => {
     const name = 'Community to delete';
     const description = 'This community will be deleted';
     // create a community
@@ -661,4 +621,47 @@ describe("'communities ' service", () => {
 
     expect(deletedCommunity.statusCode).toEqual(200);
   });
+
+  it('Should find private community after becoming member', async () => {
+    const { statusCode, body: privateGroup } = await testServer
+      .post(endpoint)
+      .set('authorization', creator.accessToken)
+      .send({
+        name: 'Private community group',
+        description: 'Private community',
+        privacyType: 'private',
+      });
+
+    expect(statusCode).toBe(201);
+    const { statusCode: status, body: user } = await testServer
+      .post(userEndpoint)
+      .send({ ...getRandUser(), id: undefined });
+
+    expect(status).toBe(201);
+    const { body: nonMemberAccess } = await testServer
+      .get(endpoint)
+      .set('authorization', user.accessToken);
+
+    expect(nonMemberAccess.total).toBe(9);
+
+    const CommunityUser = app.get('sequelizeClient').models.CommunityUsers;
+
+    await CommunityUser.create({
+      CommunityId: privateGroup.id,
+      UserId: user.id,
+      CommunityRoleId: roles[0].id,
+    });
+    await CommunityUser.create({
+      CommunityId: privateGroup.id,
+      UserId: user.id,
+      CommunityRoleId: roles[0].id,
+    });
+
+    expect(status).toBe(201);
+    const { body: memberAccess } = await testServer
+      .get(endpoint)
+      .set('authorization', user.accessToken);
+
+    expect(memberAccess.total).toBe(9);
+  }, 3000);
 });

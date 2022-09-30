@@ -55,6 +55,7 @@ export default async (context: HookContext) => {
     FROM "CommunityUsers" AS "CU"
     INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
     WHERE "CU"."CommunityId"="Community"."id" and "CU"."UserId"='${context.params.User.id}'
+    LIMIT 1
   )`;
 
   const Interests = `(
