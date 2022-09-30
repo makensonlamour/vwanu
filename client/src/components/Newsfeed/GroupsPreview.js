@@ -15,7 +15,7 @@ const GroupsPreview = ({ data, isError, isLoading }) => {
   return (
     <>
       <div className="mb-1 bg-white border border-gray-200 rounded-lg p-2 mt-8">
-        <h2 className="my-2 px-2 text-xl font-medium">Communities</h2>
+        <h2 className="my-2 px-2 text-md font-medium">Communities</h2>
         <TabContext value={value}>
           <div>
             <TabList

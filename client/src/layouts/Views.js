@@ -60,6 +60,50 @@ const Views = () => {
     messageService.on("patched", onPatchedListener);
   };
 
+  //online user
+  const onUpdatedOnlineListener = () => {
+    queryClient.invalidateQueries(["user", "online"]);
+  };
+  const onPatchedOnlineListener = () => {
+    queryClient.invalidateQueries(["user", "online"]);
+  };
+
+  const userService = client.service("users");
+
+  const onlineFn = async () => {
+    userService.on("updated", onUpdatedOnlineListener);
+    userService.on("patched", onPatchedOnlineListener);
+  };
+
+  //friend request
+
+  const requestService = client.service("users");
+
+  const requestFn = async () => {
+    requestService.on("updated", onUpdatedRequestListener);
+    requestService.on("created", onCreatedRequestListener);
+    requestService.on("deleted", onDeletedRequestListener);
+    requestService.on("patched", onPatchedRequestListener);
+  };
+
+  const onUpdatedRequestListener = () => {
+    queryClient.invalidateQueries(["user", "request"]);
+    queryClient.invalidateQueries(["user", "friend"]);
+  };
+  const onPatchedRequestListener = () => {
+    queryClient.invalidateQueries(["user", "request"]);
+    queryClient.invalidateQueries(["user", "friend"]);
+  };
+
+  const onDeletedRequestListener = () => {
+    queryClient.invalidateQueries(["user", "request"]);
+    queryClient.invalidateQueries(["user", "friend"]);
+  };
+  const onCreatedRequestListener = () => {
+    queryClient.invalidateQueries(["user", "request"]);
+    queryClient.invalidateQueries(["user", "friend"]);
+  };
+
   function denyCall() {
     console.log("deny call");
     setCalling(false);
@@ -95,6 +139,7 @@ const Views = () => {
 
   useEffect(() => {
     messageFn();
+    onlineFn();
     ConnectPeer();
   }, []);
 

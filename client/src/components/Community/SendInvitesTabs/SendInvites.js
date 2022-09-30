@@ -80,7 +80,7 @@ const SendInvites = () => {
       const dataObj = {
         CommunityRoleId: roleCommunityId,
         CommunityId: id,
-        guestId: guest,
+        guestId: guest[0],
       };
 
       await sendInvitation.mutateAsync(dataObj);

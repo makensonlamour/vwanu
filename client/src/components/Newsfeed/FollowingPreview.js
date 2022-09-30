@@ -12,13 +12,12 @@ const FollowingPreview = ({ data, isError, isLoading }) => {
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
-  console.log(data);
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">
-        <h2 className="my-2 px-2 text-xl font-medium">
+        <h2 className="my-2 px-2 text-md font-medium">
           {`I'm Following `}
-          <span className="font-normal text-lg text-gray-400">{data?.length || 0}</span>
+          <span className="font-normal text-md text-gray-400">{data?.length || 0}</span>
         </h2>
         {isLoading ? (
           <div className="flex justify-center py-5">

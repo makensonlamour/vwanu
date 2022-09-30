@@ -29,7 +29,7 @@ const Blog = () => {
           isError={isError}
           hasNext={hasNextPage}
           container={true}
-          classNameContainer={"overflow-y-auto h-[60vh]"}
+          classNameContainer={"overflow-y-auto h-[77vh]"}
           refetch={() => queryClient.invalidateQueries(["blog", "all"])}
           loader={
             <div className="flex justify-center py-5">
@@ -88,7 +88,7 @@ const Blog = () => {
           Create New Article
         </Link>
       </div>
-      <div className="flex mt-10">
+      <div className="flex mt-2">
         <div className="basis-[100%] lg:basis-4/6">
           {content}
           {/* {blogList?.data?.length > 0 ? (

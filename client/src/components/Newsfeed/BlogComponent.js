@@ -13,11 +13,10 @@ const BlogComponent = ({ data, isError, isLoading }) => {
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
-  console.log(data);
   return (
     <div>
       <div className="bg-white w-full 4xl:w-[70%] border border-gray-200 rounded-lg p-2 mb-8">
-        <h2 className="my-2 px-2 text-xl font-medium">Blog</h2>
+        <h2 className="my-2 px-2 text-md font-medium">Blog</h2>
         {isLoading ? (
           <div className="flex justify-center py-5">
             <Loader color="black" />

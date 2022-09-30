@@ -21,7 +21,7 @@ import { checkFriendList } from "../../helpers/index";
 import { FaUserEdit, FaUserAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import EditProfile from "../../pages/Profil/EditProfile";
-import { useGetListFollowing } from "../../features/follower/followerSlice";
+import { useGetOnline } from "../../features/user/userSlice";
 import { useGetBlogList } from "../../features/blog/blogSlice";
 import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
@@ -49,27 +49,13 @@ const ProfileHeader = ({
 
   const { data: blogList, isError, isLoading } = useGetBlogList(["blog", "all"], true);
 
-  // const percentage = 73;
-
-  // const steps = [
-  //   { title: "General Information", total: 6, complete: 5 },
-  //   { title: "Work Experience", total: 3, complete: 1 },
-  //   { title: "Profile Photo", total: 1, complete: 1 },
-  //   { title: "Cover Photo", total: 1, complete: 1 },
-  // ];
-
-  const recentlyActive = [
-    { image: "https://picsum.photos/200/300?image=0" },
-    { image: "https://picsum.photos/200/300?image=1" },
-    { image: "https://picsum.photos/200/300?image=2" },
-    { image: "https://picsum.photos/200/300?image=3" },
-    { image: "https://picsum.photos/200/300?image=4" },
-    { image: "https://picsum.photos/200/300?image=8" },
-    { image: "https://picsum.photos/200/300?image=9" },
-    { image: "https://picsum.photos/200/300?image=10" },
-    { image: "https://picsum.photos/200/300?image=11" },
-    { image: "https://picsum.photos/200/300?image=12" },
-  ];
+  const {
+    data: listOnline,
+    isLoading: loadingOnline,
+    isError: onlineError,
+    hasNextPage: hasNextPageOnline,
+    fetchNextPage: fetchNextPageOnline,
+  } = useGetOnline(["user", "online"]);
 
   const groups = [
     {
@@ -98,7 +84,6 @@ const ProfileHeader = ({
       members: "17",
     },
   ];
-  console.log(otherUser);
   return (
     <>
       {!user && !otherUser ? (
@@ -147,14 +132,6 @@ const ProfileHeader = ({
                       )}
                     </div>
                   </div>
-
-                  {/*otherUser ? null : (
-                      <UploadPhotoCrop
-                        fromButton="profile"
-                        id={user?.id}
-                        className="absolute bottom-[0%] right-[30%] lg:right-[0%] lg:bottom-[0%]"
-                      />
-                    )*/}
                 </div>
               </div>
 
@@ -253,8 +230,14 @@ const ProfileHeader = ({
             </div>
 
             <div className="hidden lg:block basis-[20%] ml-auto mx-2 mt-8">
-              <BlogComponent data={blogList || []} isLoading={isLoading} isError={isError} />
-              <RecentlyActive data={recentlyActive || []} />
+              <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={isLoading} isError={isError} />
+              <RecentlyActive
+                data={listOnline || []}
+                isLoading={loadingOnline}
+                isError={onlineError}
+                hasNextPage={hasNextPageOnline}
+                fetchNextPage={fetchNextPageOnline}
+              />
               <GroupsPreview data={groups || []} />
               {/* <CompleteProfile percentage={percentage} data={steps} /> */}
               <div className="block xl:hidden">

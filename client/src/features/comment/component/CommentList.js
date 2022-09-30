@@ -14,7 +14,6 @@ const CommentList = ({ postId, showAll }) => {
   const user = useOutletContext();
   const queryClient = useQueryClient();
   function reloadPage() {
-    // window.location.reload();
     queryClient.refetchQueries(["comments", "all"]);
   }
   const {
@@ -38,7 +37,7 @@ const CommentList = ({ postId, showAll }) => {
             Tap to retry
           </Link>{" "}
         </div>
-      ) : commentList?.pages && commentList?.pages?.length > 0 ? (
+      ) : commentList?.pages && commentList?.pages?.length && commentList?.pages[0]?.data?.total > 0 ? (
         showAll ? (
           <InfiniteScroll
             fetchMore={fetchNextPage}

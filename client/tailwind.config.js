@@ -37,13 +37,13 @@ module.exports = {
 
           "base-100": "#FFFFFF",
 
-          info: "#e0f2fe",
+          info2: "#e0f2fe",
 
-          success: "#dcfce7",
+          success2: "#dcfce7",
 
-          warning: "#fef9c3",
+          warning2: "#fef9c3",
 
-          error: "#fee2e2",
+          error2: "#fee2e2",
         },
         screens: {
           sm: "425px",

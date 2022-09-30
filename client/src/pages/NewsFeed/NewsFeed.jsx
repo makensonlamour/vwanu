@@ -16,6 +16,7 @@ import PostList from "../../features/post/PostList";
 import { useGetTimelineList } from "../../features/post/postSlice";
 import { useGetListFollowing } from "../../features/follower/followerSlice";
 import { useGetBlogList } from "../../features/blog/blogSlice";
+import { useGetOnline } from "../../features/user/userSlice";
 import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
@@ -32,6 +33,16 @@ const NewsFeed = () => {
   const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
   const { data: listFollowing, isLoading: loadingFollowing, isError: errorFollowing } = useGetListFollowing(["user", "following"], true);
   const { data: blogList, isLoading: loadingBlog, isError: errorBlog } = useGetBlogList(["blog", "all"], true);
+  const {
+    data: listOnline,
+    isLoading: loadingOnline,
+    isError: onlineError,
+    hasNextPage: hasNextPageOnline,
+    fetchNextPage: fetchNextPageOnline,
+  } = useGetOnline(["user", "online"]);
+
+  console.log("online people", listOnline);
+
   const onCreatedListener = (notification) => {
     if (notification?.to?.toString() === user?.id?.toString() && notification?.UserId?.toString() !== user?.id?.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
@@ -186,35 +197,33 @@ const NewsFeed = () => {
       <div className="mx-auto mt-6 max-w-screen-3xl">
         <div className="flex justify-evenly">
           <div className="basis-[25%] hidden xl:block">
-            <BlogComponent data={blogList?.pages[0]?.data || []} isLoading={loadingBlog} isError={errorBlog} />
-            <FollowingPreview
-              isLoading={loadingFollowing}
-              isError={errorFollowing}
-              data={listFollowing?.pages ? listFollowing?.pages[0]?.data?.data : []}
-            />
+            <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
+            <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing || []} />
           </div>
           <div className="basis-full lg:basis-[56%] ">
             <div className="px-3">
-              <h2 className="pb-5 text-2xl font-bold">Activity Feed</h2>
+              <h2 className="pb-5 text-lg font-bold">Activity Feed</h2>
               <InputModal reference="newsfeed" />
               <div className="w-full py-2">{content}</div>
             </div>
           </div>
           <div className="basis-[22%] hidden lg:block">
             <span className="block xl:hidden">
-              <BlogComponent data={blogList?.pages[0]?.data || []} isLoading={loadingBlog} isError={errorBlog} />
+              <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
             </span>
             <span className="block xl:hidden">
-              <FollowingPreview
-                isLoading={loadingFollowing}
-                isError={errorFollowing}
-                data={listFollowing?.pages ? listFollowing?.pages[0]?.data?.data : []}
-              />
+              <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing || []} />
             </span>
 
             {/* <CompleteProfile percentage={percentage} data={steps} /> */}
             <UpdatesComponent data={notificationList || []} />
-            <RecentlyActive data={recentlyActive || []} />
+            <RecentlyActive
+              data={listOnline || []}
+              isLoading={loadingOnline}
+              isError={onlineError}
+              hasNextPage={hasNextPageOnline}
+              fetchNextPage={fetchNextPageOnline}
+            />
             <GroupsPreview data={groups || []} />
           </div>
         </div>

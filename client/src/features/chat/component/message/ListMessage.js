@@ -8,25 +8,41 @@ import SingleMessage from "./SingleMessage";
 import { IoVideocamOutline, IoCallOutline } from "react-icons/io5";
 import { useScrollIntoView } from "@mantine/hooks";
 import { BiArrowBack } from "react-icons/bi";
+import Loader from "../../../../components/common/Loader";
+import { useQueryClient } from "react-query";
+import InfiniteScroll from "../../../../components/InfiniteScroll/InfiniteScroll";
+import _ from "lodash";
 
 const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: listMessage } = useListMessageOfConversation(["message", id], id ? true : false, id);
+  const {
+    data: listMessage,
+    isError,
+    isLoading: messageLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useListMessageOfConversation(["message", id], id ? true : false, id);
   const { data: conversationData, isLoading } = useGetConversation(["conversation", id], id ? true : false, id);
   const user = useOutletContext();
-  const filtered = conversationData?.data?.Users?.filter((item) => item.id !== user?.id);
+  const filtered = conversationData?.Users?.filter((item) => item.id !== user?.id);
   const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView({ duration: 0 });
-
   useEffect(() => {
     scrollIntoView();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listMessage]);
+  }, [listMessage, scrollIntoView]);
+
+  const queryClient = useQueryClient();
+  function reloadPage() {
+    queryClient.refetchQueries(["message", id]);
+  }
 
   return (
     <>
       {isLoading ? (
-        <p className="text-lg font-bold">Loading...</p>
+        <div className="flex justify-center py-5">
+          <Loader color="black" />
+        </div>
       ) : (
         filtered && (
           <div className="w-full h-full">
@@ -102,24 +118,81 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
               )}
             </div>
             <div className="flex flex-col flex-nowrap h-[79.50vh] lg:h-[81.75vh] xl:h-[80.15vh] justify-between">
-              <div ref={scrollableRef} className="w-full overflow-y-auto">
-                {listMessage?.data?.length > 0 &&
-                  listMessage?.data?.map((message) => {
-                    return (
-                      <div key={message.id} className="px-2 lg:px-5 py-1">
-                        <SingleMessage
-                          conversation={conversationData?.data}
-                          groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
-                          sender={user?.id === message?.senderId ? true : false}
-                          listMessage={message}
-                        />
-                      </div>
-                    );
+              {messageLoading ? (
+                <div className="flex justify-center py-5">
+                  <Loader color="black" />
+                </div>
+              ) : isError ? (
+                <div className="py-5 m-auto text-center px-2">
+                  {"There was an error while fetching the data. "}{" "}
+                  <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
+                    Tap to retry
+                  </Link>{" "}
+                </div>
+              ) : listMessage?.pages && listMessage?.pages?.length && listMessage?.pages[0]?.data?.total > 0 ? (
+                <InfiniteScroll
+                  fetchMore={fetchNextPage}
+                  isError={isError}
+                  isLoading={isLoading}
+                  hasNext={hasNextPage}
+                  refetch={() => queryClient.invalidateQueries(["message", id])}
+                  container={true}
+                  isMessage={true}
+                  classNameContainer={"overflow-y-auto h-[73vh]"}
+                  loader={
+                    <div className="flex justify-center py-5">
+                      <Loader color="black" />
+                    </div>
+                  }
+                  errorRender={
+                    <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+                      {"There was an error while fetching the data. "}{" "}
+                      <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["message", id])}>
+                        Tap to retry
+                      </Link>{" "}
+                    </div>
+                  }
+                >
+                  {listMessage?.pages?.map((page) => {
+                    let array = page?.data?.data;
+                    console.log([].concat(array).reverse());
+                    return []
+                      .concat(array)
+                      .reverse()
+                      .map((message) => {
+                        return (
+                          <div key={message?.id} className="px-2 lg:px-5 py-1">
+                            <SingleMessage
+                              conversation={conversationData?.data}
+                              groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
+                              sender={user?.id === message?.senderId ? true : false}
+                              listMessage={message}
+                            />
+                          </div>
+                        );
+                      });
                   })}
-                <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
-              </div>
+                </InfiniteScroll>
+              ) : // <div ref={scrollableRef} className="w-full overflow-y-auto">
+              //   {listMessage?.data?.length > 0 &&
+              //     listMessage?.data?.map((message) => {
+              //       return (
+              //         <div key={message?.id} className="px-2 lg:px-5 py-1">
+              //           <SingleMessage
+              //             conversation={conversationData?.data}
+              //             groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
+              //             sender={user?.id === message?.senderId ? true : false}
+              //             listMessage={message}
+              //           />
+              //         </div>
+              //       );
+              //     })}
+              //   <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
+              // </div>
+              null}
+              <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
               <div className="z-40 w-full h-fit">
-                <InputMessage type={""} selectMember={conversationData?.data} />
+                <InputMessage type={""} selectMember={conversationData} />
               </div>
             </div>
           </div>

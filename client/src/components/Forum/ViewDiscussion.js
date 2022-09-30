@@ -82,7 +82,11 @@ const ViewDiscussion = ({ data, type = "forum", isLoading, isError, hasNextPage,
                           <p className="pt-2 text-sm text-gray-500">
                             {item?.lastComment !== null && (
                               <span className="">
-                                {item?.lastComment[0]?.User?.firstName + " replied on " + item?.lastComment[0]?.createdAt}
+                                {item?.lastComment?.commenterFirstName +
+                                  " " +
+                                  item?.lastComment?.commenterLastName +
+                                  " replied on " +
+                                  item?.lastComment?.createdAt}
                               </span>
                             )}
                             {item?.lastComment === null && (

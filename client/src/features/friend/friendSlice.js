@@ -2,7 +2,7 @@ import { usePost, useUpdate, useDelete, useLoadMore } from "../../lib/react-quer
 
 export const useSendFriendRequest = (queryKey) => usePost(queryKey, `/friendRequest`);
 
-export const useCancelFriendRequest = (queryKey) => usePost(queryKey, `/friendRequest`);
+export const useCancelFriendRequest = (queryKey, friendId) => useDelete(queryKey, `/friendRequest?friendId=${friendId}`);
 
 export const useGetListFriendRequestSent = (queryKey, enabled) =>
   useLoadMore(queryKey, enabled, `/friendRequest/?action=people-i-want-to-be-friend-with`);

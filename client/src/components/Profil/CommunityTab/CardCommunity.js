@@ -101,13 +101,13 @@ const CardCommunity = ({ data }) => {
                 <button className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white">{data?.IsMember?.role}</button>
               ) : data?.pendingInvitation && data?.pendingInvitation?.length === 1 ? (
                 <button
-                  disabled={data?.pendingInvitation[0]?.id ? false : true}
+                  disabled={data?.pendingInvitation[0]?.hostId === data?.pendingInvitation[0]?.guestId ? false : true}
                   onClick={() => {
                     handleJoin();
                   }}
                   className="px-4 text-sm bg-gray-200 rounded-lg hover:bg-primary hover:text-white"
                 >
-                  {data?.pendingInvitation[0]?.id ? "Accept Invitation" : "Request Sent"}
+                  {data?.pendingInvitation[0]?.hostId === data?.pendingInvitation[0]?.guestId ? "Request Sent" : "Accept Invitation"}
                 </button>
               ) : (
                 <button
