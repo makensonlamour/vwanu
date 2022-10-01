@@ -35,6 +35,7 @@ export class CommunitiesRegistration extends Service {
         where: {
           CommunityId: invitation.CommunityId,
           UserId: invitation.guestId,
+          untilDate: null,
         },
         include: [{ model: models.CommunityRoles, attributes: ['id', 'name'] }],
       });
