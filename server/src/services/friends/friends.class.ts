@@ -111,10 +111,15 @@ export class Friends extends Service {
         friend.addFollowing(approver),
         approver.addFollower(friend),
         friend.addFollower(approver),
-        approver.removeFriendsRequest(friend),
-        friend.removeFriendshipRequested(approver),
       ]);
-    else await approver.addUndesiredFriends(friend);
+    else {
+      await approver.addUndesiredFriends(friend);
+    }
+
+    await Promise.all([
+      approver.removeFriendsRequest(friend),
+      friend.removeFriendshipRequested(approver),
+    ]);
 
     const user2 = await approver.reload();
 
