@@ -5,42 +5,23 @@ import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 import {
   AutoOwn,
   LimitToOwner,
-  OwnerAccess,
   SaveInterest,
-  IncludeAssociations,
   ValidateResource,
-  LimitedAccess,
   TrueBoolean,
 } from '../../Hooks';
+
+import QueryBlogs from './hooks/findBlog';
 
 import * as Schema from '../../schema/blog.schema';
 
 const { authenticate } = authentication.hooks;
-const UserAttributes = [
-  'firstName',
-  'lastName',
-  'id',
-  'profilePicture',
-  'createdAt',
-];
+
 const SaveCover = saveProfilePicture(['coverPicture']);
 export default {
   before: {
-    all: [
-      authenticate('jwt'),
-      IncludeAssociations({
-        include: [
-          {
-            model: 'blogs',
-            as: 'User',
-            attributes: UserAttributes,
-          },
-          { model: 'blogs', as: 'Interests' },
-        ],
-      }),
-    ],
-    find: [],
-    get: [],
+    all: [authenticate('jwt')],
+    find: [QueryBlogs],
+    get: [QueryBlogs],
     create: [
       TrueBoolean(['publish']),
       ValidateResource(Schema.createBlogSchema),
@@ -63,10 +44,10 @@ export default {
 
   after: {
     all: [],
-    find: [LimitedAccess({ publish: true })],
-    get: [OwnerAccess({ publish: true })],
+    find: [],
+    get: [],
     create: [SaveInterest],
-    update: [SaveInterest],
+    update: [],
     patch: [SaveInterest],
     remove: [],
   },
