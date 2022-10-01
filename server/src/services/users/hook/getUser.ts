@@ -13,6 +13,15 @@ export default (context: HookContext) => {
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
+
+  const OnlyInterests = (interest) =>
+    `(
+  EXISTS(
+    SELECT 1 FROM "Interests" AS "I" 
+    INNER JOIN "User_Interest" AS "CI" ON "CI"."InterestId"="I"."id" AND "CI"."UserId"="User"."id"
+    WHERE "I"."name"= '${interest}' )
+  
+  )`;
   const Interests = `(
 SELECT 
   json_agg(
@@ -94,6 +103,14 @@ SELECT
       ...where,
       [Op.and]: [Sequelize.literal(friends)],
     };
+  }
+
+  if (where.interests) {
+    const { interests } = where;
+    delete where.interests;
+    clause[Op.and].push(
+      Sequelize.where(Sequelize.literal(OnlyInterests(interests)), true)
+    );
   }
 
   params.sequelize = {
