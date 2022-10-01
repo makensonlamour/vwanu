@@ -84,7 +84,7 @@ SELECT
   FROM "CommunityUsers" AS "CU" 
   INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
   INNER JOIN "Users" AS "U" ON "CU"."UserId" = "U"."id"
-  WHERE "CU"."UserId"="U"."id" AND "CU"."CommunityId"="Community"."id"
+  WHERE "CU"."UserId"="U"."id" AND "CU"."CommunityId"="Community"."id" AND "CU"."untilDate" IS NULL
   LIMIT 10
   )`;
 
@@ -96,7 +96,8 @@ SELECT
   // WHERE  "C"."privacyType" <> 'hidden' OR ("CU"."UserId"='${context.params.User.id}' AND "C"."privacyType" = 'hidden')
 
   const isParticipant = `(
-    EXISTS (SELECT 1 FROM "CommunityUsers" AS "CU" WHERE "CU"."CommunityId"="Community"."id" AND "CU"."UserId"='${context.params.User.id}')
+    EXISTS (SELECT 1 FROM "CommunityUsers" AS "CU" WHERE "CU"."CommunityId"="Community"."id" AND "CU"."banned"=false AND 
+    "CU"."UserId"='${context.params.User.id}')
   )`;
   const pendingInvitation = `(
     SELECT 
@@ -146,7 +147,7 @@ SELECT
   }
   params.sequelize = {
     where: clause,
-    logging: interests ? console.log : null,
+    // logging: interests ? console.log : null,
     attributes: {
       include: [
         [Sequelize.literal(isMember), 'IsMember'],
