@@ -25,6 +25,17 @@ export default (context: HookContext) => {
           SELECT 1 FROM "User_friends" WHERE ("User_friends"."UserId" = '${params.User.id}' AND "User_friends"."friendId" = "User"."id") OR ("User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${params.User.id}')
         )
   )`;
+
+  const isAFollower = `(
+        EXISTS(
+          SELECT 1 FROM "User_Following" WHERE "User_Following"."UserId" = '${params.User.id}' AND "User_Following"."FollowingId" = "User"."id" 
+        )
+  )`;
+  const iFollow = `(
+        EXISTS(
+          SELECT 1 FROM "User_Follower" WHERE "User_Follower"."UserId" = '${params.User.id}' AND "User_Follower"."FollowerId" = "User"."id" 
+        )
+  )`;
   const hasReceivedFriendRequest = `(
     EXISTS(
     SELECT  1 FROM "User_friends_request" WHERE "User_friends_request"."UserId" ='${params.User.id}' AND "User_friends_request"."friendsRequestId" =  "User"."id" 
@@ -35,12 +46,23 @@ export default (context: HookContext) => {
     SELECT  1 FROM "User_friends_request" WHERE ("User_friends_request"."friendsRequestId" = '${params.User.id}' AND "User_friends_request"."UserId" = "User"."id" )
       ))`;
 
+  const amountOfFollower = `(
+    SELECT COUNT(*) FROM "User_Follower" WHERE "User_Follower"."UserId" = "User"."id"
+  )::int`;
+  const amountOfFollowing = `(
+    SELECT COUNT(*) FROM "User_Following" WHERE "User_Following"."UserId" = "User"."id"
+  )::int`;
+
   if (context.method === 'get') where.id = context.id;
   const attributes = {
     include: [
       [Sequelize.literal(isFriend), 'isFriend'],
+      [Sequelize.literal(iFollow), 'iFollow'],
+      [Sequelize.literal(isAFollower), 'IsAFollower'],
       [Sequelize.literal(hasReceivedFriendRequest), 'hasReceivedFriendRequest'],
       [Sequelize.literal(hasSentFriendRequest), 'hasSentFriendRequest'],
+      [Sequelize.literal(amountOfFollower), 'amountOfFollower'],
+      [Sequelize.literal(amountOfFollowing), 'amountOfFollowing'],
     ],
   };
   delete where?.profilePrivacy;
