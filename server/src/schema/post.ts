@@ -18,11 +18,11 @@ export const createPostSchema = object({
     mediaType: string().optional(),
     hashTag: string().optional(),
     private: z.boolean().optional(),
-   
     postText: string({
-      required_error: 'A post need at least to have some text',
       invalid_type_error: "You' have not provided a recognizable text",
-    }).min(1),
+    })
+      .min(1)
+      .optional(),
   }),
 });
 
