@@ -103,4 +103,7 @@ describe("'community-users ' service", () => {
       })
     );
   });
+
+  it.todo('should not banned a user of the community');
+  it.todo('should  ban a user of the community');
 });

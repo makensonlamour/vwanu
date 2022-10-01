@@ -143,7 +143,7 @@ export default async (context: HookContext) => {
           INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
           INNER JOIN "Community_Interest" AS "CI" ON "CI"."CommunityId" = '${context.id}'
           INNER JOIN "Interests" AS "I" ON "I"."id" = "CI"."InterestId"
-          WHERE "C"."id" = '${context.id}' AND ("C"."privacyType" = 'public' OR ("CU"."UserId" = '${context.params.User.id}' AND "CU"."untilDate" IS NULL))
+          WHERE "C"."id" = '${context.id}' AND ("C"."privacyType" = 'public' OR ("CU"."UserId" = '${context.params.User.id}' AND "CU"."untilDate" IS NULL AND "CU"."banned"=false))
           
            GROUP BY "C"."name","C"."description", "C"."id" ,"C"."privacyType" , "C"."profilePicture", "C"."coverPicture","CU"."CommunityId", "CU"."UserId","CU"."CommunityRoleId","CU"."banned","CU"."bannedDate","CR"."name","CR"."id"
            LIMIT 1`;
