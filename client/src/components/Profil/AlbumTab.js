@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { Tab } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import routesPath from "../../routesPath";
+import { useParams, useSearchParams } from "react-router-dom";
+// import routesPath from "../../routesPath";
 import AlbumList from "../../features/album/component/AlbumList";
 import PhotoList from "../../features/album/component/PhotoList";
 import toast, { Toaster } from "react-hot-toast";
+import AddPhoto from "../../features/album/component/AddPhoto";
 import { Field, Form, Submit } from "../../components/form";
 import Loader from "../../components/common/Loader";
 import { useCreateAlbum } from "../../features/album/albumSlice";
@@ -28,7 +29,7 @@ const addError = () =>
   });
 
 const AlbumTab = ({ user }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = useParams();
 
   const initialValues = {
@@ -102,14 +103,7 @@ const AlbumTab = ({ user }) => {
             <p className="font-bold text-lg md:text-3xl">{value === "1" ? "Photos" : "Albums"}</p>
             {user?.id?.toString() === id?.toString() &&
               (value === "1" ? (
-                <button
-                  onClick={() => {
-                    navigate("../.." + routesPath.PROFILE_EDIT);
-                  }}
-                  className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
-                >
-                  Add Photos
-                </button>
+                <AddPhoto user={user} />
               ) : (
                 <button
                   onClick={() => {

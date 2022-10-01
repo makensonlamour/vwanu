@@ -25,7 +25,7 @@ const FormStepTwo = () => {
   const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
   const [isLoading, setIsLoading] = useState(false);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
-  const options = assignValue(interestList?.data);
+  const options = assignValue(interestList);
   const [interest, setInterest] = useState([]);
   const [countryCode, setCountryCode] = useState("");
   const [stateCode, setStateCode] = useState("");
@@ -79,7 +79,8 @@ const FormStepTwo = () => {
     };
 
     try {
-      updateUser.mutateAsync(dataObj);
+      let result = await updateUser.mutateAsync(dataObj);
+      console.log("result profile", result);
       navigate("../../" + routesPath.STEP_THREE);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
@@ -151,7 +152,7 @@ const FormStepTwo = () => {
           ]}
         />
         <MultiSelect
-          label="Interest In"
+          label="Interest"
           className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
           placeholder={"Select the category..."}
           multiple

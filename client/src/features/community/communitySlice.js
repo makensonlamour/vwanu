@@ -1,4 +1,4 @@
-import { useFetch, usePost, useUpdate, useLoadMore } from "../../lib/react-query";
+import { useFetch, usePost, useUpdate, useLoadMore, useDelete } from "../../lib/react-query";
 import { api } from "../../lib/api";
 
 // export const useGetCommunityList = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/communities`);
@@ -28,7 +28,7 @@ export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(query
 export const useJoinCommunity = (queryKey, oldData, newData) => usePost(queryKey, `/community-join`, (oldData, newData));
 
 export const useGetAllMembersCommunity = (queryKey, enabled = true, communityId) =>
-  useFetch(queryKey, enabled, `/community-users?CommunityId=${communityId}`);
+  useLoadMore(queryKey, enabled, `/community-users?CommunityId=${communityId}`);
 
 export const useGetCommunityRole = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/community-role`);
 
@@ -43,3 +43,16 @@ export const useGetMyCommunityInvitation = (queryKey, enabled = true, userId) =>
 
 export const useCheckIfMember = (queryKey, enabled = true, communityId, userId) =>
   useFetch(queryKey, enabled, `/community-users/?CommunityId=${communityId}&UserId=${userId}`);
+
+export const useGetCommunitySuggest = (queryKey, enabled = true, interest) =>
+  useLoadMore(queryKey, enabled, `/communities?interests=${interest}`);
+
+export const useGetCommunityByNew = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/communities?$sort[createdAt]=-1`);
+
+export const useGetCommunityPopular = (queryKey, enabled = true) =>
+  useLoadMore(queryKey, enabled, `/communities?$sort[amountOfMembers]=-1`);
+
+export const useGetCommunityIn = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/communities?participate=true`);
+
+export const useDeleteCommunity = (queryKey, communityId, oldData, newData) =>
+  useDelete(queryKey, `/communities/${communityId}`, (oldData, newData));

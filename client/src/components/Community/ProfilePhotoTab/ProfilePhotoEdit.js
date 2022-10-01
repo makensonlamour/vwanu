@@ -133,7 +133,7 @@ const ProfilePhotoTab = ({ data, setData }) => {
                 </div>
               ) : (
                 <div className="mt-8">
-                  <p className="bg-info text-secondary font-semibold px-6 py-4 rounded-xl">
+                  <p className="bg-info-2 text-secondary font-semibold px-6 py-4 rounded-xl">
                     {`You already delete your profile picture. Add a picture to your profile for a better experience`}.
                   </p>
                 </div>

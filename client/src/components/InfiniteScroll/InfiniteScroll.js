@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 // import useInfiniteScroll from "./useInfiniteScroll";
 import { Facebook } from "react-content-loader";
 import { PullToRefresh, PullDownContent, ReleaseContent, RefreshContent } from "react-js-pull-to-refresh";
 import { BottomScrollListener } from "react-bottom-scroll-listener";
 import useChatScroll from "./useChatScroll";
+import { useWindowScroll } from "@mantine/hooks";
 
 const InfiniteScroll = ({
   children,
@@ -18,17 +19,22 @@ const InfiniteScroll = ({
   container = false,
   classNameContainer,
   isLoading,
-  isMessage = false,
+  isReverse = false,
   style,
 }) => {
   // eslint-disable-next-line no-unused-vars
   // const [isFetching, setIsFetching] = useInfiniteScroll(fetchMore, hasNext);
-
+  // eslint-disable-next-line no-unused-vars
+  const [scroll, scrollTo] = useWindowScroll();
   const refScroll = useChatScroll(children);
+
+  useEffect(() => {
+    console.log("test", scroll.y);
+  }, [scroll.y]);
 
   return (
     <>
-      {isMessage ? (
+      {isReverse ? (
         <PullToRefresh
           pullDownContent={<PullDownContent />}
           releaseContent={<ReleaseContent />}
@@ -129,7 +135,7 @@ InfiniteScroll.propTypes = {
   container: PropTypes.bool,
   classNameContainer: PropTypes.string,
   style: PropTypes.object,
-  isMessage: PropTypes.bool,
+  isReverse: PropTypes.bool,
 };
 
 export default InfiniteScroll;

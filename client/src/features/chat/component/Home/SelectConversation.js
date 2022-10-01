@@ -30,7 +30,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
 
   return (
     <>
-      <div className="overflow-y-auto w-full h-full">
+      <div className="border-t border-gray-200">
         {conversation?.Users?.length > 2 ? (
           <Link
             onClick={() => {
@@ -38,7 +38,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
               setCreateConversationOpened(false);
             }}
             to={`../messages/${conversationId}`}
-            className={`w-full lg:mx-0 rounded-xl hover:bg-dark-lighten relative flex items-stretch gap-2 py-2 px-2 lg:px-0 transition duration-300 ${
+            className={`w-full lg:mx-0 rounded-xl hover:bg-dark-lighten relative flex gap-2 py-2 px-2 lg:px-0 transition duration-300 ${
               conversationId === id ? "bg-placeholder-color" : ""
             }`}
           >
@@ -82,6 +82,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
             </div>
           </Link>
         ) : (
+          conversation?.lastMessage &&
           Object.keys(conversation?.lastMessage).length > 0 && (
             <Link
               key={conversationId}

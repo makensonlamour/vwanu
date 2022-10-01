@@ -198,7 +198,7 @@ const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
               </div>
             </div>
           </div>
-          <div className="mt-6 px-4 py-3 bg-warning w-full border border-yellow-300 rounded-2xl">
+          <div className="mt-6 px-4 py-3 bg-warning-2 w-full border border-yellow-300 rounded-2xl">
             <p className="text-v-yellow-dark text-sm">{`For best results, upload an image that is 300px by 300px or larger.`}</p>
             <p className="text-v-yellow-dark text-sm">{`If you'd like to delete the existing profile photo but not upload a new one, please use the delete tab.`}</p>
           </div>

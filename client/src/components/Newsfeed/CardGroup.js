@@ -8,6 +8,7 @@ import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
 
 const CardGroup = ({ data, isError, isLoading }) => {
+  console.log("test", data);
   const queryClient = useQueryClient();
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
@@ -29,10 +30,10 @@ const CardGroup = ({ data, isError, isLoading }) => {
         <Stack spacing={1}>
           {/* eslint-disable-next-line array-callback-return */}
           {data?.map((group, idx) => {
-            if (idx < 5) {
+            if (idx < 9) {
               return (
                 <Item
-                  key={group?.name + ""}
+                  key={group?.id}
                   elevation={0}
                   style={{
                     paddingTop: "0.5rem",
@@ -43,19 +44,19 @@ const CardGroup = ({ data, isError, isLoading }) => {
                   <div className="w-[3rem]">
                     <img
                       className="mask mask-squircle items-center justify-center w-[5rem] h-10 rounded-lg"
-                      src={group?.image}
+                      src={group?.profilePicture}
                       alt={group?.name}
                     />
                   </div>
                   <div>
                     <p to="#" className=" text-sm line-clamp-2 max-w-[22ch] text-ellipsis whitespace-wrap overflow-hidden ml-2 pb-1">
-                      <Link className="hover:text-secondary" to="/">
+                      <Link className="hover:text-secondary" to={"../../groups/" + group?.id}>
                         <span className="font-semibold">{group?.name}</span>
-                        {group?.where}
+                        <span className="ml-3 text-white text-xs bg-secondary py-[0.2rem] px-2 rounded-lg">{group?.privacyType}</span>
                       </Link>
                     </p>
                     <p className=" text-gray-400 font-medium text-sm ml-2">
-                      {group?.members}
+                      {group?.amountOfMembers}
                       {" members"}
                     </p>
                   </div>
@@ -74,13 +75,13 @@ const CardGroup = ({ data, isError, isLoading }) => {
           />
         </div>
       )}
-      <button className="my-4 bg-primary py-1 px-3 text-white rounded-lg hover:bg-secondary">See All</button>
+      {/* <button className="my-4 bg-primary py-1 px-3 text-white rounded-lg hover:bg-secondary">See All</button> */}
     </>
   );
 };
 
 CardGroup.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.array,
   isError: PropTypes.bool,
   isLoading: PropTypes.bool,
 };

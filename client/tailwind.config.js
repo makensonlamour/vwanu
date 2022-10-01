@@ -11,6 +11,10 @@ module.exports = {
         "g-two": "#4E81FF",
         "placeholder-color": "#EFF3FF",
         "vwanu-color-3": "#797979",
+        "info-2": "#e0f2fe",
+        "success-2": "#dcfce7",
+        "warning-2": "#fef9c3",
+        "error-2": "#fee2e2",
       },
       screens: {
         "3xl": "2000px",
@@ -36,14 +40,6 @@ module.exports = {
           neutral: "#3D4451",
 
           "base-100": "#FFFFFF",
-
-          info2: "#e0f2fe",
-
-          success2: "#dcfce7",
-
-          warning2: "#fef9c3",
-
-          error2: "#fee2e2",
         },
         screens: {
           sm: "425px",

@@ -119,31 +119,34 @@ export function assignValueStates(obj) {
 
 //assign value for interest
 export function assignCommunityMember(obj, types) {
-  if (obj?.length === 0 || types === "") return;
+  console.log(obj === undefined || obj?.pages === undefined || obj?.pages[0]?.data?.total === 0);
+  if (obj === undefined || obj?.pages === undefined || obj?.pages[0]?.data?.total === 0) return;
   const array = [];
 
-  // eslint-disable-next-line array-callback-return
-  obj?.map((item) => {
-    if (item?.CommunityRole?.name === types) {
-      return array?.push({
-        id: item?.id,
-        CommunityId: item?.CommunityId,
-        CommunityRole: item?.CommunityRole,
-        CommunityRoleId: item?.CommunityRoleId,
-        User: item?.User,
-        UserId: item?.UserId,
-        banned: item?.banned,
-        bannedDate: item?.bannedDate,
-        canInvite: item?.canInvite,
-        canMessageInGroup: item?.canMessageInGroup,
-        canPost: item?.canPost,
-        canUploadDoc: item?.canUploadDoc,
-        canUploadPhoto: item?.canUploadPhoto,
-        canUploadVideo: item?.canUploadVideo,
-        createdAt: item?.createdAt,
-        updatedAt: item?.updatedAt,
-      });
-    }
+  obj?.pages?.map((page) => {
+    // eslint-disable-next-line array-callback-return
+    return page?.data?.data?.map((item) => {
+      if (item?.CommunityRole?.name === types) {
+        return array?.push({
+          id: item?.id,
+          CommunityId: item?.CommunityId,
+          CommunityRole: item?.CommunityRole,
+          CommunityRoleId: item?.CommunityRoleId,
+          User: item?.User,
+          UserId: item?.UserId,
+          banned: item?.banned,
+          bannedDate: item?.bannedDate,
+          canInvite: item?.canInvite,
+          canMessageInGroup: item?.canMessageInGroup,
+          canPost: item?.canPost,
+          canUploadDoc: item?.canUploadDoc,
+          canUploadPhoto: item?.canUploadPhoto,
+          canUploadVideo: item?.canUploadVideo,
+          createdAt: item?.createdAt,
+          updatedAt: item?.updatedAt,
+        });
+      }
+    });
   });
 
   return array;

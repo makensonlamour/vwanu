@@ -31,7 +31,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
   const [isEdit, setIsEdit] = useState(false);
   const { data: photos } = useGetAlbum(["me", "album", "photo"], true, { albumId });
 
-  const updateName = useUpdateAlbum(["album", photos?.data?.id], undefined, undefined, photos?.data?.id);
+  const updateName = useUpdateAlbum(["album", photos?.id], undefined, undefined, photos?.data?.id);
 
   const initialValues = {
     name: photos?.data?.name || "",
@@ -58,7 +58,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
           {isEdit ? (
             <div className="">
               <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleEdit} className="w-full">
-                <h4 className="text-xl font-semibold">Edit Album {` "${photos?.data?.name}" `} name</h4>
+                <h4 className="text-xl font-semibold">Edit Album {` "${photos?.name}" `} name</h4>
                 <Toaster />
                 <Field
                   autoCapitalize="none"
@@ -73,7 +73,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
             </div>
           ) : (
             <>
-              <h4 className="text-xl font-semibold mr-2">{photos?.data?.name}</h4>
+              <h4 className="text-xl font-semibold mr-2">{photos?.name}</h4>
               <button onClick={() => setIsEdit(true)} className="px-4 py-1 bg-primary text-white rounded-xl">
                 edit
               </button>
@@ -81,9 +81,9 @@ const ViewAlbum = ({ albumId, album, user }) => {
           )}
         </div>
         <div className="flex justify-center py-3">
-          <span className="text-sm">{format(new Date(album.createdAt), "MMM dd, yyyy")}</span>
+          <span className="text-sm">{format(new Date(album?.createdAt), "MMM dd, yyyy")}</span>
           <span className="px-1">•</span>
-          <span className="text-sm">{photos?.data?.Medias?.length + " Medias"}</span>
+          <span className="text-sm">{photos?.Medias?.length + " Medias"}</span>
         </div>
         {user?.id?.toString() === id?.toString() && (
           <div className="flex flex-col md:flex-row justify-between items-center py-5">
@@ -102,7 +102,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
           </div>
         )}
         <div className="">
-          {photos?.data?.Medias?.length > 0 ? (
+          {photos?.Medias?.length > 0 ? (
             <div className="mx-auto w-full">
               <div className="flex flex-wrap justify-start">
                 {photos?.Medias?.map((photo) => {
@@ -110,6 +110,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
                     <Link to={"#"} key={photo?.id} className="shadow-sm rounded-lg w-[130px] h-[130px] mx-3 mt-3 mb-3 hover:shadow-lg">
                       <ViewPhoto
                         photo={photo}
+                        data={photos}
                         imgComponent={
                           <img
                             className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"

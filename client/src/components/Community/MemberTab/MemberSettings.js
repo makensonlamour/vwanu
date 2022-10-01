@@ -22,7 +22,6 @@ const MemberSettings = ({ data }) => {
   const { id } = useParams();
   const sendInvitation = useSendInvitation(["community", "invitation"], undefined, undefined);
   const { data: roles } = useGetCommunityRole(["roles", "all"]);
-  console.log(roles?.data);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendAdmin = async (_id, _role) => {
