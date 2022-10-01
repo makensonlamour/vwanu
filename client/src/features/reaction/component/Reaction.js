@@ -44,7 +44,6 @@ const Reaction = ({ post }) => {
           {post && post?.isReactor?.length === 1 ? (
             <Fragment>
               <p style={{ textTransform: "capitalize" }} className="text-left align-middle">
-                {" "}
                 {"Pa Korem"}
               </p>
             </Fragment>

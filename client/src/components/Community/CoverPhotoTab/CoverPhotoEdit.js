@@ -82,7 +82,7 @@ const CoverPhotoEdit = ({ data, setData }) => {
         <div className="mb-8 mt-10">
           <FormUploadCover getImg={getImg} hideViewer={true} user={user} />
         </div>
-        <div className="px-4 py-3 bg-warning w-full border border-yellow-300 rounded-2xl">
+        <div className="px-4 py-3 bg-warning-2 w-full border border-yellow-300 rounded-2xl">
           <p className="text-v-yellow-dark text-sm">{`For best results, upload an image that is 1950px by 450px or larger.`}</p>
         </div>
       </Form>

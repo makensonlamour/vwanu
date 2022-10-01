@@ -41,8 +41,6 @@ const NewsFeed = () => {
     fetchNextPage: fetchNextPageOnline,
   } = useGetOnline(["user", "online"]);
 
-  console.log("online people", listOnline);
-
   const onCreatedListener = (notification) => {
     if (notification?.to?.toString() === user?.id?.toString() && notification?.UserId?.toString() !== user?.id?.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);

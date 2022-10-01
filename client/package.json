@@ -83,6 +83,7 @@
     "react-test-renderer": "^18.2.0",
     "react-textarea-autosize": "^8.3.4",
     "react-toastify": "^9.0.8",
+    "react-use-window-scroll": "^1.0.14",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
     "rxjs": "^7.5.6",

@@ -8,28 +8,28 @@ import { assignCommunityMember } from "../../../helpers/index";
 const Member = () => {
   const { id } = useParams();
   const { data: listFriend } = useGetAllMembersCommunity(["user", "friend"], id === "undefined" ? false : true, id);
-  //   fn(listFriend?.data?.length);
+  //   fn(listFriend?.length);
 
   return (
     <>
-      {assignCommunityMember(listFriend?.data, "admin")?.length > 0 && (
+      {assignCommunityMember(listFriend, "admin")?.length > 0 && (
         <>
           <p className="text-xl">Administrators</p>
-          <ViewFriend data={assignCommunityMember(listFriend?.data, "admin")} noDataLabel={"No Member"} />
+          <ViewFriend data={assignCommunityMember(listFriend, "admin")} noDataLabel={"No Member"} />
         </>
       )}
 
-      {assignCommunityMember(listFriend?.data, "moderator")?.length > 0 && (
+      {assignCommunityMember(listFriend, "moderator")?.length > 0 && (
         <>
           <p className="text-xl">Moderators</p>
-          <ViewFriend data={assignCommunityMember(listFriend?.data, "moderator")} noDataLabel={"No Member"} />
+          <ViewFriend data={assignCommunityMember(listFriend, "moderator")} noDataLabel={"No Member"} />
         </>
       )}
 
-      {assignCommunityMember(listFriend?.data, "member")?.length > 0 && (
+      {assignCommunityMember(listFriend, "member")?.length > 0 && (
         <>
           <p className="text-xl">Members</p>
-          <ViewFriend data={assignCommunityMember(listFriend?.data, "member")} noDataLabel={"No Member"} />
+          <ViewFriend data={assignCommunityMember(listFriend, "member")} noDataLabel={"No Member"} />
         </>
       )}
     </>

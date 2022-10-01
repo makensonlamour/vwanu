@@ -9,10 +9,10 @@ const AlbumList = ({ user, fn, setAlbumId, setAlbum }) => {
   return (
     <>
       <>
-        {albums?.length > 0 ? (
+        {albums?.data?.length > 0 ? (
           <div className="mx-auto w-full">
             <div className="flex flex-wrap justify-start">
-              {albums?.map((album) => {
+              {albums?.data?.map((album) => {
                 return (
                   <button
                     style={{ backgroundImage: `url('${album?.coverPicture}')` }}

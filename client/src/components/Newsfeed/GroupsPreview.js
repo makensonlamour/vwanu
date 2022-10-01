@@ -1,12 +1,28 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Tab } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
 import CardGroup from "./CardGroup";
+import { useGetCommunitySuggest, useGetCommunityByNew, useGetCommunityPopular } from "../../features/community/communitySlice";
 
-const GroupsPreview = ({ data, isError, isLoading }) => {
+const GroupsPreview = () => {
   const [value, setValue] = React.useState("one");
+
+  const user = useOutletContext();
+  console.log(user);
+
+  const {
+    data: communitySuggest,
+    isLoading: loadingSuggest,
+    isError: errorSuggest,
+  } = useGetCommunitySuggest(["community", "suggest"], true, "random");
+  const {
+    data: communityPopular,
+    isLoading: loadingPopular,
+    isError: errorPopular,
+  } = useGetCommunityPopular(["community", "popular"], true);
+  const { data: communityNewest, isLoading: loadingNewest, isError: errorNewest } = useGetCommunityByNew(["community", "newest"], true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -14,7 +30,7 @@ const GroupsPreview = ({ data, isError, isLoading }) => {
 
   return (
     <>
-      <div className="mb-1 bg-white border border-gray-200 rounded-lg p-2 mt-8">
+      <div className="bg-white border border-gray-200 rounded-lg p-2 my-8">
         <h2 className="my-2 px-2 text-md font-medium">Communities</h2>
         <TabContext value={value}>
           <div>
@@ -33,17 +49,29 @@ const GroupsPreview = ({ data, isError, isLoading }) => {
           </div>
           <TabPanel sx={{ margin: "0px", padding: "0.25rem" }} value="one">
             <div>
-              <CardGroup data={data} isError={isError} isLoading={isLoading} />
+              <CardGroup
+                data={communityNewest ? communityNewest?.pages[0]?.data?.data : []}
+                isError={errorNewest}
+                isLoading={loadingNewest}
+              />
             </div>
           </TabPanel>
           <TabPanel sx={{ margin: "0px", padding: "0.25rem" }} value="two">
             <div>
-              <CardGroup data={data} isError={isError} isLoading={isLoading} />
+              <CardGroup
+                data={communityPopular ? communityPopular?.pages[0]?.data?.data : []}
+                isError={errorPopular}
+                isLoading={loadingPopular}
+              />
             </div>
           </TabPanel>
           <TabPanel sx={{ margin: "0px", padding: "0.25rem" }} value="three">
             <div>
-              <CardGroup data={data} isError={isError} isLoading={isLoading} />
+              <CardGroup
+                data={communitySuggest ? communitySuggest?.pages[0]?.data?.data : []}
+                isError={errorSuggest}
+                isLoading={loadingSuggest}
+              />
             </div>
           </TabPanel>
         </TabContext>

@@ -20,14 +20,14 @@ const MembersTab = () => {
             "Administrators have total control over the contents and settings of a group. That includes all the abilities of moderators, as well as the ability to turn group forums on or off, change group status from public to private, change the group photo, manage group members, and delete the group."
           }
         />
-        {assignCommunityMember(listMembers?.data, "admin")?.length > 0 && (
+        {assignCommunityMember(listMembers, "admin")?.length > 0 && (
           <>
-            <MemberSettings data={assignCommunityMember(listMembers?.data, "admin")} />
+            <MemberSettings data={assignCommunityMember(listMembers, "admin")} />
           </>
         )}
 
         <div className="my-4">
-          {assignCommunityMember(listMembers?.data, "moderator")?.length > 0 && (
+          {assignCommunityMember(listMembers, "moderator")?.length > 0 && (
             <>
               {" "}
               <MemberDescription
@@ -36,13 +36,13 @@ const MembersTab = () => {
                   "When a group member is promoted to be a moderator of the group, the member gains the ability to edit and delete any forum discussion within the group and delete any activity feed items, excluding those posted by administrators."
                 }
               />
-              <MemberSettings data={assignCommunityMember(listMembers?.data, "moderator")} />
+              <MemberSettings data={assignCommunityMember(listMembers, "moderator")} />
             </>
           )}
         </div>
 
         <div className="mb-4">
-          {assignCommunityMember(listMembers?.data, "member")?.length > 0 && (
+          {assignCommunityMember(listMembers, "member")?.length > 0 && (
             <>
               {" "}
               <MemberDescription
@@ -51,7 +51,7 @@ const MembersTab = () => {
                   "When a member joins a group, he or she is assigned the member role by default. Members are able to contribute to the group’s discussions, activity feeds, and view other group members."
                 }
               />
-              <MemberSettings data={assignCommunityMember(listMembers?.data, "member")} />
+              <MemberSettings data={assignCommunityMember(listMembers, "member")} />
             </>
           )}
         </div>

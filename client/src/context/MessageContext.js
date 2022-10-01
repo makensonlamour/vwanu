@@ -18,16 +18,15 @@ export const MessageContextProvider = ({ children }) => {
   }
 
   function countUnreadMessageConversation(arrayObj) {
-    if (typeof arrayObj === "undefined" || arrayObj?.length === 0) return countMessage;
-
-    if (arrayObj?.length === 0) return countMessage;
+    if (!(arrayObj && arrayObj?.pages && arrayObj?.pages[0]?.data?.total > 0)) return countMessage;
 
     //calculate unread message for all conversaion
-    const unread = arrayObj?.map((item) => {
-      return item?.amountOfUnreadMessages;
+    const unread = arrayObj?.pages?.map((page) => {
+      return page?.data?.data?.map((item) => {
+        return item?.amountOfUnreadMessages;
+      });
     });
-
-    setCountMessage(SumArray(unread));
+    setCountMessage(SumArray(unread[0]));
   }
 
   const value = useMemo(

@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext, useParams, Link, useNavigate } from "react-router-dom";
 import InputMessage from "./InputMessage";
@@ -16,6 +16,7 @@ import _ from "lodash";
 const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [scrollPosition, setScrollPosition] = useState(0);
   const {
     data: listMessage,
     isError,
@@ -26,11 +27,23 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
   const { data: conversationData, isLoading } = useGetConversation(["conversation", id], id ? true : false, id);
   const user = useOutletContext();
   const filtered = conversationData?.Users?.filter((item) => item.id !== user?.id);
-  const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView({ duration: 0 });
-  useEffect(() => {
-    scrollIntoView();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listMessage, scrollIntoView]);
+  // const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView({ duration: 0 });
+
+  const targetRef = useRef(null);
+
+  function handleScroll() {
+    console.log(window.innerHeight + document.documentElement.scrollTop, document.documentElement.offsetHeight);
+    if (window.innerHeight + document.documentElement.scrollTop - document.documentElement.offsetHeight < -5) return;
+  }
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  // targetRef.current?.scrollIntoView({ behavior: "auto" });
+  // console.log(targetRef.current);
+  // scrollIntoView();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // return () => window.removeEventListener("scroll", handleScroll);
+  // }, [scrollPosition, setScrollPosition]);
 
   const queryClient = useQueryClient();
   function reloadPage() {
@@ -137,7 +150,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                   hasNext={hasNextPage}
                   refetch={() => queryClient.invalidateQueries(["message", id])}
                   container={true}
-                  isMessage={true}
+                  isReverse={true}
                   classNameContainer={"overflow-y-auto h-[73vh]"}
                   loader={
                     <div className="flex justify-center py-5">

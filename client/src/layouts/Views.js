@@ -144,8 +144,8 @@ const Views = () => {
   }, []);
 
   useEffect(() => {
-    countUnreadMessageConversation(listConversation?.data);
-  }, [listConversation?.data]);
+    countUnreadMessageConversation(listConversation);
+  }, [listConversation]);
 
   return (
     <>

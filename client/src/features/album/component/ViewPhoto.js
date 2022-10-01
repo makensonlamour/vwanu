@@ -7,7 +7,7 @@ import ReactPlayer from "react-player";
 
 // import { useGetComment } from "../../comment/commentSlice";
 
-const ViewPhoto = ({ photo, imgComponent, type = "photo" }) => {
+const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo" }) => {
   // const user = useOutletContext();
   const [showModal, setShowModal] = useState(false);
   // const { data: listComment } = useGetComment(["comments", "all", photo?.id], photo?.id !== "undefined" ? true : false, photo?.id);
@@ -26,19 +26,20 @@ const ViewPhoto = ({ photo, imgComponent, type = "photo" }) => {
                   x
                 </button>
               </div>
-              <div className="flex flex-col md:flex-row p-3 justify-center">
-                {type === "photo" ? (
-                  <div className="basis-[60%] bg-black">
-                    <img
-                      src={photo?.original}
-                      className="px-5 bg-black mx-auto object-contain h-[570px] basis-[70%]"
-                      alt={"_img_" + photo?.id}
-                    />
-                  </div>
-                ) : (
-                  <div>
-                    <ReactPlayer url={photo?.original} pip={true} playing={true} volume={1} playsinline={true} controls={true} />
-                    {/* <video
+              <div className="flex p-3 justify-center flex-col md:flex-row">
+                <div>
+                  {type === "photo" ? (
+                    <div className="basis-[60%] bg-black">
+                      <img
+                        src={photo?.original}
+                        className="px-5 bg-black mx-auto object-contain h-[570px] basis-[70%]"
+                        alt={"_img_" + photo?.id}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <ReactPlayer url={photo?.original} pip={true} playing={true} volume={1} playsinline={true} controls={true} />
+                      {/* <video
                       className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
                       controls
                       alt={photo.original}
@@ -46,9 +47,9 @@ const ViewPhoto = ({ photo, imgComponent, type = "photo" }) => {
                       <source alt={"videos_" + photo?.id} src={photo.original} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video> */}
-                  </div>
-                )}
-                {/*} <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-96 top-1/2">
+                    </div>
+                  )}
+                  {/*} <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-96 top-1/2">
                     <a href="#slide1" className="btn btn-circle">
                       ❮
                     </a>
@@ -57,28 +58,36 @@ const ViewPhoto = ({ photo, imgComponent, type = "photo" }) => {
                     </a>
                   </div>
       {*/}
-              </div>
-              <div className="basis-[40%] bg-white">
-                <div className="px-4 py-2">
-                  <div className="flex items-center mb-3">
-                    <img
-                      src={photo?.User?.profilePicture}
-                      className="w-[38px] h-[38px] mask mask-squircle object-cover mr-2"
-                      alt={"_profile" + photo?.User?.firstName}
-                    />
-                    <div className="">
-                      <Link to={"../../profile/" + photo?.User?.id} className="text-primary">
-                        {photo?.User?.firstName + " " + photo?.User?.lastName} <span className="text-gray-800">{" posted an update"}</span>
-                      </Link>
+                </div>
+
+                <div className="basis-[40%] bg-white">
+                  <div className="px-4 py-2">
+                    <div className="flex items-center mb-2">
+                      <img
+                        src={data?.User?.profilePicture}
+                        className="w-[38px] h-[38px] mask mask-squircle object-cover mr-2"
+                        alt={"_profile" + data?.User?.firstName}
+                      />
                       <div className="">
-                        <span className="">{format(new Date(photo?.createdAt), "MMM dd, yyyy")}</span>{" "}
-                        <span className="">{" • Public"}</span>
+                        <Link to={"../../profile/" + data?.User?.id} className="font-semibold hover:text-primary">
+                          {data?.User?.firstName + " " + data?.User?.lastName}{" "}
+                          <span className="text-gray-800 font-normal">{" posted an update"}</span>
+                        </Link>
+                        <div className="">
+                          <span className="text-sm">{format(new Date(photo?.createdAt), "MMM dd, yyyy")}</span>{" "}
+                          <span className="">{" • Public"}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="w-full h-[1px] bg-gray-200"></div>
-                  <div className="">
-                    <CommentForm PostId={photo?.id} />
+                    <div className="flex justify-start pb-2">
+                      <button className="mr-2 font-semibold text-xs hover:text-primary">Delete</button>
+                      <button className="ml-2 font-semibold text-xs hover:text-primary">Edit</button>
+                      <button className="ml-2 font-semibold text-xs hover:text-primary">Download original</button>
+                    </div>
+                    <div className="w-full h-[1px] bg-gray-200"></div>
+                    <div className="">
+                      <CommentForm PostId={photo?.id} />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -94,6 +103,7 @@ ViewPhoto.propTypes = {
   photo: PropTypes.object.isRequired,
   imgComponent: PropTypes.any,
   type: PropTypes.string,
+  data: PropTypes.object,
 };
 
 export default ViewPhoto;
