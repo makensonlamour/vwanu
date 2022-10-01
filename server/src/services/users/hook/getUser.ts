@@ -13,7 +13,16 @@ export default (context: HookContext) => {
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
-
+  const Interests = `(
+SELECT 
+  json_agg(
+    json_build_object(
+      'name',"I"."name",
+      'id',"I"."id"
+  )) FROM "Interests" AS "I" 
+  INNER JOIN "User_Interest" AS "UI" ON "UI"."InterestId" = "I"."id"
+  WHERE "UI"."UserId"="User"."id"
+)`;
   const friends = `(
        EXISTS(
         SELECT 1 FROM "User_friends" WHERE "User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${params.User.id}'
@@ -63,6 +72,7 @@ export default (context: HookContext) => {
       [Sequelize.literal(hasSentFriendRequest), 'hasSentFriendRequest'],
       [Sequelize.literal(amountOfFollower), 'amountOfFollower'],
       [Sequelize.literal(amountOfFollowing), 'amountOfFollowing'],
+      [Sequelize.literal(Interests), 'Interests'],
     ],
   };
   delete where?.profilePrivacy;
