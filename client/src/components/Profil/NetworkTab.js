@@ -46,17 +46,17 @@ const NetworkTab = ({ user }) => {
             </TabList>
           </div>
           <TabPanel value="one">
-            <Friends user={user} fn={setTotalFriend} />
+            <Friends isNetwork={true} user={user} fn={setTotalFriend} />
           </TabPanel>
           <TabPanel value="two">
-            <Followers user={user} fn={setTotalFollowers} />
+            <Followers isNetwork={true} user={user} fn={setTotalFollowers} />
           </TabPanel>
           <TabPanel value="three">
-            <Following user={user} fn={setTotalFollowing} />
+            <Following isNetwork={true} user={user} fn={setTotalFollowing} />
           </TabPanel>
           {id?.toString() === user?.id?.toString() && (
             <TabPanel value="four">
-              <Request user={user} fn={setTotalRequest} />
+              <Request isNetwork={true} user={user} fn={setTotalRequest} />
             </TabPanel>
           )}
         </TabContext>

@@ -1,19 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useOutletContext } from "react-router-dom";
 import ViewFriend from "../ViewFriend";
 import { useGetListFollowing } from "../../../features/follower/followerSlice";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
-const Following = ({ fn }) => {
+const Following = ({ fn, isNetwork }) => {
+  const user = useOutletContext();
   const { data: listFollowing, isError, isLoading, hasNextPage, fetchNextPage } = useGetListFollowing(["user", "following"], true);
 
-  fn(listFollowing?.length || 0);
+  fn(user?.amountOfFollowing || 0);
 
   return (
     <>
       <ViewFriend
         data={listFollowing}
+        isNetwork={isNetwork}
         types={"followings"}
         isError={isError}
         isLoading={isLoading}
@@ -38,6 +41,7 @@ const Following = ({ fn }) => {
 Following.propTypes = {
   user: PropTypes.object,
   fn: PropTypes.func,
+  isNetwork: PropTypes.bool,
 };
 
 export default Following;

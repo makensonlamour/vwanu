@@ -9,22 +9,25 @@ function Checkbox({ name, label, className, testId, link, ...otherProps }) {
 
   return (
     <>
-      <div className="form-control mt-3">
-        <label className="label">
-          <input
-            type="checkbox"
-            className={
-              "checkbox appearance-none checked:bg-secondary checked:text-base-100 hover:text-base-100 active:text-base-100 border-blue-300 hover:border-blue-300 ml-2 lg:ml-2" +
-              className
-            }
-            value={values[name]}
-            onBlur={() => setFieldTouched(name)}
-            onChange={handleChange(name)}
-            {...otherProps}
-          />
-          <span className="text-secondary font-semibold ml-2 text-sm lg:text-lg lg:ml-2">{label}</span>
-          <span className="ml-8 text-sm lg:text-lg">{link}</span>
-        </label>
+      <div className="my-3">
+        <div className="flex items-start justify-between">
+          <div className="flex justify-start">
+            {" "}
+            <input
+              type="checkbox"
+              className={
+                "outline-none checked:bg-secondary cursor-pointer w-4 h-4 lg:w-5 lg:h-5 border-1 border-secondary rounded-md hover:border-1 active:border-1 focus:border-1" +
+                className
+              }
+              value={values[name]}
+              onBlur={() => setFieldTouched(name)}
+              onChange={handleChange(name)}
+              {...otherProps}
+            />
+            <p className="aligns-start ml-2 text-sm lg:text-md">{label}</p>
+          </div>
+          {<p className="aligns-start ml-2 text-sm lg:text-md">{link}</p>}
+        </div>
         <Error testId={testId} error={errors[name]} visible={touched[name]} />
       </div>
     </>

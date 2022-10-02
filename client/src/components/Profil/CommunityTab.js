@@ -5,17 +5,32 @@ import { Link, useParams } from "react-router-dom";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import CommunityList from "../../features/community/component/CommunityList";
-import { useGetMyCommunityList } from "../../features/community/communitySlice";
+import { useGetMyCommunityList, useGetCommunityIn } from "../../features/community/communitySlice";
 import InvitationTabs from "./../Community/Invitation/InvitationTabs";
 
 const CommunityTab = ({ user }) => {
   const { id } = useParams();
   const [value, setValue] = useState("1");
-  const { data: communityList } = useGetMyCommunityList(["community", "all"], user?.id !== null ? true : false, user?.id);
+  const {
+    data: communityList,
+    isError,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetMyCommunityList(["community", "all"], user?.id !== null ? true : false, user?.id);
+
+  const {
+    data: myCommunityList,
+    isError: myCommunityError,
+    isLoading: myCommunityLoading,
+    hasNextPage: myCommunityhasNextPage,
+    fetchNextPage: myCommunityfetchNextPage,
+  } = useGetCommunityIn(["community", "particular"], user?.id !== null ? true : false, user?.id);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <>
       <div className="">
@@ -46,9 +61,9 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "1" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">My Community</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Community created</div>
                       ) : (
-                        <div className="flex">My Community</div>
+                        <div className="flex">Community created</div>
                       )}
                     </Fragment>
                   }
@@ -59,22 +74,52 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "2" ? (
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">My Community</div>
+                      ) : (
+                        <div className="flex">My Community</div>
+                      )}
+                    </Fragment>
+                  }
+                  value="2"
+                />
+                <Tab
+                  sx={{ textTransform: "capitalize" }}
+                  label={
+                    <Fragment>
+                      {value === "3" ? (
                         <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Invitations</div>
                       ) : (
                         <div className="flex">Invitations</div>
                       )}
                     </Fragment>
                   }
-                  value="2"
+                  value="3"
                 />
               </TabList>
               <TabPanel value="1">
-                <div className="mt-8 wull">
-                  <CommunityList communityList={communityList} />
+                <div className=" w-full">
+                  <CommunityList
+                    communityList={communityList}
+                    isLoading={isLoading}
+                    isError={isError}
+                    hasNextPage={myCommunityhasNextPage}
+                    fetchNextPage={fetchNextPage}
+                  />
                 </div>
               </TabPanel>
               <TabPanel value="2">
-                <div className="mt-4">
+                <div className=" w-full">
+                  <CommunityList
+                    communityList={myCommunityList}
+                    isLoading={myCommunityLoading}
+                    isError={myCommunityError}
+                    hasNextPage={hasNextPage}
+                    fetchNextPage={myCommunityfetchNextPage}
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel value="3">
+                <div className="">
                   <InvitationTabs />
                 </div>
               </TabPanel>

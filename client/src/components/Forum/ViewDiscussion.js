@@ -8,7 +8,7 @@ import { useQueryClient } from "react-query";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
 
-const ViewDiscussion = ({ data, type = "forum", isLoading, isError, hasNextPage, fetchNextPage }) => {
+const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isError, hasNextPage, fetchNextPage }) => {
   const id = useParams();
   const queryClient = useQueryClient();
 
@@ -24,7 +24,14 @@ const ViewDiscussion = ({ data, type = "forum", isLoading, isError, hasNextPage,
             {/* <button className="w-fit bg-white py-1 lg:py-2 px-2 lg:px-6 border border-gray-200 rounded-lg hover:bg-primary hover:text-white mr-2">
               Subscribe
             </button> */}
-            <InputDiscussion labelBtn={"New Discussion"} communityId={id} data={{}} type="new" />
+            <InputDiscussion
+              labelBtn={"New Discussion"}
+              communityId={id}
+              data={{}}
+              type="new"
+              isForum={type === "forum" ? true : false}
+              CategoryId={type === "forum" ? CategoryId : ""}
+            />
           </div>
         </div>
         <div className="w-full h-[1px] bg-gray-300 mt-4"></div>
@@ -140,6 +147,7 @@ ViewDiscussion.propTypes = {
   isError: PropTypes.bool,
   hasNextPage: PropTypes.bool,
   fetchNextPage: PropTypes.func,
+  CategoryId: PropTypes.string,
 };
 
 export default ViewDiscussion;

@@ -7,8 +7,9 @@ import { useUpdateUser } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import { useGetInterestList } from "../../interest/interestSlice";
-import countries from "../../../data/countries.json";
-import states from "../../../data/states.json";
+import { useGetCountry, useGetState, useGetCity, useGetAddressType } from "../../address/addressSlice";
+// import countries from "../../../data/countries.json";
+// import states from "../../../data/states.json";
 // import cities from "../../../data/cities.json";
 import { assignValueCountries, assignValueStates, assignValue } from "../../../helpers/index";
 import jsonQuery from "json-query";
@@ -22,19 +23,27 @@ const FormStepTwo = () => {
   const user = useOutletContext();
   const idUser = user?.id;
   const navigate = useNavigate();
-  const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
-  const [isLoading, setIsLoading] = useState(false);
-  const { data: interestList } = useGetInterestList(["interest", "all"]);
-  const options = assignValue(interestList);
   const [interest, setInterest] = useState([]);
-  const [countryCode, setCountryCode] = useState("");
-  const [stateCode, setStateCode] = useState("");
+  const [countryCode, setCountryCode] = useState(false);
+  const [stateCode, setStateCode] = useState(false);
+  const [cityCode, setCityCode] = useState(false);
+  const [typeAddress, setTypeAddress] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const optionsCountry = assignValueCountries(countries);
-  const stateList = jsonQuery(`[*country_code=${countryCode}]`, { data: states });
-  const optionsState = assignValueStates(stateList?.value);
+  const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
+  const { data: countryList } = useGetCountry(["country", "all"], true);
+  const { data: addressTypesList } = useGetAddressType(["address-types", "all"], true);
+  const { data: stateList } = useGetState(["state", "all"], countryCode ? true : false, countryCode);
+  const { data: cityList } = useGetCity(["city", "all"], stateCode ? true : false, stateCode);
+  const { data: interestList } = useGetInterestList(["interest", "all"]);
 
-  console.log(stateList);
+  const options = assignValue(interestList);
+  const optionsCountry = assignValueCountries(countryList);
+  // const stateList = jsonQuery(`[*country_code=${countryCode}]`, { data: states });
+  const optionsState = assignValueCountries(stateList);
+  const optionsCity = assignValueCountries(cityList);
+
+  console.log(addressTypesList, countryList, stateList, cityList);
 
   const initialValues = {
     country: "",
@@ -69,8 +78,24 @@ const FormStepTwo = () => {
 
   const handleStepTwo = async (credentials) => {
     setIsLoading(true);
+
+    if (addressTypesList && addressTypesList?.total > 1) {
+      addressTypesList?.data((item) => {
+        if (item?.description === "Home") {
+          setTypeAddress(item?.id);
+        }
+      });
+    }
+
     const dataObj = {
-      country: credentials?.country,
+      address: {
+        country: countryCode,
+        state: stateCode,
+        city: cityCode,
+        street: credentials?.street,
+        zip: credentials?.zipCode,
+        addressType: typeAddress,
+      },
       gender: credentials?.gender,
       interestedBy: credentials?.interestedBy,
       birthday: credentials?.birthday,
@@ -80,7 +105,6 @@ const FormStepTwo = () => {
 
     try {
       let result = await updateUser.mutateAsync(dataObj);
-      console.log("result profile", result);
       navigate("../../" + routesPath.STEP_THREE);
     } catch (e) {
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
@@ -191,11 +215,8 @@ const FormStepTwo = () => {
             style={{ width: "100%" }}
             className="ml-2 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
             testId="city-error-message"
-            options={[
-              { id: 0, label: "Not Specified", value: "" },
-              { id: 1, label: "United States Of America", value: "usa" },
-              { id: 2, label: "Dominican Republic", value: "do" },
-            ]}
+            fn={setCityCode}
+            options={optionsCity}
           />
         </div>
         <div className="flex w-full">

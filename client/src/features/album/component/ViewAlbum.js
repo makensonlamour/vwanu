@@ -9,19 +9,29 @@ import { format } from "date-fns";
 import { Field, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 import toast, { Toaster } from "react-hot-toast";
-import { useUpdateAlbum } from "../albumSlice";
+import { useUpdateAlbum, useDeleteAlbum } from "../albumSlice";
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Album Name"),
 });
 
 const updateSuccess = () =>
-  toast.success("Profile updated successfully!", {
+  toast.success("Album name updated successfully!", {
     position: "top-center",
   });
 
 const updateError = () =>
-  toast.error("Sorry. Error on updating profile!", {
+  toast.error("Sorry. Error on editing album name!", {
+    position: "top-center",
+  });
+
+const deleteSuccess = () =>
+  toast.success("Album deleted successfully!", {
+    position: "top-center",
+  });
+
+const deleteError = () =>
+  toast.error("Sorry. Error on deleting the album!", {
     position: "top-center",
   });
 
@@ -31,10 +41,12 @@ const ViewAlbum = ({ albumId, album, user }) => {
   const [isEdit, setIsEdit] = useState(false);
   const { data: photos } = useGetAlbum(["me", "album", "photo"], true, { albumId });
 
-  const updateName = useUpdateAlbum(["album", photos?.id], undefined, undefined, photos?.data?.id);
+  const updateName = useUpdateAlbum(["album", photos?.id], undefined, undefined, photos?.id);
+
+  const deleteName = useDeleteAlbum(["album", photos?.id], undefined, undefined);
 
   const initialValues = {
-    name: photos?.data?.name || "",
+    name: photos?.name || "",
   };
 
   const handleEdit = async (data) => {
@@ -48,6 +60,19 @@ const ViewAlbum = ({ albumId, album, user }) => {
     } finally {
       setIsLoading(false);
       setIsEdit(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setIsLoading(true);
+    try {
+      await deleteName.mutateAsync({ id });
+      deleteSuccess();
+    } catch (e) {
+      console.log(e);
+      deleteError();
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,18 +106,21 @@ const ViewAlbum = ({ albumId, album, user }) => {
           )}
         </div>
         <div className="flex justify-center py-3">
-          <span className="text-sm">{format(new Date(album?.createdAt), "MMM dd, yyyy")}</span>
+          <span className="text-sm">{format(new Date(album?.createdAt), "MMM dd, yyyy ~ hh:m aaaa")}</span>
           <span className="px-1">•</span>
           <span className="text-sm">{photos?.Medias?.length + " Medias"}</span>
         </div>
         {user?.id?.toString() === id?.toString() && (
           <div className="flex flex-col md:flex-row justify-between items-center py-5">
             <div className="flex">
-              <button className="px-2 sm:px-4 py-2 text-xs sm:text-sm bg-white border border-red-500 text-gray-900 rounded-xl mr-2">
+              <button
+                onClick={() => handleDelete(photos?.id)}
+                className="px-2 sm:px-4 py-2 text-xs sm:text-sm bg-white border border-red-500 text-gray-900 rounded-xl mr-2"
+              >
                 Delete Album
               </button>
-              <AddPhoto user={user} />
-              <button className="px-2 sm:px-4 py-2 text-xs sm:text-sm bg-placeholder-color text-gray-900 rounded-xl">Add Videos</button>
+              <AddPhoto type={"photo"} user={user} />
+              <AddPhoto type={"video"} user={user} />
             </div>
             <select className="my-3 md:my-0 w-full md:w-1/5 px-2 sm:px-4 py-2 text-gray-900 border border-gray-300 rounded-xl">
               <option value="public">Public</option>

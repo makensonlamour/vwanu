@@ -1,50 +1,34 @@
-/*eslint-disable */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 //core components
 import FriendRequestButton from "../../features/friend/component/FriendRequestButton";
-import FriendButton from "../../features/friend/component/FriendButton";
 import MenuButton from "../../features/friend/component/MenuButton";
 import Loader from "../../components/common/Loader";
 import ProfileTabs from "./ProfileTabs";
-import UploadPhotoCrop from "../../components/form/profile/UploadPhotoCrop";
 import AboutTab from "./AboutTab";
-import ViewFriend from "./ViewFriend";
-import PostTab from "./PostTab";
 import AlbumTab from "./AlbumTab";
 import NetworkTab from "./NetworkTab";
 import BlogTab from "./BlogTab";
 import CommunityTab from "./CommunityTab";
 import { allTabs1 } from "./Tablink.data";
-import { checkFriendList } from "../../helpers/index";
-import { FaUserEdit, FaUserAlt } from "react-icons/fa";
+import { FaUserAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import EditProfile from "../../pages/Profil/EditProfile";
 import { useGetOnline } from "../../features/user/userSlice";
 import { useGetBlogList } from "../../features/blog/blogSlice";
-import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
-// import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
 import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
 import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { format } from "date-fns";
+import PostTab from "./../Community/CommunityTab/PostTab";
 
-const ProfileHeader = ({
-  user,
-  otherUser,
-  loadingFollowing,
-  errorFollowing,
-  listFollowers,
-  listRequest,
-  listFollowing,
-  notificationList,
-}) => {
-  const navigate = useNavigate();
+const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, listFollowing, notificationList }) => {
+  // eslint-disable-next-line no-unused-vars
   const [edit, setEdit] = useState(false);
 
   const { data: blogList, isError, isLoading } = useGetBlogList(["blog", "all"], true);
@@ -57,33 +41,6 @@ const ProfileHeader = ({
     fetchNextPage: fetchNextPageOnline,
   } = useGetOnline(["user", "online"]);
 
-  const groups = [
-    {
-      name: "Mountain Riders",
-      image: "https://picsum.photos/200/300?image=0",
-      members: "20",
-    },
-    {
-      name: "Graphic Design",
-      image: "https://picsum.photos/200/300?image=1",
-      members: "20",
-    },
-    {
-      name: "Nature Lovers",
-      image: "https://picsum.photos/200/300?image=2",
-      members: "19",
-    },
-    {
-      name: "Coffee Addicts",
-      image: "https://picsum.photos/200/300?image=3",
-      members: "19",
-    },
-    {
-      name: "Architecture",
-      image: "https://picsum.photos/200/300?image=4",
-      members: "17",
-    },
-  ];
   return (
     <>
       {!user && !otherUser ? (
@@ -91,9 +48,9 @@ const ProfileHeader = ({
       ) : (
         <>
           <div className="flex justify-between w-full">
-            <div className="w-[100vw] lg:w-[65vw] lg:basis-[72%]">
+            <div className="w-[100vw] lg:w-[65vw] lg:basis-[70%]">
               <div className="border-gray-700 bg-white">
-                <div className="relative w-full lg:w-[65vw]">
+                <div className="relative w-full lg:w-[56vw]">
                   <div className="">
                     <img
                       src={otherUser ? otherUser?.coverPicture?.original : user?.coverPicture?.original}
@@ -152,12 +109,30 @@ const ProfileHeader = ({
                     </h4>
                     <h4 className="font-mock text-sm text-gray-600 mb-2 lg:-mt-1 ">
                       <span className="pr-2">
-                        {otherUser ? listFollowers?.length : listFollowers?.length}
-                        {" followers"}
+                        {otherUser
+                          ? otherUser?.amountOfFollowers === 0
+                            ? "0 Follower"
+                            : otherUser?.amountOfFollower === 1
+                            ? otherUser?.amountOfFollower + " Folower"
+                            : otherUser?.amountOfFollower + " Followers"
+                          : user?.amountOfFollowers === 0
+                          ? "0 Follower"
+                          : user?.amountOfFollower === 1
+                          ? user?.amountOfFollower + " Folower"
+                          : user?.amountOfFollower + " Followers"}
                       </span>
                       <span className="pl-2">
-                        {otherUser ? listFollowing?.length : listFollowing?.length}
-                        {" following"}
+                        {otherUser
+                          ? otherUser?.amountOfFollowing === 0
+                            ? "0 Following"
+                            : otherUser?.amountOfFollowing === 1
+                            ? otherUser?.amountOfFollowing + " Following"
+                            : otherUser?.amountOfFollowing + " Followings"
+                          : user?.amountOfFollowings === 0
+                          ? "0 Following"
+                          : user?.amountOfFollowing === 1
+                          ? user?.amountOfFollowing + " Folower"
+                          : user?.amountOfFollowing + " Followings"}
                       </span>
                     </h4>
                     <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
@@ -229,7 +204,7 @@ const ProfileHeader = ({
               </div>
             </div>
 
-            <div className="hidden lg:block basis-[20%] ml-auto mx-2 mt-8">
+            <div className="hidden lg:block basis-[20%] lg:ml-4 xl:ml-2 mt-8">
               <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={isLoading} isError={isError} />
               <RecentlyActive
                 data={listOnline || []}
@@ -238,10 +213,13 @@ const ProfileHeader = ({
                 hasNextPage={hasNextPageOnline}
                 fetchNextPage={fetchNextPageOnline}
               />
-              <GroupsPreview data={groups || []} />
-              {/* <CompleteProfile percentage={percentage} data={steps} /> */}
+              <GroupsPreview />
               <div className="block xl:hidden">
-                <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing} />
+                <FollowingPreview
+                  isLoading={loadingFollowing}
+                  isError={errorFollowing}
+                  data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
+                />
               </div>
               <div className="block xl:hidden mb-2">
                 <UpdatesComponent data={notificationList} />

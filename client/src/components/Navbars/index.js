@@ -39,11 +39,12 @@ const Navbar = ({ user, countMessage }) => {
   const settings = [
     {
       title: "Profile",
-      icon: <BiUserCircle size={20} style={{ marginRight: "10px" }} className="mr-2" />,
+      icon: <BiUserCircle size={20} style={{ marginRight: "10px" }} className="mr-2 items-center" />,
       path: "../../profile/" + user?.id,
     },
-    { title: "Account", icon: "" },
-    { title: "Dashboard", icon: "" },
+    { title: "Edit Profile", icon: "" },
+    { title: "Account Settings", icon: "" },
+    { title: "Terms & Privacy", icon: "" },
   ];
 
   const handleOpenUserMenu = (event) => {

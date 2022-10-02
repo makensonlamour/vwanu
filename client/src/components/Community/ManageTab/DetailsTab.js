@@ -68,8 +68,6 @@ const DetailsTab = ({ communityData }) => {
     );
   };
 
-  console.log(interest);
-
   useEffect(() => {
     if (communityData?.Interests?.length > 0) {
       communityData?.Interests?.map((item) => {

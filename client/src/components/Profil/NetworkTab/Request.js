@@ -8,7 +8,7 @@ import EmptyComponent from "../../common/EmptyComponent";
 import Loader from "../../common/Loader";
 import InfiniteScroll from "../../InfiniteScroll/InfiniteScroll";
 
-const Friends = ({ fn }) => {
+const Friends = ({ fn, isNetwork = false }) => {
   const queryClient = useQueryClient();
   const { data: listFriendReceive, isError, isLoading, hasNextPage, fetchNextPage } = useGetListFriendReceive(["user", "received"], true);
 
@@ -61,7 +61,9 @@ const Friends = ({ fn }) => {
                   return (
                     <div
                       key={friend?.id}
-                      className="bg-white w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:w-[32%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3"
+                      className={`bg-white border-gray-200 w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3 
+                        ${isNetwork ? " xl:w-[48%] " : " xl:w-[31%] "}
+                      `}
                     >
                       <img
                         className="object-cover w-28 h-28 mask mask-squircle mx-auto mb-2"
@@ -106,6 +108,7 @@ const Friends = ({ fn }) => {
 Friends.propTypes = {
   user: PropTypes.object,
   fn: PropTypes.func,
+  isNetwork: PropTypes.bool,
 };
 
 export default Friends;

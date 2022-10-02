@@ -64,13 +64,26 @@ const FormLogin = () => {
           name="rememberMe"
           label="Remember me"
           link={
-            <Link className="text-primary font-bold hover:text-secondary" to={routesPath.FORGOT_PASSWORD}>
+            <Link className="font-semibold hover:text-primary" to={routesPath.FORGOT_PASSWORD}>
               Forgot password
             </Link>
           }
           className=""
         />
-        <Submit data-testid="loginBtn" className="mt-2 rounded-full text-md btn-md" title={isLoading ? <Loader /> : "Login"} />
+        <Submit
+          disabled={isLoading ? true : false}
+          data-testid="loginBtn"
+          className="mt-2 rounded-full text-md btn-md"
+          title={
+            isLoading ? (
+              <div className="flex justify-center">
+                <Loader color="black" />
+              </div>
+            ) : (
+              "Login"
+            )
+          }
+        />
         <div className="mt-9 text-center">
           <span className="text-blue-600 text-center inline text-md md:text-lg">
             {` Or sign in with `}

@@ -10,11 +10,11 @@ const SingleBlog = ({ blog }) => {
       <div className={` bg-white shadow-sm w-full rounded-xl pb-4 lg:pb-6 mb-8 lg:mb-10 `}>
         {blog?.coverPicture !== "undefined" && (
           <div className="">
-            <img className="w-full h-44 lg:h-64 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
+            <img className="w-full h-36 lg:h-56 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
           </div>
         )}
         {blog?.Interests?.length > 0 && (
-          <div className={`${blog?.coverPicture === "undefined" ? "" : "pt-6"} px-4 lg:px-8 mt-5 pt-6`}>
+          <div className={`${blog?.coverPicture === "undefined" ? "" : "pt-3"} px-4 lg:px-8 mt-4 pt-3`}>
             <Stack direction="row" spacing={1}>
               {blog?.Interests?.length > 0 &&
                 blog?.Interests?.map((interest) => {
@@ -23,12 +23,12 @@ const SingleBlog = ({ blog }) => {
             </Stack>
           </div>
         )}
-        <div className="px-4 lg:px-8 mt-3 lg:mt-7">
+        <div className="px-4 lg:px-8 mt-2 lg:mt-4">
           <Link to={`./${blog?.id}`} className="text-md lg:text-2xl font-semibold hover:text-primary line-clamp-2">
             {blog?.blogTitle}
           </Link>
-          <p className="text-sm mt-3 lg:mt-7 line-clamp-3">{parse(blog?.blogText)}</p>
-          <div className="flex mt-4 lg:mt-7 mb-2 lg:mb-4 justify-between items-center">
+          <p className="text-sm mt-3 lg:mt-4 line-clamp-3">{parse(blog?.blogText)}</p>
+          <div className="flex mt-4 lg:mt-4 mb-2 lg:mb-4 justify-between items-center">
             <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
               <img
                 className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"

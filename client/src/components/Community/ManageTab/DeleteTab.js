@@ -1,13 +1,32 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
+import { useParams } from "react-router-dom";
 import { Form, Checkbox, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
+import { useDeleteCommunity } from "./../../../features/community/communitySlice";
+import toast, { Toaster } from "react-hot-toast";
+
+const deleteSuccess = () =>
+  toast.success("community deleted successfully!", {
+    position: "top-center",
+  });
+
+const deleteError = () =>
+  toast.error("Sorry. Error on deleting community!", {
+    position: "top-center",
+  });
 
 const DeleteTab = () => {
+  const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const deleteCommunity = useDeleteCommunity(["community", id], id, undefined, undefined);
   const ValidationSchema = Yup.object().shape({
-    consent1: Yup.bool().required().oneOf([true], "You must tell us that you understand the consequences of deleting this group."),
-    consent2: Yup.bool().oneOf([true], "You must accept the terms of use and the policy privacy"),
+    consent1: Yup.bool()
+      .required()
+      .oneOf([true], "Please confirm that you acknowledge that you understand the consequences of deleting this community."),
+    consent2: Yup.bool()
+      .required()
+      .oneOf([true], "Please confirm that you acknowledge that all the discussions in this community will be delete also."),
   });
 
   const initialValues = {
@@ -15,17 +34,29 @@ const DeleteTab = () => {
     consent2: false,
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true);
-    console.log("");
-    setIsLoading(false);
+    // eslint-disable-next-line no-restricted-globals
+    let isConfirm = confirm("Do you want to delete this community?");
+    if (!isConfirm) return setIsLoading(false);
+    try {
+      await deleteCommunity.mutateAsync();
+      deleteSuccess();
+      window.location.href = "../../groups";
+    } catch (e) {
+      console.log(e);
+      deleteError();
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <>
-      <div className="bg-white border border-gray-300 pt-10 pb-5 px-2 md:px-16 rounded-xl w-full">
+      <Toaster />
+      <div className="bg-white border border-gray-300 pt-6 pb-5 px-2 md:px-10 rounded-xl w-full">
         <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`Delete`}</h4>
-        <div className="px-4 py-3 bg-warning w-full border border-yellow-300 rounded-2xl">
-          <p className="text-v-yellow-dark text-sm">{`WARNING: Deleting this group will completely remove ALL content associated with it. There is no way back. Please be careful with this option.`}</p>
+        <div className="px-4 py-3 bg-warning-2 w-full border border-yellow-300 rounded-2xl">
+          <p className="text-v-yellow-dark text-sm">{`WARNING: Deleting this community will completely remove ALL content associated with it. There is no way back. Please be careful with this option.`}</p>
         </div>
         <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="">
           <Checkbox
@@ -43,12 +74,13 @@ const DeleteTab = () => {
             className=""
             testId="consent-2-error-message"
           />
-
-          <Submit
-            data-testid="deleteGroup_btn"
-            className="rounded-xl py-1 text-md w-fit px-4"
-            title={isLoading ? <Loader /> : "Delete Group"}
-          />
+          <div className="mt-5">
+            <Submit
+              data-testid="deleteGroup_btn"
+              className="rounded-xl py-1 text-md w-fit px-4"
+              title={isLoading ? <Loader /> : "Delete Group"}
+            />
+          </div>
         </Form>
       </div>
     </>

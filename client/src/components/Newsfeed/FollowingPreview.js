@@ -46,7 +46,7 @@ const FollowingPreview = ({ data, isError, isLoading }) => {
                       <div className="w-[3.5rem] mx-[0.15rem]">
                         <img
                           className="object-cover mask mask-squircle w-[3rem] h-16 rounded-lg"
-                          src={following?.profilePicture?.original}
+                          src={following?.profilePicture?.original || following?.profilePicture}
                           alt={following?.firstName + " " + following?.lastName}
                         />
                       </div>

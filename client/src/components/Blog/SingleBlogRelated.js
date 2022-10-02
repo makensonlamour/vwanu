@@ -8,14 +8,14 @@ import { Chip, Stack } from "@mui/material";
 const SingleBlogRelated = ({ blog }) => {
   return (
     <>
-      <div className="bg-white shadow-sm w-full rounded-xl pb-2 mb-5 lg:pb-6 mb-68 lg:mb-10">
+      <div className="bg-white shadow-sm w-full rounded-xl pb-1 mb-4 lg:pb-0 lg:mb-8">
         {blog?.coverPicture !== "undefined" && (
           <div className="">
-            <img className="w-full h-44 lg:h-64 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
+            <img className="w-full h-32 lg:h-48 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
           </div>
         )}
         {blog?.Interests?.length > 0 && (
-          <div className="px-4 lg:px-8 mt-5">
+          <div className="px-3 lg:px-6 mt-4">
             <Stack direction="row" spacing={1}>
               {blog?.Interests?.length > 0 &&
                 blog?.Interests?.map((interest) => {
@@ -24,12 +24,12 @@ const SingleBlogRelated = ({ blog }) => {
             </Stack>
           </div>
         )}
-        <div className="px-4 lg:px-8 mt-3 lg:mt-7">
-          <Link to={`../../blogs/${blog?.id}`} className="text-md lg:text-2xl font-semibold hover:text-primary line-clamp-2">
+        <div className="px-3 lg:px-6 mt-2 lg:mt-3">
+          <Link to={`../../blogs/${blog?.id}`} className="text-md lg:text-xl font-semibold hover:text-primary line-clamp-2">
             {blog?.blogTitle}
           </Link>
-          <p className="text-sm mt-3 lg:mt-7 line-clamp-3">{parse(blog?.blogText)}</p>
-          <div className="flex mt-4 lg:mt-7 mb-2 lg:mb-4 justify-between items-center">
+          <p className="text-sm mt-2 lg:mt-3 line-clamp-3">{parse(blog?.blogText)}</p>
+          <div className="flex mt-2 lg:mt-4 mb-2 lg:mb-4 justify-between items-center">
             <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
               <img
                 className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"

@@ -9,12 +9,12 @@ import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 import Chip from "@mui/material/Chip";
 import { useGetAllMembers } from "../../../features/user/userSlice";
 import {
-  useGetAllMembersCommunity,
+  // useGetAllMembersCommunity,
   useSendInvitation,
   useGetCommunityRole,
-  useGetCommunityInvitation,
+  // useGetCommunityInvitation,
 } from "../../../features/community/communitySlice";
-import { isMember, isInvitation } from "../../../helpers/index";
+// import { isMember, isInvitation } from "../../../helpers/index";
 import InputSearch from "../../../features/search/components/InputSearch";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -31,9 +31,9 @@ const sendInvitationError = () =>
 const SendInvites = () => {
   const user = useOutletContext();
   const { id } = useParams();
-  const { data: members, isLoading: loadingMember, isError, hasNextPage, fetchNextPage } = useGetAllMembers(["members", "all"]);
-  const { data: listMemberCommunity } = useGetAllMembersCommunity(["user", "community", "all"], id === "undefined" ? false : true, id);
-  const { data: listInvitation } = useGetCommunityInvitation(["community", "invitation", "all"], id !== "undefined" ? true : false, id);
+  const { data: members, isLoading: loadingMember, isError, hasNextPage, fetchNextPage } = useGetAllMembers(["members", "all"], true);
+  // const { data: listMemberCommunity } = useGetAllMembersCommunity(["user", "community", "all"], id === "undefined" ? false : true, id);
+  // const { data: listInvitation } = useGetCommunityInvitation(["community", "invitation", "all"], id !== "undefined" ? true : false, id);
   const sendInvitation = useSendInvitation(["community", "invitation"]);
   const { data: roles } = useGetCommunityRole(["roles", "all"]);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,6 +99,8 @@ const SendInvites = () => {
     return memb?.length === 0 ? false : true;
   }
 
+  console.log("test", members);
+
   return (
     <>
       <Toaster />
@@ -138,7 +140,7 @@ const SendInvites = () => {
                             Tap to retry
                           </Link>{" "}
                         </div>
-                      ) : members?.pages && members?.pages?.length > 0 ? (
+                      ) : members?.pages && members?.pages?.length > 0 && members?.pages[0]?.data?.total > 0 ? (
                         <InfiniteScroll
                           fetchMore={fetchNextPage}
                           isError={isError}
@@ -163,7 +165,7 @@ const SendInvites = () => {
                         >
                           {members?.pages.map((page) => {
                             return page?.data?.data?.map((member) => {
-                              return !isMember(listMemberCommunity, member) || !isInvitation(listInvitation, member) ? null : (
+                              return (
                                 <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
                                   {user?.id !== member?.id && (
                                     <div className="flex justify-evenly items-center">
@@ -253,9 +255,7 @@ const SendInvites = () => {
                   >
                     {members?.pages.map((page) => {
                       return page?.data?.data?.map((member) => {
-                        console.log(!isMember(listMemberCommunity?.data, member), !isInvitation(listInvitation?.data, member));
-
-                        return isMember(listMemberCommunity?.data, member) || isInvitation(listInvitation?.data, member) ? null : (
+                        return (
                           <div key={member?.firstName + "_" + member?.id} className="flex justify-between items-center mb-4">
                             {user?.id !== member?.id && (
                               <div className="flex justify-evenly items-center">

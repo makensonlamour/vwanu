@@ -114,9 +114,4 @@ const CommunityFeed = () => {
   );
 };
 
-/* CommunityFeed.propTypes = {
-  user: PropTypes.object.isRequired,
-  otherUser: PropTypes.object,
-}; */
-
 export default CommunityFeed;

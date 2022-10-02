@@ -1,12 +1,14 @@
 import React from "react";
 import MemberDescription from "../MemberTab/MemberDescription";
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
 import { assignCommunityMember } from "../../../helpers/index";
 import { useGetAllMembersCommunity } from "../../../features/community/communitySlice";
 import MemberSettings from "../MemberTab/MemberSettings";
+import PropTypes from "prop-types";
 
-const MembersTab = () => {
+const MembersTab = ({ communityData }) => {
   const { id } = useParams();
+  const user = useOutletContext();
   const { data: listMembers } = useGetAllMembersCommunity(["community", "members", id], id !== "undefined" ? true : false, id);
 
   return (
@@ -22,7 +24,10 @@ const MembersTab = () => {
         />
         {assignCommunityMember(listMembers, "admin")?.length > 0 && (
           <>
-            <MemberSettings data={assignCommunityMember(listMembers, "admin")} />
+            <MemberSettings
+              data={assignCommunityMember(listMembers, "admin")}
+              isCreator={communityData?.UserId === user?.id ? true : false}
+            />
           </>
         )}
 
@@ -36,7 +41,10 @@ const MembersTab = () => {
                   "When a group member is promoted to be a moderator of the group, the member gains the ability to edit and delete any forum discussion within the group and delete any activity feed items, excluding those posted by administrators."
                 }
               />
-              <MemberSettings data={assignCommunityMember(listMembers, "moderator")} />
+              <MemberSettings
+                isCreator={communityData?.UserId === user?.id ? true : false}
+                data={assignCommunityMember(listMembers, "moderator")}
+              />
             </>
           )}
         </div>
@@ -51,13 +59,20 @@ const MembersTab = () => {
                   "When a member joins a group, he or she is assigned the member role by default. Members are able to contribute to the group’s discussions, activity feeds, and view other group members."
                 }
               />
-              <MemberSettings data={assignCommunityMember(listMembers, "member")} />
+              <MemberSettings
+                isCreator={communityData?.UserId === user?.id ? true : false}
+                data={assignCommunityMember(listMembers, "member")}
+              />
             </>
           )}
         </div>
       </div>
     </>
   );
+};
+
+MembersTab.propTypes = {
+  communityData: PropTypes.object,
 };
 
 export default MembersTab;

@@ -10,13 +10,14 @@ const GroupsPreview = () => {
   const [value, setValue] = React.useState("one");
 
   const user = useOutletContext();
-  console.log(user);
+  var randomItem =
+    user !== undefined && user?.Interests !== null ? user?.Interests[Math.floor(Math.random() * user?.Interests?.length)] : undefined;
 
   const {
     data: communitySuggest,
     isLoading: loadingSuggest,
     isError: errorSuggest,
-  } = useGetCommunitySuggest(["community", "suggest"], true, "random");
+  } = useGetCommunitySuggest(["community", "suggest"], randomItem !== undefined ? true : false, randomItem?.name);
   const {
     data: communityPopular,
     isLoading: loadingPopular,

@@ -9,7 +9,7 @@ const EmptyComponent = ({ icon, placeholder, tips, border = true }) => {
           <p className="text-lg text-center">{icon || ""}</p>
         </div>
         <div className="w-full py-2">
-          <p className="text-lg text-center">{placeholder || ""}</p>
+          <p className="text-md text-center">{placeholder || ""}</p>
         </div>
         <div className="w-full py-2">
           <p className="text-xs text-center">{tips || ""}</p>
