@@ -14,7 +14,7 @@ describe('Friend service, ', () => {
   const userEndpoint = '/users';
   beforeAll(async () => {
     testServer = request(app);
-
+    await app.get('sequelizeClient').sync({ force: true });
     createdTestUsers = await Promise.all(
       getRandUsers(4).map((u) => {
         const user = u;
@@ -36,7 +36,7 @@ describe('Friend service, ', () => {
     await app.get('sequelizeClient').close();
   });
 
-  it.skip(' The friendRequest service is running ', () => {
+  it(' The friendRequest service is running ', () => {
     const service = app.service('friendRequest');
     expect(service).toBeDefined();
   });
