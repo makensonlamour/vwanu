@@ -44,9 +44,18 @@ export default (sequelize: any, DataTypes: any) => {
 
       amountOfPeople: { type: DataTypes.INTEGER, defaultValue: 0 },
       type: {
-        type: DataTypes.ENUM('group', 'direct'),
+        type: DataTypes.STRING,
         defaultValue: 'direct',
         allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            if (!['group', 'index'].includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for friendPrivacy`
+              );
+            }
+          },
+        },
       },
       name: {
         type: DataTypes.STRING,
