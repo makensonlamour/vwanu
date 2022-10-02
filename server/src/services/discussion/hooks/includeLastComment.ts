@@ -62,6 +62,15 @@ SELECT
     WHERE "R"."entityId"="Discussion"."id" AND  "R"."entityType"='Discussion' AND "R"."UserId"='${context.params.User.id}'
   )`;
 
+  const OnCategory = (categoryId) =>
+    `(
+    EXISTS(
+     SELECT 1 
+     FROM "DiscussionInterest" AS "Di" 
+     WHERE "Di"."DiscussionId"= "Discussion"."id" AND "Di"."InterestId" IN 
+     (SELECT "InterestId" AS "id" FROM "CategoryInterest" WHERE "CategoryInterest"."id='${categoryId}')
+    ))`;
+
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
@@ -72,6 +81,14 @@ SELECT
     : isEmpty(where)
     ? { DiscussionId: null }
     : { ...where };
+
+  if (where.categoryId) {
+    const { categoryId } = where;
+
+    clause.$and.push(
+      Sequelize.where(Sequelize.literal(OnCategory(categoryId)), true)
+    );
+  }
   params.sequelize = {
     where: clause,
     attributes: {

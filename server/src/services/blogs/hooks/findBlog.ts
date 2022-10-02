@@ -105,9 +105,7 @@ SELECT
 
   const clause = {
     ...where,
-    [Op.and]: {
-      [Op.or]: [{ publish: true }, { UserId: params.User.id }],
-    },
+    [Op.and]: [{ [Op.or]: [{ publish: true }, { UserId: params.User.id }] }],
   };
 
   if (interests) {
@@ -129,7 +127,20 @@ SELECT
         [Sequelize.literal(lastResponse), 'lastResponse'],
       ],
     },
-
+    include: [
+      {
+        model: Sequelize.models.User,
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'profilePicture',
+          'createdAt',
+          'updatedAt',
+        ],
+        required: true,
+      },
+    ],
     order,
     raw: false,
   };
