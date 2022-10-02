@@ -1,5 +1,5 @@
 // import IncludeAssociations from '../../../Hooks/IncludeAssociations';
-
+import { Op } from '@sequelize/core';
 import isEmpty from 'lodash/isEmpty';
 
 const IncludeLast = (single: boolean) => async (context) => {
@@ -80,12 +80,12 @@ SELECT
     ? { id: context.id }
     : isEmpty(where)
     ? { DiscussionId: null }
-    : { ...where };
+    : { ...where, [Op.and]: [] };
 
   if (where.categoryId) {
     const { categoryId } = where;
 
-    clause.$and.push(
+    clause[Op.and].push(
       Sequelize.where(Sequelize.literal(OnCategory(categoryId)), true)
     );
   }

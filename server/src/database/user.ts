@@ -6,6 +6,7 @@ import { Model } from 'sequelize';
 
 import { UpUserInterface as UserInterface } from '../schema/user';
 
+export const authorizationEnums = ['public', 'private', 'friend'];
 export default (sequelize: any, DataTypes: any) => {
   class User extends Model<UserInterface> implements UserInterface {
     id: string;
@@ -213,20 +214,56 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       friendPrivacy: {
-        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friend'),
-        defaultValue: 'everyone',
+        type: DataTypes.STRING,
+        defaultValue: 'public',
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for friendPrivacy`
+              );
+            }
+          },
+        },
       },
       friendListPrivacy: {
-        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friend'),
+        type: DataTypes.STRING,
         defaultValue: 'everyone',
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for friendListPrivacy`
+              );
+            }
+          },
+        },
       },
       followPrivacy: {
-        type: DataTypes.ENUM('everyone', 'friend-of-friend', 'friends'),
-        defaultValue: 'everyone',
+        type: DataTypes.STRING,
+        defaultValue: 'public',
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for followPrivacy`
+              );
+            }
+          },
+        },
       },
       profilePrivacy: {
-        type: DataTypes.ENUM('private', 'public', 'friends'),
+        type: DataTypes.STRING,
         defaultValue: 'public',
+        validate: {
+          customValidator: (value) => {
+            if (!authorizationEnums.includes(value)) {
+              throw new Error(
+                `${value} is not a valid option for profilePrivacy`
+              );
+            }
+          },
+        },
       },
 
       wechat: {

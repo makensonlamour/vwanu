@@ -29,15 +29,25 @@ export default (sequelize: any, DataTypes: any) => {
       },
 
       description: {
-        type: DataTypes.ENUM(
-          'Work',
-          'Home',
-          'Billing',
-          'Shipping',
-          'School',
-          'Other'
-        ),
-        defaultValue: 'Home',
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            if (
+              ![
+                'Work',
+                'Home',
+                'Billing',
+                'Shipping',
+                'School',
+                'Other',
+              ].includes(value)
+            ) {
+              throw new Error(`${value} is not a valid option for description`);
+            }
+          },
+        },
       },
     },
 
