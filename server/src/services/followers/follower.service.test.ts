@@ -117,21 +117,14 @@ describe('Friend service, ', () => {
       .set('authorization', user.accessToken);
 
     expect(response.status).toBe(StatusCodes.OK);
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        {
-          id: expect.any(String),
-          firstName: expect.any(String),
-          lastName: expect.any(String),
-          profilePicture: expect.objectContaining({
-            medium: expect.any(String),
-            tiny: expect.any(String),
-            small: expect.any(String),
-            original: expect.any(String),
-          }),
-        },
-      ])
-    );
+    response.body.data.forEach((f) => {
+      expect(f).toMatchObject({
+        id: expect.any(String),
+        firstName: expect.any(String),
+        lastName: expect.any(String),
+        profilePicture: expect.any(String),
+      });
+    });
   }, 2000);
   it('get a list of all the people he is following', async () => {
     const requester = createdTestUsers[0].body;
@@ -139,22 +132,16 @@ describe('Friend service, ', () => {
       .get(`${endpoint}/?action=people-i-follow`)
       .set('authorization', requester.accessToken);
 
+    console.log(response.body);
     expect(response.status).toBe(StatusCodes.OK);
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        {
-          id: expect.any(String),
-          firstName: expect.any(String),
-          lastName: expect.any(String),
-          profilePicture: expect.objectContaining({
-            medium: expect.any(String),
-            tiny: expect.any(String),
-            small: expect.any(String),
-            original: expect.any(String),
-          }),
-        },
-      ])
-    );
+    response.body.data.forEach((f) => {
+      expect(f).toMatchObject({
+        id: expect.any(String),
+        firstName: expect.any(String),
+        lastName: expect.any(String),
+        profilePicture: expect.any(String),
+      });
+    });
   });
 
   it('should get a list of people someone else is following', async () => {
@@ -167,20 +154,13 @@ describe('Friend service, ', () => {
       .set('authorization', user.accessToken);
 
     expect(response.status).toBe(StatusCodes.OK);
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        {
-          id: expect.any(String),
-          firstName: expect.any(String),
-          lastName: expect.any(String),
-          profilePicture: expect.objectContaining({
-            medium: expect.any(String),
-            tiny: expect.any(String),
-            small: expect.any(String),
-            original: expect.any(String),
-          }),
-        },
-      ])
-    );
+    response.body.data.forEach((follower) => {
+      expect(follower).toMatchObject({
+        id: expect.any(String),
+        firstName: expect.any(String),
+        lastName: expect.any(String),
+        profilePicture: expect.any(String),
+      });
+    });
   });
 });
