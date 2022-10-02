@@ -5,7 +5,7 @@ import { api } from "../../lib/api";
 
 export const useGetCommunityList = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/communities`);
 
-export const useGetMyCommunityList = (queryKey, enabled = false, userId) => useFetch(queryKey, enabled, `/communities?UserId=${userId}`);
+export const useGetMyCommunityList = (queryKey, enabled = false, userId) => useLoadMore(queryKey, enabled, `/communities?UserId=${userId}`);
 
 export const useGetCommunity = (queryKey, enabled = true, communityId) => useFetch(queryKey, enabled, `/communities/${communityId}`);
 
@@ -13,6 +13,12 @@ export const useCreateCommunity = (queryKey, oldData, newData) => usePost(queryK
 
 export const useUpdateCommunity = (queryKey, communityId, oldData, newData) =>
   useUpdate(queryKey, `/communities/${communityId}`, (oldData, newData));
+
+export const useUpdateCommunityUser = (queryKey, communityId, oldData, newData) =>
+  useUpdate(queryKey, `/community-users`, (oldData, newData));
+
+export const useDeleteCommunityUser = (queryKey, communityId, oldData, newData) =>
+  useDelete(queryKey, `/community-users`, (oldData, newData));
 
 export const updateGroupPicture = (data) => api.patch(`/communities/${data?.id}`, data.formData);
 
@@ -28,7 +34,7 @@ export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(query
 export const useJoinCommunity = (queryKey, oldData, newData) => usePost(queryKey, `/community-join`, (oldData, newData));
 
 export const useGetAllMembersCommunity = (queryKey, enabled = true, communityId) =>
-  useLoadMore(queryKey, enabled, `/community-users?CommunityId=${communityId}`);
+  useLoadMore(queryKey, enabled, `/community-users?CommunityId=${communityId}&banned=false`);
 
 export const useGetCommunityRole = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/community-role`);
 

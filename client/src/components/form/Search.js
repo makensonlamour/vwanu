@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedState } from "@mantine/hooks";
 import PropTypes from "prop-types";
 import { useSearch } from "../../features/search/searchSlice";
@@ -9,9 +9,14 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
   //   const user = useOutletContext();
   //   const navigate = useNavigate();
   const [keyword, setKeyword] = useDebouncedState("", 200);
+  const [filterSearch, setFilterSearch] = useState("");
   const { data: filterData, isError, isLoading } = useSearch(["search", keyword], keyword === "" ? false : true, keyword);
-
+  console.log("filter", filterSearch);
   const inputRef = useRef(null);
+
+  const handleChange = (e) => {
+    setFilterSearch(e.target.value);
+  };
 
   useEffect(() => {
     inputRef.current.focus();
@@ -30,10 +35,32 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
             ref={inputRef}
             onChange={(e) => setKeyword(e?.target?.value)}
             className="w-full outline-0 py-2 px-4 border border-gray-300 rounded-lg "
-            placeholder={placeholder}
+            placeholder={
+              filterSearch === "" || filterSearch === "members"
+                ? placeholder
+                : filterSearch === "community"
+                ? "Search a Community"
+                : "Search a Blog"
+            }
           />
         </div>
         <ul tabIndex={0} className="w-full dropdown-content menu p-2 shadow bg-base-100 rounded-b-xl">
+          <div onChange={handleChange} className="flex flex-start items-center my-1">
+            <p className="text-sm mr-3">Search by:</p>
+            <label htmlFor="members" className="mr-1 text-sm">
+              members
+            </label>
+            <input type="radio" id="members" name="filter" value="members" />
+            <label htmlFor="blogs" className="mr-1 ml-2 text-sm">
+              blogs
+            </label>
+            <input type="radio" id="blogs" name="filter" value="blogs" />
+
+            <label htmlFor="community" className="mr-1 ml-2 text-sm">
+              community
+            </label>
+            <input type="radio" id="community" name="filter" value="community" />
+          </div>
           {isLoading ? (
             <li>
               <p className="text-center py-4 text-lg">Loading...</p>

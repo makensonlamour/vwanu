@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useFormikContext } from "formik";
+import { BiHide, BiShow } from "react-icons/bi";
 
 import Error from "./Error";
 
@@ -33,7 +34,7 @@ function FormField({ name, label, className, containerClassName, testId, showPas
               className="w-10 rounded px-2 py-1 text-sm hover:text-gray-700 text-gray-600 text-right -mt-9 mr-3 ml-auto"
               htmlFor="toggle"
             >
-              {show ? "Hide" : "Show"}
+              {show ? <BiHide size={"20px"} className="" /> : <BiShow size={"20px"} className="" />}
             </label>
           </>
         ) : null}

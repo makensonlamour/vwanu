@@ -39,38 +39,42 @@ const ManageTabs = () => {
                   scrollButtons="auto"
                   allowScrollButtonsMobile
                 >
-                  <Tab
-                    style={{ heigth: "150px", alignItems: "self-start", justifyContent: "flex-start" }}
-                    sx={{
-                      textTransform: "capitalize",
-                      textAlign: "left",
-                      heigth: "150px",
-                    }}
-                    label={
-                      <Fragment>
-                        {value === "1" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Details</div>
-                        ) : (
-                          <div className="flex">Details</div>
-                        )}
-                      </Fragment>
-                    }
-                    value="1"
-                  />
-                  <Tab
-                    sx={{ textTransform: "capitalize" }}
-                    style={{ alignItems: "self-start", justifyContent: "flex-start " }}
-                    label={
-                      <Fragment>
-                        {value === "2" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Settings</div>
-                        ) : (
-                          <div className="flex">Settings</div>
-                        )}
-                      </Fragment>
-                    }
-                    value="2"
-                  />
+                  {communityData?.IsMember?.role === "admin" && (
+                    <Tab
+                      style={{ heigth: "150px", alignItems: "self-start", justifyContent: "flex-start" }}
+                      sx={{
+                        textTransform: "capitalize",
+                        textAlign: "left",
+                        heigth: "150px",
+                      }}
+                      label={
+                        <Fragment>
+                          {value === "1" ? (
+                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Details</div>
+                          ) : (
+                            <div className="flex">Details</div>
+                          )}
+                        </Fragment>
+                      }
+                      value="1"
+                    />
+                  )}
+                  {communityData?.IsMember?.role === "admin" && (
+                    <Tab
+                      sx={{ textTransform: "capitalize" }}
+                      style={{ alignItems: "self-start", justifyContent: "flex-start " }}
+                      label={
+                        <Fragment>
+                          {value === "2" ? (
+                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Settings</div>
+                          ) : (
+                            <div className="flex">Settings</div>
+                          )}
+                        </Fragment>
+                      }
+                      value="2"
+                    />
+                  )}
                   <Tab
                     style={{ alignItems: "self-start", justifyContent: "flex-start" }}
                     sx={{ textTransform: "capitalize" }}

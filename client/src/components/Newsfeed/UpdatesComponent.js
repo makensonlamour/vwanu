@@ -6,11 +6,29 @@ import { Stack, styled, Paper } from "@mui/material";
 import { formatDistance, parseISO } from "date-fns";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
+import { useReadNotification } from "../../features/notification/notificationSlice";
 
 const UpdatesComponent = ({ data }) => {
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
+  const readNotification = useReadNotification(["notification", "read"], undefined, undefined);
+  const handleRead = async (notificationId, idLink, entityName) => {
+    try {
+      const dataObj = { id: notificationId, view: true };
+      await readNotification.mutateAsync(dataObj);
+      if (entityName === "users") {
+        window.location.href = "../../profile/" + idLink;
+      } else if (entityName === "posts") {
+        window.location.href = "../../post/" + idLink;
+      } else {
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-6 mb-8">
@@ -39,10 +57,15 @@ const UpdatesComponent = ({ data }) => {
                     </div>
                     <div>
                       <p to="#" className=" text-sm line-clamp-2 max-w-[22ch] text-ellipsis whitespace-wrap overflow-hidden ml-2 pb-1">
-                        <Link className="hover:text-secondary" to="#">
+                        <div
+                          className="cursor-pointer hover:text-secondary"
+                          onClick={() => {
+                            handleRead(latest?.id, latest?.entityId, latest?.entityName);
+                          }}
+                        >
                           <span className="font-semibold">{latest?.User?.firstName + " " + latest?.User?.lastName}</span>
                           <span className="font-light">{" " + latest?.message}</span>
-                        </Link>
+                        </div>
                       </p>
                       <p className=" text-gray-400 font-medium text-xs ml-2">
                         {formatDistance(parseISO(latest?.createdAt), new Date(), [

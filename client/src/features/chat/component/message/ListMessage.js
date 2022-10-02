@@ -166,25 +166,31 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                     </div>
                   }
                 >
-                  {listMessage?.pages?.map((page) => {
-                    let array = page?.data?.data;
-                    console.log([].concat(array).reverse());
-                    return []
-                      .concat(array)
-                      .reverse()
-                      .map((message) => {
-                        return (
-                          <div key={message?.id} className="px-2 lg:px-5 py-1">
-                            <SingleMessage
-                              conversation={conversationData?.data}
-                              groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
-                              sender={user?.id === message?.senderId ? true : false}
-                              listMessage={message}
-                            />
-                          </div>
-                        );
-                      });
-                  })}
+                  {[]
+                    .concat(listMessage?.pages)
+                    ?.reverse()
+                    ?.map((page) => {
+                      let array = page?.data?.data;
+                      // console.log([].concat(array).reverse());
+                      // return []
+                      //   .concat(array)
+                      //   .reverse()
+                      return []
+                        .concat(array)
+                        .reverse()
+                        ?.map((message) => {
+                          return (
+                            <div key={message?.id} className="px-2 lg:px-5 py-1">
+                              <SingleMessage
+                                conversation={conversationData?.data}
+                                groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
+                                sender={user?.id === message?.senderId ? true : false}
+                                listMessage={message}
+                              />
+                            </div>
+                          );
+                        });
+                    })}
                 </InfiniteScroll>
               ) : // <div ref={scrollableRef} className="w-full overflow-y-auto">
               //   {listMessage?.data?.length > 0 &&

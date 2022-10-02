@@ -8,7 +8,7 @@ import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
 import InfiniteScroll from "../InfiniteScroll/InfiniteScroll";
 
-const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery }) => {
+const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery, isNetwork = false }) => {
   const queryClient = useQueryClient();
   const user = useOutletContext();
   // const { data: listFriend } = useGetListFriend(["user", "friend"], true);
@@ -59,11 +59,14 @@ const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchN
                   return (
                     <div
                       key={friend?.id}
-                      className="bg-white w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:w-[31%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3"
+                      className={`bg-white border-gray-200 w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3 
+                        ${isNetwork ? " xl:w-[48%] " : " xl:w-[31%] "}
+                      `}
                     >
+                      {console.log(friend?.profilePicture)}
                       <img
                         className="object-cover w-28 h-28 mask mask-squircle mx-auto mb-2"
-                        src={friend?.profilePicture?.original || friend?.User?.profilePicture}
+                        src={friend?.profilePicture?.original || friend?.User?.profilePicture || friend?.profilePicture}
                         alt="_profile"
                       />
                       <Link to={`../../profile/${friend?.id}`} className="hover:text-primary">
@@ -72,7 +75,23 @@ const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchN
                         </p>
                       </Link>
                       <p className="mx-auto font-normal text-sm text-gray-400 text-center">{friend?.createdAt}</p>
-                      <p className="mx-auto py-1 font-normal text-sm text-gray-400 text-center">{"14 followers"}</p>
+                      <div className="flex justify-center">
+                        <p className="py-1 font-normal text-sm text-gray-400 text-center">
+                          {friend?.amountOfFollower === 0
+                            ? "0 Follower"
+                            : friend?.amountOfFollower === 1
+                            ? friend?.amountOfFollower + " Follower"
+                            : friend?.amountOfFollower + " Followers"}
+                        </p>
+                        <span className="mx-1">•</span>
+                        <p className="py-1 font-normal text-sm text-gray-400 text-center">
+                          {friend?.amountOfFollowing === 0
+                            ? "0 Following"
+                            : friend?.amountOfFollowing === 1
+                            ? friend?.amountOfFollowing + " Following"
+                            : friend?.amountOfFollowing + " Following"}
+                        </p>
+                      </div>
                       <div className="px-4">
                         {user?.id?.toString() === friend?.id?.toString() ? (
                           <Link
@@ -94,7 +113,7 @@ const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchN
                       </div>
                       {user?.id?.toString() !== friend?.id?.toString() && (
                         <div className="flex border border-gray-300 rounded-b-xl -px-6 justify-around bg-placeholder-color">
-                          {friend?.isFollowYou ? (
+                          {friend?.iFollow ? (
                             <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Unfollow</button>
                           ) : (
                             <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Follow</button>
@@ -127,6 +146,7 @@ ViewFriend.propTypes = {
   isError: PropTypes.bool,
   isLoading: PropTypes.bool,
   hasNextPage: PropTypes.bool,
+  isNetwork: PropTypes.bool,
   fetchNextPage: PropTypes.func,
   arrayQuery: PropTypes.array,
 };

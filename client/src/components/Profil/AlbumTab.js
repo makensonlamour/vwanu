@@ -143,7 +143,7 @@ const AlbumTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "2" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Album</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Albums</div>
                       ) : (
                         <div className="flex">Albums</div>
                       )}
@@ -153,12 +153,12 @@ const AlbumTab = ({ user }) => {
                 />
               </TabList>
               <TabPanel value="1">
-                <div className="mt-8">
+                <div className="">
                   <PhotoList user={user} />
                 </div>
               </TabPanel>
               <TabPanel value="2">
-                <div className="mt-4">
+                <div className="">
                   {openAddAlbum && (
                     <div className="">
                       <Form
@@ -177,7 +177,10 @@ const AlbumTab = ({ user }) => {
                           type="text"
                           className=" mr-1 mt-1 mb-4 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
                         />
-                        <Submit className="inline rounded-2xl text-base-100 text-md w-1/5 mt-2" title={isLoading ? <Loader /> : "Save"} />{" "}
+                        <Submit
+                          className="inline rounded-lg py-2 text-base-100 text-md w-fit px-6 mt-2"
+                          title={isLoading ? <Loader /> : "Save"}
+                        />{" "}
                       </Form>
                     </div>
                   )}

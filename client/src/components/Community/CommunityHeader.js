@@ -1,7 +1,6 @@
-/*eslint-disable */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Routes, Route, useNavigate, useLocation, useOutletContext, useParams } from "react-router-dom";
+import { Routes, Route, useLocation, useOutletContext, useParams } from "react-router-dom";
 import CommunityTabs from "./CommunityTabs";
 import { allTabs1 } from "./Tablink.data";
 import UpdatesComponent from "../Newsfeed/UpdatesComponent";
@@ -15,14 +14,16 @@ import DiscussionTabs from "./DiscussionTabs";
 import SendInviteTabs from "./SendInviteTabs";
 import { Chip, Stack } from "@mui/material";
 import EmptyComponent from "./../common/EmptyComponent";
-import {
-  useSendInvitation,
-  useGetCommunityRole,
-  useJoinCommunity,
-  useGetMyCommunityInvitation,
-} from "../../features/community/communitySlice";
+import BlogComponent from "../../components/Newsfeed/BlogComponent";
+import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
+import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
+import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
+import { useSendInvitation, useGetCommunityRole, useJoinCommunity } from "../../features/community/communitySlice";
+import { useGetBlogList } from "../../features/blog/blogSlice";
+import { useGetOnline } from "../../features/user/userSlice";
+import { useGetListFollowing } from "../../features/follower/followerSlice";
 import toast, { Toaster } from "react-hot-toast";
-import { isInvitation, isInvitationReceive } from "../../helpers/index";
+import Loader from "../../components/common/Loader";
 
 const sendInvitationSuccess = () =>
   toast.success("You sent the invitation", {
@@ -37,78 +38,30 @@ const sendInvitationError = () =>
 const CommunityHeader = ({ communityData, notificationList }) => {
   const location = useLocation();
   const data = location.state;
-  const navigate = useNavigate();
   const user = useOutletContext();
   const { id } = useParams();
-  const [edit, setEdit] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
-  const [over, setOver] = useState(false);
+  // const [over, setOver] = useState(false);
   const sendInvitation = useSendInvitation(["community", "invitation"], undefined, undefined);
   const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
-  const { data: listInvitation } = useGetMyCommunityInvitation(
-    ["community", "invitation", user?.id],
-    user?.id !== undefined ? true : false,
-    user?.id
-  );
   const { data: roles } = useGetCommunityRole(["roles", "all"], true);
-  const percentage = 73;
+  const { data: blogList, isError, isLoading: loadingBlog } = useGetBlogList(["blog", "all"], true);
+  const { data: listFollowing, isLoading: loadingFollowing, isError: errorFollowing } = useGetListFollowing(["user", "following"], true);
 
-  const steps = [
-    { title: "General Information", total: 6, complete: 5 },
-    { title: "Work Experience", total: 3, complete: 1 },
-    { title: "Profile Photo", total: 1, complete: 1 },
-    { title: "Cover Photo", total: 1, complete: 1 },
-  ];
-
-  const latestUpdates = [
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "10 months ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=3",
-      name: "Adele",
-      date: "10 months ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "in the group Coffee Addicts",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
-    },
-  ];
-  const otherUser = {};
-
-  const dataBlog = {
-    id: 1,
-    profilePicture: "https://randomuser.me/api/portraits/men/56.jpg",
-    coverPicture: "https://picsum.photos/600/600?random=1",
-    name: "Mountain Riders",
-    description: "Map out your future – but do it in pencil. The road ahead is as long as you make it. Make it worth the trip.",
-    type: "Technology",
-    privacy: "Public",
-    userRole: "Organizer",
-  };
+  const {
+    data: listOnline,
+    isLoading: loadingOnline,
+    isError: onlineError,
+    hasNextPage: hasNextPageOnline,
+    fetchNextPage: fetchNextPageOnline,
+  } = useGetOnline(["user", "online"]);
 
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
       let roleCommunityId;
+      // eslint-disable-next-line array-callback-return
       roles?.data?.map((role) => {
         if (role?.name === "member") {
           return (roleCommunityId = role?.id);
@@ -129,12 +82,10 @@ const CommunityHeader = ({ communityData, notificationList }) => {
         await sendInvitation.mutateAsync(dataObj);
       } else {
         return;
-        // console.log("hidden");
       }
 
       sendInvitationSuccess();
       window.location.reload();
-      // setSelectMember([]);
     } catch (e) {
       sendInvitationError();
       console.log(e);
@@ -142,9 +93,6 @@ const CommunityHeader = ({ communityData, notificationList }) => {
       setIsLoading(false);
     }
   };
-
-  // const invite = isInvitation(listInvitation, user);
-  // const inviteReceive = isInvitationReceive(listInvitation, user);
 
   let invite = false;
   let inviteReceive = false;
@@ -239,7 +187,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                       <p className=" lg:px-0 py-2 flex items-center text-sm lg:text-md">
                         {"Organizer:"}
                         <span className="ml-4">
-                          <img src={user?.profilePicture?.original} className="mask mask-squircle w-8 h-8" />
+                          <img alt={communityData?.name} src={user?.profilePicture?.original} className="mask mask-squircle w-8 h-8" />
                         </span>
                       </p>
                       <div className="lg:hidden">
@@ -271,7 +219,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                 </div>
               </div>
 
-              {communityData?.id && <CommunityTabs communityData={communityData} user={user} otherUser={otherUser} />}
+              {communityData?.id && <CommunityTabs communityData={communityData} user={user} />}
               {communityData?.id ? (
                 <div className="mt-8 px-2">
                   <Routes>
@@ -348,11 +296,25 @@ const CommunityHeader = ({ communityData, notificationList }) => {
               )}
             </div>
 
-            <div className="hidden lg:block basis-[20%] ml-auto mx-2 mt-8">
-              {/* <div className="block xl:hidden">
-                <FollowingPreview data={listFollowing} />
-                  </div>*/}
+            <div className="hidden lg:block basis-[20%] lg:ml-4 xl:ml-2 mt-8">
+              <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={isError} />
+              <RecentlyActive
+                data={listOnline || []}
+                isLoading={loadingOnline}
+                isError={onlineError}
+                hasNextPage={hasNextPageOnline}
+                fetchNextPage={fetchNextPageOnline}
+              />
+              <GroupsPreview />
+              {/* <CompleteProfile percentage={percentage} data={steps} /> */}
               <div className="block xl:hidden">
+                <FollowingPreview
+                  isLoading={loadingFollowing}
+                  isError={errorFollowing}
+                  data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
+                />
+              </div>
+              <div className="block xl:hidden mb-2">
                 <UpdatesComponent data={notificationList} />
               </div>
             </div>
@@ -366,7 +328,6 @@ const CommunityHeader = ({ communityData, notificationList }) => {
 CommunityHeader.propTypes = {
   user: PropTypes.object.isRequired,
   communityData: PropTypes.object,
-  otherUser: PropTypes.object,
   listFriendRequest: PropTypes.array,
   listFriend: PropTypes.array,
   listFollowers: PropTypes.array,

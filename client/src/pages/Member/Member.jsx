@@ -42,9 +42,9 @@ const Member = () => {
                 allowScrollButtonsMobile
               >
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`Members`} />
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`friends (${totalFriend})`} />
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Followers (${totalFollowers})`} />
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Following (${totalFollowing})`} />
+                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`friends (${user?.amountOfFriend || 0})`} />
+                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Followers (${user?.amountOfFollower})`} />
+                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Following (${user?.amountOfFollowing})`} />
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="five" label={`Request (${totalRequest})`} />
               </TabList>
             </div>

@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 // import useInfiniteScroll from "./useInfiniteScroll";
 import { Facebook } from "react-content-loader";
 import { PullToRefresh, PullDownContent, ReleaseContent, RefreshContent } from "react-js-pull-to-refresh";
 import { BottomScrollListener } from "react-bottom-scroll-listener";
 import useChatScroll from "./useChatScroll";
-import { useWindowScroll } from "@mantine/hooks";
+// import { useWindowScroll } from "@mantine/hooks";
 
 const InfiniteScroll = ({
   children,
@@ -25,12 +25,27 @@ const InfiniteScroll = ({
   // eslint-disable-next-line no-unused-vars
   // const [isFetching, setIsFetching] = useInfiniteScroll(fetchMore, hasNext);
   // eslint-disable-next-line no-unused-vars
-  const [scroll, scrollTo] = useWindowScroll();
+  // const containerRef = useRef(null);
   const refScroll = useChatScroll(children);
+  const [isFetching, setIsFetching] = useState(false);
+
+  function handleScroll() {
+    if (refScroll.current?.scrollTop > 30) return;
+    setIsFetching(true);
+  }
 
   useEffect(() => {
-    console.log("test", scroll.y);
-  }, [scroll.y]);
+    refScroll.current?.addEventListener("scroll", handleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!isFetching) return;
+    if (!hasNext) return setIsFetching(false);
+    fetchMore();
+    setIsFetching(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   return (
     <>

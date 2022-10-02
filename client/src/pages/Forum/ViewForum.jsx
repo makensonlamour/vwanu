@@ -1,5 +1,7 @@
 import React from "react";
 import ViewSingleDiscussion from "../../components/Forum/ViewSingleDiscussion";
+import { useParams } from "react-router-dom";
+import { useGetDiscussion } from "../../features/forum/forumSlice";
 // import InputDiscussion from "../../components/Community/DiscussionTab/InputDiscussion";
 
 const ViewForum = () => {
@@ -15,14 +17,16 @@ const ViewForum = () => {
   //   memberCount: "2",
   //   replyCount: "2",
   // };
-  const data = {};
+  const { id } = useParams();
+
+  const { data: discussionData } = useGetDiscussion(["forum", id], id !== undefined ? true : false, id);
 
   return (
     <>
       <div className="my-5 lg:mx-32">
         <div className="flex flex-col-reverse  flex-wrap lg:justify-between">
           {/* components */}
-          <ViewSingleDiscussion data={data || {}} />
+          <ViewSingleDiscussion data={discussionData || {}} />
 
           {/* <div className="flex lg:basis-[25%] justify-end h-10">
             <div className="basis-full mb-2 mx-auto">

@@ -74,47 +74,6 @@ const NewsFeed = () => {
     queryClient.refetchQueries(arrayQueryKey);
   }
 
-  const recentlyActive = [
-    { image: "https://picsum.photos/200/300?image=0" },
-    { image: "https://picsum.photos/200/300?image=1" },
-    { image: "https://picsum.photos/200/300?image=2" },
-    { image: "https://picsum.photos/200/300?image=3" },
-    { image: "https://picsum.photos/200/300?image=4" },
-    { image: "https://picsum.photos/200/300?image=8" },
-    { image: "https://picsum.photos/200/300?image=9" },
-    { image: "https://picsum.photos/200/300?image=10" },
-    { image: "https://picsum.photos/200/300?image=11" },
-    { image: "https://picsum.photos/200/300?image=12" },
-  ];
-
-  const groups = [
-    {
-      name: "Mountain Riders",
-      image: "https://picsum.photos/200/300?image=0",
-      members: "20",
-    },
-    {
-      name: "Graphic Design",
-      image: "https://picsum.photos/200/300?image=1",
-      members: "20",
-    },
-    {
-      name: "Nature Lovers",
-      image: "https://picsum.photos/200/300?image=2",
-      members: "19",
-    },
-    {
-      name: "Coffee Addicts",
-      image: "https://picsum.photos/200/300?image=3",
-      members: "19",
-    },
-    {
-      name: "Architecture",
-      image: "https://picsum.photos/200/300?image=4",
-      members: "17",
-    },
-  ];
-
   // const percentage = 73;
 
   // const steps = [
@@ -196,7 +155,11 @@ const NewsFeed = () => {
         <div className="flex justify-evenly">
           <div className="basis-[25%] hidden xl:block">
             <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
-            <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing || []} />
+            <FollowingPreview
+              isLoading={loadingFollowing}
+              isError={errorFollowing}
+              data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
+            />
           </div>
           <div className="basis-full lg:basis-[56%] ">
             <div className="px-3">
@@ -210,7 +173,11 @@ const NewsFeed = () => {
               <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
             </span>
             <span className="block xl:hidden">
-              <FollowingPreview isLoading={loadingFollowing} isError={errorFollowing} data={listFollowing || []} />
+              <FollowingPreview
+                isLoading={loadingFollowing}
+                isError={errorFollowing}
+                data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
+              />
             </span>
 
             {/* <CompleteProfile percentage={percentage} data={steps} /> */}
@@ -222,7 +189,7 @@ const NewsFeed = () => {
               hasNextPage={hasNextPageOnline}
               fetchNextPage={fetchNextPageOnline}
             />
-            <GroupsPreview data={groups || []} />
+            <GroupsPreview />
           </div>
         </div>
       </div>

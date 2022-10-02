@@ -30,7 +30,7 @@ const ForumReply = ({ data, isLoading, isError, hasNextPage, fetchNextPage }) =>
             Tap to retry
           </Link>{" "}
         </div>
-      ) : data?.pages && data?.pages?.length > 0 ? (
+      ) : data?.pages && data?.pages?.length > 0 && data?.pages[0]?.data?.total > 0 ? (
         <InfiniteScroll
           fetchMore={fetchNextPage}
           isError={isError}
@@ -96,8 +96,8 @@ const ForumReply = ({ data, isLoading, isError, hasNextPage, fetchNextPage }) =>
           <EmptyComponent
             border={false}
             icon={<ImSad size={"32px"} className="" />}
-            placeholder={"Sorry, There were no discussions found."}
-            tips={"You can be the first to ccreate a discussion in this forum by clicking on the new discussion button."}
+            placeholder={"Sorry, There were no responses found."}
+            tips={"You can be the first to responseto this discussion in this forum by clicking on the Reply button."}
           />
         </div>
       )}

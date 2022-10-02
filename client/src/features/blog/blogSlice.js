@@ -2,7 +2,10 @@ import { useFetch, usePost, useUpdate, useDelete, useLoadMore } from "../../lib/
 
 export const useGetBlogList = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/blogs`);
 
-export const useGetMyBlogList = (queryKey, enabled = true, userId) => useFetch(queryKey, enabled, `/blogs?UserId=${userId}`);
+export const useGetBlogListByInterest = (queryKey, enabled = false, interest) =>
+  useLoadMore(queryKey, enabled, `/blogs?interests=${interest}`);
+
+export const useGetMyBlogList = (queryKey, enabled = true, userId) => useLoadMore(queryKey, enabled, `/blogs?UserId=${userId}`);
 
 export const useGetBlog = (queryKey, enabled = true, blogId) => useFetch(queryKey, enabled, `/blogs/${blogId}`);
 

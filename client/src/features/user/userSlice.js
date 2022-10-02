@@ -9,4 +9,6 @@ export const useGetOtherProfile = (queryKey, enabled, id) => useFetch(queryKey, 
 
 export const useGetAllMembers = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/users`);
 
+export const useGetSuggestMembers = (queryKey, enabled = false, interest) => useLoadMore(queryKey, enabled, `/users?interests=${interest}`);
+
 export const useGetOnline = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/users?online=true&friends=true`);

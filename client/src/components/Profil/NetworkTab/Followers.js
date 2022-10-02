@@ -1,23 +1,24 @@
 /*eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import ViewFriend from "../ViewFriend";
 import { useGetListFollowers } from "../../../features/follower/followerSlice";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
-const Followers = ({ fn }) => {
-  const { id } = useParams();
+const Followers = ({ fn, isNetwork }) => {
+  const user = useOutletContext();
   const { data: listFollowers, isLoading, isError, hasNextPage, fetchNextPage } = useGetListFollowers(["user", "followers"], true);
 
-  fn(listFollowers?.length || 0);
+  fn(user?.amountOfFollower || 0);
 
   return (
     <>
       <ViewFriend
         data={listFollowers}
         isError={isError}
+        isNetwork={isNetwork}
         isLoading={isLoading}
         arrayQuery={["user", "followers"]}
         hasNextPage={hasNextPage}
@@ -40,6 +41,7 @@ const Followers = ({ fn }) => {
 Followers.propTypes = {
   user: PropTypes.object,
   fn: PropTypes.func,
+  isNetwork: PropTypes.bool,
 };
 
 export default Followers;

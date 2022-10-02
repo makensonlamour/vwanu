@@ -8,39 +8,6 @@ import UpdatesComponent from "../Newsfeed/UpdatesComponent";
 // import InfoCard from "../../features/user/Profile/component/InfoCard";
 
 const PostTab = ({ user, otherUser, listFollowing, notificationList }) => {
-  const latestUpdates = [
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "10 months ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=3",
-      name: "Adele",
-      date: "10 months ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "in the group Coffee Addicts",
-    },
-    {
-      avatar: "https://picsum.photos/200/300?image=4",
-      name: "John",
-      date: "2 years ago",
-      where: "",
-    },
-  ];
-
   return (
     <>
       <div className="lg:flex">

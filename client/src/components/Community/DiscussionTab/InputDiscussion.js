@@ -32,7 +32,7 @@ const postError = () =>
     position: "top-center",
   });
 
-const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new" }) => {
+const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isForum = true, CategoryId = "" }) => {
   const user = useOutletContext();
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
@@ -87,7 +87,11 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new" }) => 
       };
 
       if (type === "new") {
-        dataObj.CommunityId = communityId?.id;
+        if (isForum) {
+          dataObj.CategoryId = CategoryId;
+        } else {
+          dataObj.CommunityId = communityId?.id;
+        }
       } else {
         dataObj.DiscussionId = data?.id;
       }
@@ -234,6 +238,8 @@ InputDiscussion.propTypes = {
   labelBtn: PropTypes.string,
   type: PropTypes.string,
   data: PropTypes.object,
+  isForum: PropTypes.bool,
+  CategoryId: PropTypes.string,
 };
 
 export default InputDiscussion;

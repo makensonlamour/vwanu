@@ -44,10 +44,12 @@ const FormForgotPassword = () => {
         validationSchema={ValidationSchema}
         initialValues={initialValues}
         onSubmit={handleForgotPasword}
-        className="shadow-lg rounded-3xl my-10"
+        className="shadow-lg rounded-3xl my-10 bg-white"
       >
-        <h1 className="card-title text-secondary text-md text-center">Forgot your password?</h1>
-        <p className="text-sky-600">{`Enter your email and we'll send you a link to reset your password.`}</p>
+        <div className="flex justify-center">
+          <h1 className="card-title text-secondary text-md text-center pb-2">Forgot your password?</h1>
+        </div>
+        <p className="">{`Enter your email and we'll send you a link to reset your password.`}</p>
         <Alert />
         <Field
           required
@@ -61,9 +63,22 @@ const FormForgotPassword = () => {
           testId="email-error-message"
         />
 
-        <Submit data-testid="forgotPasswordBtn" className="rounded-full text-md" title={isLoading ? <Loader /> : "Reset Password"} />
+        <Submit
+          disabled={isLoading ? true : false}
+          data-testid="forgotPasswordBtn"
+          className="rounded-full text-md py-2"
+          title={
+            isLoading ? (
+              <div className="flex justify-center">
+                <Loader color="black" />
+              </div>
+            ) : (
+              "Reset Password"
+            )
+          }
+        />
         <div className="divider">OR</div>
-        <Link className="text-primary font-bold mb-10 text-center" to={routesPath.REGISTER}>
+        <Link className="hover:text-primary font-semibold mb-10 text-center" to={routesPath.REGISTER}>
           Create New Account
         </Link>
         <Link className="text-primary font-bold mt-10 text-center" to={routesPath.LOGIN}>

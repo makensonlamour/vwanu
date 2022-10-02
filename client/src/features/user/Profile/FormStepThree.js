@@ -62,16 +62,21 @@ const FormStepThree = () => {
         validationSchema={ValidationSchema}
         initialValues={initialValues}
         onSubmit={handleStepThree}
-        className="mt-4 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10"
+        className="mt-4 py-5 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10 bg-white"
       >
-        <h1 className="card-title text-secondary text-center">Change your profile photo</h1>
+        <div className="flex justify-center">
+          <h1 className="card-title text-secondary text-center pb-5">Change your profile photo</h1>
+        </div>
+
         <Alert />
         {avatar || user?.profilePicture ? (
-          <div className="object-contain object-center overflow-hidden mask mask-squircle shadow-sm m-auto h-48 w-48 items-center">
+          <div className="bg-gray-100 border border-gray-200 object-contain object-center overflow-visible mask mask-squircle shadow-sm m-auto h-fit w-48 items-center">
             <img src={avatar ? URL.createObjectURL(avatar) : user.profilePicture} className="object-fill" alt="profile_photo" />{" "}
           </div>
         ) : (
-          <FaUserCircle size="150px" className="m-auto text-gray-500" />
+          <div className="bg-gray-100 border border-gray-200 object-contain object-center overflow-visible mask mask-squircle shadow-sm m-auto h-fit w-48 items-center">
+            <FaUserCircle size="150px" className="m-auto text-gray-500" />
+          </div>
         )}
         <UploadAvatar
           autoCapitalize="none"
@@ -80,15 +85,15 @@ const FormStepThree = () => {
           id="img"
           setAvatarState={setAvatar}
           accept="image/png,image/jpg,image/jpeg"
-          icon={<RiImageAddFill size="24px" className="text-gray-800" />}
+          icon={<RiImageAddFill size="20px" className="text-gray-800" />}
           autoComplete="new-file"
           className="bg-blue-200 text-secondary font-semibold mask mask-squircle px-6 input-primary border-none w-1/2 ml-auto hidden"
         />
-        <div className="ml-auto px-2 mt-2">
-          <Link className="link link-secondary pr-2" to={"../../" + routesPath.STEP_FOUR}>
+        <div className="flex justify-end items-center px-2 mt-2">
+          <Link className="font-semibold text-secondary" to={"../../" + routesPath.STEP_FOUR}>
             Skip
           </Link>
-          <Submit className="rounded-full text-base-100 text-md w-3/5 ml-auto" title={isLoading ? <Loader /> : "Next"} />{" "}
+          <Submit className="rounded-xl text-base-100 text-md py-1 w-fit px-6 ml-auto" title={isLoading ? <Loader /> : "Next"} />{" "}
         </div>
       </Form>
     </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import * as Yup from "yup";
 import useAuth from "../../../hooks/useAuth";
 
@@ -58,7 +58,7 @@ const FormRegister = () => {
         onSubmit={handleRegister}
         className="mt-4 lg:mt-0 lg:mx-2 xl:mx-14 3xl:mx-64"
       >
-        <h1 className="card-title text-primary font-bold text-xl lg:text-2xl">Join the Vwanu Community</h1>
+        <h1 className="card-title pb-4 text-primary font-bold text-xl lg:text-2xl">Join the Vwanu Community</h1>
         <Alert />
         <div className="grid grid-cols-2">
           <Field
@@ -121,9 +121,43 @@ const FormRegister = () => {
           showPassword={true}
         />
 
-        <Checkbox required name="termOfUse" label={`I Agree with Privacy and Policy`} className="" testId="termOfUse-error-message" />
+        <Checkbox
+          required
+          name="termOfUse"
+          label={
+            <Fragment>
+              <span>
+                {"I Agree with the"}
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a href="#" className="font-semibold hover:text-primary">
+                  {" terms of use "}
+                </a>
+                {" & "}
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a href="#" className="font-semibold hover:text-primary">
+                  {" privacy and policy. "}
+                </a>
+              </span>
+            </Fragment>
+          }
+          className=""
+          testId="termOfUse-error-message"
+        />
 
-        <Submit data-testid="registerBtn" className="rounded-full text-md btn-md" title={isLoading ? <Loader /> : "Sign Up"} />
+        <Submit
+          disabled={isLoading ? true : false}
+          data-testid="registerBtn"
+          className="rounded-full text-md btn-md"
+          title={
+            isLoading ? (
+              <div className="flex justify-center">
+                <Loader color="black" />
+              </div>
+            ) : (
+              "Sign Up"
+            )
+          }
+        />
       </Form>
     </>
   );

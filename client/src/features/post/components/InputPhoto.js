@@ -6,10 +6,10 @@ import "react-image-crop/dist/ReactCrop.css";
 
 const InputPhoto = ({
   label = (
-    <Fragment>
-      <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
-      <p className="text-center text-md font-semibold">{"Add Photos"}</p>
-      <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+    <Fragment className="cursor-pointer">
+      <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto cursor-pointer" />
+      <p className="text-center text-md font-semibold cursor-pointer">{"Add Photos"}</p>
+      <p className="text-center text-sm font-light cursor-pointer">{"or Drag and drop"}</p>
     </Fragment>
   ),
   fn,
