@@ -2,6 +2,8 @@ import { HookContext } from '@feathersjs/feathers';
 import { BadRequest } from '@feathersjs/errors';
 import { Op } from '@sequelize/core';
 
+import userQuery from '../../../lib/utils/userQuery';
+
 export default (context: HookContext): HookContext => {
   const { app, params } = context;
   const { query: where } = context.app
@@ -45,19 +47,20 @@ export default (context: HookContext): HookContext => {
       throw new BadRequest('This action is not supported');
   }
 
+  const attributes = userQuery(params.User.id, Sequelize);
   params.sequelize = {
-    logging: console.log,
+    // logging: console.log,
     where: clause,
-
-    attributes: [
-      'firstName',
-      'lastName',
-      'email',
-      'id',
-      'profilePicture',
-      'createdAt',
-      'updatedAt',
-    ],
+    attributes,
+    // attributes: [
+    //   'firstName',
+    //   'lastName',
+    //   'email',
+    //   'id',
+    //   'profilePicture',
+    //   'createdAt',
+    //   'updatedAt',
+    // ],
 
     // attributes: {
     //   include: [[Sequelize.literal(friends), 'User']],

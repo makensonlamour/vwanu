@@ -132,7 +132,6 @@ describe('Friend service, ', () => {
       .get(`${endpoint}/?action=people-i-follow`)
       .set('authorization', requester.accessToken);
 
-    console.log(response.body);
     expect(response.status).toBe(StatusCodes.OK);
     response.body.data.forEach((f) => {
       expect(f).toMatchObject({
