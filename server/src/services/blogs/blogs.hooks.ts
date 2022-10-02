@@ -8,6 +8,7 @@ import {
   SaveInterest,
   ValidateResource,
   TrueBoolean,
+  IncludeAssociations,
 } from '../../Hooks';
 
 import QueryBlogs from './hooks/findBlog';
@@ -16,10 +17,29 @@ import * as Schema from '../../schema/blog.schema';
 
 const { authenticate } = authentication.hooks;
 
+const UserAttributes = [
+  'firstName',
+  'lastName',
+  'id',
+  'profilePicture',
+  'createdAt',
+];
 const SaveCover = saveProfilePicture(['coverPicture']);
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [
+      authenticate('jwt'),
+      IncludeAssociations({
+        include: [
+          {
+            model: 'blogs',
+            as: 'User',
+            attributes: UserAttributes,
+          },
+          { model: 'blogs', as: 'Interests' },
+        ],
+      }),
+    ],
     find: [QueryBlogs],
     get: [QueryBlogs],
     create: [
