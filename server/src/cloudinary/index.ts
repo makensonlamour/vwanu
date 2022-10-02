@@ -44,16 +44,18 @@ const messageMedia = new CloudinaryStorage({
 const blogImages = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg'],
+    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
     folder: 'vwanu/blog',
+    resource_type: 'auto',
   },
 });
 
 const albumImages = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg'],
+    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
     folder: 'vwanu/album',
+    resource_type: 'auto',
   },
 });
 
