@@ -133,7 +133,6 @@ describe("'discussion ' service", () => {
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[1].accessToken);
 
-    console.log(discussionWithComment);
     expect(discussionWithComment).toMatchObject({
       id: discussion.id,
       title: discussion.title,

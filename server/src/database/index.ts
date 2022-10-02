@@ -37,6 +37,7 @@ import emailTemplate from './emailTemplate';
 import communityRoles from './community-roles';
 import communityUsers from './community-users';
 import communityInvitationRequest from './communityInvitationRequest';
+import forumCatergory from './forumCatergory';
 
 const tables = [
   user,
@@ -69,6 +70,7 @@ const tables = [
   communityUsers,
   communityRoles,
   communityInvitationRequest,
+  forumCatergory,
 ];
 
 export default function (app: Application): void {
