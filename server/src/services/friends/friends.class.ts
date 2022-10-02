@@ -20,39 +20,39 @@ export class Friends extends Service {
     this.app = app;
   }
 
-  async find(params: Params) {
-    const id = params.query.UserId || params.User.id;
-    const { models } = this.app.get('sequelizeClient');
+  // async find(params: Params) {
+  //   const id = params.query.UserId || params.User.id;
+  //   const { models } = this.app.get('sequelizeClient');
 
-    const userAndFriends: any = await models.User.findOne({
-      where: { id },
-      attributes: [],
-      include: [
-        {
-          model: models.User,
-          as: 'friends',
-          attributes: userAttributes,
-        },
-      ],
-    });
+  //   const userAndFriends: any = await models.User.findOne({
+  //     where: { id },
+  //     attributes: [],
+  //     include: [
+  //       {
+  //         model: models.User,
+  //         as: 'friends',
+  //         attributes: userAttributes,
+  //       },
+  //     ],
+  //   });
 
-    if (!userAndFriends)
-      throw new AppError(
-        'Could not find your profiles or friends list',
-        StatusCodes.NOT_FOUND
-      );
+  //   if (!userAndFriends)
+  //     throw new AppError(
+  //       'Could not find your profiles or friends list',
+  //       StatusCodes.NOT_FOUND
+  //     );
 
-    const friends = userAndFriends.friends.map((friend) => ({
-      id: friend.id,
-      firstName: friend.firstName,
-      lastName: friend.lastName,
-      profilePicture: UrlToMedia(friend.profilePicture),
-      createdAt: friend.User_friends.createdAt,
-      updatedAt: friend.User_friends.updatedAt,
-    }));
+  //   const friends = userAndFriends.friends.map((friend) => ({
+  //     id: friend.id,
+  //     firstName: friend.firstName,
+  //     lastName: friend.lastName,
+  //     profilePicture: UrlToMedia(friend.profilePicture),
+  //     createdAt: friend.User_friends.createdAt,
+  //     updatedAt: friend.User_friends.updatedAt,
+  //   }));
 
-    return Promise.resolve(friends);
-  }
+  //   return Promise.resolve(friends);
+  // }
 
   async create(data, params) {
     const { models } = this.app.get('sequelizeClient');

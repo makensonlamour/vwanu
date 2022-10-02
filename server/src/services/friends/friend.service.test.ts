@@ -18,7 +18,7 @@ let notFriend;
 describe('friend service', () => {
   let testServer;
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
+    await app.get('sequelizeClient').sync({ logged: false, force: true });
     testServer = request(app);
     // create the users
     createdTestUsers = await Promise.all(
@@ -52,32 +52,19 @@ describe('friend service', () => {
     );
   }, 30000);
 
-  afterAll(async () => {
-    await Promise.all(
-      createdTestUsers.map(({ body }) =>
-        testServer
-          .delete(`${userEndpoint}/${body.id}`)
-          .set('authorization', body.accessToken)
-      )
-    );
-
-    // await app.get('sequelizeClient').close();
-  });
-
   it('should see all his friends', async () => {
     const myFriendsR = await testServer
       .get(endpoint)
       .set('authorization', User.body.accessToken);
 
+    console.log(myFriendsR.body);
     expect(myFriendsR.status).toEqual(StatusCodes.OK);
-    expect(Array.isArray(myFriendsR.body)).toBe(true);
-    myFriendsR.body.forEach((friend) => {
-      expect(Friends.some((user) => user.body.id === friend.id)).toBe(true);
-    });
+    expect(Array.isArray(myFriendsR.body.data)).toBe(true);
+    expect(myFriendsR.body.data).toHaveLength(Friends.length);
 
-    expect(myFriendsR.body.every((user) => user.id === notFriend.body.id)).toBe(
-      false
-    );
+    expect(
+      myFriendsR.body.data.every((user) => user.id === notFriend.body.id)
+    ).toBe(false);
   });
 
   it('User should Remove someone as friend', async () => {
@@ -105,13 +92,13 @@ describe('friend service', () => {
       .get(endpoint)
       .set('authorization', User.body.accessToken);
 
-    myFriendsR.body.forEach((friend) => {
+    myFriendsR.body.data.forEach((friend) => {
       expect(Friends.some((user) => user.body.id === friend.id)).toBe(true);
     });
 
-    expect(myFriendsR.body.every((user) => user.id === toUnfriend.id)).toBe(
-      false
-    );
+    expect(
+      myFriendsR.body.data.every((user) => user.id === toUnfriend.id)
+    ).toBe(false);
   });
   it('Requester should remove someone as friend', async () => {
     const toUnfriend = User.body;
@@ -139,7 +126,7 @@ describe('friend service', () => {
       .get(endpoint)
       .set('authorization', requester.accessToken);
 
-    myFriendsR.body.forEach((friend) => {
+    myFriendsR.body.data.forEach((friend) => {
       if (friend.id !== requester.id)
         expect(Friends.some((user) => user.body.id === friend.id)).toBe(true);
     });

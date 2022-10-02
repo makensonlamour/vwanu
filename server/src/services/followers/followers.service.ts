@@ -15,7 +15,7 @@ declare module '../../declarations' {
 export default function (app: Application): void {
   const sequelize = app.get('sequelizeClient');
   const options = {
-    Model: sequelize.models.User_Follower,
+    Model: sequelize.models.User,
     paginate: app.get('paginate'),
   };
 

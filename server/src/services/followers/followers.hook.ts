@@ -1,14 +1,18 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import { disallow } from 'feathers-hooks-common';
 
+import QueryFollower from './hooks/getFollower';
+
 const { authenticate } = feathersAuthentication.hooks;
 export default {
   before: {
     all: [authenticate('jwt')],
-    find: [],
+    find: [QueryFollower],
     get: [disallow()],
     create: [
       async (context) => {
+        context.service.options.Model =
+          context.app.get('sequelizeClient').models.User_Follower;
         context.data.FollowerId = context.params.User.id;
         await context.app.get('sequelizeClient').models.User_Following.create({
           FollowingId: context.data.UserId,

@@ -18,66 +18,66 @@ export class Followers extends Service {
     this.app = app;
   }
 
-  async find(params: Params) {
-    if (!params.provider) return super.find(params);
+  // async find(params: Params) {
+  //   if (!params.provider) return super.find(params);
 
-    let response = [];
-    const UserModel = this.app.service('users').Model;
-    const { action, UserId } = params.query;
-    const requesterId = UserId || params.User.id;
+  //   let response = [];
+  //   const UserModel = this.app.service('users').Model;
+  //   const { action, UserId } = params.query;
+  //   const requesterId = UserId || params.User.id;
 
-    let requester;
+  //   let requester;
 
-    switch (action) {
-      case 'people-who-follow-me':
-        requester = await UserModel.findOne({
-          where: { id: requesterId },
+  //   switch (action) {
+  //     case 'people-who-follow-me':
+  //       requester = await UserModel.findOne({
+  //         where: { id: requesterId },
 
-          include: [
-            {
-              model: UserModel,
-              as: 'Follower',
-              attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
-            },
-          ],
-        });
+  //         include: [
+  //           {
+  //             model: UserModel,
+  //             as: 'Follower',
+  //             attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
+  //           },
+  //         ],
+  //       });
 
-        if (!requester) throw new BadRequest('Could not find your profile');
-        response = requester.Follower;
-        break;
+  //       if (!requester) throw new BadRequest('Could not find your profile');
+  //       response = requester.Follower;
+  //       break;
 
-      case 'people-i-follow':
-        requester = await UserModel.findOne({
-          where: { id: requesterId },
+  //     case 'people-i-follow':
+  //       requester = await UserModel.findOne({
+  //         where: { id: requesterId },
 
-          include: [
-            {
-              model: UserModel,
-              as: 'Following',
-              attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
-            },
-          ],
-        });
+  //         include: [
+  //           {
+  //             model: UserModel,
+  //             as: 'Following',
+  //             attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
+  //           },
+  //         ],
+  //       });
 
-        if (!requester) throw new BadRequest('Could not find your profile');
-        response = requester.Following;
+  //       if (!requester) throw new BadRequest('Could not find your profile');
+  //       response = requester.Following;
 
-        break;
-      default:
-        throw new BadRequest('This action is not supported');
-    }
+  //       break;
+  //     default:
+  //       throw new BadRequest('This action is not supported');
+  //   }
 
-    response = response.map((user) => ({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profilePicture: UrlToMedia(user.profilePicture),
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    }));
+  //   response = response.map((user) => ({
+  //     id: user.id,
+  //     firstName: user.firstName,
+  //     lastName: user.lastName,
+  //     profilePicture: UrlToMedia(user.profilePicture),
+  //     createdAt: user.createdAt,
+  //     updatedAt: user.updatedAt,
+  //   }));
 
-    return Promise.resolve(response);
-  }
+  //   return Promise.resolve(response);
+  // }
 
   async remove(data, params: Params) {
     const res = await this.app

@@ -228,7 +228,7 @@ export default (sequelize: any, DataTypes: any) => {
       },
       friendListPrivacy: {
         type: DataTypes.STRING,
-        defaultValue: 'everyone',
+        defaultValue: 'public',
         validate: {
           customValidator: (value) => {
             if (!authorizationEnums.includes(value)) {
