@@ -49,12 +49,12 @@ describe("'message' service", () => {
   afterAll(async () => {});
   /** #endregion */
   /** #region tests */
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('message');
     expect(service).toBeTruthy();
   });
 
-  it('a user should be able to create a message in a conversation', async () => {
+  it.skip('a user should be able to create a message in a conversation', async () => {
     testMessages = await testServer
       .post(endpoint)
       .send({
@@ -80,7 +80,7 @@ describe("'message' service", () => {
     });
   });
 
-  it('a user should be able to pull all messages from a conversation', async () => {
+  it.skip('a user should be able to pull all messages from a conversation', async () => {
     const {
       body: { data: pulledMessages },
     } = await testServer
@@ -105,7 +105,7 @@ describe("'message' service", () => {
     });
   });
 
-  it('a user should be able pull a particular message', async () => {
+  it.skip('a user should be able pull a particular message', async () => {
     pulledMessage = await testServer
       .get(`${endpoint}/${testMessages.id}`)
       .set('authorization', testUsers[0].accessToken);
@@ -145,7 +145,7 @@ describe("'message' service", () => {
   }, 10000);
 
   it.todo('should be able to send media in a conversation');
-  it('Should Mark Message as read, received, receivedDate, readDate are automatically set', async () => {
+  it.skip('Should Mark Message as read, received, receivedDate, readDate are automatically set', async () => {
     await testServer
       .patch(`${endpoint}/${testMessages.id}`)
       .send({ read: true })

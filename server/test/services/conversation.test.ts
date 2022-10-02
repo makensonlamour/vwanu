@@ -48,13 +48,13 @@ describe("'conversation' service", () => {
       (testUser) => testUser.body
     );
   });
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('conversation');
     expect(service).toBeTruthy();
   });
 
   it.todo('Should not be able to create conversation if not friend');
-  it('Should be able to create a direct conversation', async () => {
+  it.skip('Should be able to create a direct conversation', async () => {
     const response = await createConversation([randomUser2.id], randomUser1);
     previousConversation = response;
     expect(response).toEqual(
@@ -68,7 +68,7 @@ describe("'conversation' service", () => {
       })
     );
   });
-  it('Should be able to create another conversation with a third  user', async () => {
+  it.skip('Should be able to create another conversation with a third  user', async () => {
     const response = await createConversation([randomUser3.id], randomUser1);
 
     expect(response).toEqual(
@@ -83,7 +83,7 @@ describe("'conversation' service", () => {
     );
   });
 
-  it('should not create a second conversation with the same users', async () => {
+  it.skip('should not create a second conversation with the same users', async () => {
     const response = await createConversation([randomUser2.id], randomUser1);
 
     expect(response).toEqual(
@@ -93,7 +93,7 @@ describe("'conversation' service", () => {
     );
   });
 
-  it('Should list all conversation created or part of via the conversation endpoint', async () => {
+  it.skip('Should list all conversation created or part of via the conversation endpoint', async () => {
     // The first user involve can see his conversations
     myConversations = await testServer
       .get(endpoint)
@@ -182,7 +182,7 @@ describe("'conversation' service", () => {
     expect(newConversation.data.length).toBe(0);
   }, 15000);
 
-  it('should be able to fetch one conversation', async () => {
+  it.skip('should be able to fetch one conversation', async () => {
     const { body: fetchedConversation } = await testServer
       .get(`${endpoint}/${myConversations.body.data[0].id}`)
       .set('authorization', randomUser1.accessToken);
@@ -235,7 +235,7 @@ describe("'conversation' service", () => {
       expect(conversation.id).toBeDefined();
     });
   });
-  it('Should create a new message in a conversation', async () => {
+  it.skip('Should create a new message in a conversation', async () => {
     publicConversation = await createConversation(
       [randomUser2.id],
       randomUser1
@@ -270,11 +270,13 @@ describe("'conversation' service", () => {
       );
     });
   });
-  it('should be able to fetch one conversation and see last message it contains', async () => {
-    const { body: fetchedConversation } = await testServer
+  it.skip('should be able to fetch one conversation and see last message it contains', async () => {
+    console.log('\n\n\n\n PublicConversation');
+    const { body, body: fetchedConversation } = await testServer
       .get(`${endpoint}/${publicConversation.ConversationId}`)
       .set('authorization', randomUser2.accessToken);
 
+    console.log({ body });
     console.log({ fetchedConversation });
     expect(fetchedConversation).toMatchObject({
       id: publicConversation.ConversationId,
@@ -304,7 +306,7 @@ describe("'conversation' service", () => {
     expect(Users.some((User) => User.id === randomUser2.id)).toBeTruthy();
   });
 
-  it('When a conversation is fetch it should tell the requester his amount of unread messages', async () => {
+  it.skip('When a conversation is fetch it should tell the requester his amount of unread messages', async () => {
     let conversations = await Promise.all(
       [randomUser1.accessToken, randomUser2.accessToken].map((participant) =>
         testServer

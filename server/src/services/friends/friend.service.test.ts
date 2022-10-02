@@ -57,7 +57,6 @@ describe('friend service', () => {
       .get(endpoint)
       .set('authorization', User.body.accessToken);
 
-    console.log(myFriendsR.body);
     expect(myFriendsR.status).toEqual(StatusCodes.OK);
     expect(Array.isArray(myFriendsR.body.data)).toBe(true);
     expect(myFriendsR.body.data).toHaveLength(Friends.length);
