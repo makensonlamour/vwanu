@@ -114,6 +114,7 @@ SELECT
     );
   }
 
+  if (context.method === 'get') where.id = context.id;
   params.sequelize = {
     where: clause,
 

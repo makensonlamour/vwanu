@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import * as authentication from '@feathersjs/authentication';
-import OrderBy from '../../Hooks/OrderBy.hooks';
+
 import { AddTalker } from '../../Hooks';
 
 import {
@@ -43,7 +43,7 @@ const { authenticate } = authentication.hooks;
 export default {
   before: {
     all: [authenticate('jwt')],
-    find: [FilterConversations, OrderBy({ updatedAt: -1 })],
+    find: [FilterConversations],
     get: [FilterConversations],
     create: [SetType, LimitDirectConversations],
     update: [],

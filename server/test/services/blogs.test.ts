@@ -12,13 +12,13 @@ describe("'blogs ' service", () => {
   let testUsers;
   let firstBlogs;
   let blogs;
+  let sequelize;
   const userEndpoint = '/users';
   const endpoint = '/blogs';
   beforeAll(async () => {
-    const sequelize = app.get('sequelizeClient');
+    sequelize = app.get('sequelizeClient');
     await sequelize.sync({ force: true });
-    sequelize.options.logging = false;
-
+  
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u) => {
@@ -32,7 +32,7 @@ describe("'blogs ' service", () => {
     const service = app.service('blogs');
     expect(service).toBeTruthy();
   });
-  it.skip('should be able to create new blogs', async () => {
+  it('should be able to create new blogs', async () => {
     const newBlog = {
       blogTitle: 'Title ewr',
       blogText:
@@ -95,7 +95,7 @@ describe("'blogs ' service", () => {
       });
     });
   });
-  it.skip('should be able to edit his blogs', async () => {
+  it('should be able to edit his blogs', async () => {
     const modifications = {
       blogTitle: 'Better Title',
       blogText: 'Bigger Body, text',
@@ -142,7 +142,7 @@ describe("'blogs ' service", () => {
       });
     });
   });
-  it.skip('should be able to delete his own blog', async () => {
+  it('should be able to delete his own blog', async () => {
     const user = testUsers[0].body;
     await testServer
       .delete(`${endpoint}/${firstBlogs[0].id}`)
@@ -153,7 +153,7 @@ describe("'blogs ' service", () => {
       .models.Blog.findOne({ where: { id: firstBlogs[0].id } });
     expect(proof).toEqual(null);
   });
-  it.skip('should not be able to modify some1 else blog', async () => {
+  it('should not be able to edit some1 else blog', async () => {
     const modifications = {
       blogTitle: 'Better Title',
       blogText: 'Bigger Body, text',
@@ -169,7 +169,7 @@ describe("'blogs ' service", () => {
       expect.stringContaining('Not authorized')
     );
   });
-  it.skip('should not be able to delete some1 else blog', async () => {
+  it('should not be able to delete some1 else blog', async () => {
     const user = testUsers[0].body;
     const modifiedBlog = await testServer
       .delete(`${endpoint}/${firstBlogs[1].id}`)
@@ -180,6 +180,7 @@ describe("'blogs ' service", () => {
     );
   });
   it('should only show public blogs if not owner', async () => {
+    await sequelize.models.Blog.sync({ force: true });
     const blogger = testUsers[1].body;
     const reader = testUsers[0].body;
     blogs = await Promise.all(
@@ -220,15 +221,48 @@ describe("'blogs ' service", () => {
     // });
   });
 
-  it.skip('should return a list of interest for each Blog', async () => {
+  it('should return show no interest in the previous blogs', async () => {
     const reader = testUsers[0].body;
     const {
       body: { data: publicBlogs },
     } = await testServer.get(endpoint).set('authorization', reader.accessToken);
 
     publicBlogs.forEach((blog) => {
-      expect(blog.Interests).toBe(expect.any(Array));
+      expect(blog.Interests).toBe(null);
     });
+  });
+
+  it('should see a list of interest in each blog', async () => {
+    const reader = testUsers[0].body;
+    const blogger = testUsers[1].body;
+    const interest = ['some', 'category'];
+
+    let newBlogs = await Promise.all(
+      [1, 2, 3].map((i) =>
+        testServer
+          .post(endpoint)
+          .send({
+            interests: interest,
+            blogTitle: `Private Title ${i} from ${blogger.id}`,
+            blogText: 'Bigger Body, text ',
+            publish: true,
+          })
+          .set('authorization', blogger.accessToken)
+      )
+    );
+    newBlogs = newBlogs.map((blog) => blog.body);
+
+    expect(
+      newBlogs.every((blog) => Array.isArray(blog.Interests))
+    ).toBeTruthy();
+
+    const {
+      body: { data: publicBlogs },
+    } = await testServer.get(endpoint).set('authorization', reader.accessToken);
+
+    expect(
+      publicBlogs.some((blog) => Array.isArray(blog.Interests))
+    ).toBeTruthy();
   });
 
   it('should show null for lastResponse', async () => {
@@ -265,15 +299,17 @@ describe("'blogs ' service", () => {
       expect(blog.isAResponder).toBe(false);
     });
   });
-  it.skip('owner should see both his private and public blogs', async () => {
+  it('owner should see both his private and public blogs', async () => {
     const user1 = testUsers[1].body;
     const MyBlogs = await testServer
       .get(`${endpoint}?UserId=${user1.id}`)
       .set('authorization', user1.accessToken);
 
-    expect(MyBlogs.body.some((blog) => blog.publish === false)).toBeTruthy();
+    expect(
+      MyBlogs.body.data.some((blog) => blog.publish === false)
+    ).toBeTruthy();
   });
-  it.skip('only owner can review non-publish blog', async () => {
+  it('only owner can review non-publish blog', async () => {
     const user0 = testUsers[0].body; // not the creator
     let mixedBlogs: any = await Promise.all(
       blogs.map(({ body }) =>
@@ -284,10 +320,6 @@ describe("'blogs ' service", () => {
     );
 
     mixedBlogs = mixedBlogs.map((response) => response.body);
-    expect(mixedBlogs.some((resp) => resp?.publish === true)).toBeTruthy();
-    // Due to some of the post being private and he is not the creator
-    expect(
-      mixedBlogs.some((resp) => resp?.message === 'You cannot review this item')
-    ).toBeTruthy();
+    expect(mixedBlogs.every((resp) => resp?.publish === true)).toBeTruthy();
   });
 });

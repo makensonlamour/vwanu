@@ -10,7 +10,6 @@ import {
   getRandUser,
 } from '../../src/lib/utils/generateFakeUser';
 
-const createdTestUsers = [];
 let observer;
 let privateUser;
 const endpoint = '/users';
@@ -21,8 +20,12 @@ describe('/users service', () => {
   let testServer;
   const interests = ['sport', 'education'];
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false, force: true });
+    await app.get('sequelizeClient').sync({ force: true });
     testServer = request(app);
+  });
+
+  afterAll(async () => {
+    await app.get('sequelizeClient').sync({ force: true });
   });
 
   it('The user service is running', async () => {
@@ -30,14 +33,16 @@ describe('/users service', () => {
     expect(service).toBeDefined();
   });
   it('Should not create user', async () => {
-    [
-      { password: 'goodPassword' },
-      { email: 'goodPassword' },
-      { email: 'notEmail', password: 'goodPassword' },
-      { password: 'badPassword', email: 'rt@example.com' },
-    ].map(async (requestData) => {
-      const response = await testServer.post(endpoint).send(requestData);
+    const responses = await Promise.all(
+      [
+        { password: 'goodPassword' },
+        { email: 'goodPassword' },
+        { email: 'notEmail', password: 'goodPassword' },
+        { password: 'badPassword', email: 'rt@example.com' },
+      ].map(async (requestData) => testServer.post(endpoint).send(requestData))
+    );
 
+    responses.forEach((response) => {
       expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
       expect(response.body.errors).toBeDefined();
     });
@@ -68,10 +73,35 @@ describe('/users service', () => {
       })
     );
 
+    observer = responses[0].body;
     responses.forEach((res) => {
       expect(res.statusCode).toBe(201);
     });
   });
+
+  it('should pull user with interest', async () => {
+    const {
+      body: { data: usersWithInterest },
+    } = await testServer
+      .get(endpoint)
+      .set('authorization', observer.accessToken);
+    expect(usersWithInterest.some((user) => user.Interests?.length > 0)).toBe(
+      true
+    );
+
+    usersWithInterest.forEach((user) => {
+      if (Array.isArray(user.Interests)) {
+        expect(
+          user.Interests.map((interest) => interest.name).includes(interests[0])
+        ).toBe(true);
+
+        expect(
+          user.Interests.map((interest) => interest.name).includes(interests[1])
+        ).toBe(true);
+      }
+    });
+  });
+
   it('should return all 9 users', async () => {
     const u = getRandUser();
     const user = u;
@@ -205,60 +235,56 @@ describe('/users service', () => {
     expect(userR.email).toEqual(profileRequesting.email);
     expect(userR.address).toHaveLength(0);
   });
-  it.skip('should not update sensitive information', async () => {
-    const requester = createdTestUsers[0];
+  it('should not update sensitive information', async () => {
     [
       { password: 'password' },
       { activationKey: 'activationKey' },
       { resetPasswordKey: 'resetPasswordKey' },
     ].forEach(async (unacceptable) => {
       const res = await testServer
-        .patch(`${endpoint}/${requester?.user.id}`)
+        .patch(`${endpoint}/${privateUser.id}`)
         .send(unacceptable)
-        .set('authorization', requester.token);
+        .set('authorization', privateUser.accessToken);
       expect(res.statusCode).toEqual(400);
     });
   });
 
-  it.skip('should not modify a different user', async () => {
-    const requester = createdTestUsers[0];
+  it('should not modify a different user', async () => {
     const res = await testServer
-      .patch(`${endpoint}/${createdTestUsers[1]?.user.id}`)
+      .patch(`${endpoint}/${observer.id}`)
       .send(modify)
-      .set('authorization', requester.token);
+      .set('authorization', privateUser.accessToken);
     expect(res.statusCode).toEqual(400);
   });
 
-  it.skip('should update the user details', async () => {
-    const requester = createdTestUsers[0];
+  it('should update the user details', async () => {
     const res = await testServer
-      .patch(`${endpoint}/${requester?.user.id}`)
+      .patch(`${endpoint}/${privateUser.id}`)
       .send(modify)
-      .set('authorization', requester.token);
-    expect(res.body.birthday).toBeDefined();
+      .set('authorization', privateUser.accessToken);
+
     expect(res.body).toEqual(expect.objectContaining(modify));
   });
 
-  it.skip('The user should now be updated with the fields above ', async () => {
+  it('The user should now be updated with the fields above ', async () => {
     const userR = await testServer
-      .get(`${endpoint}/${createdTestUsers[0].user.id}`)
-      .set('authorization', createdTestUsers[0].token);
-    expect(userR.body).toEqual(expect.objectContaining(modify));
+      .get(`${endpoint}/${privateUser.id}`)
+      .set('authorization', privateUser.accessToken);
+    expect(userR.body).toMatchObject(modify);
   });
 
-  it.skip('should not delete another user profile', async () => {
+  it('should not delete another user profile', async () => {
     const response = await testServer
-      .delete(`${endpoint}/${createdTestUsers[0]?.user.id}`)
-      .set('authorization', createdTestUsers[1].token);
+      .delete(`${endpoint}/${observer.id}`)
+      .set('authorization', privateUser.accessToken);
     expect(response.statusCode).toEqual(400);
   });
 
-  it.skip('should delete his own profile', async () => {
-    const requester = createdTestUsers[0];
+  it('should delete his own profile', async () => {
     const deletedUser = await testServer
-      .delete(`${endpoint}/${requester?.user.id}`)
-      .set('authorization', requester.token);
-    expect(requester?.user.id).toEqual(deletedUser.body.id);
+      .delete(`${endpoint}/${privateUser.id}`)
+      .set('authorization', privateUser.accessToken);
+    expect(privateUser.id).toEqual(deletedUser.body.id);
     expect(deletedUser.statusCode).toEqual(200);
   });
 });

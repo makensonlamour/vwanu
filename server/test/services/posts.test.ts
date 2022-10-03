@@ -37,31 +37,6 @@ describe('Posts services', () => {
     commenterToken = commenter.accessToken;
   }, 30000);
 
-  it('should not create a post ', async () => {
-    const badPosts = [
-      {
-        pos: ' I am a post text',
-      },
-    ];
-
-    const responses = await Promise.all(
-      badPosts.map((post) =>
-        testServer.post(endpoint).send(post).set('authorization', observerToken)
-      )
-    );
-
-    responses.forEach(async (response) => {
-      expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
-      expect(response.body).toMatchObject({
-        name: 'BadRequest',
-        message: 'Invalid Parameters',
-        code: 400,
-        className: 'bad-request',
-        data: expect.any(Object),
-        errors: expect.any(Array),
-      });
-    });
-  }, 3000);
   it('should create a new post', async () => {
     const { statusCode, body: response } = await testServer
       .post(endpoint)
@@ -72,7 +47,7 @@ describe('Posts services', () => {
 
     expect(statusCode).toBe(StatusCodes.CREATED);
   });
-  it('should get one post', async () => {
+  it('should get a list of posts', async () => {
     const { body: post } = await testServer
       .get(endpoint)
       .set('authorization', observerToken);

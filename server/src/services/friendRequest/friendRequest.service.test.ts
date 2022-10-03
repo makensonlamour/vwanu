@@ -24,24 +24,12 @@ describe('Friend service, ', () => {
     );
   }, 20000);
 
-  afterAll(async () => {
-    await Promise.all(
-      createdTestUsers.map(({ body }) =>
-        testServer
-          .delete(`${userEndpoint}/${body.id}`)
-          .set('authorization', body.accessToken)
-      )
-    );
-
-    await app.get('sequelizeClient').close();
-  });
-
   it(' The friendRequest service is running ', () => {
     const service = app.service('friendRequest');
     expect(service).toBeDefined();
   });
 
-  it.skip('should be able to send a friend request', async () => {
+  it('should be able to send a friend request', async () => {
     const requesters = [createdTestUsers[0].body, createdTestUsers[2].body];
     const user = createdTestUsers[1].body;
 
@@ -59,27 +47,25 @@ describe('Friend service, ', () => {
     });
 
     responses.forEach((response) => {
-      expect(response.body).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            id: expect.any(Number),
-            firstName: expect.any(String),
-            lastName: expect.any(String),
-            profilePicture: expect.objectContaining({
-              tiny: expect.any(String),
-              medium: expect.any(String),
-              small: expect.any(String),
-              original: expect.any(String),
-            }),
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
+      expect(response.body).toMatchObject([
+        {
+          id: expect.any(String),
+          firstName: expect.any(String),
+          lastName: expect.any(String),
+          profilePicture: expect.objectContaining({
+            tiny: expect.any(String),
+            medium: expect.any(String),
+            small: expect.any(String),
+            original: expect.any(String),
           }),
-        ])
-      );
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+        },
+      ]);
     });
   });
 
-  it.skip('should not be able to send another friend request if one exit', async () => {
+  it('should not be able to send another friend request if one exit', async () => {
     const requester = createdTestUsers[0].body;
     const user = createdTestUsers[1].body;
 
@@ -100,7 +86,7 @@ describe('Friend service, ', () => {
       })
     );
   });
-  it.skip('should be able to deny the friend request', async () => {
+  it('should be able to deny the friend request', async () => {
     const requester = createdTestUsers[0].body;
     const user = createdTestUsers[1].body;
 
@@ -120,7 +106,7 @@ describe('Friend service, ', () => {
     });
   });
 
-  it.skip('should not be able to send other friend request if denied previousLy', async () => {
+  it('should not be able to send other friend request if denied previousLy', async () => {
     const requester = createdTestUsers[0].body;
     const user = createdTestUsers[1].body;
 
@@ -141,7 +127,7 @@ describe('Friend service, ', () => {
     );
   });
 
-  it.skip('should be able to see all friend request sent ', async () => {
+  it('should be able to see all friend request sent ', async () => {
     const requester = createdTestUsers[2].body;
     const user = createdTestUsers[1].body;
 
@@ -162,7 +148,7 @@ describe('Friend service, ', () => {
     expect(response.status).toBe(StatusCodes.OK);
   });
 
-  it.skip('should be able to see all friend request receive', async () => {
+  it('should be able to see all friend request receive', async () => {
     const requester = createdTestUsers[2].body;
     const user = createdTestUsers[1].body;
 

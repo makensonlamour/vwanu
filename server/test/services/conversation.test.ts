@@ -32,11 +32,10 @@ describe("'conversation' service", () => {
   let publicConversation;
   let previousConversation;
   beforeAll(async () => {
-    app.get('sequelizeClient').options.log = true;
-    // await Message.sync({ force: true });
-    // await User.sync({ force: true });
+    await app.get('sequelizeClient').sync({ force: true });
+
     testServer = request(app);
-    // create two users
+    // create three users
     const users = await Promise.all(
       getRandUsers(3).map((u) => {
         const user = u;
@@ -57,6 +56,7 @@ describe("'conversation' service", () => {
   it('Should be able to create a direct conversation', async () => {
     const response = await createConversation([randomUser2.id], randomUser1);
     previousConversation = response;
+
     expect(response).toEqual(
       expect.objectContaining({
         id: expect.any(String),
@@ -206,34 +206,29 @@ describe("'conversation' service", () => {
     // expect(Users.some((User) => User.id === randomUser2.id)).toBeTruthy();
   });
 
-  it.skip('Only users of a conversation should fetch it', async () => {
-    const newUserObject = getRandUser();
-    delete newUserObject.id;
+  it('Only users of a conversation should fetch it', async () => {
     const { body: newUser } = await testServer
       .post(userEndpoint)
-      .send(newUserObject);
+      .send({ ...getRandUser(), id: undefined });
 
     const some1ElseConversation = await testServer
-      .get(`${endpoint}/${myConversations.body[0].id}`)
+      .get(`${endpoint}/${myConversations.body.data[0].id}`)
       .set('authorization', newUser.accessToken);
 
-    expect(some1ElseConversation.status).toBe(400);
+    expect(some1ElseConversation.status).toBe(404);
     let ourConversation = await Promise.all(
       [randomUser1.accessToken, randomUser2.accessToken].map((participant) =>
         testServer
-          .get(`${endpoint}/${myConversations.body[0].id}`)
+          .get(`${endpoint}/${myConversations.body.data[0].id}`)
           .set('authorization', participant)
       )
     );
 
     ourConversation.forEach((conversation) => {
       expect(conversation.status).toBe(200);
+      expect(conversation.body.id).toBe(myConversations.body.data[0].id);
     });
     ourConversation = ourConversation.map((conversation) => conversation.body);
-
-    ourConversation.forEach((conversation) => {
-      expect(conversation.id).toBeDefined();
-    });
   });
   it('Should create a new message in a conversation', async () => {
     publicConversation = await createConversation(
@@ -275,7 +270,6 @@ describe("'conversation' service", () => {
       .get(`${endpoint}/${publicConversation.ConversationId}`)
       .set('authorization', randomUser2.accessToken);
 
-    console.log({ fetchedConversation });
     expect(fetchedConversation).toMatchObject({
       id: publicConversation.ConversationId,
       amountOfPeople: 2,
@@ -319,20 +313,20 @@ describe("'conversation' service", () => {
     expect(user1Conversation.amountOfUnreadMessages).toBe(0);
     expect(user2Conversation.amountOfUnreadMessages).toBe(2);
   });
-  it.skip('user should fetch all message of a conversation', async () => {
+  it('user should fetch all message of a conversation', async () => {
     const messages = await testServer
       .get(`/message/?ConversationId=${publicConversation.ConversationId}`)
       .set('authorization', randomUser1.accessToken);
 
-    expect(Array.isArray(messages.body)).toBeTruthy();
+    expect(Array.isArray(messages.body.data)).toBeTruthy();
     expect(
-      messages.body.every(
+      messages.body.data.every(
         (message) =>
           message.ConversationId === publicConversation.ConversationId
       )
     ).toBeTruthy();
 
-    messages.body.forEach((message) => {
+    messages.body.data.forEach((message) => {
       expect(message).toEqual(
         expect.objectContaining({
           id: expect.any(String),

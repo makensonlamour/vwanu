@@ -359,6 +359,13 @@ export default (sequelize: any, DataTypes: any) => {
       gender: {
         type: DataTypes.STRING,
         defaultValue: 'not specified',
+        // validate: {
+        //   customValidator: (value) => {
+        //     if (!['f', 'm', 'not specified'].includes(value)) {
+        //       throw new Error(`${value} is not a valid option for gender`);
+        //     }
+        //   },
+        // },
       },
 
       google: {

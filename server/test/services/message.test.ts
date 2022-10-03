@@ -18,16 +18,9 @@ describe("'message' service", () => {
   /** #endregion */
   /** #region before and after Each functions */
   beforeAll(async () => {
-    const { Message, User, Conversation, Conversation_Users } =
-      app.get('sequelizeClient').models;
+    const sequelize = app.get('sequelizeClient');
 
-    await app.get('sequelizeClient').sync({ logged: false });
-
-    await Message.sync({ force: true });
-    await User.sync({ force: true });
-    await Conversation.sync({ force: true });
-    // eslint-disable-next-line camelcase
-    await Conversation_Users.sync({ force: true });
+    await sequelize.sync({ force: true });
 
     testServer = request(app);
     testUsers = await Promise.all(
@@ -46,10 +39,10 @@ describe("'message' service", () => {
       .set('authorization', conversationStarter.accessToken);
     testConversation = testConversation.body;
   });
-  afterAll(async () => {});
+
   /** #endregion */
   /** #region tests */
-  it('registered the service', () => {
+  it('registered the message service', () => {
     const service = app.service('message');
     expect(service).toBeTruthy();
   });

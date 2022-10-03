@@ -49,7 +49,7 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: false,
         validate: {
           customValidator: (value) => {
-            if (!['group', 'index'].includes(value)) {
+            if (!['group', 'direct'].includes(value)) {
               throw new Error(
                 `${value} is not a valid option for friendPrivacy`
               );
