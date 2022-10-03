@@ -6,6 +6,7 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
       'Countries',
+
       countries.map((country) => ({
         name: country.name,
         id: v4(),
