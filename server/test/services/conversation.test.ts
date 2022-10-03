@@ -32,11 +32,10 @@ describe("'conversation' service", () => {
   let publicConversation;
   let previousConversation;
   beforeAll(async () => {
-    app.get('sequelizeClient').options.log = true;
-    // await Message.sync({ force: true });
-    // await User.sync({ force: true });
+    await app.get('sequelizeClient').sync({ force: true });
+
     testServer = request(app);
-    // create two users
+    // create three users
     const users = await Promise.all(
       getRandUsers(3).map((u) => {
         const user = u;
@@ -48,15 +47,16 @@ describe("'conversation' service", () => {
       (testUser) => testUser.body
     );
   });
-  it.skip('registered the service', () => {
+  it('registered the service', () => {
     const service = app.service('conversation');
     expect(service).toBeTruthy();
   });
 
   it.todo('Should not be able to create conversation if not friend');
-  it.skip('Should be able to create a direct conversation', async () => {
+  it('Should be able to create a direct conversation', async () => {
     const response = await createConversation([randomUser2.id], randomUser1);
     previousConversation = response;
+
     expect(response).toEqual(
       expect.objectContaining({
         id: expect.any(String),
@@ -68,7 +68,7 @@ describe("'conversation' service", () => {
       })
     );
   });
-  it.skip('Should be able to create another conversation with a third  user', async () => {
+  it('Should be able to create another conversation with a third  user', async () => {
     const response = await createConversation([randomUser3.id], randomUser1);
 
     expect(response).toEqual(
@@ -83,7 +83,7 @@ describe("'conversation' service", () => {
     );
   });
 
-  it.skip('should not create a second conversation with the same users', async () => {
+  it('should not create a second conversation with the same users', async () => {
     const response = await createConversation([randomUser2.id], randomUser1);
 
     expect(response).toEqual(
@@ -93,7 +93,7 @@ describe("'conversation' service", () => {
     );
   });
 
-  it.skip('Should list all conversation created or part of via the conversation endpoint', async () => {
+  it('Should list all conversation created or part of via the conversation endpoint', async () => {
     // The first user involve can see his conversations
     myConversations = await testServer
       .get(endpoint)
@@ -182,7 +182,7 @@ describe("'conversation' service", () => {
     expect(newConversation.data.length).toBe(0);
   }, 15000);
 
-  it.skip('should be able to fetch one conversation', async () => {
+  it('should be able to fetch one conversation', async () => {
     const { body: fetchedConversation } = await testServer
       .get(`${endpoint}/${myConversations.body.data[0].id}`)
       .set('authorization', randomUser1.accessToken);
@@ -206,36 +206,31 @@ describe("'conversation' service", () => {
     // expect(Users.some((User) => User.id === randomUser2.id)).toBeTruthy();
   });
 
-  it.skip('Only users of a conversation should fetch it', async () => {
-    const newUserObject = getRandUser();
-    delete newUserObject.id;
+  it('Only users of a conversation should fetch it', async () => {
     const { body: newUser } = await testServer
       .post(userEndpoint)
-      .send(newUserObject);
+      .send({ ...getRandUser(), id: undefined });
 
     const some1ElseConversation = await testServer
-      .get(`${endpoint}/${myConversations.body[0].id}`)
+      .get(`${endpoint}/${myConversations.body.data[0].id}`)
       .set('authorization', newUser.accessToken);
 
-    expect(some1ElseConversation.status).toBe(400);
+    expect(some1ElseConversation.status).toBe(404);
     let ourConversation = await Promise.all(
       [randomUser1.accessToken, randomUser2.accessToken].map((participant) =>
         testServer
-          .get(`${endpoint}/${myConversations.body[0].id}`)
+          .get(`${endpoint}/${myConversations.body.data[0].id}`)
           .set('authorization', participant)
       )
     );
 
     ourConversation.forEach((conversation) => {
       expect(conversation.status).toBe(200);
+      expect(conversation.body.id).toBe(myConversations.body.data[0].id);
     });
     ourConversation = ourConversation.map((conversation) => conversation.body);
-
-    ourConversation.forEach((conversation) => {
-      expect(conversation.id).toBeDefined();
-    });
   });
-  it.skip('Should create a new message in a conversation', async () => {
+  it('Should create a new message in a conversation', async () => {
     publicConversation = await createConversation(
       [randomUser2.id],
       randomUser1
@@ -270,14 +265,11 @@ describe("'conversation' service", () => {
       );
     });
   });
-  it.skip('should be able to fetch one conversation and see last message it contains', async () => {
-    console.log('\n\n\n\n PublicConversation');
-    const { body, body: fetchedConversation } = await testServer
+  it('should be able to fetch one conversation and see last message it contains', async () => {
+    const { body: fetchedConversation } = await testServer
       .get(`${endpoint}/${publicConversation.ConversationId}`)
       .set('authorization', randomUser2.accessToken);
 
-    console.log({ body });
-    console.log({ fetchedConversation });
     expect(fetchedConversation).toMatchObject({
       id: publicConversation.ConversationId,
       amountOfPeople: 2,
@@ -306,7 +298,7 @@ describe("'conversation' service", () => {
     expect(Users.some((User) => User.id === randomUser2.id)).toBeTruthy();
   });
 
-  it.skip('When a conversation is fetch it should tell the requester his amount of unread messages', async () => {
+  it('When a conversation is fetch it should tell the requester his amount of unread messages', async () => {
     let conversations = await Promise.all(
       [randomUser1.accessToken, randomUser2.accessToken].map((participant) =>
         testServer
@@ -321,20 +313,20 @@ describe("'conversation' service", () => {
     expect(user1Conversation.amountOfUnreadMessages).toBe(0);
     expect(user2Conversation.amountOfUnreadMessages).toBe(2);
   });
-  it.skip('user should fetch all message of a conversation', async () => {
+  it('user should fetch all message of a conversation', async () => {
     const messages = await testServer
       .get(`/message/?ConversationId=${publicConversation.ConversationId}`)
       .set('authorization', randomUser1.accessToken);
 
-    expect(Array.isArray(messages.body)).toBeTruthy();
+    expect(Array.isArray(messages.body.data)).toBeTruthy();
     expect(
-      messages.body.every(
+      messages.body.data.every(
         (message) =>
           message.ConversationId === publicConversation.ConversationId
       )
     ).toBeTruthy();
 
-    messages.body.forEach((message) => {
+    messages.body.data.forEach((message) => {
       expect(message).toEqual(
         expect.objectContaining({
           id: expect.any(String),

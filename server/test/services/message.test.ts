@@ -18,16 +18,9 @@ describe("'message' service", () => {
   /** #endregion */
   /** #region before and after Each functions */
   beforeAll(async () => {
-    const { Message, User, Conversation, Conversation_Users } =
-      app.get('sequelizeClient').models;
+    const sequelize = app.get('sequelizeClient');
 
-    await app.get('sequelizeClient').sync({ logged: false });
-
-    await Message.sync({ force: true });
-    await User.sync({ force: true });
-    await Conversation.sync({ force: true });
-    // eslint-disable-next-line camelcase
-    await Conversation_Users.sync({ force: true });
+    await sequelize.sync({ force: true });
 
     testServer = request(app);
     testUsers = await Promise.all(
@@ -46,15 +39,15 @@ describe("'message' service", () => {
       .set('authorization', conversationStarter.accessToken);
     testConversation = testConversation.body;
   });
-  afterAll(async () => {});
+
   /** #endregion */
   /** #region tests */
-  it.skip('registered the service', () => {
+  it('registered the message service', () => {
     const service = app.service('message');
     expect(service).toBeTruthy();
   });
 
-  it.skip('a user should be able to create a message in a conversation', async () => {
+  it('a user should be able to create a message in a conversation', async () => {
     testMessages = await testServer
       .post(endpoint)
       .send({
@@ -80,7 +73,7 @@ describe("'message' service", () => {
     });
   });
 
-  it.skip('a user should be able to pull all messages from a conversation', async () => {
+  it('a user should be able to pull all messages from a conversation', async () => {
     const {
       body: { data: pulledMessages },
     } = await testServer
@@ -105,7 +98,7 @@ describe("'message' service", () => {
     });
   });
 
-  it.skip('a user should be able pull a particular message', async () => {
+  it('a user should be able pull a particular message', async () => {
     pulledMessage = await testServer
       .get(`${endpoint}/${testMessages.id}`)
       .set('authorization', testUsers[0].accessToken);
@@ -145,7 +138,7 @@ describe("'message' service", () => {
   }, 10000);
 
   it.todo('should be able to send media in a conversation');
-  it.skip('Should Mark Message as read, received, receivedDate, readDate are automatically set', async () => {
+  it('Should Mark Message as read, received, receivedDate, readDate are automatically set', async () => {
     await testServer
       .patch(`${endpoint}/${testMessages.id}`)
       .send({ read: true })

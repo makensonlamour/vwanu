@@ -37,32 +37,7 @@ describe('Posts services', () => {
     commenterToken = commenter.accessToken;
   }, 30000);
 
-  it.skip('should not create a post ', async () => {
-    const badPosts = [
-      {
-        pos: ' I am a post text',
-      },
-    ];
-
-    const responses = await Promise.all(
-      badPosts.map((post) =>
-        testServer.post(endpoint).send(post).set('authorization', observerToken)
-      )
-    );
-
-    responses.forEach(async (response) => {
-      expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
-      expect(response.body).toMatchObject({
-        name: 'BadRequest',
-        message: 'Invalid Parameters',
-        code: 400,
-        className: 'bad-request',
-        data: expect.any(Object),
-        errors: expect.any(Array),
-      });
-    });
-  }, 3000);
-  it.skip('should create a new post', async () => {
+  it('should create a new post', async () => {
     const { statusCode, body: response } = await testServer
       .post(endpoint)
       .send({ postText: `I am a new post # 1` })
@@ -72,7 +47,7 @@ describe('Posts services', () => {
 
     expect(statusCode).toBe(StatusCodes.CREATED);
   });
-  it.skip('should get one post', async () => {
+  it('should get a list of posts', async () => {
     const { body: post } = await testServer
       .get(endpoint)
       .set('authorization', observerToken);
@@ -80,7 +55,7 @@ describe('Posts services', () => {
     expect(post.data).toHaveLength(1);
   });
 
-  it.skip('should retrieve a post by its id', async () => {
+  it('should retrieve a post by its id', async () => {
     const retrievedPost = await testServer
       .get(`${endpoint}/${thePost.id}`)
       .set('authorization', observerToken);
@@ -90,7 +65,7 @@ describe('Posts services', () => {
     expect(retrievedPost.statusCode).toBe(StatusCodes.OK);
   }, 3000);
 
-  it.skip('should create comment for a post', async () => {
+  it('should create comment for a post', async () => {
     const { statusCode: commentResponse } = await testServer
       .post(endpoint)
       .set('authorization', commenterToken)
@@ -101,7 +76,7 @@ describe('Posts services', () => {
     expect(commentResponse).toBe(StatusCodes.CREATED);
   }, 3000);
 
-  it.skip('should find one post with one comment', () => {
+  it('should find one post with one comment', () => {
     testServer
       .get(endpoint)
       .set('authorization', observerToken)
@@ -111,14 +86,14 @@ describe('Posts services', () => {
         expect(data[0].amountOfComments).toBe(1);
       });
   });
-  it.skip('should find the post and have one comment', async () => {
+  it('should find the post and have one comment', async () => {
     const { body: foundPostWithComment } = await testServer
       .get(`${endpoint}/${thePost.id}`)
       .set('authorization', observerToken);
 
     expect(foundPostWithComment.amountOfComments).toEqual(1);
   });
-  it.skip('should react on the post', async () => {
+  it('should react on the post', async () => {
     const { statusCode: reactionResponse } = await testServer
       .post('/reactions')
       .set('authorization', commenterToken)
@@ -129,7 +104,7 @@ describe('Posts services', () => {
       });
     expect(reactionResponse).toBe(StatusCodes.CREATED);
   });
-  it.skip('should find one post with one comment,one reaction, and he is the reactor', () => {
+  it('should find one post with one comment,one reaction, and he is the reactor', () => {
     testServer
       .get(endpoint)
       .set('authorization', commenterToken)
@@ -142,7 +117,7 @@ describe('Posts services', () => {
       });
   });
 
-  it.skip('should find one post with one comment,one reaction, and he is not the reactor', () => {
+  it('should find one post with one comment,one reaction, and he is not the reactor', () => {
     testServer
       .get(endpoint)
       .set('authorization', observerToken)
@@ -155,7 +130,7 @@ describe('Posts services', () => {
       });
   });
 
-  it.skip('should find all comments on a post', async () => {
+  it('should find all comments on a post', async () => {
     const { body: foundComments } = await testServer
       .get(`${endpoint}?PostId=${thePost.id}`)
       .set('authorization', observerToken);
@@ -163,7 +138,7 @@ describe('Posts services', () => {
     expect(foundComments.data).toHaveLength(1);
   });
 
-  it.skip('should retrieve all post by userId', async () => {
+  it('should retrieve all post by userId', async () => {
     const {
       body: { data: observerPosts },
     } = await testServer
@@ -189,7 +164,7 @@ describe('Posts services', () => {
     expect(commenterPosts).toHaveLength(0);
   }, 3000);
 
-  it.skip('should not edit a post', async () => {
+  it('should not edit a post', async () => {
     const { statusCode: editAttemptStatus } = await testServer
       .patch(`${endpoint}/${thePost.id}`)
       .set('authorization', observerToken)
@@ -200,7 +175,7 @@ describe('Posts services', () => {
     expect(editAttemptStatus).toEqual(StatusCodes.BAD_REQUEST);
   }, 3000);
 
-  it.skip('should edit a post', async () => {
+  it('should edit a post', async () => {
     const { body: editedLPost } = await testServer
       .patch(`${endpoint}/${thePost.id}`)
       .set('authorization', postMakerToken)
@@ -213,7 +188,7 @@ describe('Posts services', () => {
     expect(editedLPost.UserId).toEqual(thePost.UserId);
   }, 3000);
 
-  it.skip('should lock post', async () => {
+  it('should lock post', async () => {
     const { body: lockedPost } = await testServer
       .patch(`${endpoint}/${thePost.id}`)
       .send({ locked: true })
@@ -221,7 +196,7 @@ describe('Posts services', () => {
     expect(lockedPost.locked).toBe(true);
   });
 
-  it.skip('Cannot comment on a locked Post', async () => {
+  it('Cannot comment on a locked Post', async () => {
     const commentAttempt = await testServer
       .post(endpoint)
       .send({
@@ -233,14 +208,14 @@ describe('Posts services', () => {
     expect(commentAttempt.statusCode).toBe(400);
   });
 
-  it.skip('should not delete a post', async () => {
+  it('should not delete a post', async () => {
     const { statusCode: editAttemptStatus } = await testServer
       .delete(`${endpoint}/${thePost.id}`)
       .set('authorization', observerToken);
 
     expect(editAttemptStatus).toEqual(StatusCodes.BAD_REQUEST);
   }, 3000);
-  it.skip('should delete a post with all its comment', async () => {
+  it('should delete a post with all its comment', async () => {
     const deletedPostResponse = await testServer
       .delete(`${endpoint}/${thePost.id}`)
       .set('authorization', postMakerToken);

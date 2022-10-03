@@ -10,7 +10,6 @@ import {
   getRandUser,
 } from '../../src/lib/utils/generateFakeUser';
 
-const createdTestUsers = [];
 let observer;
 let privateUser;
 const endpoint = '/users';
@@ -21,29 +20,35 @@ describe('/users service', () => {
   let testServer;
   const interests = ['sport', 'education'];
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false, force: true });
+    await app.get('sequelizeClient').sync({ force: true });
     testServer = request(app);
   });
 
-  it.skip('The user service is running', async () => {
+  afterAll(async () => {
+    await app.get('sequelizeClient').sync({ force: true });
+  });
+
+  it('The user service is running', async () => {
     const service = app.service('users');
     expect(service).toBeDefined();
   });
-  it.skip('Should not create user', async () => {
-    [
-      { password: 'goodPassword' },
-      { email: 'goodPassword' },
-      { email: 'notEmail', password: 'goodPassword' },
-      { password: 'badPassword', email: 'rt@example.com' },
-    ].map(async (requestData) => {
-      const response = await testServer.post(endpoint).send(requestData);
+  it('Should not create user', async () => {
+    const responses = await Promise.all(
+      [
+        { password: 'goodPassword' },
+        { email: 'goodPassword' },
+        { email: 'notEmail', password: 'goodPassword' },
+        { password: 'badPassword', email: 'rt@example.com' },
+      ].map(async (requestData) => testServer.post(endpoint).send(requestData))
+    );
 
+    responses.forEach((response) => {
       expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
       expect(response.body.errors).toBeDefined();
     });
   }, 10000);
 
-  it.skip('Should create and autoLog 4 users', async () => {
+  it('Should create and autoLog 4 users', async () => {
     const responses = await Promise.all(
       getRandUsers(4).map((u) => {
         const user = u;
@@ -59,7 +64,7 @@ describe('/users service', () => {
     });
   }, 20000);
 
-  it.skip('should create user and associate them with their interest', async () => {
+  it('should create user and associate them with their interest', async () => {
     const responses = await Promise.all(
       getRandUsers(4).map((u) => {
         const user = u;
@@ -74,18 +79,30 @@ describe('/users service', () => {
     });
   });
 
-  it.skip('should pull user with interest', async () => {
+  it('should pull user with interest', async () => {
     const {
       body: { data: usersWithInterest },
     } = await testServer
       .get(endpoint)
       .set('authorization', observer.accessToken);
-    expect(usersWithInterest.some((user) => user.Interests.length > 0)).toBe(
+    expect(usersWithInterest.some((user) => user.Interests?.length > 0)).toBe(
       true
     );
+
+    usersWithInterest.forEach((user) => {
+      if (Array.isArray(user.Interests)) {
+        expect(
+          user.Interests.map((interest) => interest.name).includes(interests[0])
+        ).toBe(true);
+
+        expect(
+          user.Interests.map((interest) => interest.name).includes(interests[1])
+        ).toBe(true);
+      }
+    });
   });
 
-  it.skip('should return all 9 users', async () => {
+  it('should return all 9 users', async () => {
     const u = getRandUser();
     const user = u;
     delete user.id;
@@ -100,7 +117,7 @@ describe('/users service', () => {
     expect(users).toHaveLength(9);
   }, 1000);
 
-  it.skip('should create a user with a private profile', async () => {
+  it('should create a user with a private profile', async () => {
     const u = getRandUser();
     const user = u;
     delete user.id;
@@ -110,7 +127,7 @@ describe('/users service', () => {
     privateUser = response.body;
     expect(response.statusCode).toBe(201);
   });
-  it.skip('should still return  9 users', async () => {
+  it('should still return  9 users', async () => {
     const {
       body: { data: users },
     } = await testServer
@@ -120,7 +137,7 @@ describe('/users service', () => {
     expect(users).toHaveLength(9);
   }, 1000);
 
-  it.skip('should  return  10 users', async () => {
+  it('should  return  10 users', async () => {
     const {
       body: { data: users },
     } = await testServer
@@ -130,7 +147,7 @@ describe('/users service', () => {
     expect(users).toHaveLength(10);
   }, 1000);
 
-  it.skip('should only find online users ', async () => {
+  it('should only find online users ', async () => {
     const {
       body: { data: users },
     } = await testServer
@@ -160,7 +177,7 @@ describe('/users service', () => {
 
     expect(onlineUsers).toHaveLength(4);
   });
-  it.skip('should only find online users witch are friends and mark as friends', async () => {
+  it('should only find online users witch are friends and mark as friends', async () => {
     const {
       body: { data: users },
     } = await testServer
@@ -202,7 +219,7 @@ describe('/users service', () => {
     expect(onlineUsers).toHaveLength(4);
   });
 
-  it.skip('should get a user by id ', async () => {
+  it('should get a user by id ', async () => {
     const requester = observer.body;
     const user = getRandUser();
     delete user.id;
@@ -218,60 +235,56 @@ describe('/users service', () => {
     expect(userR.email).toEqual(profileRequesting.email);
     expect(userR.address).toHaveLength(0);
   });
-  it.skip('should not update sensitive information', async () => {
-    const requester = createdTestUsers[0];
+  it('should not update sensitive information', async () => {
     [
       { password: 'password' },
       { activationKey: 'activationKey' },
       { resetPasswordKey: 'resetPasswordKey' },
     ].forEach(async (unacceptable) => {
       const res = await testServer
-        .patch(`${endpoint}/${requester?.user.id}`)
+        .patch(`${endpoint}/${privateUser.id}`)
         .send(unacceptable)
-        .set('authorization', requester.token);
+        .set('authorization', privateUser.accessToken);
       expect(res.statusCode).toEqual(400);
     });
   });
 
-  it.skip('should not modify a different user', async () => {
-    const requester = createdTestUsers[0];
+  it('should not modify a different user', async () => {
     const res = await testServer
-      .patch(`${endpoint}/${createdTestUsers[1]?.user.id}`)
+      .patch(`${endpoint}/${observer.id}`)
       .send(modify)
-      .set('authorization', requester.token);
+      .set('authorization', privateUser.accessToken);
     expect(res.statusCode).toEqual(400);
   });
 
-  it.skip('should update the user details', async () => {
-    const requester = createdTestUsers[0];
+  it('should update the user details', async () => {
     const res = await testServer
-      .patch(`${endpoint}/${requester?.user.id}`)
+      .patch(`${endpoint}/${privateUser.id}`)
       .send(modify)
-      .set('authorization', requester.token);
-    expect(res.body.birthday).toBeDefined();
+      .set('authorization', privateUser.accessToken);
+
     expect(res.body).toEqual(expect.objectContaining(modify));
   });
 
-  it.skip('The user should now be updated with the fields above ', async () => {
+  it('The user should now be updated with the fields above ', async () => {
     const userR = await testServer
-      .get(`${endpoint}/${createdTestUsers[0].user.id}`)
-      .set('authorization', createdTestUsers[0].token);
-    expect(userR.body).toEqual(expect.objectContaining(modify));
+      .get(`${endpoint}/${privateUser.id}`)
+      .set('authorization', privateUser.accessToken);
+    expect(userR.body).toMatchObject(modify);
   });
 
-  it.skip('should not delete another user profile', async () => {
+  it('should not delete another user profile', async () => {
     const response = await testServer
-      .delete(`${endpoint}/${createdTestUsers[0]?.user.id}`)
-      .set('authorization', createdTestUsers[1].token);
+      .delete(`${endpoint}/${observer.id}`)
+      .set('authorization', privateUser.accessToken);
     expect(response.statusCode).toEqual(400);
   });
 
-  it.skip('should delete his own profile', async () => {
-    const requester = createdTestUsers[0];
+  it('should delete his own profile', async () => {
     const deletedUser = await testServer
-      .delete(`${endpoint}/${requester?.user.id}`)
-      .set('authorization', requester.token);
-    expect(requester?.user.id).toEqual(deletedUser.body.id);
+      .delete(`${endpoint}/${privateUser.id}`)
+      .set('authorization', privateUser.accessToken);
+    expect(privateUser.id).toEqual(deletedUser.body.id);
     expect(deletedUser.statusCode).toEqual(200);
   });
 });

@@ -39,7 +39,7 @@ describe('search friends service', () => {
   ];
   beforeAll(async () => {
     testServer = request(app);
-
+    await app.get('sequelizeClient').sync({ force: true });
     createdTestUsers = await Promise.all(
       testUsers.map((user) => testServer.post(userEndpoint).send(user))
     );
@@ -57,7 +57,7 @@ describe('search friends service', () => {
     );
   });
 
-  it.skip('should search and find user related by first name', async () => {
+  it('should search and find user related by first name', async () => {
     const rand = Math.floor(Math.random() * createdTestUsers.length);
 
     const userToSearch = createdTestUsers[rand].body;
@@ -65,7 +65,7 @@ describe('search friends service', () => {
       .get(`${endpoint}/?$search=${userToSearch.firstName}`)
       .set('authorization', researcher.accessToken);
 
-    expect(res.body).toEqual(
+    expect(res.body.data).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: userToSearch.id,
@@ -75,7 +75,7 @@ describe('search friends service', () => {
       ])
     );
   });
-  it.skip('should search and find user related by last name', async () => {
+  it('should search and find user related by last name', async () => {
     const rand = Math.floor(Math.random() * createdTestUsers.length);
 
     const userToSearch = createdTestUsers[rand].body;
@@ -83,7 +83,7 @@ describe('search friends service', () => {
       .get(`${endpoint}/?$search=${userToSearch.lastName}`)
       .set('authorization', researcher.accessToken);
 
-    expect(res.body).toEqual(
+    expect(res.body.data).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: userToSearch.id,
@@ -93,7 +93,7 @@ describe('search friends service', () => {
       ])
     );
   });
-  it.skip('should search and find user related by email', async () => {
+  it('should search and find user related by email', async () => {
     const rand = Math.floor(Math.random() * createdTestUsers.length);
 
     const userToSearch = createdTestUsers[rand].body;
@@ -101,7 +101,7 @@ describe('search friends service', () => {
       .get(`${endpoint}/?$search=${userToSearch.email}`)
       .set('authorization', researcher.accessToken);
 
-    expect(res.body).toEqual(
+    expect(res.body.data).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: userToSearch.id,
