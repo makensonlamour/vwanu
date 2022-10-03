@@ -8,6 +8,7 @@ import EmptyComponent from "../../../components/common/EmptyComponent";
 import Loader from "../../../components/common/Loader";
 import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 import { useQueryClient } from "react-query";
+import ReactPlayer from "react-player";
 
 const PhotoList = ({ user }) => {
   const queryClient = useQueryClient();
@@ -51,33 +52,56 @@ const PhotoList = ({ user }) => {
             </div>
           }
         >
-          {photoList?.pages?.map((page) => {
-            return page?.data?.data?.map((photo) => {
-              return (
-                <div key={photo?.id} className="mx-auto w-full">
-                  <div className="flex flex-wrap justify-start">
+          <div className="mx-auto w-full">
+            <div className="flex flex-wrap justify-start">
+              {photoList?.pages?.map((page) => {
+                return page?.data?.data?.map((photo) => {
+                  return (
                     <Link
                       to={"#"}
                       key={photo?.id}
                       className="shadow-sm rounded-lg h-[120px] w-[120px] sm:w-[130px] sm:h-[130px] mx-3 sm:mx-3 mt-3 mb-3 hover:shadow-lg"
                     >
-                      <ViewPhoto
-                        photo={photo}
-                        data={photo}
-                        imgComponent={
-                          <img
-                            className="shadow-sm h-[120px] w-[120px] sm:h-[130px] sm:w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
-                            src={photo?.original}
-                            alt={"_img_" + photo?.id}
-                          />
-                        }
-                      />
+                      {photo?.original.endsWith(".mp4") ? (
+                        <ViewPhoto
+                          type={"video"}
+                          photo={photo}
+                          data={photo}
+                          imgComponent={
+                            <div>
+                              <ReactPlayer
+                                className={"bg-black h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"}
+                                url={photo?.original}
+                                muted={true}
+                                pip={true}
+                                volume={1}
+                                playsinline={true}
+                                controls={true}
+                                light={true}
+                              />
+                            </div>
+                          }
+                        />
+                      ) : (
+                        <ViewPhoto
+                          photo={photo}
+                          data={photo}
+                          type="photo"
+                          imgComponent={
+                            <img
+                              className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
+                              src={photo?.original}
+                              alt={"_img_" + photo?.id}
+                            />
+                          }
+                        />
+                      )}
                     </Link>
-                  </div>
-                </div>
-              );
-            });
-          })}
+                  );
+                });
+              })}
+            </div>
+          </div>
         </InfiniteScroll>
       ) : (
         <div className="flex justify-center w-full">

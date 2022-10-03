@@ -6,13 +6,9 @@ import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import { FiUserX, FiUserPlus } from "react-icons/fi";
 import { AiOutlineCheck } from "react-icons/ai";
-import { checkFriendRequest, checkFriendList } from "../../../helpers/index";
 import AcceptFriendRequestButton from "./AcceptFriendRequestButton";
 import {
   useSendFriendRequest,
-  useGetListFriendRequestSent,
-  useGetListFriendReceive,
-  useGetListFriend,
   useCancelFriendRequest,
   useUnfriendUser,
 } from "../friendSlice";

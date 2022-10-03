@@ -1,5 +1,6 @@
-import React from "react";
-// import { useGetListFriend } from "../../features/friend/friendSlice";
+import React, { useState } from "react";
+import { useSendFriendRequest } from "../../features/friend/friendSlice";
+import { useSendFollow } from "../../features/follower/followerSlice";
 import PropTypes from "prop-types";
 import { Link, useOutletContext } from "react-router-dom";
 // import { checkFriendList } from "../../../helpers/index";
@@ -7,17 +8,64 @@ import { Link, useOutletContext } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
 import InfiniteScroll from "../InfiniteScroll/InfiniteScroll";
+import toast, { Toaster } from "react-hot-toast";
+import EmptyComponent from "../common/EmptyComponent";
+import { ImSad } from "react-icons/im";
 
-const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery, isNetwork = false }) => {
+const friendRequestError = () =>
+  toast.error("Sorry. Error on sending Friend Request!", {
+    position: "top-center",
+  });
+
+const followError = () =>
+  toast.error("Sorry. Error on following this user!", {
+    position: "top-center",
+  });
+
+const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery, isNetwork = false }) => {
   const queryClient = useQueryClient();
   const user = useOutletContext();
   // const { data: listFriend } = useGetListFriend(["user", "friend"], true);
+  const [loading, setLoading] = useState(false);
+
+  const sendFriendRequest = useSendFriendRequest(["user", "request"]);
+  const sendFollow = useSendFollow(["user", "follow"]);
+
   function reloadPage() {
     queryClient.refetchQueries(arrayQuery);
   }
 
+  const handleFollower = async (e, _id) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await sendFollow.mutateAsync({ UserId: _id });
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+      followError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFriendRequest = async (e, _id) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await sendFriendRequest.mutateAsync({ UserID: _id });
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+      friendRequestError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
+      <Toaster />
       <div className="my-2 w-full">
         {isLoading ? (
           <div className="flex justify-center py-5">
@@ -63,7 +111,6 @@ const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchN
                         ${isNetwork ? " xl:w-[48%] " : " xl:w-[31%] "}
                       `}
                     >
-                      {console.log(friend?.profilePicture)}
                       <img
                         className="object-cover w-28 h-28 mask mask-squircle mx-auto mb-2"
                         src={friend?.profilePicture?.original || friend?.User?.profilePicture || friend?.profilePicture}
@@ -112,16 +159,72 @@ const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchN
                         )}
                       </div>
                       {user?.id?.toString() !== friend?.id?.toString() && (
-                        <div className="flex border border-gray-300 rounded-b-xl -px-6 justify-around bg-placeholder-color">
+                        <div className="flex border border-gray-300 rounded-b-xl -px-6 justify-around  bg-placeholder-color">
                           {friend?.iFollow ? (
-                            <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Unfollow</button>
+                            <button disabled={true} className="basis-1/2 py-3 border-r bg-white border-gray-300 hover:bg-gray-100">
+                              {loading ? (
+                                <div className="flex justify-center py-5">
+                                  <Loader color="black" />
+                                </div>
+                              ) : (
+                                "Following"
+                              )}
+                            </button>
                           ) : (
-                            <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Follow</button>
+                            <button
+                              onClick={(e) => {
+                                handleFollower(e, friend?.id);
+                              }}
+                              className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100"
+                            >
+                              {loading ? (
+                                <div className="flex justify-center py-5">
+                                  <Loader color="black" />
+                                </div>
+                              ) : (
+                                "Follow"
+                              )}
+                            </button>
                           )}
+
+                          {/* connect friend */}
                           {friend?.isFriend ? (
-                            <button className="basis-1/2 py-3 border-l border-gray-300 hover:bg-gray-100">Unconnect</button>
+                            <button disabled={true} className="basis-1/2 py-3 border-l border-gray-300 hover:bg-gray-100  bg-white">
+                              {loading ? (
+                                <div className="flex justify-center py-5">
+                                  <Loader color="black" />
+                                </div>
+                              ) : (
+                                "Connected"
+                              )}
+                            </button>
+                          ) : friend?.hasReceivedFriendRequest || friend?.hasSentFriendRequest ? (
+                            <button disabled={true} className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100 bg-white">
+                              {loading ? (
+                                <div className="flex justify-center py-5">
+                                  <Loader color="black" />
+                                </div>
+                              ) : friend?.hasReceivedFriendRequest ? (
+                                "Request Received"
+                              ) : (
+                                "Request Sent"
+                              )}
+                            </button>
                           ) : (
-                            <button className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100">Connect</button>
+                            <button
+                              onClick={(e) => {
+                                handleFriendRequest(e, friend?.id);
+                              }}
+                              className="basis-1/2 py-3 border-r border-gray-300 hover:bg-gray-100"
+                            >
+                              {loading ? (
+                                <div className="flex justify-center py-5">
+                                  <Loader color="black" />
+                                </div>
+                              ) : (
+                                "Connect"
+                              )}
+                            </button>
                           )}
                         </div>
                       )}
@@ -132,7 +235,14 @@ const ViewFriend = ({ data, noDataLabel, isLoading, isError, hasNextPage, fetchN
             </div>
           </InfiniteScroll>
         ) : (
-          <div className="flex w-full p-10 mx-auto">{noDataLabel}</div>
+          <div className="flex justify-center">
+            <EmptyComponent
+              border={false}
+              icon={<ImSad size={"32px"} className="" />}
+              placeholder={"Sorry, You don't follow anyone."}
+              tips={"Follow someone you may know or appreciate to everything about they."}
+            />
+          </div>
         )}
       </div>
     </>
