@@ -113,12 +113,12 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                           ? otherUser?.amountOfFollowers === 0
                             ? "0 Follower"
                             : otherUser?.amountOfFollower === 1
-                            ? otherUser?.amountOfFollower + " Folower"
+                            ? otherUser?.amountOfFollower + " Follower"
                             : otherUser?.amountOfFollower + " Followers"
                           : user?.amountOfFollowers === 0
                           ? "0 Follower"
                           : user?.amountOfFollower === 1
-                          ? user?.amountOfFollower + " Folower"
+                          ? user?.amountOfFollower + " Follower"
                           : user?.amountOfFollower + " Followers"}
                       </span>
                       <span className="pl-2">
@@ -131,7 +131,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                           : user?.amountOfFollowings === 0
                           ? "0 Following"
                           : user?.amountOfFollowing === 1
-                          ? user?.amountOfFollowing + " Folower"
+                          ? user?.amountOfFollowing + " Follower"
                           : user?.amountOfFollowing + " Followings"}
                       </span>
                     </h4>

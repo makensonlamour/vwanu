@@ -10,6 +10,7 @@ import { Field, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { useUpdateAlbum, useDeleteAlbum } from "../albumSlice";
+import ReactPlayer from "react-player";
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Album Name"),
@@ -63,11 +64,12 @@ const ViewAlbum = ({ albumId, album, user }) => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (_id) => {
     setIsLoading(true);
     try {
-      await deleteName.mutateAsync({ id });
+      await deleteName.mutateAsync({ id: _id });
       deleteSuccess();
+      window.location.reload();
     } catch (e) {
       console.log(e);
       deleteError();
@@ -136,17 +138,40 @@ const ViewAlbum = ({ albumId, album, user }) => {
                 {photos?.Medias?.map((photo) => {
                   return (
                     <Link to={"#"} key={photo?.id} className="shadow-sm rounded-lg w-[130px] h-[130px] mx-3 mt-3 mb-3 hover:shadow-lg">
-                      <ViewPhoto
-                        photo={photo}
-                        data={photos}
-                        imgComponent={
-                          <img
-                            className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
-                            src={photo?.original}
-                            alt={"_img_" + photo?.id}
-                          />
-                        }
-                      />
+                      {photo?.original.endsWith(".mp4") ? (
+                        <ViewPhoto
+                          type={"video"}
+                          photo={photo}
+                          data={photos}
+                          imgComponent={
+                            <div>
+                              <ReactPlayer
+                                className={"bg-black h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"}
+                                url={photo?.original}
+                                muted={true}
+                                pip={true}
+                                volume={1}
+                                playsinline={true}
+                                controls={true}
+                                light={true}
+                              />
+                            </div>
+                          }
+                        />
+                      ) : (
+                        <ViewPhoto
+                          photo={photo}
+                          data={photos}
+                          type="photo"
+                          imgComponent={
+                            <img
+                              className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
+                              src={photo?.original}
+                              alt={"_img_" + photo?.id}
+                            />
+                          }
+                        />
+                      )}
                       {/*} <div className=" ">
                     <img
                       className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"

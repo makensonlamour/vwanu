@@ -24,7 +24,7 @@ const LayoutAuth = () => {
       <Navbar countMessage={countMessage} user={user ? user : undefined} />
       {user?.birthday ? <Navigate to={routesPath.NEWSFEED} state={{ from: location }} replace /> : null}
       <div className="">
-        <div className="h-auto mr-5 my-4 px-4 lg:px-16">
+        <div className="h-auto my-4 px-4 lg:px-16">
           {user ? <Outlet context={user ? user : undefined} /> : <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />}
         </div>
       </div>

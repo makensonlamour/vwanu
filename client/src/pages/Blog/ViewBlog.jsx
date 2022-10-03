@@ -34,7 +34,7 @@ const ViewBlog = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [responseText, setResponseText] = useState("");
   const queryClient = useQueryClient();
-  const { data: blog } = useGetBlog(["blog", id], id?.toString() !== "undefined" ? true : false, id);
+  const { data: blog } = useGetBlog(["blog", "", id], id?.toString() !== undefined ? true : false, id);
   const { data: blogList } = useGetBlogList(["blog", "all"], true);
   const {
     data: listResponse,
