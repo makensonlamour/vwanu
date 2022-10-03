@@ -5,7 +5,8 @@ const countries = require('../data/counties');
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      'State',
+      'Countries',
+
       countries.map((country) => ({
         name: country.name,
         id: v4(),
