@@ -15,6 +15,8 @@ import CommentForm from "../comment/component/CommentForm";
 import ReusableDialog from "../../components/common/ReusableDialog";
 import ViewLikeButton from "../reaction/component/ViewLikeButton";
 import Share from "../../components/Share/Share";
+// import koremPNG from "../../assets/images/reactions/korem2.png";
+import { ReactComponent as koremPNG } from "../../assets/images/reactions/korem2.png";
 
 // import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
@@ -63,7 +65,7 @@ const PostList = ({ post, pageTitle }) => {
       {post ? (
         <>
           <Toaster />
-          <div className="border-[0.5px] border-slate-200 pb-3 mb-5 mt-4 rounded-lg shadow-md lg:w-full bg-white">
+          <div className="border-[0.5px] border-slate-200 pb-3 mb-3 mt-2 rounded-lg shadow-md lg:w-full bg-white">
             <div className="pt-3 pb-1 px-3">
               <div className="flex flex-wrap mb-1">
                 <div>
@@ -135,8 +137,10 @@ const PostList = ({ post, pageTitle }) => {
                             {post?.amountOfReactions > 0 ? (
                               <>
                                 <div className="flex text-primary items-center">
-                                  <p className="">
-                                    <span>
+                                  <p className="flex justify-start items-center">
+                                    {/* <img height={18} width={18} src={koremPNG} alt="_kore" /> */}
+                                    <koremPNG width={18} height={18} className="text-black" />
+                                    <span className="ml-1">
                                       {post?.isReactor && post?.isReactor?.length === 1
                                         ? post?.amountOfReactions - 1 === 0
                                           ? "You react on this post"

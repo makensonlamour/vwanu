@@ -18,7 +18,7 @@ const commentError = () =>
     position: "top-center",
   });
 
-const CommentForm = ({ PostId }) => {
+const CommentForm = ({ PostId, response = false }) => {
   const queryClient = useQueryClient();
   const user = useOutletContext();
   const UserId = user?.id;
@@ -56,14 +56,18 @@ const CommentForm = ({ PostId }) => {
     <>
       <Toaster />
 
-      <div className="flex w-full space-x-2 items-center my-2">
-        <img className="object-cover mask mask-squircle h-10 w-10" src={user?.profilePicture?.original} alt="_picture" />
-        <form style={{ padding: ".85rem" }} className={`flex bg-gray-100 rounded-3xl items-center w-full`}>
+      <div className={`${response ? "ml-10" : ""} flex space-x-1 items-center my-2`}>
+        <img
+          className={`${response ? "h-6 w-6" : "h-10 w-10"} object-cover mask mask-squircle `}
+          src={user?.profilePicture?.original}
+          alt="_picture"
+        />
+        <form className={`${response ? "py-[0.10rem]" : "py-[0.38rem]"} flex bg-gray-100 rounded-xl items-center w-full`}>
           <TextareaAutosize
             name="postText"
             type="text"
-            className="resize-none outline-none w-full bg-transparent text-md placeholder-gray-400 font-light"
-            placeholder={`Write a comment and press enter to post`}
+            className="resize-none hover:border-0 border-0 align-middle items-center text-xs outline-none w-full bg-transparent text-md placeholder-gray-400 font-light"
+            placeholder={`${response ? "Write a response and press enter..." : "Write a comment and press enter..."}`}
             maxRows={4}
             autoFocus={true}
             onKeyDown={onEnterPress}
@@ -82,6 +86,7 @@ const CommentForm = ({ PostId }) => {
 
 CommentForm.propTypes = {
   PostId: PropTypes.string.isRequired,
+  response: PropTypes.bool,
 };
 
 export default CommentForm;

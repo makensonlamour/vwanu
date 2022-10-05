@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { useQueryClient } from "react-query";
 import { useCreateReaction, useDeleteReaction } from "../reactionSlice";
 import { Button } from "@mui/material";
+import koremPNG from "../../../assets/images/reactions/korem2.png";
+
 // import { ReactionBarSelector } from "@charkour/react-reactions";
 // import _ from "lodash";
 // import { FaThumbsUp } from "react-icons/fa";
@@ -44,13 +46,17 @@ const Reaction = ({ post }) => {
           {post && post?.isReactor?.length === 1 ? (
             <Fragment>
               <p style={{ textTransform: "capitalize" }} className="text-left align-middle">
-                {"Pa Korem"}
+                {"Pa Kore"}
               </p>
             </Fragment>
           ) : (
             <Fragment>
               {/* <FaThumbsUp size={"24px"} className="bg-g-one/[0.3] p-1 mask mask-squircle inline mr-2" /> */}
-              <span className="text-semibold hover:text-primary">{" Korem"}</span>
+              <p className="text-semibold hover:text-primary flex justify-center items-center">
+                <img height={20} width={20} src={koremPNG} alt="_kore" />
+                <span className="ml-1"></span>
+                {" Kore"}
+              </p>
             </Fragment>
           )}
         </p>
