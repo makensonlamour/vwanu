@@ -42,7 +42,7 @@ let routesPath = {
   VOICE_CALL: "/call",
   VIDEO_CALL: "/general-settings",
   NOTIFICATIONS: "/notifications",
-  // TEST_PAGE: "/test",
+  TEST_PAGE: "/test",
 };
 
 export default routesPath;

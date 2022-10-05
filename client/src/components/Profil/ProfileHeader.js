@@ -47,14 +47,14 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
         <Loader />
       ) : (
         <>
-          <div className="flex justify-between w-full">
+          <div className="flex justify-between w-full max-w-screen-[1400px]">
             <div className="w-[100vw] lg:w-[65vw] lg:basis-[70%]">
               <div className="border-gray-700 bg-white">
-                <div className="relative w-full lg:w-[56vw]">
+                <div className="relative w-full lg:w-[65vw]">
                   <div className="">
                     <img
                       src={otherUser ? otherUser?.coverPicture?.original : user?.coverPicture?.original}
-                      className="mx-auto max-h-64 w-full object-cover lg:h-[250px]"
+                      className="mx-auto max-h-[312px] aspect-[3.46/1] w-max-[1080px] w-full object-cover lg:h-[312px]"
                       alt="cover_profile"
                     />
                     {!otherUser && (
@@ -131,7 +131,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                           : user?.amountOfFollowings === 0
                           ? "0 Following"
                           : user?.amountOfFollowing === 1
-                          ? user?.amountOfFollowing + " Follower"
+                          ? user?.amountOfFollowing + " Following"
                           : user?.amountOfFollowing + " Followings"}
                       </span>
                     </h4>

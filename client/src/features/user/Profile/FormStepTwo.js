@@ -64,7 +64,7 @@ const FormStepTwo = () => {
     street: Yup.string().label("Street"),
     zipCode: Yup.string().label("Zip Code"),
     gender: Yup.string().required().label("Gender"),
-    interestedBy: Yup.string().required().label("Interest By"),
+    // interestedBy: Yup.string().required().label("Interest By"),
     interest: Yup.array().label("Interest"),
     birthday: Yup.date()
       .test(
@@ -97,7 +97,7 @@ const FormStepTwo = () => {
         addressType: typeAddress,
       },
       gender: credentials?.gender,
-      interestedBy: credentials?.interestedBy,
+      // interestedBy: credentials?.interestedBy,
       birthday: credentials?.birthday,
       interests: interest,
       id: idUser,
@@ -162,19 +162,7 @@ const FormStepTwo = () => {
             { id: 2, label: "female", value: "f" },
           ]}
         />
-        <Select
-          required
-          label="Interest By"
-          placeholder="Interest By"
-          name="interestedBy"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-          testId="interestBy-error-message"
-          options={[
-            { id: 0, label: "Not Specified", value: "" },
-            { id: 1, label: "male", value: "m" },
-            { id: 2, label: "female", value: "f" },
-          ]}
-        />
+
         <MultiSelect
           label="Interest"
           className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "

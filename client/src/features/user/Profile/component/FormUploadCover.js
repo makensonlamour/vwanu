@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+/*eslint-disable*/
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import ReactCrop from "react-image-crop";
+import Cropper from "react-cropper";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
 import toast, { Toaster } from "react-hot-toast";
@@ -18,48 +20,50 @@ const uploadCoverError = () =>
   });
 
 const FormUploadCover = ({ user, hideViewer, getImg }) => {
+  const cropperRef = useRef(false);
   function reload() {
     window.location.reload();
   }
+
   const [files, setFiles] = useState([]);
-  const [crop, setCrop] = useState({
-    unit: "%", // Can be 'px' or '%'
-    x: 0,
-    y: 10,
-    width: 98,
-    height: 50,
-    aspect: 1,
-  });
+  // const [crop, setCrop] = useState({
+  //   unit: "%", // Can be 'px' or '%'
+  //   x: 0,
+  //   y: 10,
+  //   width: 98,
+  //   height: 50,
+  //   aspect: 1,
+  // });
   //save the image that used to be crop
-  const [image, setImage] = useState(null);
-  const [result, setResult] = useState(null);
-  const [previewImg, setPreviewImg] = useState(null);
+  const [image, setImage] = useState(false);
+  // const [result, setResult] = useState(null);
+  const [previewImg, setPreviewImg] = useState(false);
 
-  const getCroppedImg = async () => {
-    try {
-      const canvas = document.createElement("canvas");
-      const scaleX = image.naturalWidth / image.width;
-      const scaleY = image.naturalHeight / image.height;
-      canvas.width = crop.width;
-      canvas.height = crop.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height);
+  // const getCroppedImg = async () => {
+  //   try {
+  //     const canvas = document.createElement("canvas");
+  //     const scaleX = image.naturalWidth / image.width;
+  //     const scaleY = image.naturalHeight / image.height;
+  //     canvas.width = crop.width;
+  //     canvas.height = crop.height;
+  //     const ctx = canvas.getContext("2d");
+  //     ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height);
 
-      //   const base64Image = canvas.toDataURL("image/jpeg", 1);
+  //     //   const base64Image = canvas.toDataURL("image/jpeg", 1);
 
-      canvas.toBlob(function (blob) {
-        const url = URL.createObjectURL(blob);
-        setPreviewImg(url);
-        setResult(blob);
-      }, "image/jpeg");
+  //     canvas.toBlob(function (blob) {
+  //       const url = URL.createObjectURL(blob);
+  //       setPreviewImg(url);
+  //       setResult(blob);
+  //     }, "image/jpeg");
 
-      //   console.log(canvas);
+  //     //   console.log(canvas);
 
-      //   setResult(base64Image);
-    } catch (e) {
-      console.log("crop the image");
-    }
-  };
+  //     //   setResult(base64Image);
+  //   } catch (e) {
+  //     console.log("crop the image");
+  //   }
+  // };
 
   const { getRootProps, getInputProps, open } = useDropzone({
     maxFiles: 1,
@@ -88,16 +92,28 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
     noKeyboard: true,
   });
 
+  let preview = false;
+
+  const onCrop = async () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    await cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096 }).toBlob((blob) => {
+      preview = blob;
+      // setPreviewImg(blob);
+    });
+  };
+
   const handleSubmit = async () => {
-    getCroppedImg();
+    // getCroppedImg();
+    // await onCrop();
     const formData = new FormData();
-    formData.append("coverPicture", result);
+    formData.append("coverPicture", preview);
     formData.append("UserId", user?.id);
     try {
       const res = await updateProfilePicture({ formData, id: user?.id });
       if (res?.data) {
         uploadCoverSuccess();
-        reload();
+        window.location.href = "../../profile/" + user?.id;
       }
     } catch (e) {
       console.log(e);
@@ -107,34 +123,34 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
     }
   };
 
-  const preview = (
-    <>
-      {files?.map((file) => {
-        return (
-          <div key={file?.path} className="">
-            <ReactCrop
-              crop={crop}
-              onChange={(c) => {
-                getCroppedImg();
-                setCrop(c);
-              }}
-            >
-              <img
-                alt={user?.firstName}
-                src={file?.preview}
-                className="h-72 w-96"
-                // Revoke data uri after image is loaded
-                onLoad={(e) => {
-                  setImage(e.target);
-                  getCroppedImg();
-                }}
-              />
-            </ReactCrop>
-          </div>
-        );
-      })}
-    </>
-  );
+  // const preview = (
+  //   <>
+  //     {files?.map((file) => {
+  //       return (
+  //         <div key={file?.path} className="">
+  //           <ReactCrop
+  //             crop={crop}
+  //             onChange={(c) => {
+  //               getCroppedImg();
+  //               setCrop(c);
+  //             }}
+  //           >
+  //             <img
+  //               alt={user?.firstName}
+  //               src={file?.preview}
+  //               className="h-72 w-96"
+  //               // Revoke data uri after image is loaded
+  //               onLoad={(e) => {
+  //                 setImage(e.target);
+  //                 getCroppedImg();
+  //               }}
+  //             />
+  //           </ReactCrop>
+  //         </div>
+  //       );
+  //     })}
+  //   </>
+  // );
 
   return (
     <>
@@ -154,8 +170,33 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
       )}
       {files?.length > 0 ? (
         hideViewer ? null : (
-          <div className="flex flex-col md:flex-row">
-            <div>{preview}</div>
+          <div className="">
+            <div className="flex justify-center w-full">
+              <Cropper
+                src={URL.createObjectURL(files[0])}
+                style={{ height: 312, width: 1080 }}
+                // Cropper.js options
+                viewMode={0}
+                dragMode="none"
+                autoCrop={true}
+                highlight={true}
+                autoCropArea={0.8}
+                rotatable={false}
+                zoomable={false}
+                background={false}
+                zoomOnTouch={false}
+                zoomOnWheel={false}
+                cropBoxMovable={true}
+                cropBoxResizable={false}
+                toggleDragModeOnDblclick={false}
+                initialAspectRatio={3.46 / 1}
+                aspectRatio={3.46 / 1}
+                guides={true}
+                cropend={onCrop}
+                ref={cropperRef}
+              />
+            </div>
+            {/* <div>{preview}</div>
             <div className="block mx-auto">
               {files?.map((file) => {
                 return (
@@ -174,20 +215,20 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
                     </div>
                   </div>
                 );
-              })}
-              <div className="mt-2 mx-4 flex flex-col justify-center">
-                <button
-                  onClick={handleSubmit}
-                  className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
-                >
-                  Save
-                </button>
-                <button onClick={() => setFiles([])} className="block my-2 hover:text-primary">
-                  Cancel
-                </button>
-              </div>
+              })} */}
+            <div className="mt-2 mx-4 flex flex-row justify-between items-center">
+              <button onClick={() => setFiles([])} className="my-2 hover:text-primary font-semibold">
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="w-fit mt-4 bg-primary px-6 py-1 border-0 text-base-100 hover:bg-secondary rounded-lg"
+              >
+                Save
+              </button>
             </div>
           </div>
+          // </div>
         )
       ) : (
         <div className="p-6 bg-placeholder-color rounded-2xl border-2 border-sky-500 border-dotted">
