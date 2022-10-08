@@ -128,21 +128,20 @@ SELECT
         [Sequelize.literal(lastResponse), 'lastResponse'],
       ],
     },
-    // include: [
-    //   {
-    //     model: Sequelize.models.User,
-    //     attributes: [
-    //       'id',
-    //       'firstName',
-    //       'lastName',
-    //       'profilePicture',
-    //       'createdAt',
-    //       'updatedAt',
-    //     ],
-    //     required: true,
-    //   },
-
-    // ],
+    include: [
+      {
+        model: Sequelize.models.User,
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'profilePicture',
+          'createdAt',
+          'updatedAt',
+        ],
+        required: true,
+      },
+    ],
     order,
     raw: false,
   };
