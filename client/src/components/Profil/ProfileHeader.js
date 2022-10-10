@@ -25,7 +25,7 @@ import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { format } from "date-fns";
-import PostTab from "./../Community/CommunityTab/PostTab";
+import PostTab from "./PostTab";
 
 const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, listFollowing, notificationList }) => {
   // eslint-disable-next-line no-unused-vars
@@ -98,6 +98,11 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                     <h1 className="font-mock text-2xl font-semibold text-primary inline">
                       {otherUser ? otherUser?.firstName + " " + otherUser?.lastName : user?.firstName + " " + user?.lastName}
                     </h1>
+                    <p className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
+                      {`" `}
+                      {otherUser ? otherUser?.about : user?.about}
+                      {` "`}
+                    </p>
                     <h4 className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
                       {"From "}
                       {otherUser ? otherUser?.country : user.country ? user.country : ""}

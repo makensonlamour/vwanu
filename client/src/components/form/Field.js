@@ -20,7 +20,8 @@ function FormField({ name, label, className, containerClassName, testId, showPas
           )}
         </div>
         <input
-          className={"input " + className}
+          style={{ outline: "none" }}
+          className={"input focus:outline-0 focus:border-0  " + className}
           value={values[name]}
           onBlur={() => setFieldTouched(name)}
           onChange={handleChange(name)}

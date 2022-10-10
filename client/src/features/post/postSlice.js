@@ -1,7 +1,7 @@
 import { useFetch, usePost, useLoadMore, useDelete, useUpdate } from "../../lib/react-query";
 
 export const useGetPostsList = (queryKey, enabled = false, UserId) =>
-  useLoadMore(queryKey, enabled, `/timeline?UserId=${UserId}&$sort[createdAt]=-1`);
+  useLoadMore(queryKey, enabled, `/posts?UserId=${UserId}&$sort[createdAt]=-1`);
 
 export const useGetTimelineList = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/timeline?$sort[createdAt]=-1`);
 

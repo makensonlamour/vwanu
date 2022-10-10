@@ -34,8 +34,8 @@ const FormBiography = ({ user }) => {
 
   const handleSubmit = async (dataObj) => {
     setIsLoading(true);
-    const data = { id: user?.id, country: dataObj?.country, livingCountry: dataObj?.livingCountry };
 
+    const data = { id: user?.id, about: dataObj?.about };
     try {
       await updateUser.mutateAsync(data);
       updateSuccess();

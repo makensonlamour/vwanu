@@ -290,19 +290,19 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
                               }
                               type={type}
                               fn={setFiles}
-                              maxFiles={4}
+                              maxFiles={10}
                             />
                           </div>
                         ) : null}
                         {files?.length > 0 && (
                           <div className="flex flex-wrap mt-2 overflow-auto scrollbar h-36">
                             <>
-                              {files?.length < 4 && (
+                              {files?.length < 10 && (
                                 <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
                                   {" "}
                                   <InputPhoto
                                     files={files}
-                                    maxFiles={4 - files?.length}
+                                    maxFiles={10 - files?.length}
                                     label={
                                       <Fragment>
                                         <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />

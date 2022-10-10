@@ -1,66 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import CommentForm from "../../comment/component/CommentForm";
-import ReactPlayer from "react-player";
-
+import _ from "lodash";
+// import { Player } from "video-react";
+import VideoPlayer from "react-videoplayer";
+import "video-react/dist/video-react.css";
+// import ReactPlayer from "react-player";
+// import { VideoPlayer } from "@videojs-player/react";
+import { useScrollLock } from "@mantine/hooks";
+import ReactSlidy from "react-slidy";
+// import "video.js/dist/video-js.css";
+import Reaction from "../../reaction/component/Reaction";
+import Share from "../../../components/Share/Share";
+import ViewLikeButton from "../../reaction/component/ViewLikeButton";
+import koremPNG from "../../../assets/images/reactions/korem2.png";
 // import { useGetComment } from "../../comment/commentSlice";
 
-const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo" }) => {
+// eslint-disable-next-line no-unused-vars
+const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo", idxImg = 0, pageTitle = "post" }) => {
   // const user = useOutletContext();
   const [showModal, setShowModal] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [scrollLocked, setScrollLocked] = useScrollLock();
+  const [commentPrev, setCommentPrev] = useState(false);
   // const { data: listComment } = useGetComment(["comments", "all", photo?.id], photo?.id !== "undefined" ? true : false, photo?.id);
+
+  useEffect(() => {
+    if (showModal) {
+      setScrollLocked(true);
+    } else {
+      setScrollLocked(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
+
   return (
     <>
-      <button onClick={() => setShowModal(true)} className="">
-        <div className=" ">{imgComponent}</div>
+      <button onClick={() => setShowModal(true)} className="w-full">
+        <div className="w-full">{imgComponent}</div>
       </button>
       {showModal && (
-        <div className="justify-center flex overflow-x-hidden overflow-y-auto scrollbar inset-0 fixed bg-black bg-opacity-[0.95] h-full w-full z-50 outline-none focus:outline-none">
+        <div
+          open={showModal}
+          className="justify-center flex overflow-x-hidden overflow-y-auto scrollbar inset-0 fixed bg-black bg-opacity-[0.95] h-full w-full z-50 outline-none focus:outline-none"
+        >
           <div className="relative w-full ">
-            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full  outline-none focus:outline-none">
-              <div className="flex items-start justify-between px-5 py-3 border-solid rounded-t">
-                <p className="text-lg font-medium"></p>
-                <button onClick={() => setShowModal(false)} className="text-3xl text-white font-medium">
-                  x
-                </button>
-              </div>
-              <div className="flex p-3 justify-center flex-col md:flex-row">
-                <div>
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none">
+              <div className="flex justify-between flex-col md:flex-row w-full">
+                <div className="flex justify-center w-full lg:py-5">
+                  <div className="flex items-start justify-start border-solid">
+                    <button onClick={() => setShowModal(false)} className="text-3xl text-white font-medium px-2 lg:pl-2">
+                      x
+                    </button>
+                  </div>
                   {type === "photo" ? (
-                    <div className="basis-[60%] bg-black">
-                      <img
-                        src={photo?.original}
-                        className="px-5 bg-black mx-auto object-contain h-[570px] basis-[70%]"
-                        alt={"_img_" + photo?.id}
-                      />
+                    <div className="w-full lg:w-[80%] h-auto lg:h-[90vh] flex items-center justify-center bg-black pt-10 pb-5 lg:py-5">
+                      <ReactSlidy imageObjectFit="contain">
+                        {data?.Media?.map((item) => {
+                          return (
+                            <img
+                              key={item?.original}
+                              alt={"_img"}
+                              className="px-2 lg:px-5 bg-black mx-auto object-contain"
+                              style={{ maxHeight: "100vh" }}
+                              src={item?.original}
+                            />
+                          );
+                        })}
+                      </ReactSlidy>
+                      {/* <img src={photo?.original} className="px-5 bg-black mx-auto object-contain max-h-[97vh]" alt={"_img_" + photo?.id} /> */}
                     </div>
                   ) : (
-                    <div>
-                      <ReactPlayer url={photo?.original} pip={true} playing={true} volume={1} playsinline={true} controls={true} />
-                      {/* <video
-                      className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
-                      controls
-                      alt={photo.original}
-                    >
-                      <source alt={"videos_" + photo?.id} src={photo.original} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video> */}
+                    <div className="flex items-center justify-center w-full lg:w-[80%] h-[90vh]">
+                      <VideoPlayer
+                        className={"rounded-lg"}
+                        videoSrc={photo?.original}
+                        autoPlay={true}
+                        muted={true}
+                        videoVolume={100}
+                        defaultBrowserControls={true}
+                        customHtmlControls={false}
+                      />
+                      {/* <Player fluid={true} src={photo?.original} muted={true} playsInline controls pip={true} autoplay={true} /> */}
                     </div>
                   )}
-                  {/*} <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-96 top-1/2">
-                    <a href="#slide1" className="btn btn-circle">
-                      ❮
-                    </a>
-                    <a href="#slide3" className="btn btn-circle">
-                      ❯
-                    </a>
-                  </div>
-      {*/}
                 </div>
 
-                <div className="basis-[40%] bg-white">
+                <div className="w-full lg:w-[35%] h-[70vh] lg:h-[100vh] bg-white">
                   <div className="px-4 py-2">
                     <div className="flex items-center mb-2">
                       <img
@@ -84,9 +112,83 @@ const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo" }) => {
                       <button className="ml-2 font-semibold text-xs hover:text-primary">Edit</button>
                       <button className="ml-2 font-semibold text-xs hover:text-primary">Download original</button>
                     </div>
+                    {data?.amountOfReactions !== 0 || data?.amountOfComments !== 0 ? (
+                      <div className="flex flex-nowrap lg:mt-5 lg:pt-2 pb-3 border-b">
+                        <div>
+                          <ViewLikeButton
+                            amountOfReactions={data?.amountOfReactions}
+                            postId={data?.id}
+                            label={
+                              <Fragment>
+                                <p className="text-sm text-secondary">
+                                  {data?.amountOfReactions > 0 ? (
+                                    <>
+                                      <div className="flex text-primary items-center">
+                                        <p className="flex justify-start items-center">
+                                          <img height={18} width={18} src={koremPNG} alt="_kore" />
+                                          {/* <koremPNG width={18} height={18} className="text-black" /> */}
+                                          <span className="ml-1">
+                                            {data?.isReactor && data?.isReactor?.length === 1
+                                              ? data?.amountOfReactions - 1 === 0
+                                                ? "You react on this post"
+                                                : "You and "
+                                              : null}
+                                          </span>
+                                          <span>
+                                            {
+                                              data?.amountOfReactions === 0
+                                                ? null
+                                                : data?.amountOfReactions > 1 && data?.isReactor?.length === 1
+                                                ? data?.amountOfReactions - 1 + " other people" //I like and more than one like the post
+                                                : data?.isReactor && data?.isReactor?.length - 1 === 0
+                                                ? null
+                                                : data?.amountOfReactions + " other people" //I don't like and other people like
+                                            }
+                                          </span>
+                                        </p>
+                                      </div>
+                                    </>
+                                  ) : null}
+                                </p>
+                              </Fragment>
+                            }
+                          />
+                        </div>
+
+                        <p className="ml-auto">
+                          <Link
+                            to={_.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed") ? "" : `../../post/${data?.id}`}
+                            className="ml-auto text-xs text-primary mr-2 hover:border-b hover:border-primary"
+                          >
+                            {data?.amountOfComments === 0
+                              ? null
+                              : data?.amountOfComments === 1
+                              ? data?.amountOfComments + " Comment"
+                              : data?.amountOfComments + " Comments"}
+                          </Link>
+                          <button className="ml-auto text-xs text-primary hover:border-b hover:border-primary">
+                            {data?.Shares?.length ? data?.Shares?.length + " shares" : null}
+                          </button>
+                        </p>
+                      </div>
+                    ) : null}
+                    <div className="flex flex-wrap">
+                      {/*Reactions*/}
+                      <Reaction post={data} />
+
+                      {/*Comments*/}
+                      <button
+                        onClick={() => setCommentPrev(!commentPrev)}
+                        className="text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
+                      >
+                        {/* <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
+                        {" Comment"}
+                      </button>
+                      <Share post={data} label={" Share"} link={""} />
+                    </div>
                     <div className="w-full h-[1px] bg-gray-200"></div>
                     <div className="">
-                      <CommentForm PostId={photo?.id} />
+                      <CommentForm PostId={data?.id} />
                     </div>
                   </div>
                 </div>
@@ -104,6 +206,8 @@ ViewPhoto.propTypes = {
   imgComponent: PropTypes.any,
   type: PropTypes.string,
   data: PropTypes.object,
+  idxImg: PropTypes.number,
+  pageTitle: PropTypes.string,
 };
 
 export default ViewPhoto;

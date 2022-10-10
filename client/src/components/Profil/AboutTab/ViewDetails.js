@@ -9,6 +9,8 @@ const ViewDetails = ({ title, user, substabs }) => {
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
 
+  console.log("bio", userMe);
+
   return (
     <>
       <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
@@ -34,6 +36,7 @@ const ViewDetails = ({ title, user, substabs }) => {
                 <div key={detail?.name + "_" + detail?.value} className="flex py-3">
                   <p className="basis-1/3 text-gray-500">{detail?.name}</p>
                   <p className="basis-2/3 capitalize">{detail?.value}</p>
+                  <p>Hide</p>
                 </div>
               )}
             </>
