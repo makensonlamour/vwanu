@@ -1,9 +1,13 @@
+/*eslint-disable*/
 import React, { useState, useEffect } from "react";
-import ReactPlayer from "react-player";
+// import { Player } from "video-react";
+// import ReactPlayer from "react-player";
 import PropTypes from "prop-types";
 import ViewPhoto from "../../../features/album/component/ViewPhoto";
+import { isMobile } from "react-device-detect";
+import VideoPlayer from "react-videoplayer";
 
-const MediaPost = ({ medias }) => {
+const MediaPost = ({ medias, post }) => {
   const [type, setType] = useState("photo");
 
   const checkType = () => {
@@ -11,6 +15,21 @@ const MediaPost = ({ medias }) => {
       setType("video");
     }
   };
+
+  function transformImgSingle(url, postNumber) {
+    if (!url) return "";
+    if (isMobile && postNumber === 1) return url;
+    const arrayUrl = url.split("/");
+
+    arrayUrl.splice(6, 0, "q_100");
+    if (postNumber === 1) {
+      arrayUrl.splice(7, 0, "b_auto:predominant,c_pad,h_1200,w_1400");
+    } else {
+      arrayUrl.splice(7, 0, "b_auto:predominant,c_pad,h_1200,w_1200");
+    }
+
+    return arrayUrl.join("/");
+  }
 
   useEffect(() => {
     checkType();
@@ -25,27 +44,21 @@ const MediaPost = ({ medias }) => {
       <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <ViewPhoto
           type={type}
+          data={post}
           photo={medias[0]}
           imgComponent={
-            <div>
-              <ReactPlayer
-                className={"h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"}
-                url={medias[0]?.original}
+            <div className="w-[0px] object-cover">
+              {/* <VideoPlayer
+                width={10}
+                style={{ borderRadius: "10px" }}
+                className={"rounded-lg"}
+                videoSrc={medias[0]?.original}
+                autoPlay={false}
                 muted={true}
-                pip={true}
-                volume={1}
-                playsinline={true}
-                controls={true}
-                light={true}
-              />
-              {/* <video
-                className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
-                controls
-                alt={medias[0]?.original}
-              >
-                <source alt={"videos_" + sender?.firstName} src={medias[0]?.original} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video> */}
+                videoVolume={100}
+                defaultBrowserControls={true}
+                customHtmlControls={false}
+              /> */}
             </div>
           }
         />
@@ -57,12 +70,13 @@ const MediaPost = ({ medias }) => {
     content = (
       <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <ViewPhoto
+          data={post}
           photo={medias[0]}
           imgComponent={
             <img
-              src={medias[0]?.original}
+              src={transformImgSingle(medias[0]?.original, 1)}
               alt={"post_image_" + medias[0]?.id}
-              className="h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
+              className="flex-wrap inline object-cover h-auto max-h-[630px] object-center w-[100%] rounded-xl"
             />
           }
         />
@@ -72,15 +86,17 @@ const MediaPost = ({ medias }) => {
     content = (
       <div className="grid grid-cols-2 gap-2 pt-5">
         {" "}
-        {medias?.map((media) => {
+        {medias?.map((media, idx) => {
           return (
             <>
               <div className="flex w-full ">
                 <ViewPhoto
+                  idxImg={idx}
+                  data={post}
                   photo={media}
                   imgComponent={
                     <img
-                      src={media?.original}
+                      src={transformImgSingle(media?.original, 2)}
                       alt={"post_image_" + media?.id}
                       className=" flex-wrap inline object-cover h-[100%] w-96 object-top rounded-lg"
                     />
@@ -102,10 +118,11 @@ const MediaPost = ({ medias }) => {
               {idx === 1 ? (
                 <div className={"w-full col-span-2 p-1 row-span-2"}>
                   <ViewPhoto
+                    data={post}
                     photo={media}
                     imgComponent={
                       <img
-                        src={media?.original}
+                        src={transformImgSingle(media?.original, 3)}
                         alt={"post_image_" + media?.id}
                         className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
                       />
@@ -115,10 +132,12 @@ const MediaPost = ({ medias }) => {
               ) : (
                 <div className={"w-full p-1"}>
                   <ViewPhoto
+                    idxImg={idx}
+                    data={post}
                     photo={media}
                     imgComponent={
                       <img
-                        src={media?.original}
+                        src={transformImgSingle(media?.original, 3)}
                         alt={"post_image_" + media?.id}
                         className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
                       />
@@ -135,15 +154,17 @@ const MediaPost = ({ medias }) => {
     content = (
       <div className="grid grid-rows-2 grid-flow-col gap-2 pt-5">
         {" "}
-        {medias?.map((media) => {
+        {medias?.map((media, idx) => {
           return (
             <>
               <div className="flex w-full">
                 <ViewPhoto
+                  idxImg={idx}
+                  data={post}
                   photo={media}
                   imgComponent={
                     <img
-                      src={media?.original}
+                      src={transformImgSingle(media?.original, 4)}
                       alt={"post_image_" + media?.id}
                       className=" flex-wrap inline object-cover object-center w-full rounded-lg"
                     />
@@ -163,6 +184,7 @@ const MediaPost = ({ medias }) => {
             <>
               <div className="flex w-full">
                 <ViewPhoto
+                  data={post}
                   photo={media}
                   imgComponent={
                     <img
@@ -187,6 +209,6 @@ const MediaPost = ({ medias }) => {
   );
 };
 
-MediaPost.propTypes = { medias: PropTypes.array.isRequired, sender: PropTypes.string };
+MediaPost.propTypes = { medias: PropTypes.array.isRequired, sender: PropTypes.string, post: PropTypes.object };
 
 export default MediaPost;

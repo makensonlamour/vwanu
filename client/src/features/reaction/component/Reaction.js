@@ -14,6 +14,7 @@ import koremPNG from "../../../assets/images/reactions/korem2.png";
 const Reaction = ({ post }) => {
   const queryClient = useQueryClient();
   // const user = useOutletContext();
+  console.log("data", post);
 
   const createReaction = useCreateReaction(["post", "home", post?.id], (oldData, newData) => [...oldData, newData]);
   // const updateReaction = useUpdateReaction(["post", "home", post.id], (oldData, newData) => [...oldData, newData]);
@@ -45,8 +46,10 @@ const Reaction = ({ post }) => {
         >
           {post && post?.isReactor?.length === 1 ? (
             <Fragment>
-              <p style={{ textTransform: "capitalize" }} className="text-left align-middle">
-                {"Pa Kore"}
+              <p style={{ textTransform: "capitalize" }} className="text-left align-middle flex justify-center items-center">
+                <img height={20} width={20} src={koremPNG} alt="_kore" />
+                <span className="ml-1">{"Kore"}</span>
+
               </p>
             </Fragment>
           ) : (
@@ -54,8 +57,8 @@ const Reaction = ({ post }) => {
               {/* <FaThumbsUp size={"24px"} className="bg-g-one/[0.3] p-1 mask mask-squircle inline mr-2" /> */}
               <p className="text-semibold hover:text-primary flex justify-center items-center">
                 <img height={20} width={20} src={koremPNG} alt="_kore" />
-                <span className="ml-1"></span>
-                {" Kore"}
+                <span className="ml-1">{"Kore"}</span>
+
               </p>
             </Fragment>
           )}

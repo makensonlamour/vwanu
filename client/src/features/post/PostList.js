@@ -15,8 +15,8 @@ import CommentForm from "../comment/component/CommentForm";
 import ReusableDialog from "../../components/common/ReusableDialog";
 import ViewLikeButton from "../reaction/component/ViewLikeButton";
 import Share from "../../components/Share/Share";
-// import koremPNG from "../../assets/images/reactions/korem2.png";
-import { ReactComponent as koremPNG } from "../../assets/images/reactions/korem2.png";
+import koremPNG from "../../assets/images/reactions/korem2.png";
+// import { ReactComponent as koremPNG } from "../../assets/images/reactions/korem2.png";
 
 // import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
@@ -93,20 +93,7 @@ const PostList = ({ post, pageTitle }) => {
                     {}
                   </p>
                 </div>
-                <span className="ml-auto mt-2">
-                  {post?.User?.id === user?.id && (
-                    <MenuPost post={post} />
-                    // <button
-                    //   label="Test"
-                    //   onClick={() => {
-                    //     handleClickOpen();
-                    //   }}
-                    //   className="flex justify-center items-center"
-                    // >
-                    //   <BsThreeDots className="h-6 w-6 hover:bg-gray-200" />
-                    // </button>
-                  )}
-                </span>
+                <span className="ml-auto mt-2">{post?.User?.id === user?.id && <MenuPost post={post} />}</span>
                 <ReusableDialog
                   title={"Delete Post"}
                   action={"delete"}
@@ -124,7 +111,7 @@ const PostList = ({ post, pageTitle }) => {
                   </p>
                 );
               })}
-              {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} /> : null}
+              {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
               {post?.amountOfReactions !== 0 || post?.amountOfComments !== 0 ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
                   <div open={viewLike}>
@@ -138,8 +125,8 @@ const PostList = ({ post, pageTitle }) => {
                               <>
                                 <div className="flex text-primary items-center">
                                   <p className="flex justify-start items-center">
-                                    {/* <img height={18} width={18} src={koremPNG} alt="_kore" /> */}
-                                    <koremPNG width={18} height={18} className="text-black" />
+                                    <img height={18} width={18} src={koremPNG} alt="_kore" />
+                                    {/* <koremPNG width={18} height={18} className="text-black" /> */}
                                     <span className="ml-1">
                                       {post?.isReactor && post?.isReactor?.length === 1
                                         ? post?.amountOfReactions - 1 === 0

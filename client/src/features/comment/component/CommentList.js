@@ -1,22 +1,25 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { formatDistance, parseISO } from "date-fns";
-import { Link, useOutletContext } from "react-router-dom";
-import MenuPost from "./../../post/components/MenuPost";
+import { Link } from "react-router-dom";
 // import { Facebook } from "react-content-loader";
 import { useQueryClient } from "react-query";
 import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 // import { BottomScrollListener } from "react-bottom-scroll-listener";
 import { useGetCommentList } from "../../comment/commentSlice";
+import { useCreateReaction, useDeleteReaction } from "../../reaction/reactionSlice";
 import Loader from "../../../components/common/Loader";
 import CommentForm from "./CommentForm";
 import koremPNG from "../../../assets/images/reactions/korem2.png";
+import CommentSingle from "./CommentSingle";
 
 const CommentList = ({ postId, showAll }) => {
-  const user = useOutletContext();
   const queryClient = useQueryClient();
   const [isResponse, setIsResponse] = useState(false);
   const [idResponse, setIdResponse] = useState(false);
+
+  const createReaction = useCreateReaction(["comments", "all"], (oldData, newData) => [...oldData, newData]);
+  const deleteReaction = useDeleteReaction(["comments", "all"]);
 
   function reloadPage() {
     queryClient.refetchQueries(["comments", "all"]);
@@ -29,6 +32,26 @@ const CommentList = ({ postId, showAll }) => {
     fetchNextPage,
     hasNextPage,
   } = useGetCommentList(["comments", "all", postId], postId !== undefined ? true : false, postId);
+
+  const {
+    data: responseList,
+    isError: errorResponse,
+    isLoading: loadingResponse,
+    fetchNextPage: fetchNextPageResponse,
+    hasNextPage: hasNextPageResponse,
+  } = useGetCommentList(["response", "all", idResponse], idResponse ? true : false, idResponse);
+
+  const handleReaction = async (_post) => {
+    if (_post && _post?.isReactor?.length === 1) {
+      await deleteReaction.mutateAsync({ id: _post?.isReactor[0]?.id });
+      queryClient.invalidateQueries(["post", _post?.id]);
+    } else {
+      await createReaction.mutateAsync({ content: "like", entityId: _post?.id, entityType: "Post" });
+      queryClient.invalidateQueries(["post", _post?.id]);
+    }
+
+    // queryClient.invalidateQueries(["post", "home"]);
+  };
 
   return (
     <>
@@ -74,28 +97,36 @@ const CommentList = ({ postId, showAll }) => {
                     <div key={idx} className="flex items-start pr-3 mt-3">
                       <img src={comment?.User?.profilePicture} className="h-8 w-8 mr-2 mt-1 mask mask-squircle" alt="_profile_img" />
                       {/* extra div for flex of comment text div and the three dots  */}
-                      <div className="flex items-start flex-shrink">
-                        <div className={`px-4 py-2 bg-gray-100 rounded-3xl items-center`}>
-                          <div className="flex justify-between space-x-6">
-                            <Link to={`../../profile/${comment?.User?.id}`} className="text-secondary text-sm">
-                              {`${comment?.User?.firstName} ${comment?.User?.lastName}`}
-                            </Link>
-                            <span className="text-gray-500 font-light text-right">
-                              {formatDistance(parseISO(comment?.createdAt), new Date(), [
-                                {
-                                  includeSeconds: true,
-                                },
-                              ])}
-                            </span>
-                            {user?.id === comment?.User?.id && <MenuPost post={comment} />}
-                          </div>
-
-                          <p className="text-gray-800 font-light" style={{ fontSize: "0.97rem" }}>
-                            {comment?.postText}
-                          </p>
-                        </div>
-                      </div>
+                      <CommentSingle key={idx} comment={comment} PostId={postId} />
                     </div>
+                    <div className="ml-12 flex items-starts justify-start">
+                      <div
+                        onClick={() => {
+                          setIdResponse(comment?.id);
+                          setIsResponse(!isResponse);
+                        }}
+                        className="text-xs mx-1 hover:text-primary cursor-pointer"
+                      >
+                        reply
+                      </div>
+                      <div
+                        onClick={() => handleReaction(comment)}
+                        className={`${
+                          comment?.isReactor && comment?.isReactor[0]?.id
+                            ? "text-primary font-semibold text-xs mx-1 hover:text-primary cursor-pointer"
+                            : "text-xs mx-1 hover:text-primary cursor-pointer"
+                        }`}
+                      >
+                        kore
+                      </div>
+                      {comment?.amountOfReactions > 0 && (
+                        <div className="text-xs mx-1 hover:text-primary cursor-pointer flex items-center bg-gray-200 rounded-2xl px-1 py-1 text-primary">
+                          <img height={14} width={14} src={koremPNG} alt="_kore" />
+                          <span className="ml-1">{comment?.amountOfReactions}</span>
+                        </div>
+                      )}
+                    </div>
+
                     <div className="ml-12 flex items-starts justify-start">
                       <div
                         onClick={() => {
@@ -121,28 +152,7 @@ const CommentList = ({ postId, showAll }) => {
               return page?.data?.data?.map((comment, idx) => {
                 return idx < 3 ? (
                   <div key={idx} className="pr-3 mt-3">
-                    <div className="flex items-start pr-3 mt-3">
-                      <img src={comment?.User?.profilePicture} className="h-8 w-8 mr-2 mt-1 mask mask-squircle" alt="_profile_img" />
-                      {/* extra div for flex of comment text div and the three dots  */}
-                      <div className="flex items-center flex-shrink">
-                        <div className={`px-3 py-1 bg-gray-100 rounded-xl items-center`}>
-                          <div className="flex justify-between space-x-4">
-                            <Link to={`../../profile/${comment?.User?.id}`} className="font-semibold hover:text-primary text-sm">
-                              {`${comment?.User?.firstName} ${comment?.User?.lastName}`}
-                            </Link>
-                            <span className="text-gray-500 font-light text-xs" style={{ textDecoration: "none" }}>
-                              {formatDistance(parseISO(comment?.createdAt), new Date(), [
-                                {
-                                  includeSeconds: true,
-                                },
-                              ])}
-                            </span>
-                            <div className="">{user?.id === comment?.User?.id && <MenuPost post={comment} />}</div>
-                          </div>
-                          <p className="text-gray-800 font-light text-sm">{comment?.postText}</p>
-                        </div>
-                      </div>
-                    </div>
+                    <CommentSingle key={idx} comment={comment} PostId={postId} />
                     <div className="ml-12 flex items-center justify-start">
                       <div
                         onClick={() => {
@@ -153,7 +163,16 @@ const CommentList = ({ postId, showAll }) => {
                       >
                         reply
                       </div>
-                      <div className="text-xs mx-1 hover:text-primary cursor-pointer">kore</div>
+                      <div
+                        onClick={() => handleReaction(comment)}
+                        className={`${
+                          comment?.isReactor && comment?.isReactor[0]?.id
+                            ? "text-primary font-semibold text-xs mx-1 hover:text-primary cursor-pointer"
+                            : "text-xs mx-1 hover:text-primary cursor-pointer"
+                        }`}
+                      >
+                        kore
+                      </div>
                       {comment?.amountOfReactions > 0 && (
                         <div className="text-xs mx-1 hover:text-primary cursor-pointer flex items-center bg-gray-200 rounded-2xl px-1 py-1 text-primary">
                           <img height={14} width={14} src={koremPNG} alt="_kore" />
@@ -162,6 +181,36 @@ const CommentList = ({ postId, showAll }) => {
                       )}
                     </div>
                     {isResponse && idResponse === comment?.id && <CommentForm response={true} PostId={comment?.id} />}
+                    {/* Response */}
+                    {comment?.amountOfComments > 0 && (
+                      <div>
+                        {loadingResponse ? (
+                          <div className="flex justify-center py-5">
+                            <Loader color="black" />
+                          </div>
+                        ) : errorResponse ? (
+                          <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
+                            {"There was an error while fetching the data. "}{" "}
+                            <Link
+                              className="text-secondary hover:text-primary"
+                              to={""}
+                              onClick={() => reloadPage(["response", "all", idResponse])}
+                            >
+                              Tap to retry
+                            </Link>{" "}
+                          </div>
+                        ) : responseList && responseList.pages?.length > 0 && responseList?.pages[0]?.data?.total > 0 ? (
+                          <div className="pl-10">
+                            {responseList?.pages?.map((page) => {
+                              return page?.data?.data?.map((resp) => {
+                                return <CommentSingle key={resp?.id} comment={resp} PostId={resp?.id} />;
+                              });
+                            })}
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
+
                   </div>
                 ) : null;
               });
