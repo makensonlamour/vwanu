@@ -25,12 +25,12 @@ SELECT
         )
   )`;
 
-  const isAFollower = `(
+  const  iFollow= `(
         EXISTS(
           SELECT 1 FROM "User_Following" WHERE "User_Following"."UserId" = '${UserId}' AND "User_Following"."FollowingId" = "User"."id" 
         )
   )`;
-  const iFollow = `(
+  const isAFollower = `(
         EXISTS(
           SELECT 1 FROM "User_Follower" WHERE "User_Follower"."UserId" = '${UserId}' AND "User_Follower"."FollowerId" = "User"."id" 
         )
