@@ -103,6 +103,7 @@ SELECT
     LIMIT 1
   )`;
 
+  if (context.method === 'get') where.id = context.id;
   const clause = {
     ...where,
     [Op.and]: [{ [Op.or]: [{ publish: true }, { UserId: params.User.id }] }],
@@ -114,7 +115,6 @@ SELECT
     );
   }
 
-  if (context.method === 'get') where.id = context.id;
   params.sequelize = {
     where: clause,
 
