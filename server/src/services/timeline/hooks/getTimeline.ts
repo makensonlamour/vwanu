@@ -46,26 +46,51 @@ SELECT
     .service(context.path)
     .filterQuery(context.params);
 
+  const uId = where.UserId || params.User.id;
+  // const OnMyWall = `(
+  //   NOT EXISTS(
+  //     SELECT 1 FROM "Post" where "Post"."wallId" IS NOT NULL AND "Post"."wallId" NOT  = '${uId}'
+  // )
+  //   )`;
+
+  console.log(uId === where.UserId);
   const single = context.method === 'get';
   const queryString = /* isEmpty(where)
     ? */ {
-    mediaId: null,
-    MediumId: null,
-    PostId: null,
-    ...where,
-    [Op.and]: {
-      [Op.or]: [
-        { privacyType: 'public' },
-        { UserId: params.User.id },
-        {
-          [Op.and]: [{ privacyType: 'friends' }, Sequelize.literal(friends)],
+    [Op.or]: [
+      {
+        mediaId: null,
+        MediumId: null,
+        PostId: null,
+        wallId: null,
+        ...where,
+
+        [Op.and]: {
+          [Op.or]: [
+            { privacyType: 'public' },
+            { UserId: params.User.id },
+            { wallId: uId },
+            {
+              [Op.and]: [
+                { privacyType: 'friends' },
+                Sequelize.literal(friends),
+              ],
+            },
+          ],
         },
-      ],
-    },
+      },
+      { wallId: uId },
+    ],
   };
   /*: { ...where }; */
 
   const clause = single ? { id: context.id } : queryString;
+  // if (where.UserId) {
+  // delete queryString.wallId;
+  // clause[Op.or].push({ wallId: where.UserId });
+  //   clause[Op.or].push({ UserId: where.UserId });
+  //   delete where.UserId;
+  // }
 
   params.sequelize = {
     // logging: console.log,

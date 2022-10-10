@@ -28,6 +28,7 @@ export default (sequelize: any, DataTypes: any) => {
         as: 'Media-comment',
         foreignKey: 'mediaId',
       });
+      Post.belongsTo(models.User, { as: 'wall' });
       Post.hasMany(models.Post, { as: 'Comments' });
       Post.hasMany(models.Reaction, {
         foreignKey: 'entityId',

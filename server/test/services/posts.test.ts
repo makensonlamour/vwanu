@@ -230,3 +230,5 @@ describe('Posts services', () => {
     expect(retrievePostResponse.statusCode).toBe(StatusCodes.NOT_FOUND);
   }, 3000);
 });
+
+

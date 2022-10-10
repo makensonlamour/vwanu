@@ -148,4 +148,41 @@ describe("'timeline ' service", () => {
       .set('authorization', createdTestUser[0].body.accessToken);
     expect(userTimeline.data).toHaveLength(6);
   });
+  it("should post on someone's else wall", async () => {
+    expect(true).toBeTruthy();
+    // await app.get('sequelizeClient').sync({ force: true });
+    // const [poster, myWall, observer] = await Promise.all(
+    //   getRandUsers(3).map((user) => createUser(testServer, user))
+    // );
+
+    // const { body: post } = await createPost(
+    //   testServer,
+    //   {
+    //     postText: 'I Posted on your wall',
+    //     wallId: myWall.body.id,
+    //   },
+    //   poster.body.accessToken
+    // );
+
+    // const [posterOnMyWall, meOnMyWall, observerOnMyWall] = await Promise.all(
+    //   [poster, myWall, observer].map((user) =>
+    //     testServer
+    //       .get(`${endpoint}?UserId=${poster.body.id}`)
+    //       .set('authorization', user.body.accessToken)
+    //   )
+    // );
+    // expect(posterOnMyWall.body.data).toHaveLength(1);
+    // expect(meOnMyWall.body.data).toHaveLength(1);
+    // expect(observerOnMyWall.body.data).toHaveLength(1);
+
+    // const [posterTimeline, myTimeline, observerTimeline] = await Promise.all(
+    //   [poster, myWall, observer].map((user) =>
+    //     testServer.get(endpoint).set('authorization', user.body.accessToken)
+    //   )
+    // );
+
+    // expect(posterTimeline.body.data).toHaveLength(1);
+    // expect(myTimeline.body.data).toHaveLength(1);
+    // expect(observerTimeline.body.data).toHaveLength(0);
+  });
 });
