@@ -25,12 +25,12 @@ SELECT
         )
   )`;
 
-  const isAFollower = `(
+  const  iFollow= `(
         EXISTS(
           SELECT 1 FROM "User_Following" WHERE "User_Following"."UserId" = '${UserId}' AND "User_Following"."FollowingId" = "User"."id" 
         )
   )`;
-  const iFollow = `(
+  const isAFollower = `(
         EXISTS(
           SELECT 1 FROM "User_Follower" WHERE "User_Follower"."UserId" = '${UserId}' AND "User_Follower"."FollowerId" = "User"."id" 
         )
@@ -52,6 +52,9 @@ SELECT
     SELECT COUNT(*) FROM "User_Following" WHERE "User_Following"."UserId" = "User"."id"
   )::int`;
 
+  const amountOfFriend = `(
+    SELECT COUNT(*) FROM "User_friends" WHERE "User_friends"."UserId" = '${UserId}' AND "User_friends"."friendId" = "User"."id") 
+  ::int`;
   return {
     include: [
       [Sequelize.literal(isFriend), 'isFriend'],
@@ -61,6 +64,7 @@ SELECT
       [Sequelize.literal(hasSentFriendRequest), 'hasSentFriendRequest'],
       [Sequelize.literal(amountOfFollower), 'amountOfFollower'],
       [Sequelize.literal(amountOfFollowing), 'amountOfFollowing'],
+      [Sequelize.literal(amountOfFriend), 'amountOfFriend'],
       [Sequelize.literal(Interests), 'Interests'],
     ],
   };

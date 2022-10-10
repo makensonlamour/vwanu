@@ -49,6 +49,7 @@ const Reaction = ({ post }) => {
               <p style={{ textTransform: "capitalize" }} className="text-left align-middle flex justify-center items-center">
                 <img height={20} width={20} src={koremPNG} alt="_kore" />
                 <span className="ml-1">{"Kore"}</span>
+
               </p>
             </Fragment>
           ) : (
@@ -57,6 +58,7 @@ const Reaction = ({ post }) => {
               <p className="text-semibold hover:text-primary flex justify-center items-center">
                 <img height={20} width={20} src={koremPNG} alt="_kore" />
                 <span className="ml-1">{"Kore"}</span>
+
               </p>
             </Fragment>
           )}

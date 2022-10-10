@@ -18,7 +18,7 @@ describe("'blogs ' service", () => {
   beforeAll(async () => {
     sequelize = app.get('sequelizeClient');
     await sequelize.sync({ force: true });
-  
+
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(2).map((u) => {

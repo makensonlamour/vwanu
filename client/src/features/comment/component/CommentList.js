@@ -126,6 +126,20 @@ const CommentList = ({ postId, showAll }) => {
                         </div>
                       )}
                     </div>
+
+                    <div className="ml-12 flex items-starts justify-start">
+                      <div
+                        onClick={() => {
+                          setIdResponse(comment?.id);
+                          setIsResponse(!isResponse);
+                        }}
+                        className="text-xs mx-1 hover:text-primary cursor-pointer"
+                      >
+                        reply
+                      </div>
+                      <div className="text-xs mx-1 hover:text-primary cursor-pointer">kore</div>
+                      <div className="text-xs mx-1 hover:text-primary cursor-pointer">Number of kore</div>
+                    </div>
                     {isResponse && idResponse === comment?.id && <CommentForm response={true} PostId={comment?.id} />}
                   </>
                 );
@@ -196,6 +210,7 @@ const CommentList = ({ postId, showAll }) => {
                         ) : null}
                       </div>
                     )}
+
                   </div>
                 ) : null;
               });

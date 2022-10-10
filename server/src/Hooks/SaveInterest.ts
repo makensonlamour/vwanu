@@ -10,6 +10,9 @@ const UserAttributes = [
 export default async (context: HookContext) => {
   const { data, result, app, params } = context;
   if (!data.interests) return context;
+  const interests = Array.isArray(data.interests)
+    ? data.interests
+    : [data.interests];
   const {
     Interest: InterestModel,
     Blog_Interest: BlogInterestTable,
@@ -17,7 +20,7 @@ export default async (context: HookContext) => {
     User: UserModel,
   } = app.get('sequelizeClient').models;
   const interestList = await Promise.all(
-    data.interests.map((name) =>
+    interests.map((name) =>
       InterestModel.findOrCreate({
         where: { name },
         defaults: {
