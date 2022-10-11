@@ -7,7 +7,7 @@ const CustomModal = ({ modal, setModal, trigger, content, title, closeIcon, widt
     <>
       {trigger}
       {modal && (
-        <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50">
           <div className={`bg-white p-2 rounded w-full max-w-md lg:max-w-${width} h-${height}`}>
             <div className="flex justify-between">
               <p className="">{title}</p>

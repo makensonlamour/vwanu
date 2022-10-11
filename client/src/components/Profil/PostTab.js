@@ -15,7 +15,7 @@ const PostTab = ({ user, otherUser, listFollowing, notificationList }) => {
           <div className="">
             <FollowingPreview data={listFollowing} />
           </div>
-          <div className="">
+          <div className="mt-6">
             <UpdatesComponent data={notificationList} />
           </div>
         </div>

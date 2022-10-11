@@ -24,8 +24,8 @@ const LayoutCall = () => {
   return (
     <>
       <div className="mx-auto">
-        <div className="w-[100vw] md:w-[90vw] lg:w-[94vw]">
-          <Item elevation={0} className="max-w-screen-xxl w-[100vw] sm:w-[90vw] mx-auto">
+        <div className="w-[100vw]">
+          <Item elevation={0} className="max-w-screen-xxl w-[100vw] sm:w-[100vw] mx-auto">
             {user ? <Outlet context={user || undefined} /> : <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />}
           </Item>
         </div>

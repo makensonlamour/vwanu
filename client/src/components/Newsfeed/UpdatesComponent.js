@@ -8,7 +8,7 @@ import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
 import { useReadNotification } from "../../features/notification/notificationSlice";
 
-const UpdatesComponent = ({ data }) => {
+const UpdatesComponent = ({ data, className }) => {
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
@@ -31,7 +31,7 @@ const UpdatesComponent = ({ data }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-200 rounded-lg p-2 mt-6 mb-8">
+      <div className={"bg-white border border-gray-200 rounded-lg p-2 mb-8 " + className}>
         <h2 className="my-2 px-2 text-md font-medium">Latest updates</h2>
         {data?.length > 0 ? (
           <Stack spacing={1}>
@@ -103,6 +103,7 @@ const UpdatesComponent = ({ data }) => {
 
 UpdatesComponent.propTypes = {
   data: PropTypes.array.isRequired,
+  className: PropTypes.string,
 };
 
 export default UpdatesComponent;

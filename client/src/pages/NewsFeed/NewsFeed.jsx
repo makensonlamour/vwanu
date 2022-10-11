@@ -41,6 +41,14 @@ const NewsFeed = () => {
     fetchNextPage: fetchNextPageOnline,
   } = useGetOnline(["user", "online"]);
 
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
+    }
+  }
+
   const onCreatedListener = (notification) => {
     if (notification?.to?.toString() === user?.id?.toString() && notification?.UserId?.toString() !== user?.id?.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
@@ -154,14 +162,16 @@ const NewsFeed = () => {
       <div className="mx-auto mt-6 max-w-screen-3xl">
         <div className="flex justify-evenly">
           <div className="basis-[25%] hidden xl:block">
-            <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
-            <FollowingPreview
-              isLoading={loadingFollowing}
-              isError={errorFollowing}
-              data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
-            />
+            <div className="sticky top-[6rem] hover:overflow-y-auto scrollbar h-[87vh]">
+              <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
+              <FollowingPreview
+                isLoading={loadingFollowing}
+                isError={errorFollowing}
+                data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
+              />
+            </div>
           </div>
-          <div className="basis-full lg:basis-[56%] ">
+          <div className="basis-full lg:basis-[56%]">
             <div className="px-3">
               <h2 className="pb-5 text-lg font-bold">Activity Feed</h2>
               <InputModal reference="newsfeed" />
@@ -169,27 +179,29 @@ const NewsFeed = () => {
             </div>
           </div>
           <div className="basis-[22%] hidden lg:block">
-            <span className="block xl:hidden">
-              <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
-            </span>
-            <span className="block xl:hidden">
-              <FollowingPreview
-                isLoading={loadingFollowing}
-                isError={errorFollowing}
-                data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
-              />
-            </span>
+            <div className="sticky top-[6rem] hover:overflow-y-auto scrollbar h-[87vh]">
+              <span className="block xl:hidden">
+                <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
+              </span>
+              <span className="block xl:hidden">
+                <FollowingPreview
+                  isLoading={loadingFollowing}
+                  isError={errorFollowing}
+                  data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
+                />
+              </span>
 
-            {/* <CompleteProfile percentage={percentage} data={steps} /> */}
-            <UpdatesComponent data={notificationList || []} />
-            <RecentlyActive
-              data={listOnline || []}
-              isLoading={loadingOnline}
-              isError={onlineError}
-              hasNextPage={hasNextPageOnline}
-              fetchNextPage={fetchNextPageOnline}
-            />
-            <GroupsPreview />
+              {/* <CompleteProfile percentage={percentage} data={steps} /> */}
+              <UpdatesComponent data={notificationList || []} />
+              <RecentlyActive
+                data={listOnline || []}
+                isLoading={loadingOnline}
+                isError={onlineError}
+                hasNextPage={hasNextPageOnline}
+                fetchNextPage={fetchNextPageOnline}
+              />
+              <GroupsPreview />
+            </div>
           </div>
         </div>
       </div>
