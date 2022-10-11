@@ -19,7 +19,7 @@ const NotifyUsers = async (context) => {
   // console.log('User ids');
   // console.log(data.userIds);
   try {
-    const connections = [...data.userIds].map(
+    const connections = [...data.userIds, context.params.User.id].map(
       (userId) => app.channel(`userIds-${userId}`).connections
     );
     connections.forEach((connection) => {
