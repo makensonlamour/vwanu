@@ -1,7 +1,6 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { useQueryClient } from "react-query";
 // import SocialMediaShare from "../common/SocialMediaShare";
 import { useGetListFriend } from "./../../features/friend/friendSlice";
@@ -12,30 +11,35 @@ import EmptyComponent from "./../common/EmptyComponent";
 import { ImSad } from "react-icons/im";
 import { useClipboard } from "@mantine/hooks";
 import { TextareaAutosize } from "@mui/material";
+import { useCreateConversation, useCreateNewMessage } from "../../features/chat/messageSlice";
+import { useCreatePost } from "../../features/post/postSlice";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  backgroundColor: "#fff",
-  padding: "10px",
-  borderRadius: "15px",
-};
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 400,
+//   backgroundColor: "#fff",
+//   padding: "10px",
+//   borderRadius: "15px",
+// };
 
 // eslint-disable-next-line no-unused-vars
-const Share = ({ post, label }) => {
+const Share = ({ post, label, type = "" }) => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const user = useOutletContext();
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [modal, setModal] = useState(false);
   const [message, setMessage] = useState("");
   const [friendId, setFriendId] = useState(false);
   const clipboard = useClipboard({ timeout: 1000 });
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
 
   const {
     data: listFriend,
@@ -44,6 +48,9 @@ const Share = ({ post, label }) => {
     hasNextPage,
     fetchNextPage,
   } = useGetListFriend(["friends", "all"], true, undefined, undefined);
+  const createConversation = useCreateConversation(["conversation", "new"], undefined, undefined);
+  const sendMessage = useCreateNewMessage(["message", "new"], undefined, undefined);
+  const createPost = useCreatePost(["post", "new"], undefined, undefined);
   // eslint-disable-next-line no-unused-vars
   const sharePrivate = async () => {};
   // eslint-disable-next-line no-unused-vars
@@ -51,6 +58,62 @@ const Share = ({ post, label }) => {
 
   function reloadPage() {
     queryClient.refetchQueries(["friends", "all"]);
+  }
+
+  async function handleCreateConversation() {
+    setLoading(true);
+    if (!friendId) return alert("Please select a friend.");
+    let arrayReceiver = [];
+    try {
+      arrayReceiver.push(friendId);
+      const dataObj = { userIds: arrayReceiver };
+      let resultConversation = await createConversation.mutateAsync(dataObj);
+      const dataMessage = {
+        ConversationId: resultConversation?.data?.ConversationId || resultConversation?.data?.id,
+      };
+
+      if (message.trim() === "") {
+        dataMessage.messageText =
+          type === "post"
+            ? "Hello :) Take a look at this: " + url + "/post/" + post?.id
+            : "Hello :) Take a look at this: " + window.location.href;
+      } else {
+        dataMessage.messageText = type === "post" ? message + ": " + url + "/post/" + post?.id : message + ": " + window.location.href;
+      }
+
+      await sendMessage.mutateAsync(dataMessage);
+      navigate(`../../messages/${resultConversation?.data?.ConversationId || resultConversation?.data?.id}`);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleShareToWall() {
+    const dataObj = {
+      originalId: post?.id,
+      postText:
+        post?.User?.id + "~=~" + post?.User?.firstName + " " + post?.User?.lastName + "~=~" + post?.createdAt + "~=~" + post?.postText,
+      privacyType: "public",
+      UserId: user?.id,
+    };
+    let arrayImg = [];
+    try {
+      if (post?.Media?.length > 0) {
+        // eslint-disable-next-line array-callback-return
+        post?.Media?.map((file) => {
+          arrayImg.push(file.original);
+        });
+      }
+      if (arrayImg?.length > 0) {
+        dataObj.mediaLinks = arrayImg;
+      }
+      await createPost.mutateAsync(dataObj);
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   let content;
@@ -151,7 +214,12 @@ const Share = ({ post, label }) => {
         content={
           <div>
             <div className="block border-primary">
-              <div className="cursor-pointer border-b border-gray-200 p-2 hover:bg-gray-200 hover:rounded-lg">Share to Wall</div>
+              <div
+                onClick={() => handleShareToWall()}
+                className="cursor-pointer border-b border-gray-200 p-2 hover:bg-gray-200 hover:rounded-lg"
+              >
+                Share to Wall
+              </div>
 
               {/* Modal for list friends */}
               <CustomModal
@@ -174,10 +242,11 @@ const Share = ({ post, label }) => {
                       ></TextareaAutosize>
                       <div>
                         <button
+                          onClick={() => handleCreateConversation()}
                           disabled={friendId ? false : true}
                           className="cursor-pointer bg-placeholder-color px-4 py-1 w-fit rounded-lg text-sm disabled:opacity-[0.5]"
                         >
-                          Send
+                          {loading ? "Loading" : "Send"}
                         </button>
                       </div>
                     </div>
@@ -224,6 +293,7 @@ const Share = ({ post, label }) => {
 Share.propTypes = {
   label: PropTypes.any,
   post: PropTypes.object,
+  type: PropTypes.string,
 };
 
 export default Share;

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import VideoPlayer from "react-videoplayer";
+// import VideoPlayer from "react-videoplayer";
 import "video-react/dist/video-react.css";
 import _ from "lodash";
 import ReactSlidy from "react-slidy";
@@ -16,6 +16,7 @@ import { useQueryClient } from "react-query";
 import logo from "../../assets/images/Asset_9.png";
 import { AiOutlineClose } from "react-icons/ai";
 import CommentList from "./../../features/comment/component/CommentList";
+import ResponsivePlayer from "../../components/common/ResponsivePlayer";
 
 const PreviewPhoto = () => {
   const queryClient = useQueryClient();
@@ -47,19 +48,19 @@ const PreviewPhoto = () => {
             <div className="relative w-full ">
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none">
                 <div className="flex justify-between flex-col md:flex-row w-full">
-                  <div className="flex justify-around w-full lg:py-5">
-                    <div className="flex items-start justify-start border-solid">
+                  <div className="flex justify-center flex-wrap w-full lg:py-2">
+                    <div className="flex items-start justify-start w-full h-fit">
                       <button onClick={() => navigate(-1)} className=" text-white px-2 lg:pl-2">
                         <AiOutlineClose size={"24px"} className="text-white" />
                       </button>
                       <Link className="" to={`../../`}>
-                        <div className="w-full h-32 md:w-full">
-                          <img className="justify-center w-full h-10" src={logo} alt="logo_vwanu" />
+                        <div className="w-10 h-8 md:w-full">
+                          <img className="h-10 w-12 object-cover" src={logo} alt="logo_vwanu" />
                         </div>
                       </Link>
                     </div>
                     {type === "photo" ? (
-                      <div className="w-full lg:w-[80%] h-fit lg:h-[90vh] flex items-center justify-center bg-black pt-10 pb-5 lg:py-5">
+                      <div className="w-[90%] lg:max-w-[900px] h-full lg:h-[90vh] flex items-center justify-center bg-black pt-0 pb-0 lg:py-0">
                         <ReactSlidy imageObjectFit="contain">
                           {post?.Media?.map((item) => {
                             return (
@@ -67,7 +68,7 @@ const PreviewPhoto = () => {
                                 key={item?.original}
                                 alt={"_img"}
                                 className="bg-black mx-auto object-contain"
-                                style={{ maxHeight: "100vh" }}
+                                style={{ maxHeight: "90vh" }}
                                 src={item?.original}
                               />
                             );
@@ -75,17 +76,8 @@ const PreviewPhoto = () => {
                         </ReactSlidy>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center w-full lg:w-[80%] h-[90vh]">
-                        <VideoPlayer
-                          className={"rounded-lg"}
-                          videoSrc={post?.Media[0]?.original}
-                          autoPlay={true}
-                          muted={true}
-                          videoVolume={100}
-                          defaultBrowserControls={true}
-                          customHtmlControls={false}
-                        />
-                        {/* <Player fluid={true} src={photo?.original} muted={true} playsInline controls pip={true} autoplay={true} /> */}
+                      <div className="w-full ">
+                        <ResponsivePlayer url={post?.Media[0]?.original} autoplay={true} muted={true} volume={1} />
                       </div>
                     )}
                   </div>

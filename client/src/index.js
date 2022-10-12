@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -8,6 +9,7 @@ import "react-quill/dist/quill.snow.css";
 import "cropperjs/dist/cropper.css";
 import "react-slidy/lib/styles.css";
 import "react-videoplayer/lib/index.css";
+
 // import { StyledEngineProvider } from "@mui/material/styles";
 // import { CssBaseline } from "@mui/material";
 
@@ -40,19 +42,17 @@ if (typeof document === "undefined") {
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <StrictMode>
-    <BrowserRouter history={history}>
-      <div>
-        <AuthContextProvider>
-          <MessageContextProvider>
-            <IntlProvider locale={language} messages={languages[language]}>
-              <App />
-            </IntlProvider>
-          </MessageContextProvider>
-        </AuthContextProvider>
-      </div>
-    </BrowserRouter>
-  </StrictMode>
+  <BrowserRouter history={history}>
+    <div>
+      <AuthContextProvider>
+        <MessageContextProvider>
+          <IntlProvider locale={language} messages={languages[language]}>
+            <App />
+          </IntlProvider>
+        </MessageContextProvider>
+      </AuthContextProvider>
+    </div>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

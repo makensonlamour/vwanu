@@ -36,6 +36,7 @@ const PostList = ({ post, pageTitle }) => {
   const [commentPrev, setCommentPrev] = useState(false);
   const [open, setOpen] = useState(false);
   const [viewLike, setViewLike] = useState(false);
+  const [original, setOriginal] = useState(false);
 
   // const openLike = Boolean(openReactions);
 
@@ -59,6 +60,13 @@ const PostList = ({ post, pageTitle }) => {
     console.log("I do not agree.");
     handleClose();
   };
+
+  useEffect(() => {
+    if (post && post?.originalId) {
+      let temp = post?.postText?.split("~=~");
+      setOriginal({ id: temp[0], name: temp[1], createdAt: temp[2], postText: temp[3] });
+    }
+  }, [post]);
 
   return (
     <>
@@ -104,6 +112,7 @@ const PostList = ({ post, pageTitle }) => {
                   handleDisagree={handleDisagree}
                 />
               </div>
+              {/* Begin design for shared post */}
               {post?.postText?.split("\n").map((text) => {
                 return (
                   <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
@@ -185,7 +194,7 @@ const PostList = ({ post, pageTitle }) => {
                   {/* <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
                   {" Comment"}
                 </button>
-                <Share post={post} label={" Share"} link={""} />
+                <Share post={post} label={" Share"} link={""} type="post" />
               </div>
               {/*Check if we are on post page to show all comments, if not show 3 comments*/}
               {_.isEqual(pageTitle, "post") ? (

@@ -7,6 +7,7 @@ import ViewPhoto from "../../../features/album/component/ViewPhoto";
 import { isMobile } from "react-device-detect";
 import VideoPlayer from "react-videoplayer";
 import { useNavigate } from "react-router-dom";
+import ResponsivePlayer from "../../common/ResponsivePlayer";
 
 const MediaPost = ({ medias, post }) => {
   const [type, setType] = useState("photo");
@@ -44,13 +45,9 @@ const MediaPost = ({ medias, post }) => {
   if (type === "video") {
     contentVideo = (
       <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
-        <ViewPhoto
-          type={type}
-          data={post}
-          photo={medias[0]}
-          imgComponent={
-            <div className="w-[0px] object-cover">
-              {/* <VideoPlayer
+        <div onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)} className="w-full object-cover">
+          <ResponsivePlayer url={medias[0]?.original} autoplay={true} muted={true} volume={1} />
+          {/* <VideoPlayer
                 width={10}
                 style={{ borderRadius: "10px" }}
                 className={"rounded-lg"}
@@ -61,9 +58,7 @@ const MediaPost = ({ medias, post }) => {
                 defaultBrowserControls={true}
                 customHtmlControls={false}
               /> */}
-            </div>
-          }
-        />
+        </div>
       </div>
     );
   }
