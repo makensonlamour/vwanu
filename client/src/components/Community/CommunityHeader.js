@@ -244,7 +244,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                       path={allTabs1[3]}
                       element={
                         <div>
-                          <DiscussionTabs />{" "}
+                          <DiscussionTabs communityData={communityData} />{" "}
                         </div>
                       }
                     />
@@ -269,7 +269,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                       }
                     />
                     {/* <Route path={allTabs1[5]} element={<div>Send Messages</div>} /> */}
-                    {user?.id.toString() === communityData?.UserId?.toString() && (
+                    {(communityData?.IsMember?.role === "admin" || communityData?.IsMember?.role === "moderator") && (
                       <Route
                         path={allTabs1[6]}
                         element={
@@ -314,7 +314,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                   data={listFollowing ? listFollowing?.pages[0]?.data?.data : []}
                 />
               </div>
-              <div className="block xl:hidden mb-2">
+              <div className="block xl:hidden my-2">
                 <UpdatesComponent data={notificationList} />
               </div>
             </div>

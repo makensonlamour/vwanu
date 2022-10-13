@@ -3,10 +3,11 @@ import { useParams, useSearchParams } from "react-router-dom";
 import ViewDiscussion from "./../../components/Forum/ViewDiscussion";
 import { useGetListDiscussionCommunity, useGetDiscussion } from "../../features/forum/forumSlice";
 import ViewSingleDiscussion from "./../Forum/ViewSingleDiscussion";
+import PropTypes from "prop-types";
 
 // import InputDiscussion from "../../components/Community/DiscussionTab/InputDiscussion";
 
-const DiscussionTabs = () => {
+const DiscussionTabs = ({ communityData }) => {
   const [searchParams] = useSearchParams();
   const idDiscussion = searchParams.get("idD");
   const { id } = useParams();
@@ -30,11 +31,12 @@ const DiscussionTabs = () => {
         <div className="mb-5 mt-2 lg:my-5">
           {idDiscussion !== null ? (
             <div className="flex flex-col-reverse lg:flex-row lg:justify-between">
-              <ViewSingleDiscussion type="community" data={discussion} />
+              <ViewSingleDiscussion communityData={communityData} type="community" data={discussion} />
             </div>
           ) : (
             <ViewDiscussion
               type="community"
+              communityData={communityData}
               data={listDiscussion || []}
               isLoading={isLoading}
               isError={isError}
@@ -46,6 +48,10 @@ const DiscussionTabs = () => {
       </div>
     </>
   );
+};
+
+DiscussionTabs.propTypes = {
+  communityData: PropTypes.object,
 };
 
 export default DiscussionTabs;

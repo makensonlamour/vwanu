@@ -16,26 +16,18 @@ import { useCreatePost } from "../../features/post/postSlice";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   backgroundColor: "#fff",
-//   padding: "10px",
-//   borderRadius: "15px",
-// };
-
 // eslint-disable-next-line no-unused-vars
-const Share = ({ post, label, type = "" }) => {
+const Share = ({ post, label, type = "", classNameTrigger, noButton = false, customModal, setCustomModal }) => {
+  console.log("share data:", post);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useOutletContext();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openWall, setOpenWall] = useState(false);
   const [modal, setModal] = useState(false);
   const [message, setMessage] = useState("");
+  const [customText, setCustomText] = useState("");
   const [friendId, setFriendId] = useState(false);
   const clipboard = useClipboard({ timeout: 1000 });
   // const handleOpen = () => setOpen(true);
@@ -47,7 +39,7 @@ const Share = ({ post, label, type = "" }) => {
     isError,
     hasNextPage,
     fetchNextPage,
-  } = useGetListFriend(["friends", "all"], true, undefined, undefined);
+  } = useGetListFriend(["friends", "all"], open, undefined, undefined);
   const createConversation = useCreateConversation(["conversation", "new"], undefined, undefined);
   const sendMessage = useCreateNewMessage(["message", "new"], undefined, undefined);
   const createPost = useCreatePost(["post", "new"], undefined, undefined);
@@ -72,13 +64,21 @@ const Share = ({ post, label, type = "" }) => {
         ConversationId: resultConversation?.data?.ConversationId || resultConversation?.data?.id,
       };
 
-      if (message.trim() === "") {
-        dataMessage.messageText =
-          type === "post"
-            ? "Hello :) Take a look at this: " + url + "/post/" + post?.id
-            : "Hello :) Take a look at this: " + window.location.href;
-      } else {
-        dataMessage.messageText = type === "post" ? message + ": " + url + "/post/" + post?.id : message + ": " + window.location.href;
+      if (type === "post") {
+        if (message.trim() === "") {
+          dataMessage.messageText =
+            type === "post"
+              ? "Hello :) Take a look at this: " + url + "/post/" + post?.id
+              : "Hello :) Take a look at this: " + window.location.href;
+        } else {
+          dataMessage.messageText = type === "post" ? message + ": " + url + "/post/" + post?.id : message + ": " + window.location.href;
+        }
+      } else if (type === "discussion") {
+        if (message.trim() === "") {
+          dataMessage.messageText = "Hello :) Take a look at this: " + window.location.href;
+        } else {
+          dataMessage.messageText = message + ": " + window.location.href;
+        }
       }
 
       await sendMessage.mutateAsync(dataMessage);
@@ -91,10 +91,10 @@ const Share = ({ post, label, type = "" }) => {
   }
 
   async function handleShareToWall() {
+    if (type === "post" && post?.originalId !== null) return alert("Sorry, you can't share to your feed, a post shared.");
+
     const dataObj = {
       originalId: post?.id,
-      postText:
-        post?.User?.id + "~=~" + post?.User?.firstName + " " + post?.User?.lastName + "~=~" + post?.createdAt + "~=~" + post?.postText,
       privacyType: "public",
       UserId: user?.id,
     };
@@ -108,6 +108,33 @@ const Share = ({ post, label, type = "" }) => {
       }
       if (arrayImg?.length > 0) {
         dataObj.mediaLinks = arrayImg;
+      }
+      if (type === "post") {
+        dataObj.postText =
+          post?.User?.id +
+          "~=~" +
+          post?.User?.firstName +
+          " " +
+          post?.User?.lastName +
+          "~=~" +
+          post?.createdAt +
+          "~=~" +
+          customText +
+          "~=~" +
+          post?.postText;
+      } else if (type === "discussion") {
+        dataObj.postText =
+          post?.User?.id +
+          "~=~" +
+          post?.User?.firstName +
+          " " +
+          post?.User?.lastName +
+          "~=~" +
+          post?.createdAt +
+          "~=~" +
+          customText +
+          "~=~" +
+          post?.title;
       }
       await createPost.mutateAsync(dataObj);
       window.location.reload();
@@ -209,17 +236,59 @@ const Share = ({ post, label, type = "" }) => {
   return (
     <>
       <CustomModal
-        modal={modal}
-        setModal={setModal}
+        modal={noButton ? customModal : modal}
+        setModal={noButton ? setCustomModal : setModal}
         content={
           <div>
             <div className="block border-primary">
-              <div
+              {/* Share to wall */}
+              <CustomModal
+                modal={openWall}
+                setModal={setOpenWall}
+                content={
+                  <div>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-4">
+                      <TextareaAutosize
+                        name="customText"
+                        type="text"
+                        className="resize-none border border-placeholder-color align-middle items-center text-xs outline-none w-full bg-transparent text-md placeholder-gray-400 font-light rounded-lg"
+                        placeholder={`Write a post...`}
+                        maxRows={6}
+                        minRows={4}
+                        autoFocus={false}
+                        value={customText}
+                        onChange={(e) => {
+                          setCustomText(e.target.value);
+                        }}
+                      ></TextareaAutosize>
+                      <div className="flex justify-end w-full">
+                        <button
+                          onClick={() => handleShareToWall()}
+                          className="cursor-pointer bg-placeholder-color px-4 py-1 w-fit rounded-lg text-sm disabled:opacity-[0.5]"
+                        >
+                          {loading ? "Loading" : "Post"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                }
+                closeIcon={"X"}
+                title={"Write a custom post and press send"}
+                trigger={
+                  <button
+                    onClick={() => setOpenWall(!openWall)}
+                    className="flex justify-start cursor-pointer border-b w-full border-gray-200 p-2 hover:bg-gray-200 hover:rounded-lg"
+                  >
+                    {"Share to feed"}
+                  </button>
+                }
+              />
+              {/* <div
                 onClick={() => handleShareToWall()}
                 className="cursor-pointer border-b border-gray-200 p-2 hover:bg-gray-200 hover:rounded-lg"
               >
-                Share to Wall
-              </div>
+                Share to feed
+              </div> */}
 
               {/* Modal for list friends */}
               <CustomModal
@@ -277,13 +346,20 @@ const Share = ({ post, label, type = "" }) => {
         }
         closeIcon={"X"}
         title={""}
+        noButton={noButton}
         trigger={
-          <button
-            onClick={() => setModal(!modal)}
-            className="text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
-          >
-            {label}
-          </button>
+          noButton ? null : (
+            <button
+              onClick={() => setModal(!modal)}
+              className={
+                classNameTrigger
+                  ? classNameTrigger
+                  : "text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
+              }
+            >
+              {label}
+            </button>
+          )
         }
       />
     </>
@@ -294,6 +370,10 @@ Share.propTypes = {
   label: PropTypes.any,
   post: PropTypes.object,
   type: PropTypes.string,
+  classNameTrigger: PropTypes.string,
+  noButton: PropTypes.bool,
+  customModal: PropTypes.bool,
+  setCustomModal: PropTypes.func,
 };
 
 export default Share;

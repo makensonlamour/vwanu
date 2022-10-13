@@ -14,7 +14,6 @@ import koremPNG from "../../../assets/images/reactions/korem2.png";
 const Reaction = ({ post }) => {
   const queryClient = useQueryClient();
   // const user = useOutletContext();
-  console.log("data", post);
 
   const createReaction = useCreateReaction(["post", "home", post?.id], (oldData, newData) => [...oldData, newData]);
   // const updateReaction = useUpdateReaction(["post", "home", post.id], (oldData, newData) => [...oldData, newData]);

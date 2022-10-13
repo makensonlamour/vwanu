@@ -9,7 +9,6 @@ import EmptyComponent from "../common/EmptyComponent";
 import { MdGroups } from "react-icons/md";
 
 const CardGroup = ({ data, isError, isLoading }) => {
-  console.log("test", data);
   const queryClient = useQueryClient();
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",

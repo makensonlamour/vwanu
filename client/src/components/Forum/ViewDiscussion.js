@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import InputDiscussion from "../Community/DiscussionTab/InputDiscussion";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
@@ -11,6 +11,7 @@ import Loader from "../../components/common/Loader";
 const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isError, hasNextPage, fetchNextPage }) => {
   const id = useParams();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   function reloadPage() {
     queryClient.refetchQueries(["community", "discussion", "all"]);
@@ -55,7 +56,7 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
               hasNext={hasNextPage}
               refetch={() => queryClient.invalidateQueries(["community", "discussion", "all"])}
               container={true}
-              classNameContainer={"overflow-y-auto h-[46vh]"}
+              classNameContainer={"overflow-y-auto scrollbar h-fit max-h-[46vh]"}
               loader={
                 <div className="flex justify-center py-5">
                   <Loader color="black" />
@@ -77,46 +78,55 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
               {data?.pages.map((page) => {
                 return page?.data?.data?.map((item) => {
                   return (
-                    <div key={item?.title} className="hover:shadow-lg">
-                      <div className="flex lg:px-6 px-4 lg:py-6 py-4">
-                        <div className="mr-4">
-                          <img alt={item?.title} src={item?.User?.profilePicture} className="w-12 h-12 mask mask-squircle" />
-                        </div>
-                        <div className="">
-                          <Link to={type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`} className="font-semibold hover:text-primary">
-                            {item?.title}
-                          </Link>
-                          <p className="pt-2 text-sm text-gray-500">
-                            {item?.lastComment !== null && (
-                              <span className="">
-                                {item?.lastComment?.commenterFirstName +
-                                  " " +
-                                  item?.lastComment?.commenterLastName +
-                                  " replied on " +
-                                  item?.lastComment?.createdAt}
+                    <div
+                      onClick={() => navigate(type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`)}
+                      key={item?.title}
+                      className="hover:shadow-lg cursor-pointer"
+                    >
+                      <div className="flex justify-between lg:px-6 px-4 lg:py-3 py-2">
+                        <div className="flex justify-between ">
+                          <div className="mr-4">
+                            <img alt={item?.title} src={item?.User?.profilePicture} className="w-12 h-12 mask mask-squircle" />
+                          </div>
+                          <div className="">
+                            <Link
+                              to={type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`}
+                              className="font-semibold hover:text-primary"
+                            >
+                              {item?.title}
+                            </Link>
+                            <p className="pt-2 text-sm text-gray-500">
+                              {item?.lastComment !== null && (
+                                <span className="">
+                                  {item?.lastComment?.commenterFirstName +
+                                    " " +
+                                    item?.lastComment?.commenterLastName +
+                                    " replied on " +
+                                    item?.lastComment?.createdAt}
+                                </span>
+                              )}
+                              {item?.lastComment === null && (
+                                <span className="">
+                                  {item?.User?.firstName + " " + item?.User?.lastName + " created on " + item?.createdAt}
+                                </span>
+                              )}
+                              <span className="mx-2">
+                                {" " + item?.activeParticipants === 0
+                                  ? "0 Member"
+                                  : item?.activeParticipants > 1
+                                  ? item?.activeParticipants + " Members"
+                                  : item?.activeParticipants + " Member"}
                               </span>
-                            )}
-                            {item?.lastComment === null && (
-                              <span className="">
-                                {item?.User?.firstName + " " + item?.User?.lastName + " created on " + item?.createdAt}
+                              •
+                              <span className="mx-2">
+                                {" " + item?.amountOfComments === 0
+                                  ? "0 Reply"
+                                  : item?.amountOfComments > 1
+                                  ? item?.amountOfComments + " Replies"
+                                  : item?.amountOfComments + " Reply"}
                               </span>
-                            )}
-                            <span className="mx-2">
-                              {" " + item?.activeParticipants === 0
-                                ? "0 Member"
-                                : item?.activeParticipants > 1
-                                ? item?.activeParticipants + " Members"
-                                : item?.activeParticipants + " Member"}
-                            </span>
-                            •
-                            <span className="mx-2">
-                              {" " + item?.amountOfComments === 0
-                                ? "0 Reply"
-                                : item?.amountOfComments > 1
-                                ? item?.amountOfComments + " Replies"
-                                : item?.amountOfComments + " Reply"}
-                            </span>
-                          </p>
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
