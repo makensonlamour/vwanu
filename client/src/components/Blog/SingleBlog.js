@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
+import { format } from "date-fns";
 
 const SingleBlog = ({ blog }) => {
   return (
@@ -37,7 +38,7 @@ const SingleBlog = ({ blog }) => {
               />
               <div className="ml-4">
                 <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
-                <p className="text-gray-400 text-xs">{blog?.createdAt}</p>
+                <p className="text-gray-400 text-xs">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
               </div>
             </Link>
             <div className="">

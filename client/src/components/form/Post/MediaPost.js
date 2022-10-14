@@ -6,9 +6,12 @@ import PropTypes from "prop-types";
 import ViewPhoto from "../../../features/album/component/ViewPhoto";
 import { isMobile } from "react-device-detect";
 import VideoPlayer from "react-videoplayer";
+import { useNavigate } from "react-router-dom";
+import ResponsivePlayer from "../../common/ResponsivePlayer";
 
 const MediaPost = ({ medias, post }) => {
   const [type, setType] = useState("photo");
+  const navigate = useNavigate();
 
   const checkType = () => {
     if (medias[0]?.original.endsWith(".mp4") || medias[0]?.original.endsWith(".mp4")) {
@@ -42,13 +45,9 @@ const MediaPost = ({ medias, post }) => {
   if (type === "video") {
     contentVideo = (
       <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
-        <ViewPhoto
-          type={type}
-          data={post}
-          photo={medias[0]}
-          imgComponent={
-            <div className="w-[0px] object-cover">
-              {/* <VideoPlayer
+        <div onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)} className="w-full object-cover">
+          <ResponsivePlayer url={medias[0]?.original} autoplay={true} muted={true} volume={1} />
+          {/* <VideoPlayer
                 width={10}
                 style={{ borderRadius: "10px" }}
                 className={"rounded-lg"}
@@ -59,26 +58,21 @@ const MediaPost = ({ medias, post }) => {
                 defaultBrowserControls={true}
                 customHtmlControls={false}
               /> */}
-            </div>
-          }
-        />
+        </div>
       </div>
     );
   }
 
   if (medias?.length === 1) {
     content = (
-      <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
-        <ViewPhoto
-          data={post}
-          photo={medias[0]}
-          imgComponent={
-            <img
-              src={transformImgSingle(medias[0]?.original, 1)}
-              alt={"post_image_" + medias[0]?.id}
-              className="flex-wrap inline object-cover h-auto max-h-[630px] object-center w-[100%] rounded-xl"
-            />
-          }
+      <div
+        onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)}
+        className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full"
+      >
+        <img
+          src={transformImgSingle(medias[0]?.original, 1)}
+          alt={"post_image_" + medias[0]?.id}
+          className="flex-wrap inline object-cover h-auto max-h-[630px] object-center w-[100%] rounded-xl"
         />
       </div>
     );
@@ -89,18 +83,14 @@ const MediaPost = ({ medias, post }) => {
         {medias?.map((media, idx) => {
           return (
             <>
-              <div className="flex w-full ">
-                <ViewPhoto
-                  idxImg={idx}
-                  data={post}
-                  photo={media}
-                  imgComponent={
-                    <img
-                      src={transformImgSingle(media?.original, 2)}
-                      alt={"post_image_" + media?.id}
-                      className=" flex-wrap inline object-cover h-[100%] w-96 object-top rounded-lg"
-                    />
-                  }
+              <div
+                onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)}
+                className="flex w-full cursor-pointer "
+              >
+                <img
+                  src={transformImgSingle(media?.original, 2)}
+                  alt={"post_image_" + media?.id}
+                  className=" flex-wrap inline object-cover h-[100%] w-96 object-top rounded-lg"
                 />
               </div>
             </>
@@ -116,32 +106,22 @@ const MediaPost = ({ medias, post }) => {
           return (
             <>
               {idx === 1 ? (
-                <div className={"w-full col-span-2 p-1 row-span-2"}>
-                  <ViewPhoto
-                    data={post}
-                    photo={media}
-                    imgComponent={
-                      <img
-                        src={transformImgSingle(media?.original, 3)}
-                        alt={"post_image_" + media?.id}
-                        className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
-                      />
-                    }
+                <div
+                  onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)}
+                  className={"w-full col-span-2 p-1 row-span-2"}
+                >
+                  <img
+                    src={transformImgSingle(media?.original, 3)}
+                    alt={"post_image_" + media?.id}
+                    className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
                   />
                 </div>
               ) : (
-                <div className={"w-full p-1"}>
-                  <ViewPhoto
-                    idxImg={idx}
-                    data={post}
-                    photo={media}
-                    imgComponent={
-                      <img
-                        src={transformImgSingle(media?.original, 3)}
-                        alt={"post_image_" + media?.id}
-                        className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
-                      />
-                    }
+                <div onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)} className={"w-full p-1"}>
+                  <img
+                    src={transformImgSingle(media?.original, 3)}
+                    alt={"post_image_" + media?.id}
+                    className={"flex-wrap inline object-cover object-center w-full rounded-lg "}
                   />
                 </div>
               )}
@@ -154,21 +134,17 @@ const MediaPost = ({ medias, post }) => {
     content = (
       <div className="grid grid-rows-2 grid-flow-col gap-2 pt-5">
         {" "}
-        {medias?.map((media, idx) => {
+        {medias?.map((media) => {
           return (
             <>
-              <div className="flex w-full">
-                <ViewPhoto
-                  idxImg={idx}
-                  data={post}
-                  photo={media}
-                  imgComponent={
-                    <img
-                      src={transformImgSingle(media?.original, 4)}
-                      alt={"post_image_" + media?.id}
-                      className=" flex-wrap inline object-cover object-center w-full rounded-lg"
-                    />
-                  }
+              <div
+                onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)}
+                className="flex w-full cursor-pointer"
+              >
+                <img
+                  src={transformImgSingle(media?.original, 4)}
+                  alt={"post_image_" + media?.id}
+                  className=" flex-wrap inline object-cover object-center w-full rounded-lg"
                 />
               </div>
             </>
@@ -182,7 +158,7 @@ const MediaPost = ({ medias, post }) => {
         {medias?.map((media) => {
           return (
             <>
-              <div className="flex w-full">
+              <div className="flex w-full cursor-pointer">
                 <ViewPhoto
                   data={post}
                   photo={media}

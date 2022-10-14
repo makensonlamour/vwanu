@@ -33,6 +33,7 @@ let routesPath = {
   ADD_BLOG: "/blogs/add",
   PROFILE: "/profile/:id/*",
   POST: "/post/:id",
+  POST_PREVIEW: "/post/preview",
   PROFILE_EDIT: "/me/profile/edit",
   MEMBERS: "/members",
   FRIENDS: "/friends/",

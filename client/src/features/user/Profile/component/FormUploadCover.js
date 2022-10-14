@@ -1,7 +1,5 @@
-/*eslint-disable*/
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
-import ReactCrop from "react-image-crop";
 import Cropper from "react-cropper";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
@@ -21,49 +19,7 @@ const uploadCoverError = () =>
 
 const FormUploadCover = ({ user, hideViewer, getImg }) => {
   const cropperRef = useRef(false);
-  function reload() {
-    window.location.reload();
-  }
-
   const [files, setFiles] = useState([]);
-  // const [crop, setCrop] = useState({
-  //   unit: "%", // Can be 'px' or '%'
-  //   x: 0,
-  //   y: 10,
-  //   width: 98,
-  //   height: 50,
-  //   aspect: 1,
-  // });
-  //save the image that used to be crop
-  const [image, setImage] = useState(false);
-  // const [result, setResult] = useState(null);
-  const [previewImg, setPreviewImg] = useState(false);
-
-  // const getCroppedImg = async () => {
-  //   try {
-  //     const canvas = document.createElement("canvas");
-  //     const scaleX = image.naturalWidth / image.width;
-  //     const scaleY = image.naturalHeight / image.height;
-  //     canvas.width = crop.width;
-  //     canvas.height = crop.height;
-  //     const ctx = canvas.getContext("2d");
-  //     ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height);
-
-  //     //   const base64Image = canvas.toDataURL("image/jpeg", 1);
-
-  //     canvas.toBlob(function (blob) {
-  //       const url = URL.createObjectURL(blob);
-  //       setPreviewImg(url);
-  //       setResult(blob);
-  //     }, "image/jpeg");
-
-  //     //   console.log(canvas);
-
-  //     //   setResult(base64Image);
-  //   } catch (e) {
-  //     console.log("crop the image");
-  //   }
-  // };
 
   const { getRootProps, getInputProps, open } = useDropzone({
     maxFiles: 1,
@@ -118,39 +74,8 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
     } catch (e) {
       console.log(e);
       uploadCoverError();
-    } finally {
-      setImage(false);
     }
   };
-
-  // const preview = (
-  //   <>
-  //     {files?.map((file) => {
-  //       return (
-  //         <div key={file?.path} className="">
-  //           <ReactCrop
-  //             crop={crop}
-  //             onChange={(c) => {
-  //               getCroppedImg();
-  //               setCrop(c);
-  //             }}
-  //           >
-  //             <img
-  //               alt={user?.firstName}
-  //               src={file?.preview}
-  //               className="h-72 w-96"
-  //               // Revoke data uri after image is loaded
-  //               onLoad={(e) => {
-  //                 setImage(e.target);
-  //                 getCroppedImg();
-  //               }}
-  //             />
-  //           </ReactCrop>
-  //         </div>
-  //       );
-  //     })}
-  //   </>
-  // );
 
   return (
     <>
@@ -196,26 +121,7 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
                 ref={cropperRef}
               />
             </div>
-            {/* <div>{preview}</div>
-            <div className="block mx-auto">
-              {files?.map((file) => {
-                return (
-                  <div key={file?.path} className="mt-5 md:mt-0">
-                    <h4 className="text-center text-lg py-3 font-semibold">Preview</h4>
-                    <div className="h-36 w-72 mx-4">
-                      <img
-                        alt={user?.firstName}
-                        src={previewImg}
-                        className="h-36 w-72 object-cover"
-                        // Revoke data uri after image is loaded
-                        onLoad={() => {
-                          URL.revokeObjectURL(result);
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })} */}
+
             <div className="mt-2 mx-4 flex flex-row justify-between items-center">
               <button onClick={() => setFiles([])} className="my-2 hover:text-primary font-semibold">
                 Cancel
@@ -228,16 +134,15 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
               </button>
             </div>
           </div>
-          // </div>
         )
       ) : (
-        <div className="p-6 bg-placeholder-color rounded-2xl border-2 border-sky-500 border-dotted">
+        <div className="p-6 rounded-xl border-2 border-sky-500 border-dotted">
           <div {...getRootProps({ className: "dropzone" })}>
             <input {...getInputProps()} />
             <div className="mx-auto justify-center w-full">
               <p className="text-center text-lg font-normal">{`Drop your image here`}</p>
               <button
-                className="mt-3 flex justify-center px-8 mx-auto py-2 items-center bg-primary text-base-100 hover:bg-secondary rounded-xl border-0"
+                className="mt-3 flex justify-center px-8 mx-auto py-2 items-center border-placeholder-color bg-gray-100 text-black hover:bg-primary hover:text0white rounded-xl border-0"
                 onClick={open}
               >
                 Select your file

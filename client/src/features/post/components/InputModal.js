@@ -27,7 +27,7 @@ const postError = () =>
     position: "top-center",
   });
 
-const InputModal = ({ reference, communityId, disabled = false }) => {
+const InputModal = ({ reference, communityId, disabled = false, otherUser }) => {
   const queryClient = useQueryClient();
   const user = useOutletContext();
   const UserId = user?.id;
@@ -125,6 +125,10 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
         formData.append("postText", credentials.postText);
         formData.append("UserId", credentials.UserId);
         formData.append("privacyType", privacyText);
+        if (otherUser && otherUser?.id) {
+          dataObj.wallId = otherUser?.id;
+          formData.append("wallId", otherUser?.id);
+        }
         try {
           await mutationAdd.mutateAsync(selectedGif !== "" ? dataObj : formData);
           postSuccess();
@@ -226,7 +230,7 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
             onSubmit={handleSubmit}
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto inset-0 fixed z-50 outline-none focus:outline-none"
           >
-            <div className="relative w-full my-6 mx-auto max-w-md lg:max-w-2xl">
+            <div className="relative w-full my-6 mx-auto max-w-md lg:max-w-lg">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
@@ -315,23 +319,39 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
                                   />
                                 </div>
                               )}
-                              {files?.map((file) => {
-                                return (
-                                  <div key={file?.preview} className="w-32 relative">
-                                    <img
-                                      src={file?.preview}
-                                      className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
-                                      alt={file?.path}
-                                    />
-                                    <button
-                                      onClick={() => handleRemove(file)}
-                                      className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
-                                    >
-                                      <AiOutlineDelete size={"24px"} className="" />
-                                    </button>
-                                  </div>
-                                );
-                              })}
+                              {files?.length === 1 &&
+                                files?.map((file) => {
+                                  return (
+                                    <div key={file?.preview} className="w-32 relative">
+                                      <img src={file?.preview} className="object-fit bg-gray-300 m-1 w-full h-52" alt={file?.path} />
+                                      <button
+                                        onClick={() => handleRemove(file)}
+                                        className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                                      >
+                                        <AiOutlineDelete size={"24px"} className="" />
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                              {files?.length >= 2 &&
+                                files?.length < 10 &&
+                                files?.map((file) => {
+                                  return (
+                                    <div key={file?.preview} className="w-32 relative">
+                                      <img
+                                        src={file?.preview}
+                                        className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
+                                        alt={file?.path}
+                                      />
+                                      <button
+                                        onClick={() => handleRemove(file)}
+                                        className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                                      >
+                                        <AiOutlineDelete size={"24px"} className="" />
+                                      </button>
+                                    </div>
+                                  );
+                                })}
                             </>
                           </div>
                         )}
@@ -458,6 +478,7 @@ const InputModal = ({ reference, communityId, disabled = false }) => {
 InputModal.propTypes = {
   reference: PropTypes.string.isRequired,
   communityId: PropTypes.string,
+  otherUser: PropTypes.string,
   disabled: PropTypes.bool,
 };
 

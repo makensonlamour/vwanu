@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
-
 import { Paper, styled } from "@mui/material";
 
 //core components
@@ -31,7 +30,7 @@ const LayoutUser = () => {
   return (
     <>
       <div className="mx-auto">
-        <div className="flex overflow-y-auto">
+        <div className="flex">
           <div className="grow hidden md:block">
             <SidebarLeft user={user ? user : undefined} />
           </div>
@@ -42,7 +41,6 @@ const LayoutUser = () => {
               </div>
             ) : (
               <>
-                {" "}
                 <Navbar countMessage={countMessage} user={user ? user : undefined} />
                 <Item elevation={0} className="max-w-screen-xxl w-[100vw] sm:w-[90vw] mx-auto">
                   {user && !user?.birthday && <Navigate to={routesPath.STEP_TWO} state={{ from: location }} replace />}

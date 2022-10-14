@@ -1,36 +1,40 @@
 import React from "react";
 import { AiOutlineLink } from "react-icons/ai";
 import PropTypes from "prop-types";
+import { useLinkPreview } from "get-link-preview";
 
 const PreviewUrl = ({ url }) => {
-  const urlData = "";
+  const { error, data } = useLinkPreview(url);
   return (
-    <>
-      {urlData ? (
-        <a
-          href={"https://" + urlData?.domain}
-          rel="noopener noreferrer"
-          target="_blank"
-          className="w-full h-28 border border-gray-200 flex items-center rounded-box bg-placeholder-color"
-        >
-          <div className="w-48 rounded-l-xl border-r border-gray-200">
-            <img alt={urlData?.title} src={urlData?.img} className="w-48 h-28 rounded-l-xl px-[0.5px]" />
+    <div className="w-full mt-2">
+      {
+        error ? (
+          "Error"
+        ) : data && Object.keys(data).length > 0 ? (
+          <div className="">
+            <a href={data?.ogUrl} rel="noopener noreferrer" target="_blank" className="w-full mt-1 h-40 lg:h-48 bg-placeholder-color">
+              <div className="w-full rounded-t-lg">
+                <img
+                  alt={data?.domain}
+                  src={data?.image}
+                  className="w-full h-40 lg:h-48 object-cover border border-gray-200 rounded-t-lg px-[0.5px]"
+                />
+              </div>
+              <div className="w-full p-2 border-b rounded-b-lg border-r border-l border-gray-200 bg-placeholder-color">
+                <p className="font-semibold">{data?.title}</p>
+                <p className="text-gray-600">
+                  <AiOutlineLink className="inline mr-2" size={"20px"} />
+                  {data?.domain}
+                </p>
+              </div>
+            </a>
           </div>
-          <div className="w-[90%] px-4">
-            <p className="font-semibold">{urlData?.title}</p>
-            <p className="line-clamp-2 text-gray-600">{urlData?.description}</p>
-            <p className="text-gray-600">
-              <AiOutlineLink className="inline mr-2" size={"20px"} />
-              {"https://" + urlData?.domain}
-            </p>
-          </div>
-        </a>
-      ) : (
-        <a rel="noopener noreferrer" target="_blank" href={url} className="font-bold hover:text-primary">
-          {url}
-        </a>
-      )}
-    </>
+        ) : null
+        // <a rel="noopener noreferrer" target="_blank" href={url} className="font-bold hover:text-primary">
+        //   {url}
+        // </a>
+      }
+    </div>
   );
 };
 

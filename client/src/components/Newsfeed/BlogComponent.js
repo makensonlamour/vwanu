@@ -7,6 +7,7 @@ import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
 import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
+import { format } from "date-fns";
 
 const BlogComponent = ({ data, isError, isLoading }) => {
   const queryClient = useQueryClient();
@@ -57,7 +58,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
                           {blog?.blogTitle}
                         </Link>
                       </p>
-                      <p className=" text-gray-400 text-xs ml-2">{blog?.createdAt}</p>
+                      <p className=" text-gray-400 text-xs ml-2">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
                     </div>
                   </Item>
                 );
@@ -65,6 +66,11 @@ const BlogComponent = ({ data, isError, isLoading }) => {
                 return null;
               }
             })}
+            {data && data?.length > 6 ? (
+              <Link className="hover:text-primary text-xs" to={"../../blogs"}>
+                view more
+              </Link>
+            ) : null}
           </Stack>
         ) : (
           <div className="flex justify-center">

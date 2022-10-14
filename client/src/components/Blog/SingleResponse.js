@@ -2,12 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const SingleResponse = ({ blog }) => {
   return (
     <>
       <div className="w-full" key={blog?.BlogId}>
-        <div className="">
+        <div className="w-full">
           <div className="bg-white border border-gray-300 rounded-xl p-4 mt-6 flex flex-col justify-end">
             <div className="flex justify-between items-center">
               <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
@@ -18,7 +19,7 @@ const SingleResponse = ({ blog }) => {
                 />
                 <div className="ml-4">
                   <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
-                  <p className="text-gray-400 text-sm">{blog?.createdAt}</p>
+                  <p className="text-gray-400 text-sm">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
                 </div>
               </Link>
               <div className="">
@@ -27,10 +28,10 @@ const SingleResponse = ({ blog }) => {
                 </Link>
               </div>
             </div>
-            <p className="py-3">{blog?.responseText}</p>
-            <div className="py-3">
-              <button className="mr-2">Reply</button>
-              <button className="ml-2">Edit</button>
+            <p className="py-1 pl-16">{blog?.responseText}</p>
+            <div className="py-1">
+              <button className="mr-2 pl-16 text-sm hover:text-primary font-semibold">Reply</button>
+              {/* <button className="ml-2">Edit</button> */}
             </div>
           </div>
         </div>

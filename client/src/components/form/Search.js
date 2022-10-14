@@ -1,7 +1,8 @@
+/*eslint-disable*/
 import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedState } from "@mantine/hooks";
 import PropTypes from "prop-types";
-import { useSearch } from "../../features/search/searchSlice";
+import { useSearch, useCommunitySearch, useBlogSearch } from "../../features/search/searchSlice";
 // import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -10,7 +11,28 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
   //   const navigate = useNavigate();
   const [keyword, setKeyword] = useDebouncedState("", 200);
   const [filterSearch, setFilterSearch] = useState("");
-  const { data: filterData, isError, isLoading } = useSearch(["search", keyword], keyword === "" ? false : true, keyword);
+  const {
+    data: filterData,
+    isError,
+    isLoading,
+  } = useSearch(
+    ["search", "member", keyword],
+    keyword !== "" && (filterSearch === "" || filterSearch === "members") ? true : false,
+    keyword
+  );
+
+  const {
+    data: filterDataCommunity,
+    isError: errorCommunity,
+    isLoading: loadingCommunity,
+  } = useCommunitySearch(["search", "community", keyword], keyword !== "" && filterSearch === "community" ? true : false, keyword);
+
+  const {
+    data: filterDataBlog,
+    isError: errorBlog,
+    isLoading: loadingBlog,
+  } = useBlogSearch(["search", "blog", keyword], keyword !== "" && filterSearch === "blogs" ? true : false, keyword);
+
   console.log("filter", filterSearch);
   const inputRef = useRef(null);
 
@@ -21,6 +43,8 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
   useEffect(() => {
     inputRef.current.focus();
   }, []);
+
+  console.log(filterData, filterDataBlog, filterDataCommunity);
 
   return (
     <>
@@ -45,27 +69,28 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
           />
         </div>
         <ul tabIndex={0} className="w-full dropdown-content menu p-2 shadow bg-base-100 rounded-b-xl">
-          <div onChange={handleChange} className="flex flex-start items-center my-1">
+          <div onChange={handleChange} className="flex flex-start items-center gap-x-2 my-1">
             <p className="text-sm mr-3">Search by:</p>
-            <label htmlFor="members" className="mr-1 text-sm">
+            <input type="radio" id="members" name="filter" value="members" />
+            <label htmlFor="members" className="text-sm">
               members
             </label>
-            <input type="radio" id="members" name="filter" value="members" />
-            <label htmlFor="blogs" className="mr-1 ml-2 text-sm">
+
+            <input type="radio" id="blogs" name="filter" value="blogs" />
+            <label htmlFor="blogs" className="text-sm">
               blogs
             </label>
-            <input type="radio" id="blogs" name="filter" value="blogs" />
 
-            <label htmlFor="community" className="mr-1 ml-2 text-sm">
+            <input type="radio" id="community" name="filter" value="community" />
+            <label htmlFor="community" className="text-sm">
               community
             </label>
-            <input type="radio" id="community" name="filter" value="community" />
           </div>
-          {isLoading ? (
+          {isLoading || loadingCommunity || loadingBlog ? (
             <li>
               <p className="text-center py-4 text-lg">Loading...</p>
             </li>
-          ) : isError ? (
+          ) : isError || errorCommunity || errorBlog ? (
             <li>
               <p className="text-center py-4 text-lg">{`Sorry, Something went wrong ;(`}</p>
             </li>
@@ -77,7 +102,7 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
                     setIsSearchOpen(false);
                     window.location.href = `../../profile/${data?.id}`;
                   }}
-                  className="pointer py-2 px-2 hover:bg-placeholder-color rounded-xl"
+                  className="pointer py-1 px-2 text-sm hover:bg-placeholder-color rounded-lg"
                   key={data?.id}
                 >
                   <div className="basis-[80%] flex items-center">
@@ -88,14 +113,58 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
                         className="mask mask-squircle w-10 h-10"
                       />
                     </div>
-                    <p className="text-lg font-500 align-center">{data?.firstName + " " + data?.lastName}</p>
+                    <p className="text-sm font-500 align-center">{data?.firstName + " " + data?.lastName}</p>
+                  </div>
+                </li>
+              );
+            })
+          ) : filterDataCommunity?.data?.length > 0 ? (
+            filterDataCommunity?.data?.slice(0, 10)?.map((data) => {
+              return (
+                <li
+                  onClick={() => {
+                    setIsSearchOpen(false);
+                    window.location.href = `../../groups/${data?.id}`;
+                  }}
+                  className="pointer py-1 px-2 text-sm hover:bg-placeholder-color rounded-lg"
+                  key={data?.id}
+                >
+                  <div className="basis-[80%] flex items-center">
+                    <div className="mr-4 w-10 h-10">
+                      <img
+                        src={data?.profilePicture}
+                        alt={data?.firstName + " " + data?.lastName}
+                        className="mask mask-squircle w-10 h-10"
+                      />
+                    </div>
+                    <p className="text-sm font-500 align-center">{data?.name}</p>
+                  </div>
+                </li>
+              );
+            })
+          ) : filterDataBlog?.data?.length > 0 ? (
+            filterDataBlog?.data?.slice(0, 10)?.map((data) => {
+              return (
+                <li
+                  onClick={() => {
+                    setIsSearchOpen(false);
+                    window.location.href = `../../blogs/${data?.id}`;
+                  }}
+                  className="pointer py-1 px-2 text-sm hover:bg-placeholder-color rounded-lg"
+                  key={data?.id}
+                >
+                  <div className="basis-[80%] flex items-center">
+                    <div className="mr-4">
+                      <img src={data?.coverPicture} alt={data?.blogTitleblogTitle} className="mask mask-squircle w-10 h-10" />
+                    </div>
+                    <p className="text-sm font-500 align-center">{data?.blogTitle}</p>
                   </div>
                 </li>
               );
             })
           ) : (
             <li>
-              <p className="text-center py-4 text-lg">No results</p>
+              <p className="text-center py-2 text-sm">No results</p>
             </li>
           )}
         </ul>

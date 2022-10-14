@@ -1,14 +1,14 @@
 /*eslint-disable */
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import cryptoRandomString from "crypto-random-string";
 import PropTypes from "prop-types";
 import { formatDistance, parseISO } from "date-fns";
 import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
 import reactions from "../../data/reactions";
-import { likeArray, transformHashtagAndLink } from "../../helpers/index";
+import { generateArrayLink, transformHashtagAndLink } from "../../helpers/index";
 // import { RiShareForwardLine } from "react-icons/ri";
-// import { BiComment } from "react-icons/bi";
+import { FaLongArrowAltRight } from "react-icons/fa";
 import MediaPost from "../../components/form/Post/MediaPost";
 import CommentList from "../comment/component/CommentList";
 import CommentForm from "../comment/component/CommentForm";
@@ -16,12 +16,7 @@ import ReusableDialog from "../../components/common/ReusableDialog";
 import ViewLikeButton from "../reaction/component/ViewLikeButton";
 import Share from "../../components/Share/Share";
 import koremPNG from "../../assets/images/reactions/korem2.png";
-// import { ReactComponent as koremPNG } from "../../assets/images/reactions/korem2.png";
-
-// import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
-// import { ReactionCounter } from "@charkour/react-reactions";
-
 import Reaction from "../reaction/component/Reaction";
 import MenuPost from "./components/MenuPost";
 // import routesPath from "../../../routesPath";
@@ -36,6 +31,10 @@ const PostList = ({ post, pageTitle }) => {
   const [commentPrev, setCommentPrev] = useState(false);
   const [open, setOpen] = useState(false);
   const [viewLike, setViewLike] = useState(false);
+  const [original, setOriginal] = useState(false);
+
+  let arrayLink = [];
+  arrayLink = generateArrayLink(post?.postText);
 
   // const openLike = Boolean(openReactions);
 
@@ -60,6 +59,18 @@ const PostList = ({ post, pageTitle }) => {
     handleClose();
   };
 
+  useEffect(() => {
+    let temp = [];
+    if (post?.originalId !== null) {
+      temp = post?.postText?.split("~=~");
+      if (temp?.length >= 5) {
+        setOriginal({ id: temp[0], name: temp[1], createdAt: temp[2], link: temp[3], customMessage: temp[4], postText: temp[5] });
+      }
+    } else {
+      return setOriginal(false);
+    }
+  }, [post]);
+
   return (
     <>
       {post ? (
@@ -73,16 +84,75 @@ const PostList = ({ post, pageTitle }) => {
                   <img alt="" className="object-cover object-center w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
                 </div>
                 <div className="block w-[80%]">
-                  <Link
-                    className="flex flex-nowrap mb-1"
-                    to={
-                      _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
-                        ? `../../profile/${post?.User?.id}`
-                        : `../../profile/${post?.User?.id}`
-                    }
-                  >
-                    <span className="ml-3 text-sm font-bold hover:text-primary line-clamp-1 w-[80%]">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
-                  </Link>
+                  <div className="flex items-start w-full gap-x-2">
+                    <Link
+                      className="flex flex-nowrap mb-1"
+                      to={
+                        _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
+                          ? `../../profile/${post?.User?.id}`
+                          : `../../profile/${post?.User?.id}`
+                      }
+                    >
+                      <span className="ml-3 text-sm font-bold hover:text-primary line-clamp-1">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
+                    </Link>
+                    {/*Start of design shared */}
+                    {post?.wallId !== null ? (
+                      <Fragment>
+                        <p className="align-top">
+                          <FaLongArrowAltRight size={"20px"} />
+                        </p>
+                        <Link
+                          className="flex flex-nowrap mb-1"
+                          to={
+                            _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
+                              ? `../../profile/${post?.Wall?.id}`
+                              : `../../profile/${post?.Wall?.id}`
+                          }
+                        >
+                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.firstName} ${post?.Wall?.lastName} `}</span>
+                        </Link>
+                      </Fragment>
+                    ) : post?.communityId !== null ? (
+                      <Fragment>
+                        <p className="align-top text-sm">
+                          {"post from"}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
+                        <Link
+                          className="flex flex-nowrap mb-1"
+                          to={
+                            _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
+                              ? `../../profile/${post?.CommunityId}`
+                              : `../../profile/${post?.CommunityId}`
+                          }
+                        >
+                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.name} `}</span>
+                        </Link>
+                      </Fragment>
+                    ) : original && original?.link?.includes("blogs") ? (
+                      <Fragment>
+                        <p className="align-top text-sm">
+                          {" shared a blog"}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
+                      </Fragment>
+                    ) : original && (original?.link?.includes("discussions") || original?.link?.includes("forum")) ? (
+                      <Fragment>
+                        <p className="align-top text-sm">
+                          {" shared a discussion"}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
+                      </Fragment>
+                    ) : original && original?.link?.includes("post") ? (
+                      <Fragment>
+                        <p className="align-top text-sm">
+                          {" shared a post"}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
+                      </Fragment>
+                    ) : null}{" "}
+                    {/*End of design shared */}
+                  </div>
                   <p className="ml-3 font-medium text-xs text-gray-900">
                     {formatDistance(parseISO(post?.createdAt), new Date(), [
                       {
@@ -90,7 +160,6 @@ const PostList = ({ post, pageTitle }) => {
                       },
                     ])}{" "}
                     {" ago"} <span className="ml-2 text-gray-600">{" • "}</span> <span className="ml-2">{post?.privacyType}</span>
-                    {}
                   </p>
                 </div>
                 <span className="ml-auto mt-2">{post?.User?.id === user?.id && <MenuPost post={post} />}</span>
@@ -104,14 +173,61 @@ const PostList = ({ post, pageTitle }) => {
                   handleDisagree={handleDisagree}
                 />
               </div>
-              {post?.postText?.split("\n").map((text) => {
-                return (
-                  <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
-                    {transformHashtagAndLink(text)}
-                  </p>
-                );
-              })}
-              {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
+              {/* Begin design for shared post */}
+              {post?.originalId !== null && original?.name !== undefined ? (
+                <div className="mt-3">
+                  {original?.customMessage?.split("\n").map((text) => {
+                    return (
+                      <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
+                        {transformHashtagAndLink(text)}
+                      </p>
+                    );
+                  })}
+                  <div className="border p-1 m-3 border-placeholder-color rounded-lg">
+                    <div className="">
+                      <Link to={"../../profile/" + original?.id} className="text-[0.95rem] font-semibold hover:text-primary">
+                        {original?.name}
+                      </Link>
+                      <div className="flex ">
+                        <p className="text-xs text-black">
+                          {formatDistance(parseISO(original?.createdAt), new Date(), [
+                            {
+                              includeSeconds: true,
+                            },
+                          ])}{" "}
+                          {" ago"} <span className="ml-2 text-gray-600">{" • "}</span>
+                        </p>
+                        <a href={original?.link} className="text-xs cursor-pointer hover:text-primary">
+                          <span className="ml-2">{"see original"}</span>
+                        </a>
+                      </div>
+                    </div>
+                    {original?.postText?.split("\n").map((text) => {
+                      return (
+                        <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
+                          {transformHashtagAndLink(text)}
+                        </p>
+                      );
+                    })}
+
+                    {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  {post?.postText?.split("\n").map((text) => {
+                    return (
+                      <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
+                        {transformHashtagAndLink(text)}
+                      </p>
+                    );
+                  })}
+
+                  {post?.Media?.length === 0 && arrayLink?.length > 0 && transformHashtagAndLink(arrayLink[0], true)}
+
+                  {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
+                </div>
+              )}
               {post?.amountOfReactions !== 0 || post?.amountOfComments !== 0 ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
                   <div open={viewLike}>
@@ -185,7 +301,7 @@ const PostList = ({ post, pageTitle }) => {
                   {/* <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
                   {" Comment"}
                 </button>
-                <Share post={post} label={" Share"} link={""} />
+                <Share post={post} label={" Share"} link={""} type="post" />
               </div>
               {/*Check if we are on post page to show all comments, if not show 3 comments*/}
               {_.isEqual(pageTitle, "post") ? (

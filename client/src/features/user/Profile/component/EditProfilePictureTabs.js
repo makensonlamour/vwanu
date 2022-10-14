@@ -37,9 +37,9 @@ const EditProfilePictureTabs = ({ user }) => {
     <>
       <Toaster />
       <div className="bg-white border border-gray-300 py-10 px-4 md:px-16 rounded-xl">
-        <h4 className="text-center md:text-left mb-8 text-2xl font-semibold">{`Change Profile Picture`}</h4>
-        <div className="px-4 py-3 bg-info w-full border border-sky-300 rounded-2xl">
-          <span className="text-secondary text-sm">{`Your profile photo will be used on your profile and throughout the site.`}</span>
+        <h4 className="text-center md:text-left mb-8 text-xl font-semibold">{`Change Profile Picture`}</h4>
+        <div className="px-4 py-3 bg-white w-full border border-placeholder-color rounded-xl">
+          <span className="text-black text-sm">{`Your profile photo will be used on your profile and throughout the site.`}</span>
         </div>
         <div className="mb-8 mt-10">
           <Tabs>
@@ -67,7 +67,7 @@ const EditProfilePictureTabs = ({ user }) => {
                 </div>
               ) : (
                 <div className="mt-8">
-                  <p className="bg-info text-secondary font-semibold px-6 py-4 rounded-xl">
+                  <p className="bg-white text-secondary font-semibold px-6 py-4 rounded-xl">
                     {`You already delete your profile picture. Add a picture to your profile for a better experience`}.
                   </p>
                 </div>

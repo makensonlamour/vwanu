@@ -14,7 +14,6 @@ import koremPNG from "../../../assets/images/reactions/korem2.png";
 const Reaction = ({ post }) => {
   const queryClient = useQueryClient();
   // const user = useOutletContext();
-  console.log("data", post);
 
   const createReaction = useCreateReaction(["post", "home", post?.id], (oldData, newData) => [...oldData, newData]);
   // const updateReaction = useUpdateReaction(["post", "home", post.id], (oldData, newData) => [...oldData, newData]);
@@ -29,7 +28,7 @@ const Reaction = ({ post }) => {
       queryClient.invalidateQueries(["post", post?.id]);
     }
 
-    queryClient.invalidateQueries(["post", "home"]);
+    // queryClient.invalidateQueries(["post", "home"]);
   };
 
   return (
@@ -49,7 +48,6 @@ const Reaction = ({ post }) => {
               <p style={{ textTransform: "capitalize" }} className="text-left align-middle flex justify-center items-center">
                 <img height={20} width={20} src={koremPNG} alt="_kore" />
                 <span className="ml-1">{"Kore"}</span>
-
               </p>
             </Fragment>
           ) : (
@@ -58,7 +56,6 @@ const Reaction = ({ post }) => {
               <p className="text-semibold hover:text-primary flex justify-center items-center">
                 <img height={20} width={20} src={koremPNG} alt="_kore" />
                 <span className="ml-1">{"Kore"}</span>
-
               </p>
             </Fragment>
           )}

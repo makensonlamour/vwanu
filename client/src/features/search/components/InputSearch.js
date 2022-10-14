@@ -13,7 +13,6 @@ const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIs
     let memb = selectMember?.filter((member) => member?.id === data?.id);
     return memb?.length === 0 ? false : true;
   }
-  console.log(filterData);
 
   return (
     <>

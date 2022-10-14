@@ -12,8 +12,9 @@ import Loader from "../../../components/common/Loader";
 import CommentForm from "./CommentForm";
 import koremPNG from "../../../assets/images/reactions/korem2.png";
 import CommentSingle from "./CommentSingle";
+import ResponseList from "./ResponseList";
 
-const CommentList = ({ postId, showAll }) => {
+const CommentList = ({ postId, showAll, height = "h-[46vh]" }) => {
   const queryClient = useQueryClient();
   const [isResponse, setIsResponse] = useState(false);
   const [idResponse, setIdResponse] = useState(false);
@@ -33,13 +34,13 @@ const CommentList = ({ postId, showAll }) => {
     hasNextPage,
   } = useGetCommentList(["comments", "all", postId], postId !== undefined ? true : false, postId);
 
-  const {
-    data: responseList,
-    isError: errorResponse,
-    isLoading: loadingResponse,
-    fetchNextPage: fetchNextPageResponse,
-    hasNextPage: hasNextPageResponse,
-  } = useGetCommentList(["response", "all", idResponse], idResponse ? true : false, idResponse);
+  // const {
+  //   data: responseList,
+  //   isError: errorResponse,
+  //   isLoading: loadingResponse,
+  //   fetchNextPage: fetchNextPageResponse,
+  //   hasNextPage: hasNextPageResponse,
+  // } = useGetCommentList(["response", "all", idResponse], idResponse ? true : false, idResponse);
 
   const handleReaction = async (_post) => {
     if (_post && _post?.isReactor?.length === 1) {
@@ -75,7 +76,7 @@ const CommentList = ({ postId, showAll }) => {
             hasNext={hasNextPage}
             refetch={() => queryClient.invalidateQueries(["post", "home"])}
             container={true}
-            classNameContainer={"overflow-y-auto h-[46vh]"}
+            classNameContainer={`overflow-y-auto scrollbar ${height}`}
             loader={
               <div className="flex justify-center py-5">
                 <Loader color="black" />
@@ -95,7 +96,7 @@ const CommentList = ({ postId, showAll }) => {
                 return (
                   <>
                     <div key={idx} className="flex items-start pr-3 mt-3">
-                      <img src={comment?.User?.profilePicture} className="h-8 w-8 mr-2 mt-1 mask mask-squircle" alt="_profile_img" />
+                      {/* <img src={comment?.User?.profilePicture} className="h-8 w-8 mr-2 mt-1 mask mask-squircle" alt="_profile_img" /> */}
                       {/* extra div for flex of comment text div and the three dots  */}
                       <CommentSingle key={idx} comment={comment} PostId={postId} />
                     </div>
@@ -126,21 +127,10 @@ const CommentList = ({ postId, showAll }) => {
                         </div>
                       )}
                     </div>
-
-                    <div className="ml-12 flex items-starts justify-start">
-                      <div
-                        onClick={() => {
-                          setIdResponse(comment?.id);
-                          setIsResponse(!isResponse);
-                        }}
-                        className="text-xs mx-1 hover:text-primary cursor-pointer"
-                      >
-                        reply
-                      </div>
-                      <div className="text-xs mx-1 hover:text-primary cursor-pointer">kore</div>
-                      <div className="text-xs mx-1 hover:text-primary cursor-pointer">Number of kore</div>
-                    </div>
                     {isResponse && idResponse === comment?.id && <CommentForm response={true} PostId={comment?.id} />}
+                    {/* Response */}
+
+                    {comment?.amountOfComments > 0 && <ResponseList postId={comment?.id} response={false} />}
                   </>
                 );
               });
@@ -182,35 +172,7 @@ const CommentList = ({ postId, showAll }) => {
                     </div>
                     {isResponse && idResponse === comment?.id && <CommentForm response={true} PostId={comment?.id} />}
                     {/* Response */}
-                    {comment?.amountOfComments > 0 && (
-                      <div>
-                        {loadingResponse ? (
-                          <div className="flex justify-center py-5">
-                            <Loader color="black" />
-                          </div>
-                        ) : errorResponse ? (
-                          <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
-                            {"There was an error while fetching the data. "}{" "}
-                            <Link
-                              className="text-secondary hover:text-primary"
-                              to={""}
-                              onClick={() => reloadPage(["response", "all", idResponse])}
-                            >
-                              Tap to retry
-                            </Link>{" "}
-                          </div>
-                        ) : responseList && responseList.pages?.length > 0 && responseList?.pages[0]?.data?.total > 0 ? (
-                          <div className="pl-10">
-                            {responseList?.pages?.map((page) => {
-                              return page?.data?.data?.map((resp) => {
-                                return <CommentSingle key={resp?.id} comment={resp} PostId={resp?.id} />;
-                              });
-                            })}
-                          </div>
-                        ) : null}
-                      </div>
-                    )}
-
+                    {comment?.amountOfComments > 0 && <ResponseList postId={comment?.id} response={false} />}
                   </div>
                 ) : null;
               });
@@ -234,6 +196,7 @@ const CommentList = ({ postId, showAll }) => {
 CommentList.propTypes = {
   postId: PropTypes.string.isRequired,
   showAll: PropTypes.bool,
+  height: PropTypes.string,
 };
 
 export default CommentList;

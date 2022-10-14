@@ -20,6 +20,7 @@ import Community from "./pages/Community/Community";
 import Forum from "./pages/Forum/Forum";
 import ViewForum from "./pages/Forum/ViewForum";
 import ForumList from "./pages/Forum/ForumList";
+import PreviewPhoto from "./pages/NewsFeed/PreviewPhoto";
 import Notification from "./pages/Notification/Notification";
 import CallScreen from "./pages/Call/CallScreen";
 import TestSingleComponents from "./pages/TestSingleComponents/index";
@@ -132,6 +133,12 @@ let routes = [
     name: "Post",
     element: ViewPost,
     access: role.USER,
+  },
+  {
+    path: routesPath.POST_PREVIEW,
+    name: "Post preview photo",
+    element: PreviewPhoto,
+    access: role.CALL,
   },
   {
     path: routesPath.MEMBERS,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useGetBlog, useGetBlogList } from "../../features/blog/blogSlice";
+import { useGetBlog, useGetBlogListByInterest } from "../../features/blog/blogSlice";
 // import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
 import { GoComment } from "react-icons/go";
@@ -10,12 +10,14 @@ import { useCreateResponse, useGetAllResponse } from "../../features/blog/blogSl
 import { FaBlog } from "react-icons/fa";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
-import SocialMediaShare from "../../components/common/SocialMediaShare";
+// import SocialMediaShare from "../../components/common/SocialMediaShare";
 import EmptyComponent from "../../components/common/EmptyComponent";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
+import Share from "../../components/Share/Share";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.core.css";
+import { format } from "date-fns";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -35,7 +37,7 @@ const ViewBlog = () => {
   const [responseText, setResponseText] = useState("");
   const queryClient = useQueryClient();
   const { data: blog } = useGetBlog(["blog", "", id], id?.toString() !== undefined ? true : false, id);
-  const { data: blogList } = useGetBlogList(["blog", "all"], true);
+  const { data: blogList } = useGetBlogListByInterest(["blog", "all"], false);
   const {
     data: listResponse,
     isLoading: responseLoading,
@@ -91,7 +93,7 @@ const ViewBlog = () => {
           isLoading={responseLoading}
           hasNext={hasNextPage}
           container={false}
-          classNameContainer={"overflow-y-auto h-[60vh]"}
+          classNameContainer={"overflow-y-auto scrollbar h-fit max-h-[60vh]"}
           refetch={() => queryClient.invalidateQueries(["blog"])}
           loader={
             <div className="flex justify-center py-5">
@@ -159,10 +161,10 @@ const ViewBlog = () => {
               </Stack>
             </div>
           )}
-          <div className="mt-5 lg:mt-6 px-4 lg:px-28">
-            <p className="text-md lg:text-2xl font-semibold">{blog?.blogTitle}</p>
+          <div className="mt-2 lg:mt-4 px-4 lg:px-28">
+            <p className="text-md lg:text-lg font-semibold">{blog?.blogTitle}</p>
           </div>
-          <div className="mt-6 lg:mt-10 px-4 lg:px-28">
+          <div className="mt-4 lg:mt-6 px-4 lg:px-28">
             <div className="flex mt-7 mb-4 justify-between items-center">
               <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
                 <img
@@ -172,7 +174,7 @@ const ViewBlog = () => {
                 />
                 <div className="ml-4">
                   <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
-                  <p className="text-gray-400 text-sm">{blog?.createdAt}</p>
+                  <p className="text-gray-400 text-sm">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
                 </div>
               </Link>
               <div className="">
@@ -183,66 +185,17 @@ const ViewBlog = () => {
               </div>
             </div>
           </div>
-          <div className="mt-5 lg:mt-6 px-4 lg:px-28">
+          <div className="mt-3 lg:mt-4 px-4 lg:px-28">
             <div className="view ql-editor" dangerouslySetInnerHTML={{ __html: blog?.blogText }}></div>
             {/* <p className="">{parse(`${blog?.blogText}`)}</p> */}
           </div>
-          <SocialMediaShare
-            className={"m-1"}
-            title={blog?.blogTitle}
-            quote={blog?.blogTitle}
-            url={`${url}/blogs/${blog?.id}`}
-            image={blog?.coverPicture}
-            hashtag={`#vwanu #haitian_social_media #blog #social #haiti`}
-            description={blog?.blogTitle}
-            imageUrl={blog?.coverPicture}
-            caption={blog?.blogText}
-            media={blog?.coverPicture}
-            summary={blog?.blogText}
-            source={"Vwanu"}
-            hashtags={["vwanu", "haitian_social_media", "blog", "social", "haiti"]}
-            subject={`${blog?.blogTitle}`}
-            body={`${blog?.blogText}`}
-            via={"Vwanu"}
-            tags={["vwanu", "haitian_social_media", " blog", "social", "haiti"]}
-          />
-          <div className="mt-10 lg:px-28">
-            <div className="border-b border-t border-gray-300">
-              <Link to={"../../profile/" + blog?.User?.id} className="px-4 py-2 lg:py-10 flex items-center">
-                <img
-                  src={blog?.User?.profilePicture}
-                  alt={"_img_" + blog?.User?.firstName}
-                  className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
-                />
-                <p className="text-md lg:text-lg font-semibold ml-3 hover:text-primary">
-                  {blog?.User?.firstName + " " + blog?.User?.lastName}
-                </p>
-              </Link>
-            </div>
+          <div className="mt-3 lg:mt-4 px-4 lg:px-28">
+            <Share post={blog} label={" Share"} link={""} type="blog" />
           </div>
-          <div className="mt-4 lg:mt-5 px-4 lg:px-28">
-            <div className="">
-              <p className="text-lg lg:text-2xl font-semibold pb-5 lg:pb-10">Related Articles</p>
-              <div className="flex justify-start lg:justify-between flex-wrap">
-                {blogList?.length > 0 &&
-                  blogList?.map((blog, idx) => {
-                    if (idx < 2) {
-                      return (
-                        <div key={blog?.id} className="w-[100%] lg:w-[48%]">
-                          {" "}
-                          <SingleBlogRelated blog={blog} />
-                        </div>
-                      );
-                    } else {
-                      return null;
-                    }
-                  })}
-              </div>
-            </div>
-          </div>
+
           <div className="mt-6 lg:mt-10 lg:px-28">
             <div className="border-t border-gray-300 my-5">
-              <p className="px-4 lg:px-0 text-lg lg:text-2xl font-semibold pt-3 lg:pt-0">
+              <p className="px-4 lg:px-0 text-lg lg:text-lg font-semibold pt-3 lg:pt-3">
                 {blog?.amountOfComments < 1 ? blog?.amountOfComments + " Response" : blog?.amountOfComments + " Responses"}
               </p>
               <div id="responses" className="bg-white border border-gray-300 rounded-xl m-2 p-4 mt-4 lg:mt-6 flex flex-col justify-end">
@@ -271,6 +224,26 @@ const ViewBlog = () => {
                 </button>
               </div>
               <div className="mx-2 w-full">{content}</div>
+            </div>
+          </div>
+          <div className="mt-4 lg:mt-5 px-4 lg:px-28">
+            <div className="">
+              <p className="text-lg lg:text-lg font-semibold pb-5 lg:pb-10">Related Articles</p>
+              <div className="flex justify-start lg:justify-between flex-wrap">
+                {blogList?.length > 0 &&
+                  blogList?.map((blog, idx) => {
+                    if (idx < 2) {
+                      return (
+                        <div key={blog?.id} className="w-[100%] lg:w-[48%]">
+                          {" "}
+                          <SingleBlogRelated blog={blog} />
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+              </div>
             </div>
           </div>
         </div>

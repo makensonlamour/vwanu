@@ -1,4 +1,4 @@
-import { useFetch, useLoadMore, usePost, useUpdate } from "../../lib/react-query";
+import { useFetch, useLoadMore, usePost, useUpdate, useDelete } from "../../lib/react-query";
 
 export const useGetListDiscussionCommunity = (queryKey, enabled = false, communityId) =>
   useLoadMore(queryKey, enabled, `/discussion?CommunityId=${communityId}`);
@@ -18,3 +18,5 @@ export const useGetListDiscussionReplies = (queryKey, enabled = false, discussio
   useLoadMore(queryKey, enabled, `/discussion?DiscussionId=${discussionId}`);
 
 export const useUpdateDiscussion = (queryKey, oldData, newData) => useUpdate(queryKey, `/discussion`, (oldData, newData));
+
+export const useDeleteDiscussion = (queryKey, oldData, newData) => useDelete(queryKey, `/discussion`, (oldData, newData));

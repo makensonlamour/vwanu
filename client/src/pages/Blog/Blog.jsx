@@ -10,6 +10,7 @@ import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
 import { useQueryClient } from "react-query";
 import { useGetInterestList } from "./../../features/interest/interestSlice";
+import { Chip, Stack } from "@mui/material";
 
 const Blog = () => {
   const [interest, setInterest] = useState(false);
@@ -106,7 +107,7 @@ const Blog = () => {
           isError={isError}
           hasNext={hasNextPageBlog}
           container={true}
-          classNameContainer={"overflow-y-auto h-[77vh]"}
+          classNameContainer={"overflow-y-auto scrollbar h-fit max-h-[77vh]"}
           refetch={() => queryClient.invalidateQueries(["interest", "all"])}
           loader={
             <div className="flex justify-center py-5">
@@ -165,10 +166,10 @@ const Blog = () => {
           Create New Article
         </Link>
       </div>
-      <div className="flex mt-2 gap-x-10">
+      <div className="flex flex-col-reverse lg:flex-row mt-2 gap-x-10">
         <div className="basis-[100%] lg:basis-4/6">{interest ? contentInterest : content}</div>
-        <div className="basis-[100%] lg:basis-2/6 bg-white rounded-lg border border-gray-200 overflow-y-auto">
-          <p className="text-center py-3 border-b border-placeholder-color font-semibold text-md">List of Interest</p>
+        <div className="basis-[100%] lg:basis-2/6 bg-white rounded-lg border border-gray-200 overflow-y-auto scrollbar px-2 my-4 lg:my-0 pb-4 lg:pb-0">
+          <p className="text-center py-3 font-semibold text-md">Filter by Interests</p>
           {loadingInterest ? (
             <div className="flex justify-center py-5">
               <Loader color="black" />
@@ -181,25 +182,27 @@ const Blog = () => {
               </Link>{" "}
             </div>
           ) : interestList?.length > 0 ? (
-            interestList?.map((interest2) => {
-              return (
-                <div
-                  key={interest2?.id}
-                  className={`${
-                    interest === interest2?.name ? "bg-placeholder-color " : ""
-                  } border-b border-gray-200 p-2 cursor-pointer hover:bg-placeholder-color flex justify-between`}
-                >
-                  <div onClick={() => setInterest(interest2?.name)} className="w-[80%]">
-                    {interest2?.name}
-                  </div>
-                  {interest === interest2?.name && (
-                    <button className="" onClick={() => setInterest(false)}>
-                      <FcCancel size={"24px"} className="" />
-                    </button>
-                  )}
-                </div>
-              );
-            })
+            <Stack direction="row" spacing={0} className="flex flex-wrap gap-2">
+              {interestList?.map((interest2) => {
+                return (
+                  <Chip
+                    onClick={() => {
+                      if (interest === interest2?.name) {
+                        setInterest(false);
+                      } else {
+                        setInterest(interest2?.name);
+                      }
+                    }}
+                    className={`${
+                      interest === interest2?.name ? "bg-primary text-white " : ""
+                    } border-b border-gray-200 p-2 cursor-pointer hover:bg-primary hover:text-white flex justify-between`}
+                    key={interest2?.id}
+                    label={interest2?.name}
+                    size="small"
+                  />
+                );
+              })}
+            </Stack>
           ) : (
             <div className="flex justify-center w-full">
               <EmptyComponent icon={<FaBlog size={"32px"} className="" />} placeholder={"There's no interest yet."} tips={""} />

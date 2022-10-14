@@ -5,6 +5,7 @@ import { TextareaAutosize } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
 import { Facebook } from "react-content-loader";
 import { useQueryClient } from "react-query";
+import { useOs } from "@mantine/hooks";
 
 import { useCreateComment } from "../../comment/commentSlice";
 
@@ -19,6 +20,7 @@ const commentError = () =>
   });
 
 const CommentForm = ({ PostId, response = false }) => {
+  const os = useOs();
   const queryClient = useQueryClient();
   const user = useOutletContext();
   const UserId = user?.id;
@@ -26,6 +28,7 @@ const CommentForm = ({ PostId, response = false }) => {
   const [postText, setPostText] = useState("");
 
   const onEnterPress = (e) => {
+    if (postText.trim() === "") return;
     if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault();
       buttonRef.current.click();
@@ -44,8 +47,8 @@ const CommentForm = ({ PostId, response = false }) => {
       await mutationAddComment.mutateAsync(objComment);
       setPostText("");
       commentSuccess();
-      queryClient.refetchQueries(["post", "home"]);
-      queryClient.refetchQueries(["post", PostId]);
+      queryClient.invalidateQueries(["post", "home"]);
+      queryClient.invalidateQueries(["post", PostId]);
     } catch (e) {
       console.log(e);
       commentError();
@@ -66,10 +69,11 @@ const CommentForm = ({ PostId, response = false }) => {
           <TextareaAutosize
             name="postText"
             type="text"
-            className="resize-none hover:border-0 border-0 align-middle items-center text-xs outline-none w-full bg-transparent text-md placeholder-gray-400 font-light"
+            style={{ outline: "none", ":hover": { outline: "none" } }}
+            className="!outline-none hover:!outline-none resize-none hover:border-0 border-0 align-middle items-center text-xs w-full bg-transparent text-md placeholder-gray-400 font-light"
             placeholder={`${response ? "Write a response and press enter..." : "Write a comment and press enter..."}`}
             maxRows={4}
-            autoFocus={true}
+            autoFocus={os === "ios" || os === "android" ? false : true}
             onKeyDown={onEnterPress}
             value={postText}
             onChange={(e) => {
