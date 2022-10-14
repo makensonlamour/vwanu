@@ -76,7 +76,7 @@ SELECT
         [Sequelize.literal(amountOfReactions), 'amountOfReactions'],
         [Sequelize.literal(isReactor), 'isReactor'],
       ],
-      exclude: ['UserId', 'PostId', 'CommunityId'],
+      exclude: ['UserId'],
     },
 
     include: [

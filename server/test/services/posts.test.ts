@@ -17,6 +17,7 @@ describe('Posts services', () => {
   let commenterToken;
   const endpoint = '/posts';
   const userEndpoint = '/users';
+  const reactionEndpoint = '/reactions';
   beforeAll(async () => {
     await app.get('sequelizeClient').sync({ logged: false, force: true });
     testServer = request(app);
@@ -95,7 +96,7 @@ describe('Posts services', () => {
   });
   it('should react on the post', async () => {
     const { statusCode: reactionResponse } = await testServer
-      .post('/reactions')
+      .post(reactionEndpoint)
       .set('authorization', commenterToken)
       .send({
         content: 'like',
