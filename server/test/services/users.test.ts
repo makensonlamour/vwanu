@@ -20,7 +20,8 @@ describe('/users service', () => {
   let testServer;
   const interests = ['sport', 'education'];
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true });
+    const sequelize = app.get('sequelizeClient');
+    await sequelize.sync({ force: true });
     testServer = request(app);
   });
 

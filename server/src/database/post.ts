@@ -24,6 +24,9 @@ export default (sequelize: any, DataTypes: any) => {
       Post.belongsToMany(models.Media, {
         through: 'Post_Media',
       });
+
+      Post.belongsTo(models.User, { as: 'wall' });
+      Post.belongsTo(models.Post, { as: 'original' });
       Post.belongsTo(models.Media, {
         as: 'Media-comment',
         foreignKey: 'mediaId',
