@@ -105,14 +105,14 @@ const PostList = ({ post, pageTitle }) => {
                           className="flex flex-nowrap mb-1"
                           to={
                             _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
-                              ? `../../profile/${post?.Wall?.id}`
-                              : `../../profile/${post?.Wall?.id}`
+                              ? `../../profile/${post?.wall?.id}`
+                              : `../../profile/${post?.wall?.id}`
                           }
                         >
-                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.firstName} ${post?.Wall?.lastName} `}</span>
+                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.wall?.firstName} ${post?.wall?.lastName} `}</span>
                         </Link>
                       </Fragment>
-                    ) : post?.communityId !== null ? (
+                    ) : post?.CommunityId !== null ? (
                       <Fragment>
                         <p className="align-top text-sm">
                           {"post from"}
@@ -129,14 +129,14 @@ const PostList = ({ post, pageTitle }) => {
                           <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.name} `}</span>
                         </Link>
                       </Fragment>
-                    ) : original && original?.link?.includes("blogs") ? (
+                    ) : original && original?.link?.includes("blogs") && post?.originalId ? (
                       <Fragment>
                         <p className="align-top text-sm">
                           {" shared a blog"}
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                       </Fragment>
-                    ) : original && (original?.link?.includes("discussions") || original?.link?.includes("forum")) ? (
+                    ) : original && (original?.link?.includes("discussions") || original?.link?.includes("forum")) && post?.originalId ? (
                       <Fragment>
                         <p className="align-top text-sm">
                           {" shared a discussion"}
