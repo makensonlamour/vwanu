@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
-import ReactCrop from "react-image-crop";
+import Cropper from "react-cropper";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
 import toast, { Toaster } from "react-hot-toast";
@@ -18,49 +18,8 @@ const uploadProfileError = () =>
   });
 
 const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
-  function reload() {
-    window.location.reload();
-  }
+  const cropperRef = useRef(false);
   const [files, setFiles] = useState([]);
-  const [crop, setCrop] = useState({
-    unit: "%", // Can be 'px' or '%'
-    x: 25,
-    y: 15,
-    width: 50,
-    height: 65,
-    aspect: 1,
-  });
-  //save the image that used to be crop
-  const [image, setImage] = useState(null);
-  const [result, setResult] = useState(null);
-  const [previewImg, setPreviewImg] = useState(null);
-
-  const getCroppedImg = async () => {
-    try {
-      const canvas = document.createElement("canvas");
-      const scaleX = image.naturalWidth / image.width;
-      const scaleY = image.naturalHeight / image.height;
-      canvas.width = crop.width;
-      canvas.height = crop.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height);
-
-      //   const base64Image = canvas.toDataURL("image/jpeg", 1);
-
-      canvas.toBlob(function (blob) {
-        const url = URL.createObjectURL(blob);
-        setPreviewImg(url);
-        setResult(blob);
-        getImg([blob, url]);
-      }, "image/jpeg");
-
-      //   console.log(canvas);
-
-      //   setResult(base64Image);
-    } catch (e) {
-      console.log("crop the image");
-    }
-  };
 
   const { getRootProps, getInputProps, open } = useDropzone({
     maxFiles: 1,
@@ -76,121 +35,113 @@ const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
           })
         )
       );
+      getImg(
+        acceptedFiles?.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
     },
     // Disable click and keydown behavior
     noClick: true,
     noKeyboard: true,
   });
 
+  let preview = false;
+
+  const onCrop = async () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    await cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096 }).toBlob((blob) => {
+      preview = blob;
+      // setPreviewImg(blob);
+    });
+  };
+
   const handleSubmit = async () => {
-    getCroppedImg();
     const formData = new FormData();
-    formData.append("profilePicture", result);
+    formData.append("profilePicture", preview);
     formData.append("UserId", user?.id);
     try {
       const res = await updateProfilePicture({ formData, id: user?.id });
       if (res?.data) {
         uploadProfileSuccess();
-        reload();
+        window.location.href = "../../profile/" + user?.id;
       }
     } catch (e) {
       console.log(e);
       uploadProfileError();
-    } finally {
-      setImage(false);
     }
   };
-
-  const preview = (
-    <>
-      {files?.map((file) => {
-        return (
-          <div key={file?.path} className="">
-            <ReactCrop
-              crop={crop}
-              onChange={(c) => {
-                getCroppedImg();
-                setCrop(c);
-              }}
-            >
-              <img
-                alt={user?.firstName}
-                src={file?.preview}
-                className="h-72 w-96 object-cover"
-                // Revoke data uri after image is loaded
-                onLoad={(e) => {
-                  setImage(e.target);
-                  getCroppedImg();
-                }}
-              />
-            </ReactCrop>
-          </div>
-        );
-      })}
-    </>
-  );
 
   return (
     <>
       <Toaster />
+      {hideViewer && files?.length > 0 && (
+        <div className="flex justify-center">
+          <button
+            onClick={() => {
+              setFiles([]);
+              getImg([]);
+            }}
+            className="block my-2 px-8 rounded-lg py-2 bg-red-500 hover:bg-red-700 text-white"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
       {files?.length > 0 ? (
-        <div className="flex flex-col md:flex-row">
-          <div>{preview}</div>
-          {hideViewer && (
-            <div className="lg:ml-6 ">
-              <button
-                onClick={() => {
-                  setFiles([]);
-                  getImg([]);
-                }}
-                className="block my-2 px-8 rounded-lg py-2 bg-red-500 hover:bg-red-700 text-white"
-              >
+        hideViewer ? null : (
+          <div className="">
+            <div className="flex justify-center w-full">
+              <Cropper
+                src={URL.createObjectURL(files[0])}
+                style={{ height: 170, width: 170 }}
+                // Cropper.js options
+                viewMode={0}
+                dragMode="none"
+                autoCrop={true}
+                highlight={true}
+                autoCropArea={0.8}
+                rotatable={false}
+                zoomable={false}
+                background={false}
+                zoomOnTouch={false}
+                zoomOnWheel={false}
+                cropBoxMovable={true}
+                cropBoxResizable={false}
+                toggleDragModeOnDblclick={false}
+                initialAspectRatio={1 / 1}
+                aspectRatio={1 / 1}
+                guides={true}
+                cropend={onCrop}
+                ref={cropperRef}
+              />
+            </div>
+
+            <div className="mt-2 mx-4 flex flex-row justify-between items-center">
+              <button onClick={() => setFiles([])} className="my-2 hover:text-primary font-semibold">
                 Cancel
               </button>
+              <button
+                onClick={handleSubmit}
+                className="w-fit mt-4 bg-primary px-6 py-1 border-0 text-base-100 hover:bg-secondary rounded-lg"
+              >
+                Save
+              </button>
             </div>
-          )}
-          {hideViewer ? null : (
-            <div className="block mx-auto">
-              {files?.map((file) => {
-                return (
-                  <div key={file?.path} className="mt-6 md:mt-0">
-                    <div className="h-36 w-36">
-                      <img
-                        alt={user?.firstName}
-                        src={previewImg}
-                        className="h-36 w-36 mask mask-squircle object-cover"
-                        // Revoke data uri after image is loaded
-                        onLoad={() => {
-                          URL.revokeObjectURL(result);
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-              <div className="mt-2 flex flex-col justify-center">
-                <button
-                  onClick={handleSubmit}
-                  className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
-                >
-                  Save
-                </button>
-                <button onClick={() => setFiles([])} className="block my-2 hover:text-primary">
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )
       ) : (
         <>
-          <div className="p-6 bg-placeholder-color rounded-2xl border-2 border-sky-500 border-dotted">
+          <div className="p-6 rounded-xl border-2 border-sky-500 border-dotted">
             <div {...getRootProps({ className: "dropzone" })}>
               <input {...getInputProps()} />
               <div className="mx-auto justify-center w-full">
                 <p className="text-center text-lg font-normal">{`Drop your image here`}</p>
                 <button
-                  className="mt-3 flex justify-center px-8 mx-auto py-2 items-center bg-primary text-base-100 hover:bg-secondary rounded-xl border-0"
+                  className="mt-3 flex justify-center px-8 mx-auto py-2 items-center border-placeholder-color bg-gray-100 text-black hover:bg-primary hover:text0white rounded-xl border-0"
                   onClick={open}
                 >
                   Select your file
@@ -198,9 +149,9 @@ const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
               </div>
             </div>
           </div>
-          <div className="mt-6 px-4 py-3 bg-warning-2 w-full border border-yellow-300 rounded-2xl">
-            <p className="text-v-yellow-dark text-sm">{`For best results, upload an image that is 300px by 300px or larger.`}</p>
-            <p className="text-v-yellow-dark text-sm">{`If you'd like to delete the existing profile photo but not upload a new one, please use the delete tab.`}</p>
+          <div className="mt-6 px-4 py-3 bg-white w-full border border-placeholder-color rounded-2xl">
+            <p className="text-black text-sm">{`For best results, upload an image that is 300px by 300px or larger.`}</p>
+            <p className="text-black text-sm">{`If you'd like to delete the existing profile photo but not upload a new one, please use the delete tab.`}</p>
           </div>
         </>
       )}

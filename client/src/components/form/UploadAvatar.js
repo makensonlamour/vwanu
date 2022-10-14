@@ -43,6 +43,7 @@ UploadAvatar.propTypes = {
   id: PropTypes.any.isRequired,
   format: PropTypes.string,
   setAvatarState: PropTypes.func,
+  avatarState: PropTypes.any,
 };
 
 export default UploadAvatar;

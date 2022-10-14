@@ -1,5 +1,5 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import { useParams, Link } from "react-router-dom";
 // import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
 import InfiniteScroll from "../InfiniteScroll/InfiniteScroll";
@@ -14,7 +14,7 @@ import PostList from "../../features/post/PostList";
 import { useGetPostsList } from "../../features/post/postSlice";
 import InputModal from "../../features/post/components/InputModal";
 
-const ProfileFeed = () => {
+const ProfileFeed = ({ otherUser }) => {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const UserId = id;
@@ -103,7 +103,7 @@ const ProfileFeed = () => {
       <div className="mx-auto">
         <div className="pb-2 mx-auto align-items-center lg:w-full space-y-2">
           <div className="lg:basis-2/3">
-            <InputModal reference="profilefeed" />
+            <InputModal reference="profilefeed" otherUser={otherUser} />
           </div>
           <div className="lg:flex">
             <div className="w-full">{content}</div>
@@ -114,9 +114,9 @@ const ProfileFeed = () => {
   );
 };
 
-/* ProfileFeed.propTypes = {
+ProfileFeed.propTypes = {
   user: PropTypes.object.isRequired,
   otherUser: PropTypes.object,
-}; */
+};
 
 export default ProfileFeed;

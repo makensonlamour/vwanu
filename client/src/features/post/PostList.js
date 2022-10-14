@@ -6,7 +6,7 @@ import { formatDistance, parseISO } from "date-fns";
 import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
 import reactions from "../../data/reactions";
-import { likeArray, transformHashtagAndLink } from "../../helpers/index";
+import { generateArrayLink, transformHashtagAndLink } from "../../helpers/index";
 // import { RiShareForwardLine } from "react-icons/ri";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import MediaPost from "../../components/form/Post/MediaPost";
@@ -32,6 +32,9 @@ const PostList = ({ post, pageTitle }) => {
   const [open, setOpen] = useState(false);
   const [viewLike, setViewLike] = useState(false);
   const [original, setOriginal] = useState(false);
+
+  let arrayLink = [];
+  arrayLink = generateArrayLink(post?.postText);
 
   // const openLike = Boolean(openReactions);
 
@@ -219,6 +222,8 @@ const PostList = ({ post, pageTitle }) => {
                       </p>
                     );
                   })}
+
+                  {post?.Media?.length === 0 && arrayLink?.length > 0 && transformHashtagAndLink(arrayLink[0], true)}
 
                   {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
                 </div>

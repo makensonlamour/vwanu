@@ -1,7 +1,5 @@
-/*eslint-disable*/
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
-import ReactCrop from "react-image-crop";
 import Cropper from "react-cropper";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
@@ -21,11 +19,7 @@ const uploadCoverError = () =>
 
 const FormUploadCover = ({ user, hideViewer, getImg }) => {
   const cropperRef = useRef(false);
-
   const [files, setFiles] = useState([]);
-
-  const [image, setImage] = useState(false);
-  const [previewImg, setPreviewImg] = useState(false);
 
   const { getRootProps, getInputProps, open } = useDropzone({
     maxFiles: 1,
@@ -80,8 +74,6 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
     } catch (e) {
       console.log(e);
       uploadCoverError();
-    } finally {
-      setImage(false);
     }
   };
 

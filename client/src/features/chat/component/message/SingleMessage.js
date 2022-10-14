@@ -6,7 +6,7 @@ import { GrFormView } from "react-icons/gr";
 import { BsThreeDots } from "react-icons/bs";
 import { IoIosSend } from "react-icons/io";
 import { useReadMessage } from "../../messageSlice";
-import { transformHashtagAndLink } from "../../../../helpers/index";
+import { transformHashtagAndLink, generateArrayLink } from "../../../../helpers/index";
 import MediaMessage from "./MediaMessage";
 import { Menu, MenuItem } from "@mui/material";
 
@@ -55,6 +55,9 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
   useEffect(() => {
     handleRead();
   }, []);
+
+  let arrayLink = [];
+  arrayLink = generateArrayLink(listMessage?.messageText);
 
   return (
     <>
@@ -122,6 +125,7 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
                 </p>
               );
             })}
+            {listMessage?.Media?.length === 0 && arrayLink?.length > 0 && transformHashtagAndLink(arrayLink[0], true)}
             {listMessage?.Media?.length > 0 ? <MediaMessage sender={listMessage?.sender} medias={listMessage?.Media} /> : null}
             <p className="text-xs text-gray-700 align-middle text-right">
               {formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}
@@ -142,6 +146,7 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
                 </p>
               );
             })}
+            {listMessage?.Media?.length === 0 && arrayLink?.length > 0 && transformHashtagAndLink(arrayLink[0], true)}
             {listMessage?.Media?.length > 0 ? <MediaMessage sender={listMessage?.sender} medias={listMessage?.Media} /> : null}
             <p className="text-xs text-gray-600 text-right">{formatRelative(parseISO(listMessage?.createdAt), new Date(), { locale })}</p>
           </div>

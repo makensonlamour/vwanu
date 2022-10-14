@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import * as Yup from "yup";
 import routesPath from "../../../routesPath";
 import { useNavigate, useOutletContext, Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { updateProfilePicture } from "../../user/userSlice";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import useAuthContext from "../../../hooks/useAuthContext";
+import Cropper from "react-cropper";
 
 // Core components
 import { UploadAvatar, Form, Submit } from "../../../components/form";
@@ -15,6 +16,7 @@ import { RiImageAddFill } from "react-icons/ri";
 
 const FormStepThree = () => {
   const user = useOutletContext();
+  const cropperRef = useRef(false);
   const { dispatch, Types } = useAuthContext();
   const idUser = user?.id;
   const navigate = useNavigate();
@@ -30,12 +32,21 @@ const FormStepThree = () => {
     profilePicture: "",
     id: idUser,
   };
+  let preview = false;
+  const onCrop = async () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    await cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096 }).toBlob((blob) => {
+      preview = blob;
+      // setPreviewImg(blob);
+    });
+  };
 
   let formData = new FormData();
 
   const handleStepThree = async () => {
     setIsLoading(true);
-    formData.append("profilePicture", avatar);
+    formData.append("profilePicture", preview);
     formData.append("idUser", idUser);
     try {
       const res = await updateProfilePicture({ formData, id: idUser });
@@ -70,8 +81,30 @@ const FormStepThree = () => {
 
         <Alert />
         {avatar || user?.profilePicture ? (
-          <div className="bg-gray-100 border border-gray-200 object-contain object-center overflow-visible mask mask-squircle shadow-sm m-auto h-fit w-48 items-center">
-            <img src={avatar ? URL.createObjectURL(avatar) : user.profilePicture} className="object-fill" alt="profile_photo" />{" "}
+          <div className="flex justify-center w-full">
+            <Cropper
+              src={URL.createObjectURL(avatar)}
+              style={{ height: 170, width: 170 }}
+              // Cropper.js options
+              viewMode={0}
+              dragMode="none"
+              autoCrop={true}
+              highlight={true}
+              autoCropArea={0.8}
+              rotatable={false}
+              zoomable={false}
+              background={false}
+              zoomOnTouch={false}
+              zoomOnWheel={false}
+              cropBoxMovable={true}
+              cropBoxResizable={false}
+              toggleDragModeOnDblclick={false}
+              initialAspectRatio={1 / 1}
+              aspectRatio={1 / 1}
+              guides={true}
+              cropend={onCrop}
+              ref={cropperRef}
+            />
           </div>
         ) : (
           <div className="bg-gray-100 border border-gray-200 object-contain object-center overflow-visible mask mask-squircle shadow-sm m-auto h-fit w-48 items-center">
@@ -84,6 +117,7 @@ const FormStepThree = () => {
           name="profilePicture"
           id="img"
           setAvatarState={setAvatar}
+          avatarState={avatar}
           accept="image/png,image/jpg,image/jpeg"
           icon={<RiImageAddFill size="20px" className="text-gray-800" />}
           autoComplete="new-file"

@@ -69,7 +69,8 @@ const CommentForm = ({ PostId, response = false }) => {
           <TextareaAutosize
             name="postText"
             type="text"
-            className="resize-none hover:border-0 border-0 align-middle items-center text-xs outline-none w-full bg-transparent text-md placeholder-gray-400 font-light"
+            style={{ outline: "none", ":hover": { outline: "none" } }}
+            className="!outline-none hover:!outline-none resize-none hover:border-0 border-0 align-middle items-center text-xs w-full bg-transparent text-md placeholder-gray-400 font-light"
             placeholder={`${response ? "Write a response and press enter..." : "Write a comment and press enter..."}`}
             maxRows={4}
             autoFocus={os === "ios" || os === "android" ? false : true}

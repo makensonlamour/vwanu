@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from "react";
 import cryptoRandomString from "crypto-random-string";
 import jwtDecode from "jwt-decode";
@@ -176,21 +177,42 @@ export function isInvitationReceive(listMembers, data) {
   return memb?.length === 0 ? true : false;
 }
 
-export function transformHashtagAndLink(strText) {
+export function generateArrayLink(text = "") {
+  if (!text) return "";
+  let arrayLinks = [];
+  text.split("\n").map((txt) => {
+    return txt.split(" ").map((str) => {
+      if (str.startsWith("https")) {
+        return arrayLinks.push(str);
+      } else if (str.startsWith("www.")) {
+        return arrayLinks.push("https://" + str);
+      } else {
+        return;
+      }
+    });
+  });
+
+  return arrayLinks;
+}
+
+export function transformHashtagAndLink(strText, preview = false) {
   strText = strText.split(" ").map((str) => {
     if (str.startsWith("https")) {
-      return (
-        <PreviewUrl key={cryptoRandomString({ length: 10 })} url={str} />
-        // <a
-        //   key={cryptoRandomString({ length: 10 })}
-        //   rel="noopener noreferrer"
-        //   target="_blank"
-        //   href={`${str}`}
-        //   className="font-bold hover:text-primary"
-        // >
-        //   {str}
-        // </a>
-      );
+      if (preview) {
+        return <PreviewUrl url={str} />;
+      } else {
+        return (
+          <a
+            key={cryptoRandomString({ length: 10 })}
+            rel="noopener noreferrer"
+            target="_blank"
+            href={`${str}`}
+            className="text-secondary  hover:font-semibold"
+          >
+            {str}
+          </a>
+        );
+      }
     } else if (str.startsWith("#")) {
       return (
         <span key={cryptoRandomString({ length: 10 })} className="font-bold">
@@ -198,21 +220,34 @@ export function transformHashtagAndLink(strText) {
         </span>
       );
     } else if (str.startsWith("www.")) {
-      return (
-        <a
-          key={cryptoRandomString({ length: 10 })}
-          rel="noopener noreferrer"
-          target="_blank"
-          href={`https://${str}`}
-          className="font-bold hover:text-primary"
-        >
-          {str}
-        </a>
-      );
+      if (preview) {
+        return <PreviewUrl url={"https://" + str} />;
+      } else {
+        return (
+          <a
+            key={cryptoRandomString({ length: 10 })}
+            rel="noopener noreferrer"
+            target="_blank"
+            href={`https://${str}`}
+            className="text-secondary hover:font-semibold"
+          >
+            {str}
+          </a>
+        );
+      }
     } else {
       return str + " ";
     }
   });
 
   return strText;
+
+  // if (hasMedia || arrayLinks?.length === 0) {
+  //   return strText;
+  // } else if (arrayLinks?.length > 0) {
+  //   console.log(strText + " " + <PreviewUrl url={arrayLinks[0]} />);
+  //   return strText + " " + <PreviewUrl url={arrayLinks[0]} />;
+  // } else {
+  //   return strText;
+  // }
 }

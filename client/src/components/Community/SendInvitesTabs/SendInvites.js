@@ -321,7 +321,7 @@ const SendInvites = () => {
                         border: "none",
                       },
                     }}
-                    className="w-full mt-1 p-2 mb-4 outline-0 text-secondary placeholder:text-gray-300 focus:border-0  rounded-2xl input-secondary border-0"
+                    className="w-full mt-1 p-2 mb-4 outline-0 text-secondary placeholder:text-gray-300 focus:border-0 !outline-none rounded-2xl input-secondary border-0"
                   />
                   <Submit
                     className="w-full lg:w-fit py-2 px-4 rounded-2xl text-base-100 text-md md:w-[30%]"
