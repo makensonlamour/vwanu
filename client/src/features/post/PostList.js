@@ -2,7 +2,7 @@
 import React, { useState, Fragment, useEffect } from "react";
 import cryptoRandomString from "crypto-random-string";
 import PropTypes from "prop-types";
-import { formatDistance, parseISO, parse } from "date-fns";
+import { formatDistance, parseISO } from "date-fns";
 import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
 import reactions from "../../data/reactions";
@@ -57,9 +57,12 @@ const PostList = ({ post, pageTitle }) => {
   };
 
   useEffect(() => {
-    if (post) {
-      let temp = post?.postText?.split("~=~");
-      setOriginal({ id: temp[0], name: temp[1], createdAt: temp[2], customMessage: temp[3], postText: temp[4] });
+    let temp = [];
+    if (post?.originalId !== null) {
+      temp = post?.postText?.split("~=~");
+      if (temp?.length >= 5) {
+        setOriginal({ id: temp[0], name: temp[1], createdAt: temp[2], link: temp[3], customMessage: temp[4], postText: temp[5] });
+      }
     } else {
       return setOriginal(false);
     }
@@ -89,6 +92,7 @@ const PostList = ({ post, pageTitle }) => {
                     >
                       <span className="ml-3 text-sm font-bold hover:text-primary line-clamp-1">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
                     </Link>
+                    {/*Start of design shared */}
                     {post?.wallId !== null ? (
                       <Fragment>
                         <p className="align-top">
@@ -108,7 +112,7 @@ const PostList = ({ post, pageTitle }) => {
                     ) : post?.communityId !== null ? (
                       <Fragment>
                         <p className="align-top text-sm">
-                          {"from"}
+                          {"post from"}
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                         <Link
@@ -122,7 +126,29 @@ const PostList = ({ post, pageTitle }) => {
                           <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.name} `}</span>
                         </Link>
                       </Fragment>
-                    ) : null}
+                    ) : original && original?.link?.includes("blogs") ? (
+                      <Fragment>
+                        <p className="align-top text-sm">
+                          {" shared a blog"}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
+                      </Fragment>
+                    ) : original && (original?.link?.includes("discussions") || original?.link?.includes("forum")) ? (
+                      <Fragment>
+                        <p className="align-top text-sm">
+                          {" shared a discussion"}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
+                      </Fragment>
+                    ) : original && original?.link?.includes("post") ? (
+                      <Fragment>
+                        <p className="align-top text-sm">
+                          {" shared a post"}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
+                      </Fragment>
+                    ) : null}{" "}
+                    {/*End of design shared */}
                   </div>
                   <p className="ml-3 font-medium text-xs text-gray-900">
                     {formatDistance(parseISO(post?.createdAt), new Date(), [
@@ -168,9 +194,9 @@ const PostList = ({ post, pageTitle }) => {
                           ])}{" "}
                           {" ago"} <span className="ml-2 text-gray-600">{" • "}</span>
                         </p>
-                        <Link to={"../../post/" + post?.originalId} className="text-xs hover:text-primary">
+                        <a href={original?.link} className="text-xs cursor-pointer hover:text-primary">
                           <span className="ml-2">{"see original"}</span>
-                        </Link>
+                        </a>
                       </div>
                     </div>
                     {original?.postText?.split("\n").map((text) => {

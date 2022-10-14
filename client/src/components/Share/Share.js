@@ -13,8 +13,19 @@ import { useClipboard } from "@mantine/hooks";
 import { TextareaAutosize } from "@mui/material";
 import { useCreateConversation, useCreateNewMessage } from "../../features/chat/messageSlice";
 import { useCreatePost } from "../../features/post/postSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
+
+const shareSuccess = (_text) =>
+  toast.success("You share this " + _text + " successfully!", {
+    position: "top-center",
+  });
+
+const shareError = () =>
+  toast.error("Sorry. Error on sharing this content!", {
+    position: "top-center",
+  });
 
 // eslint-disable-next-line no-unused-vars
 const Share = ({ post, label, type = "", classNameTrigger, noButton = false, customModal, setCustomModal }) => {
@@ -52,6 +63,67 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
     queryClient.refetchQueries(["friends", "all"]);
   }
 
+  function generateShare(type) {
+    if (!type) return "";
+    let result = "";
+    if (type === "post") {
+      result =
+        post?.User?.id +
+        "~=~" +
+        post?.User?.firstName +
+        " " +
+        post?.User?.lastName +
+        "~=~" +
+        post?.createdAt +
+        "~=~" +
+        url +
+        "/post" +
+        post?.id +
+        "~=~" +
+        customText +
+        "~=~" +
+        post?.postText;
+    } else if (type === "discussion") {
+      result =
+        post?.User?.id +
+        "~=~" +
+        post?.User?.firstName +
+        " " +
+        post?.User?.lastName +
+        "~=~" +
+        post?.createdAt +
+        "~=~" +
+        window.location.href +
+        "~=~" +
+        customText +
+        "~=~" +
+        post?.title;
+    } else if (type === "blog") {
+      const newStr = post?.blogText.replace(/(<([^>]+)>)/gi, "");
+      let temp = newStr.length > 70 ? newStr.substring(0, 70) + "..." : newStr;
+      result =
+        post?.User?.id +
+        "~=~" +
+        post?.User?.firstName +
+        " " +
+        post?.User?.lastName +
+        "~=~" +
+        post?.createdAt +
+        "~=~" +
+        window.location.href +
+        "~=~" +
+        customText +
+        "~=~" +
+        post?.blogTitle +
+        "\n" +
+        temp;
+    } else {
+      return result;
+    }
+
+    return result;
+  }
+
   async function handleCreateConversation() {
     setLoading(true);
     if (!friendId) return alert("Please select a friend.");
@@ -73,7 +145,7 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
         } else {
           dataMessage.messageText = type === "post" ? message + ": " + url + "/post/" + post?.id : message + ": " + window.location.href;
         }
-      } else if (type === "discussion") {
+      } else {
         if (message.trim() === "") {
           dataMessage.messageText = "Hello :) Take a look at this: " + window.location.href;
         } else {
@@ -109,37 +181,15 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
       if (arrayImg?.length > 0) {
         dataObj.mediaLinks = arrayImg;
       }
-      if (type === "post") {
-        dataObj.postText =
-          post?.User?.id +
-          "~=~" +
-          post?.User?.firstName +
-          " " +
-          post?.User?.lastName +
-          "~=~" +
-          post?.createdAt +
-          "~=~" +
-          customText +
-          "~=~" +
-          post?.postText;
-      } else if (type === "discussion") {
-        dataObj.postText =
-          post?.User?.id +
-          "~=~" +
-          post?.User?.firstName +
-          " " +
-          post?.User?.lastName +
-          "~=~" +
-          post?.createdAt +
-          "~=~" +
-          customText +
-          "~=~" +
-          post?.title;
-      }
+      // generate
+      dataObj.postText = generateShare(type);
       await createPost.mutateAsync(dataObj);
-      window.location.reload();
+      shareSuccess(type);
+      noButton ? setCustomModal(false) : setModal(false);
+      // window.location.reload();
     } catch (e) {
       console.log(e);
+      shareError();
     }
   }
 
@@ -235,6 +285,7 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
 
   return (
     <>
+      <Toaster />
       <CustomModal
         modal={noButton ? customModal : modal}
         setModal={noButton ? setCustomModal : setModal}

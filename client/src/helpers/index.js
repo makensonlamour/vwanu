@@ -2,6 +2,7 @@ import React from "react";
 import cryptoRandomString from "crypto-random-string";
 import jwtDecode from "jwt-decode";
 import _ from "lodash";
+import PreviewUrl from "../components/common/PreviewUrl";
 
 export function decoder(token) {
   if (!token) return {};
@@ -179,15 +180,16 @@ export function transformHashtagAndLink(strText) {
   strText = strText.split(" ").map((str) => {
     if (str.startsWith("https")) {
       return (
-        <a
-          key={cryptoRandomString({ length: 10 })}
-          rel="noopener noreferrer"
-          target="_blank"
-          href={`${str}`}
-          className="font-bold hover:text-primary"
-        >
-          {str}
-        </a>
+        <PreviewUrl key={cryptoRandomString({ length: 10 })} url={str} />
+        // <a
+        //   key={cryptoRandomString({ length: 10 })}
+        //   rel="noopener noreferrer"
+        //   target="_blank"
+        //   href={`${str}`}
+        //   className="font-bold hover:text-primary"
+        // >
+        //   {str}
+        // </a>
       );
     } else if (str.startsWith("#")) {
       return (

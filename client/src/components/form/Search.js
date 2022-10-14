@@ -1,7 +1,8 @@
+/*eslint-disable*/
 import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedState } from "@mantine/hooks";
 import PropTypes from "prop-types";
-import { useSearch } from "../../features/search/searchSlice";
+import { useSearch, useCommunitySearch, useBlogSearch } from "../../features/search/searchSlice";
 // import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -10,7 +11,24 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
   //   const navigate = useNavigate();
   const [keyword, setKeyword] = useDebouncedState("", 200);
   const [filterSearch, setFilterSearch] = useState("");
-  const { data: filterData, isError, isLoading } = useSearch(["search", keyword], keyword === "" ? false : true, keyword);
+  const {
+    data: filterData,
+    isError,
+    isLoading,
+  } = useSearch(["search","member", keyword], keyword !== "" && (filterSearch === "" || filterSearch === "members") ? true : false, keyword);
+
+  const {
+    data: filterDataCommunity,
+    isError: errorCommunity,
+    isLoading: loadingCommunity,
+  } = useCommunitySearch(["search","community", keyword], keyword !== "" && filterSearch === "community" ? true : false, keyword);
+
+  const {
+    data: filterDataBlog,
+    isError: errorBlog,
+    isLoading: loadingBlog,
+  } = useBlogSearch(["search","blog", keyword], keyword !== "" && filterSearch === "blogs" ? true : false, keyword);
+
   console.log("filter", filterSearch);
   const inputRef = useRef(null);
 
@@ -21,6 +39,8 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
   useEffect(() => {
     inputRef.current.focus();
   }, []);
+
+  console.log(filterData, filterDataBlog, filterDataCommunity);
 
   return (
     <>

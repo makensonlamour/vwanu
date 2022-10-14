@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useGetBlog, useGetBlogList } from "../../features/blog/blogSlice";
+import { useGetBlog, useGetBlogListByInterest } from "../../features/blog/blogSlice";
 // import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
 import { GoComment } from "react-icons/go";
@@ -10,10 +10,11 @@ import { useCreateResponse, useGetAllResponse } from "../../features/blog/blogSl
 import { FaBlog } from "react-icons/fa";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
-import SocialMediaShare from "../../components/common/SocialMediaShare";
+// import SocialMediaShare from "../../components/common/SocialMediaShare";
 import EmptyComponent from "../../components/common/EmptyComponent";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
+import Share from "../../components/Share/Share";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.core.css";
 import { format } from "date-fns";
@@ -36,7 +37,7 @@ const ViewBlog = () => {
   const [responseText, setResponseText] = useState("");
   const queryClient = useQueryClient();
   const { data: blog } = useGetBlog(["blog", "", id], id?.toString() !== undefined ? true : false, id);
-  const { data: blogList } = useGetBlogList(["blog", "all"], true);
+  const { data: blogList } = useGetBlogListByInterest(["blog", "all"], false);
   const {
     data: listResponse,
     isLoading: responseLoading,
@@ -188,39 +189,10 @@ const ViewBlog = () => {
             <div className="view ql-editor" dangerouslySetInnerHTML={{ __html: blog?.blogText }}></div>
             {/* <p className="">{parse(`${blog?.blogText}`)}</p> */}
           </div>
-          <SocialMediaShare
-            className={"m-1"}
-            title={blog?.blogTitle}
-            quote={blog?.blogTitle}
-            url={`${url}/blogs/${blog?.id}`}
-            image={blog?.coverPicture}
-            hashtag={`#vwanu #haitian_social_media #blog #social #haiti`}
-            description={blog?.blogTitle}
-            imageUrl={blog?.coverPicture}
-            caption={blog?.blogText}
-            media={blog?.coverPicture}
-            summary={blog?.blogText}
-            source={"Vwanu"}
-            hashtags={["vwanu", "haitian_social_media", "blog", "social", "haiti"]}
-            subject={`${blog?.blogTitle}`}
-            body={`${blog?.blogText}`}
-            via={"Vwanu"}
-            tags={["vwanu", "haitian_social_media", " blog", "social", "haiti"]}
-          />
-          {/* <div className="mt-10 lg:px-28">
-            <div className="border-b border-t border-gray-300">
-              <Link to={"../../profile/" + blog?.User?.id} className="px-4 py-2 lg:py-10 flex items-center">
-                <img
-                  src={blog?.User?.profilePicture}
-                  alt={"_img_" + blog?.User?.firstName}
-                  className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
-                />
-                <p className="text-md lg:text-lg font-semibold ml-3 hover:text-primary">
-                  {blog?.User?.firstName + " " + blog?.User?.lastName}
-                </p>
-              </Link>
-            </div>
-          </div> */}
+          <div className="mt-3 lg:mt-4 px-4 lg:px-28">
+            <Share post={blog} label={" Share"} link={""} type="blog" />
+          </div>
+
           <div className="mt-6 lg:mt-10 lg:px-28">
             <div className="border-t border-gray-300 my-5">
               <p className="px-4 lg:px-0 text-lg lg:text-lg font-semibold pt-3 lg:pt-3">

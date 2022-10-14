@@ -156,7 +156,10 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
               </span>
             )}
             {data?.lastComment === null && (
-              <span className="">{data?.User?.firstName + " " + data?.User?.lastName + " created on " + data?.createdAt}</span>
+              <span className="">
+                {data?.User?.firstName + " " + data?.User?.lastName + " created on "}{" "}
+                {data && format(new Date(data?.createdAt), "MMM dd, yyyy hh:mm aaaa")}
+              </span>
             )}
             <span className="mx-2">
               {data?.activeParticipants === 0
