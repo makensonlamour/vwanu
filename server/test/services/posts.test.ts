@@ -60,6 +60,7 @@ describe('Posts services', () => {
     const retrievedPost = await testServer
       .get(`${endpoint}/${thePost.id}`)
       .set('authorization', observerToken);
+
     const samePost = retrievedPost.body;
     expect(samePost.id).toEqual(thePost.id);
     expect(samePost.postText).toEqual(thePost.postText);

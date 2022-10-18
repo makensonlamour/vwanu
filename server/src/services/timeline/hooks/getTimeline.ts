@@ -42,6 +42,7 @@ SELECT
       SELECT 1 FROM "User_friends" WHERE "User_friends"."UserId" = "Post"."UserId" AND "User_friends"."friendId" = '${params.User.id}'
      )
     )`;
+
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
@@ -85,7 +86,10 @@ SELECT
         attributes: UserAttributes,
         required: true,
       },
-
+      {
+        model: Sequelize.models.Community,
+        
+      },
       {
         model: Sequelize.models.Media,
         include: {

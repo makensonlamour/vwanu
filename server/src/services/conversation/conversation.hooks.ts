@@ -15,14 +15,23 @@ import {
 const NotifyUsers = async (context) => {
   const { app, data, result } = context;
   if (!data?.userIds) return context;
-  // console.log('\n\n NotifyUsers');
-  // console.log('User ids');
-  // console.log(data.userIds);
+  console.log('\n\n NotifyUsers');
+  console.log('User ids');
+  console.log(data.userIds);
+  console.log('Channels ');
+  console.log(app.channels);
+
+  console.log(app.channel(app.channels).connections);
   try {
-    const connections = [...data.userIds, context.params.User.id].map(
-      (userId) => app.channel(`userIds-${userId}`).connections
-    );
-    connections.forEach((connection) => {
+    if (!app.channel(app.channels).length) return context;
+    const cons = [...data.userIds, context.params.User.id].map((userId) => {
+      const { connections } = app.channel(`userIds-${userId}`);
+      console.log(`For id ${userId} the connection is ${connections}`);
+      return connections;
+    });
+    console.log('Here is what connections contains');
+    console.log({ cons });
+    cons.forEach((connection) => {
       app.channel(`conversation-${result.id}`).join(connection);
       // app.service('conversation').publish('created', (v) =>
       //   app.channel(`conversation-${result.id}`).send({

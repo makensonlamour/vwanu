@@ -30,6 +30,10 @@ export default (sequelize: any, DataTypes: any) => {
         foreignKey: 'entityId',
         constraints: false,
       });
+      Reaction.belongsTo(models.Blog, {
+        foreignKey: 'entityId',
+        constraints: false,
+      });
     }
   }
   Reaction.init(

@@ -41,6 +41,13 @@ export default (sequelize: any, DataTypes: any) => {
       // });
       Blog.belongsToMany(models.Interest, { through: 'Blog_Interest' });
 
+      Blog.hasMany(models.Reaction, {
+        foreignKey: 'entityId',
+        constraints: false,
+        scope: {
+          entityType: 'Blog',
+        },
+      });
       Blog.hasMany(models.BlogResponse);
       // Blog.hasMany(models.Reaction);
 
