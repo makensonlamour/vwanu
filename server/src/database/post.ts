@@ -26,7 +26,23 @@ export default (sequelize: any, DataTypes: any) => {
       });
 
       Post.belongsTo(models.User, { as: 'wall' });
-      Post.belongsTo(models.Post, { as: 'original' });
+
+      Post.belongsTo(models.Post, {
+        foreignKey: 'originalId',
+        constraints: false,
+        scope: {
+          originalType: 'Post',
+        },
+      });
+      Post.belongsTo(models.Discussion, {
+        foreignKey: 'originalId',
+        constraints: false,
+      });
+
+      Post.belongsTo(models.Blog, {
+        foreignKey: 'originalId',
+        constraints: false,
+      });
       Post.belongsTo(models.Media, {
         as: 'Media-comment',
         foreignKey: 'mediaId',

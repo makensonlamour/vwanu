@@ -1,16 +1,17 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
+import saveMedia from '../../Hooks/SaveProfilePictures.hooks';
 
 const { authenticate } = feathersAuthentication.hooks;
 
 export default {
   before: {
-    all: [],
-    find: [authenticate('jwt')],
-    get: [authenticate('jwt')],
-    create: [],
-    update: [authenticate('jwt')],
-    patch: [authenticate('jwt')],
-    remove: [authenticate('jwt')],
+    all: [authenticate('jwt')],
+    find: [],
+    get: [],
+    create: [saveMedia(['original'])],
+    update: [],
+    patch: [],
+    remove: [],
   },
 
   after: {

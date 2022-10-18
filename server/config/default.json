@@ -19,7 +19,7 @@
   "send-in-blue-mail-pass": "ZcPSk8drzEHFMn6K",
   "multerSetting": {},
   "JWT_SECRET": "StageSecretIsREal",
-  "maxPostImages": 4,
+  "maxPostImages": 10,
   "maxMessageImages": 4,
   "maxPostVideos": 1,
   "maxPostAudios": 1,
