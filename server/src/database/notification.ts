@@ -3,8 +3,8 @@
 import { Model } from 'sequelize';
 
 export interface NotificationInterface {
-  id: number;
-  to: number;
+  id: string;
+  to: string;
   message: string;
   type: string;
   view: boolean;
@@ -16,9 +16,9 @@ export default (sequelize: any, DataTypes: any) => {
     extends Model<NotificationInterface>
     implements NotificationInterface
   {
-    id: number;
+    id: string;
 
-    to: number;
+    to: string;
 
     message: string;
 

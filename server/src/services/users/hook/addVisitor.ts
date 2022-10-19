@@ -1,9 +1,13 @@
-export default async (context) => {
+import { HookContext } from '@feathersjs/feathers';
+
+export default async (context: HookContext): Promise<HookContext> => {
   if (
+    !context?.result?.id ||
     !context.params.provider ||
     !context.params.User ||
     !context.id ||
-    context.params.User.id === context.id
+    context.params.User.id === context.id ||
+    !context.params?.User?.eVisitedNotified
   )
     return context;
 
@@ -15,11 +19,11 @@ export default async (context) => {
 
     await context.app.service('notification').create({
       UserId: context.params.User.id,
-      to: context.id,
+      to: context.result.id,
       message: 'Visited your profile',
       type: 'direct',
       entityName: 'users',
-      entityId: context.id,
+      entityId: context.result.id,
     });
   } catch (error) {
     throw new Error(error);
