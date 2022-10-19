@@ -25,7 +25,7 @@ SELECT
         )
   )`;
 
-  const  iFollow= `(
+  const iFollow = `(
         EXISTS(
           SELECT 1 FROM "User_Following" WHERE "User_Following"."UserId" = '${UserId}' AND "User_Following"."FollowingId" = "User"."id" 
         )
@@ -52,8 +52,9 @@ SELECT
     SELECT COUNT(*) FROM "User_Following" WHERE "User_Following"."UserId" = "User"."id"
   )::int`;
 
+  // "User_friends"."UserId" = '${UserId}' AND
   const amountOfFriend = `(
-    SELECT COUNT(*) FROM "User_friends" WHERE "User_friends"."UserId" = '${UserId}' AND "User_friends"."friendId" = "User"."id") 
+    SELECT COUNT(*) FROM "User_friends" WHERE "User_friends"."friendId" = "User"."id") 
   ::int`;
   return {
     include: [

@@ -119,6 +119,8 @@ export default (sequelize: any, DataTypes: any) => {
 
     showLastSeen: boolean;
 
+    eVisitedNotified: boolean;
+
     static associate(models: any) {
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
@@ -405,11 +407,15 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+
       showLastSeen: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-
+      eVisitedNotified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,

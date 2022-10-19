@@ -5,3 +5,4 @@ export { default as LimitDirectConversations } from './limitDirectConversation';
 export { default as SetType } from './setType';
 export { default as UnreadMessage } from './getUnreadMessage';
 
+export { default as NotifyUsers } from './NewConversation';
