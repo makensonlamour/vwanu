@@ -76,6 +76,27 @@ const noDuplicateInvitation = async (context) => {
 
   return context;
 };
+
+const notifyInvitation = async (context) => {
+  const {
+    app,
+    data,
+    result,
+    params: { User },
+  } = context;
+  if (!result) return context;
+  const { guestId, CommunityId } = data;
+  await app.service('notification').create({
+    UserId: User.id,
+    to: guestId,
+    message: 'Invited you to a community',
+    type: 'direct',
+    entityName: 'Community',
+    entityId: CommunityId,
+  });
+
+  return context;
+};
 export default {
   before: {
     all: [authenticate('jwt'), IncludeGuests],
@@ -91,7 +112,7 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [notifyInvitation],
     update: [],
     patch: [],
     remove: [],
