@@ -35,9 +35,9 @@ export default (sequelize: any, DataTypes: any) => {
       Media.belongsToMany(models.Post, {
         through: 'Post_Media',
       });
-      Media.hasMany(models.Post, {
-        onDelete: 'CASCADE',
-      });
+      // Media.hasMany(models.Post, {
+      //   onDelete: 'CASCADE',
+      // });
     }
   }
   Media.init(

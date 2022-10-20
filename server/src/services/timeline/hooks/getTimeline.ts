@@ -50,8 +50,6 @@ SELECT
   const single = context.method === 'get';
   const queryString = /* isEmpty(where)
     ? */ {
-    mediaId: null,
-    MediumId: null,
     PostId: null,
     ...where,
     [Op.and]: {
@@ -88,7 +86,6 @@ SELECT
       },
       {
         model: Sequelize.models.Community,
-        
       },
       {
         model: Sequelize.models.Media,

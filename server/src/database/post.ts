@@ -43,10 +43,10 @@ export default (sequelize: any, DataTypes: any) => {
         foreignKey: 'originalId',
         constraints: false,
       });
-      Post.belongsTo(models.Media, {
-        as: 'Media-comment',
-        foreignKey: 'mediaId',
-      });
+      // Post.belongsTo(models.Media, {
+      //   as: 'Media-comment',
+      //   foreignKey: 'mediaId',
+      // });
       Post.hasMany(models.Post, { as: 'Comments' });
       Post.hasMany(models.Reaction, {
         foreignKey: 'entityId',
