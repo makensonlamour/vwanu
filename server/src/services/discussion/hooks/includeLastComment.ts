@@ -2,6 +2,14 @@
 import { Op } from '@sequelize/core';
 import isEmpty from 'lodash/isEmpty';
 
+const UserAttributes = [
+  'firstName',
+  'lastName',
+  'id',
+  'profilePicture',
+  'createdAt',
+  'updatedAt',
+];
 const IncludeLast = (single: boolean) => async (context) => {
   const { app, params } = context;
 
@@ -104,15 +112,16 @@ SELECT
     include: [
       {
         model: Sequelize.models.User,
-        attributes: [
-          'id',
-          'firstName',
-          'lastName',
-          'profilePicture',
-          'createdAt',
-          'updatedAt',
-        ],
+        attributes: UserAttributes,
         required: true,
+      },
+
+      {
+        model: Sequelize.models.Media,
+        include: {
+          model: Sequelize.models.User,
+          attributes: UserAttributes,
+        },
       },
     ],
     raw: false,

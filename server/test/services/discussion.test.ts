@@ -42,6 +42,7 @@ describe("'discussion ' service", () => {
       })
       .set('authorization', `Bearer ${testUsers[0].accessToken}`);
     discussion = discussion.body;
+
     expect(discussion).toHaveProperty('id');
   });
   it('should get a discussion', async () => {
@@ -78,6 +79,7 @@ describe("'discussion ' service", () => {
 
     expect(comment.statusCode).toBe(201);
     comment = comment.body;
+
     expect(comment.DiscussionId).toBe(discussion.id);
   });
 
