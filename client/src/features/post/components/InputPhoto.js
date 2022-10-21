@@ -18,13 +18,14 @@ const InputPhoto = ({
 }) => {
   const { fileRejections, getRootProps, getInputProps, open } = useDropzone({
     maxFiles: maxFiles,
+    multiple: true,
     accept:
       type === "photo"
         ? {
             "image/*": [".jpg", ".jpeg", ".png"],
           }
         : {
-            "video/*": [".mp4", ".m4v"],
+            "video/*": [".mp4", ".m4v", ".mov", ".wmv", ".avi"],
           },
     onDrop: (acceptedFiles) => {
       let currentFiles = acceptedFiles?.map((file) =>
@@ -32,7 +33,10 @@ const InputPhoto = ({
           preview: URL.createObjectURL(file),
         })
       );
-      fn((oldFiles) => [...oldFiles, currentFiles[0]]);
+      console.log(currentFiles);
+      currentFiles.map((f) => {
+        fn((oldFiles) => [...oldFiles, f]);
+      });
     },
     // Disable click and keydown behavior
     noClick: true,
@@ -40,7 +44,7 @@ const InputPhoto = ({
   });
 
   if (fileRejections?.length > 0) {
-    alert(`You can't upload more than 4 images at once`);
+    alert(`You can't upload more than 10 images at once`);
   }
 
   return (

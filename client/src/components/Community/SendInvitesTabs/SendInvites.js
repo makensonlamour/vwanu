@@ -15,6 +15,7 @@ import {
   // useGetCommunityInvitation,
 } from "../../../features/community/communitySlice";
 // import { isMember, isInvitation } from "../../../helpers/index";
+import { MdAddCircleOutline, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import InputSearch from "../../../features/search/components/InputSearch";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -80,10 +81,16 @@ const SendInvites = () => {
       const dataObj = {
         CommunityRoleId: roleCommunityId,
         CommunityId: id,
-        guestId: guest[0],
+        // guestId: guest[0],
       };
+      //Promise.allSettled or all
+      await Promise.all(
+        guest?.map(async (g) => {
+          dataObj.guestId = g;
+          await sendInvitation.mutateAsync(dataObj);
+        })
+      );
 
-      await sendInvitation.mutateAsync(dataObj);
       sendInvitationSuccess();
       setSelectMember([]);
     } catch (e) {
@@ -98,8 +105,6 @@ const SendInvites = () => {
     let memb = selectMember?.filter((member) => member?.id === data?.id);
     return memb?.length === 0 ? false : true;
   }
-
-  console.log("test", members);
 
   return (
     <>
@@ -182,9 +187,13 @@ const SendInvites = () => {
                                   {user?.id !== member?.id && (
                                     <div className="">
                                       {isIntoArray(member) ? (
-                                        <button onClick={handleRemove(member)}>remove</button>
+                                        <button onClick={handleRemove(member)}>
+                                          <MdOutlineRemoveCircleOutline size={"24px"} className="" />
+                                        </button>
                                       ) : (
-                                        <button onClick={() => handleAdd(member)}>add</button>
+                                        <button onClick={() => handleAdd(member)}>
+                                          <MdAddCircleOutline size={"24px"} className="" />
+                                        </button>
                                       )}
                                     </div>
                                   )}
@@ -272,9 +281,14 @@ const SendInvites = () => {
                             {user?.id !== member?.id && (
                               <div className="">
                                 {isIntoArray(member) ? (
-                                  <button onClick={handleRemove(member)}>remove</button>
+                                  <button onClick={handleRemove(member)}>
+                                    <MdOutlineRemoveCircleOutline size={"24px"} className="" />
+                                  </button>
                                 ) : (
-                                  <button onClick={() => handleAdd(member)}>add</button>
+                                  <button onClick={() => handleAdd(member)}>
+                                    {" "}
+                                    <MdAddCircleOutline size={"24px"} className="" />
+                                  </button>
                                 )}
                               </div>
                             )}

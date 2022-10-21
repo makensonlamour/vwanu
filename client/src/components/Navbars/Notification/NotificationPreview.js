@@ -52,6 +52,19 @@ const NotificationPreview = () => {
     }
   };
 
+  const handleReadAll = async () => {
+    try {
+     let result =  await Promise.all(
+        notificationList?.map(async (notif) => {
+          await readNotification.mutateAsync({ id: notif?.id, view: true });
+        })
+      );
+      window.location.href = "../../notifications";
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     if (!run) {
       nots();
@@ -82,7 +95,9 @@ const NotificationPreview = () => {
             <>
               <div className="flex justify-between mb-4 m-2">
                 <h4 className="text-lg font-semibold px-2">Notifications</h4>
-                <button className="text-sm text-primary font-[400]">Mark all as read</button>
+                <button onClick={() => handleReadAll()} className="text-sm text-primary font-[400]">
+                  Mark all as read
+                </button>
               </div>
 
               {notificationList?.map((notification, idx) => {

@@ -1,14 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
 import ViewFriend from "../ViewFriend";
 import { useGetListFollowing } from "../../../features/follower/followerSlice";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
-const Following = ({ fn, isNetwork }) => {
-  const user = useOutletContext();
-  const { data: listFollowing, isError, isLoading, hasNextPage, fetchNextPage } = useGetListFollowing(["user", "following"], true);
+const Following = ({ user, fn, isNetwork }) => {
+  // const user = useOutletContext();
+  const {
+    data: listFollowing,
+    isError,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetListFollowing(["user", "following", user?.id], true, user?.id);
 
   fn(user?.amountOfFollowing || 0);
 

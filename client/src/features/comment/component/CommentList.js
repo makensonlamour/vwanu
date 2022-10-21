@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 // import { Facebook } from "react-content-loader";
@@ -13,6 +13,7 @@ import CommentForm from "./CommentForm";
 import koremPNG from "../../../assets/images/reactions/korem2.png";
 import CommentSingle from "./CommentSingle";
 import ResponseList from "./ResponseList";
+import ViewLikeButton from "../../reaction/component/ViewLikeButton";
 
 const CommentList = ({ postId, showAll, height = "h-[46vh]" }) => {
   const queryClient = useQueryClient();
@@ -163,12 +164,24 @@ const CommentList = ({ postId, showAll, height = "h-[46vh]" }) => {
                       >
                         kore
                       </div>
-                      {comment?.amountOfReactions > 0 && (
-                        <div className="text-xs mx-1 hover:text-primary cursor-pointer flex items-center bg-gray-200 rounded-2xl px-1 py-1 text-primary">
-                          <img height={14} width={14} src={koremPNG} alt="_kore" />
-                          <span className="ml-1">{comment?.amountOfReactions}</span>
-                        </div>
-                      )}
+                      <div>
+                        <ViewLikeButton
+                          amountOfReactions={comment?.amountOfReactions}
+                          postId={comment?.id}
+                          label={
+                            <Fragment>
+                              <p className="text-sm text-secondary">
+                                {comment?.amountOfReactions > 0 && (
+                                  <div className="text-xs mx-1 hover:text-primary cursor-pointer flex items-center bg-gray-200 rounded-2xl px-1 py-1 text-primary">
+                                    <img height={14} width={14} src={koremPNG} alt="_kore" />
+                                    <span className="ml-1">{comment?.amountOfReactions}</span>
+                                  </div>
+                                )}
+                              </p>
+                            </Fragment>
+                          }
+                        />
+                      </div>
                     </div>
                     {isResponse && idResponse === comment?.id && <CommentForm response={true} PostId={comment?.id} />}
                     {/* Response */}

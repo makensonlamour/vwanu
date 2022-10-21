@@ -12,10 +12,10 @@ import { useGetCountry, useGetState, useGetCity, useGetAddressType } from "../..
 // import states from "../../../data/states.json";
 // import cities from "../../../data/cities.json";
 import { assignValueCountries, assignValueStates, assignValue } from "../../../helpers/index";
-import jsonQuery from "json-query";
 
 // Core components
 import { Field, Select, MultiSelect, Form, Submit } from "../../../components/form";
+import CustomSelect from "../../../components/form/CustomSelect/CustomSelect";
 import Loader from "../../../components/common/Loader";
 import { differenceInYears } from "date-fns";
 
@@ -24,7 +24,10 @@ const FormStepTwo = () => {
   const idUser = user?.id;
   const navigate = useNavigate();
   const [interest, setInterest] = useState([]);
-  const [countryCode, setCountryCode] = useState(false);
+  const [countryCode, setCountryCode] = useState({
+    value: "",
+    label: "Not Specified",
+  });
   const [stateCode, setStateCode] = useState(false);
   const [cityCode, setCityCode] = useState(false);
   const [typeAddress, setTypeAddress] = useState("");
@@ -33,7 +36,7 @@ const FormStepTwo = () => {
   const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
   const { data: countryList } = useGetCountry(["country", "all"], true);
   const { data: addressTypesList } = useGetAddressType(["address-types", "all"], true);
-  const { data: stateList } = useGetState(["state", "all"], countryCode ? true : false, countryCode);
+  const { data: stateList } = useGetState(["state", "all"], countryCode?.value !== "" ? true : false, countryCode?.label);
   const { data: cityList } = useGetCity(["city", "all"], stateCode ? true : false, stateCode);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
 
@@ -173,7 +176,8 @@ const FormStepTwo = () => {
           val={interest}
           name="interest"
         />
-        <Select
+        <CustomSelect label={"Country"} options={optionsCountry} value={countryCode} onChange={(o) => setCountryCode(o)} />
+        {/* <Select
           required
           label="Country"
           placeholder="Country"
@@ -183,7 +187,7 @@ const FormStepTwo = () => {
           className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="country-error-message"
           options={optionsCountry}
-        />
+        /> */}
         <div className="flex justify-center w-full">
           <Select
             required

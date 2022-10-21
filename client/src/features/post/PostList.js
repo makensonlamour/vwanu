@@ -7,6 +7,7 @@ import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
 import reactions from "../../data/reactions";
 import { generateArrayLink, transformHashtagAndLink } from "../../helpers/index";
+import { BiComment } from "react-icons/bi";
 // import { RiShareForwardLine } from "react-icons/ri";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import MediaPost from "../../components/form/Post/MediaPost";
@@ -109,7 +110,7 @@ const PostList = ({ post, pageTitle }) => {
                               : `../../profile/${post?.wall?.id}`
                           }
                         >
-                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.wall?.firstName} ${post?.wall?.lastName} `}</span>
+                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.firstName} ${post?.Wall?.lastName} `}</span>
                         </Link>
                       </Fragment>
                     ) : post?.CommunityId !== null ? (
@@ -122,11 +123,11 @@ const PostList = ({ post, pageTitle }) => {
                           className="flex flex-nowrap mb-1"
                           to={
                             _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
-                              ? `../../profile/${post?.CommunityId}`
-                              : `../../profile/${post?.CommunityId}`
+                              ? `../../groups/${post?.CommunityId}`
+                              : `../../groups/${post?.CommunityId}`
                           }
                         >
-                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.name} `}</span>
+                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Community?.name} `}</span>
                         </Link>
                       </Fragment>
                     ) : original && original?.link?.includes("blogs") && post?.originalId ? (
@@ -223,14 +224,14 @@ const PostList = ({ post, pageTitle }) => {
                     );
                   })}
 
-                  {post?.Media?.length === 0 && arrayLink?.length > 0 && transformHashtagAndLink(arrayLink[0], true)}
+                  {/* {post?.Media?.length === 0 && arrayLink?.length > 0 && transformHashtagAndLink(arrayLink[0], true)} */}
 
                   {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
                 </div>
               )}
               {post?.amountOfReactions !== 0 || post?.amountOfComments !== 0 ? (
                 <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
-                  <div open={viewLike}>
+                  <div>
                     <ViewLikeButton
                       amountOfReactions={post?.amountOfReactions}
                       postId={post?.id}
@@ -298,7 +299,7 @@ const PostList = ({ post, pageTitle }) => {
                   onClick={() => setCommentPrev(!commentPrev)}
                   className="text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
                 >
-                  {/* <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
+                  <BiComment size={"24px"} className="inline p-1" />
                   {" Comment"}
                 </button>
                 <Share post={post} label={" Share"} link={""} type="post" />

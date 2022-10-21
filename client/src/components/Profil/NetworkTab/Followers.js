@@ -7,9 +7,15 @@ import { useGetListFollowers } from "../../../features/follower/followerSlice";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
-const Followers = ({ fn, isNetwork }) => {
-  const user = useOutletContext();
-  const { data: listFollowers, isLoading, isError, hasNextPage, fetchNextPage } = useGetListFollowers(["user", "followers"], true);
+const Followers = ({ user, fn, isNetwork }) => {
+  // const user = useOutletContext();
+  const {
+    data: listFollowers,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetListFollowers(["user", "followers", user?.id], true, user?.id);
 
   fn(user?.amountOfFollower || 0);
 

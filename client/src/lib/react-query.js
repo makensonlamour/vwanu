@@ -1,17 +1,17 @@
 import { api } from "./api";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 
-export const fetcher = (url, params, pageParam) => {
-  return api.get(url, { params: { ...params, $skip: pageParam?.pageParam } }).then((res) => res);
+export const fetcher = (url, params, limit, pageParam) => {
+  return api.get(url, { params: { ...params, $skip: pageParam?.pageParam, $limit: limit } }).then((res) => res);
 };
 
-export const useLoadMore = (queryKey, enabled, url, params) => {
-  const context = useInfiniteQuery(queryKey, (pageParam = 0) => fetcher(url, params, pageParam), {
+export const useLoadMore = (queryKey, enabled, url, limit = 10, params) => {
+  const context = useInfiniteQuery(queryKey, (pageParam = 0) => fetcher(url, params, limit, pageParam), {
     getPreviousPageParam: (firstPage) => firstPage.previousId ?? false,
     getNextPageParam: (lastPage, allPages) => {
       const temp = Math.floor(lastPage.data.total / lastPage.data.limit);
       const totalPages = lastPage.data.total % lastPage.data.limit === 0 ? temp : temp + 1;
-      const skip = lastPage.data.skip + 10;
+      const skip = lastPage.data.skip + limit;
       const nextPage = allPages.length === totalPages ? undefined : skip;
       return nextPage;
       // const maxPages = lastPage.data.totalPages;

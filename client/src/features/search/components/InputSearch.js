@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useSearch } from "../searchSlice";
 import { useOutletContext } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
+import { MdAddCircleOutline, MdOutlineRemoveCircleOutline } from "react-icons/md";
 
 const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIsSearchOpen }) => {
   const user = useOutletContext();
@@ -56,9 +57,13 @@ const InputSearch = ({ selectMember, handleAdd, handleRemove, placeholder, setIs
                         {user?.id !== data?.id && (
                           <div className="">
                             {isIntoArray(data) ? (
-                              <button onClick={handleRemove(data)}>remove</button>
+                              <button onClick={handleRemove(data)}>
+                                <MdOutlineRemoveCircleOutline size={"24px"} className="" />
+                              </button>
                             ) : (
-                              <button onClick={() => handleAdd(data)}>add</button>
+                              <button onClick={() => handleAdd(data)}>
+                                <MdAddCircleOutline size={"24px"} className="" />
+                              </button>
                             )}
                           </div>
                         )}

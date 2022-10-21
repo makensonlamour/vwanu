@@ -179,7 +179,7 @@ const NewsFeed = () => {
             </div>
           </div>
           <div className="basis-[22%] hidden lg:block">
-            <div className="sticky top-[6rem] hover:overflow-y-auto scrollbar h-[87vh]">
+            <div className="sticky top-[6rem] overflow-y-auto scrollbar h-[87vh]">
               <span className="block xl:hidden">
                 <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
               </span>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -8,16 +8,16 @@ import { useQueryClient } from "react-query";
 import { useOutletContext } from "react-router-dom";
 import { InputField, SubmitPost, Field, Form } from "../../../components/form";
 //import { FcGallery } from "react-icons/fc";
-// import { MdAlternateEmail } from "react-icons/md";
+import { MdPhotoSizeSelectActual, MdVideoLibrary } from "react-icons/md";
 // import { RiHashtag } from "react-icons/ri";
 // import { BsEmojiSmile } from "react-icons/bs";
-import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineGif } from "react-icons/ai";
+import { AiOutlineCamera, AiOutlineVideoCamera, AiOutlineDelete } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 // import ModalPrivacy from "../../../components/common/ModalPrivacy";
 // import { Popover } from "@mui/material";
 import { useCreateDiscussion } from "../../../features/forum/forumSlice";
 // import Picker from "emoji-picker-react";
-// import InputPhoto from "./InputPhoto";
+import InputPhoto from "../../../features/post/components/InputPhoto";
 // import Editor from "../../../components/form/Post/InputField/Editor.js";
 import Loader from "./../../common/Loader";
 
@@ -38,9 +38,11 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   //   const [openPrivacy, setOpenPrivacy] = useState(false);
+  const [files, setFiles] = useState([]);
   const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
   const [openUploadVideo, setOpenUploadVideo] = useState(false);
-  const [openUploadGif, setOpenUploadGif] = useState(false);
+  const [typeF, setTypeF] = useState("photo");
+  // const [openUploadGif, setOpenUploadGif] = useState(false);
   // const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
   //   const [privacyText, setPrivacyText] = useState("public");
   // const [hashTag, setHashTag] = useState(false);
@@ -80,12 +82,28 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
 
   const handleSubmit = async (credentials) => {
     setLoading(true);
+    let formData = new FormData();
     try {
       const dataObj = {
         body: credentials.postText,
         title: credentials.postTitle,
       };
 
+      if (files?.length) {
+        formData.append("body", credentials.postText);
+        formData.append("title", credentials.postTitle);
+      }
+      if (files?.length) {
+        if (typeF === "photo") {
+          files?.map((file) => {
+            formData.append("discussionImage", file);
+          });
+        } else {
+          files?.map((file) => {
+            formData.append("discussionVideo", file);
+          });
+        }
+      }
       if (type === "new") {
         if (isForum) {
           dataObj.CategoryId = CategoryId;
@@ -96,7 +114,7 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
         dataObj.DiscussionId = data?.id;
       }
 
-      let result = await mutationAdd.mutateAsync(dataObj);
+      let result = await mutationAdd.mutateAsync(files?.length > 0 ? formData : dataObj);
       console.log(result);
       postSuccess();
       queryClient.invalidateQueries(["community", "reply", data?.id]);
@@ -108,6 +126,10 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
       setShowModal(false);
       setLoading(false);
     }
+  };
+
+  const handleRemove = (itemToRemove) => {
+    setFiles((files) => files.filter((f) => f.name !== itemToRemove.name));
   };
 
   return (
@@ -177,6 +199,148 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                       testId="post-error-message"
                     />
                   </div>
+                  {/* for photos and videos */}
+                  {openUploadPhoto && (
+                    <div className="flex">
+                      <div className="w-full">
+                        {files?.length === 0 ? (
+                          <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
+                            <InputPhoto
+                              files={files}
+                              label={
+                                <Fragment>
+                                  <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                  <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                  <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                </Fragment>
+                              }
+                              type={typeF}
+                              fn={setFiles}
+                              maxFiles={1}
+                            />
+                          </div>
+                        ) : null}
+                        {files?.length > 0 && (
+                          <div className="flex flex-wrap mt-2 overflow-auto scrollbar h-36">
+                            <>
+                              {files?.length < 10 && (
+                                <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
+                                  {" "}
+                                  <InputPhoto
+                                    files={files}
+                                    maxFiles={1 - files?.length}
+                                    label={
+                                      <Fragment>
+                                        <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                        <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                        <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                      </Fragment>
+                                    }
+                                    type={typeF}
+                                    fn={setFiles}
+                                  />
+                                </div>
+                              )}
+                              {files?.length === 1 &&
+                                files?.map((file) => {
+                                  return (
+                                    <div key={file?.preview} className="w-32 relative">
+                                      <img src={file?.preview} className="object-fit bg-gray-300 m-1 w-full h-52" alt={file?.path} />
+                                      <button
+                                        onClick={() => handleRemove(file)}
+                                        className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                                      >
+                                        <AiOutlineDelete size={"24px"} className="" />
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                              {files?.length >= 2 &&
+                                files?.length < 10 &&
+                                files?.map((file) => {
+                                  return (
+                                    <div key={file?.preview} className="w-32 relative">
+                                      <img
+                                        src={file?.preview}
+                                        className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle"
+                                        alt={file?.path}
+                                      />
+                                      <button
+                                        onClick={() => handleRemove(file)}
+                                        className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                                      >
+                                        <AiOutlineDelete size={"24px"} className="" />
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                            </>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {openUploadVideo && (
+                    <div className="flex">
+                      <div className="w-full">
+                        {files?.length === 0 ? (
+                          <div className="flex items-center justify-center mt-2 bg-gray-300 m-1 w-full h-36 rounded-xl">
+                            <InputPhoto
+                              label={
+                                <Fragment>
+                                  <MdVideoLibrary size={"28px"} className="text-center mx-auto" />
+                                  <p className="text-center text-md font-semibold">{"Add Video"}</p>
+                                  <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                </Fragment>
+                              }
+                              type={typeF}
+                              fn={setFiles}
+                              maxFiles={1}
+                            />
+                          </div>
+                        ) : null}
+                        {files?.length > 0 && (
+                          <div className="flex flex-wrap mt-2 overflow-auto scrollbar h-36">
+                            <>
+                              {files?.length < 1 && (
+                                <div className="flex items-center justify-center bg-gray-300 m-1 w-32 h-32 mask mask-squircle">
+                                  <InputPhoto
+                                    label={
+                                      <Fragment>
+                                        <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
+                                        <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                        <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
+                                      </Fragment>
+                                    }
+                                    type={typeF}
+                                    fn={setFiles}
+                                  />
+                                </div>
+                              )}
+                              {files?.map((file) => {
+                                return (
+                                  <div key={file?.preview} className="w-32 relative">
+                                    <div>
+                                      <video className="object-fit bg-gray-300 m-1 w-32 h-32 mask mask-squircle" controls alt={file?.path}>
+                                        <source alt={file?.path} src={file?.preview} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                      </video>
+                                    </div>
+                                    <button
+                                      onClick={() => handleRemove(file)}
+                                      className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                                    >
+                                      <AiOutlineDelete size={"24px"} className="" />
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 {/*footer*/}
                 <div className="rounded-b-lg border-t border-solid border-gray-300 bg-placeholder-color px-4">
@@ -186,7 +350,8 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                         onClick={() => {
                           setOpenUploadPhoto(!openUploadPhoto);
                           setOpenUploadVideo(false);
-                          setOpenUploadGif(false);
+                          setTypeF("photo");
+                          // setOpenUploadGif(false);
                         }}
                         className="mr-4"
                       >
@@ -195,14 +360,15 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                       <button
                         onClick={() => {
                           setOpenUploadVideo(!openUploadVideo);
-                          setOpenUploadGif(false);
+                          // setOpenUploadGif(false);
                           setOpenUploadPhoto(false);
+                          setTypeF("video");
                         }}
                         className="mr-4"
                       >
                         <AiOutlineVideoCamera size={"24px"} />
                       </button>
-                      <button
+                      {/* <button
                         onClick={() => {
                           setOpenUploadGif(!openUploadGif);
                           setOpenUploadPhoto(false);
@@ -211,7 +377,7 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                         className="mr-4"
                       >
                         <AiOutlineGif size={"24px"} />
-                      </button>
+                      </button> */}
                     </div>
 
                     <div>
