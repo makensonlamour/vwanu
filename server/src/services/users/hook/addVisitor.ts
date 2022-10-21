@@ -23,7 +23,7 @@ export default async (context: HookContext): Promise<HookContext> => {
       message: 'Visited your profile',
       type: 'direct',
       entityName: 'users',
-      entityId: context.result.id,
+      entityId: context.params.User.id,
     });
   } catch (error) {
     throw new Error(error);

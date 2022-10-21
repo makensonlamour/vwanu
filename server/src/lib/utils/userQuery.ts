@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+import { Op } from '@sequelize/core';
+
 export const AreFriends = (UserId, Sequelize) => {
   const friends = `(
     EXISTS(
@@ -6,6 +9,69 @@ export const AreFriends = (UserId, Sequelize) => {
     WHERE "User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${UserId}'
     ))`;
   return Sequelize.literal(friends);
+};
+export const OnlyInterests = (interest) =>
+  `(
+  EXISTS(
+    SELECT 1 FROM "Interests" AS "I" 
+    INNER JOIN "User_Interest" AS "CI" ON "CI"."InterestId"="I"."id" AND "CI"."UserId"="User"."id"
+    WHERE "I"."name"= '${interest}' )
+  
+  )`;
+export const notMemberOfCommunity = (communityId) => `(
+  NOT EXISTS(
+    SELECT 1 FROM "CommunityUsers" AS "CU"
+    INNER JOIN "CommunityInvitationRequests" AS "CIR" ON "CIR"."guestId"="CU"."UserId"
+    WHERE "CU"."UserId"="User"."id" AND "CU"."CommunityId"='${communityId}' OR ("CIR"."communityId"="CU"."CommunityId" AND "CIR"."response" IS NULL)
+  )
+  )`;
+export const queryClause = (context, where) => {
+  const { app, params } = context;
+  const Sequelize = app.get('sequelizeClient');
+  delete where?.profilePrivacy;
+  let clause = {
+    ...where,
+    [Op.and]: {
+      [Op.or]: [
+        { profilePrivacy: 'public' },
+        { id: params?.User?.id },
+        {
+          [Op.and]: [
+            { profilePrivacy: 'friends' },
+            AreFriends(params.User.id, Sequelize),
+          ],
+        },
+      ],
+    },
+  };
+  if (where.friends) {
+    delete where.friends;
+    clause = {
+      ...where,
+      [Op.and]: [AreFriends(params.User.id, Sequelize)],
+    };
+  }
+
+  if (where.notCommunityMember) {
+    const { notCommunityMember } = where;
+    delete where.notCommunityMember;
+
+    clause[Op.and].push(
+      Sequelize.where(
+        Sequelize.literal(notMemberOfCommunity(notCommunityMember)),
+        true
+      )
+    );
+  }
+
+  if (where.interests) {
+    const { interests } = where;
+    delete where.interests;
+    clause[Op.and].push(
+      Sequelize.where(Sequelize.literal(OnlyInterests(interests)), true)
+    );
+  }
+  return clause;
 };
 export default (UserId, Sequelize) => {
   const Interests = `(
