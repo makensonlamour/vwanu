@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
-import { useGetCommunityList, useGetMyCommunityList } from "../../features/community/communitySlice";
+import { useGetCommunityList, useGetMyCommunityList, useGetCommunityIn } from "../../features/community/communitySlice";
 import CommunityList from "../../features/community/component/CommunityList";
 import InvitationTabs from "./../../components/Community/Invitation/InvitationTabs";
 
@@ -15,6 +15,13 @@ const Community = () => {
 
   const { data: communityList, isLoading, fetchNextPage, hasNextPage, isError } = useGetCommunityList(["community", "all"], true);
   const { data: myCommunityList } = useGetMyCommunityList(["community", "me"], user?.id !== undefined ? true : false, user?.id);
+  const {
+    data: CommunityListIn,
+    isError: CommunityInError,
+    isLoading: CommunityInLoading,
+    hasNextPage: CommunityInhasNextPage,
+    fetchNextPage: CommunityInfetchNextPage,
+  } = useGetCommunityIn(["community", "particular"], user?.id !== null ? true : false, user?.id);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -22,7 +29,7 @@ const Community = () => {
   const handleUrlChange = () => {
     if (tabsUrl === "myCommunity" && run) {
       run = false;
-      setValue("2");
+      setValue("3");
     }
   };
 
@@ -82,26 +89,40 @@ const Community = () => {
                   label={
                     <Fragment>
                       {value === "2" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">My Community</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Community Created</div>
                       ) : (
-                        <div className="flex">My Community</div>
+                        <div className="flex">Community Created</div>
                       )}
                     </Fragment>
                   }
                   value="2"
                 />
                 <Tab
-                  sx={{ textTransform: "capitalize" }}
+                  style={{ heigth: "150px" }}
+                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "150px" }}
                   label={
                     <Fragment>
                       {value === "3" ? (
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">My Community</div>
+                      ) : (
+                        <div className="flex">My Community</div>
+                      )}
+                    </Fragment>
+                  }
+                  value="3"
+                />
+                <Tab
+                  sx={{ textTransform: "capitalize" }}
+                  label={
+                    <Fragment>
+                      {value === "4" ? (
                         <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Invitations</div>
                       ) : (
                         <div className="flex">Invitations</div>
                       )}
                     </Fragment>
                   }
-                  value="3"
+                  value="4"
                 />
               </TabList>
               <TabPanel value="1">
@@ -127,6 +148,17 @@ const Community = () => {
                 </div>
               </TabPanel>
               <TabPanel value="3">
+                <div className="lg:mt-0 w-full">
+                  <CommunityList
+                    communityList={CommunityListIn}
+                    isLoading={CommunityInLoading}
+                    isError={CommunityInError}
+                    hasNextPage={CommunityInhasNextPage}
+                    fetchNextPage={CommunityInfetchNextPage}
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel value="4">
                 <div className="mt-0 w-full">
                   <div className="flex">
                     <InvitationTabs />

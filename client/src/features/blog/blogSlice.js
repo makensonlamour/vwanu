@@ -17,4 +17,5 @@ export const useDeleteBlog = (queryKey, oldData, newData) => useDelete(queryKey,
 
 export const useCreateResponse = (queryKey, oldData, newData) => usePost(queryKey, `/blogResponse`, (oldData, newData));
 
-export const useGetAllResponse = (queryKey, enabled = true, blogId) => useLoadMore(queryKey, enabled, `/blogResponse?BlogId=${blogId}`);
+export const useGetAllResponse = (queryKey, enabled = true, blogId, limit) =>
+  useLoadMore(queryKey, enabled, `/blogResponse?BlogId=${blogId}`, limit);

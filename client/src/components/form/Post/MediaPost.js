@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 // import { Player } from "video-react";
 // import ReactPlayer from "react-player";
 import PropTypes from "prop-types";
@@ -8,13 +8,50 @@ import { isMobile } from "react-device-detect";
 import VideoPlayer from "react-videoplayer";
 import { useNavigate } from "react-router-dom";
 import ResponsivePlayer from "../../common/ResponsivePlayer";
+import ReactPlayer from "react-player";
+
+function useIsInViewport(ref) {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+
+  const observer = useMemo(() => new IntersectionObserver(([entry]) => setIsIntersecting(entry.isIntersecting)), []);
+
+  useEffect(() => {
+    observer.observe(ref.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [ref, observer]);
+
+  return isIntersecting;
+}
 
 const MediaPost = ({ medias, post }) => {
   const [type, setType] = useState("photo");
+  const refPost = useRef(null);
   const navigate = useNavigate();
 
+  const isInViewport = useIsInViewport(refPost);
+
   const checkType = () => {
-    if (medias[0]?.original.endsWith(".mp4") || medias[0]?.original.endsWith(".mp4")) {
+    if (
+      medias[0]?.original.endsWith(".mp4") ||
+      medias[0]?.original.endsWith(".avi") ||
+      medias[0]?.original.endsWith(".mov") ||
+      medias[0]?.original.endsWith(".wmv") ||
+      medias[0]?.original.endsWith(".flv") ||
+      medias[0]?.original.endsWith(".f4v") ||
+      medias[0]?.original.endsWith(".swf") ||
+      medias[0]?.original.endsWith(".mkv") ||
+      medias[0]?.original.endsWith(".webm") ||
+      medias[0]?.original.endsWith(".html5") ||
+      medias[0]?.original.endsWith(".mpeg-2") ||
+      medias[0]?.original.endsWith(".avchd") ||
+      medias[0]?.original.endsWith(".ogv") ||
+      medias[0]?.original.endsWith(".m3u8") ||
+      medias[0]?.original.endsWith(".mpd") ||
+      medias[0]?.original.endsWith(".m4v")
+    ) {
       setType("video");
     }
   };
@@ -33,7 +70,6 @@ const MediaPost = ({ medias, post }) => {
 
     return arrayUrl.join("/");
   }
-
   useEffect(() => {
     checkType();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,7 +82,7 @@ const MediaPost = ({ medias, post }) => {
     contentVideo = (
       <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <div onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)} className="w-full object-cover">
-          <ResponsivePlayer url={medias[0]?.original} autoplay={true} muted={true} volume={1} />
+          <ResponsivePlayer url={medias[0]?.original} autoplay={isInViewport ? true : false} muted={true} volume={1} />
           {/* <VideoPlayer
                 width={10}
                 style={{ borderRadius: "10px" }}
@@ -180,7 +216,7 @@ const MediaPost = ({ medias, post }) => {
 
   return (
     <>
-      <div>{type === "photo" ? content : contentVideo}</div>
+      <div ref={refPost}>{type === "photo" ? content : contentVideo}</div>
     </>
   );
 };

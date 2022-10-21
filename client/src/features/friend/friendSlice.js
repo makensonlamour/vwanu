@@ -18,5 +18,6 @@ export const useUnfollowUser = (queryKey, dataObj) =>
 
 export const useAcceptFriendRequest = (queryKey) => useUpdate(queryKey, `/friendRequest`);
 export const useDeclineFriendRequest = (queryKey) => useUpdate(queryKey, `/friendRequest`);
-export const useGetListFriend = (queryKey, enabled = true) => useLoadMore(queryKey, enabled, `/friends`);
+export const useGetListFriend = (queryKey, enabled = true, UserId) =>
+  useLoadMore(queryKey, enabled, UserId !== undefined ? `/friends?UserId=${UserId}` : `/friends`);
 export const useUnfriendUser = (queryKey, friendID) => useDelete(queryKey, `/friends/?friendId=${friendID}`);

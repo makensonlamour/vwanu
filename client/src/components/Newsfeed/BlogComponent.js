@@ -8,6 +8,7 @@ import EmptyComponent from "../common/EmptyComponent";
 import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
 import { format } from "date-fns";
+import placeholderBlog from "../../assets/images/placeholderBlog.png";
 
 const BlogComponent = ({ data, isError, isLoading }) => {
   const queryClient = useQueryClient();
@@ -45,13 +46,23 @@ const BlogComponent = ({ data, isError, isLoading }) => {
                       paddingRight: "1rem",
                     }}
                   >
-                    <div className="w-[6rem]">
-                      <img
-                        className="object-cover mask mask-squircle w-[5rem] h-16 rounded-lg"
-                        src={blog?.coverPicture}
-                        alt={blog?.blogTitle}
-                      />
-                    </div>
+                    {blog?.coverPicture !== null ? (
+                      <div className="w-[6rem]">
+                        <img
+                          className="object-cover mask mask-squircle w-[5rem] h-16 rounded-lg"
+                          src={blog?.coverPicture}
+                          alt={blog?.blogTitle}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-[6rem]">
+                        <img
+                          className="object-cover mask mask-squircle w-[5rem] h-16 rounded-lg"
+                          src={placeholderBlog}
+                          alt={blog?.blogTitle}
+                        />
+                      </div>
+                    )}
                     <div>
                       <p className=" text-sm line-clamp-2 max-w-[25ch] text-ellipsis whitespace-wrap overflow-hidden font-medium ml-2 pb-1">
                         <Link className="hover:text-secondary" to={`../../blogs/${blog?.id}`}>

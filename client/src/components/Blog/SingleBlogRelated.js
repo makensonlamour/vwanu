@@ -4,14 +4,19 @@ import { Link } from "react-router-dom";
 import parse from "html-react-parser";
 import { GoComment } from "react-icons/go";
 import { Chip, Stack } from "@mui/material";
+import placeholderBlog from "../../assets/images/placeholderBlog.png";
 
 const SingleBlogRelated = ({ blog }) => {
   return (
     <>
       <div className="bg-white shadow-sm w-full rounded-xl pb-1 mb-4 lg:pb-0 lg:mb-8">
-        {blog?.coverPicture !== "undefined" && (
+        {blog?.coverPicture !== null ? (
           <div className="">
             <img className="w-full h-32 lg:h-48 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
+          </div>
+        ) : (
+          <div className="">
+            <img className="w-full h-32 lg:h-48 object-cover rounded-t-xl" src={placeholderBlog} alt="blog" />
           </div>
         )}
         {blog?.Interests?.length > 0 && (

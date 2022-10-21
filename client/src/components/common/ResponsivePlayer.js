@@ -17,6 +17,11 @@ const ResponsivePlayer = ({ url, autoplay = false, muted = true, volume = 1 }) =
         volume={volume}
         playsinline={true}
         pip={true}
+        config={{
+          file: {
+            forceVideo: true,
+          },
+        }}
       />
     </div>
   );

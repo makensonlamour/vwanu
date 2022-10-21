@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useParams, useOutletContext } from "react-router-dom";
@@ -37,9 +38,9 @@ const NetworkTab = ({ user }) => {
               variant="scrollable"
               scrollButtons="auto"
             >
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`Friends (${totalFriend})`} />
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`Followers (${totalFollowers})`} />
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Following (${totalFollowing})`} />
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`Friends (${user?.amountOfFriend})`} />
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`Followers (${user?.amountOfFollower})`} />
+              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Following (${user?.amountOfFollowing})`} />
               {id?.toString() === me?.id?.toString() && (
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Request (${totalRequest})`} />
               )}

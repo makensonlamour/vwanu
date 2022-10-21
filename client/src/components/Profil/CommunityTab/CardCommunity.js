@@ -68,8 +68,8 @@ const CardCommunity = ({ data }) => {
             </Link>
             <p className="mx-1 bg-secondary px-2 pb-[0.25rem] rounded-lg text-white text-sm align-middle">{data?.privacyType}</p>
           </div>
-          <div className="flex justify-center px-4 pt-1 md:pt-2">
-            <Stack direction="row" spacing={1}>
+          <div>
+            <Stack className="flex justify-center w-full flex-wrap gap-2" direction="row">
               {data?.Interests?.length > 0 &&
                 data?.Interests?.map((interest) => {
                   return <Chip key={interest?.id} label={interest?.name} size="small" />;

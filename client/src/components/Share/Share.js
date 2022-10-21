@@ -14,6 +14,7 @@ import { TextareaAutosize } from "@mui/material";
 import { useCreateConversation, useCreateNewMessage } from "../../features/chat/messageSlice";
 import { useCreatePost } from "../../features/post/postSlice";
 import toast, { Toaster } from "react-hot-toast";
+import { FiShare } from "react-icons/fi";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -29,7 +30,6 @@ const shareError = () =>
 
 // eslint-disable-next-line no-unused-vars
 const Share = ({ post, label, type = "", classNameTrigger, noButton = false, customModal, setCustomModal }) => {
-  console.log("share data:", post);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useOutletContext();
@@ -408,6 +408,7 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
                   : "text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
               }
             >
+              <FiShare size={"24px"} className="inline p-1" />
               {label}
             </button>
           )

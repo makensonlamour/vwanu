@@ -9,7 +9,14 @@ import EmptyComponent from "../../common/EmptyComponent";
 
 const Friends = ({ fn, isNetwork }) => {
   const user = useOutletContext();
-  const { data: listFriend, isError, isLoading, hasNextPage, fetchNextPage } = useGetListFriend(["user", "friend"], true);
+  const {
+    data: listFriend,
+    isError,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetListFriend(["user", "friend", user?.id], true, user?.id);
+  console.log(listFriend);
   fn(user?.amountOfFriends || 0);
 
   return (

@@ -8,9 +8,7 @@ const PreviewUrl = ({ url }) => {
   return (
     <div className="w-full mt-2">
       {
-        error ? (
-          "Error"
-        ) : data && Object.keys(data).length > 0 ? (
+        error ? null : data && Object.keys(data).length > 0 ? (
           <div className="">
             <a href={data?.ogUrl} rel="noopener noreferrer" target="_blank" className="w-full mt-1 h-40 lg:h-48 bg-placeholder-color">
               <div className="w-full rounded-t-lg">

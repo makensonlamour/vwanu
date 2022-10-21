@@ -5,7 +5,9 @@ import ReactPlayer from "react-player";
 const MediaPreview = ({ photo, imgComponent, sender, type = "photo" }) => {
   // const user = useOutletContext();
   const [showModal, setShowModal] = useState(false);
+
   // const { data: listComment } = useGetComment(["comments", "all", photo?.id], photo?.id !== "undefined" ? true : false, photo?.id);
+
   return (
     <>
       <button onClick={() => setShowModal(true)} className="">

@@ -1,17 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import parse from "html-react-parser";
+// import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
 import { format } from "date-fns";
+import placeholderBlog from "../../assets/images/placeholderBlog.png";
 
 const SingleBlog = ({ blog }) => {
   return (
     <>
       <div className={` bg-white shadow-sm w-full rounded-xl pb-4 lg:pb-6 mb-8 lg:mb-10 `}>
-        {blog?.coverPicture !== "undefined" && (
+        {blog?.coverPicture !== null ? (
           <div className="">
             <img className="w-full h-36 lg:h-56 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
+          </div>
+        ) : (
+          <div className="">
+            <img className="w-full h-36 lg:h-56 object-cover rounded-t-xl" src={placeholderBlog} alt="blog" />
           </div>
         )}
         {blog?.Interests?.length > 0 && (
@@ -28,7 +33,7 @@ const SingleBlog = ({ blog }) => {
           <Link to={`./${blog?.id}`} className="text-md lg:text-2xl font-semibold hover:text-primary line-clamp-2">
             {blog?.blogTitle}
           </Link>
-          <p className="text-sm mt-3 lg:mt-4 line-clamp-3">{parse(blog?.blogText)}</p>
+          <p className="text-sm mt-3 lg:mt-4 line-clamp-3">{blog?.blogText.replace(/(<([^>]+)>)/gi, "")}</p>
           <div className="flex mt-4 lg:mt-4 mb-2 lg:mb-4 justify-between items-center">
             <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
               <img
