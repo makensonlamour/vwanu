@@ -82,7 +82,7 @@ const MediaPost = ({ medias, post }) => {
     contentVideo = (
       <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <div onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)} className="w-full object-cover">
-          <ResponsivePlayer url={medias[0]?.original} autoplay={isInViewport ? true : false} muted={true} volume={1} />
+          <ResponsivePlayer url={medias[0]?.original} autoplay={isInViewport ? true : false} muted={true} volume={1} loop={false} />
           {/* <VideoPlayer
                 width={10}
                 style={{ borderRadius: "10px" }}
