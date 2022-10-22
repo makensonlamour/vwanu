@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { Stack, styled, Paper } from "@mui/material";
 import { formatDistance, parseISO } from "date-fns";
 import { useGetNotificationList, useReadNotification } from "../../features/notification/notificationSlice";
@@ -9,6 +9,7 @@ import Loader from "../../components/common/Loader";
 
 const Notification = () => {
   const queryClient = useQueryClient();
+  const user = useOutletContext();
   const Item = styled(Paper)(() => ({
     backgroundColor: "inherit",
   }));
@@ -24,7 +25,7 @@ const Notification = () => {
     isLoading,
     hasNextPage,
     fetchNextPage,
-  } = useGetNotificationList(["user", "notification", "all"], true);
+  } = useGetNotificationList(["user", "notification", "all"], user?.id !== undefined ? true : false, user?.id);
 
   const handleRead = async (notificationId, idLink, entityName) => {
     try {
