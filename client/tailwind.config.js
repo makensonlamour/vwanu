@@ -17,6 +17,8 @@ module.exports = {
         "error-2": "#fee2e2",
       },
       screens: {
+        "2xs": "320px",
+        xs: "390px",
         "3xl": "2000px",
         "4xl": "2400px",
         // => @media (min-width: 2000px) { ... }
