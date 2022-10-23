@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import InputBlog from "../../features/blog/component/lexical/InputBlog";
+import InputBlog from "../../features/blog/component/React-Quill/InputBlog";
 import toast, { Toaster } from "react-hot-toast";
 import { useGetInterestList } from "../../features/interest/interestSlice";
 import { useCreateBlog, useUpdateBlog } from "../../features/blog/blogSlice";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+// import Select from "react-select";
+import CustomMultiSelect from "../../components/form/CustomMultiSelect";
+// import makeAnimated from "react-select/animated";
 import { assignValue } from "./../../helpers/index";
 import InputCover from "../../features/blog/component/InputCover";
 import ListBlogUser from "../../features/blog/component/ListBlogsUser";
+import Loader from "../../components/common/Loader";
+// import { ImageBlogContext } from "../../context/imageBlogContext";
 
 const AddBlog = () => {
   const blogSuccess = () =>
@@ -20,20 +23,37 @@ const AddBlog = () => {
       position: "top-center",
     });
 
-  const animatedComponents = makeAnimated();
+  // const animatedComponents = makeAnimated();
   const [text, setText] = useState(null);
   const [cover, setCover] = useState([]);
   const [blogTitle, setBlogTitle] = useState("");
   const [interest, setInterest] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [editData, setEditData] = useState({});
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setInterest(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
 
   const createBlog = useCreateBlog(["blog", "create"], undefined, undefined);
   const updateBlog = useUpdateBlog(["blog", "update"], editData?.id, undefined, undefined);
   const { data: interestList } = useGetInterestList(["interest", "all"], true);
 
+  // eslint-disable-next-line no-unused-vars
+  // const { resetImageList, imageUpload } = useContext(ImageBlogContext);
+
+  // console.log("list of images uploaded", imageUpload);
+
   const handleSubmit = async (publish) => {
-    if (!text && !blogTitle) {
+    setLoading(true);
+    if (!text && !blogTitle && blogTitle.length < 50) {
       alert("Please enter a blog title and a blog text to continue");
       return;
     }
@@ -41,7 +61,7 @@ const AddBlog = () => {
     let formData = new FormData();
     try {
       interest?.forEach((item) => {
-        return formData.append("interests", item?.label);
+        return formData.append("interests", item);
       });
       formData.append("blogText", text);
       formData.append("blogTitle", blogTitle);
@@ -63,10 +83,13 @@ const AddBlog = () => {
       setCover([]);
       setBlogTitle(null);
       setInterest([]);
+      // resetImageList();
       window.location.href = "../../blogs/" + result?.data?.id;
     } catch (e) {
       console.log(e);
       blogError();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,7 +124,16 @@ const AddBlog = () => {
             </div>
             <div className="my-2">
               <p className="text-lg font-semibold">Category</p>
-              <Select
+              <CustomMultiSelect
+                className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
+                placeholder={"Select the category..."}
+                multiple
+                options={options}
+                fn={handleChange}
+                val={interest}
+                name="interest"
+              />
+              {/* <Select
                 placeholder={"Select the category..."}
                 closeMenuOnSelect={false}
                 components={animatedComponents}
@@ -112,7 +144,7 @@ const AddBlog = () => {
                 onChange={(values) => {
                   setInterest(values);
                 }}
-              />
+              /> */}
             </div>
             <label className="text-lg font-semibold">Blog Text</label>
             <div className="my-4 bg-white w-full py-5 rounded-lg overflow-y">
@@ -126,10 +158,10 @@ const AddBlog = () => {
                 </button>
               )}
               <button onClick={() => handleSubmit(false)} className="mr-2 bg-white border border-gray-300 px-4 py-1 rounded-lg">
-                Save Draft
+                {loading ? <Loader color="black" /> : "Save Draft"}
               </button>
               <button onClick={() => handleSubmit(true)} className="ml-2 px-4 py-1 bg-primary text-white rounded-lg">
-                Publish
+                {loading ? <Loader /> : "Publish"}
               </button>
             </div>
           </div>

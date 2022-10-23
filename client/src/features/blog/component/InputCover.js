@@ -58,13 +58,13 @@ const InputCover = ({ fn, editData = false }) => {
         </div>
       ) : (
         <>
-          <div className="p-6 bg-placeholder-color rounded-2xl border-2 border-sky-500 border-dotted">
+          <div className="p-6 bg-white rounded-2xl border-2 border-sky-500 border-dotted">
             <div {...getRootProps({ className: "dropzone" })}>
               <input {...getInputProps()} />
               <div className="mx-auto justify-center w-full">
                 <p className="text-center text-lg font-normal">{`Drop your image here`}</p>
                 <button
-                  className="mt-3 flex justify-center px-8 mx-auto py-2 items-center bg-primary text-base-100 hover:bg-secondary rounded-xl border-0"
+                  className="mt-3 flex justify-center px-8 mx-auto py-2 items-center bg-gray-200 text-black hover:text-white hover:bg-secondary rounded-xl border-0"
                   onClick={open}
                 >
                   Select your file
@@ -72,9 +72,9 @@ const InputCover = ({ fn, editData = false }) => {
               </div>
             </div>
           </div>
-          <div className="mt-6 px-4 py-3 bg-warning-2 w-full border border-yellow-100 rounded-2xl">
-            <p className="text-v-yellow-dark text-sm">{`For best results, upload an image that is 700px by 300px or larger.`}</p>
-            <p className="text-v-yellow-dark text-sm">{`If you'd like to delete the existing profile photo but not upload a new one, please use the delete tab.`}</p>
+          <div className="mt-6 px-4 py-3 bg-white w-full border border-gray-200 rounded-2xl">
+            <p className="text-black text-sm">{`For best results, upload an image that is 700px by 300px or larger.`}</p>
+            <p className="text-black text-sm">{`If you'd like to delete the existing profile photo but not upload a new one, please use the delete tab.`}</p>
           </div>
         </>
       )}
