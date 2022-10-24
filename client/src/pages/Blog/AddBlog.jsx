@@ -97,7 +97,11 @@ const AddBlog = () => {
 
   useEffect(() => {
     setBlogTitle(editData?.blogTitle);
-    setInterest(assignValue(editData?.Interests));
+    if (editData?.Interests?.length > 0) {
+      editData?.Interests?.map((item) => {
+        return setInterest((oldData) => [...oldData, item?.name]);
+      });
+    }
   }, [editData]);
 
   return (
@@ -125,7 +129,7 @@ const AddBlog = () => {
             <div className="my-2">
               <p className="text-lg font-semibold">Category</p>
               <CustomMultiSelect
-                className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
+                className="w-full mt-1 font-semibold rounded-xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
                 placeholder={"Select the category..."}
                 multiple
                 options={options}

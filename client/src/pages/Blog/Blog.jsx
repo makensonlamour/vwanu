@@ -43,7 +43,7 @@ const Blog = () => {
           isError={isError}
           hasNext={hasNextPage}
           container={true}
-          classNameContainer={"overflow-y-auto h-[77vh]"}
+          classNameContainer={"overflow-y-auto scrollbar h-[77vh]"}
           refetch={() => queryClient.invalidateQueries(["blog", "all"])}
           loader={
             <div className="flex justify-center py-5">

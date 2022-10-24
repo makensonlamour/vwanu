@@ -82,10 +82,10 @@ class Alert extends React.Component {
     const classes = ["alert", "alert-dismissable", "mb-2", "mr-auto"];
 
     const alertTypeClass = {
-      [alertType.success]: "alert bg-success",
-      [alertType.error]: "alert bg-error",
-      [alertType.info]: "alert bg-info",
-      [alertType.warning]: "alert bg-warning",
+      [alertType.success]: "alert bg-success-2",
+      [alertType.error]: "alert bg-error-2",
+      [alertType.info]: "alert bg-info-2",
+      [alertType.warning]: "alert bg-warning-2",
     };
 
     classes.push(alertTypeClass[alert.type]);

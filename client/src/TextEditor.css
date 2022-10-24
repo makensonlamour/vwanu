@@ -86,14 +86,19 @@ iframe {
   color: #ff4200;
 }
 
+.view > p > a:hover {
+  color: #053dc8 !important;
+}
+
 .view > pre {
-  background: #ccc !important;
+  background: rgb(230, 230, 230) !important;
   border-radius: 10px;
+  padding: 5px !important;
 }
 
 .view > blockquote {
-  /* margin-top: 10px !important; */
-  /* margin-bottom: 10px !important; */
+  margin-top: 5px !important;
+  margin-bottom: 10px !important;
   margin-left: 50px !important;
   padding-left: 10px !important;
   border-left: 3px solid #ccc !important;
@@ -107,14 +112,12 @@ iframe {
 
 .ql-align-left,
 .view > .ql-align-left {
-  display: flex !important;
-  justify-content: start;
+  display: flex-start !important;
 }
 
 .ql-align-right,
 .view > .ql-align-right {
-  display: flex !important;
-  justify-content: end;
+  display: flex-end !important;
 }
 
 /* .view > p {
