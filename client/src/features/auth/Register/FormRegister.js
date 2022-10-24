@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import * as Yup from "yup";
 import useAuth from "../../../hooks/useAuth";
 
@@ -28,6 +28,8 @@ const initialValues = {
   termOfUse: false,
 };
 
+let trigger = false;
+
 const FormRegister = () => {
   const { isLoading, error, signup } = useAuth();
 
@@ -36,9 +38,10 @@ const FormRegister = () => {
   }
 
   const handleRegister = async (credentials) => {
+    trigger = true;
     try {
       await signup(credentials);
-      alertService.error(error, { autoClose: true });
+      // alertService.error(error, { autoClose: true });
       reloadPage();
     } catch (e) {
       console.log("error", e);
@@ -49,6 +52,11 @@ const FormRegister = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (error !== null) alertService.error(error, { autoClose: true });
+    if (trigger && error === null) window.location.reload();
+  }, [error]);
 
   return (
     <>

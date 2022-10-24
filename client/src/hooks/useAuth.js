@@ -63,17 +63,16 @@ const useAuth = () => {
       //   dispatch user to the whole app if successful
       dispatch({ type: Types.USER_LOGGED_IN, payload: res.User });
 
-      if (!isCancelled) {
-        setLoading(false);
-        setError(null);
-      }
+      setLoading(false);
+      setError(null);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       setError(error.message);
-      if (!isCancelled) {
-        setLoading(false);
-        setError(error.message);
-      }
+      setLoading(false);
+      // if (!isCancelled) {
+      //   setLoading(false);
+      //   setError(error.message);
+      // }
     } finally {
       setLoading(false);
     }

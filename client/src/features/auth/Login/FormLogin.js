@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
@@ -13,6 +13,7 @@ import useAuth from "../../../hooks/useAuth";
 
 const FormLogin = () => {
   const { isLoading, error, login } = useAuth();
+  console.log(error);
 
   const ValidationSchema = Yup.object().shape({
     email: Yup.string().required().min(6).email().label("Email"),
@@ -21,8 +22,11 @@ const FormLogin = () => {
 
   const handleLogin = async (credentials) => {
     await login(credentials);
-    alertService.error(error, { autoClose: true });
   };
+
+  useEffect(() => {
+    if (error !== null) alertService.error(error, { autoClose: true });
+  }, [error]);
 
   return (
     <>
