@@ -4,31 +4,41 @@ import queryConverter from 'pg-tsquery';
 import { HookContext } from '@feathersjs/feathers';
 import utils from 'feathers-sequelize/lib/utils.js';
 
+import { queryClause } from '../../lib/utils/userQuery';
+
 export default (defaultOptions: any) => async (ctx: HookContext) => {
   const options = {
     conversionOptions: {},
     searchColumn: 'search_vector',
     ...defaultOptions,
   };
-  const { params } = ctx;
+  const { params, path } = ctx;
 
   const search = params?.query?.$search;
 
   if (!search) return ctx;
   delete ctx.params?.query?.$search;
 
-  const { filters, query: where } = ctx.app
-    .service(ctx.path)
-    .filterQuery(params);
+  const { filters, query: where } = ctx.app.service(path).filterQuery(params);
 
-  params.sequelize = {
-    where: {
-      ...where,
-      [Op.and]: Sequelize.fn(
+  let clause = {
+    ...where,
+    [Op.and]: Sequelize.fn(
+      `${options.searchColumn} @@ to_tsquery`,
+      Sequelize.literal(':query')
+    ),
+  };
+  if (path === 'users') {
+    clause = queryClause(ctx, where);
+    clause[Op.and].push(
+      Sequelize.fn(
         `${options.searchColumn} @@ to_tsquery`,
         Sequelize.literal(':query')
-      ),
-    },
+      )
+    );
+  }
+  params.sequelize = {
+    where: clause,
     replacements: { query: queryConverter(options.conversionOptions)(search) },
   };
 

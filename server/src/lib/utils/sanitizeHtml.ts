@@ -72,6 +72,7 @@ export const defaultOptions = {
     'th',
     'thead',
     'tr',
+    'img',
   ],
 
   allowedAttributes: {
@@ -95,6 +96,11 @@ export const defaultOptions = {
   allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
   allowedSchemesByTag: {},
   allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
+  allowedIframeHostnames: [
+    'www.youtube.com',
+    'player.vimeo.com',
+    'https://www.dailymotion.com',
+  ],
   allowProtocolRelative: true,
   enforceHtmlBoundary: false,
 };
