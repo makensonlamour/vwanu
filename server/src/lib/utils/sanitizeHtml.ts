@@ -95,6 +95,7 @@ export const defaultOptions = {
   allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
   allowedSchemesByTag: {},
   allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
+  allowedIframeHostnames: ['www.youtube.com'],
   allowProtocolRelative: true,
   enforceHtmlBoundary: false,
 };
