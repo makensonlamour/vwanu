@@ -49,7 +49,11 @@ export default (sequelize: any, DataTypes: any) => {
 
     friendPrivacy: string;
 
+    phonePrivacy: boolean;
+
     friendListPrivacy: string;
+
+    emailPrivacy: boolean;
 
     gender: string;
 
@@ -404,6 +408,14 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: true,
       },
       verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      emailPrivacy: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      phonePrivacy: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
