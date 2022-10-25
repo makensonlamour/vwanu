@@ -56,6 +56,66 @@ SELECT
   WHERE  "Post"."wallId" IS NOT NULL AND "U"."id" = "Post"."wallId"
   )`;
 
+  const Original = `(
+  SELECT
+  CASE 
+  WHEN "Post"."originalId" IS NULL THEN NULL
+  WHEN "Post"."originalType" = 'Post' THEN
+  (
+  SELECT 
+  json_build_object(
+    'id', "P"."id",
+    'content', "P"."postText",
+    'createdAt', "P"."createdAt",
+    'updatedAt', "P"."updatedAt",
+    'firstName', "U"."firstName",
+    'lastName', "U"."lastName",
+    'UserId', "U"."id",
+    'profilePicture', "U"."profilePicture"
+  )
+    FROM "Posts" AS "P" 
+    INNER JOIN "Users" AS "U" ON "U"."id" = "P"."UserId"
+    WHERE "P"."id" = "Post"."originalId"
+    LIMIT 1
+    )
+  WHEN "Post"."originalType" = 'Blogs' THEN
+  (
+  SELECT 
+  json_build_object(
+    'id', "B"."id",
+    'content', "B"."blogText",
+    'createdAt', "B"."createdAt",
+    'updatedAt', "B"."updatedAt",
+    'firstName', "U"."firstName",
+    'lastName', "U"."lastName",
+    'UserId', "U"."id",
+    'profilePicture', "U"."profilePicture"
+  )
+    FROM "Blogs" AS "B"
+    INNER JOIN "Users" AS "U" ON "U"."id" = "B"."UserId"
+    WHERE "B"."id" = "Post"."originalId"
+    LIMIT 1
+  )
+  WHEN "Post"."originalType" = 'Discussion' THEN
+  (
+  SELECT
+  json_build_object(
+    'id', "D"."id",
+    'content', "D"."body",
+    'createdAt', "D"."createdAt",
+    'updatedAt', "D"."updatedAt",
+    'firstName', "U"."firstName",
+    'lastName', "U"."lastName",
+    'UserId', "U"."id",
+    'profilePicture', "U"."profilePicture"
+  )
+    FROM "Discussions" AS "D"
+    INNER JOIN "Users" AS "U" ON "U"."id" = "D"."UserId"
+    WHERE "D"."id" = "Post"."originalId"
+    LIMIT 1
+  )
+  END
+)`;
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
@@ -88,6 +148,7 @@ SELECT
         [Sequelize.literal(amountOfReactions), 'amountOfReactions'],
         [Sequelize.literal(isReactor), 'isReactor'],
         [Sequelize.literal(WallUser), 'WallUser'],
+        [Sequelize.literal(Original), 'Original'],
       ],
       exclude: ['UserId'],
     },
