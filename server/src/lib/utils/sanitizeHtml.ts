@@ -2,6 +2,7 @@ import sanitizeHtml from 'sanitize-html';
 
 export const defaultOptions = {
   allowedTags: [
+    'iframe',
     'address',
     'article',
     'aside',

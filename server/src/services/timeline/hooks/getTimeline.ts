@@ -43,6 +43,19 @@ SELECT
      )
     )`;
 
+  const WallUser = `(
+  SELECT 
+  json_build_object(
+   'firstName', "U"."firstName",
+   'lastName', "U"."lastName",
+   'id', "U"."id",
+   'profilePicture', "U"."profilePicture",
+   'createdAt' ,"U"."createdAt"
+   )
+  FROM "Users" AS "U"
+  WHERE  "Post"."wallId" IS NOT NULL AND "U"."id" = "Post"."wallId"
+  )`;
+
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
@@ -74,6 +87,7 @@ SELECT
         [Sequelize.literal(amountOfComments), 'amountOfComments'],
         [Sequelize.literal(amountOfReactions), 'amountOfReactions'],
         [Sequelize.literal(isReactor), 'isReactor'],
+        [Sequelize.literal(WallUser), 'WallUser'],
       ],
       exclude: ['UserId'],
     },

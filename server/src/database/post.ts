@@ -7,6 +7,7 @@ export interface PostInterface {
   postText: string;
   privacyType: string;
   locked: boolean;
+  originalType: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Post extends Model<PostInterface> implements PostInterface {
@@ -17,6 +18,8 @@ export default (sequelize: any, DataTypes: any) => {
     privacyType: string;
 
     locked: boolean;
+
+    originalType: string;
 
     static associate(models: any): void {
       Post.belongsTo(models.User);
@@ -43,6 +46,7 @@ export default (sequelize: any, DataTypes: any) => {
         foreignKey: 'originalId',
         constraints: false,
       });
+
       // Post.belongsTo(models.Media, {
       //   as: 'Media-comment',
       //   foreignKey: 'mediaId',
@@ -71,6 +75,10 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: true,
       },
 
+      originalType: {
+        type: DataTypes.STRING,
+        defaultValue: 'public',
+      },
       privacyType: {
         type: DataTypes.STRING,
         defaultValue: 'public',
