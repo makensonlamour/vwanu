@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 // import { useOutletContext } from "react-router-dom";
@@ -5,6 +6,8 @@ import { useQueryClient } from "react-query";
 import { useCreateReaction, useDeleteReaction } from "../reactionSlice";
 import { Button } from "@mui/material";
 import koremPNG from "../../../assets/images/reactions/korem2.png";
+import koremBlackPNG from "../../../assets/images/reactions/korem3.png";
+import { useHover } from "@mantine/hooks";
 
 // import { ReactionBarSelector } from "@charkour/react-reactions";
 // import _ from "lodash";
@@ -14,10 +17,11 @@ import koremPNG from "../../../assets/images/reactions/korem2.png";
 const Reaction = ({ post }) => {
   const queryClient = useQueryClient();
   // const user = useOutletContext();
+  const { hovered, ref } = useHover();
 
-  const createReaction = useCreateReaction(["post", "home", post?.id], (oldData, newData) => [...oldData, newData]);
+  const createReaction = useCreateReaction(["post", "home", { id: post?.id }], (oldData, newData) => [...oldData, newData]);
   // const updateReaction = useUpdateReaction(["post", "home", post.id], (oldData, newData) => [...oldData, newData]);
-  const deleteReaction = useDeleteReaction(["post", "home", post?.id]);
+  const deleteReaction = useDeleteReaction(["post", "home", { id: post?.id }]);
 
   const handleReaction = async () => {
     if (post && post?.isReactor?.length === 1) {
@@ -53,10 +57,14 @@ const Reaction = ({ post }) => {
           ) : (
             <Fragment>
               {/* <FaThumbsUp size={"24px"} className="bg-g-one/[0.3] p-1 mask mask-squircle inline mr-2" /> */}
-              <p className="text-semibold hover:text-primary flex justify-center items-center">
-                <img height={20} width={20} src={koremPNG} alt="_kore" />
+              <div ref={ref} className="text-semibold hover:text-primary flex justify-center items-center">
+                {hovered ? (
+                  <img height={20} width={20} src={koremPNG} alt="_kore" />
+                ) : (
+                  <img height={20} width={20} src={koremBlackPNG} alt="_kore" />
+                )}
                 <span className="ml-1">{"Kore"}</span>
-              </p>
+              </div>
             </Fragment>
           )}
         </p>

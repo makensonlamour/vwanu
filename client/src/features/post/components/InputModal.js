@@ -195,9 +195,9 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
           disabled ? "hidden" : ""
         } cursor-pointer rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color`}
       >
-        <div className="flex items-center px-4 pb-4">
+        <div className="flex items-center 2xs:px-2 xs:px-4 pb-4">
           {" "}
-          <Link className="w-14 h-14 mx-auto " to={"../profile/" + user?.id}>
+          <Link className="2xs:w-10 2xs:h-10 xs:w-14 xs:h-14 mx-auto " to={"../profile/" + user?.id}>
             {" "}
             <img
               alt=""

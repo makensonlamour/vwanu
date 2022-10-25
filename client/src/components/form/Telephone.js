@@ -13,13 +13,13 @@ function FormTelephone({ name, label, className, testId, countryCode, ...otherPr
     <>
       <div className="form-control">
         <label className="label">
-          <span className="label-text text-md text-secondary font-semibold -mb-2 mt-4">{label}</span>
+          <span className="label-text text-md font-semibold -mb-2 mt-4">{label}</span>
         </label>
         <PhoneInput
           international
           countryCallingCodeEditable={false}
           defaultCountry={countryCode ? countryCode : ""}
-          className={"input first:bg-inherit " + className}
+          className={"input first:bg-inherit first:border-none " + className}
           value={values[name]}
           onBlur={() => setFieldTouched(name)}
           onChange={handleChange(name)}

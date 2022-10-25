@@ -195,7 +195,12 @@ export function generateArrayLink(text = "") {
   return arrayLinks;
 }
 
-export function transformHashtagAndLink(strText, preview = false) {
+export function transformHashtagAndLink(strText, preview = false, originalType = "public") {
+  if (originalType === "Blogs") {
+    strText = strText.replace(/(<([^>]+)>)/gi, "");
+    strText = strText.length > 100 ? strText.substring(0, 100) + "..." : strText;
+  }
+
   strText = strText.split(" ").map((str) => {
     if (str.startsWith("https")) {
       if (preview) {

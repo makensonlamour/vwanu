@@ -78,8 +78,8 @@ const BlogComponent = ({ data, isError, isLoading }) => {
               }
             })}
             {data && data?.length > 6 ? (
-              <Link className="hover:text-primary text-xs" to={"../../blogs"}>
-                view more
+              <Link className="hover:text-primary text-xs text-center font-semibold" to={"../../blogs"}>
+                see more
               </Link>
             ) : null}
           </Stack>

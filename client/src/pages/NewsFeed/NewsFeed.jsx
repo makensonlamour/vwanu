@@ -171,9 +171,9 @@ const NewsFeed = () => {
               />
             </div>
           </div>
-          <div className="basis-full lg:basis-[56%]">
-            <div className="px-3">
-              <h2 className="pb-5 text-lg font-bold">Activity Feed</h2>
+          <div className="2xs:w-full xs:w-0 xs:basis-full lg:basis-[56%]">
+            <div className="px-0 sm:px-3">
+              <h2 className="2xs:pl-2 sm:pl-0 pb-5 text-lg font-bold">Activity Feed</h2>
               <InputModal reference="newsfeed" />
               <div className="w-full py-2">{content}</div>
             </div>
@@ -192,7 +192,7 @@ const NewsFeed = () => {
               </span>
 
               {/* <CompleteProfile percentage={percentage} data={steps} /> */}
-              <UpdatesComponent data={notificationList || []} />
+              <UpdatesComponent className="mt-8" data={notificationList || []} />
               <RecentlyActive
                 data={listOnline || []}
                 isLoading={loadingOnline}

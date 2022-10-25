@@ -5,8 +5,20 @@ import { BiHide, BiShow } from "react-icons/bi";
 
 import Error from "./Error";
 
-function FormField({ name, label, className, containerClassName, testId, showPassword, labelFor, ...otherProps }) {
-  const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
+function FormField({
+  name,
+  label,
+  className,
+  containerClassName,
+  testId,
+  showPassword,
+  fn,
+  labelFor,
+  length,
+  showLength = false,
+  ...otherProps
+}) {
+  const { values, setFieldTouched, setFieldValue, handleChange, errors, touched } = useFormikContext();
   const [show, setShow] = useState(false);
 
   return (
@@ -15,7 +27,10 @@ function FormField({ name, label, className, containerClassName, testId, showPas
         <div className="-mb-4">
           {label && (
             <label className="label">
-              <span className="label-text text-md text-secondary font-semibold mt-1 pb-4">{label}</span>
+              <span className="label-text text-md font-semibold mt-1 pb-4">
+                {label}
+                {`${showLength ? "(" + length + ")" : ""}`}
+              </span>
             </label>
           )}
         </div>
@@ -24,7 +39,13 @@ function FormField({ name, label, className, containerClassName, testId, showPas
           className={"input focus:outline-0 focus:border-0  " + className}
           value={values[name]}
           onBlur={() => setFieldTouched(name)}
-          onChange={handleChange(name)}
+          onChange={(e) => {
+            setFieldValue(name, e.target.value);
+            handleChange(name);
+            if (fn) {
+              fn(e.target.value);
+            }
+          }}
           type={showPassword && show ? "text" : "password"}
           {...otherProps}
         />
@@ -54,6 +75,9 @@ FormField.propTypes = {
   containerClassName: PropTypes.string,
   testId: PropTypes.string,
   showPassword: PropTypes.bool,
+  showLength: PropTypes.bool,
+  length: PropTypes.number,
+  fn: PropTypes.func,
   labelFor: PropTypes.string,
 };
 

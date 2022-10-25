@@ -21,7 +21,7 @@ function FormSelectMulti({ name, label, options, className, testId, link, isMult
   return (
     <>
       <div className="form-control mt-3">
-        <span className="label-text text-md text-secondary font-semibold">{label}</span>
+        <span className="label-text text-md font-semibold">{label}</span>
         <Select
           className={"select w-full " + className}
           placeholder={"Select " + label}

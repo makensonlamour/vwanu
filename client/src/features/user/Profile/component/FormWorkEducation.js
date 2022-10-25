@@ -42,6 +42,7 @@ const FormWorkEducation = ({ user }) => {
       await updateUser.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries();
+      window.location.href = "../../profile/" + user?.id;
     } catch (e) {
       console.log(e);
       updateError();
@@ -60,9 +61,9 @@ const FormWorkEducation = ({ user }) => {
           label="Work place"
           name="work"
           type="text"
-          className="w-full mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          className="w-full mt-1 mb-4 font-semibold rounded-xl input-secondary border-gray-200 border invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
         />
-        <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/5 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="w-full rounded-xl text-base-100 text-md md:w-fit px-6 py-2 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

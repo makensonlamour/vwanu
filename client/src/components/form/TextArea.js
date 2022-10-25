@@ -18,7 +18,7 @@ function TextArea({ name, maxRows, minRows, label, onKeyDown, className, testId,
     <>
       {label && (
         <label className="label">
-          <span className="label-text text-md text-secondary font-semibold -mb-2 mt-4">{label}</span>
+          <span className="label-text text-md font-semibold -mb-2 mt-4">{label}</span>
         </label>
       )}
       <TextareaAutosize

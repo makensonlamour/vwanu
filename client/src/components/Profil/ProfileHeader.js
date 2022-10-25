@@ -12,7 +12,7 @@ import NetworkTab from "./NetworkTab";
 import BlogTab from "./BlogTab";
 import CommunityTab from "./CommunityTab";
 import { allTabs1 } from "./Tablink.data";
-import { FaUserAlt } from "react-icons/fa";
+import { FaUserAlt, FaTiktok } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import EditProfile from "../../pages/Profil/EditProfile";
 import { useGetOnline } from "../../features/user/userSlice";
@@ -22,7 +22,7 @@ import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
 import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
 import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
-import { AiFillYoutube, AiFillTwitterCircle } from "react-icons/ai";
+import { AiFillYoutube, AiFillTwitterCircle, AiOutlineInstagram, AiOutlineLinkedin } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { format } from "date-fns";
 import PostTab from "./PostTab";
@@ -141,15 +141,78 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                       </span>
                     </h4>
                     <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
-                      <div className="inline w-8 h-8 mr-2">
-                        <BsFacebook size={"24px"} className="mx-auto" />
-                      </div>
-                      <div className="inline w-8 h-8  mr-2">
-                        <AiFillYoutube size={"24px"} className="mx-auto" />
-                      </div>
-                      <div className="inline w-8 h-8  mr-2">
-                        <AiFillTwitterCircle size={"24px"} className="mx-auto" />
-                      </div>
+                      {otherUser
+                        ? otherUser?.facebookPrivacy
+                        : user?.facebookPrivacy && (
+                            <a
+                              href={`https://${otherUser ? otherUser?.facebook : user?.facebook}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <BsFacebook size={"24px"} className="mx-auto" />
+                            </a>
+                          )}
+                      {otherUser
+                        ? otherUser?.youtubePrivacy
+                        : user?.youtubePrivacy && (
+                            <a
+                              href={`https://${otherUser ? otherUser?.youtube : user?.youtube}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiFillYoutube size={"24px"} className="mx-auto" />
+                            </a>
+                          )}
+                      {otherUser
+                        ? otherUser?.twitterPrivacy
+                        : user?.twitterPrivacy && (
+                            <a
+                              href={`https://${otherUser ? otherUser?.twitter : user?.twitter}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiFillTwitterCircle size={"24px"} className="mx-auto" />
+                            </a>
+                          )}
+                      {otherUser
+                        ? otherUser?.instagramPrivacy
+                        : user?.instagramPrivacy && (
+                            <a
+                              href={`https://${otherUser ? otherUser?.instagram : user?.instagram}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiOutlineInstagram size={"24px"} className="mx-auto" />
+                            </a>
+                          )}
+                      {otherUser
+                        ? otherUser?.linkedinPrivacy
+                        : user?.linkedinPrivacy && (
+                            <a
+                              href={`https://${otherUser ? otherUser?.linkedin : user?.linkedin}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiOutlineLinkedin size={"24px"} className="mx-auto" />
+                            </a>
+                          )}
+                      {otherUser
+                        ? otherUser?.tiktokPrivacy
+                        : user?.tiktokPrivacy && (
+                            <a
+                              href={`https://${otherUser ? otherUser?.tiktok : user?.tiktok}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <FaTiktok size={"24px"} className="mx-auto" />
+                            </a>
+                          )}
                     </h4>
                   </div>
                   <div>

@@ -1,10 +1,17 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
+// import { makeStyles } from "@mui/material";
 import { Tab } from "@mui/material";
 import { useGetCommunityList, useGetMyCommunityList, useGetCommunityIn } from "../../features/community/communitySlice";
 import CommunityList from "../../features/community/component/CommunityList";
 import InvitationTabs from "./../../components/Community/Invitation/InvitationTabs";
+
+// const useStyles = makeStyles({
+//   tabPanelRoot: {
+//     padding: 0,
+//   },
+// });
 
 const Community = () => {
   const user = useOutletContext();
@@ -12,6 +19,7 @@ const Community = () => {
   const [searchParams] = useSearchParams();
   const tabsUrl = searchParams.get("tabs");
   let run = true;
+  // const classes = useStyles();
 
   const { data: communityList, isLoading, fetchNextPage, hasNextPage, isError } = useGetCommunityList(["community", "all"], true);
   const { data: myCommunityList } = useGetMyCommunityList(["community", "me"], user?.id !== undefined ? true : false, user?.id);
@@ -61,17 +69,19 @@ const Community = () => {
           <TabContext value={value}>
             <div className="">
               <TabList
-                TabIndicatorProps={{ style: { background: "inherit" } }}
+                TabIndicatorProps={{ style: { background: "inherit", width: "10px" } }}
                 sx={{ justifyContent: "start" }}
+                style={{ padding: 0 }}
                 orientation="horizontal"
+                variant="scrollable"
                 onChange={handleChange}
-                aria-label="lab API tabs example"
-                scrollButtons={true}
-                allowScrollButtonsMobile
+                aria-label="scrollable force tabs example"
+                scrollButtons
+                allowScrollButtonsMobile={true}
               >
                 <Tab
-                  style={{ heigth: "150px" }}
-                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "150px" }}
+                  style={{ height: "0px" }}
+                  sx={{ textTransform: "capitalize", textAlign: "left", height: "0px" }}
                   label={
                     <Fragment>
                       {value === "1" ? (
@@ -84,8 +94,8 @@ const Community = () => {
                   value="1"
                 />
                 <Tab
-                  style={{ heigth: "150px" }}
-                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "150px" }}
+                  style={{ heigth: "0px" }}
+                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px", padding: 0 }}
                   label={
                     <Fragment>
                       {value === "2" ? (
@@ -125,7 +135,7 @@ const Community = () => {
                   value="4"
                 />
               </TabList>
-              <TabPanel value="1">
+              <TabPanel value="1" style={{ padding: 0 }}>
                 <div className="lg:mt-0 w-full">
                   <CommunityList
                     communityList={communityList}
@@ -136,7 +146,7 @@ const Community = () => {
                   />
                 </div>
               </TabPanel>
-              <TabPanel value="2">
+              <TabPanel value="2" style={{ padding: 0 }}>
                 <div className="lg:mt-0 w-full">
                   <CommunityList
                     communityList={myCommunityList}
@@ -147,7 +157,7 @@ const Community = () => {
                   />
                 </div>
               </TabPanel>
-              <TabPanel value="3">
+              <TabPanel value="3" style={{ padding: 0 }}>
                 <div className="lg:mt-0 w-full">
                   <CommunityList
                     communityList={CommunityListIn}
@@ -158,7 +168,7 @@ const Community = () => {
                   />
                 </div>
               </TabPanel>
-              <TabPanel value="4">
+              <TabPanel value="4" style={{ padding: 0 }}>
                 <div className="mt-0 w-full">
                   <div className="flex">
                     <InvitationTabs />

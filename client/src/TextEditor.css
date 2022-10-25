@@ -77,9 +77,16 @@
   }
 }
 
-iframe {
-  width: 967px;
-  height: 537px;
+iframe,
+.ql-editor > iframe {
+  width: 70% !important;
+  height: 350px !important;
+}
+
+.view > p > img,
+.ql-editor > p > img {
+  width: auto !important;
+  height: 350px !important;
 }
 
 .view > p > a {

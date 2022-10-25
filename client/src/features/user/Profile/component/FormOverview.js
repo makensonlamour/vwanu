@@ -68,7 +68,8 @@ const FormOverview = ({ user }) => {
       await updateUser?.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries();
-      window.location.reload();
+      // window.location.reload();
+      window.location.href = "../../profile/" + user?.id;
     } catch (e) {
       console.log(e);
       updateError();
@@ -87,7 +88,7 @@ const FormOverview = ({ user }) => {
           label="First Name"
           name="firstName"
           type="text"
-          className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -95,7 +96,7 @@ const FormOverview = ({ user }) => {
           label="Last Name"
           name="lastName"
           type="text"
-          className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -103,13 +104,13 @@ const FormOverview = ({ user }) => {
           placeholder="Date of Birth"
           name="birthday"
           type="date"
-          className="w-full mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Select
           label="Gender"
           placeholder="Gender"
           name="gender"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="gender-error-message"
           options={[
             { id: 0, name: "Not Specified", value: "" },
@@ -117,23 +118,23 @@ const FormOverview = ({ user }) => {
             { id: 2, name: "female", value: "f" },
           ]}
         />
-        <Select
+        {/* <Select
           label="Interest By"
           placeholder="Interest By"
           name="interestedBy"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="interestBy-error-message"
           options={[
             { id: 0, name: "Not Specified", value: "" },
             { id: 1, name: "male", value: "m" },
             { id: 2, name: "female", value: "f" },
           ]}
-        />
+        /> */}
         <Select
           label="Language"
           placeholder="Language"
           name="language"
-          className="mt-1 lg:mt-2 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 mb-4 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           options={[
             { id: 0, name: "Not Specified", value: "" },
             { id: 1, name: "English", value: "en" },
@@ -147,10 +148,10 @@ const FormOverview = ({ user }) => {
           label="About"
           name="about"
           type="text"
-          className="w-full mt-1 mb-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="w-full mt-1 mb-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
   {*/}
-        <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/4" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="w-full px-6 py-2 rounded-xl text-base-100 text-md md:w-fit" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

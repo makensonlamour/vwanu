@@ -23,12 +23,12 @@ import Loader from "./../../common/Loader";
 
 //Functions for notification after actions
 const postSuccess = () =>
-  toast.success("Post created successfully!", {
+  toast.success("Discussion created successfully!", {
     position: "top-center",
   });
 
 const postError = () =>
-  toast.error("Sorry. Error on creating post!", {
+  toast.error("Sorry. Error on creating discussion!", {
     position: "top-center",
   });
 
@@ -107,11 +107,14 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
       if (type === "new") {
         if (isForum) {
           dataObj.CategoryId = CategoryId;
+          formData.append("CategoryId", CategoryId);
         } else {
           dataObj.CommunityId = communityId?.id;
+          formData.append("CommunityId", communityId?.id);
         }
       } else {
         dataObj.DiscussionId = data?.id;
+        formData.append("DiscussionId", data?.id);
       }
 
       let result = await mutationAdd.mutateAsync(files?.length > 0 ? formData : dataObj);

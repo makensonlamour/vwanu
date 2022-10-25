@@ -42,6 +42,7 @@ const FormPlaceLived = ({ user }) => {
       await updateUser.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries();
+      window.location.href = "../../profile/" + user?.id;
     } catch (e) {
       console.log(e);
       updateError();

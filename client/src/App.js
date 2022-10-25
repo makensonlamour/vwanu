@@ -18,6 +18,7 @@ const App = () => {
       },
     },
   });
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
