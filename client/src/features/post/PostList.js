@@ -84,7 +84,7 @@ const PostList = ({ post, pageTitle }) => {
                   {" "}
                   <img alt="" className="object-cover object-center w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
                 </div>
-                <div className="block w-[80%]">
+                <div className="block 2xs:w-[75%] xs:w-[80%]">
                   <div className="flex items-start w-full gap-x-2">
                     <Link
                       className="flex flex-nowrap mb-1"
@@ -106,11 +106,11 @@ const PostList = ({ post, pageTitle }) => {
                           className="flex flex-nowrap mb-1"
                           to={
                             _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
-                              ? `../../profile/${post?.wall?.id}`
-                              : `../../profile/${post?.wall?.id}`
+                              ? `../../profile/${post?.wallId}`
+                              : `../../profile/${post?.wallId}`
                           }
                         >
-                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Wall?.firstName} ${post?.Wall?.lastName} `}</span>
+                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.WallUser?.firstName} ${post?.WallUser?.lastName} `}</span>
                         </Link>
                       </Fragment>
                     ) : post?.CommunityId !== null ? (
@@ -130,21 +130,21 @@ const PostList = ({ post, pageTitle }) => {
                           <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Community?.name} `}</span>
                         </Link>
                       </Fragment>
-                    ) : original && original?.link?.includes("blogs") && post?.originalId ? (
+                    ) : post?.originalId !== null && post?.originalType === "Blogs" ? (
                       <Fragment>
                         <p className="align-top text-sm">
                           {" shared a blog"}
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                       </Fragment>
-                    ) : original && (original?.link?.includes("discussions") || original?.link?.includes("forum")) && post?.originalId ? (
+                    ) : post?.originalId !== null && post?.originalType === "Discussion" ? (
                       <Fragment>
                         <p className="align-top text-sm">
                           {" shared a discussion"}
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                       </Fragment>
-                    ) : original && original?.link?.includes("post") ? (
+                    ) : post?.originalId !== null && post?.originalType === "Post" ? (
                       <Fragment>
                         <p className="align-top text-sm">
                           {" shared a post"}
@@ -175,9 +175,9 @@ const PostList = ({ post, pageTitle }) => {
                 />
               </div>
               {/* Begin design for shared post */}
-              {post?.originalId !== null && original?.name !== undefined ? (
+              {post?.originalId !== null ? (
                 <div className="mt-3">
-                  {original?.customMessage?.split("\n").map((text) => {
+                  {post?.postText?.split("\n").map((text) => {
                     return (
                       <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
                         {transformHashtagAndLink(text)}
@@ -186,27 +186,32 @@ const PostList = ({ post, pageTitle }) => {
                   })}
                   <div className="border p-1 m-3 border-placeholder-color rounded-lg">
                     <div className="">
-                      <Link to={"../../profile/" + original?.id} className="text-[0.95rem] font-semibold hover:text-primary">
-                        {original?.name}
+                      <Link to={"../../profile/" + post?.Original?.id} className="text-[0.95rem] font-semibold hover:text-primary">
+                        {post?.Original?.firstName + " " + post?.Original?.lastName}
                       </Link>
                       <div className="flex ">
                         <p className="text-xs text-black">
-                          {formatDistance(parseISO(original?.createdAt), new Date(), [
+                          {formatDistance(parseISO(post?.Original?.createdAt), new Date(), [
                             {
                               includeSeconds: true,
                             },
                           ])}{" "}
                           {" ago"} <span className="ml-2 text-gray-600">{" • "}</span>
                         </p>
-                        <a href={original?.link} className="text-xs cursor-pointer hover:text-primary">
+                        <a
+                          href={`../../${
+                            post?.originalType === "Post" ? "posts" : post?.originalType === "Blogs" ? "blogs" : "discussions"
+                          }/${post?.OriginalId}`}
+                          className="text-xs cursor-pointer hover:text-primary"
+                        >
                           <span className="ml-2">{"see original"}</span>
                         </a>
                       </div>
                     </div>
-                    {original?.postText?.split("\n").map((text) => {
+                    {post?.Original?.content?.split("\n").map((text) => {
                       return (
                         <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
-                          {transformHashtagAndLink(text)}
+                          {transformHashtagAndLink(text, false, post?.originalType)}
                         </p>
                       );
                     })}
@@ -224,13 +229,16 @@ const PostList = ({ post, pageTitle }) => {
                     );
                   })}
 
-                  {/* {post?.Media?.length === 0 && arrayLink?.length > 0 && transformHashtagAndLink(arrayLink[0], true)} */}
+                  {/* to paste link */}
+                  {post?.Media?.length === 0 && arrayLink?.length > 0 && (
+                    <div className="min-h-48 h-fit max-h-68">{transformHashtagAndLink(arrayLink[0], true)}</div>
+                  )}
 
                   {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
                 </div>
               )}
               {post?.amountOfReactions !== 0 || post?.amountOfComments !== 0 ? (
-                <div className="flex flex-nowrap mt-5 pt-2 pb-3 border-b">
+                <div className="flex flex-nowrap mt-1 pt-2 pb-3 border-b">
                   <div>
                     <ViewLikeButton
                       amountOfReactions={post?.amountOfReactions}

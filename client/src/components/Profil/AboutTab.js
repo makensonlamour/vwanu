@@ -9,30 +9,38 @@ const AboutTab = ({ user }) => {
     {
       name: "First Name",
       value: user?.firstName,
+      view: true,
     },
     {
       name: "Last Name",
       value: user?.lastName,
+      view: true,
     },
     {
       name: "Nick Name",
       value: user?.nickName,
+      view: true,
     },
     {
       name: "Birth Date",
       value: format(new Date(user?.birthday), "MMMM dd, yyyy"),
+      hideName: "birthdayPrivacy",
+      view: user?.birthdayPrivacy,
     },
     {
       name: "Gender",
       value: user?.gender === "m" ? "male" : "female",
+      view: true,
     },
     {
-      name: "Interested By",
-      value: user?.interestedBy === "m" ? "male" : "female",
+      name: "Interest",
+      value: user?.Interests,
+      view: true,
     },
     {
       name: "Language",
       value: user?.language,
+      view: true,
     },
   ];
 
@@ -40,26 +48,56 @@ const AboutTab = ({ user }) => {
     {
       name: "Email",
       value: user?.email,
+      hideName: "emailPrivacy",
+      view: user?.emailPrivacy,
     },
     {
       name: "Telephone",
-      value: user?.telephone,
+      value: user?.phone,
+      hideName: "phonePrivacy",
+      view: user?.phonePrivacy,
     },
     {
       name: "Website",
       value: user?.website,
+      hideName: "websitePrivacy",
+      view: user?.websitePrivacy,
     },
     {
       name: "Facebook",
       value: user?.facebook,
+      hideName: "facebookPrivacy",
+      view: user?.facebookPrivacy,
     },
     {
       name: "Twitter",
       value: user?.twitter,
+      hideName: "twitterPrivacy",
+      view: user?.twitterPrivacy,
     },
     {
       name: "Instagram",
       value: user?.instagram,
+      hideName: "instagramPrivacy",
+      view: user?.instagramPrivacy,
+    },
+    {
+      name: "Linkedin",
+      value: user?.linkedin,
+      hideName: "linkedinPrivacy",
+      view: user?.linkedinPrivacy,
+    },
+    {
+      name: "Tiktok",
+      value: user?.tiktok,
+      hideName: "tiktokPrivacy",
+      view: user?.tiktokPrivacy,
+    },
+    {
+      name: "Youtube",
+      value: user?.youtube,
+      hideName: "youtubePrivacy",
+      view: user?.youtubePrivacy,
     },
   ];
 
@@ -67,10 +105,12 @@ const AboutTab = ({ user }) => {
     {
       name: "Current city",
       value: user?.country,
+      view: true,
     },
     {
       name: "Hometown",
       value: user?.country,
+      view: true,
     },
   ];
 
@@ -78,6 +118,7 @@ const AboutTab = ({ user }) => {
     {
       name: "Job Title",
       value: "Developer",
+      view: true,
     },
   ];
 
@@ -85,6 +126,7 @@ const AboutTab = ({ user }) => {
     {
       name: "Biography",
       value: user?.about,
+      view: true,
     },
   ];
 

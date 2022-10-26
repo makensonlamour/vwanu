@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Proptypes from "prop-types";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
@@ -22,10 +22,11 @@ const updateError = () =>
 const FormBiography = ({ user }) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [textBio, setTextBio] = useState("");
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
   const initialValues = {
-    about: "",
+    about: user ? user?.about : "",
   };
 
   const ValidationSchema = Yup.object().shape({
@@ -40,6 +41,7 @@ const FormBiography = ({ user }) => {
       await updateUser.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries();
+      window.location.href = "../../profile/" + user?.id;
     } catch (e) {
       console.log(e);
       updateError();
@@ -47,6 +49,10 @@ const FormBiography = ({ user }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user) setTextBio(user?.about);
+  }, [user]);
 
   return (
     <>
@@ -58,9 +64,13 @@ const FormBiography = ({ user }) => {
           label="Biography"
           name="about"
           type="text"
-          className="w-full mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+          fn={setTextBio}
+          showLength={true}
+          length={70 - textBio.length}
+          maxLength="70"
+          className="w-full mt-1 mb-4 mx-auto border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
         />
-        <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/5 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit className="w-full mx-2 rounded-xl px-4 py-1 text-base-100 text-md md:w-fit mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

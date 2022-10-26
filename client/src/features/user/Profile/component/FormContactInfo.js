@@ -26,18 +26,24 @@ const FormContactInfo = ({ user }) => {
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
 
   const initialValues = {
-    telephone: user ? user?.telephone : "",
+    phone: user ? user?.telephone : "",
     instagram: user ? user?.instagram : "",
     twitter: user ? user?.twitter : "",
     facebook: user ? user?.facebook : "",
+    tiktok: user ? user?.tiktok : "",
+    linkedin: user ? user?.linkedin : "",
+    youtube: user ? user?.youtube : "",
     website: user ? user?.website : "",
   };
 
   const ValidationSchema = Yup.object().shape({
-    telephone: Yup.string().nullable().label("Telephone"),
+    phone: Yup.string().nullable().label("Telephone"),
     instagram: Yup.string().nullable().label("Instagram"),
     facebook: Yup.string().nullable().label("Facebook"),
     twitter: Yup.string().nullable().label("Twitter"),
+    tiktok: Yup.string().nullable().label("Tiktok"),
+    linkedin: Yup.string().nullable().label("Linkedin"),
+    youtube: Yup.string().nullable().label("Youtube"),
     website: Yup.string().nullable().label("Website"),
   });
 
@@ -45,9 +51,13 @@ const FormContactInfo = ({ user }) => {
     setIsLoading(true);
     const data = {
       id: user?.id,
-      telephone: dataObj?.telephone,
+      phone: dataObj?.phone,
       instagram: dataObj?.instagram,
+      facebook: dataObj?.facebook,
       twitter: dataObj?.twitter,
+      tiktok: dataObj?.tiktok,
+      linkedin: dataObj?.linkedin,
+      youtube: dataObj?.youtube,
       website: dataObj?.website,
     };
 
@@ -55,7 +65,8 @@ const FormContactInfo = ({ user }) => {
       await updateUser.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries(["user", "me"]);
-      window.location.reload();
+      // window.location.reload();
+      window.location.href = "../../profile/" + user?.id;
     } catch (e) {
       console.log(e);
       updateError();
@@ -66,14 +77,14 @@ const FormContactInfo = ({ user }) => {
 
   return (
     <>
-      <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
+      <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full gap-y-2 gap-x-2">
         <Toaster />
         <Telephone
           label="Telephone"
-          name="telephone"
+          name="phone"
           countryCode={user?.country}
-          containerClassName="my-4"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -81,8 +92,8 @@ const FormContactInfo = ({ user }) => {
           placeholder="Facebook"
           name="facebook"
           type="text"
-          containerClassName="my-4"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -90,8 +101,8 @@ const FormContactInfo = ({ user }) => {
           placeholder="Twitter"
           name="twitter"
           type="text"
-          containerClassName="my-4"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -99,8 +110,44 @@ const FormContactInfo = ({ user }) => {
           placeholder="Instagram"
           name="instagram"
           type="text"
-          containerClassName="my-4"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+        />
+        <Field
+          autoCapitalize="none"
+          label="Youtube"
+          placeholder="Youtube"
+          name="youtube"
+          type="text"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+        />
+        <Field
+          autoCapitalize="none"
+          label="Linkedin"
+          placeholder="Linkedin"
+          name="linkedin"
+          type="text"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+        />
+        <Field
+          autoCapitalize="none"
+          label="Instagram"
+          placeholder="Instagram"
+          name="instagram"
+          type="text"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+        />
+        <Field
+          autoCapitalize="none"
+          label="Tiktok"
+          placeholder="Tiktok"
+          name="tiktok"
+          type="text"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Field
           autoCapitalize="none"
@@ -108,10 +155,13 @@ const FormContactInfo = ({ user }) => {
           placeholder="Website"
           name="website"
           type="text"
-          containerClassName="my-4"
-          className="mt-1 mb-4 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          containerClassName=""
+          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
-        <Submit className="w-full rounded-lg py-2 text-base-100 md:px-6  text-md md:w-fit mt-2" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <Submit
+          className="w-full mx-2 rounded-lg py-2 text-base-100 md:px-6 text-md md:w-fit mt-2"
+          title={isLoading ? <Loader /> : "Save"}
+        />{" "}
       </Form>
     </>
   );

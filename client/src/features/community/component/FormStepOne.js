@@ -85,11 +85,11 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
             label="Community Name (required)"
             name="communityName"
             type="text"
-            className="w-full mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="w-full mt-1 mb-4 placeholder:text-secondary font-semibold rounded-xl input-secondary border border-gray-200 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <MultiSelect
             label="Interest"
-            className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
+            className="w-full mt-1 placeholder:text-secondary font-semibold rounded-xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
             placeholder={"Select the category..."}
             multiple
             options={options}
@@ -105,7 +105,7 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
             maxRows="5"
             minRows="3"
             style={{ width: "100%" }}
-            className="p-4 mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="p-4 mt-1 mb-4 placeholder:text-secondary font-semibold rounded-xl input-secondary border border-gray-200 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Submit
             className="mt-4 py-3 px-4 w-full rounded-2xl text-base-100 text-md md:w-[30%]"

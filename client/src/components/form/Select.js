@@ -12,7 +12,7 @@ function FormSelect({ name, label, options, className, testId, link, fn, ...othe
   return (
     <>
       <div className="form-control mt-3 w-full">
-        <span className="label-text text-md text-secondary font-semibold">{label}</span>
+        <span className="label-text text-md font-semibold">{label}</span>
         <select
           className={"select w-full " + className}
           value={values[name]}

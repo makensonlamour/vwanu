@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import routesPath from "../../../routesPath";
+import { useUpdateUser } from "../../../features/user/userSlice";
 
 const ViewDetails = ({ title, user, substabs }) => {
   const userMe = useOutletContext();
@@ -9,7 +10,20 @@ const ViewDetails = ({ title, user, substabs }) => {
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
 
-  console.log("bio", userMe);
+  const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
+
+  const handleUpdate = async (isHide, hideName) => {
+    try {
+      const dataObj = { id: userMe?.id };
+      dataObj[hideName] = isHide;
+
+      await updateUser.mutateAsync(dataObj);
+
+      window.location.href = "../../profile/" + userMe?.id;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -32,11 +46,29 @@ const ViewDetails = ({ title, user, substabs }) => {
         {user?.map((detail) => {
           return (
             <>
-              {detail?.value && (
+              {detail?.value && (detail?.view || userMe?.id?.toString() === id?.toString()) && (
                 <div key={detail?.name + "_" + detail?.value} className="flex py-3">
                   <p className="basis-1/3 text-gray-500">{detail?.name}</p>
                   <p className="basis-2/3 capitalize">{detail?.value}</p>
-                  <p>Hide</p>
+                  {userMe?.id?.toString() === id?.toString() &&
+                    (detail?.name === "Birth Date" ||
+                      detail?.name === "Email" ||
+                      detail?.name === "Telephone" ||
+                      detail?.name === "Website" ||
+                      detail?.name === "Facebook" ||
+                      detail?.name === "Twitter" ||
+                      detail?.name === "Instagram" ||
+                      detail?.name === "Tiktok" ||
+                      detail?.name === "Linkedin" ||
+                      detail?.name === "Youtube") && (
+                      <div>
+                        {detail?.view ? (
+                          <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>Hide</button>
+                        ) : (
+                          <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>View</button>
+                        )}
+                      </div>
+                    )}
                 </div>
               )}
             </>

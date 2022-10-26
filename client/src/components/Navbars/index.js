@@ -70,7 +70,7 @@ const Navbar = ({ user, countMessage }) => {
                 onClick={() => {
                   toggleSidebar();
                 }}
-                className="md:hidden w-[2.7rem] lg:w-[20%] h-[2.9rem] lg:h-14 md:shadow-md focus:outline-none bg-white z-10"
+                className="md:hidden w-[1.9rem] xs:w-[2.7rem] lg:w-[20%] h-[2.9rem] lg:h-14 md:shadow-md focus:outline-none bg-white z-10"
               >
                 <CgMenuLeft size={"24px"} className={`${anchorElUser ? "hidden" : ""} mx-auto`} />
               </button>
@@ -118,15 +118,15 @@ const Navbar = ({ user, countMessage }) => {
             </div>
           )}
           <div className="basis-[35%] lg:basis-[30%] flex-none">
-            <div className="flex justify-between md:justify-end items-center">
+            <div className="flex justify-between md:justify-end items-center gap-x-2">
               {search ? (
-                <AiOutlineClose onClick={() => setSearch(false)} size="24px" className="text-black mr-4" />
+                <AiOutlineClose onClick={() => setSearch(false)} size="20px" className="text-black" />
               ) : (
-                <BsSearch onClick={() => setSearch(true)} size="24px" className="text-black mr-4" />
+                <BsSearch onClick={() => setSearch(true)} size="20px" className="text-black " />
               )}
-              <div className="h-6 bg-black w-[1px] mr-4"></div>
+              <div className="h-6 bg-black w-[1px]"></div>
               <Link to={routesPath?.MESSAGE}>
-                <Badge badgeContent={countMessage} color="primary" className="mr-4">
+                <Badge badgeContent={countMessage} color="primary" className="">
                   <AiOutlineInbox size="24px" className="text-black" />
                 </Badge>
               </Link>

@@ -54,7 +54,7 @@ const NotificationPreview = () => {
 
   const handleReadAll = async () => {
     try {
-     let result =  await Promise.all(
+      let result = await Promise.all(
         notificationList?.map(async (notif) => {
           await readNotification.mutateAsync({ id: notif?.id, view: true });
         })
@@ -89,13 +89,13 @@ const NotificationPreview = () => {
         </label>
         <ul
           tabIndex="2"
-          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-96 text-gray-900 overflow-auto scrollbar h-96"
+          className="dropdown-content menu p-1 sm:p-2 shadow bg-base-100 rounded-box w-[95vw] sm:w-96 text-gray-900 overflow-auto scrollbar h-fit max-h-96"
         >
           {notificationList?.length > 0 ? (
             <>
-              <div className="flex justify-between mb-4 m-2">
+              <div className="flex justify-between m-2">
                 <h4 className="text-lg font-semibold px-2">Notifications</h4>
-                <button onClick={() => handleReadAll()} className="text-sm text-primary font-[400]">
+                <button onClick={() => handleReadAll()} className="text-xs sm:text-sm text-primary font-[400]">
                   Mark all as read
                 </button>
               </div>
@@ -117,18 +117,18 @@ const NotificationPreview = () => {
                           }
                         }
                       }}
-                      className="mx-2 text-base my-1 py-2 hover:bg-placeholder-color px-2 rounded-xl"
+                      className="mx-2 text-base my-1 py-1 sm:py-2 hover:bg-placeholder-color px-2 rounded-xl"
                     >
-                      <div className="flex items-center align-middle justify-between">
+                      <div className="flex items-center align-middle justify-between gap-x-3 sm:gap-x-0">
                         <div className="w-12">
                           <img className="object-cover w-10 h-10 mask mask-squircle" src={notification?.User?.profilePicture} alt="" />
                         </div>
                         <div className=" text-sm w-64">
-                          <p className="pb-1">
+                          <p className="sm:pb-1">
                             <span className="font-semibold"> {notification?.User?.firstName + " " + notification?.User?.lastName}</span>
-                            <span className="font-normal"> {" " + notification?.message}</span>
+                            <span className="font-normal text-sm"> {" " + notification?.message}</span>
                           </p>
-                          <p className="pt-1 text-gray-400 font-medium text">
+                          <p className="pt-1 text-gray-400 font-medium text-xs">
                             {formatDistance(parseISO(notification?.createdAt), new Date(), [
                               {
                                 includeSeconds: true,
@@ -150,8 +150,10 @@ const NotificationPreview = () => {
                   );
                 }
               })}
-              <li className="sticky border-t hover:text-primary mx-auto text-center -px-2 text-gray-900">
-                <Link to={"../../notifications"}>{"View Notifications >"}</Link>
+              <li className="border-t hover:text-primary mx-auto text-center -px-2 text-gray-900">
+                <Link to={"../../notifications"} className="text-xs font-semibold">
+                  {"View Notifications >"}
+                </Link>
               </li>
             </>
           ) : (

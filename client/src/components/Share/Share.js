@@ -63,66 +63,78 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
     queryClient.refetchQueries(["friends", "all"]);
   }
 
-  function generateShare(type) {
-    if (!type) return "";
-    let result = "";
-    if (type === "post") {
-      result =
-        post?.User?.id +
-        "~=~" +
-        post?.User?.firstName +
-        " " +
-        post?.User?.lastName +
-        "~=~" +
-        post?.createdAt +
-        "~=~" +
-        url +
-        "/post" +
-        post?.id +
-        "~=~" +
-        customText +
-        "~=~" +
-        post?.postText;
-    } else if (type === "discussion") {
-      result =
-        post?.User?.id +
-        "~=~" +
-        post?.User?.firstName +
-        " " +
-        post?.User?.lastName +
-        "~=~" +
-        post?.createdAt +
-        "~=~" +
-        window.location.href +
-        "~=~" +
-        customText +
-        "~=~" +
-        post?.title;
-    } else if (type === "blog") {
-      const newStr = post?.blogText.replace(/(<([^>]+)>)/gi, "");
-      let temp = newStr.length > 70 ? newStr.substring(0, 70) + "..." : newStr;
-      result =
-        post?.User?.id +
-        "~=~" +
-        post?.User?.firstName +
-        " " +
-        post?.User?.lastName +
-        "~=~" +
-        post?.createdAt +
-        "~=~" +
-        window.location.href +
-        "~=~" +
-        customText +
-        "~=~" +
-        post?.blogTitle +
-        "\n" +
-        temp;
-    } else {
-      return result;
-    }
+  // function generateShare(type) {
+  //   if (!type) return "";
+  //   let result = "";
+  //   if (type === "post") {
+  //     result =
+  //       post?.User?.id +
+  //       "~=~" +
+  //       post?.User?.firstName +
+  //       " " +
+  //       post?.User?.lastName +
+  //       "~=~" +
+  //       post?.createdAt +
+  //       "~=~" +
+  //       url +
+  //       "/post" +
+  //       post?.id +
+  //       "~=~" +
+  //       customText +
+  //       "~=~" +
+  //       post?.postText;
+  //   } else if (type === "discussion") {
+  //     result =
+  //       post?.User?.id +
+  //       "~=~" +
+  //       post?.User?.firstName +
+  //       " " +
+  //       post?.User?.lastName +
+  //       "~=~" +
+  //       post?.createdAt +
+  //       "~=~" +
+  //       window.location.href +
+  //       "~=~" +
+  //       customText +
+  //       "~=~" +
+  //       post?.title;
+  //   } else if (type === "blog") {
+  //     const newStr = post?.blogText.replace(/(<([^>]+)>)/gi, "");
+  //     let temp = newStr.length > 70 ? newStr.substring(0, 70) + "..." : newStr;
+  //     result =
+  //       post?.User?.id +
+  //       "~=~" +
+  //       post?.User?.firstName +
+  //       " " +
+  //       post?.User?.lastName +
+  //       "~=~" +
+  //       post?.createdAt +
+  //       "~=~" +
+  //       window.location.href +
+  //       "~=~" +
+  //       customText +
+  //       "~=~" +
+  //       post?.blogTitle +
+  //       "\n" +
+  //       temp;
+  //   } else {
+  //     return result;
+  //   }
 
-    return result;
-  }
+  //   return result;
+  // }
+
+  // function generateShareWall(type) {
+  //   if (!type) return "";
+  //   let result = "";
+  //   if (type === "post") {
+  //     result = post?.postText;
+  //   } else if (type === "blog") {
+  //     post?.blogTitle + "\n" + post?.post?.blogText;
+  //   } else {
+  //   }
+  //   return result;
+  // }
 
   async function handleCreateConversation() {
     setLoading(true);
@@ -181,8 +193,16 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
       if (arrayImg?.length > 0) {
         dataObj.mediaLinks = arrayImg;
       }
-      // generate
-      dataObj.postText = generateShare(type);
+      dataObj.postText = customText;
+
+      if (type === "post") {
+        dataObj.originalType = "Post";
+      } else if (type === "blog") {
+        dataObj.originalType = "Blogs";
+      } else {
+        dataObj.originalType = "Discussion";
+      }
+
       await createPost.mutateAsync(dataObj);
       shareSuccess(type);
       noButton ? setCustomModal(false) : setModal(false);

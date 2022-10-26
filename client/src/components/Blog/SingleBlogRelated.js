@@ -9,7 +9,7 @@ import placeholderBlog from "../../assets/images/placeholderBlog.png";
 const SingleBlogRelated = ({ blog }) => {
   return (
     <>
-      <div className="bg-white shadow-sm w-full rounded-xl pb-1 mb-4 lg:pb-0 lg:mb-8">
+      <div className="bg-white shadow-sm w-full rounded-xl pb-1 mb-4 lg:pb-4 lg:mb-8">
         {blog?.coverPicture !== null ? (
           <div className="">
             <img className="w-full h-32 lg:h-48 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />
@@ -20,8 +20,8 @@ const SingleBlogRelated = ({ blog }) => {
           </div>
         )}
         {blog?.Interests?.length > 0 && (
-          <div className="px-3 lg:px-6 mt-4">
-            <Stack direction="row" spacing={1}>
+          <div className="px-2 lg:px-2 mt-4">
+            <Stack className="flex justify-start w-full flex-wrap gap-2" direction="row" spacing={1}>
               {blog?.Interests?.length > 0 &&
                 blog?.Interests?.map((interest) => {
                   return <Chip key={interest?.id} label={interest?.name} size="small" />;

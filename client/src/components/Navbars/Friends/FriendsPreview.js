@@ -32,12 +32,18 @@ const FriendsPreview = () => {
     <>
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <Badge badgeContent={friendReceiveNumber} color="primary" className="mr-4">
+          <Badge badgeContent={friendReceiveNumber} color="primary" className="">
             <AiOutlineUserAdd size={"24px"} />
           </Badge>
         </label>
-        <ul tabIndex="2" className="dropdown-content menu py-2 shadow bg-base-100 rounded-box w-96 text-gray-900">
-          {listFriendReceive?.pages?.length > 0 ? (
+        <ul
+          tabIndex="2"
+          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-[90vw] sm:w-96 text-gray-900 overflow-auto scrollbar h-fit max-h-96"
+        >
+          {listFriendReceive &&
+          listFriendReceive?.pages &&
+          listFriendReceive?.pages?.length > 0 &&
+          listFriendReceive?.pages[0]?.data?.total > 0 ? (
             <li>
               {listFriendReceive?.pages?.map((page, idx) => {
                 return page.data?.map((friend) => {
@@ -64,7 +70,7 @@ const FriendsPreview = () => {
             </li>
           ) : (
             <>
-              <div className="text-green-500 font-semibold p-5 text-center">
+              <div className="w-full text-green-500 font-semibold p-5 text-center">
                 <span>
                   {" "}
                   <BsXCircleFill size={"48px"} className="m-auto p-2" />

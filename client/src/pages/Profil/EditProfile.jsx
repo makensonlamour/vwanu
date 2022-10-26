@@ -14,7 +14,7 @@ const EditProfile = () => {
   const user = useOutletContext();
 
   const [value, setValue] = useState("1");
-  const mediaQuery = window.matchMedia("(max-width: 768px)");
+  const mediaQuery = window.matchMedia("(max-width: 1023px)");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -54,7 +54,7 @@ const EditProfile = () => {
     <>
       <div className="mt-8 mb-6 px-2">
         <div className="flex justify-between mb-2">
-          <h4 className="text-3xl font-bold">Edit Profile</h4>
+          <h4 className="text-lg lg:text-3xl font-bold">Edit Profile</h4>
           <Link
             to={"../../profile/" + user?.id}
             className="text-black btn align-middle btn-sm bg-gray-300 border-0 hover:bg-primary hover:text-base-100 px-5 py-2 capitalize"
@@ -62,7 +62,7 @@ const EditProfile = () => {
             <FiUser size={"18px"} className="mr-1" /> View My Profile
           </Link>
         </div>
-        <div className="flex flex-col md:flex-row mt-8 mb-4">
+        <div className="flex flex-col lg:flex-row mt-8 mb-4">
           <TabContext value={value}>
             <div className="basis-[20%]">
               <div className="">

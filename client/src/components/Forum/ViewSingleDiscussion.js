@@ -7,6 +7,8 @@ import { useGetListDiscussionReplies, useUpdateDiscussion, useDeleteDiscussion }
 import { BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
+import { isMobile } from "react-device-detect";
+
 // import { useQueryClient } from "react-query";
 import InputDiscussion from "../Community/DiscussionTab/InputDiscussion";
 import { format } from "date-fns";
@@ -83,6 +85,21 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
     }
   };
 
+  function transformImgSingle(url, postNumber) {
+    if (!url) return "";
+    if (isMobile && postNumber === 1) return url;
+    const arrayUrl = url.split("/");
+
+    arrayUrl.splice(6, 0, "q_100");
+    if (postNumber === 1) {
+      arrayUrl.splice(7, 0, "b_auto:predominant,c_pad,h_1200,w_1400");
+    } else {
+      arrayUrl.splice(7, 0, "b_auto:predominant,c_pad,h_1200,w_1200");
+    }
+
+    return arrayUrl.join("/");
+  }
+
   return (
     <>
       <Toaster />
@@ -106,19 +123,21 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
                 {data?.category}
               </button>
             )}
-            {(user?.id === data?.User?.id ||
-              communityData?.IsMember?.role === "admin" ||
-              communityData?.IsMember?.role === "moderator") && (
+            {
               <div className="flex justify-end items-center gap-x-1">
-                <p className="mr-2 cursor-pointer">
-                  {data?.locked ? (
-                    <BiLockAlt onClick={() => handleUpdate(false)} size={"24px"} className="inline" />
-                  ) : (
-                    <BiLockOpenAlt onClick={() => handleUpdate(true)} size={"24px"} className="inline" />
-                  )}
-                </p>
+                {(user?.id === data?.User?.id ||
+                  communityData?.IsMember?.role === "admin" ||
+                  communityData?.IsMember?.role === "moderator") && (
+                  <p className="mr-2 cursor-pointer">
+                    {data?.locked ? (
+                      <BiLockAlt onClick={() => handleUpdate(false)} size={"24px"} className="inline" />
+                    ) : (
+                      <BiLockOpenAlt onClick={() => handleUpdate(true)} size={"24px"} className="inline" />
+                    )}
+                  </p>
+                )}
                 {/* <CustomDropdown /> */}
-                <div className="dropdown">
+                <div className="dropdown dropdown-end">
                   <label tabIndex={0} className="cursor-pointer">
                     <BsThreeDots size={"24px"} className="inline" />
                   </label>
@@ -128,15 +147,19 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
                         Share
                       </p>
                     </li>
-                    <li>
-                      <p className="hover:bg-placeholder-color hover:text-black" onClick={() => handleDelete(data?.id)}>
-                        Delete
-                      </p>
-                    </li>
+                    {(user?.id === data?.User?.id ||
+                      communityData?.IsMember?.role === "admin" ||
+                      communityData?.IsMember?.role === "moderator") && (
+                      <li>
+                        <p className="hover:bg-placeholder-color hover:text-black" onClick={() => handleDelete(data?.id)}>
+                          Delete
+                        </p>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
-            )}
+            }
           </div>
 
           <p className="px-6 text-lg font-semibold">{data?.title}</p>
@@ -148,6 +171,18 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
             </span>
           </p>
           <p className="px-6 py-2">{data?.body}</p>
+          {data && data?.Media?.length > 0 && (
+            <div
+              // onClick={() => navigate(`../../post/preview?posts=${data?.id}&type=${type}&from=post`)}
+              className=" rounded-lg bg-cover py-2 px-6 mt-2 flex justify-center items-center w-full"
+            >
+              <img
+                src={transformImgSingle(data?.Media[0]?.original, 1)}
+                alt={"discussion_image_" + data?.Media[0]?.id}
+                className="flex-wrap inline object-cover h-auto max-h-[300px] object-center w-[50%] rounded-xl"
+              />
+            </div>
+          )}
           <p className="pb-4 px-6 text-sm text-gray-500">
             {data?.lastComment !== null && (
               <span className="">
