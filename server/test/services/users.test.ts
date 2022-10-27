@@ -67,7 +67,7 @@ describe('/users service', () => {
 
   it('should create user and associate them with their interest', async () => {
     const responses = await Promise.all(
-      getRandUsers(4).map((u) => {
+      getRandUsers(2).map((u) => {
         const user = u;
         delete user.id;
         return testServer.post(endpoint).send({ ...user, interests });
@@ -119,6 +119,40 @@ describe('/users service', () => {
       Interests.map((interest) => interest.name).includes(interests[1])
     ).toBe(true);
   });
+
+  it('Should create user and associate interest on patch', async () => {
+    const responses = await Promise.all(
+      getRandUsers(2).map((u) => {
+        const user = u;
+        delete user.id;
+        return testServer.post(endpoint).send({ ...user });
+      })
+    );
+
+    observer = responses[0].body;
+    responses.forEach(({ statusCode }) => {
+      expect(statusCode).toBe(201);
+    });
+    // pull and the user and test it has no interests
+
+    const { body: userWithNoInterests } = await testServer
+      .get(`${endpoint}/${observer.id}`)
+      .set('authorization', observer.accessToken);
+    expect(userWithNoInterests.Interests).toBeNull();
+
+    // patch the user with interests
+    await testServer
+      .patch(`${endpoint}/${observer.id}`)
+      .send({ interests })
+      .set('authorization', observer.accessToken);
+    // pull and test user now has interest false
+    const { body: userWitInterests } = await testServer
+      .get(`${endpoint}/${observer.id}`)
+      .set('authorization', observer.accessToken);
+
+    expect(Array.isArray(userWitInterests.Interests)).toBe(true);
+    expect(userWitInterests.Interests).toHaveLength(interests.length);
+  }, 30000);
 
   it('should return all 9 users', async () => {
     const u = getRandUser();

@@ -40,7 +40,7 @@ export default function (app: Application): void {
   service.hooks({
     before: { ...hooks.before },
     after: {
-     ...hooks.after,
+      ...hooks.after,
       create: [
         ...hooks.after.create,
         updateTheTSVector({
@@ -55,6 +55,7 @@ export default function (app: Application): void {
         }),
       ],
       patch: [
+        ...hooks.after.patch,
         updateTheTSVector({
           model: UserModel,
           searchColumn: 'search_vector',
