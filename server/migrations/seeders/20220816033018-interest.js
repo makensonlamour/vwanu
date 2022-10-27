@@ -2,7 +2,7 @@
 
 const { v4 } = require('uuid');
 
-const interests = [
+const interestsList = [
   'Sports',
   'education',
   'Politics',
@@ -12,18 +12,17 @@ const interests = [
   'Technology',
   'Art',
 ];
+const interests = interestsList?.map((name) => ({
+  name,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  accessible: true,
+  id: v4(),
+}));
 module.exports = {
   async up(queryInterface) {
-    return queryInterface.bulkInsert(
-      'Interests',
-      interests.map((name) => ({
-        name,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        accessible: true,
-        id: v4(),
-      }))
-    );
+    await queryInterface.bulkDelete('Interests', null, {});
+    return queryInterface.bulkInsert('Interests', interests);
   },
 
   async down(queryInterface) {

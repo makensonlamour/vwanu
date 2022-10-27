@@ -4,6 +4,7 @@ const { v4 } = require('uuid');
 const roles = ['admin', 'moderator', 'member'];
 module.exports = {
   async up(queryInterface) {
+    await queryInterface.bulkDelete('CommunityRoles', null, {});
     return queryInterface.bulkInsert(
       'CommunityRoles',
       roles.map((role) => ({
