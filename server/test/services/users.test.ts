@@ -75,17 +75,18 @@ describe('/users service', () => {
     );
 
     observer = responses[0].body;
-    responses.forEach((res) => {
-      expect(res.statusCode).toBe(201);
+    responses.forEach(({ statusCode }) => {
+      expect(statusCode).toBe(201);
     });
   });
 
-  it('should pull user with interest', async () => {
+  it('should pull users with interest', async () => {
     const {
       body: { data: usersWithInterest },
     } = await testServer
       .get(endpoint)
       .set('authorization', observer.accessToken);
+
     expect(usersWithInterest.some((user) => user.Interests?.length > 0)).toBe(
       true
     );
@@ -101,6 +102,22 @@ describe('/users service', () => {
         ).toBe(true);
       }
     });
+  });
+  it('should pull a single user with interest', async () => {
+    const { body: observerWithInterest } = await testServer
+      .get(`${endpoint}/${observer.id}`)
+      .set('authorization', observer.accessToken);
+    const { Interests } = observerWithInterest;
+    expect(Array.isArray(Interests)).toBe(true);
+    expect(Interests).toHaveLength(2);
+
+    expect(
+      Interests.map((interest) => interest.name).includes(interests[0])
+    ).toBe(true);
+
+    expect(
+      Interests.map((interest) => interest.name).includes(interests[1])
+    ).toBe(true);
   });
 
   it('should return all 9 users', async () => {

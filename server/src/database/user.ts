@@ -61,8 +61,6 @@ export default (sequelize: any, DataTypes: any) => {
 
     instagram: string;
 
-    interestedBy: string;
-
     lastSeen: Date;
 
     lastName: string;
@@ -109,6 +107,8 @@ export default (sequelize: any, DataTypes: any) => {
 
     vk: string;
 
+    tiktok: string;
+
     verified?: boolean | undefined;
 
     wechat: string;
@@ -124,6 +124,16 @@ export default (sequelize: any, DataTypes: any) => {
     showLastSeen: boolean;
 
     eVisitedNotified: boolean;
+
+    youtubePrivacy: boolean;
+
+    linkedinPrivacy: boolean;
+
+    twitterPrivacy: boolean;
+
+    faceBookPrivacy: boolean;
+
+    instagramPrivacy: boolean;
 
     static associate(models: any) {
       User.hasMany(models.Post, {
@@ -245,6 +255,31 @@ export default (sequelize: any, DataTypes: any) => {
           },
         },
       },
+
+      youtubePrivacy: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+
+      linkedinPrivacy: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+
+      twitterPrivacy: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+
+      faceBookPrivacy: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+
+      instagramPrivacy: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       followPrivacy: {
         type: DataTypes.STRING,
         defaultValue: 'public',
@@ -283,6 +318,11 @@ export default (sequelize: any, DataTypes: any) => {
         unique: true,
       },
 
+      tiktok: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
       mailru: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -364,14 +404,14 @@ export default (sequelize: any, DataTypes: any) => {
 
       gender: {
         type: DataTypes.STRING,
-        defaultValue: 'not specified',
-        // validate: {
-        //   customValidator: (value) => {
-        //     if (!['f', 'm', 'not specified'].includes(value)) {
-        //       throw new Error(`${value} is not a valid option for gender`);
-        //     }
-        //   },
-        // },
+        defaultValue: 'Not specified',
+        validate: {
+          customValidator: (value) => {
+            if (!['f', 'm', 'Not specified'].includes(value)) {
+              throw new Error(`${value} is not a valid option for gender`);
+            }
+          },
+        },
       },
 
       google: {
@@ -382,11 +422,6 @@ export default (sequelize: any, DataTypes: any) => {
       country: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-
-      interestedBy: {
-        type: DataTypes.STRING,
-        defaultValue: 'not specified',
       },
 
       about: {

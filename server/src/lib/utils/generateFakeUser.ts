@@ -20,13 +20,19 @@ export type FakeUser = {
 export const generateFakeEmail = () =>
   `${NAMESPACE}.${nanoid()}@inbox.testmail.app`;
 
+const genders = ['m', 'f'];
 export const getRandUser = (): FakeUser => {
   const rand = Math.floor(Math.random() * allUsers.length);
   const user = allUsers[rand];
+  const userGender =
+    user.gender === 'm' || user.gender === 'f'
+      ? user.gender
+      : genders[Math.floor(Math.random() * genders.length)];
   return {
     ...user,
     passwordConfirmation: user.password,
     email: generateFakeEmail(),
+    gender: userGender,
   };
 };
 
