@@ -1,7 +1,10 @@
+import { disablePagination } from 'feathers-hooks-common';
+
 export default {
   before: {
     all: [],
-    find: [],
+    find: disablePagination(),
+
     get: [],
     create: [],
     update: [],
