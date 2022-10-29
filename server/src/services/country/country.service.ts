@@ -15,7 +15,7 @@ declare module '../../declarations' {
 export default function (app: Application): void {
   const options = {
     Model: app.get('sequelizeClient').models.Country,
-    paginate: app.get('paginate'),
+    paginate: undefined,
   };
 
   // Initialize our service with any options it requires
