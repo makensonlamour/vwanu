@@ -73,6 +73,26 @@ export const queryClause = (context, where) => {
   }
   return clause;
 };
+export const Addresses = `(
+  SELECT 
+    json_agg(
+      json_build_object(
+        'id', "EntityAddresses"."id",
+        'street', "Streets"."name",  
+        'country', "Countries"."name",
+        'state', "States"."name",
+        'city', "Cities"."name",
+        'addressType', "AddressTypes"."description"
+      ))
+    FROM "EntityAddresses"
+    INNER JOIN "Addresses" ON "Addresses"."id" = "EntityAddresses"."AddressId"
+    INNER JOIN "Streets" ON "Streets"."id" = "Addresses"."StreetId"
+    INNER JOIN "Cities" ON "Cities"."id" = "Addresses"."CityId"
+    INNER JOIN "States" ON "States"."id" = "Addresses"."StateId"
+    INNER JOIN "Countries" ON "Countries"."id" = "Addresses"."CountryId"
+    INNER JOIN "AddressTypes" ON "AddressTypes"."id" = "EntityAddresses"."AddressTypeId"
+    WHERE "EntityAddresses"."UserId" = "User"."id"
+  )`;
 export default (UserId, Sequelize) => {
   const Interests = `(
 SELECT 
@@ -133,6 +153,7 @@ SELECT
       [Sequelize.literal(amountOfFollowing), 'amountOfFollowing'],
       [Sequelize.literal(amountOfFriend), 'amountOfFriend'],
       [Sequelize.literal(Interests), 'Interests'],
+      [Sequelize.literal(Addresses), 'Addresses'],
     ],
   };
 };

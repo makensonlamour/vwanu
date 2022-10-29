@@ -1,37 +1,16 @@
 import * as authentication from '@feathersjs/authentication';
+// import { disallow } from 'feathers-hooks-common';
 // Don't remove this comment. It's needed to format import lines nicely.
-import { disablePagination } from 'feathers-hooks-common';
-
 const { authenticate } = authentication.hooks;
 
+// const notAllow = disallow('external');
 export default {
   before: {
     all: [authenticate('jwt')],
-    find: disablePagination(),
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
-  },
-
-  after: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
+    // get: notAllow,
+    // create: notAllow,
+    // update: notAllow,
+    // patch: notAllow,
+    // remove: notAllow,
   },
 };

@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
-
 /** Local dependencies */
 import app from '../../src/app';
 import {
@@ -24,7 +23,9 @@ describe("'address' service", () => {
     testServer = request(app);
     // Creating test users
     testUsers = await Promise.all(
-      getRandUsers(2).map((user) => testServer.post(userEndpoint).send(user))
+      getRandUsers(2).map((user) =>
+        testServer.post(userEndpoint).send({ ...user, id: undefined })
+      )
     );
     testUsers = testUsers.map((testUser) => testUser.body);
 
@@ -97,11 +98,25 @@ describe("'address' service", () => {
       streetType: 'Street',
     };
 
-    const newUser = { ...getRandUser(), address };
-    await testServer.post(userEndpoint).send(newUser);
+    const newUser = { ...getRandUser(), address, id: undefined };
+    const { body: userWithAddress } = await testServer
+      .post(userEndpoint)
+      .send(newUser);
 
     // console.log(body.errors[0].instance);
 
+    const { body: addressFromDB } = await testServer
+      .get(`${userEndpoint}/${userWithAddress.id}`)
+      .set('authorization', testUsers[0].accessToken);
+
+    expect(addressFromDB.Addresses[0]).toMatchObject({
+      id: expect.any(String),
+      street: address.street,
+      country: fakeCountries[0].name,
+      state: fakeStates[0].name,
+      city: fakeCities[0].name,
+      addressType: addressTypes[0].description,
+    });
     // expect(body).toEqual(address);
   });
   it.todo('Should be able to get all addresses of a user');
@@ -112,3 +127,36 @@ describe("'address' service", () => {
     'address must contain address type , user details , and address information'
   );
 });
+
+// describe('User Address', () => {
+//   let countries;
+//   let states;
+//   let cities;
+//   beforeAll(async () => {
+//     await sequelize.sync({ force: true });
+//     countries = await Promise.all(
+//       [
+//         { name: 'Katchopa', initials: 'kp' },
+//         { name: 'Boyo', initials: 'by' },
+//       ].map((c) => testServer.post('/countries').send(c))
+//     );
+//   });
+//   it('should create users with address', async () => {
+//     console.log(countries[0].body);
+//     const responses = await Promise.all(
+//       getRandUsers(2).map((u) => {
+//         const user = u;
+//         delete user.id;
+//         return testServer.post(endpoint).send({ ...user, interests });
+//       })
+//     );
+//     responses.forEach(({ statusCode }) => {
+//       expect(statusCode).toBe(201);
+//     });
+//   });
+//   it.todo('Each users have an address');
+//   it.todo('User has an address');
+//   it.todo('User can add an address');
+//   it.todo('User can update his address');
+//   it.todo('User can delete his address');
+// });

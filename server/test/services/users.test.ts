@@ -12,6 +12,8 @@ import {
 
 let observer;
 let privateUser;
+const sequelize = app.get('sequelizeClient');
+
 const endpoint = '/users';
 
 const modify = { country: 'United States', gender: 'f' };
@@ -20,13 +22,12 @@ describe('/users service', () => {
   let testServer;
   const interests = ['sport', 'education'];
   beforeAll(async () => {
-    const sequelize = app.get('sequelizeClient');
     await sequelize.sync({ force: true });
     testServer = request(app);
   });
 
   afterAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true });
+    await sequelize.sync({ force: true });
   });
 
   it('The user service is running', async () => {
@@ -285,7 +286,6 @@ describe('/users service', () => {
 
     expect(userR.id).toEqual(profileRequesting.id);
     expect(userR.email).toEqual(profileRequesting.email);
-    expect(userR.address).toHaveLength(0);
   });
   it('should not update sensitive information', async () => {
     [
