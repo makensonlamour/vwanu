@@ -43,7 +43,7 @@
     "entity": "User",
     "service": "users",
     "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
-    "authStrategies": ["jwt", "local"],
+    "authStrategies": ["jwt", "local", "facebook", "google"],
     "jwtOptions": {
       "header": {
         "typ": "access"
@@ -56,6 +56,23 @@
     "local": {
       "usernameField": "email",
       "passwordField": "password"
+    },
+    "oauth": {
+      "redirect": "http://localhost:3000",
+      "facebook": {
+        "key": "1115816222641818",
+        "secret": "5b4be3fc54a9e671e246cd436e77077b",
+        "scope": ["email, public_profile"]
+      },
+      "google": {
+        "key": "1021743534725-pshc954af9tss4eljolbjp3v6getgjkl.apps.googleusercontent.com", // "1021743534725-npul9e6m1k4ifq04hqilhllc0u5hp8vi.apps.googleusercontent.com",
+        "secret": "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",
+        //"1021743534725-npul9e6m1k4ifq04hqilhllc0u5hp8vi.apps.googleusercontent.com",
+        "scope": ["email", "profile", "openid"],
+        // "redirect_uri": "http://127.0.0.1:3000",
+        "callback": "/oauth/google/callback",
+        "nonce": true
+      }
     }
   },
   "refresh-token": {
@@ -66,7 +83,7 @@
       "header": {
         "typ": "refresh"
       },
-      "audience": "https://example.com",
+      "audience": "http://localhost:3000",
       "issuer": "example",
       "algorithm": "HS256",
       "expiresIn": "360d"
