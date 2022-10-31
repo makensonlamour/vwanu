@@ -103,7 +103,45 @@ describe("'address' service", () => {
       .post(userEndpoint)
       .send(newUser);
 
-    // console.log(body.errors[0].instance);
+    const { body: addressFromDB } = await testServer
+      .get(`${userEndpoint}/${userWithAddress.id}`)
+      .set('authorization', testUsers[0].accessToken);
+
+    expect(addressFromDB.Addresses[0]).toMatchObject({
+      id: expect.any(String),
+      // street: address.street,
+      country: fakeCountries[0].name,
+      state: fakeStates[0].name,
+      city: fakeCities[0].name,
+      addressType: addressTypes[0].description,
+    });
+    // expect(body).toEqual(address);
+  });
+
+  it('should be able to register a user then patch an address', async () => {
+    const address = {
+      // street: '123 Fake Street',
+      city: fakeCities[0].id,
+      state: fakeStates[0].id,
+      country: fakeCountries[0].id,
+      addressType: addressTypes[0].id,
+      streetType: 'Street',
+    };
+
+    const newUser = { ...getRandUser(), id: undefined };
+    const { body: userWithAddress, statusCode } = await testServer
+      .post(userEndpoint)
+      .send(newUser);
+
+    expect(statusCode).toBe(201);
+
+    // Patch address to user authenticated
+    const { statusCode: patchStatusCode } = await testServer
+      .patch(`${userEndpoint}/${userWithAddress.id}`)
+      .set('authorization', userWithAddress.accessToken)
+      .send({ address });
+
+    expect(patchStatusCode).toBe(200);
 
     const { body: addressFromDB } = await testServer
       .get(`${userEndpoint}/${userWithAddress.id}`)
@@ -111,13 +149,12 @@ describe("'address' service", () => {
 
     expect(addressFromDB.Addresses[0]).toMatchObject({
       id: expect.any(String),
-      street: address.street,
+      // street: null,
       country: fakeCountries[0].name,
       state: fakeStates[0].name,
       city: fakeCities[0].name,
       addressType: addressTypes[0].description,
     });
-    // expect(body).toEqual(address);
   });
   it.todo('Should be able to get all addresses of a user');
   it.todo("Should be able to update an user's address");

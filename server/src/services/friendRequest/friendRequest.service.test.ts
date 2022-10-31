@@ -96,6 +96,7 @@ describe('Friend service, ', () => {
       .set('authorization', user.accessToken);
 
     expect(response.statusCode).toEqual(StatusCodes.OK);
+
     expect(response.body).toEqual({
       id: requester.id,
       firstName: requester.firstName,
@@ -134,14 +135,13 @@ describe('Friend service, ', () => {
     const response = await testServer
       .get(`${endpoint}/?action=people-i-want-to-be-friend-with`)
       .set('authorization', requester.accessToken);
-
-    expect(response.body).toEqual(
+    expect(response.body.data).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           firstName: user.firstName,
           lastName: user.lastName,
           id: user.id,
-          profilePicture: user.profilePicture,
+          profilePicture: expect.any(String),
         }),
       ])
     );
@@ -156,13 +156,13 @@ describe('Friend service, ', () => {
       .get(`${endpoint}/?action=people-who-want-to-Be-my-friend`)
       .set('authorization', user.accessToken);
 
-    expect(response.body).toEqual(
+    expect(response.body.data).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           firstName: requester.firstName,
           lastName: requester.lastName,
           id: requester.id,
-          profilePicture: requester.profilePicture,
+          profilePicture: expect.any(String),
         }),
       ])
     );

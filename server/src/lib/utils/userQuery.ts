@@ -78,7 +78,7 @@ export const Addresses = `(
     json_agg(
       json_build_object(
         'id', "EntityAddresses"."id",
-        'street', "Streets"."name",  
+        --'street', "Streets"."name",  
         'country', "Countries"."name",
         'state', "States"."name",
         'city', "Cities"."name",
@@ -86,7 +86,7 @@ export const Addresses = `(
       ))
     FROM "EntityAddresses"
     INNER JOIN "Addresses" ON "Addresses"."id" = "EntityAddresses"."AddressId"
-    INNER JOIN "Streets" ON "Streets"."id" = "Addresses"."StreetId"
+    --INNER JOIN "Streets" ON "Streets"."id" = "Addresses"."StreetId"
     INNER JOIN "Cities" ON "Cities"."id" = "Addresses"."CityId"
     INNER JOIN "States" ON "States"."id" = "Addresses"."StateId"
     INNER JOIN "Countries" ON "Countries"."id" = "Addresses"."CountryId"
