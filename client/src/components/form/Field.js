@@ -29,6 +29,7 @@ function FormField({
             <label className="label">
               <span className="label-text text-md font-semibold mt-1 pb-4">
                 {label}
+                <span className="text-primary font-bold">{otherProps.required ? " *" : ""}</span>
                 {`${showLength ? "(" + length + ")" : ""}`}
               </span>
             </label>

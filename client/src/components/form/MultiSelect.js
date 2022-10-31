@@ -21,9 +21,12 @@ function FormSelectMulti({ name, label, options, className, testId, link, isMult
   return (
     <>
       <div className="form-control mt-3">
-        <span className="label-text text-md font-semibold">{label}</span>
+        <span className="label-text text-md font-semibold">
+          {label}
+          <span className="text-primary font-bold">{otherProps.required ? " *" : ""}</span>
+        </span>
         <Select
-          className={"select w-full " + className}
+          className={"select w-full font-normal capitalize " + className}
           placeholder={"Select " + label}
           value={val}
           onBlur={() => setFieldTouched(name)}
@@ -35,11 +38,11 @@ function FormSelectMulti({ name, label, options, className, testId, link, isMult
           MenuProps={MenuProps}
           {...otherProps}
         >
-          <MenuItem>{"Not specified"}</MenuItem>
+          <MenuItem className="font-normal !capitalize ">{"Not specified"}</MenuItem>
           {options?.length > 0
             ? options?.map((option) => {
-                return !_.isEqual(option?.label, "Not Specified") ? (
-                  <MenuItem key={option?.id} value={option?.label}>
+                return !_.isEqual(option?.label, "Not specified") ? (
+                  <MenuItem className="font-normal !capitalize " key={option?.id} value={option?.label}>
                     {option?.label}
                   </MenuItem>
                 ) : (

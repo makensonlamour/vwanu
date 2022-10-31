@@ -98,14 +98,12 @@ export function assignValue(obj) {
 }
 
 export function assignValueCountries(obj) {
-  if (obj === undefined || obj?.pages === undefined || obj?.pages[0]?.data?.total === 0) return;
+  if (obj === undefined || obj?.length === 0) return;
   const array = [];
 
-  obj?.pages?.map((page) => {
-    // eslint-disable-next-line array-callback-return
-    return page?.data?.data?.map((item) => {
-      return array?.push({ id: item?.id, value: item?.id, label: item?.name, ...item });
-    });
+  // eslint-disable-next-line array-callback-return
+  obj?.map((item) => {
+    return array?.push({ id: item?.id, value: item?.id, label: item?.name, ...item });
   });
 
   return array;

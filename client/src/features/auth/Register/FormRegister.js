@@ -45,16 +45,23 @@ const FormRegister = () => {
       reloadPage();
     } catch (e) {
       console.log("error", e);
-      if (e.response.status === 400) {
+      // if (e.response.status === 400) {
+      //   alertService.error("This email is already existed. Try with a different one", { autoClose: true });
+      // } else {
+      //   alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
+      // }
+    }
+  };
+
+  useEffect(() => {
+    if (error !== null) {
+      alertService.error(error, { autoClose: true });
+      if (error && error.includes("400")) {
         alertService.error("This email is already existed. Try with a different one", { autoClose: true });
       } else {
         alertService.error("An unknown network error has occurred on Vwanu. Try again later.", { autoClose: true });
       }
     }
-  };
-
-  useEffect(() => {
-    if (error !== null) alertService.error(error, { autoClose: true });
     if (trigger && error === null) window.location.reload();
   }, [error]);
 

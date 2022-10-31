@@ -91,7 +91,7 @@ const AboutTab = ({ user }) => {
       name: "Tiktok",
       value: user?.tiktok,
       hideName: "tiktokPrivacy",
-      view: user?.tiktokPrivacy,
+      view: user?.tiktokPrivacy || true,
     },
     {
       name: "Youtube",

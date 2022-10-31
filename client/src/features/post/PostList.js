@@ -60,18 +60,6 @@ const PostList = ({ post, pageTitle }) => {
     handleClose();
   };
 
-  useEffect(() => {
-    let temp = [];
-    if (post?.originalId !== null) {
-      temp = post?.postText?.split("~=~");
-      if (temp?.length >= 5) {
-        setOriginal({ id: temp[0], name: temp[1], createdAt: temp[2], link: temp[3], customMessage: temp[4], postText: temp[5] });
-      }
-    } else {
-      return setOriginal(false);
-    }
-  }, [post]);
-
   return (
     <>
       {post ? (
@@ -84,17 +72,19 @@ const PostList = ({ post, pageTitle }) => {
                   {" "}
                   <img alt="" className="object-cover object-center w-10 h-10 rounded-[14px]" src={post?.User?.profilePicture} />{" "}
                 </div>
-                <div className="block 2xs:w-[75%] xs:w-[80%]">
+                <div className="block w-[75%] xs:w-[80%]">
                   <div className="flex items-start w-full gap-x-2">
                     <Link
-                      className="flex flex-nowrap mb-1"
+                      className={`${
+                        post?.originalId || post?.wallId || post?.CommunityId ? "w-[50%] xs:w-full" : ""
+                      } flex flex-nowrap mb-1  xs:w-full`}
                       to={
                         _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
                           ? `../../profile/${post?.User?.id}`
                           : `../../profile/${post?.User?.id}`
                       }
                     >
-                      <span className="ml-3 text-sm font-bold hover:text-primary line-clamp-1">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
+                      <span className="ml-2 xs:ml-3 text-sm font-bold hover:text-primary line-clamp-1">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
                     </Link>
                     {/*Start of design shared */}
                     {post?.wallId !== null ? (
@@ -154,7 +144,7 @@ const PostList = ({ post, pageTitle }) => {
                     ) : null}{" "}
                     {/*End of design shared */}
                   </div>
-                  <p className="ml-3 font-medium text-xs text-gray-900">
+                  <p className="ml-1 sm:ml-3 font-medium text-xs text-gray-900">
                     {formatDistance(parseISO(post?.createdAt), new Date(), [
                       {
                         includeSeconds: true,
@@ -186,7 +176,10 @@ const PostList = ({ post, pageTitle }) => {
                   })}
                   <div className="border p-1 m-3 border-placeholder-color rounded-lg">
                     <div className="">
-                      <Link to={"../../profile/" + post?.Original?.id} className="text-[0.95rem] font-semibold hover:text-primary">
+                      <Link
+                        to={"../../profile/" + post?.Original?.id}
+                        className="text-sm xs:text-[0.95rem] font-semibold hover:text-primary"
+                      >
                         {post?.Original?.firstName + " " + post?.Original?.lastName}
                       </Link>
                       <div className="flex ">
@@ -201,7 +194,7 @@ const PostList = ({ post, pageTitle }) => {
                         <a
                           href={`../../${
                             post?.originalType === "Post" ? "posts" : post?.originalType === "Blogs" ? "blogs" : "discussions"
-                          }/${post?.OriginalId}`}
+                          }/${post?.originalId}`}
                           className="text-xs cursor-pointer hover:text-primary"
                         >
                           <span className="ml-2">{"see original"}</span>
@@ -264,10 +257,10 @@ const PostList = ({ post, pageTitle }) => {
                                         post?.amountOfReactions === 0
                                           ? null
                                           : post?.amountOfReactions > 1 && post?.isReactor?.length === 1
-                                          ? post?.amountOfReactions - 1 + " other people" //I like and more than one like the post
+                                          ? post?.amountOfReactions - 1 + " people" //I like and more than one like the post
                                           : post?.isReactor && post?.isReactor?.length - 1 === 0
                                           ? null
-                                          : post?.amountOfReactions + " other people" //I don't like and other people like
+                                          : post?.amountOfReactions + " people" //I don't like and other people like
                                       }
                                     </span>
                                   </p>

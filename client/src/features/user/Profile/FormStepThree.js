@@ -73,14 +73,14 @@ const FormStepThree = () => {
         validationSchema={ValidationSchema}
         initialValues={initialValues}
         onSubmit={handleStepThree}
-        className="mt-4 py-5 lg:shadow-2xl lg:rounded-t-3xl md:px-24 lg:px-10 bg-white"
+        className="mt-4 py-5 lg:shadow-2xl lg:rounded-t-3xl lg:px-10 bg-white"
       >
         <div className="flex justify-center">
-          <h1 className="card-title text-secondary text-center pb-5">Change your profile photo</h1>
+          <h1 className="card-title text-center pb-5">Change your profile photo</h1>
         </div>
 
         <Alert />
-        {avatar || user?.profilePicture ? (
+        {avatar ? (
           <div className="flex justify-center w-full">
             <Cropper
               src={URL.createObjectURL(avatar)}
@@ -107,8 +107,8 @@ const FormStepThree = () => {
             />
           </div>
         ) : (
-          <div className="bg-gray-100 border border-gray-200 object-contain object-center overflow-visible mask mask-squircle shadow-sm m-auto h-fit w-48 items-center">
-            <FaUserCircle size="150px" className="m-auto text-gray-500" />
+          <div className="bg-gray-100 border w-[170px] h-[170px] border-gray-200 object-contain object-center overflow-visible mask mask-squircle shadow-sm m-auto flex items-center">
+            <FaUserCircle size="100px" className="m-auto text-gray-500" />
           </div>
         )}
         <UploadAvatar
@@ -124,7 +124,7 @@ const FormStepThree = () => {
           className="bg-blue-200 text-secondary font-semibold mask mask-squircle px-6 input-primary border-none w-1/2 ml-auto hidden"
         />
         <div className="flex justify-end items-center px-2 mt-2">
-          <Link className="font-semibold text-secondary" to={"../../" + routesPath.STEP_FOUR}>
+          <Link className="font-semibold" to={"../../" + routesPath.STEP_FOUR}>
             Skip
           </Link>
           <Submit className="rounded-xl text-base-100 text-md py-1 w-fit px-6 ml-auto" title={isLoading ? <Loader /> : "Next"} />{" "}

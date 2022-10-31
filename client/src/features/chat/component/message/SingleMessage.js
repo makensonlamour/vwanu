@@ -117,7 +117,7 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
             <MenuItem onClick={handleClose}>Delete</MenuItem>
             <MenuItem onClick={handleClose}>Forward</MenuItem>
           </Menu>
-          <div className="bg-sky-100 px-2 py-1 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl w-max max-w-[70%] shadow">
+          <div className="bg-sky-100 px-2 py-1 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl w-max max-w-[90%] md:max-w-[70%] shadow">
             {listMessage?.messageText?.split("\n").map((text) => {
               return (
                 <p key={text} className="text-sm">
@@ -138,7 +138,7 @@ const SingleMessage = ({ groups, sender, listMessage, conversation }) => {
         </div>
       ) : (
         <div onMouseEnter={() => setFocus(true)} onMouseLeave={() => setFocus(false)} className="flex flex-wrap items-center">
-          <div className="shadow bg-orange-100 px-2 py-1 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl w-max max-w-[70%] lg:pl-2">
+          <div className="shadow bg-orange-100 px-2 py-1 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl w-max max-w-[90%] md:max-w-[70%] lg:pl-2">
             {listMessage?.messageText?.split("\n").map((text) => {
               return (
                 <p key={text} className="text-left text-sm">

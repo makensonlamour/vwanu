@@ -51,7 +51,7 @@ const FormBiography = ({ user }) => {
   };
 
   useEffect(() => {
-    if (user) setTextBio(user?.about);
+    if (user && user?.about) setTextBio(user?.about);
   }, [user]);
 
   return (
@@ -66,7 +66,7 @@ const FormBiography = ({ user }) => {
           type="text"
           fn={setTextBio}
           showLength={true}
-          length={70 - textBio.length}
+          length={70 - textBio?.length || 0}
           maxLength="70"
           className="w-full mt-1 mb-4 mx-auto border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
         />

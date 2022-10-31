@@ -15,6 +15,8 @@ const EditProfileTabs = ({ user }) => {
   // const urlTabs = searchParams.get("subTabs");
   const editTabs = searchParams.get("subtabs");
   let run = true;
+  // let title = "";
+  const [title, setTitle] = useState("Edit General Information");
 
   const handleUrlChange = () => {
     if (editTabs === "general" && run) {
@@ -38,9 +40,28 @@ const EditProfileTabs = ({ user }) => {
     }
   };
 
+  const handleTitle = () => {
+    if (value === "one") {
+      setTitle("Edit General Information");
+    } else if (value === "two") {
+      setTitle("Edit Contact Info");
+    } else if (value === "three") {
+      setTitle("Edit Places Lived");
+    } else if (value === "four") {
+      setTitle("Edit Work experience");
+    } else if (value === "five") {
+      setTitle("Edit Biography");
+    }
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    handleTitle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   useEffect(() => {
     if (editTabs && run) {
@@ -57,7 +78,7 @@ const EditProfileTabs = ({ user }) => {
   return (
     <>
       <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl">
-        <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`Edit "Work Experience" Information`}</h4>
+        <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`${title}`}</h4>
         <TabContext value={value}>
           <div>
             <TabList

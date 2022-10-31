@@ -7,14 +7,17 @@ import _ from "lodash";
 
 import Error from "./Error";
 
-function FormSelect({ name, label, options, className, testId, link, fn, ...otherProps }) {
+function FormSelect({ name, label, options, className, testId, link, fn, byId = false, ...otherProps }) {
   const { values, setFieldTouched, setFieldValue, handleChange, errors, touched } = useFormikContext();
   return (
     <>
       <div className="form-control mt-3 w-full">
-        <span className="label-text text-md font-semibold">{label}</span>
+        <span className="label-text text-md font-semibold">
+          {label}
+          <span className="text-primary font-bold">{otherProps.required ? " *" : ""}</span>
+        </span>
         <select
-          className={"select w-full " + className}
+          className={"select w-full !capitalize " + className}
           value={values[name]}
           onBlur={() => {
             setFieldTouched(name);
@@ -33,7 +36,12 @@ function FormSelect({ name, label, options, className, testId, link, fn, ...othe
           {options?.length > 0 &&
             options?.map((option) => {
               return !_.isEqual(option?.label, "Not Specified") ? (
-                <option onClick={() => (fn ? fn(option?.value) : "")} key={option?.id} value={option?.value}>
+                <option
+                  className="!capitalize"
+                  onClick={() => (fn ? fn(option?.value) : "")}
+                  key={option?.id}
+                  value={byId ? option?.id : option?.value}
+                >
                   {option?.label}
                 </option>
               ) : (
@@ -54,6 +62,7 @@ FormSelect.propTypes = {
   testId: PropTypes.string,
   link: PropTypes.string,
   fn: PropTypes.func,
+  byId: PropTypes.bool,
   options: PropTypes.any.isRequired,
 };
 

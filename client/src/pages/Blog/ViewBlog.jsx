@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useGetBlog, useGetBlogListByInterest } from "../../features/blog/blogSlice";
 // import parse from "html-react-parser";
@@ -20,6 +20,7 @@ import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.core.css";
 import { format } from "date-fns";
 import placeholderBlog from "../../assets/images/placeholderBlog.png";
+import { Helmet } from "react-helmet";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -199,6 +200,20 @@ const ViewBlog = () => {
 
   return (
     <>
+      {/*  Meta tags */}
+      <Helmet>
+        <title>{blog?.blogTitle}</title>
+        <meta property="og:title" content={blog?.blogTitle} />
+        <meta property="og:site_name" content={"Vwanu,LLC"} />
+        <meta property="og:description" content={blog?.blogText} />
+        <meta property="og:keywords" content="vwanu,blogs,social,media" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="article:author" content={blog?.User?.firstName + " " + blog?.User?.lastName} />
+        <meta property="og:image" content={blog?.coverPicture} />
+        <meta property="twitter:card" content={blog?.coverPicture} />
+        <meta name="twitter:image:alt" content={blog?.blogTitle} />
+      </Helmet>
       <Toaster />
       <div className="mb-10 md:max-w-[600px] md:mx-auto lg:max-w-[1450px]">
         <div className="w-full">

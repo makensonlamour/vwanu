@@ -18,6 +18,8 @@ const NotificationPreview = () => {
   const [notificationList, setNotificationList] = useState([]);
   let run = false;
 
+  console.log(notificationList);
+
   const onCreatedListener = (notification) => {
     if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
@@ -108,13 +110,7 @@ const NotificationPreview = () => {
                       to={"#"}
                       onClick={() => {
                         if (!notification?.view) {
-                          if (entityName === "users") {
-                            handleRead(notification?.id, notification?.UserId, notification?.entityName);
-                          } else if (entityName === "posts") {
-                            handleRead(notification?.id, notification?.entityId, notification?.entityName);
-                          } else {
-                            return;
-                          }
+                          handleRead(notification?.id, notification?.entityId, notification?.entityName);
                         }
                       }}
                       className="mx-2 text-base my-1 py-1 sm:py-2 hover:bg-placeholder-color px-2 rounded-xl"

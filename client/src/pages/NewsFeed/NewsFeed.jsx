@@ -161,7 +161,7 @@ const NewsFeed = () => {
     <>
       <div className="mx-auto mt-6 max-w-screen-3xl">
         <div className="flex justify-evenly">
-          <div className="basis-[25%] hidden xl:block">
+          <div className="basis-[35%] hidden xl:block">
             <div className="sticky top-[6rem] overflow-y-auto scrollbar h-[87vh]">
               <BlogComponent data={blogList?.pages[0]?.data?.data || []} isLoading={loadingBlog} isError={errorBlog} />
               <FollowingPreview

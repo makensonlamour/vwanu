@@ -53,7 +53,7 @@ const StepFour = () => {
                 hasNext={hasNextPage}
                 refetch={() => queryClient.refetchQueries(["user", "suggest"])}
                 container={true}
-                classNameContainer={"overflow-y-auto h-[57vh] w-full"}
+                classNameContainer={"overflow-y-auto scrollbar h-fit max-h-[57vh] w-full"}
                 loader={
                   <div className="flex justify-center py-5">
                     <Loader color="black" />

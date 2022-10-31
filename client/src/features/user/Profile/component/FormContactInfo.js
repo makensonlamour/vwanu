@@ -133,15 +133,6 @@ const FormContactInfo = ({ user }) => {
         />
         <Field
           autoCapitalize="none"
-          label="Instagram"
-          placeholder="Instagram"
-          name="instagram"
-          type="text"
-          containerClassName=""
-          className="mt-1 lg:mt-2 mx-2 border-gray-200 border font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-        />
-        <Field
-          autoCapitalize="none"
           label="Tiktok"
           placeholder="Tiktok"
           name="tiktok"

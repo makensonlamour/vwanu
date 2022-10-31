@@ -6,6 +6,7 @@ import { useSendFriendRequest, useCancelFriendRequest } from "../../../features/
 import { useSendFollow } from "../../../features/follower/followerSlice";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
+import { useQueryClient } from "react-query";
 
 const sendInvitationSuccess = () =>
   toast.success("You sent the invitation", {
@@ -40,7 +41,7 @@ const followError = () =>
 const FindFriend = ({ data }) => {
   const user = useOutletContext();
   const { id } = useParams();
-  console.log(data);
+  const queryClient = useQueryClient();
   const sendFriendRequest = useSendFriendRequest(["user", "suggest"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "suggest"], data?.id);
   const sendFollow = useSendFollow(["user", "suggest"]);
@@ -92,7 +93,7 @@ const FindFriend = ({ data }) => {
     <>
       <Toaster />
       {data?.id !== user?.id && (
-        <div className="my-4">
+        <div className="w-full">
           <div key={data?.id} className="border border-gray-200 p-2 lg:p-4">
             <div className="flex justify-start items-center">
               <div className="mr-3">

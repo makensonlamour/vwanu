@@ -142,10 +142,19 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                     </h4>
                     <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
                       {otherUser
-                        ? otherUser?.facebookPrivacy
+                        ? otherUser?.facebookPrivacy && (
+                            <a
+                              href={`https://${otherUser?.facebook}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <BsFacebook size={"24px"} className="mx-auto" />
+                            </a>
+                          )
                         : user?.facebookPrivacy && (
                             <a
-                              href={`https://${otherUser ? otherUser?.facebook : user?.facebook}`}
+                              href={`https://${user?.facebook}`}
                               target="_blank"
                               className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
                               rel="noreferrer"
@@ -154,10 +163,19 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                             </a>
                           )}
                       {otherUser
-                        ? otherUser?.youtubePrivacy
+                        ? otherUser?.youtubePrivacy && (
+                            <a
+                              href={`https://${otherUser?.youtube}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiFillYoutube size={"24px"} className="mx-auto" />
+                            </a>
+                          )
                         : user?.youtubePrivacy && (
                             <a
-                              href={`https://${otherUser ? otherUser?.youtube : user?.youtube}`}
+                              href={`https://${user?.youtube}`}
                               target="_blank"
                               className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
                               rel="noreferrer"
@@ -166,10 +184,19 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                             </a>
                           )}
                       {otherUser
-                        ? otherUser?.twitterPrivacy
+                        ? otherUser?.twitterPrivacy && (
+                            <a
+                              href={`https://${otherUser?.twitter}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiFillTwitterCircle size={"24px"} className="mx-auto" />
+                            </a>
+                          )
                         : user?.twitterPrivacy && (
                             <a
-                              href={`https://${otherUser ? otherUser?.twitter : user?.twitter}`}
+                              href={`https://${user?.twitter}`}
                               target="_blank"
                               className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
                               rel="noreferrer"
@@ -178,10 +205,19 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                             </a>
                           )}
                       {otherUser
-                        ? otherUser?.instagramPrivacy
+                        ? otherUser?.instagramPrivacy && (
+                            <a
+                              href={`https://${otherUser?.instagram}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiOutlineInstagram size={"24px"} className="mx-auto" />
+                            </a>
+                          )
                         : user?.instagramPrivacy && (
                             <a
-                              href={`https://${otherUser ? otherUser?.instagram : user?.instagram}`}
+                              href={`https://${user?.instagram}`}
                               target="_blank"
                               className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
                               rel="noreferrer"
@@ -190,10 +226,19 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                             </a>
                           )}
                       {otherUser
-                        ? otherUser?.linkedinPrivacy
+                        ? otherUser?.linkedinPrivacy && (
+                            <a
+                              href={`https://${otherUser?.linkedin}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <AiOutlineLinkedin size={"24px"} className="mx-auto" />
+                            </a>
+                          )
                         : user?.linkedinPrivacy && (
                             <a
-                              href={`https://${otherUser ? otherUser?.linkedin : user?.linkedin}`}
+                              href={`https://${user?.linkedin}`}
                               target="_blank"
                               className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
                               rel="noreferrer"
@@ -202,10 +247,19 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                             </a>
                           )}
                       {otherUser
-                        ? otherUser?.tiktokPrivacy
+                        ? otherUser?.tiktokPrivacy && (
+                            <a
+                              href={`https://${otherUser?.tiktokk}`}
+                              target="_blank"
+                              className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
+                              rel="noreferrer"
+                            >
+                              <FaTiktok size={"24px"} className="mx-auto" />
+                            </a>
+                          )
                         : user?.tiktokPrivacy && (
                             <a
-                              href={`https://${otherUser ? otherUser?.tiktok : user?.tiktok}`}
+                              href={`https://${user?.tiktok}`}
                               target="_blank"
                               className="inline w-8 h-8 mr-2 hover:text-secondary cursor-pointer"
                               rel="noreferrer"

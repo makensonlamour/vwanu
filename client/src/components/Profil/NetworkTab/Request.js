@@ -33,7 +33,7 @@ const Friends = ({ fn, isNetwork = false }) => {
                 Tap to retry
               </Link>
             </div>
-          ) : listFriendReceive?.pages?.length > 0 && listFriendReceive?.pages[0]?.data?.total > 0 ? (
+          ) : listFriendReceive && listFriendReceive?.pages?.length > 0 && listFriendReceive?.pages[0]?.data?.total > 0 ? (
             <InfiniteScroll
               fetchMore={fetchNextPage}
               isError={isError}
