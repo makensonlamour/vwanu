@@ -84,7 +84,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
             ) : null}
           </Stack>
         ) : (
-          <div className="flex justify-center">
+          <div className="flex justify-center w-full">
             <EmptyComponent
               border={false}
               icon={<ImSad size={"32px"} className="" />}

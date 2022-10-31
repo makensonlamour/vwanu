@@ -47,9 +47,23 @@ const ViewDetails = ({ title, user, substabs }) => {
           return (
             <>
               {detail?.value && (detail?.view || userMe?.id?.toString() === id?.toString()) && (
-                <div key={detail?.name + "_" + detail?.value} className="flex py-3">
+                <div key={detail?.name} className="flex py-3">
                   <p className="basis-1/3 text-gray-500">{detail?.name}</p>
-                  <p className="basis-2/3 capitalize">{detail?.value}</p>
+                  {detail?.name === "Interest" ? (
+                    detail?.value?.length > 0 ? (
+                      <div className="flex justify-start gap-x-2">
+                        {detail?.value?.map((interest) => {
+                          return (
+                            <p key={interest?.id} className="bg-gray-100 px-2 py-1 text-xs rounded-full">
+                              {interest?.name}
+                            </p>
+                          );
+                        })}
+                      </div>
+                    ) : null
+                  ) : (
+                    <p className="basis-2/3 capitalize">{detail?.value}</p>
+                  )}
                   {userMe?.id?.toString() === id?.toString() &&
                     (detail?.name === "Birth Date" ||
                       detail?.name === "Email" ||

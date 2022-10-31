@@ -13,7 +13,7 @@ const StepTwo = () => {
     <>
       <div>
         <Step step={2} className="step-primary mb-4" />
-        <div className="lg:w-2/5 m-auto px-2 lg:px-0">
+        <div className="lg:w-2/5 m-auto xs:px-2 lg:px-0">
           <FormStepTwo />
         </div>
       </div>

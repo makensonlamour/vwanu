@@ -7,7 +7,7 @@ import Loader from "../../../components/common/Loader";
 import { TextArea, Submit, Form } from "../../../components/form";
 import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 import Chip from "@mui/material/Chip";
-import { useGetAllMembers } from "../../../features/user/userSlice";
+import { useGetAllNonMembers } from "../../../features/community/communitySlice";
 import {
   // useGetAllMembersCommunity,
   useSendInvitation,
@@ -32,7 +32,13 @@ const sendInvitationError = () =>
 const SendInvites = () => {
   const user = useOutletContext();
   const { id } = useParams();
-  const { data: members, isLoading: loadingMember, isError, hasNextPage, fetchNextPage } = useGetAllMembers(["members", "all"], true);
+  const {
+    data: members,
+    isLoading: loadingMember,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetAllNonMembers(["nomembers", "all"], id !== undefined ? true : false, id);
   // const { data: listMemberCommunity } = useGetAllMembersCommunity(["user", "community", "all"], id === "undefined" ? false : true, id);
   // const { data: listInvitation } = useGetCommunityInvitation(["community", "invitation", "all"], id !== "undefined" ? true : false, id);
   const sendInvitation = useSendInvitation(["community", "invitation"]);

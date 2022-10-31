@@ -130,8 +130,8 @@ const FormStepFive = ({ setStep, currentStep, data, setData }) => {
           <div className="mb-8 mt-10">
             <FormUploadCover getImg={getImg} hideViewer={true} user={user} />
           </div>
-          <div className="px-4 py-3 bg-warning w-full border border-yellow-300 rounded-2xl">
-            <p className="text-v-yellow-dark text-sm">{`For best results, upload an image that is 1950px by 450px or larger.`}</p>
+          <div className="px-4 py-3 bg-white w-full border border-gray-200 rounded-xl">
+            <p className="text-black text-sm">{`For best results, upload an image that is 1950px by 450px or larger.`}</p>
           </div>
 
           <div className="flex justify-between">

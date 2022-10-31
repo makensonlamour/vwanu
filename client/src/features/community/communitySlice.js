@@ -62,3 +62,6 @@ export const useGetCommunityIn = (queryKey, enabled = true) => useLoadMore(query
 
 export const useDeleteCommunity = (queryKey, communityId, oldData, newData) =>
   useDelete(queryKey, `/communities/${communityId}`, (oldData, newData));
+
+export const useGetAllNonMembers = (queryKey, enabled = true, communityId) =>
+  useLoadMore(queryKey, enabled, `/users?friends=true&notCommunityMember=${communityId}`);

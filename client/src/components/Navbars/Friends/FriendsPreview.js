@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BsXCircleFill } from "react-icons/bs";
-import { useGetListFriendReceive } from "../../../features/friend/friendSlice";
+import { useGetListFriendReceive, useAcceptFriendRequest, useDeclineFriendRequest } from "../../../features/friend/friendSlice";
 import { Badge } from "@mui/material";
+import toast, { Toaster } from "react-hot-toast";
 
 // import AcceptFriendRequestButton from "../../../features/friend/component/AcceptFriendRequestButton";
 
@@ -12,7 +13,10 @@ import { Badge } from "@mui/material";
 
 const FriendsPreview = () => {
   const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
+  const acceptFriendRequest = useAcceptFriendRequest(["user", "request"]);
+  const declineFriendRequest = useDeclineFriendRequest(["user", "request"]);
   const [friendReceiveNumber, setFriendReceiveNumber] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const calculateLength = () => {
     if (listFriendReceive && listFriendReceive?.pages?.length > 0) {
@@ -23,6 +27,46 @@ const FriendsPreview = () => {
     }
   };
 
+  const acceptFriendRequestError = () =>
+    toast.error("Sorry. Error on accepting Friend Request!", {
+      position: "top-center",
+    });
+
+  const declineFriendRequestError = () =>
+    toast.error("Sorry. Error on refusing Friend Request!", {
+      position: "top-center",
+    });
+
+  const handleAcceptfriendRequest = async (friendId) => {
+    // e.preventDefault();
+    setIsLoading(true);
+    try {
+      await acceptFriendRequest.mutateAsync({ friendId, accept: true });
+      //add query to fetch
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+      acceptFriendRequestError();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeclinefriendRequest = async (friendId) => {
+    // e.preventDefault();
+    setIsLoading(true);
+    try {
+      await declineFriendRequest.mutateAsync({ friendId, accept: false });
+      //add query to fetch
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+      declineFriendRequestError();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     calculateLength();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,6 +74,7 @@ const FriendsPreview = () => {
 
   return (
     <>
+      <Toaster />
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
           <Badge badgeContent={friendReceiveNumber} color="primary" className="">
@@ -40,13 +85,14 @@ const FriendsPreview = () => {
           tabIndex="2"
           className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-[90vw] sm:w-96 text-gray-900 overflow-auto scrollbar h-fit max-h-96"
         >
+          {console.log(listFriendReceive)}
           {listFriendReceive &&
           listFriendReceive?.pages &&
           listFriendReceive?.pages?.length > 0 &&
           listFriendReceive?.pages[0]?.data?.total > 0 ? (
             <li>
               {listFriendReceive?.pages?.map((page, idx) => {
-                return page.data?.map((friend) => {
+                return page?.data?.map((friend) => {
                   return (
                     <Link key={idx} to={"/profile/" + friend?.id} className="text-base border-b hover:bg-placeholder-color mx-2 rounded-xl">
                       <div className="flex items-center align-middle justify-between">
@@ -56,10 +102,18 @@ const FriendsPreview = () => {
                         <div className="text-secondary text-sm w-40">{friend?.firstName + " " + friend?.lastName}</div>
                         <div className="w-48">
                           <button
-                            to={"/profile/" + friend?.id}
+                            onClick={() => handleAcceptfriendRequest(friend?.id)}
+                            // to={"/profile/" + friend?.id}
                             className="capitalize ml-auto text-sm items-right align-middle mr-1 btn btn-sm btn-secondary text-base-100 rounded-xl mb-2 lg:mb-0 hover:bg-primary justify-end"
                           >
-                            Visit profile
+                            {isLoading ? "Loading..." : "Accept"}
+                          </button>
+                          <button
+                            onClick={() => handleDeclinefriendRequest(friend?.id)}
+                            // to={"/profile/" + friend?.id}
+                            className="capitalize ml-auto text-sm items-right align-middle mr-1 btn btn-sm btn-secondary text-base-100 rounded-xl mb-2 lg:mb-0 hover:bg-primary justify-end"
+                          >
+                            {isLoading ? "Loading..." : "Decline"}
                           </button>
                         </div>
                       </div>

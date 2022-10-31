@@ -7,11 +7,7 @@ import Loader from "../../../components/common/Loader";
 import { FiUserX, FiUserPlus } from "react-icons/fi";
 import { AiOutlineCheck } from "react-icons/ai";
 import AcceptFriendRequestButton from "./AcceptFriendRequestButton";
-import {
-  useSendFriendRequest,
-  useCancelFriendRequest,
-  useUnfriendUser,
-} from "../friendSlice";
+import { useSendFriendRequest, useCancelFriendRequest, useUnfriendUser } from "../friendSlice";
 
 const FriendRequestButton = ({ otherUser }) => {
   const { id } = useParams();
@@ -34,10 +30,6 @@ const FriendRequestButton = ({ otherUser }) => {
     toast.error("Sorry. Error on Removing Connection!", {
       position: "top-center",
     });
-
-  // const { data: listFriendSent } = useGetListFriendRequestSent(["user", "sent"], true);
-  // const { data: listFriendReceive } = useGetListFriendReceive(["user", "received"], true);
-  // const { data: listFriendship } = useGetListFriend(["user", "friend"], id === "undefined" ? false : true, id);
 
   const sendFriendRequest = useSendFriendRequest(["user", "request"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "request"], otherUser?.id);

@@ -25,7 +25,7 @@ function UploadAvatar({ name, className, id, icon, format, setAvatarState, ...ot
           {...otherProps}
         />
         <label htmlFor={id}>
-          <div className="absolute border-2 border-white bottom-[31%] right-[21%] lg:right-[34%] lg:bottom-[25%] rounded-[14px] bg-gray-300 opacity-75 p-2">
+          <div className="absolute border-2 border-white bottom-[25%] right-[17%] xs:bottom-[25%] xs:right-[21%] lg:right-[34%] lg:bottom-[25%] rounded-[14px] bg-gray-300 opacity-75 p-2">
             {icon}
           </div>
         </label>

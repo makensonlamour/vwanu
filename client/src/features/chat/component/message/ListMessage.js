@@ -151,7 +151,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                   refetch={() => queryClient.invalidateQueries(["message", id])}
                   container={true}
                   isReverse={true}
-                  classNameContainer={"overflow-y-auto h-[73vh]"}
+                  classNameContainer={"overflow-y-auto h-fit max-h-[72vh]"}
                   loader={
                     <div className="flex justify-center py-5">
                       <Loader color="black" />
@@ -180,7 +180,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                         .reverse()
                         ?.map((message) => {
                           return (
-                            <div key={message?.id} className="px-2 lg:px-5 py-1">
+                            <div key={message?.id} className="px-2 lg:px-5 py-1 mb-1">
                               <SingleMessage
                                 conversation={conversationData?.data}
                                 groups={message?.Conversation?.amountOfPeople > 2 ? true : false}

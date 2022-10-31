@@ -31,7 +31,7 @@ const Member = () => {
           <TabContext value={value}>
             <div>
               <TabList
-                sx={{ marginBottom: "-2rem", borderBottom: "1px #eff3ff solid" }}
+                sx={{ marginBottom: "0.5rem", borderBottom: "1px #eff3ff solid" }}
                 value={value}
                 onChange={handleChange}
                 textColor="primary"
@@ -41,26 +41,30 @@ const Member = () => {
                 scrollButtons="auto"
                 allowScrollButtonsMobile
               >
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`Members`} />
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`friends (${user?.amountOfFriend || 0})`} />
+                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`People`} />
+                <Tab
+                  sx={{ textTransform: "capitalize", fontSize: "1rem" }}
+                  value="two"
+                  label={`Connections (${user?.amountOfFriend || 0})`}
+                />
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Followers (${user?.amountOfFollower})`} />
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Following (${user?.amountOfFollowing})`} />
                 <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="five" label={`Request (${totalRequest})`} />
               </TabList>
             </div>
-            <TabPanel value="one" sx={{ width: "100%" }}>
+            <TabPanel value="one" sx={{ width: "100%" }} style={{ padding: 0 }}>
               <MemberList user={user} fn={setTotalMember} />
             </TabPanel>
-            <TabPanel value="two">
+            <TabPanel value="two" style={{ padding: 0 }}>
               <Friends user={user} fn={setTotalFriend} />
             </TabPanel>
-            <TabPanel value="three">
+            <TabPanel value="three" style={{ padding: 0 }}>
               <Followers user={user} fn={setTotalFollowers} />
             </TabPanel>
-            <TabPanel value="four">
+            <TabPanel value="four" style={{ padding: 0 }}>
               <Following user={user} fn={setTotalFollowing} />
             </TabPanel>
-            <TabPanel value="five">
+            <TabPanel value="five" style={{ padding: 0 }}>
               <Request user={user} fn={setTotalRequest} />
             </TabPanel>
           </TabContext>

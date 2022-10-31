@@ -11,7 +11,7 @@ import { useGetCountry, useGetState, useGetCity, useGetAddressType } from "../..
 // import countries from "../../../data/countries.json";
 // import states from "../../../data/states.json";
 // import cities from "../../../data/cities.json";
-import { assignValueCountries, assignValueStates, assignValue } from "../../../helpers/index";
+import { assignValueCountries, assignValue } from "../../../helpers/index";
 
 // Core components
 import { Field, Select, MultiSelect, Form, Submit } from "../../../components/form";
@@ -24,10 +24,7 @@ const FormStepTwo = () => {
   const idUser = user?.id;
   const navigate = useNavigate();
   const [interest, setInterest] = useState([]);
-  const [countryCode, setCountryCode] = useState({
-    value: "",
-    label: "Not Specified",
-  });
+  const [countryCode, setCountryCode] = useState(false);
   const [stateCode, setStateCode] = useState(false);
   const [cityCode, setCityCode] = useState(false);
   const [typeAddress, setTypeAddress] = useState("");
@@ -36,8 +33,8 @@ const FormStepTwo = () => {
   const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
   const { data: countryList } = useGetCountry(["country", "all"], true);
   const { data: addressTypesList } = useGetAddressType(["address-types", "all"], true);
-  const { data: stateList } = useGetState(["state", "all"], countryCode?.value !== "" ? true : false, countryCode?.label);
-  const { data: cityList } = useGetCity(["city", "all"], stateCode ? true : false, stateCode);
+  const { data: stateList } = useGetState(["state", "all", countryCode], countryCode ? true : false, countryCode);
+  const { data: cityList } = useGetCity(["city", "all", stateCode], stateCode ? true : false, stateCode);
   const { data: interestList } = useGetInterestList(["interest", "all"]);
 
   const options = assignValue(interestList);
@@ -46,29 +43,29 @@ const FormStepTwo = () => {
   const optionsState = assignValueCountries(stateList);
   const optionsCity = assignValueCountries(cityList);
 
-  console.log(addressTypesList, countryList, stateList, cityList);
+  // console.log(addressTypesList, countryList, stateList, cityList);
 
   const initialValues = {
     country: "",
     states: "",
     city: "",
-    street: "",
-    zipCode: "",
+    // street: "",
+    // zipCode: "",
     gender: "",
-    interestedBy: "",
+    // interestedBy: "",
     interest: "",
     birthday: "",
   };
 
   const ValidationSchema = Yup.object().shape({
     country: Yup.string().required().label("Country"),
-    states: Yup.string().label("States"),
-    city: Yup.string().label("City"),
-    street: Yup.string().label("Street"),
-    zipCode: Yup.string().label("Zip Code"),
+    states: Yup.string().required().label("States"),
+    city: Yup.string().required().label("City"),
+    // street: Yup.string().label("Street"),
+    // zipCode: Yup.string().label("Zip Code"),
     gender: Yup.string().required().label("Gender"),
     // interestedBy: Yup.string().required().label("Interest By"),
-    interest: Yup.array().label("Interest"),
+    interest: Yup.array().required().label("Interest"),
     birthday: Yup.date()
       .test(
         "birthday",
@@ -80,36 +77,38 @@ const FormStepTwo = () => {
   });
 
   const handleStepTwo = async (credentials) => {
-    setIsLoading(true);
-
-    if (addressTypesList && addressTypesList?.total > 1) {
-      addressTypesList?.data((item) => {
-        if (item?.description === "Home") {
-          setTypeAddress(item?.id);
-        }
-      });
-    }
-
-    const dataObj = {
-      address: {
-        country: countryCode,
-        state: stateCode,
-        city: cityCode,
-        street: credentials?.street,
-        zip: credentials?.zipCode,
-        addressType: typeAddress,
-      },
-      gender: credentials?.gender,
-      // interestedBy: credentials?.interestedBy,
-      birthday: credentials?.birthday,
-      interests: interest,
-      id: idUser,
-    };
-
     try {
+      setIsLoading(true);
+      if (addressTypesList && addressTypesList?.total > 0) {
+        addressTypesList?.data?.map((item) => {
+          console.log(item, item?.description);
+          if (item?.description === "Home") {
+            setTypeAddress(item?.id);
+          }
+        });
+      }
+
+      const dataObj = {
+        address: {
+          country: countryCode,
+          state: stateCode,
+          city: cityCode,
+          // street: "hg",
+          // zip: "76",
+          addressType: typeAddress,
+        },
+        gender: credentials?.gender,
+        // interestedBy: credentials?.interestedBy,
+        birthday: credentials?.birthday,
+        interests: interest,
+        id: idUser,
+      };
+
       let result = await updateUser.mutateAsync(dataObj);
+      console.log(result);
       navigate("../../" + routesPath.STEP_THREE);
     } catch (e) {
+      console.log(e);
       let customMessage = "An unknown network error has occurred on Vwanu. Try again later.";
       if (e?.response?.status === 400) {
         alertService.error(e?.response?.data?.errors[0]?.message, { autoClose: true });
@@ -145,19 +144,20 @@ const FormStepTwo = () => {
         <h1 className="card-title text-black text-center">Create your profile</h1>
         <Alert />
         <Field
+          required
           autoCapitalize="none"
           label="Date of Birth"
           placeholder="Date of Birth"
           name="birthday"
           type="date"
-          className="mr-1 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mr-1 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
         <Select
           required
           label="Gender"
           placeholder="Gender"
           name="gender"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="gender-error-message"
           options={[
             { id: 0, label: "Not Specified", value: "" },
@@ -167,8 +167,9 @@ const FormStepTwo = () => {
         />
 
         <MultiSelect
+          required
           label="Interest"
-          className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
+          className="w-full mt-1 border-0 border-gray-200 font-semibold rounded-xl input-secondary autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
           placeholder={"Select the category..."}
           multiple
           options={options}
@@ -176,7 +177,7 @@ const FormStepTwo = () => {
           val={interest}
           name="interest"
         />
-        <CustomSelect label={"Country"} options={optionsCountry} value={countryCode} onChange={(o) => setCountryCode(o)} />
+        {/* <CustomSelect label={"Country"} options={optionsCountry} value={countryCode} onChange={(o) => setCountryCode(o)} /> */}
         {/* <Select
           required
           label="Country"
@@ -184,17 +185,28 @@ const FormStepTwo = () => {
           name="country"
           style={{ width: "100%" }}
           fn={setCountryCode}
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          className="mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="country-error-message"
           options={optionsCountry}
         /> */}
+        <Select
+          required
+          label="Country"
+          placeholder="Country"
+          name="country"
+          className="mr-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          testId="state-error-message"
+          fn={setCountryCode}
+          byId={true}
+          options={optionsCountry}
+        />
         <div className="flex justify-center w-full">
           <Select
             required
             label="States"
             placeholder="States"
             name="states"
-            className="mr-2 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="mr-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
             testId="state-error-message"
             fn={setStateCode}
             options={optionsState}
@@ -205,20 +217,20 @@ const FormStepTwo = () => {
             placeholder="City"
             name="city"
             style={{ width: "100%" }}
-            className="ml-2 mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="ml-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
             testId="city-error-message"
             fn={setCityCode}
             options={optionsCity}
           />
         </div>
-        <div className="flex w-full">
+        {/* <div className="flex w-full">
           <Field
             label="Street"
             placeholder="Street Address"
             name="street"
             type="text"
             containerClassName="w-full"
-            className="w-full mr-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="w-full mr-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Field
             label="Zip Code"
@@ -226,9 +238,9 @@ const FormStepTwo = () => {
             name="zipCode"
             type="text"
             containerClassName=""
-            className="w-full ml-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="w-full ml-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
-        </div>
+        </div> */}
         <div className="mt-6">
           <Submit className="rounded-xl py-2 text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />
         </div>

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useState } from "react";
 import { useSendFriendRequest } from "../../features/friend/friendSlice";
 import { useSendFollow } from "../../features/follower/followerSlice";
@@ -11,6 +12,7 @@ import InfiniteScroll from "../InfiniteScroll/InfiniteScroll";
 import toast, { Toaster } from "react-hot-toast";
 import EmptyComponent from "../common/EmptyComponent";
 import { ImSad } from "react-icons/im";
+import CustomViewFriend from "./CustomViewFriend";
 
 const friendRequestError = () =>
   toast.error("Sorry. Error on sending Friend Request!", {
@@ -86,7 +88,7 @@ const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arra
             hasNext={hasNextPage}
             refetch={() => queryClient.invalidateQueries(arrayQuery)}
             container={true}
-            classNameContainer={"overflow-y-auto h-[60vh] w-full"}
+            classNameContainer={"overflow-y-auto scrollbar max-h-[60vh] w-full"}
             loader={
               <div className="flex justify-center py-5">
                 <Loader color="black" />
@@ -104,8 +106,8 @@ const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arra
             <div className="flex flex-wrap lg:justify-between xl:justify-start py-2 w-full">
               {data?.pages?.map((page) => {
                 return page?.data?.data?.map((friend) => {
-                  return (
-                    <div
+                  return <CustomViewFriend data={friend} />;
+                  /*<div
                       key={friend?.id}
                       className={`bg-white border-gray-200 w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3 
                         ${isNetwork ? " xl:w-[48%] " : " xl:w-[31%] "}
@@ -187,7 +189,7 @@ const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arra
                             </button>
                           )}
 
-                          {/* connect friend */}
+                          {/* connect friend }
                           {friend?.isFriend ? (
                             <button disabled={true} className="basis-1/2 py-3 border-l border-gray-300 hover:bg-gray-100  bg-white">
                               {loading ? (
@@ -229,7 +231,7 @@ const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arra
                         </div>
                       )}
                     </div>
-                  );
+                  );*/
                 });
               })}
             </div>

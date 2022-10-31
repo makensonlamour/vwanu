@@ -8,7 +8,7 @@ export const token = getToken("feathers-jwt");
 const baseUrl = `http://${url}`;
 export const api = {
   get: async (url, params = {}) =>
-    axios.get(baseUrl + "" + url, {
+    axios.get(url?.includes("https") ? url : baseUrl + "" + url, {
       headers: {
         "x-auth-token": token, //add here to search token in localstorage if user rememberMe: Cookies.get("token")
         authorization: token || token === null ? getToken("feathers-jwt") : null,
