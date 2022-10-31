@@ -11,17 +11,20 @@ export default async (context) => {
   const { Street, Address, EntityAddress } =
     context.app.get('sequelizeClient').models;
 
-  const [{ id: streetId }] = await Street.findOrCreate({
-    where: {
-      name: address.street,
-      CityId: address.city,
-      type: address.streetType,
-    },
-    defaults: {
-      zipCode: address.zip,
-      type: address.streetType,
-    },
-  });
+  let streetId = null;
+  if (address.street && address.streetType) {
+    [{ id: streetId }] = await Street.findOrCreate({
+      where: {
+        name: address.street,
+        CityId: address.city,
+        type: address.streetType,
+      },
+      defaults: {
+        zipCode: address.zip,
+        type: address.streetType,
+      },
+    });
+  }
 
   const [{ id: addressId }] = await Address.findOrCreate({
     where: {
@@ -33,6 +36,7 @@ export default async (context) => {
   });
 
   const { id: userId } = result;
+
   await EntityAddress.findOrCreate({
     where: {
       UserId: userId,

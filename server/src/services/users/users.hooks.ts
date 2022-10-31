@@ -11,7 +11,7 @@ import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
 import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
 // const verifyHooks = authMan.hooks;
-import { SaveAddress, IncludeAddress, AddVisitor, GetUser } from './hook';
+import { SaveAddress, AddVisitor, GetUser } from './hook';
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
 const { hashPassword, protect } = local.hooks;
@@ -72,6 +72,7 @@ export default {
           'activationKey',
           'resetPasswordKey',
           'verifyExpires',
+          'search_vector',
         ]
       ),
       MediaStringToMediaObject(['profilePicture', 'coverPicture']),
@@ -91,7 +92,7 @@ export default {
     update: [],
     patch: [
       SaveAddress,
-      IncludeAddress,
+
       SaveAndAttachInterests({
         entityName: 'User',
         relationTableName: 'User_Interest',
