@@ -86,6 +86,7 @@ SELECT
     'content', "B"."blogText",
     'createdAt', "B"."createdAt",
     'updatedAt', "B"."updatedAt",
+    'coverPicture', "B"."coverPicture",
     'firstName', "U"."firstName",
     'lastName', "U"."lastName",
     'UserId', "U"."id",
