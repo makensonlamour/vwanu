@@ -92,7 +92,7 @@ const FriendsPreview = () => {
           listFriendReceive?.pages[0]?.data?.total > 0 ? (
             <li>
               {listFriendReceive?.pages?.map((page, idx) => {
-                return page?.data?.map((friend) => {
+                return page?.data?.data?.map((friend) => {
                   return (
                     <Link key={idx} to={"/profile/" + friend?.id} className="text-base border-b hover:bg-placeholder-color mx-2 rounded-xl">
                       <div className="flex items-center align-middle justify-between">
