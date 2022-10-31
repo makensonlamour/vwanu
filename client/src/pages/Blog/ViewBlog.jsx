@@ -204,6 +204,7 @@ const ViewBlog = () => {
       <Helmet>
         <title>{blog?.blogTitle}</title>
         <meta property="og:title" content={blog?.blogTitle} />
+        <meta name="og:title" content={blog?.blogTitle} />
         <meta property="og:site_name" content={"Vwanu,LLC"} />
         <meta property="og:description" content={blog?.blogText} />
         <meta property="og:keywords" content="vwanu,blogs,social,media" />
@@ -211,6 +212,7 @@ const ViewBlog = () => {
         <meta property="og:url" content={window.location.href} />
         <meta property="article:author" content={blog?.User?.firstName + " " + blog?.User?.lastName} />
         <meta property="og:image" content={blog?.coverPicture} />
+        <meta name="og:image" content={blog?.coverPicture} />
         <meta property="twitter:card" content={blog?.coverPicture} />
         <meta name="twitter:image:alt" content={blog?.blogTitle} />
       </Helmet>
