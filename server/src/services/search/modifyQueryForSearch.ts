@@ -33,7 +33,7 @@ export default (defaultOptions: any) => async (ctx: HookContext) => {
   if (path === 'search') {
     clause = queryClause(ctx, where);
     attributes = userQuery(params.User.id, Sequelize);
-    console.log('clause0', clause);
+    // console.log('clause0', clause);
     if (Array.isArray(clause[Op.and])) {
       clause[Op.and].push(
         Sequelize.fn(
@@ -52,7 +52,7 @@ export default (defaultOptions: any) => async (ctx: HookContext) => {
         ],
       };
     }
-    console.log('clause1', clause[Op.and]);
+    // console.log('clause1', clause[Op.and]);
   }
   params.sequelize = {
     // logging: console.log,

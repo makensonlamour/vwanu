@@ -484,7 +484,7 @@ describe("'communities ' service", () => {
       expect(allUserAmount).toBe(
         communityAmountOfMembers + amountOfUserNotInCommunity
       );
-    });
+    }, 50000);
     it('search users that are not member of community', async () => {
       // creating similar user like firstCreator
       const { body: similarUser } = await testServer.post(userEndpoint).send({
@@ -511,17 +511,14 @@ describe("'communities ' service", () => {
         similarUsers.some((user) => user.firstName === firstCreator.firstName)
       ).toBe(true);
 
-      const {
-        body: l,
-        body: { data: notInCommunityUser },
-      } = await testServer
+      await testServer
         .get(
           `/search?$search=${similarUser.firstName}&notCommunityMember=${communities[1].body.id}`
         )
         .set('authorization', firstCreator.accessToken);
-
-      console.log({ l });
-      console.log({ notInCommunityUser });
+      // TODO FIX THIS
+      // console.log({ l });
+      // console.log({ notInCommunityUser });
       expect(true).toBe(true);
     }, 50000);
   });
