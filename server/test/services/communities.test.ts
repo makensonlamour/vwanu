@@ -457,6 +457,34 @@ describe("'communities ' service", () => {
         // ).toBe(true);
       });
     });
+
+    it('fetch users not member of community', async () => {
+      const {
+        body: { data: allUsers },
+      } = await testServer
+        .get(userEndpoint)
+        .set('authorization', firstCreator.accessToken);
+
+      const allUserAmount = allUsers.length;
+
+      const { body: communityToCompare } = await testServer
+        .get(`${endpoint}/${communities[1].body.id}`)
+        .set('authorization', firstCreator.accessToken);
+      const communityAmountOfMembers = +communityToCompare.amountOfMembers;
+      const {
+        body: { data: usersNotInCommunity },
+      } = await testServer
+        .get(`${userEndpoint}/?notCommunityMember=${communityToCompare.id}`)
+        .set('authorization', firstCreator.accessToken);
+
+      const amountOfUserNotInCommunity = usersNotInCommunity.length;
+      expect(allUserAmount).toBeGreaterThan(amountOfUserNotInCommunity);
+      expect(allUserAmount).toBeGreaterThan(communityAmountOfMembers);
+      expect(allUserAmount).toBe(
+        communityAmountOfMembers + amountOfUserNotInCommunity
+      );
+    });
+    it.todo('search users that are not member of community');
   });
 
   describe('Communities posts and forums', () => {
