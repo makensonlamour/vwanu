@@ -90,7 +90,8 @@ SELECT
     'firstName', "U"."firstName",
     'lastName', "U"."lastName",
     'UserId', "U"."id",
-    'profilePicture', "U"."profilePicture"
+    'profilePicture', "U"."profilePicture",
+    'title', "B"."blogTitle"
   )
     FROM "Blogs" AS "B"
     INNER JOIN "Users" AS "U" ON "U"."id" = "B"."UserId"

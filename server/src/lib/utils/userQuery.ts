@@ -37,18 +37,20 @@ export const queryClause = (context, where) => {
   delete where?.profilePrivacy;
   let clause = {
     ...where,
-    [Op.and]: {
-      [Op.or]: [
-        { profilePrivacy: 'public' },
-        { id: params?.User?.id },
-        {
-          [Op.and]: [
-            { profilePrivacy: 'friends' },
-            AreFriends(params.User.id, Sequelize),
-          ],
-        },
-      ],
-    },
+    [Op.and]: [
+      {
+        [Op.or]: [
+          { profilePrivacy: 'public' },
+          { id: params?.User?.id },
+          {
+            [Op.and]: [
+              { profilePrivacy: 'friends' },
+              AreFriends(params.User.id, Sequelize),
+            ],
+          },
+        ],
+      },
+    ],
   };
   if (where.friends) {
     delete where.friends;
@@ -60,7 +62,9 @@ export const queryClause = (context, where) => {
 
   if (where.notCommunityMember) {
     const { notCommunityMember } = where;
-    delete where.notCommunityMember;
+    delete where?.notCommunityMember;
+    delete clause?.notCommunityMember;
+
     if (Array.isArray(clause[Op.and])) {
       clause[Op.and].push(
         Sequelize.where(
