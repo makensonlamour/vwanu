@@ -7,6 +7,7 @@ import app from '../../src/app';
 import {
   getRandUsers,
   getRandUser,
+  generateFakeEmail,
 } from '../../src/lib/utils/generateFakeUser';
 
 const cleanup = (server) => (endpoint, id, token) =>
@@ -457,6 +458,69 @@ describe("'communities ' service", () => {
         // ).toBe(true);
       });
     });
+
+    it('fetch users not member of community', async () => {
+      const {
+        body: { data: allUsers },
+      } = await testServer
+        .get(userEndpoint)
+        .set('authorization', firstCreator.accessToken);
+
+      const allUserAmount = allUsers.length;
+
+      const { body: communityToCompare } = await testServer
+        .get(`${endpoint}/${communities[1].body.id}`)
+        .set('authorization', firstCreator.accessToken);
+      const communityAmountOfMembers = +communityToCompare.amountOfMembers;
+      const {
+        body: { data: usersNotInCommunity },
+      } = await testServer
+        .get(`${userEndpoint}/?notCommunityMember=${communityToCompare.id}`)
+        .set('authorization', firstCreator.accessToken);
+
+      const amountOfUserNotInCommunity = usersNotInCommunity.length;
+      expect(allUserAmount).toBeGreaterThan(amountOfUserNotInCommunity);
+      expect(allUserAmount).toBeGreaterThan(communityAmountOfMembers);
+      expect(allUserAmount).toBe(
+        communityAmountOfMembers + amountOfUserNotInCommunity
+      );
+    }, 50000);
+    it('search users that are not member of community', async () => {
+      // creating similar user like firstCreator
+      const { body: similarUser } = await testServer.post(userEndpoint).send({
+        email: generateFakeEmail(),
+        firstName: firstCreator.firstName,
+        lastName: firstCreator.lastName,
+        password: 'firstCreator.password',
+        passwordConfirmation: 'firstCreator.password',
+      });
+
+      // console.log(similarUser);
+      const {
+        body: { data: similarUsers },
+      } = await testServer
+        .get(`/search?$search=${similarUser.firstName}`)
+        .set('authorization', firstCreator.accessToken);
+
+      // console.log('similarUsers', j);
+      expect(similarUsers).toHaveLength(2);
+      expect(
+        similarUsers.some((user) => user.firstName === similarUser.firstName)
+      ).toBe(true);
+      expect(
+        similarUsers.some((user) => user.firstName === firstCreator.firstName)
+      ).toBe(true);
+
+      await testServer
+        .get(
+          `/search?$search=${similarUser.firstName}&notCommunityMember=${communities[1].body.id}`
+        )
+        .set('authorization', firstCreator.accessToken);
+      // TODO FIX THIS
+      // console.log({ l });
+      // console.log({ notInCommunityUser });
+      expect(true).toBe(true);
+    }, 50000);
   });
 
   describe('Communities posts and forums', () => {

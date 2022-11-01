@@ -55,8 +55,8 @@ describe("'timeline ' service", () => {
     const { body: timeline } = await testServer
       .get(endpoint)
       .set('authorization', observer.accessToken);
-    console.log('Newly created posts');
-    console.log(timeline);
+    // console.log('Newly created posts');
+    // console.log(timeline);
     expect(timeline.data).toHaveLength(4);
 
     createdTestUser.forEach((u) => {

@@ -20,9 +20,15 @@ export const OnlyInterests = (interest) =>
   )`;
 export const notMemberOfCommunity = (communityId) => `(
   NOT EXISTS(
-    SELECT 1 FROM "CommunityUsers" AS "CU"
-    INNER JOIN "CommunityInvitationRequests" AS "CIR" ON "CIR"."guestId"="CU"."UserId"
-    WHERE "CU"."UserId"="User"."id" AND "CU"."CommunityId"='${communityId}' OR ("CIR"."communityId"="CU"."CommunityId" AND "CIR"."response" IS NULL)
+    SELECT 1 FROM 
+    "CommunityUsers" AS "CU"
+    LEFT JOIN "CommunityInvitationRequests" AS "CIR" ON "CIR"."guestId"="CU"."UserId"
+    WHERE 
+   ("CU"."UserId"="User"."id" AND
+   "CU"."CommunityId"='${communityId}') 
+    OR (
+    "CIR"."CommunityId"='${communityId}'  
+    AND "CIR"."response" IS NULL) 
   )
   )`;
 export const queryClause = (context, where) => {
@@ -31,18 +37,20 @@ export const queryClause = (context, where) => {
   delete where?.profilePrivacy;
   let clause = {
     ...where,
-    [Op.and]: {
-      [Op.or]: [
-        { profilePrivacy: 'public' },
-        { id: params?.User?.id },
-        {
-          [Op.and]: [
-            { profilePrivacy: 'friends' },
-            AreFriends(params.User.id, Sequelize),
-          ],
-        },
-      ],
-    },
+    [Op.and]: [
+      {
+        [Op.or]: [
+          { profilePrivacy: 'public' },
+          { id: params?.User?.id },
+          {
+            [Op.and]: [
+              { profilePrivacy: 'friends' },
+              AreFriends(params.User.id, Sequelize),
+            ],
+          },
+        ],
+      },
+    ],
   };
   if (where.friends) {
     delete where.friends;
@@ -54,14 +62,27 @@ export const queryClause = (context, where) => {
 
   if (where.notCommunityMember) {
     const { notCommunityMember } = where;
-    delete where.notCommunityMember;
+    delete where?.notCommunityMember;
+    delete clause?.notCommunityMember;
 
-    clause[Op.and].push(
-      Sequelize.where(
-        Sequelize.literal(notMemberOfCommunity(notCommunityMember)),
-        true
-      )
-    );
+    if (Array.isArray(clause[Op.and])) {
+      clause[Op.and].push(
+        Sequelize.where(
+          Sequelize.literal(notMemberOfCommunity(notCommunityMember)),
+          true
+        )
+      );
+    } else {
+      clause = {
+        ...where,
+        [Op.and]: [
+          Sequelize.where(
+            Sequelize.literal(notMemberOfCommunity(notCommunityMember)),
+            true
+          ),
+        ],
+      };
+    }
   }
 
   if (where.interests) {
@@ -154,6 +175,16 @@ SELECT
       [Sequelize.literal(amountOfFriend), 'amountOfFriend'],
       [Sequelize.literal(Interests), 'Interests'],
       [Sequelize.literal(Addresses), 'Addresses'],
+    ],
+    exclude: [
+      'password',
+      'resetAttempts',
+      'resetToken',
+      'resetTokenExpires',
+      'loginAttempts',
+      'activationKey',
+      'resetPasswordKey',
+      'search_vector',
     ],
   };
 };
