@@ -159,7 +159,10 @@ SELECT
     SELECT COUNT(*) FROM "User_Following" WHERE "User_Following"."UserId" = "User"."id"
   )::int`;
 
-  // "User_friends"."UserId" = '${UserId}' AND
+  const amountOfFriendRequest = `(
+    SELECT COUNT(*) FROM "User_friends_request" WHERE "User_friends_request"."friendsRequestId" = "User"."id"
+  )::int`;
+
   const amountOfFriend = `(
     SELECT COUNT(*) FROM "User_friends" WHERE "User_friends"."friendId" = "User"."id") 
   ::int`;
@@ -175,6 +178,7 @@ SELECT
       [Sequelize.literal(amountOfFriend), 'amountOfFriend'],
       [Sequelize.literal(Interests), 'Interests'],
       [Sequelize.literal(Addresses), 'Addresses'],
+      [Sequelize.literal(amountOfFriendRequest), 'amountOfFriendRequest'],
     ],
     exclude: [
       'password',
