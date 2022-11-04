@@ -12,7 +12,9 @@ const GroupsPreview = () => {
   const user = useOutletContext();
   console.log(user, user?.Interests);
   var randomItem =
-    user !== undefined && user?.Interests !== null ? user?.Interests[Math.floor(Math.random() * user?.Interests?.length)] : undefined;
+    user !== undefined && user !== null && user?.Interests !== null && user?.Interests !== undefined
+      ? user?.Interests[Math.floor(Math.random() * user?.Interests?.length)]
+      : undefined;
 
   const {
     data: communitySuggest,

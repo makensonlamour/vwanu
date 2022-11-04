@@ -103,15 +103,26 @@ const AboutTab = ({ user }) => {
 
   const objectPlaces = [
     {
-      name: "Current city",
-      value: user?.country,
+      name: "Living",
+      value:
+        user?.Addresses !== null ? user?.Addresses[0]?.country + ", " + user?.Addresses[0]?.state + ", " + user?.Addresses[0]?.city : null,
       view: true,
     },
-    {
-      name: "Hometown",
-      value: user?.country,
-      view: true,
-    },
+    // {
+    //   name: "Country",
+    //   value: user?.Addresses !== null ? user?.Addresses?.country : null,
+    //   view: true,
+    // },
+    // {
+    //   name: "State",
+    //   value: user?.Addresses !== null ? user?.Addresses?.state : null,
+    //   view: true,
+    // },
+    // {
+    //   name: "City",
+    //   value: user?.Addresses !== null ? user?.Addresses?.city : null,
+    //   view: true,
+    // },
   ];
 
   const objectWorkedExperience = [

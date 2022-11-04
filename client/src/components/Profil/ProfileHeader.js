@@ -98,18 +98,34 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                     <h1 className="font-mock text-2xl font-semibold text-primary inline">
                       {otherUser ? otherUser?.firstName + " " + otherUser?.lastName : user?.firstName + " " + user?.lastName}
                     </h1>
-                    <p className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
-                      {`" `}
-                      {otherUser ? otherUser?.about : user?.about}
-                      {` "`}
-                    </p>
-                    <h4 className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
+                    {otherUser
+                      ? otherUser?.about && (
+                          <p className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
+                            {`" `}
+                            {otherUser ? otherUser?.about : user?.about}
+                            {` "`}
+                          </p>
+                        )
+                      : user?.about && (
+                          <p className="font-mock text-sm text-gray-600 mb-2 lg:0 mt-2">
+                            {`" `}
+                            {otherUser ? otherUser?.about : user?.about}
+                            {` "`}
+                          </p>
+                        )}
+                    <h4 className="font-mock text-sm capitalize text-gray-600 mb-2 lg:0 mt-2">
                       {"From "}
-                      {otherUser ? otherUser?.country : user.country ? user.country : ""}
+                      {otherUser
+                        ? otherUser?.Addresses !== null
+                          ? otherUser?.Addresses[0]?.country
+                          : null
+                        : user.Addresses !== null
+                        ? user.Addresses[0]?.country
+                        : ""}
                       <span className="px-2">•</span>
                       <span>
                         {"Joined "}
-                        {format(new Date(otherUser ? otherUser?.createdAt : user?.createdAt), "MMM dd, yyyy")}
+                        {format(new Date(otherUser ? otherUser?.createdAt : user?.createdAt), "MMM yyyy")}
                       </span>
                     </h4>
                     <h4 className="font-mock text-sm text-gray-600 mb-2 lg:-mt-1 ">

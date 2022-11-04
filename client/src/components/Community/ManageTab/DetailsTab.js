@@ -25,6 +25,7 @@ const DetailsTab = ({ communityData }) => {
   const { data: interestList } = useGetInterestList(["interest", "all"], true);
   const updateCommunity = useUpdateCommunity(["community", id], id, undefined, undefined);
   const [interest, setInterest] = useState([]);
+  let removeInterest = [];
   const options = assignValue(interestList);
   const initialValues = {
     communityName: communityData?.name || "",
@@ -40,13 +41,20 @@ const DetailsTab = ({ communityData }) => {
 
   const handleSubmit = async (data) => {
     setIsLoading(true);
-    const dataObj = {
-      name: data?.communityName,
-      interests: interest,
-      description: data?.communityDescription,
-    };
-    console.log(dataObj);
     try {
+      let resultInt = data?.Interests.length > 0 && data?.Interests?.filter((item) => !interest?.includes(item?.name));
+      resultInt?.length > 0 &&
+        resultInt?.map((itemI) => {
+          return removeInterest.push(itemI?.name);
+        });
+      const dataObj = {
+        name: data?.communityName,
+        interests: interest,
+        removeInterest: removeInterest,
+        description: data?.communityDescription,
+      };
+      console.log(dataObj);
+
       let result = await updateCommunity.mutateAsync(dataObj);
       console.log(result);
       updateSuccess();
@@ -88,11 +96,11 @@ const DetailsTab = ({ communityData }) => {
             label="Community Name (required)"
             name="communityName"
             type="text"
-            className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="w-full mt-1 font-semibold rounded-xl border input-secondary border-gray-200 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <MultiSelect
             label="Interest"
-            className="w-full mt-1 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
+            className="w-full mt-1 font-semibold border-gray-50 border rounded-xl input-secondary autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
             placeholder={"Select the category..."}
             multiple
             options={options}
@@ -108,7 +116,7 @@ const DetailsTab = ({ communityData }) => {
             maxRows="5"
             minRows="3"
             style={{ width: "100%" }}
-            className="p-4 mt-1 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-0 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            className="p-4 mt-1 mb-4 font-semibold rounded-xl border input-secondary border-gray-200 invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           />
           <Submit className="w-full rounded-xl text-base-100 text-md md:w-[30%] py-2" title={isLoading ? <Loader /> : "Save changes"} />{" "}
         </Form>

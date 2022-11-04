@@ -2,7 +2,12 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext, useParams, Link } from "react-router-dom";
-import { useSendFriendRequest, useCancelFriendRequest } from "../../features/friend/friendSlice";
+import {
+  useSendFriendRequest,
+  useCancelFriendRequest,
+  useAcceptFriendRequest,
+  useDeclineFriendRequest,
+} from "../../features/friend/friendSlice";
 import { useSendFollow } from "../../features/follower/followerSlice";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../components/common/Loader";
@@ -38,13 +43,25 @@ const followError = () =>
     position: "top-center",
   });
 
-const CustomViewFriend = ({ data }) => {
+const acceptFriendRequestError = () =>
+  toast.error("Sorry. Error on accepting Friend Request!", {
+    position: "top-center",
+  });
+
+const declineFriendRequestError = () =>
+  toast.error("Sorry. Error on refusing Friend Request!", {
+    position: "top-center",
+  });
+
+const CustomViewFriend = ({ data, isRequest = false }) => {
   const user = useOutletContext();
   const queryClient = useQueryClient();
   const { id } = useParams();
   const sendFriendRequest = useSendFriendRequest(["user", "suggest"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "suggest"], data?.id);
   const sendFollow = useSendFollow(["user", "suggest"]);
+  const acceptFriendRequest = useAcceptFriendRequest(["user", "request"]);
+  const declineFriendRequest = useDeclineFriendRequest(["user", "request"]);
   const [isLoading, setLoading] = useState(false);
 
   const handleFollower = async (_id) => {
@@ -89,6 +106,36 @@ const CustomViewFriend = ({ data }) => {
     }
   };
 
+  const handleAcceptfriendRequest = async (friendId) => {
+    // e.preventDefault();
+    setIsLoading(true);
+    try {
+      await acceptFriendRequest.mutateAsync({ friendId, accept: true });
+      //add query to fetch
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+      acceptFriendRequestError();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeclinefriendRequest = async (friendId) => {
+    // e.preventDefault();
+    setIsLoading(true);
+    try {
+      await declineFriendRequest.mutateAsync({ friendId, accept: false });
+      //add query to fetch
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+      declineFriendRequestError();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <Toaster />
@@ -103,12 +150,12 @@ const CustomViewFriend = ({ data }) => {
               />
             </div>
             <div className="text-md">
-              <div className="flex items-center gap-x-6">
+              <div className="flex items-center justify-between w-full gap-x-6">
                 {" "}
                 <Link to={`../../profile/${data?.id}`} className="text-[0.95rem] sm:text-md hover:text-primary font-semibold">
                   {(data?.firstName || data?.User?.firstName) + " " + (data?.lastName || data?.User?.lastName)}
                 </Link>
-                <div className="">
+                <div className="flex justify-end">
                   {user?.id?.toString() === data?.id?.toString() ? (
                     <Link
                       to={`../../profile/${data?.id}`}
@@ -128,25 +175,27 @@ const CustomViewFriend = ({ data }) => {
                   )}
                 </div>
               </div>
-              <div className="flex items-center gap-x-1">
-                <p className=" font-normal text-sm text-gray-400 text-center">
-                  {data?.amountOfFollower === 0
-                    ? "0 Follower"
-                    : data?.amountOfFollower === 1
-                    ? data?.amountOfFollower + " Follower"
-                    : data?.amountOfFollower + " Followers"}
-                </p>
-                <span className="">•</span>
-                <p className="font-normal text-sm text-gray-400 text-center">
-                  {data?.amountOfFollowing === 0
-                    ? "0 Following"
-                    : data?.amountOfFollowing === 1
-                    ? data?.amountOfFollowing + " Following"
-                    : data?.amountOfFollowing + " Following"}
-                </p>
-              </div>
+              {!isRequest && (
+                <div className="flex items-center gap-x-1">
+                  <p className=" font-normal text-sm text-gray-400 text-center">
+                    {data?.amountOfFollower === 0
+                      ? "0 Follower"
+                      : data?.amountOfFollower === 1
+                      ? data?.amountOfFollower + " Follower"
+                      : data?.amountOfFollower + " Followers"}
+                  </p>
+                  <span className="">•</span>
+                  <p className="font-normal text-sm text-gray-400 text-center">
+                    {data?.amountOfFollowing === 0
+                      ? "0 Following"
+                      : data?.amountOfFollowing === 1
+                      ? data?.amountOfFollowing + " Following"
+                      : data?.amountOfFollowing + " Following"}
+                  </p>
+                </div>
+              )}
 
-              {user?.id !== data?.id && (
+              {!isRequest && user?.id !== data?.id && (
                 <div className="py-0 lg:py-2 flex items-center justify-start flex-wrap">
                   {!data?.isFriend &&
                     (!data?.hasSentFriendRequest ? (
@@ -199,6 +248,28 @@ const CustomViewFriend = ({ data }) => {
                   )}
                 </div>
               )}
+
+              {/* if request */}
+              {isRequest && (
+                <div className="">
+                  <button
+                    onClick={() => {
+                      handleAcceptfriendRequest(data?.id);
+                    }}
+                    className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-1 my-0 rounded-lg hover:bg-primary"
+                  >
+                    {isLoading ? <Loader /> : "Accept"}
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDeclinefriendRequest(data?.id);
+                    }}
+                    className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-1 my-0 rounded-lg hover:bg-primary"
+                  >
+                    {isLoading ? <Loader /> : "Decline"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -209,6 +280,7 @@ const CustomViewFriend = ({ data }) => {
 
 CustomViewFriend.propTypes = {
   data: PropTypes.array,
+  isRequest: PropTypes.bool,
 };
 
 export default CustomViewFriend;

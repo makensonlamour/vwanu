@@ -19,11 +19,11 @@ const Message = () => {
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-b-xl h-[90vh] lg:w-[85vw] max-w-[1450px]">
-        <div className="grid grid-cols-4 lg:w-full h-full">
+        <div className="grid grid-cols-4 md:w-full h-full">
           <div
             className={`${
               matches && (selectedConversation || createConversationOpened) ? "hidden" : ""
-            } col-span-12 lg:col-span-1 w-full h-full`}
+            } col-span-12 md:!block md:col-span-1 w-full h-full`}
           >
             <Sidebar
               createConversationOpened={createConversationOpened}
@@ -32,7 +32,7 @@ const Message = () => {
               setCreateConversationOpened={setCreateConversationOpened}
             />
           </div>
-          <div className="col-span-12 lg:col-span-3 w-full">
+          <div className="col-span-12 md:col-span-3 w-full">
             {createConversationOpened && (
               <CreateConversation
                 setIsOpened={setCreateConversationOpened}
@@ -41,7 +41,7 @@ const Message = () => {
               />
             )}
             {!createConversationOpened && !selectedConversation ? (
-              <div className="hidden align-middle lg:w-full lg:h-full lg:px-6 flex-grow flex-col items-center justify-center gap-1 lg:!flex">
+              <div className="hidden align-middle lg:w-full lg:h-full lg:px-6 flex-grow flex-col items-center justify-center gap-1 md:!flex">
                 <h1 className="text-center">Select a friend to start a conversation or choose a conversation to open</h1>
               </div>
             ) : selectedConversation ? (

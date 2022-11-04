@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Proptypes from "prop-types";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
 import { useQueryClient } from "react-query";
 import { differenceInYears } from "date-fns";
-import { Field, Select, Form, Submit } from "../../../../components/form";
+import { Field, Select, MultiSelect, Form, Submit } from "../../../../components/form";
 import Loader from "../../../../components/common/Loader";
 import { useUpdateUser } from "../../userSlice";
+import { assignValue } from "./../../../../helpers/index";
+import { useGetInterestList } from "./../../../interest/interestSlice";
 
 //Functions for notification after actions
 const updateSuccess = () =>
@@ -22,8 +24,13 @@ const updateError = () =>
 const FormOverview = ({ user }) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [interest, setInterest] = useState([]);
+  let removeInterest = [];
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
+  const { data: interestList } = useGetInterestList(["interest", "all"]);
+
+  const options = assignValue(interestList);
 
   const initialValues = {
     firstName: user ? user?.firstName : "",
@@ -32,6 +39,7 @@ const FormOverview = ({ user }) => {
     birthday: user ? user?.birthday : "",
     language: user ? user?.language : "",
     interestedBy: user ? user?.interestedBy : "",
+    interest: "",
     about: user ? user?.about : "",
   };
 
@@ -39,7 +47,7 @@ const FormOverview = ({ user }) => {
     firstName: Yup.string().required().label("First Name"),
     lastName: Yup.string().required().label("Last Name"),
     gender: Yup.string().nullable().required().label("Gender"),
-    interestedBy: Yup.string().nullable().label("Interest By"),
+    interest: Yup.array().label("Interest"),
     birthday: Yup.date()
       .test(
         "birthday",
@@ -54,17 +62,24 @@ const FormOverview = ({ user }) => {
 
   const handleSubmit = async (dataObj) => {
     setIsLoading(true);
-    const data = {
-      id: user?.id,
-      firstName: dataObj?.firstName,
-      lastName: dataObj?.lastName,
-      birthday: dataObj?.birthday,
-      gender: dataObj?.gender,
-      interestedBy: dataObj?.interestedBy,
-      language: dataObj?.language,
-    };
-
     try {
+      let result = user?.Interests.length > 0 && user?.Interests?.filter((item) => !interest?.includes(item?.name));
+      result?.length > 0 &&
+        result?.map((itemI) => {
+          return removeInterest.push(itemI?.name);
+        });
+
+      const data = {
+        id: user?.id,
+        firstName: dataObj?.firstName,
+        lastName: dataObj?.lastName,
+        birthday: dataObj?.birthday,
+        gender: dataObj?.gender,
+        removeInterest: removeInterest,
+        interests: interest,
+        language: dataObj?.language,
+      };
+
       await updateUser?.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries();
@@ -77,6 +92,24 @@ const FormOverview = ({ user }) => {
       setIsLoading(false);
     }
   };
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setInterest(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value?.split(",") : value
+    );
+  };
+
+  useEffect(() => {
+    if (user?.Interests?.length > 0) {
+      user?.Interests?.map((item) => {
+        return setInterest((oldData) => [...oldData, item?.name]);
+      });
+    }
+  }, [user]);
 
   return (
     <>
@@ -106,6 +139,17 @@ const FormOverview = ({ user }) => {
           type="date"
           className="w-full mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
         />
+        <MultiSelect
+          required
+          label="Interest"
+          className="w-full mt-1 border-0 border-gray-200 font-semibold rounded-xl input-secondary autofill:text-secondary autofill:bg-placeholder-color invalid:text-red-500 "
+          placeholder={"Select the category..."}
+          multiple
+          options={options}
+          fn={handleChange}
+          val={interest}
+          name="interest"
+        />
         <Select
           label="Gender"
           placeholder="Gender"
@@ -113,44 +157,22 @@ const FormOverview = ({ user }) => {
           className="mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           testId="gender-error-message"
           options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "male", value: "m" },
-            { id: 2, name: "female", value: "f" },
+            { id: 0, label: "Not Specified", value: "" },
+            { id: 1, label: "male", value: "m" },
+            { id: 2, label: "female", value: "f" },
           ]}
         />
-        {/* <Select
-          label="Interest By"
-          placeholder="Interest By"
-          name="interestedBy"
-          className="mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-          testId="interestBy-error-message"
-          options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "male", value: "m" },
-            { id: 2, name: "female", value: "f" },
-          ]}
-        /> */}
         <Select
           label="Language"
           placeholder="Language"
           name="language"
           className="mt-1 lg:mt-2 mb-4 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
           options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "English", value: "en" },
-            { id: 2, name: "Espanol", value: "es" },
+            { id: 0, label: "Not Specified", value: "" },
+            { id: 1, label: "English", value: "en" },
+            { id: 2, label: "Espanol", value: "es" },
           ]}
         />
-        {/*}
-        <Field
-          autoCapitalize="none"
-          placeholder="About"
-          label="About"
-          name="about"
-          type="text"
-          className="w-full mt-1 mb-2 border border-gray-200 font-semibold rounded-xl input-secondary  invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-        />
-  {*/}
         <Submit className="w-full px-6 py-2 rounded-xl text-base-100 text-md md:w-fit" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>

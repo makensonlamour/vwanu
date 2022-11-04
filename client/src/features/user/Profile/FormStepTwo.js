@@ -27,7 +27,8 @@ const FormStepTwo = () => {
   const [countryCode, setCountryCode] = useState(false);
   const [stateCode, setStateCode] = useState(false);
   const [cityCode, setCityCode] = useState(false);
-  const [typeAddress, setTypeAddress] = useState("");
+  // const [typeAddress, setTypeAddress] = useState("");
+  let typeAddress = "";
   const [isLoading, setIsLoading] = useState(false);
 
   const updateUser = useUpdateUser(["user", "me"], user?.id, undefined, undefined);
@@ -83,7 +84,7 @@ const FormStepTwo = () => {
         addressTypesList?.data?.map((item) => {
           console.log(item, item?.description);
           if (item?.description === "Home") {
-            setTypeAddress(item?.id);
+            typeAddress = item?.id;
           }
         });
       }

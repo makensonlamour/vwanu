@@ -20,6 +20,7 @@ import koremPNG from "../../assets/images/reactions/korem2.png";
 import toast, { Toaster } from "react-hot-toast";
 import Reaction from "../reaction/component/Reaction";
 import MenuPost from "./components/MenuPost";
+import PreviewShareBlog from "./components/PreviewShareBlog";
 // import routesPath from "../../../routesPath";
 
 const notify = () =>
@@ -76,8 +77,8 @@ const PostList = ({ post, pageTitle }) => {
                   <div className="flex items-start w-full gap-x-2">
                     <Link
                       className={`${
-                        post?.originalId || post?.wallId || post?.CommunityId ? "w-[50%] xs:w-full" : ""
-                      } flex flex-nowrap mb-1  xs:w-full`}
+                        post?.originalId || post?.wallId || post?.CommunityId ? "max-w-[70%] w-fit" : "w-full"
+                      } flex flex-nowrap mb-1`}
                       to={
                         _.isEqual(pageTitle, "post") || _.isEqual(pageTitle, "profilefeed")
                           ? `../../profile/${post?.User?.id}`
@@ -201,13 +202,18 @@ const PostList = ({ post, pageTitle }) => {
                         </a>
                       </div>
                     </div>
-                    {post?.Original?.content?.split("\n").map((text) => {
-                      return (
-                        <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
-                          {transformHashtagAndLink(text, false, post?.originalType)}
-                        </p>
-                      );
-                    })}
+
+                    {post?.originalType !== "Blogs" ? (
+                      post?.Original?.content?.split("\n").map((text) => {
+                        return (
+                          <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
+                            {transformHashtagAndLink(text, false, post?.originalType)}
+                          </p>
+                        );
+                      })
+                    ) : (
+                      <PreviewShareBlog data={post?.Original} />
+                    )}
 
                     {post?.Media?.length > 0 ? <MediaPost medias={post?.Media} post={post} /> : null}
                   </div>

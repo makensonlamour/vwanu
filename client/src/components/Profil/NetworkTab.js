@@ -42,7 +42,7 @@ const NetworkTab = ({ user }) => {
               <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`Followers (${user?.amountOfFollower})`} />
               <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Following (${user?.amountOfFollowing})`} />
               {id?.toString() === me?.id?.toString() && (
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Request (${totalRequest})`} />
+                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Request (${user?.amountOfFriendRequest})`} />
               )}
             </TabList>
           </div>
