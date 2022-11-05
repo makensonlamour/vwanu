@@ -21,9 +21,8 @@ const FriendsPreview = () => {
   const calculateLength = () => {
     if (listFriendReceive && listFriendReceive?.pages?.length > 0) {
       // eslint-disable-next-line array-callback-return
-      listFriendReceive?.pages?.map((item) => {
-        setFriendReceiveNumber(item?.data?.length);
-      });
+      let total = listFriendReceive?.pages[0]?.data?.total;
+      setFriendReceiveNumber(total);
     }
   };
 
@@ -94,24 +93,26 @@ const FriendsPreview = () => {
               {listFriendReceive?.pages?.map((page, idx) => {
                 return page?.data?.data?.map((friend) => {
                   return (
-                    <Link key={idx} to={"/profile/" + friend?.id} className="text-base border-b hover:bg-placeholder-color mx-2 rounded-xl">
-                      <div className="flex items-center align-middle justify-between">
-                        <div className="w-12">
-                          <img className="object-cover w-8 h-8 mask mask-squircle" src={friend?.profilePicture?.original} alt="" />
+                    <Link key={idx} to={"/profile/" + friend?.id} className="text-base border-b hover:bg-placeholder-color rounded-xl">
+                      <div className="flex items-center align-middle justify-between w-full">
+                        <div className="flex items-center justify-start">
+                          <div className="w-12">
+                            <img className="object-cover w-8 h-8 mask mask-squircle" src={friend?.profilePicture?.original} alt="" />
+                          </div>
+                          <div className="text-secondary text-sm w-[75%] line-clamp-1">{friend?.firstName + " " + friend?.lastName}</div>
                         </div>
-                        <div className="text-secondary text-sm w-40">{friend?.firstName + " " + friend?.lastName}</div>
-                        <div className="w-48">
+                        <div className="">
                           <button
                             onClick={() => handleAcceptfriendRequest(friend?.id)}
                             // to={"/profile/" + friend?.id}
-                            className="capitalize ml-auto text-sm items-right align-middle mr-1 btn btn-sm btn-secondary text-base-100 rounded-xl mb-2 lg:mb-0 hover:bg-primary justify-end"
+                            className="capitalize text-xs items-right align-middle mr-1 text-white bg-secondary rounded-lg px-2 py-1 mb-2 lg:mb-0 hover:bg-primary"
                           >
                             {isLoading ? "Loading..." : "Accept"}
                           </button>
                           <button
                             onClick={() => handleDeclinefriendRequest(friend?.id)}
                             // to={"/profile/" + friend?.id}
-                            className="capitalize ml-auto text-sm items-right align-middle mr-1 btn btn-sm btn-secondary text-base-100 rounded-xl mb-2 lg:mb-0 hover:bg-primary justify-end"
+                            className="capitalize text-xs items-right align-middle text-white bg-secondary rounded-lg px-2 py-1 mb-2 lg:mb-0 hover:bg-primary"
                           >
                             {isLoading ? "Loading..." : "Decline"}
                           </button>

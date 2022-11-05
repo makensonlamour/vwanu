@@ -89,19 +89,23 @@ const Views = () => {
   const onUpdatedRequestListener = () => {
     queryClient.invalidateQueries(["user", "request"]);
     queryClient.invalidateQueries(["user", "friend"]);
+    queryClient.invalidateQueries(["user", "received"]);
   };
   const onPatchedRequestListener = () => {
     queryClient.invalidateQueries(["user", "request"]);
     queryClient.invalidateQueries(["user", "friend"]);
+    queryClient.invalidateQueries(["user", "received"]);
   };
 
   const onDeletedRequestListener = () => {
     queryClient.invalidateQueries(["user", "request"]);
     queryClient.invalidateQueries(["user", "friend"]);
+    queryClient.invalidateQueries(["user", "received"]);
   };
   const onCreatedRequestListener = () => {
     queryClient.invalidateQueries(["user", "request"]);
     queryClient.invalidateQueries(["user", "friend"]);
+    queryClient.invalidateQueries(["user", "received"]);
   };
 
   function denyCall() {

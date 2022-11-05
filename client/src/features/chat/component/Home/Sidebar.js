@@ -74,10 +74,10 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
     <>
       {!loading ? (
         <div
-          className={`rounded-lr-xl w-full border-dark-lighten h-full flex-shrink-0 overflow-y-auto border-r ${
+          className={`rounded-lr-xl w-full border-dark-lighten h-full flex-shrink-0 scrollbar overflow-y-auto overflow-x-none border-r ${
             location.pathname !== "/messages" || selectedConversation || createConversationOpened
-              ? "hidden w-full lg:!block"
-              : "w-full lg:!w-full"
+              ? "hidden w-full md:!block"
+              : "w-full md:!w-full"
           }`}
         >
           <div className="border-dark-lighten flex h-16 items-center justify-between px-2 lg:px-3">
@@ -123,7 +123,7 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
                   hasNext={hasNextPage}
                   refetch={() => queryClient.invalidateQueries(["user", "conversation", "all"])}
                   container={FaLaptopHouse}
-                  classNameContainer={"overflow-y-auto h-[46vh]"}
+                  classNameContainer={"overflow-y-auto h-fit scrollbar max-h-[46vh]"}
                   loader={
                     <div className="flex justify-center py-5">
                       <Loader color="black" />

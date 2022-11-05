@@ -25,7 +25,7 @@ const BlogTab = () => {
 
   return (
     <>
-      <div className=" my-4 bg-white border border-gray-300 py-5 md:py-10 px-2 md:px-16 rounded-xl">
+      <div className="w-full my-4 bg-white border border-gray-300 py-5 md:py-10 px-2 md:px-16 rounded-xl">
         <div className="flex justify-between items-center pb-4">
           <h4 className="text-lg md:text-xl font-semibold">Blog</h4>
           <Link
@@ -35,10 +35,10 @@ const BlogTab = () => {
             Create Blog
           </Link>
         </div>
-        <div className="w-full">
-          <div className="flex justify-between">
+        <div className="!w-full">
+          <div className="">
             {isLoading ? (
-              <div className="flex justify-center py-5">
+              <div className="flex justify-center w-full py-5">
                 <Loader color="black" />
               </div>
             ) : isError ? (
@@ -56,7 +56,7 @@ const BlogTab = () => {
                 hasNext={hasNextPage}
                 refetch={() => queryClient.invalidateQueries(["user", "photos"])}
                 container={true}
-                classNameContainer={"overflow-y-auto h-[60vh] w-full"}
+                classNameContainer={"overflow-y-auto h-fit scrollbar max-h-[60vh] w-full"}
                 loader={
                   <div className="flex justify-center py-5">
                     <Loader color="black" />
@@ -71,15 +71,17 @@ const BlogTab = () => {
                   </div>
                 }
               >
-                {blogList?.pages?.map((page) => {
-                  return page?.data?.data?.map((blog) => {
-                    return (
-                      <div key={blog?.id} className="w-[48%]">
-                        <SingleBlogRelated blog={blog} />
-                      </div>
-                    );
-                  });
-                })}
+                <div className="flex flex-wrap justify-between !w-full">
+                  {blogList?.pages?.map((page) => {
+                    return page?.data?.data?.map((blog) => {
+                      return (
+                        <div key={blog?.id} className="w-full lg:w-[48%]">
+                          <SingleBlogRelated blog={blog} />
+                        </div>
+                      );
+                    });
+                  })}
+                </div>
               </InfiniteScroll>
             ) : (
               <div className="flex justify-center w-full">

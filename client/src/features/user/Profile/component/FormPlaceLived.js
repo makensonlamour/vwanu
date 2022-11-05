@@ -3,8 +3,9 @@ import Proptypes from "prop-types";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
 import { useQueryClient } from "react-query";
-
+import { useGetCountry, useGetState, useGetCity, useGetAddressType } from "../../../address/addressSlice";
 import { Select, Form, Submit } from "../../../../components/form";
+import { assignValueCountries } from "../../../../helpers/index";
 import Loader from "../../../../components/common/Loader";
 import { useUpdateUser } from "../../userSlice";
 
@@ -22,23 +23,55 @@ const updateError = () =>
 const FormPlaceLived = ({ user }) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [countryCode, setCountryCode] = useState(false);
+  const [stateCode, setStateCode] = useState(false);
+  const [cityCode, setCityCode] = useState(false);
+  let typeAddress = "";
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
+  const { data: countryList } = useGetCountry(["country", "all"], true);
+  const { data: addressTypesList } = useGetAddressType(["address-types", "all"], true);
+  const { data: stateList } = useGetState(["state", "all", countryCode], countryCode ? true : false, countryCode);
+  const { data: cityList } = useGetCity(["city", "all", stateCode], stateCode ? true : false, stateCode);
+
+  const optionsCountry = assignValueCountries(countryList);
+  const optionsState = assignValueCountries(stateList);
+  const optionsCity = assignValueCountries(cityList);
+
   const initialValues = {
     country: "",
-    livingCountry: "",
+    states: "",
+    city: "",
   };
 
   const ValidationSchema = Yup.object().shape({
-    country: Yup.string().label("Country From"),
-    livingCountry: Yup.string().label("Living Country"),
+    country: Yup.string().required().label("Country"),
+    states: Yup.string().required().label("States"),
+    city: Yup.string().required().label("City"),
   });
 
-  const handleSubmit = async (dataObj) => {
+  const handleSubmit = async () => {
     setIsLoading(true);
-    const data = { id: user?.id, country: dataObj?.country, livingCountry: dataObj?.livingCountry };
-
     try {
+      if (addressTypesList && addressTypesList?.total > 0) {
+        addressTypesList?.data?.map((item) => {
+          console.log(item, item?.description);
+          if (item?.description === "Home") {
+            typeAddress = item?.id;
+          }
+        });
+      }
+
+      const data = {
+        id: user?.id,
+        address: {
+          country: countryCode,
+          state: stateCode,
+          city: cityCode,
+          addressType: typeAddress,
+        },
+      };
+
       await updateUser.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries();
@@ -55,37 +88,42 @@ const FormPlaceLived = ({ user }) => {
     <>
       <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
         <Toaster />
+        <label className="text-md">Places Lived</label>
         <Select
           required
-          label="Country From"
-          placeholder="Country From"
+          label="Country"
+          placeholder="Country"
           name="country"
-          className="mt-1 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-          testId="country-error-message"
-          isSearchable={true}
-          options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "United States Of America", value: "us" },
-            { id: 2, name: "Dominican Republic", value: "do" },
-            { id: 2, name: "Haiti", value: "ht" },
-          ]}
+          className="mr-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+          testId="state-error-message"
+          fn={setCountryCode}
+          byId={true}
+          options={optionsCountry}
         />
-        <Select
-          required
-          label="Living Country"
-          placeholder="Living Country"
-          name="livingCountry"
-          className="mt-1 lg:mt-2 mb-4 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-          testId="livingCountry-error-message"
-          isSearchable={true}
-          options={[
-            { id: 0, name: "Not Specified", value: "" },
-            { id: 1, name: "United States Of America", value: "us" },
-            { id: 2, name: "Dominican Republic", value: "do" },
-            { id: 2, name: "Haiti", value: "ht" },
-          ]}
-        />
-        <Submit className="w-full rounded-2xl text-base-100 text-md md:w-1/5 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
+        <div className="flex justify-center w-full">
+          <Select
+            required
+            label="States"
+            placeholder="States"
+            name="states"
+            className="mr-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            testId="state-error-message"
+            fn={setStateCode}
+            options={optionsState}
+          />
+          <Select
+            required
+            label="City"
+            placeholder="City"
+            name="city"
+            style={{ width: "100%" }}
+            className="ml-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+            testId="city-error-message"
+            fn={setCityCode}
+            options={optionsCity}
+          />
+        </div>
+        <Submit className="w-full rounded-lg text-base-100 text-md md:w-fit px-6 py-1 mt-4" title={isLoading ? <Loader /> : "Save"} />{" "}
       </Form>
     </>
   );

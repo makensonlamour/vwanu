@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import { GoComment } from "react-icons/go";
 import { Chip, Stack } from "@mui/material";
 import placeholderBlog from "../../assets/images/placeholderBlog.png";
+import { format } from "date-fns";
 
 const SingleBlogRelated = ({ blog }) => {
   return (
@@ -42,12 +43,12 @@ const SingleBlogRelated = ({ blog }) => {
                 alt={"img_" + blog?.User?.firstName}
               />
               <div className="ml-4">
-                <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
-                <p className="text-gray-400 text-xs">{blog?.createdAt}</p>
+                <p className="font-semibold text-left text-sm md:text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
+                <p className="text-gray-400 text-xs">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
               </div>
             </Link>
             <div className="">
-              <Link to={`../../blogs/${blog?.id}`} className="px-4 py-2 hover:bg-placeholder-color text-md rounded-lg">
+              <Link to={`../../blogs/${blog?.id}`} className="px-2 md:px-4 py-2 hover:bg-placeholder-color text-sm md:text-md rounded-lg">
                 {blog?.Response?.length} <GoComment size={"18px"} className="ml-2 mr-1 inline" /> {blog?.amountOfComments}
               </Link>
             </div>

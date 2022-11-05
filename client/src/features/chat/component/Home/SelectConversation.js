@@ -30,7 +30,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
 
   return (
     <>
-      <div className="border-t border-gray-200">
+      <div className="w-full border-t border-gray-200">
         {conversation?.Users?.length > 2 ? (
           <Link
             onClick={() => {
@@ -92,29 +92,29 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
               }`}
             >
               <div className="flex justify-between items-center w-full">
-                <div className="flex justify-start w-full">
+                <div className="flex justify-start w-[80%]">
                   <div className="mr-2 w-10 h-10">
                     <img className="mask mask-squircle w-10 h-10" src={filtered[0]?.profilePicture} alt="" />
                   </div>
-                  <div className="w-[78%]">
+                  <div className="md:w-[40%] lg:w-[70%]">
                     {filtered?.map((item) => {
                       return (
                         <p
-                          key={item?.firstName + "ml-2 align-center items-center " + item?.lastName}
-                          className="font-semibold w-full line-clamp-1"
+                          key={item?.firstName + "ml-2 align-center text-sm items-center " + item?.lastName}
+                          className="font-semibold w-fit line-clamp-1"
                         >
                           {item?.firstName + " " + item?.lastName}
                         </p>
                       );
                     })}
                     {Object.keys(conversation?.lastMessage).length > 0 && (
-                      <div className="flex justify-start pt-0 items-center w-[100%]">
+                      <div className="flex justify-start pt-0 items-center w-fit max-w-[100%]">
                         {conversation?.lastMessage?.senderId === user?.id ? (
                           <div className="">
                             <BsArrowReturnRight className="mr-1" size={"14px"} />
                           </div>
                         ) : null}
-                        <p className="text-sm line-clamp-1 w-full">{conversation?.lastMessage?.messageText}</p>
+                        <p className="text-sm line-clamp-1 max-w-[100%]">{conversation?.lastMessage?.messageText}</p>
                       </div>
                     )}
                   </div>

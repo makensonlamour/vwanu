@@ -151,7 +151,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                   refetch={() => queryClient.invalidateQueries(["message", id])}
                   container={true}
                   isReverse={true}
-                  classNameContainer={"overflow-y-auto h-fit max-h-[72vh]"}
+                  classNameContainer={"overflow-y-auto scrollbar h-fit max-h-[72vh]"}
                   loader={
                     <div className="flex justify-center py-5">
                       <Loader color="black" />

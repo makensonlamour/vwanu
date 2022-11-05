@@ -106,7 +106,7 @@ const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arra
             <div className="flex flex-wrap lg:justify-between xl:justify-start py-2 w-full">
               {data?.pages?.map((page) => {
                 return page?.data?.data?.map((friend) => {
-                  return <CustomViewFriend data={friend} />;
+                  return <CustomViewFriend key={friend?.id} data={friend} />;
                   /*<div
                       key={friend?.id}
                       className={`bg-white border-gray-200 w-[100%] sm:w-[49%] md:w-[100%] lg:w-[49%] xl:mx-2 rounded-xl border pt-8 hover:shadow-xl my-3 
