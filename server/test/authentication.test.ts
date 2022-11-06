@@ -26,6 +26,7 @@ describe('Authentication service', () => {
   let testServer;
   let testUsers;
 
+  console.log(testUsers);
   beforeAll(async () => {
     await app.get('sequelizeClient').sync({ logged: false });
     testServer = request(app);
@@ -34,8 +35,6 @@ describe('Authentication service', () => {
         .post(userEndpoint)
         .send({ ...getRandUser(), id: undefined })
     ).body;
-
-    console.log('testUsers', testUsers);
   }, 20000);
 
   it('registered the service', () => {
@@ -63,7 +62,7 @@ describe('Authentication service', () => {
     expect(loginResponse).toHaveProperty('accessToken');
   });
 
-  it.skip('should create a new user and authenticate with facebook', async () => {
+  it.skip('should create a new user and authenticate with GOOGLE', async () => {
     (async () => {
       const browser = await puppeteer.launch({
         headless: false,
@@ -79,7 +78,11 @@ describe('Authentication service', () => {
       await page.goto('http://localhost:4000/oauth/google');
 
       // Type into search box.
-      // await page.type('.devsite-search-field', 'Headless Chrome');
+      await page.type('input[type="email"]', 'vwanuht@gmail.com');
+      const button = await page.waitForSelector('button');
+      console.log(button);
+      await button.click();
+      // await page.$x(`/*[@id="identifierNext"]/div/button`)[0].click();
 
       // // Wait for suggest overlay to appear and click "show all results".
       // const allResultsSelector = '.devsite-suggest-all-results';

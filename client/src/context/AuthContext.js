@@ -31,8 +31,17 @@ export const AuthContextProvider = ({ children }) => {
 
   const reAuth = async () => {
     try {
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      });
+
+      const acc = params.access_token;
+      if (acc) {
+        await client.authentication.setAccessToken(acc);
+        window.location.href = "/";
+      }
+
       const res = await client.reAuthenticate();
-      console.log("re-authentication", res.User);
       dispatch({ type: Types.AUTH_IS_READY, payload: res.User });
     } catch (error) {
       console.warn(error);
