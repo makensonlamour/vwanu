@@ -88,7 +88,7 @@ const FormPlaceLived = ({ user }) => {
     <>
       <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
         <Toaster />
-        <label className="text-md">Places Lived</label>
+        <label className="text-md py-4">Places Lived</label>
         <Select
           required
           label="Country"
@@ -109,6 +109,7 @@ const FormPlaceLived = ({ user }) => {
             className="mr-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
             testId="state-error-message"
             fn={setStateCode}
+            byId={true}
             options={optionsState}
           />
           <Select
@@ -120,6 +121,7 @@ const FormPlaceLived = ({ user }) => {
             className="ml-2 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
             testId="city-error-message"
             fn={setCityCode}
+            byId={true}
             options={optionsCity}
           />
         </div>
