@@ -1,4 +1,5 @@
-/*import React, { useState } from "react";
+/*eslint-disable*/
+import React, { useState } from "react";
 import { useOutletContext, useSearchParams } from "react-router-dom";
 import {
   BsFillMicMuteFill,
@@ -24,7 +25,7 @@ const CallScreen = () => {
         <div className="flex justify-center items-center mt-16">
           <img className="border border-gray-200 mask mask-squircle w-28 h-28" src={user?.profilePicture?.original} alt="_" />
         </div>
-        <div classsName="py-10">
+        <div className="py-10">
           <p className="text-center pb-1 pt-4 text-lg font-semibold">{user?.firstName + " " + user?.lastName}</p>
           <p className="text-center py-2">{ringing ? "Ringing..." : "0:00"}</p>
         </div>
@@ -60,8 +61,9 @@ const CallScreen = () => {
 };
 
 export default CallScreen;
-*/
-/*eslint-disable */
+
+/*
+/*eslint-disable 
 // import Landing from './components/Landing/LandingPage'
 // import Chat from './components/Chat/Chat'
 // import { Switch, Route } from 'react-router-dom'
@@ -219,3 +221,4 @@ function CallScreen() {
 }
 
 export default CallScreen;
+*/

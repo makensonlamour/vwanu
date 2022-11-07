@@ -97,7 +97,11 @@ const FriendsPreview = () => {
                       <div className="flex items-center align-middle justify-between w-full">
                         <div className="flex items-center justify-start">
                           <div className="w-12">
-                            <img className="object-cover w-8 h-8 mask mask-squircle" src={friend?.profilePicture?.original} alt="" />
+                            <img
+                              className="object-cover w-8 h-8 mask mask-squircle"
+                              src={friend?.profilePicture || friend?.profilePicture?.original}
+                              alt=""
+                            />
                           </div>
                           <div className="text-secondary text-sm w-[75%] line-clamp-1">{friend?.firstName + " " + friend?.lastName}</div>
                         </div>
