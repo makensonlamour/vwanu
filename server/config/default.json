@@ -1,4 +1,5 @@
 {
+  "port": 4000,
   "host": "localhost",
   "smtp": {
     "user": "mzghhfqe244g3ssi@ethereal.email",
@@ -43,7 +44,7 @@
     "entity": "User",
     "service": "users",
     "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
-    "authStrategies": ["jwt", "local"],
+    "authStrategies": ["jwt", "local", "facebook", "google"],
     "jwtOptions": {
       "header": {
         "typ": "access"
@@ -56,6 +57,21 @@
     "local": {
       "usernameField": "email",
       "passwordField": "password"
+    },
+    "oauth": {
+      "redirect": "http://localhost:4000/oauth/",
+      "facebook": {
+        "key": "1115816222641818",
+        "secret": "5b4be3fc54a9e671e246cd436e77077b",
+        "scope": ["email, public_profile"]
+      },
+      "google": {
+        "key": "1021743534725-npul9e6m1k4ifq04hqilhllc0u5hp8vi.apps.googleusercontent.com",
+        "secret": "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",
+        "scope": ["email", "profile", "openid"],
+        "callback": "/oauth/google/authenticate",
+        "nonce": true
+      }
     }
   },
   "refresh-token": {
@@ -66,7 +82,7 @@
       "header": {
         "typ": "refresh"
       },
-      "audience": "https://example.com",
+      "audience": "http://localhost:3000",
       "issuer": "example",
       "algorithm": "HS256",
       "expiresIn": "360d"
