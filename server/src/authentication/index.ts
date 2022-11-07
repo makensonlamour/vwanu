@@ -20,10 +20,11 @@ import {
 } from '@feathersjs/authentication-oauth';
 import axios from 'axios';
 import { issueRefreshToken } from '@jackywxd/feathers-refresh-token';
-import { Application } from './declarations';
+import { Application } from '../declarations';
+import Strategy from './OAuth';
 
 const { protect } = local.hooks;
-declare module './declarations' {
+declare module '../declarations' {
   // eslint-disable-next-line no-unused-vars
   interface ServiceTypes {
     authentication: AuthenticationService & ServiceAddons<any>;
