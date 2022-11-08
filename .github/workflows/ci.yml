@@ -13,15 +13,16 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/checkout@v2
 
-      - name: Make env file
-        uses: SpicyPizza/create-envfile@v1.3
-        with: 
-          envkey_OAUTH_REDIRECT_URL: ${{secrets.OAUTH_REDIRECT_URL}}
-          envkey_GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
-          envkey_GOOGLE_SECRET: ${{secrets.GOOGLe_SECRET}}
-          directory: server/
-          file_name: .env
-          fail_on_empty: true
+      - name: Adding env variable files
+        if: github.event_name == 'pull_request'
+        run: |
+          touch server/.env
+          echo "OAUTH_REDIRECT_URL=${{secrets.OAUTH_REDIRECT_URL}}" >>  server/.env
+          echo "GOOGLE_KEY=${{secrets.GOOGLE_KEY}}" >>  server/.env
+          echo "GOOGLE_SECRET=${{secrets.GOOGLE_SECRET}}" >>  server/.env
+
+      - name: Read env file file
+        run: cat server/.env
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1
