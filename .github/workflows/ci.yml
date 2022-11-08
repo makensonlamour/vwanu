@@ -13,12 +13,12 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/checkout@v2
 
-      - name: Make envfile
+      - name: Make env file
         uses: SpicyPizza/create-envfile@v1.3
-        with:
-          OAUTH_REDIRECT_URL: ${{secrets.OAUTH_REDIRECT_URL}}
-          GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
-          GOOGLE_SECRET: ${{secrets.GOOGLe_SECRET}}
+        with: 
+          envkey_OAUTH_REDIRECT_URL: ${{secrets.OAUTH_REDIRECT_URL}}
+          envkey_GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
+          envkey_GOOGLE_SECRET: ${{secrets.GOOGLe_SECRET}}
           directory: server/
           file_name: .env
           fail_on_empty: true
