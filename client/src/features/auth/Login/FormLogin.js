@@ -97,7 +97,7 @@ const FormLogin = () => {
             <Link className="text-sky-400" to={"#"}>
               <BsTwitter className="text-2xl inline mx-1" />
             </Link>
-            <Link className="text-red-600" to={"#"}>
+            <Link className="text-red-600" to={"/api/oauth/google"}>
               <FaGooglePlus className="text-2xl inline mx-1" />
             </Link>
           </span>

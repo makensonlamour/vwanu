@@ -12,35 +12,16 @@ jobs:
       - name: Running checkout
         if: github.event_name == 'pull_request'
         uses: actions/checkout@v2
-      # - name: Adding env variable files
-      #   if: github.event_name == 'pull_request'
-      #   run: |
-      #     touch server/config/local.json
-      #     echo { >  server/config/local.json
-      #     echo "\"TEST_MAIL_API_KEY\":\"${{secrets.TEST_MAIL_API_KEY}}\"," >>  server/config/local.json
-      #     echo "\"TEST_MAIL_NAMESPACE\":\"${{secrets.TEST_MAIL_NAMESPACE}}\"," >>  server/config/local.json
-      #     echo "\"smtp_username\": \"${{secrets.SMTP_USERNAME}}\"," >> server/config/local.json
-      #     echo "\"smtp_password\": \"${{secrets.SMTP_PASSWORD}}\"," >>  server/config/local.json
-      #     echo "\"smtp_port\": \"${{secrets.SMTP_PORT}}\"," >>  server/config/local.json
-      #     echo "\"smtp_host\": \"${{secrets.SMTP_HOST}}\"," >> server/config/local.json
-      #     echo "\"smtp\":{" >>  server/config/local.json
-      #     echo "\"user\":\"${{secrets.SMTP_USER}}\"," >>  server/config/local.json
-      #     echo "\"pass\":\"${{secrets.SMTP_PASS}}\"," >>  server/config/local.json
-      #     echo "\"port\":\"${{secrets.SMTP_PORT}}\"," >>  server/config/local.json
-      #     echo "\"secure\":\"${{secrets.SMTP_PORT}}\"," >>  server/config/local.json
-      #     echo "\"service\":\"${{secrets.SMTP_SERVICE}}\"" >>  server/config/local.json
-      #     echo "}}" >> server/config/local.json
 
-      #     echo "\"smtp\":{" >>  server/config/local.json
-      #     echo "\"user\":\"${{secrets.SMTP_USER}}\"," >>  server/config/local.json
-      #     echo "\"pass\":\"${{secrets.SMTP_PASS}}\"," >>  server/config/local.json
-      #     echo "\"port\":\"${{secrets.SMTP_PORT}}\"," >>  server/config/local.json
-      #     echo "\"secure\":\"${{secrets.SMTP_PORT}}\"," >>  server/config/local.json
-      #     echo "\"service\":\"${{secrets.SMTP_SERVICE}}\"" >>  server/config/local.json
-
-      # - name: Reading the created File
-      #   if: github.event_name == 'pull_request'
-      #   run: cat server/config/local.json
+      - name: Make env file
+        uses: SpicyPizza/create-envfile@v1.3
+        with: 
+          envkey_OAUTH_REDIRECT_URL: ${{secrets.OAUTH_REDIRECT_URL}}
+          envkey_GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
+          envkey_GOOGLE_SECRET: ${{secrets.GOOGLe_SECRET}}
+          directory: server/
+          file_name: .env
+          fail_on_empty: true
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1

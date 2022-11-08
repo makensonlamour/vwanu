@@ -1,5 +1,6 @@
 {
   "port": 4000,
+  "frontendUrl": "http://localhost:3000",
   "host": "localhost",
   "smtp": {
     "user": "mzghhfqe244g3ssi@ethereal.email",
@@ -66,8 +67,8 @@
         "scope": ["email, public_profile"]
       },
       "google": {
-        "key": "1021743534725-npul9e6m1k4ifq04hqilhllc0u5hp8vi.apps.googleusercontent.com",
-        "secret": "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",
+        "key": "GOOGLE_KEY",
+        "secret": "GOOGLE_SECRET",
         "scope": ["email", "profile", "openid"],
         "callback": "/oauth/google/authenticate",
         "nonce": true
