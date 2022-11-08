@@ -11,11 +11,24 @@
     "host": "SMTP_HOST",
     "port": "SMTP_PORT",
     "secure": "SMTP_SECURE",
-    "service":"SMTP_SERVICE"
+    "service": "SMTP_SERVICE"
   },
 
   "CLOUDINARY_API_SECRET": "CLOUDINARY_API_SECRET",
   "CLOUDINARY_API_KEY": "CLOUDINARY_API_KEY",
   "CLOUDINARY_CLOUD_NAME": "CLOUDINARY_CLOUD_NAME",
-  "JWT_SECRET": "JWT_SECRET"
+  "JWT_SECRET": "JWT_SECRET",
+
+  "oauth": {
+    "redirect": "OAUTH_REDIRECT_URL",
+    "facebook": {
+      "key": "FACEBOOK_KEY",
+      "secret": "FACEBOOK_SECRET"
+    },
+    "google": {
+      "key": "GOOGLE_KEY",
+      "secret": "GOOGLE_SECRET",
+      "callback": "/oauth/google/authenticate"
+    }
+  }
 }
