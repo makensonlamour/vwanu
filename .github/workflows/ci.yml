@@ -23,6 +23,7 @@ jobs:
       - name: Reading the created File
         if: github.event_name == 'pull_request'
         run: cat server/.env
+
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1
