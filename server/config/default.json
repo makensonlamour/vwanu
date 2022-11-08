@@ -1,5 +1,6 @@
 {
   "port": 4000,
+  "frontendUrl": "http://localhost:3000",
   "host": "localhost",
   "smtp": {
     "user": "mzghhfqe244g3ssi@ethereal.email",
