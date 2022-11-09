@@ -74,10 +74,15 @@ SELECT
     `(
     EXISTS(
      SELECT 1 
-     FROM "DiscussionInterest" AS "Di" 
-     WHERE "Di"."DiscussionId"= "Discussion"."id" AND "Di"."InterestId" IN 
-     (SELECT "InterestId" AS "id" FROM "CategoryInterest" WHERE "CategoryInterest"."id='${categoryId}')
-    ))`;
+     FROM "DiscussionInterests" AS "Di" 
+     WHERE "Di"."DiscussionId" = "Discussion"."id" AND "Di"."InterestId" IN 
+     (SELECT 
+      "InterestId" AS "id"
+       FROM "CategoryInterests" 
+       WHERE "CategoryInterests"."ForumCategoryId"='${categoryId}'
+    )
+    )
+    )`;
 
   const { query: where } = context.app
     .service(context.path)
@@ -92,20 +97,22 @@ SELECT
 
   if (where.categoryId) {
     const { categoryId } = where;
-
+    delete where.categoryId;
+    delete clause.categoryId;
     clause[Op.and].push(
       Sequelize.where(Sequelize.literal(OnCategory(categoryId)), true)
     );
   }
   params.sequelize = {
+    logging: console.log,
     where: clause,
     attributes: {
       include: [
-        [Sequelize.literal(activeParticipants), 'activeParticipants'],
-        [Sequelize.literal(amountOfComments), 'amountOfComments'],
-        [Sequelize.literal(lastComment), 'lastComment'],
-        [Sequelize.literal(amountOfReactions), 'amountOfReactions'],
         [Sequelize.literal(isReactor), 'isReactor'],
+        [Sequelize.literal(lastComment), 'lastComment'],
+        [Sequelize.literal(amountOfComments), 'amountOfComments'],
+        [Sequelize.literal(amountOfReactions), 'amountOfReactions'],
+        [Sequelize.literal(activeParticipants), 'activeParticipants'],
       ],
       exclude: ['DiscussionId', 'UserId', 'CommunityId'],
     },
