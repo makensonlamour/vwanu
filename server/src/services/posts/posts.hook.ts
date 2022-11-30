@@ -3,6 +3,7 @@ import * as feathersAuthentication from '@feathersjs/authentication';
 /** Local dependencies */
 import AutoOwn from '../../Hooks/AutoOwn';
 import { LimitToOwner } from '../../Hooks';
+import DeletePost from './hooks/deletePost';
 import * as schema from '../../schema/post';
 import GetTimeline from '../timeline/hooks/getTimeline';
 import validateResource from '../../middleware/validateResource';
@@ -24,7 +25,7 @@ export default {
     ],
     update: [CanPostInCommunity],
     patch: [LimitToOwner],
-    remove: [LimitToOwner],
+    remove: [DeletePost],
   },
 
   after: {
