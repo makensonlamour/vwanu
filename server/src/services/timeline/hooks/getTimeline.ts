@@ -118,6 +118,20 @@ SELECT
   )
   END
 )`;
+
+  const CanDelete = `(
+    CASE 
+    WHEN "Post"."UserId" = '${params.User.id}' THEN true
+    WHEN "Post"."wallId" = '${params.User.id}' THEN true
+    WHEN "Post"."PostId" IS NOT NULL 
+    AND  EXISTS( 
+     Select 1
+     FROM "Posts" as "P"
+     WHERE "P"."id" = "Post"."PostId" AND "P"."UserId" = '${params.User.id}')
+    THEN true
+    ELSE false
+    END)`;
+
   const { query: where } = context.app
     .service(context.path)
     .filterQuery(context.params);
@@ -151,6 +165,7 @@ SELECT
         [Sequelize.literal(isReactor), 'isReactor'],
         [Sequelize.literal(WallUser), 'WallUser'],
         [Sequelize.literal(Original), 'Original'],
+        [Sequelize.literal(CanDelete), 'canDelete'],
       ],
       exclude: ['UserId'],
     },
