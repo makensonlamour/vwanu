@@ -1,15 +1,15 @@
-/* eslint-disable no-unused-vars */
-import { Op } from '@sequelize/core';
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable camelcase */
+
 import { Params, Id } from '@feathersjs/feathers';
 import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
 
-import { BadRequest } from '@feathersjs/errors';
-
 /** Local dependencies */
 import { Application } from '../../declarations';
-import UrlToMedia from '../../lib/utils/UrlToMedia';
 
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * A class for the followers service
+ */
 export class Followers extends Service {
   app;
 
@@ -18,74 +18,87 @@ export class Followers extends Service {
     this.app = app;
   }
 
-  // async find(params: Params) {
-  //   if (!params.provider) return super.find(params);
+  /**
+   * This method is used to remove a  follower record
+   * @param {Id} id  The id of the user to unFollow
+   * @param {params} params - The metadata sent
+   * @returns - response from the api
+   */
+  async remove(id: Id, params: Params) {
+    const { User_Follower, User_Following } =
+      this.app.get('sequelizeClient').models;
 
-  //   let response = [];
-  //   const UserModel = this.app.service('users').Model;
-  //   const { action, UserId } = params.query;
-  //   const requesterId = UserId || params.User.id;
-
-  //   let requester;
-
-  //   switch (action) {
-  //     case 'people-who-follow-me':
-  //       requester = await UserModel.findOne({
-  //         where: { id: requesterId },
-
-  //         include: [
-  //           {
-  //             model: UserModel,
-  //             as: 'Follower',
-  //             attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
-  //           },
-  //         ],
-  //       });
-
-  //       if (!requester) throw new BadRequest('Could not find your profile');
-  //       response = requester.Follower;
-  //       break;
-
-  //     case 'people-i-follow':
-  //       requester = await UserModel.findOne({
-  //         where: { id: requesterId },
-
-  //         include: [
-  //           {
-  //             model: UserModel,
-  //             as: 'Following',
-  //             attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
-  //           },
-  //         ],
-  //       });
-
-  //       if (!requester) throw new BadRequest('Could not find your profile');
-  //       response = requester.Following;
-
-  //       break;
-  //     default:
-  //       throw new BadRequest('This action is not supported');
-  //   }
-
-  //   response = response.map((user) => ({
-  //     id: user.id,
-  //     firstName: user.firstName,
-  //     lastName: user.lastName,
-  //     profilePicture: UrlToMedia(user.profilePicture),
-  //     createdAt: user.createdAt,
-  //     updatedAt: user.updatedAt,
-  //   }));
-
-  //   return Promise.resolve(response);
-  // }
-
-  async remove(data, params: Params) {
-    const res = await this.app
-      .get('sequelizeClient')
-      .models.User_Follower.destroy({
-        where: { UserId: params.query.UserId, FollowerId: params.User.id },
-      });
+    await User_Following.destroy({
+      where: {
+        FollowingId: id,
+        UserId: params.User.id,
+      },
+    });
+    const res = await User_Follower.destroy({
+      where: { UserId: id, FollowerId: params.User.id },
+    });
 
     return Promise.resolve(res);
   }
 }
+
+// async find(params: Params) {
+//   if (!params.provider) return super.find(params);
+
+//   let response = [];
+//   const UserModel = this.app.service('users').Model;
+//   const { action, UserId } = params.query;
+//   const requesterId = UserId || params.User.id;
+
+//   let requester;
+
+//   switch (action) {
+//     case 'people-who-follow-me':
+//       requester = await UserModel.findOne({
+//         where: { id: requesterId },
+
+//         include: [
+//           {
+//             model: UserModel,
+//             as: 'Follower',
+//             attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
+//           },
+//         ],
+//       });
+
+//       if (!requester) throw new BadRequest('Could not find your profile');
+//       response = requester.Follower;
+//       break;
+
+//     case 'people-i-follow':
+//       requester = await UserModel.findOne({
+//         where: { id: requesterId },
+
+//         include: [
+//           {
+//             model: UserModel,
+//             as: 'Following',
+//             attributes: ['id', 'firstName', 'lastName', 'profilePicture'],
+//           },
+//         ],
+//       });
+
+//       if (!requester) throw new BadRequest('Could not find your profile');
+//       response = requester.Following;
+
+//       break;
+//     default:
+//       throw new BadRequest('This action is not supported');
+//   }
+
+//   response = response.map((user) => ({
+//     id: user.id,
+//     firstName: user.firstName,
+//     lastName: user.lastName,
+//     profilePicture: UrlToMedia(user.profilePicture),
+//     createdAt: user.createdAt,
+//     updatedAt: user.updatedAt,
+//   }));
+
+//   return Promise.resolve(response);
+// }

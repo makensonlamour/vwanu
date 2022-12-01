@@ -2,42 +2,40 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
 import { StatusCodes } from 'http-status-codes';
-import request from 'supertest';
-import app from '../../app';
-
-import { getRandUsers } from '../../lib/utils/generateFakeUser';
+import app from '../../src/app';
+import Service from './index.test';
+import UsersClass from './users.test';
+import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
 
 let createdTestUsers = [];
 const endpoint = '/followers';
 
-const userEndpoint = '/users';
-describe('Friend service, ', () => {
-  let testServer;
+const Users = new UsersClass();
+const Followers = new Service(endpoint);
+
+describe('Follower service, ', () => {
   beforeAll(async () => {
     await app.get('sequelizeClient').sync({ logged: false });
-    testServer = request(app);
 
     createdTestUsers = await Promise.all(
       getRandUsers(4).map((u) => {
         const user = u;
         delete user.id;
-        return testServer.post(userEndpoint).send(user);
+        return Users.create(user);
       })
     );
-  }, 20000);
+  });
 
   afterAll(async () => {
     await Promise.all(
       createdTestUsers.map(({ body }) =>
-        testServer
-          .delete(`${userEndpoint}/${body.id}`)
-          .set('authorization', body.accessToken)
+        Users.delete(body.id, body.accessToken)
       )
     );
-
     await app.get('sequelizeClient').close();
   });
-  it('The user service is running', async () => {
+
+  it('The follower service is running', async () => {
     const service = app.service('followers');
     expect(service).toBeDefined();
   });
@@ -45,11 +43,10 @@ describe('Friend service, ', () => {
   it('should start following someone', async () => {
     const requester = createdTestUsers[0].body;
     const user = createdTestUsers[1].body;
-
-    const response = await testServer
-      .post(endpoint)
-      .send({ UserId: user.id })
-      .set('authorization', requester.accessToken);
+    const response = await Followers.create(
+      { UserId: user.id },
+      requester.accessToken
+    );
 
     expect(response.status).toBe(StatusCodes.CREATED);
     expect(response.body).toEqual(
@@ -65,10 +62,10 @@ describe('Friend service, ', () => {
     const requester = createdTestUsers[2].body;
     const user = createdTestUsers[3].body;
 
-    const response = await testServer
-      .post(endpoint)
-      .send({ UserId: user.id })
-      .set('authorization', requester.accessToken);
+    const response = await Followers.create(
+      { UserId: user.id },
+      requester.accessToken
+    );
 
     expect(response.status).toBe(StatusCodes.CREATED);
     expect(response.body).toEqual(
@@ -80,43 +77,61 @@ describe('Friend service, ', () => {
       })
     );
 
-    // Checking the follower records exist in dthe db
+    const { User_Follower, User_Following } = app.get('sequelizeClient').models;
 
-    // eslint-disable-next-line prefer-destructuring
-    const Model = app.get('sequelizeClient').models.User_Follower;
-
-    let records = await Model.findAll({
+    // Ensuring  the follower records was created in the db
+    let followerRecords = await User_Follower.findAll({
       where: { UserId: user.id, FollowerId: requester.id },
     });
     expect(
-      records.some(
+      followerRecords.some(
         (record) =>
           record.UserId === user.id && record.FollowerId === requester.id
       )
     ).toBeTruthy();
 
-    await testServer
-      .delete(`${endpoint}?UserId=${user.id}`)
-      .set('authorization', requester.accessToken);
+    // Ensuring  the following records was created in the db
 
-    // ensuring the follower records no longe exist in db
-    records = await Model.findAll({
+    let followingRecords = await User_Following.findAll({
+      where: { FollowingId: user.id, UserId: requester.id },
+    });
+
+    expect(
+      followingRecords.some(
+        (record) =>
+          record.FollowingId === user.id && record.UserId === requester.id
+      )
+    ).toBeTruthy();
+
+    await Followers.delete(user.id, requester.accessToken);
+
+    // Ensuring the follower records no longer exist in db
+    followerRecords = await User_Follower.findAll({
       where: { UserId: user.id, FollowerId: requester.id },
     });
     expect(
-      records.every(
+      followerRecords.every(
         (record) =>
           record.UserId !== user.id && record.FollowerId !== requester.id
       )
     ).toBeTruthy();
+
+    // Ensuring the following records no longer exist in db
+
+    followingRecords = await User_Following.findAll({
+      where: { FollowingId: user.id, UserId: requester.id },
+    });
+    expect(followingRecords.length).toBe(0);
   });
+
   it('get the list of all his followers', async () => {
     const user = createdTestUsers[1].body;
-    const response = await testServer
-      .get(`${endpoint}/?action=people-who-follow-me`)
-      .set('authorization', user.accessToken);
-
+    const response = await Followers.getList(
+      user.accessToken,
+      `action=people-who-follow-me`
+    );
     expect(response.status).toBe(StatusCodes.OK);
+
     response.body.data.forEach((f) => {
       expect(f).toMatchObject({
         id: expect.any(String),
@@ -128,9 +143,10 @@ describe('Friend service, ', () => {
   }, 2000);
   it('get a list of all the people he is following', async () => {
     const requester = createdTestUsers[0].body;
-    const response = await testServer
-      .get(`${endpoint}/?action=people-i-follow`)
-      .set('authorization', requester.accessToken);
+    const response = await Followers.getList(
+      requester.accessToken,
+      `action=people-i-follow`
+    );
 
     expect(response.status).toBe(StatusCodes.OK);
     response.body.data.forEach((f) => {
@@ -146,11 +162,10 @@ describe('Friend service, ', () => {
   it('should get a list of people someone else is following', async () => {
     const peopleWithFollower = createdTestUsers[1].body;
     const user = createdTestUsers[3].body;
-    const response = await testServer
-      .get(
-        `${endpoint}/?action=people-who-follow-me&UserId=${peopleWithFollower.id}`
-      )
-      .set('authorization', user.accessToken);
+    const response = await Followers.getList(
+      user.accessToken,
+      `action=people-who-follow-me&UserId=${peopleWithFollower.id}`
+    );
 
     expect(response.status).toBe(StatusCodes.OK);
     response.body.data.forEach((follower) => {
