@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { StatusCodes } from 'http-status-codes';
@@ -7,17 +6,7 @@ import app from '../../../src/app';
 import { getRandUsers } from '../../../src/lib/utils/generateFakeUser';
 
 import Service from '../index.test';
-
-export default class UsersClass extends Service {
-  constructor() {
-    super('/users');
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  create(details: any) {
-    return this._testServer.post(this._endpoint).send(details);
-  }
-}
+import UsersClass from '../users.test';
 
 describe('Posts services', () => {
   let observer;
@@ -291,6 +280,4 @@ describe('Posts services', () => {
 
     expect(statusCode).toEqual(StatusCodes.OK);
   });
-
-  
 });

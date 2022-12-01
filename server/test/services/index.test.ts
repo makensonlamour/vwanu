@@ -20,6 +20,12 @@ export default class Service {
     this._testServer = request(app);
   }
 
+  /**
+   *
+   * @param details - The details of the resource to be created
+   * @param token - the token of the user who is creating the resource
+   * @returns - the server response
+   */
   create(details, token) {
     return this._testServer
       .post(this._endpoint)
@@ -46,6 +52,12 @@ export default class Service {
       .set('authorization', token);
   }
 
+  /**
+   *
+   * @param id - id of the resource to be deleted
+   * @param token - The token of the user who is deleting the resource
+   * @returns - The response from the server
+   */
   delete(id, token) {
     return this._testServer
       .delete(`${this._endpoint}/${id}`)

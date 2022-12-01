@@ -1,4 +1,6 @@
+/* eslint-disable lines-between-class-members */
 /* eslint-disable camelcase */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
 import { StatusCodes } from 'http-status-codes';
@@ -9,6 +11,16 @@ import {
   getRandUsers,
   getRandUser,
 } from '../../src/lib/utils/generateFakeUser';
+import Service from './index.test';
+
+export default class UsersClass extends Service {
+  constructor() {
+    super('/users');
+  }
+  create(details: any) {
+    return this._testServer.post(this._endpoint).send(details);
+  }
+}
 
 let observer;
 let privateUser;
