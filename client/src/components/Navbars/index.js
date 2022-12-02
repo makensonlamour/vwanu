@@ -126,7 +126,7 @@ const Navbar = ({ user, countMessage }) => {
               )}
               <div className="h-6 bg-black w-[1px]"></div>
               <Link to={routesPath?.MESSAGE}>
-                <Badge badgeContent={countMessage} color="primary" className="">
+                <Badge badgeContent={countMessage} color="secondary" className="">
                   <AiOutlineInbox size="24px" className="text-primary hover:text-secondary cursor-pointer" />
                 </Badge>
               </Link>
