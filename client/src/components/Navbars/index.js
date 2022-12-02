@@ -86,7 +86,7 @@ const Navbar = ({ user, countMessage }) => {
           </div>
           {search ? (
             <div className="z-50 md:basis-[30%] xl:basis-2/4 flex-none md:block items-center">
-              <Search placeholder={`Search a members`} setIsSearchOpen={setSearch} />
+              <Search placeholder={`Search people`} setIsSearchOpen={setSearch} />
             </div>
           ) : (
             <div className="md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
