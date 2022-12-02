@@ -7,8 +7,8 @@ import FormRegister from "../../features/auth/Register/FormRegister";
 import logo from "../../assets/images/Vwanu_logo.svg";
 import Shape_up from "../../assets/images/Shape_up.svg";
 import Home_pic from "../../assets/images/Home_pic.jpg";
-import { BsFacebook, BsTwitter } from "react-icons/bs";
-import { FaGooglePlus } from "react-icons/fa";
+// import { BsFacebook, BsTwitter } from "react-icons/bs";
+// import { FaGooglePlus } from "react-icons/fa";
 
 const RegisterScreen = () => {
   return (
@@ -72,7 +72,7 @@ const RegisterScreen = () => {
                 </Link>
               </p>
             </div>
-            <div className="hidden lg:block mb-8 lg:mb-4 text-center">
+            {/* <div className="hidden lg:block mb-8 lg:mb-4 text-center">
               <span className="text-blue-600 text-center inline text-md md:text-lg">
                 {` Or sign in with `}
                 <Link className="text-blue-500 ml-2" to={"#"}>
@@ -85,11 +85,11 @@ const RegisterScreen = () => {
                   <FaGooglePlus className="text-2xl inline mx-1" />
                 </Link>
               </span>
-            </div>
+            </div> */}
             <div className="lg:flex-none lg:w-full">
               <FormRegister />
             </div>
-            <div className="lg:hidden mb-8 text-center">
+            {/* <div className="lg:hidden mb-8 text-center">
               <span className="text-blue-600 text-center inline text-md md:text-lg">
                 {` Or sign in with `}
                 <Link className="text-blue-500 ml-2" to={"#"}>
@@ -102,7 +102,7 @@ const RegisterScreen = () => {
                   <FaGooglePlus className="text-2xl inline mx-1" />
                 </Link>
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
         {/*}

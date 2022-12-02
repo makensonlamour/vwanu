@@ -152,7 +152,10 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
             <div className="text-md">
               <div className="flex items-center justify-between w-full gap-x-6">
                 {" "}
-                <Link to={`../../profile/${data?.id}`} className="text-[0.95rem] sm:text-md hover:text-primary font-semibold">
+                <Link
+                  to={`../../profile/${data?.id}`}
+                  className="text-[0.95rem] sm:text-md text-primary hover:text-secondary font-semibold"
+                >
                   {(data?.firstName || data?.User?.firstName) + " " + (data?.lastName || data?.User?.lastName)}
                 </Link>
                 <div className="flex justify-end">

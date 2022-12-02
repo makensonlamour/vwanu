@@ -36,7 +36,7 @@ const CommunityTab = ({ user }) => {
       <div className="">
         <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
           <div className="flex justify-between items-center pb-4">
-            <p className="font-bold text-3xl">Community</p>
+            <p className="font-bold text-lg text-primary">Community</p>
             {user?.id?.toString() === id?.toString() && (
               <Link
                 to={"../.." + routesPath.ADD_GROUPS}

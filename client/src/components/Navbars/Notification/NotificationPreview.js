@@ -85,8 +85,8 @@ const NotificationPreview = () => {
     <>
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <Badge badgeContent={NotificationUnview?.length} color="primary" className="">
-            <IoMdNotificationsOutline size="24px" className="text-black" />
+          <Badge badgeContent={NotificationUnview?.length} color="secondary" className="">
+            <IoMdNotificationsOutline size="24px" className="text-primary hover:text-secondary cursor-pointer" />
           </Badge>
         </label>
         <ul

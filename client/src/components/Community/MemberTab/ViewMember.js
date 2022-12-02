@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext, useParams, Link } from "react-router-dom";
 import { useDeleteCommunityUser } from "../../../features/community/communitySlice";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../common/Loader";
@@ -61,7 +61,12 @@ const MemberSettings = ({ data, isCreator }) => {
                     <img src={member?.User?.profilePicture} alt={"_profilePicture"} className="mask mask-squircle w-10 h-10" />
                   </div>
                   <div className="text-md">
-                    <p className="">{member?.User?.firstName + " " + member?.User?.lastName}</p>
+                    <Link
+                      to={"../../profile/" + member?.User?.id}
+                      className="cursor-pointer font-semibold text-primary hover:text-secondary"
+                    >
+                      {member?.User?.firstName + " " + member?.User?.lastName}
+                    </Link>
                     <div className="py-2 flex justify-start flex-wrap">
                       {user?.id === member?.UserId && !isCreator && (
                         <button

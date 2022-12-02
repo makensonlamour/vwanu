@@ -51,7 +51,7 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
       <div className="w-full dropdown">
         <div tabIndex={0} className="w-full relative text-gray-400 focus-within:text-gray-400">
           <span className="absolute inset-y-0 right-0 flex items-center pr-2">
-            <button onClick={() => setIsSearchOpen(false)} className="">
+            <button onClick={() => setIsSearchOpen(false)} className="text-primary">
               <AiOutlineClose size={"24px"} className="" />
             </button>
           </span>

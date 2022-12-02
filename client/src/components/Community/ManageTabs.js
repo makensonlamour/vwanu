@@ -50,9 +50,9 @@ const ManageTabs = () => {
                       label={
                         <Fragment>
                           {value === "1" ? (
-                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Details</div>
+                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Details</div>
                           ) : (
-                            <div className="flex">Details</div>
+                            <div className="flex text-primary">Details</div>
                           )}
                         </Fragment>
                       }
@@ -66,9 +66,9 @@ const ManageTabs = () => {
                       label={
                         <Fragment>
                           {value === "2" ? (
-                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Settings</div>
+                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Settings</div>
                           ) : (
-                            <div className="flex">Settings</div>
+                            <div className="flex text-primary">Settings</div>
                           )}
                         </Fragment>
                       }
@@ -81,9 +81,9 @@ const ManageTabs = () => {
                     label={
                       <Fragment>
                         {value === "3" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Photo</div>
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Photo</div>
                         ) : (
-                          <div className="flex">Photo</div>
+                          <div className="flex text-primary">Photo</div>
                         )}
                       </Fragment>
                     }
@@ -95,9 +95,9 @@ const ManageTabs = () => {
                     label={
                       <Fragment>
                         {value === "4" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Cover Photo</div>
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Cover Photo</div>
                         ) : (
-                          <div className="flex">Cover Photo</div>
+                          <div className="flex text-primary">Cover Photo</div>
                         )}
                       </Fragment>
                     }
@@ -109,9 +109,9 @@ const ManageTabs = () => {
                     label={
                       <Fragment>
                         {value === "5" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Members</div>
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Members</div>
                         ) : (
-                          <div className="flex">Members</div>
+                          <div className="flex text-primary">Members</div>
                         )}
                       </Fragment>
                     }
@@ -123,9 +123,9 @@ const ManageTabs = () => {
                     label={
                       <Fragment>
                         {value === "6" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Forum</div>
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Forum</div>
                         ) : (
-                          <div className="flex">Forum</div>
+                          <div className="flex text-primary">Forum</div>
                         )}
                       </Fragment>
                     }
@@ -137,9 +137,9 @@ const ManageTabs = () => {
                     label={
                       <Fragment>
                         {value === "7" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Delete</div>
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Delete</div>
                         ) : (
-                          <div className="flex">Delete</div>
+                          <div className="flex text-primary">Delete</div>
                         )}
                       </Fragment>
                     }

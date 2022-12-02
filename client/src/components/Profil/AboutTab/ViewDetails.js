@@ -29,7 +29,7 @@ const ViewDetails = ({ title, user, substabs }) => {
     <>
       <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
         <div className="border-b flex justify-between items-center pb-4">
-          <p className="font-bold text-lg">{title}</p>
+          <p className="font-bold text-lg text-primary">{title}</p>
 
           {userMe?.id?.toString() === id?.toString() && (
             <button

@@ -15,14 +15,14 @@ const ModalOnlineUser = ({ open, setOpen, label, data, isLoading, isError, hasNe
   return (
     <>
       <div className="w-80 mx-auto">
-        <button onClick={() => setOpen(true)} className="w-full py-1 px-3 text-xs mx-auto font-[500] hover:text-primary">
+        <button onClick={() => setOpen(true)} className="w-full py-1 px-3 text-sm mx-auto font-[500] text-primary hover:text-secondary">
           {label}
         </button>
         {open && (
-          <div className="fixed z-50 inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full">
+          <div className="fixed z-[1000] inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full">
             <div className="relative top-20 mx-auto p-2 border w-full md:w-[30%] shadow-lg rounded-md bg-white">
               <div className="flex justify-between items-center">
-                <h2 className="my-2 text-md font-medium">
+                <h2 className="my-2 text-md font-medium text-primary">
                   Online Friends <span className="font-normal text-md text-gray-400">{data?.pages[0]?.data?.total}</span>
                 </h2>
                 <button onClick={() => setOpen(false)} className="">

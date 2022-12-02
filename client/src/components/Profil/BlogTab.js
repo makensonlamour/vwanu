@@ -27,7 +27,7 @@ const BlogTab = () => {
     <>
       <div className="w-full my-4 bg-white border border-gray-300 py-5 md:py-10 px-2 md:px-16 rounded-xl">
         <div className="flex justify-between items-center pb-4">
-          <h4 className="text-lg md:text-xl font-semibold">Blog</h4>
+          <h4 className="text-lg md:text-xl font-semibold text-primary">Blog</h4>
           <Link
             to={"../../blogs/add"}
             className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-1 md:py-2 px-4 md:px-6 font-semibold"

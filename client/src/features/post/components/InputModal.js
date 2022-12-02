@@ -210,13 +210,13 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
           </p>
         </div>
         <div className="border-t rounded-b-lg border-gray-300 bg-placeholder-color text-left py-4 px-4">
-          <button className="mr-4">
-            <AiOutlineCamera size={"24px"} />
+          <button className="mr-4 text-primary hover:text-secondary">
+            <AiOutlineCamera size={"24px"} className="" />
           </button>
-          <button className="mr-4">
+          <button className="mr-4 text-primary hover:text-secondary">
             <AiOutlineVideoCamera size={"24px"} />
           </button>
-          <button className="mr-4">
+          <button className="mr-4 text-primary hover:text-secondary">
             <AiOutlineGif size={"24px"} />
           </button>
         </div>
@@ -235,7 +235,7 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between px-5 py-3 border-b border-solid border-blueGray-200 rounded-t">
-                  <p className="text-lg font-medium">Create a Post</p>
+                  <p className="text-lg font-medium text-primary">Create a Post</p>
                   <button onClick={() => setShowModal(false)} className="text-lg font-medium">
                     x
                   </button>
@@ -437,7 +437,7 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
                           setFiles([]);
                           setSelectedGif("");
                         }}
-                        className="mr-4"
+                        className="mr-4 text-primary hover:text-secondary"
                       >
                         <AiOutlineCamera size={"24px"} />
                       </button>
@@ -449,7 +449,7 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
                           setFiles([]);
                           setSelectedGif("");
                         }}
-                        className="mr-4"
+                        className="mr-4 text-primary hover:text-secondary"
                       >
                         <AiOutlineVideoCamera size={"24px"} />
                       </button>
