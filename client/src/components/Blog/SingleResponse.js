@@ -11,7 +11,7 @@ const SingleResponse = ({ blog }) => {
         <div className="w-full">
           <div className="bg-white border border-gray-300 rounded-xl p-4 mt-4 flex flex-col justify-end">
             <div className="flex justify-between items-center">
-              <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
+              <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary text-secondary">
                 <img
                   className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
                   src={blog?.User?.profilePicture}

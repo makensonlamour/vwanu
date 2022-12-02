@@ -96,7 +96,7 @@ const Navbar = ({ user, countMessage }) => {
                     to={page?.path}
                     key={cryptoRandomString({ length: 10 })}
                     activeclassname="text-secondary"
-                    className=" text-primary hover:text-secondary active:text-secondary"
+                    className="font-semibold text-primary hover:text-secondary active:text-secondary"
                   >
                     {page?.title}
                   </NavLink>
