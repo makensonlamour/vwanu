@@ -2,8 +2,8 @@
 import request from 'supertest';
 
 /** Local dependencies */
-import app from '../../src/app';
-import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
+import app from '../../../src/app';
+import { getRandUsers } from '../../../src/lib/utils/generateFakeUser';
 
 describe("'discussion ' service", () => {
   let testUsers;
