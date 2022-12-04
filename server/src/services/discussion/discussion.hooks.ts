@@ -5,7 +5,7 @@ import LimitToOwner from '../../Hooks/LimitToOwner';
 import NoCommentOnLockParents from '../../Hooks/NoCommentOnLockParents';
 import CanDiscussInCommunity from '../../Hooks/CanDoInCommunity.hook';
 
-import { includeUserAndLastComment } from './hooks';
+import { includeUserAndLastComment, AssociateWithForumInterest } from './hooks';
 
 const { authenticate } = authentication.hooks;
 
@@ -24,7 +24,7 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [AssociateWithForumInterest],
     update: [],
     patch: [],
     remove: [],

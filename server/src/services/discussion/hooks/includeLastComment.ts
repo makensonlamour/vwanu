@@ -74,9 +74,9 @@ SELECT
     `(
     EXISTS(
      SELECT 1 
-     FROM "DiscussionInterest" AS "Di" 
-     WHERE "Di"."DiscussionId"= "Discussion"."id" AND "Di"."InterestId" IN 
-     (SELECT "InterestId" AS "id" FROM "CategoryInterest" WHERE "CategoryInterest"."id='${categoryId}')
+     FROM "Discussion_ForumCategory" AS "DF" 
+     WHERE "DF"."DiscussionId"= "Discussion"."id" 
+     AND "DF"."ForumCategoryId" = '${categoryId}'
     ))`;
 
   const { query: where } = context.app
@@ -92,7 +92,8 @@ SELECT
 
   if (where.categoryId) {
     const { categoryId } = where;
-
+    delete where.categoryId;
+    delete clause.categoryId;
     clause[Op.and].push(
       Sequelize.where(Sequelize.literal(OnCategory(categoryId)), true)
     );

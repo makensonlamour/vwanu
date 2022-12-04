@@ -35,6 +35,10 @@ export default (sequelize: any, DataTypes: any) => {
       Discussion.belongsToMany(models.Media, {
         through: 'Discussion_Media',
       });
+      Discussion.belongsToMany(models.ForumCategory, {
+        through: 'Discussion_ForumCategory',
+        as: 'forum_discussion',
+      });
       Discussion.belongsTo(models.Community);
       Discussion.hasMany(models.Discussion, { as: 'Comments' });
       Discussion.hasMany(models.Reaction, {
