@@ -75,7 +75,7 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
                 </div>
               }
             >
-              {data?.pages.map((page) => {
+              {data?.pages?.map((page) => {
                 return page?.data?.data?.map((item) => {
                   return (
                     <div

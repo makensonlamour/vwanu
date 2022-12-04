@@ -1,6 +1,9 @@
 import { usePost, useLoadMore } from "../../lib/react-query";
 
 export const useSendFollow = (queryKey) => usePost(queryKey, `/followers`);
+
+export const useSendUnfollow = (queryKey) => usePost(queryKey, `/followers`);
+
 export const useGetListFollowers = (queryKey, enabled = true, UserId) =>
   useLoadMore(
     queryKey,

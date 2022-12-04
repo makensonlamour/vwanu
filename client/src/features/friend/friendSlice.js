@@ -12,9 +12,8 @@ export const useGetListFriendReceive = (queryKey, enabled = true) =>
 
 export const useFollowUser = (queryKey, dataObj) =>
   usePost(queryKey, `/user/follow/${dataObj.userId}/${dataObj.otherUserId}?action=follow`);
-/* 
-export const useUnfollowUser = (queryKey, dataObj) =>
-  usePost(queryKey, `/user/follow/${dataObj.userId}/${dataObj.otherUserId}?action=unfollow`); */
+
+export const useUnfollowUser = (queryKey, dataObj) => usePost(queryKey, `/follower/${dataObj.userId}`);
 
 export const useAcceptFriendRequest = (queryKey) => useUpdate(queryKey, `/friendRequest`);
 export const useDeclineFriendRequest = (queryKey) => useUpdate(queryKey, `/friendRequest`);
