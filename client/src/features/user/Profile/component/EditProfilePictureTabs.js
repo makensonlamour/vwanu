@@ -37,7 +37,7 @@ const EditProfilePictureTabs = ({ user }) => {
     <>
       <Toaster />
       <div className="bg-white border border-gray-300 py-10 px-4 md:px-16 rounded-xl">
-        <h4 className="text-center md:text-left mb-8 text-xl font-semibold">{`Change Profile Picture`}</h4>
+        <h4 className="text-center md:text-left mb-8 text-xl font-semibold text-primary">{`Change Profile Picture`}</h4>
         <div className="px-4 py-3 bg-white w-full border border-placeholder-color rounded-xl">
           <span className="text-black text-sm">{`Your profile photo will be used on your profile and throughout the site.`}</span>
         </div>

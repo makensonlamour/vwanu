@@ -43,16 +43,18 @@ const HomeBanner = () => {
                 style={{ backgroundImage: `url(${slide?.src})`, backgroundRepeat: "no-repeat", backgroundSize: "cover" }}
                 className={`${
                   activeIndex === idx ? " " : "hidden"
-                } w-full h-[25vh] lg:h-[40vh] bg-white lg:max-h-[320px] rounded-lg lg:rounded-xl carousel-item items-center`}
+                } w-full h-[25vh] lg:h-[40vh] bg-white lg:max-h-[320px] rounded-lg lg:rounded-xl carousel-item`}
               >
-                <div className="bg-black/40 h-full w-full rounded-xl p-0 flex-none items-center flex-wrap">
-                  <div className="cursor-pointer flex justify-end items-center rounded-tr-xl p-2">
-                    <p className="flex bg-white hover:bg-primary hover:text-white rounded-full justify-center text-lg w-6 h-6 items-center align-middle text-center">
+                <div className="bg-black/40 h-full w-full rounded-xl p-0 flex items-center">
+                  {/* <div className="cursor-pointer flex justify-end items-center rounded-tr-xl p-2"> */}
+                  {/* <p className="flex bg-white hover:bg-primary hover:text-white rounded-full justify-center text-lg w-6 h-6 items-center align-middle text-center">
                       x
-                    </p>
+                    </p> */}
+                  {/* </div> */}
+                  <div className="w-full">
+                    <p className="w-full text-center font-bold text-3xl pb-6 text-white align-middle">{slide?.title}</p>
+                    <p className="w-full text-center text-lg font-light text-white">{slide?.body}</p>
                   </div>
-                  <p className="text-center font-bold text-3xl pb-6 text-white">{slide?.title}</p>
-                  <p className="text-center text-lg font-light text-white">{slide?.body}</p>
                 </div>
               </div>
             );

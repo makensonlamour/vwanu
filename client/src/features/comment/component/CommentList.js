@@ -64,7 +64,7 @@ const CommentList = ({ postId, showAll, height = "h-[46vh]" }) => {
       ) : isError ? (
         <div className="py-5 m-auto text-center px-2">
           {"There was an error while fetching the data. "}{" "}
-          <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
+          <Link className="text-primary hover:text-secondary" to={""} onClick={() => reloadPage()}>
             Tap to retry
           </Link>{" "}
         </div>
@@ -86,7 +86,7 @@ const CommentList = ({ postId, showAll, height = "h-[46vh]" }) => {
             errorRender={
               <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
                 {"There was an error while fetching the data. "}{" "}
-                <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["post", "home"])}>
+                <Link className="text-primary hover:text-secondary" to={""} onClick={() => reloadPage(["post", "home"])}>
                   Tap to retry
                 </Link>{" "}
               </div>

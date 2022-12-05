@@ -54,7 +54,7 @@ const EditProfile = () => {
     <>
       <div className="mt-8 mb-6 px-2">
         <div className="flex justify-between mb-2">
-          <h4 className="text-lg lg:text-3xl font-bold">Edit Profile</h4>
+          <h4 className="text-lg lg:text-3xl font-bold text-primary">Edit Profile</h4>
           <Link
             to={"../../profile/" + user?.id}
             className="text-black btn align-middle btn-sm bg-gray-300 border-0 hover:bg-primary hover:text-base-100 px-5 py-2 capitalize"
@@ -81,11 +81,11 @@ const EditProfile = () => {
                     label={
                       <Fragment>
                         {value === "1" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">
                             <FiEdit size={"18px"} className="mr-1" /> Edit
                           </div>
                         ) : (
-                          <div className="flex">
+                          <div className="flex text-primary">
                             <FiEdit size={"18px"} className="mr-3" />
                             Edit
                           </div>
@@ -99,11 +99,11 @@ const EditProfile = () => {
                     label={
                       <Fragment>
                         {value === "2" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">
                             <ImProfile size={"18px"} className="mr-1" /> Profile Photo
                           </div>
                         ) : (
-                          <div className="flex">
+                          <div className="flex text-primary">
                             <ImProfile size={"18px"} className="mr-3" />
                             Profile Photo
                           </div>
@@ -117,11 +117,11 @@ const EditProfile = () => {
                     label={
                       <Fragment>
                         {value === "3" ? (
-                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">
+                          <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">
                             <BsCardImage size={"18px"} className="mr-1" /> Cover Picture
                           </div>
                         ) : (
-                          <div className="flex">
+                          <div className="flex text-primary">
                             <BsCardImage size={"18px"} className="mr-2" />
                             Cover Picture
                           </div>

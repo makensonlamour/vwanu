@@ -187,7 +187,7 @@ const MenuPost = ({ post }) => {
                   onKeyDown={handleListKeyDown}
                 >
                   <MenuItem
-                    className="text-black rounded-xl hover:text-primary"
+                    className="text-primary hover:text-secondary rounded-xl"
                     onClick={(e) => {
                       handleClickOpen(e);
                       handleClose(e);
@@ -198,7 +198,7 @@ const MenuPost = ({ post }) => {
                     Edit
                   </MenuItem>
                   <MenuItem
-                    className="text-black  rounded-xl hover:text-primary"
+                    className="text-primary hover:text-secondary rounded-xl"
                     onClick={(e) => {
                       //   window.location.href = `../../messages?newMessage=true&otherUserId=${otherUser?.id}`;
                       handleClickOpenDialog();

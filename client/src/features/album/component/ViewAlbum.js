@@ -85,7 +85,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
           {isEdit ? (
             <div className="">
               <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleEdit} className="w-full">
-                <h4 className="text-xl font-semibold">Edit Album {` "${photos?.name}" `} name</h4>
+                <h4 className="text-xl font-semibold text-primary">Edit Album {` "${photos?.name}" `} name</h4>
                 <Toaster />
                 <Field
                   autoCapitalize="none"

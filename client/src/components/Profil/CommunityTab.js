@@ -61,9 +61,9 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "1" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Community created</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Community created</div>
                       ) : (
-                        <div className="flex">Community created</div>
+                        <div className="flex text-primary">Community created</div>
                       )}
                     </Fragment>
                   }
@@ -74,9 +74,9 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "2" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">My Community</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">My Community</div>
                       ) : (
-                        <div className="flex">My Community</div>
+                        <div className="flex text-primary">My Community</div>
                       )}
                     </Fragment>
                   }
@@ -87,9 +87,9 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "3" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Invitations</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Invitations</div>
                       ) : (
-                        <div className="flex">Invitations</div>
+                        <div className="flex text-primary">Invitations</div>
                       )}
                     </Fragment>
                   }

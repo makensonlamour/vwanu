@@ -16,7 +16,7 @@ function Checkbox({ name, label, className, testId, link, ...otherProps }) {
             <input
               type="checkbox"
               className={
-                "outline-none checked:bg-secondary cursor-pointer w-4 h-4 lg:w-5 lg:h-5 border-1 border-secondary rounded-md hover:border-1 active:border-1 focus:border-1" +
+                "outline-none checked:bg-primary cursor-pointer w-4 h-4 lg:w-5 lg:h-5 border-1 border-primary rounded-md hover:border-1 active:border-1 focus:border-1" +
                 className
               }
               value={values[name]}

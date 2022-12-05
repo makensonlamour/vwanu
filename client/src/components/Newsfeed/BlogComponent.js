@@ -63,7 +63,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
                         />
                       </div>
                     )}
-                    <div>
+                    <div className="space-y-1 w-full ml-1">
                       <p className=" text-sm line-clamp-2 max-w-[25ch] text-ellipsis whitespace-wrap overflow-hidden font-medium ml-2 pb-1">
                         <Link className="text-primary hover:text-secondary font-semibold" to={`../../blogs/${blog?.id}`}>
                           {blog?.blogTitle}

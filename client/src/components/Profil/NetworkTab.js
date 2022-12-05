@@ -32,18 +32,30 @@ const NetworkTab = ({ user }) => {
               sx={{ marginBottom: "-2rem", borderBottom: "1px #eff3ff solid" }}
               value={value}
               onChange={handleChange}
-              textColor="primary"
-              indicatorColor="primary"
+              textColor="secondary"
+              indicatorColor="secondary"
               aria-label="secondary TabList  example"
               variant="scrollable"
               scrollButtons="auto"
             >
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`Connections (${user?.amountOfFriend})`} />
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`Followers (${user?.amountOfFollower})`} />
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Following (${user?.amountOfFollowing})`} />
+              <Tab
+                sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                value="one"
+                label={`Connections (${user?.amountOfFriend})`}
+              />
+              <Tab
+                sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                value="two"
+                label={`Followers (${user?.amountOfFollower})`}
+              />
+              <Tab
+                sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                value="three"
+                label={`Following (${user?.amountOfFollowing})`}
+              />
               {id?.toString() === me?.id?.toString() && (
                 <Tab
-                  sx={{ textTransform: "capitalize", fontSize: "1rem" }}
+                  sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
                   value="four"
                   label={`Request (${user?.amountOfFriendRequest})`}
                 />

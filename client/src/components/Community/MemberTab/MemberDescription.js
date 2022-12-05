@@ -6,7 +6,7 @@ const MemberDescription = ({ title, description }) => {
     <>
       <div className="">
         <div className="">
-          <p className="text-lg font-semibold py-4">{title ? title : ""}</p>
+          <p className="text-lg font-semibold py-4 text-primary">{title ? title : ""}</p>
           <p className="">{description ? description : ""}</p>
         </div>
       </div>

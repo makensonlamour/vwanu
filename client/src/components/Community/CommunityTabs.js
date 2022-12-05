@@ -74,14 +74,14 @@ export default function CommunityTabs({ communityData }) {
                 component={Link}
                 to={allTabs[1]}
               />
-              <Tab
+              {/* <Tab
                 style={{ textTransform: "capitalize", fontSize: 15 }}
                 sx={{ color: "#ff4200" }}
                 label="Albums"
                 value="3"
                 component={Link}
                 to={allTabs[2]}
-              />
+              /> */}
               {communityData?.haveDiscussionForum && (
                 <Tab
                   style={{ textTransform: "capitalize", fontSize: 15 }}

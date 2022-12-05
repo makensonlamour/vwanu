@@ -44,7 +44,7 @@ const ForumTab = () => {
     <>
       <Toaster />
       <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl w-full">
-        <h4 className="md:text-left text-center mb-4a text-lg font-semibold">{`Forum`}</h4>
+        <h4 className="md:text-left text-center mb-4a text-lg font-semibold text-primary">{`Forum`}</h4>
         <div className="">
           <p className="text-sm">
             {
@@ -59,7 +59,7 @@ const ForumTab = () => {
                 onChange={() => setForum(!forum)}
                 value={forum}
                 type="checkbox"
-                className="checked:bg-secondary cursor-pointer w-6 h-6 border-1 border-secondary rounded-md"
+                className="checked:bg-primary cursor-pointer w-6 h-6 border-1 border-primary rounded-md"
               />
               <span className="ml-2">Discussion Forum</span>
             </label>

@@ -1,13 +1,18 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useGetBlog, useGetBlogListByInterest } from "../../features/blog/blogSlice";
+import {
+  useCreateResponse,
+  useGetAllResponse,
+  useGetMyBlogList,
+  useGetBlog,
+  useGetBlogListByInterest,
+} from "../../features/blog/blogSlice";
 // import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
 import { GoComment } from "react-icons/go";
 import SingleBlogRelated from "../../components/Blog/SingleBlogRelated";
 import SingleResponse from "../../components/Blog/SingleResponse";
-import { useCreateResponse, useGetAllResponse } from "../../features/blog/blogSlice";
 import { FaBlog } from "react-icons/fa";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
@@ -21,6 +26,7 @@ import "react-quill/dist/quill.core.css";
 import { format } from "date-fns";
 import placeholderBlog from "../../assets/images/placeholderBlog.png";
 import { Helmet } from "react-helmet";
+import BlogAutor from "../../components/Blog/BlogAutor";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -45,6 +51,17 @@ const ViewBlog = () => {
     blog !== undefined && blog?.Interests !== null ? blog?.Interests[Math.floor(Math.random() * blog?.Interests?.length)] : undefined;
 
   const { data: blogList } = useGetBlogListByInterest(["blog", "related"], randomItem !== undefined ? true : false, randomItem?.name);
+
+  const {
+    data: blogListAutor,
+    isLoading: loadingAutor,
+    isError: errorAutor,
+    hasNextPage: hasNextPageAutor,
+    fetchNextPage: fetchNextPageAutor,
+  } = useGetMyBlogList(["blog", id], blog && blog?.User?.id !== "undefined" ? true : false, blog?.User?.id);
+
+  console.log("blogListAutor", blogListAutor);
+
   const {
     data: listResponse,
     isLoading: responseLoading,
@@ -162,8 +179,8 @@ const ViewBlog = () => {
               <img src={placeholderBlog} alt={"_coverPicture"} className="w-full object-cover h-64 lg:h-96" />
             </div>
           )}
-          <div className="lg:px-0 flex space-x-6 lg:mt-8">
-            <div className="bg-white rounded-xl p-10 lg:w-[75%]">
+          <div className="lg:px-0 flex flex-col lg:space-y-0 lg:flex-row lg:space-x-6 lg:mt-8">
+            <div className="bg-white rounded-xl py-2 px-1 lg:p-10 w-full lg:w-[75%]">
               {blog?.Interests?.length > 0 && (
                 <div className="px-4 lg:px-0 mt-5 lg:mt-0">
                   <Stack direction="row" spacing={1}>
@@ -206,11 +223,19 @@ const ViewBlog = () => {
                 <Share post={blog} label={" Share"} link={""} type="blog" />
               </div>
             </div>
-            <div className="bg-white rounded-xl p-4 lg:w-[25%] h-fit overscroll-y-auto">
+            <div className="bg-white w-full mt-8 lg:mt-0 rounded-xl p-4 lg:w-[25%] h-fit overscroll-y-auto">
               <p className="font-semibold text-md text-primary text-center">
                 Blog from {blog?.User?.firstName + " " + blog?.User?.lastName}
               </p>
-              <div></div>
+              <div>
+                <BlogAutor
+                  data={blogListAutor}
+                  isLoading={loadingAutor}
+                  isError={errorAutor}
+                  hasNextPage={hasNextPageAutor}
+                  fetchNextPage={fetchNextPageAutor}
+                />
+              </div>
             </div>
           </div>
 
@@ -248,7 +273,7 @@ const ViewBlog = () => {
                   {isLoading ? "Loading..." : "Publish"}
                 </button>
               </div>
-              <div className="mx-2 lg:mx-0 w-full">{content}</div>
+              <div className="mx-0 w-full">{content}</div>
             </div>
           </div>
           <div className="mt-4 lg:mt-5 px-4 lg:px-28">
