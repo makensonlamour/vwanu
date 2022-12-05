@@ -22,7 +22,7 @@ const BoxEmoji = ({ setSelectedEmoji, label }) => {
       {/* <img src={selectedGif} width="480" height="446" alt="_" className="" allowFullScreen /> */}
       <button
         onClick={handleClick}
-        className="inline-flex justify-center px-1 py-2 text-gray-900 rounded-lg cursor-pointer hover:text-primary"
+        className="inline-flex justify-center px-1 py-2 rounded-lg cursor-pointer hover:text-secondary text-primary"
       >
         {label}
       </button>

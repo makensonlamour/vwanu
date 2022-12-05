@@ -81,7 +81,7 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
           }`}
         >
           <div className="border-dark-lighten flex h-16 items-center justify-between px-2 lg:px-3">
-            <h1 className="text-lg">Messages</h1>
+            <h1 className="text-lg text-primary font-semibold">Messages</h1>
 
             <div className="flex items-center gap-1">
               <button

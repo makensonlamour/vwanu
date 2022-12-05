@@ -66,7 +66,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                       </button>
                     )}
                   </div>
-                  <div className="transform translate-y-1/4 absolute w-full left-0 bottom-0 z-30 flex justify-center">
+                  <div className="transform translate-y-1/4 absolute w-full left-0 bottom-0 flex justify-center">
                     <div className="flex items-center justify-center mask mask-squircle w-[126px] h-[126px] bg-gray-100">
                       {otherUser?.profilePicture?.original !== "null" || user?.profilePicture?.original !== "null" ? (
                         <div className="relative">
