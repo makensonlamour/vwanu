@@ -26,7 +26,7 @@ const SendInviteTabs = ({ user }) => {
   return (
     <>
       <div className="mb-3 bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl">
-        <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`My Network`}</h4>
+        <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`Send Invites`}</h4>
         <TabContext value={value}>
           <div>
             <TabList
@@ -42,9 +42,9 @@ const SendInviteTabs = ({ user }) => {
                 label={
                   <Fragment>
                     {value === "1" ? (
-                      <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Send Invites</div>
+                      <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Send Invites</div>
                     ) : (
-                      <div className="flex">Send Invites</div>
+                      <div className="flex text-primary">Send Invites</div>
                     )}
                   </Fragment>
                 }
@@ -55,9 +55,9 @@ const SendInviteTabs = ({ user }) => {
                 label={
                   <Fragment>
                     {value === "2" ? (
-                      <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Pending Invites</div>
+                      <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Pending Invites</div>
                     ) : (
-                      <div className="flex">Pending Invites</div>
+                      <div className="flex text-primary">Pending Invites</div>
                     )}
                   </Fragment>
                 }

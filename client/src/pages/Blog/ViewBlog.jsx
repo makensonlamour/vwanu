@@ -1,13 +1,18 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useGetBlog, useGetBlogListByInterest } from "../../features/blog/blogSlice";
+import {
+  useCreateResponse,
+  useGetAllResponse,
+  useGetMyBlogList,
+  useGetBlog,
+  useGetBlogListByInterest,
+} from "../../features/blog/blogSlice";
 // import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
 import { GoComment } from "react-icons/go";
 import SingleBlogRelated from "../../components/Blog/SingleBlogRelated";
 import SingleResponse from "../../components/Blog/SingleResponse";
-import { useCreateResponse, useGetAllResponse } from "../../features/blog/blogSlice";
 import { FaBlog } from "react-icons/fa";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
@@ -21,6 +26,7 @@ import "react-quill/dist/quill.core.css";
 import { format } from "date-fns";
 import placeholderBlog from "../../assets/images/placeholderBlog.png";
 import { Helmet } from "react-helmet";
+import BlogAutor from "../../components/Blog/BlogAutor";
 
 export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
@@ -45,6 +51,17 @@ const ViewBlog = () => {
     blog !== undefined && blog?.Interests !== null ? blog?.Interests[Math.floor(Math.random() * blog?.Interests?.length)] : undefined;
 
   const { data: blogList } = useGetBlogListByInterest(["blog", "related"], randomItem !== undefined ? true : false, randomItem?.name);
+
+  const {
+    data: blogListAutor,
+    isLoading: loadingAutor,
+    isError: errorAutor,
+    hasNextPage: hasNextPageAutor,
+    fetchNextPage: fetchNextPageAutor,
+  } = useGetMyBlogList(["blog", id], blog && blog?.User?.id !== "undefined" ? true : false, blog?.User?.id);
+
+  console.log("blogListAutor", blogListAutor);
+
   const {
     data: listResponse,
     isLoading: responseLoading,
@@ -132,72 +149,6 @@ const ViewBlog = () => {
     );
   }
 
-  // function reloadPage() {
-  //   queryClient.refetchQueries(["blog", "all"]);
-  // }
-  // if (responseLoading) {
-  //   content = (
-  //     <div className="flex justify-center py-5">
-  //       <Loader color="black" />
-  //     </div>
-  //   );
-  // } else if (listResponse?.pages?.length > 0 && listResponse?.pages[0]?.data?.total > 0) {
-  //   content = (
-  //     <>
-  //       <InfiniteScroll
-  //         fetchMore={fetchNextPage}
-  //         isError={isError}
-  //         isLoading={responseLoading}
-  //         hasNext={hasNextPage}
-  //         container={false}
-  //         classNameContainer={"overflow-y-auto scrollbar h-fit max-h-[60vh]"}
-  //         refetch={() => queryClient.invalidateQueries(["blog"])}
-  //         loader={
-  //           <div className="flex justify-center py-5">
-  //             <Loader color="black" />
-  //           </div>
-  //         }
-  //         errorRender={
-  //           <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
-  //             {"There was an error while fetching the data. "}{" "}
-  //             <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["blog", "all"])}>
-  //               Tap to retry
-  //             </Link>{" "}
-  //           </div>
-  //         }
-  //       >
-  //         <div className="flex flex-wrap lg:justify-start py-2 w-full">
-  //           {listResponse?.pages?.map((page) => {
-  //             return page?.data?.data?.map((blog) => {
-  //               return <SingleResponse key={blog?.id} blog={blog} />;
-  //               // return <PostList key={cryptoRandomString({ length: 10 })} post={post} pageTitle={""} />;
-  //             });
-  //           })}
-  //         </div>
-  //       </InfiniteScroll>
-  //     </>
-  //   );
-  // } else if (isError) {
-  //   content = (
-  //     <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
-  //       {"Failed to load post. "}{" "}
-  //       <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
-  //         Reload the page
-  //       </Link>{" "}
-  //     </div>
-  //   );
-  // } else {
-  //   content = (
-  //     <div className="flex justify-center w-full">
-  //       <EmptyComponent
-  //         icon={<FaBlog size={"32px"} className="" />}
-  //         placeholder={"There's no blog published yet."}
-  //         tips={"Here, Be the first one to create a blog by just click on the button Create New Article."}
-  //       />
-  //     </div>
-  //   );
-  // }
-
   return (
     <>
       {/*  Meta tags */}
@@ -228,58 +179,76 @@ const ViewBlog = () => {
               <img src={placeholderBlog} alt={"_coverPicture"} className="w-full object-cover h-64 lg:h-96" />
             </div>
           )}
-          {blog?.Interests?.length > 0 && (
-            <div className="px-4 lg:px-28 mt-5 lg:mt-6">
-              <Stack direction="row" spacing={1}>
-                {blog?.Interests?.length > 0 &&
-                  blog?.Interests?.map((interest) => {
-                    return <Chip key={interest?.id} label={interest?.name} size="small" />;
-                  })}
-              </Stack>
-            </div>
-          )}
-          <div className="mt-2 lg:mt-4 px-4 lg:px-28">
-            <p className="text-md lg:text-lg font-semibold">{blog?.blogTitle}</p>
-          </div>
-          <div className="mt-4 lg:mt-6 px-4 lg:px-28">
-            <div className="flex mt-7 mb-4 justify-between items-center">
-              <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
-                <img
-                  className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
-                  src={blog?.User?.profilePicture}
-                  alt={"img_" + blog?.User?.firstName}
-                />
-                <div className="ml-4">
-                  <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
-                  <p className="text-gray-400 text-sm">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
+          <div className="lg:px-0 flex flex-col lg:space-y-0 lg:flex-row lg:space-x-6 lg:mt-8">
+            <div className="bg-white rounded-xl py-2 px-1 lg:p-10 w-full lg:w-[75%]">
+              {blog?.Interests?.length > 0 && (
+                <div className="px-4 lg:px-0 mt-5 lg:mt-0">
+                  <Stack direction="row" spacing={1}>
+                    {blog?.Interests?.length > 0 &&
+                      blog?.Interests?.map((interest) => {
+                        return <Chip key={interest?.id} label={interest?.name} size="small" />;
+                      })}
+                  </Stack>
                 </div>
-              </Link>
-              <div className="">
-                <Link to={`#responses`} className="text-md px-4 py-2 hover:bg-gray-50 rounded-lg flex items-center align-middle">
-                  <GoComment size={"18px"} className="mr-2 inline align-middle" />{" "}
-                  {blog?.amountOfComments <= 1 ? blog?.amountOfComments + " Comment" : blog?.amountOfComments + " Comments"}
-                </Link>
+              )}
+              <div className="mt-2 lg:mt-4 px-4 lg:px-0">
+                <p className="text-md lg:text-lg font-semibold">{blog?.blogTitle}</p>
+              </div>
+              <div className="mt-4 lg:mt-6 px-4 lg:px-0">
+                <div className="flex mt-7 mb-4 justify-between items-center">
+                  <Link to={"../../profile/" + blog?.User?.id} className="flex items-center text-primary hover:text-secondary">
+                    <img
+                      className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
+                      src={blog?.User?.profilePicture}
+                      alt={"img_" + blog?.User?.firstName}
+                    />
+                    <div className="ml-4">
+                      <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
+                      <p className="text-gray-400 text-sm">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
+                    </div>
+                  </Link>
+                  <div className="">
+                    <Link to={`#responses`} className="text-md px-4 py-2 hover:bg-gray-50 rounded-lg flex items-center align-middle">
+                      <GoComment size={"18px"} className="mr-2 inline align-middle" />{" "}
+                      {blog?.amountOfComments <= 1 ? blog?.amountOfComments + " Comment" : blog?.amountOfComments + " Comments"}
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 lg:mt-4 px-4 lg:px-0">
+                <div className="view ql-editor" dangerouslySetInnerHTML={{ __html: blog?.blogText }}></div>
+                {/* <p className="">{parse(`${blog?.blogText}`)}</p> */}
+              </div>
+              <div className="mt-3 lg:mt-4 px-4 lg:px-0">
+                <Share post={blog} label={" Share"} link={""} type="blog" />
               </div>
             </div>
-          </div>
-          <div className="mt-3 lg:mt-4 px-4 lg:px-28">
-            <div className="view ql-editor" dangerouslySetInnerHTML={{ __html: blog?.blogText }}></div>
-            {/* <p className="">{parse(`${blog?.blogText}`)}</p> */}
-          </div>
-          <div className="mt-3 lg:mt-4 px-4 lg:px-28">
-            <Share post={blog} label={" Share"} link={""} type="blog" />
+            <div className="bg-white w-full mt-8 lg:mt-0 rounded-xl p-4 lg:w-[25%] h-fit overscroll-y-auto">
+              <p className="font-semibold text-md text-primary text-center">
+                Blog from {blog?.User?.firstName + " " + blog?.User?.lastName}
+              </p>
+              <div>
+                <BlogAutor
+                  data={blogListAutor}
+                  isLoading={loadingAutor}
+                  isError={errorAutor}
+                  hasNextPage={hasNextPageAutor}
+                  fetchNextPage={fetchNextPageAutor}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="mt-6 lg:mt-10 lg:px-28">
             <div className="border-t border-gray-300 my-5">
-              <p className="px-4 lg:px-0 text-lg lg:text-lg font-semibold pt-3 lg:pt-3">
+              <p className="px-4 lg:px-0 text-lg lg:text-lg font-semibold pt-3 lg:pt-3 text-primary">
                 {blog?.amountOfComments < 1 ? blog?.amountOfComments + " Response" : blog?.amountOfComments + " Responses"}
               </p>
               <div
                 id="responses"
                 className="mx-auto bg-white border border-gray-300 rounded-xl p-4 mt-4 lg:mt-4 flex flex-col justify-center"
               >
-                <Link to={"../../profile/" + blog?.User?.id} className="py-2 lg:py-2 flex items-center">
+                <Link to={"../../profile/" + blog?.User?.id} className="py-2 lg:py-2 flex items-center text-primary hover:text-secondary">
                   <img
                     src={blog?.User?.profilePicture}
                     alt={"_img_" + blog?.User?.firstName}
@@ -304,12 +273,12 @@ const ViewBlog = () => {
                   {isLoading ? "Loading..." : "Publish"}
                 </button>
               </div>
-              <div className="mx-2 lg:mx-0 w-full">{content}</div>
+              <div className="mx-0 w-full">{content}</div>
             </div>
           </div>
           <div className="mt-4 lg:mt-5 px-4 lg:px-28">
             <div className="">
-              <p className="text-lg lg:text-lg font-semibold pb-5 lg:pb-10">Related Articles</p>
+              <p className="text-lg lg:text-lg font-semibold pb-5 lg:pb-10 text-primary">Related Articles</p>
               <div className="flex justify-start lg:justify-between flex-wrap">
                 {blogList &&
                   blogList?.pages &&

@@ -11,7 +11,7 @@ import client from "../../features/feathers";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import { useQueryClient } from "react-query";
 //Core components
-
+import HomeBanner from "../../components/common/Banner/HomeBanner";
 import PostList from "../../features/post/PostList";
 import { useGetTimelineList } from "../../features/post/postSlice";
 import { useGetListFollowing } from "../../features/follower/followerSlice";
@@ -160,6 +160,9 @@ const NewsFeed = () => {
   return (
     <>
       <div className="mx-auto mt-6 max-w-screen-3xl">
+        <div className="mb-6 px-2">
+          <HomeBanner />
+        </div>
         <div className="flex justify-evenly">
           <div className="basis-[35%] hidden xl:block">
             <div className="sticky top-[6rem] overflow-y-auto scrollbar h-[87vh]">
@@ -173,7 +176,7 @@ const NewsFeed = () => {
           </div>
           <div className="2xs:w-full xs:w-0 xs:basis-full lg:basis-[56%]">
             <div className="px-0 sm:px-3">
-              <h2 className="2xs:pl-2 sm:pl-0 pb-5 text-lg font-bold">Activity Feed</h2>
+              <h2 className="2xs:pl-2 sm:pl-0 pb-5 text-lg font-bold text-primary">Activity Feed</h2>
               <InputModal reference="newsfeed" />
               <div className="w-full py-2">{content}</div>
             </div>

@@ -58,7 +58,7 @@ const Community = () => {
       <div className="max-w-[1450px]">
         <div className="bg-white border border-gray-300 w-full rounded-lg p-2 md:p-4 my-2">
           <div className="flex justify-between items-center pb-4">
-            <p className="font-bold text-lg md:text-3xl">Community</p>
+            <p className="font-bold text-lg md:text-3xl text-primary">Community</p>
             <Link
               to={"../../groups/add"}
               className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-1 md:py-2 px-4 md:px-6 font-semibold"
@@ -80,55 +80,55 @@ const Community = () => {
                 allowScrollButtonsMobile={true}
               >
                 <Tab
-                  style={{ height: "0px" }}
-                  sx={{ textTransform: "capitalize", textAlign: "left", height: "0px" }}
+                  // style={{ height: "0px" }}
+                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px" }}
                   label={
                     <Fragment>
                       {value === "1" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Community</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Community</div>
                       ) : (
-                        <div className="flex">Community</div>
+                        <div className="flex text-primary">Community</div>
                       )}
                     </Fragment>
                   }
                   value="1"
                 />
                 <Tab
-                  style={{ heigth: "0px" }}
-                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px", padding: 0 }}
+                  // style={{ heigth: "0px" }}
+                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px" }}
                   label={
                     <Fragment>
                       {value === "2" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Community Created</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Community Created</div>
                       ) : (
-                        <div className="flex">Community Created</div>
+                        <div className="flex text-primary">Community Created</div>
                       )}
                     </Fragment>
                   }
                   value="2"
                 />
                 <Tab
-                  style={{ heigth: "150px" }}
-                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "150px" }}
+                  // style={{ heigth: "150px" }}
+                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px" }}
                   label={
                     <Fragment>
                       {value === "3" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">My Community</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">My Community</div>
                       ) : (
-                        <div className="flex">My Community</div>
+                        <div className="flex text-primary">My Community</div>
                       )}
                     </Fragment>
                   }
                   value="3"
                 />
                 <Tab
-                  sx={{ textTransform: "capitalize" }}
+                  sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px" }}
                   label={
                     <Fragment>
                       {value === "4" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Invitations</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Invitations</div>
                       ) : (
-                        <div className="flex">Invitations</div>
+                        <div className="flex text-primary">Invitations</div>
                       )}
                     </Fragment>
                   }
@@ -169,7 +169,7 @@ const Community = () => {
                 </div>
               </TabPanel>
               <TabPanel value="4" style={{ padding: 0 }}>
-                <div className="mt-0 w-full">
+                <div className="lg:mt-0 w-full">
                   <div className="flex">
                     <InvitationTabs />
                   </div>

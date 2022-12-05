@@ -111,7 +111,7 @@ const InfiniteScroll = ({
                 }}
               >
                 {(scrollRef) => (
-                  <div style={style} ref={scrollRef} className={"w-full " + classNameContainer || ""}>
+                  <div style={style} ref={scrollRef} className={"w-full z-30 " + classNameContainer || ""}>
                     {children}
                   </div>
                 )}

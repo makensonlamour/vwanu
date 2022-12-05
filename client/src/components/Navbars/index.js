@@ -86,7 +86,7 @@ const Navbar = ({ user, countMessage }) => {
           </div>
           {search ? (
             <div className="z-50 md:basis-[30%] xl:basis-2/4 flex-none md:block items-center">
-              <Search placeholder={`Search a members`} setIsSearchOpen={setSearch} />
+              <Search placeholder={`Search people`} setIsSearchOpen={setSearch} />
             </div>
           ) : (
             <div className="md:basis-[30%] xl:basis-2/4 flex-none hidden md:block">
@@ -96,7 +96,7 @@ const Navbar = ({ user, countMessage }) => {
                     to={page?.path}
                     key={cryptoRandomString({ length: 10 })}
                     activeclassname="text-secondary"
-                    className=" text-primary hover:text-secondary active:text-secondary"
+                    className="font-semibold text-primary hover:text-secondary active:text-secondary"
                   >
                     {page?.title}
                   </NavLink>
@@ -120,14 +120,14 @@ const Navbar = ({ user, countMessage }) => {
           <div className="basis-[35%] lg:basis-[30%] flex-none">
             <div className="flex justify-between md:justify-end items-center gap-x-2">
               {search ? (
-                <AiOutlineClose onClick={() => setSearch(false)} size="20px" className="text-black" />
+                <AiOutlineClose onClick={() => setSearch(false)} size="20px" className="text-primary hover:text-secondary" />
               ) : (
-                <BsSearch onClick={() => setSearch(true)} size="20px" className="text-black " />
+                <BsSearch onClick={() => setSearch(true)} size="20px" className="text-primary hover:text-secondary cursor-pointer" />
               )}
               <div className="h-6 bg-black w-[1px]"></div>
               <Link to={routesPath?.MESSAGE}>
-                <Badge badgeContent={countMessage} color="primary" className="">
-                  <AiOutlineInbox size="24px" className="text-black" />
+                <Badge badgeContent={countMessage} color="secondary" className="">
+                  <AiOutlineInbox size="24px" className="text-primary hover:text-secondary cursor-pointer" />
                 </Badge>
               </Link>
               <div className="">
@@ -144,7 +144,9 @@ const Navbar = ({ user, countMessage }) => {
                     onClick={handleOpenUserMenu}
                     sx={{ p: 0, fontWeight: "light", paddingLeft: "10px", paddingRight: "10px", borderRadius: "15px" }}
                   >
-                    <p className="hidden mr-1 text-[0.75rem] md:hidden xl:inline text-black capitalize font-light">{user?.firstName}</p>
+                    <p className="hidden mr-1 text-[0.90rem] md:hidden xl:inline text-primary hover:text-secondary capitalize font-semibold">
+                      {user?.firstName}
+                    </p>
                     <span className="hidden md:hidden xl:inline">
                       <IoIosArrowDown size="18px" className="mr-2" />
                     </span>
@@ -199,7 +201,9 @@ const Navbar = ({ user, countMessage }) => {
                             alt="profil_image"
                           />
                         </p>
-                        <p className="align-middle pl-3">{user?.firstName}</p>
+                        <p style={{ fontWeight: "400px" }} className="align-middle pl-3 !font-semibold text-primary hover:text-secondary">
+                          {user?.firstName}
+                        </p>
                       </div>
                     </Link>
                   </MenuItem>

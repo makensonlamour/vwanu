@@ -290,7 +290,7 @@ const InputMessage = ({ selectMember, type }) => {
                         setTypeMedia("photo");
                       }
                     }}
-                    className="hover:text-primary inline-flex justify-center p-2 text-gray-900 rounded-lg cursor-pointer"
+                    className="hover:text-secondary text-primary inline-flex justify-center p-2 rounded-lg cursor-pointer"
                   >
                     <AiOutlineCamera size={"24px"} />
                   </button>
@@ -316,13 +316,13 @@ const InputMessage = ({ selectMember, type }) => {
                         setTypeMedia("video");
                       }
                     }}
-                    className="inline-flex justify-center py-2 text-gray-900 rounded-lg cursor-pointer hover:text-primary"
+                    className="inline-flex justify-center py-2 rounded-lg cursor-pointer hover:text-secondary text-primary"
                   >
                     <AiOutlineVideoCamera size={"24px"} />
                   </button>
                 </>
               ) : (
-                <div className="py-2">
+                <div className="py-2 text-primary hover:text-secondary">
                   <ImAttachment size={"21px"} />
                 </div>
               )}
@@ -353,7 +353,7 @@ const InputMessage = ({ selectMember, type }) => {
                 }}
                 className="my-1 px-4 lg:px-6 lg:py-2 w-fit rounded-xl text-md"
               >
-                {isLoading ? <Loader color="primary" /> : <AiOutlineSend size={"24px"} className="hover:hover:text-primary" />}
+                {isLoading ? <Loader color="primary" /> : <AiOutlineSend size={"24px"} className="hover:text-secondary text-primary" />}
               </button>
             </div>
           </div>

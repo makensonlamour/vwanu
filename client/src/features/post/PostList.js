@@ -85,7 +85,7 @@ const PostList = ({ post, pageTitle }) => {
                           : `../../profile/${post?.User?.id}`
                       }
                     >
-                      <span className="ml-2 xs:ml-3 text-sm font-bold hover:text-primary line-clamp-1">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
+                      <span className="ml-2 xs:ml-3 text-sm font-bold hover:text-secondary text-primary line-clamp-1">{`${post?.User?.firstName} ${post?.User?.lastName} `}</span>
                     </Link>
                     {/*Start of design shared */}
                     {post?.wallId !== null ? (
@@ -101,7 +101,7 @@ const PostList = ({ post, pageTitle }) => {
                               : `../../profile/${post?.wallId}`
                           }
                         >
-                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.WallUser?.firstName} ${post?.WallUser?.lastName} `}</span>
+                          <span className="text-sm font-bold hover:text-secondary text-primary line-clamp-1">{`${post?.WallUser?.firstName} ${post?.WallUser?.lastName} `}</span>
                         </Link>
                       </Fragment>
                     ) : post?.CommunityId !== null ? (
@@ -118,7 +118,7 @@ const PostList = ({ post, pageTitle }) => {
                               : `../../groups/${post?.CommunityId}`
                           }
                         >
-                          <span className="text-sm font-bold hover:text-primary line-clamp-1">{`${post?.Community?.name} `}</span>
+                          <span className="text-sm font-bold hover:text-secondary text-primary line-clamp-1">{`${post?.Community?.name} `}</span>
                         </Link>
                       </Fragment>
                     ) : post?.originalId !== null && post?.originalType === "Blogs" ? (
@@ -179,7 +179,7 @@ const PostList = ({ post, pageTitle }) => {
                     <div className="">
                       <Link
                         to={"../../profile/" + post?.Original?.id}
-                        className="text-sm xs:text-[0.95rem] font-semibold hover:text-primary"
+                        className="text-sm xs:text-[0.95rem] font-semibold hover:text-secondary text-primary"
                       >
                         {post?.Original?.firstName + " " + post?.Original?.lastName}
                       </Link>
@@ -196,7 +196,7 @@ const PostList = ({ post, pageTitle }) => {
                           href={`../../${
                             post?.originalType === "Post" ? "posts" : post?.originalType === "Blogs" ? "blogs" : "discussions"
                           }/${post?.originalId}`}
-                          className="text-xs cursor-pointer hover:text-primary"
+                          className="text-xs cursor-pointer hover:text-secondary text-primary"
                         >
                           <span className="ml-2">{"see original"}</span>
                         </a>

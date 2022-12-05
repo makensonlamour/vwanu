@@ -20,7 +20,7 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
     <>
       <div className="bg-white border border-gray-200 rounded-xl w-full py-5">
         <div className="flex justify-between items-center">
-          <p className="px-5 text-sm lg:text-lg font-semibold align-center">All Discussions</p>
+          <p className="px-5 text-sm lg:text-lg font-semibold align-center text-primary">All Discussions</p>
           <div className="flex justify-end px-4 items-center lg:px-6">
             {/* <button className="w-fit bg-white py-1 lg:py-2 px-2 lg:px-6 border border-gray-200 rounded-lg hover:bg-primary hover:text-white mr-2">
               Subscribe
@@ -75,7 +75,7 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
                 </div>
               }
             >
-              {data?.pages.map((page) => {
+              {data?.pages?.map((page) => {
                 return page?.data?.data?.map((item) => {
                   return (
                     <div

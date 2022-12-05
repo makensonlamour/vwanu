@@ -62,7 +62,7 @@ const CardCommunity = ({ data }) => {
             <Link
               to={"../../groups/" + data?.id}
               state={data}
-              className="flex justify-center text-center items-center text-lg md:text-xl font-semibold hover:text-primary mr-2"
+              className="flex justify-center text-center items-center text-lg md:text-xl font-semibold text-primary hover:text-secondary mr-2"
             >
               {data?.name}
             </Link>

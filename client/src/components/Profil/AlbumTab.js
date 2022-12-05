@@ -100,7 +100,7 @@ const AlbumTab = ({ user }) => {
       <div className="">
         <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
           <div className="flex justify-between items-center pb-4">
-            <p className="font-bold text-lg md:text-3xl">{value === "1" ? "Photos" : "Albums"}</p>
+            <p className="font-bold text-lg md:text-3xl text-primary">{value === "1" ? "Photos" : "Albums"}</p>
             {user?.id?.toString() === id?.toString() &&
               (value === "1" ? (
                 <AddPhoto user={user} />
@@ -130,9 +130,9 @@ const AlbumTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "1" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Photos</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Photos</div>
                       ) : (
-                        <div className="flex">Photos</div>
+                        <div className="flex text-primary">Photos</div>
                       )}
                     </Fragment>
                   }
@@ -143,9 +143,9 @@ const AlbumTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "2" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Albums</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Albums</div>
                       ) : (
-                        <div className="flex">Albums</div>
+                        <div className="flex text-primary">Albums</div>
                       )}
                     </Fragment>
                   }
@@ -167,7 +167,7 @@ const AlbumTab = ({ user }) => {
                         onSubmit={handleCreateAlbum}
                         className="w-full"
                       >
-                        <h4 className="text-xl font-semibold">Create New Album</h4>
+                        <h4 className="text-xl font-semibold text-primary">Create New Album</h4>
                         <Toaster />
                         <Field
                           autoCapitalize="none"
@@ -175,7 +175,7 @@ const AlbumTab = ({ user }) => {
                           placeholder="Name"
                           name="name"
                           type="text"
-                          className=" mr-1 mt-1 mb-4 lg:mt-2 bg-placeholder-color text-secondary placeholder:text-secondary font-semibold rounded-2xl input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
+                          className=" mr-1 mt-1 mb-4 lg:mt-2 border border-gray-200 placeholder:text-secondary font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
                         />
                         <Submit
                           className="inline rounded-lg py-2 text-base-100 text-md w-fit px-6 mt-2"

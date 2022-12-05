@@ -54,7 +54,7 @@ const CardGroup = ({ data, isError, isLoading }) => {
                   </div>
                   <div>
                     <p to="#" className=" text-sm line-clamp-2 max-w-[22ch] text-ellipsis whitespace-wrap overflow-hidden ml-2 pb-1">
-                      <Link className="hover:text-secondary" state={group} to={"../../groups/" + group?.id}>
+                      <Link className="text-primary hover:text-secondary" state={group} to={"../../groups/" + group?.id}>
                         <span className="font-semibold">{group?.name}</span>
                         <span className="ml-3 text-white text-xs bg-secondary py-[0.2rem] px-2 rounded-lg">{group?.privacyType}</span>
                       </Link>

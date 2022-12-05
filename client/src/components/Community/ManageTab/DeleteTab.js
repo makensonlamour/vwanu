@@ -55,8 +55,8 @@ const DeleteTab = () => {
       <Toaster />
       <div className="bg-white border border-gray-300 pt-6 pb-5 px-2 md:px-10 rounded-xl w-full">
         <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`Delete`}</h4>
-        <div className="px-4 py-3 bg-warning-2 w-full border border-yellow-300 rounded-2xl">
-          <p className="text-v-yellow-dark text-sm">{`WARNING: Deleting this community will completely remove ALL content associated with it. There is no way back. Please be careful with this option.`}</p>
+        <div className="px-4 py-3 bg-white w-full border border-black rounded-2xl">
+          <p className="text-black text-sm">{`WARNING: Deleting this community will completely remove ALL content associated with it. There is no way back. Please be careful with this option.`}</p>
         </div>
         <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="">
           <Checkbox

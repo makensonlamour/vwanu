@@ -36,7 +36,7 @@ const CommunityTab = ({ user }) => {
       <div className="">
         <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
           <div className="flex justify-between items-center pb-4">
-            <p className="font-bold text-3xl">Community</p>
+            <p className="font-bold text-lg text-primary">Community</p>
             {user?.id?.toString() === id?.toString() && (
               <Link
                 to={"../.." + routesPath.ADD_GROUPS}
@@ -61,9 +61,9 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "1" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Community created</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Community created</div>
                       ) : (
-                        <div className="flex">Community created</div>
+                        <div className="flex text-primary">Community created</div>
                       )}
                     </Fragment>
                   }
@@ -74,9 +74,9 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "2" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">My Community</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">My Community</div>
                       ) : (
-                        <div className="flex">My Community</div>
+                        <div className="flex text-primary">My Community</div>
                       )}
                     </Fragment>
                   }
@@ -87,9 +87,9 @@ const CommunityTab = ({ user }) => {
                   label={
                     <Fragment>
                       {value === "3" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-primary text-base-100">Invitations</div>
+                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Invitations</div>
                       ) : (
-                        <div className="flex">Invitations</div>
+                        <div className="flex text-primary">Invitations</div>
                       )}
                     </Fragment>
                   }

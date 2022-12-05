@@ -26,7 +26,7 @@ const Member = () => {
   return (
     <>
       <div className="bg-white border border-gray-300 py-5 px-2 md:px-10 rounded-xl mt-2 xl:max-w-screen-lg mx-auto">
-        <p className="text-lg lg:text-3xl font-bold">Member</p>
+        <p className="text-lg lg:text-3xl font-bold text-primary">Member</p>
         <div className="py-4">
           <TabContext value={value}>
             <div>
@@ -34,23 +34,31 @@ const Member = () => {
                 sx={{ marginBottom: "0.5rem", borderBottom: "1px #eff3ff solid" }}
                 value={value}
                 onChange={handleChange}
-                textColor="primary"
-                indicatorColor="primary"
+                textColor="secondary"
+                indicatorColor="secondary"
                 aria-label="secondary TabList  example"
                 variant="scrollable"
                 scrollButtons="auto"
                 allowScrollButtonsMobile
               >
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`People`} />
+                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }} value="one" label={`People`} />
                 <Tab
-                  sx={{ textTransform: "capitalize", fontSize: "1rem" }}
+                  sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
                   value="two"
                   label={`Connections (${user?.amountOfFriend || 0})`}
                 />
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Followers (${user?.amountOfFollower})`} />
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Following (${user?.amountOfFollowing})`} />
                 <Tab
-                  sx={{ textTransform: "capitalize", fontSize: "1rem" }}
+                  sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                  value="three"
+                  label={`Followers (${user?.amountOfFollower})`}
+                />
+                <Tab
+                  sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                  value="four"
+                  label={`Following (${user?.amountOfFollowing})`}
+                />
+                <Tab
+                  sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
                   value="five"
                   label={`Request (${user?.amountOfFriendRequest})`}
                 />

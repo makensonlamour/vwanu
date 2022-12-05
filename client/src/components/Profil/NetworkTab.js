@@ -25,24 +25,40 @@ const NetworkTab = ({ user }) => {
   return (
     <>
       <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl">
-        <h4 className="md:text-left text-center mb-8 text-lg font-semibold">{`My Network`}</h4>
+        <h4 className="md:text-left text-center mb-8 text-lg font-semibold text-primary">{`My Network`}</h4>
         <TabContext value={value}>
           <div>
             <TabList
               sx={{ marginBottom: "-2rem", borderBottom: "1px #eff3ff solid" }}
               value={value}
               onChange={handleChange}
-              textColor="primary"
-              indicatorColor="primary"
+              textColor="secondary"
+              indicatorColor="secondary"
               aria-label="secondary TabList  example"
               variant="scrollable"
               scrollButtons="auto"
             >
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="one" label={`Connections (${user?.amountOfFriend})`} />
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="two" label={`Followers (${user?.amountOfFollower})`} />
-              <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="three" label={`Following (${user?.amountOfFollowing})`} />
+              <Tab
+                sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                value="one"
+                label={`Connections (${user?.amountOfFriend})`}
+              />
+              <Tab
+                sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                value="two"
+                label={`Followers (${user?.amountOfFollower})`}
+              />
+              <Tab
+                sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                value="three"
+                label={`Following (${user?.amountOfFollowing})`}
+              />
               {id?.toString() === me?.id?.toString() && (
-                <Tab sx={{ textTransform: "capitalize", fontSize: "1rem" }} value="four" label={`Request (${user?.amountOfFriendRequest})`} />
+                <Tab
+                  sx={{ textTransform: "capitalize", fontSize: "1rem", color: "#ff4200" }}
+                  value="four"
+                  label={`Request (${user?.amountOfFriendRequest})`}
+                />
               )}
             </TabList>
           </div>

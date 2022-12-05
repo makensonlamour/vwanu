@@ -15,21 +15,21 @@ const Member = () => {
       <div className="bg-white p-2 md:p-8 border border-gray-200 rounded-lg mb-4">
         {assignCommunityMember(listFriend, "admin")?.length > 0 && (
           <>
-            <p className="text-xl">Administrators</p>
+            <p className="text-xl text-primary font-semibold">Administrators</p>
             <ViewMember data={assignCommunityMember(listFriend, "admin")} noDataLabel={"No Member"} />
           </>
         )}
 
         {assignCommunityMember(listFriend, "moderator")?.length > 0 && (
           <>
-            <p className="text-xl">Moderators</p>
+            <p className="text-xl text-primary font-semibold">Moderators</p>
             <ViewMember data={assignCommunityMember(listFriend, "moderator")} noDataLabel={"No Member"} />
           </>
         )}
 
         {assignCommunityMember(listFriend, "member")?.length > 0 && (
           <>
-            <p className="text-xl">Members</p>
+            <p className="text-xl text-primary font-semibold">Members</p>
             <ViewMember data={assignCommunityMember(listFriend, "member")} noDataLabel={"No Member"} />
           </>
         )}

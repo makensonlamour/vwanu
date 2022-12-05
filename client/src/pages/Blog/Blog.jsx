@@ -158,7 +158,7 @@ const Blog = () => {
   return (
     <div className="mt-6 mx-2">
       <div className="flex justify-between">
-        <h4 className="text-2xl font-semibold">Blog</h4>
+        <h4 className="text-2xl font-semibold text-primary">Blog</h4>
         <Link
           to={"./add"}
           className="px-4 py-1 md:py-2 border border-gray-300  hover:bg-white rounded-xl bg-placeholder-color hover:text-black"
@@ -168,8 +168,8 @@ const Blog = () => {
       </div>
       <div className="flex flex-col-reverse lg:flex-row mt-2 gap-x-10">
         <div className="basis-[100%] lg:basis-4/6">{interest ? contentInterest : content}</div>
-        <div className="basis-[100%] lg:basis-2/6 bg-white rounded-lg border border-gray-200 overflow-y-auto scrollbar px-2 my-4 lg:my-0 pb-4 lg:pb-0">
-          <p className="text-center py-3 font-semibold text-md">Filter by Interests</p>
+        <div className="basis-[100%] lg:basis-2/6 bg-white rounded-lg border border-gray-200 h-fit max-h-[77vh] overflow-y-auto scrollbar px-2 my-4 lg:my-0 pb-4 lg:pb-0">
+          <p className="text-center py-3 font-semibold text-md text-primary">Filter by Interests</p>
           {loadingInterest ? (
             <div className="flex justify-center py-5">
               <Loader color="black" />
@@ -182,7 +182,7 @@ const Blog = () => {
               </Link>{" "}
             </div>
           ) : interestList?.length > 0 ? (
-            <Stack direction="row" spacing={0} className="flex flex-wrap gap-2">
+            <Stack direction="row" spacing={0} className="flex flex-wrap gap-2 mb-5">
               {interestList?.map((interest2) => {
                 return (
                   <Chip

@@ -9,9 +9,9 @@ const SingleResponse = ({ blog }) => {
     <>
       <div className="w-full" key={blog?.BlogId}>
         <div className="w-full">
-          <div className="bg-white border border-gray-300 rounded-xl p-4 mt-4 flex flex-col justify-end">
+          <div className="bg-white border border-gray-300 rounded-xl p-4 mt-4 flex flex-col">
             <div className="flex justify-between items-center">
-              <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
+              <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-secondary text-primary">
                 <img
                   className="w-[2rem] h-[2rem] lg:w-[3rem] lg:h-[3rem] mask mask-squircle"
                   src={blog?.User?.profilePicture}
@@ -28,7 +28,7 @@ const SingleResponse = ({ blog }) => {
                 </Link>
               </div>
             </div>
-            <p className="py-1 pl-16">{blog?.responseText}</p>
+            <p className="py-1 lg:pl-16 pl-12">{blog?.responseText}</p>
             {/* <div className="py-1"> */}
             {/* <button className="mr-2 pl-16 text-sm hover:text-primary font-semibold">Reply</button> */}
             {/* <button className="ml-2">Edit</button> */}

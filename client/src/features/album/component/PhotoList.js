@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useGetPhotoList } from "../albumSlice";
-import ViewPhoto from "./ViewPhoto";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../../components/common/EmptyComponent";
 import Loader from "../../../components/common/Loader";
 import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 import { useQueryClient } from "react-query";
 import ReactPlayer from "react-player";
+import ViewerMedia from "./ViewerMedia";
 
 const PhotoList = ({ user }) => {
   const queryClient = useQueryClient();
@@ -62,34 +62,47 @@ const PhotoList = ({ user }) => {
                       key={photo?.id}
                       className="shadow-sm rounded-lg h-[120px] w-[120px] sm:w-[130px] sm:h-[130px] mx-3 sm:mx-3 mt-3 mb-3 hover:shadow-lg"
                     >
-                      {photo?.original.endsWith(".mp4") ? (
-                        <ViewPhoto
+                      {photo?.original.endsWith(".mp4") ||
+                      photo?.original.endsWith(".avi") ||
+                      photo?.original.endsWith(".mov") ||
+                      photo?.original.endsWith(".wmv") ||
+                      photo?.original.endsWith(".flv") ||
+                      photo?.original.endsWith(".f4v") ||
+                      photo?.original.endsWith(".swf") ||
+                      photo?.original.endsWith(".mkv") ||
+                      photo?.original.endsWith(".webm") ||
+                      photo?.original.endsWith(".html5") ||
+                      photo?.original.endsWith(".mpeg-2") ||
+                      photo?.original.endsWith(".avchd") ||
+                      photo?.original.endsWith(".ogv") ||
+                      photo?.original.endsWith(".m3u8") ||
+                      photo?.original.endsWith(".mpd") ||
+                      photo?.original.endsWith(".m4v") ? (
+                        <ViewerMedia
                           type={"video"}
                           photo={photo}
-                          data={photo}
                           imgComponent={
                             <div>
                               <ReactPlayer
-                                className={"bg-black h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"}
+                                className={
+                                  "bg-black border border-gray-300 h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
+                                }
                                 url={photo?.original}
-                                muted={true}
+                                muted={false}
                                 pip={true}
                                 volume={1}
-                                playsinline={true}
-                                controls={true}
                                 light={true}
                               />
                             </div>
                           }
                         />
                       ) : (
-                        <ViewPhoto
+                        <ViewerMedia
                           photo={photo}
-                          data={photo}
                           type="photo"
                           imgComponent={
                             <img
-                              className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
+                              className="shadow-sm border border-gray-300 h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
                               src={photo?.original}
                               alt={"_img_" + photo?.id}
                             />

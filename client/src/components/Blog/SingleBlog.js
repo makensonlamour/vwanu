@@ -30,7 +30,7 @@ const SingleBlog = ({ blog }) => {
           </div>
         )}
         <div className="px-4 lg:px-8 mt-2 lg:mt-4">
-          <Link to={`./${blog?.id}`} className="text-md lg:text-2xl font-semibold hover:text-primary line-clamp-2">
+          <Link to={`./${blog?.id}`} className="text-md lg:text-2xl font-semibold hover:text-secondary text-primary line-clamp-2">
             {blog?.blogTitle}
           </Link>
           <p className="text-sm mt-3 lg:mt-4 line-clamp-3">{blog?.blogText.replace(/(<([^>]+)>)/gi, "")}</p>
@@ -42,7 +42,9 @@ const SingleBlog = ({ blog }) => {
                 alt={"img_" + blog?.User?.firstName}
               />
               <div className="ml-4">
-                <p className="font-semibold text-left text-md">{blog?.User?.firstName + " " + blog?.User?.lastName}</p>
+                <p className="font-semibold text-left text-md text-primary hover:text-secondary">
+                  {blog?.User?.firstName + " " + blog?.User?.lastName}
+                </p>
                 <p className="text-gray-400 text-xs">{blog && format(new Date(blog?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</p>
               </div>
             </Link>

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import parse from "html-react-parser";
 import { GoComment } from "react-icons/go";
 import { Chip, Stack } from "@mui/material";
 import placeholderBlog from "../../assets/images/placeholderBlog.png";
@@ -31,10 +30,10 @@ const SingleBlogRelated = ({ blog }) => {
           </div>
         )}
         <div className="px-3 lg:px-6 mt-2 lg:mt-3">
-          <Link to={`../../blogs/${blog?.id}`} className="text-md lg:text-xl font-semibold hover:text-primary line-clamp-2">
+          <Link to={`../../blogs/${blog?.id}`} className="text-md lg:text-xl font-semibold hover:text-secondary text-primary line-clamp-2">
             {blog?.blogTitle}
           </Link>
-          <p className="text-sm mt-2 lg:mt-3 line-clamp-3">{parse(blog?.blogText)}</p>
+          <p className="text-sm mt-2 lg:mt-3 line-clamp-3">{blog?.blogText.replace(/(<([^>]+)>)/gi, "")}</p>
           <div className="flex mt-2 lg:mt-4 mb-2 lg:mb-4 justify-between items-center">
             <Link to={"../../profile/" + blog?.User?.id} className="flex items-center hover:text-primary">
               <img

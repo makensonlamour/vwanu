@@ -101,7 +101,7 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
                       return (
                         <p
                           key={item?.firstName + "ml-2 align-center text-sm items-center " + item?.lastName}
-                          className="font-semibold w-fit line-clamp-1"
+                          className="font-semibold w-fit line-clamp-1 text-primary hover:text-secondary"
                         >
                           {item?.firstName + " " + item?.lastName}
                         </p>

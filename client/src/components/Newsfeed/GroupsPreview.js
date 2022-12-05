@@ -35,20 +35,20 @@ const GroupsPreview = () => {
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 my-8">
-        <h2 className="my-2 px-2 text-md font-medium">Communities</h2>
+        <h2 className="my-2 px-2 text-md font-medium text-primary">Communities</h2>
         <TabContext value={value}>
           <div>
             <TabList
               sx={{ marginBottom: "0.1rem" }}
               value={value}
               onChange={handleChange}
-              textColor="primary"
-              indicatorColor="primary"
+              textColor="secondary"
+              indicatorColor="secondary"
               aria-label="secondary tabs example"
             >
-              <Tab sx={{ textTransform: "capitalize" }} value="one" label="Newest" />
-              <Tab sx={{ textTransform: "capitalize" }} value="two" label="Popular" />
-              <Tab sx={{ textTransform: "capitalize" }} value="three" label="Suggested" />
+              <Tab sx={{ textTransform: "capitalize", color: "#ff4200" }} value="one" label="Newest" />
+              <Tab sx={{ textTransform: "capitalize", color: "#ff4200" }} value="two" label="Popular" />
+              <Tab sx={{ textTransform: "capitalize", color: "#ff4200" }} value="three" label="Suggested" />
             </TabList>
           </div>
           <TabPanel sx={{ margin: "0px", padding: "0.25rem" }} value="one">

@@ -3,8 +3,8 @@ import * as Yup from "yup";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import { Field, Form, Checkbox, Submit } from "../../../components/form";
-import { BsFacebook, BsTwitter } from "react-icons/bs";
-import { FaGooglePlus } from "react-icons/fa";
+// import { BsFacebook, BsTwitter } from "react-icons/bs";
+// import { FaGooglePlus } from "react-icons/fa";
 import Loader from "../../../components/common/Loader";
 import { Link } from "react-router-dom";
 import routesPath from "../../../routesPath";
@@ -88,7 +88,7 @@ const FormLogin = () => {
             )
           }
         />
-        <div className="mt-9 text-center">
+        {/* <div className="mt-9 text-center">
           <span className="text-blue-600 text-center inline text-md md:text-lg">
             {` Or sign in with `}
             <Link className="text-blue-500 ml-2" to={"#"}>
@@ -101,7 +101,7 @@ const FormLogin = () => {
               <FaGooglePlus className="text-2xl inline mx-1" />
             </Link>
           </span>
-        </div>
+        </div> */}
         <div className="mt-8 lg:hidden">
           <p className="text-center mt-4">
             <span className="text-md text-primary font-semibold md:text-xl">Not a member ?</span>{" "}

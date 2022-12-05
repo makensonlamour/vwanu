@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { useGetAlbum } from "../albumSlice";
-import ViewPhoto from "./ViewPhoto";
+// import ViewPhoto from "./ViewPhoto";
 import AddPhoto from "./AddPhoto";
 import { format } from "date-fns";
 import { Field, Form, Submit } from "../../../components/form";
@@ -11,6 +11,7 @@ import Loader from "../../../components/common/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { useUpdateAlbum, useDeleteAlbum } from "../albumSlice";
 import ReactPlayer from "react-player";
+import ViewerMedia from "./ViewerMedia";
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Album Name"),
@@ -85,7 +86,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
           {isEdit ? (
             <div className="">
               <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleEdit} className="w-full">
-                <h4 className="text-xl font-semibold">Edit Album {` "${photos?.name}" `} name</h4>
+                <h4 className="text-xl font-semibold text-primary">Edit Album {` "${photos?.name}" `} name</h4>
                 <Toaster />
                 <Field
                   autoCapitalize="none"
@@ -138,34 +139,47 @@ const ViewAlbum = ({ albumId, album, user }) => {
                 {photos?.Medias?.map((photo) => {
                   return (
                     <Link to={"#"} key={photo?.id} className="shadow-sm rounded-lg w-[130px] h-[130px] mx-3 mt-3 mb-3 hover:shadow-lg">
-                      {photo?.original.endsWith(".mp4") ? (
-                        <ViewPhoto
+                      {photo?.original.endsWith(".mp4") ||
+                      photo?.original.endsWith(".avi") ||
+                      photo?.original.endsWith(".mov") ||
+                      photo?.original.endsWith(".wmv") ||
+                      photo?.original.endsWith(".flv") ||
+                      photo?.original.endsWith(".f4v") ||
+                      photo?.original.endsWith(".swf") ||
+                      photo?.original.endsWith(".mkv") ||
+                      photo?.original.endsWith(".webm") ||
+                      photo?.original.endsWith(".html5") ||
+                      photo?.original.endsWith(".mpeg-2") ||
+                      photo?.original.endsWith(".avchd") ||
+                      photo?.original.endsWith(".ogv") ||
+                      photo?.original.endsWith(".m3u8") ||
+                      photo?.original.endsWith(".mpd") ||
+                      photo?.original.endsWith(".m4v") ? (
+                        <ViewerMedia
                           type={"video"}
                           photo={photo}
-                          data={photos}
                           imgComponent={
                             <div>
                               <ReactPlayer
-                                className={"bg-black h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"}
+                                className={
+                                  "bg-black border border-gray-300 h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
+                                }
                                 url={photo?.original}
-                                muted={true}
+                                muted={false}
                                 pip={true}
                                 volume={1}
-                                playsinline={true}
-                                controls={true}
                                 light={true}
                               />
                             </div>
                           }
                         />
                       ) : (
-                        <ViewPhoto
+                        <ViewerMedia
                           photo={photo}
-                          data={photos}
                           type="photo"
                           imgComponent={
                             <img
-                              className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
+                              className="shadow-sm border border-gray-300 h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
                               src={photo?.original}
                               alt={"_img_" + photo?.id}
                             />

@@ -210,7 +210,7 @@ export function transformHashtagAndLink(strText, preview = false, originalType =
             rel="noopener noreferrer"
             target="_blank"
             href={`${str}`}
-            className="text-secondary  hover:font-semibold"
+            className="text-primary hover:text-secondary"
           >
             {str}
           </a>
@@ -232,7 +232,7 @@ export function transformHashtagAndLink(strText, preview = false, originalType =
             rel="noopener noreferrer"
             target="_blank"
             href={`https://${str}`}
-            className="text-secondary hover:font-semibold"
+            className="text-primary hover:text-secondary"
           >
             {str}
           </a>

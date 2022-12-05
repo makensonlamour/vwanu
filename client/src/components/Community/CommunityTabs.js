@@ -54,17 +54,48 @@ export default function CommunityTabs({ communityData }) {
               aria-label="lab API tabs example"
               variant="scrollable"
               scrollButtons="auto"
+              textColor="secondary"
+              indicatorColor="secondary"
               allowScrollButtonsMobile
             >
-              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Feed" value="1" component={Link} to={allTabs[0]} />
-              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Members" value="2" component={Link} to={allTabs[1]} />
-              <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Albums" value="3" component={Link} to={allTabs[2]} />
+              <Tab
+                style={{ textTransform: "capitalize", fontSize: 15 }}
+                sx={{ color: "#ff4200" }}
+                label="Feed"
+                value="1"
+                component={Link}
+                to={allTabs[0]}
+              />
+              <Tab
+                style={{ textTransform: "capitalize", fontSize: 15 }}
+                sx={{ color: "#ff4200" }}
+                label="Members"
+                value="2"
+                component={Link}
+                to={allTabs[1]}
+              />
+              {/* <Tab
+                style={{ textTransform: "capitalize", fontSize: 15 }}
+                sx={{ color: "#ff4200" }}
+                label="Albums"
+                value="3"
+                component={Link}
+                to={allTabs[2]}
+              /> */}
               {communityData?.haveDiscussionForum && (
-                <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Discussions" value="4" component={Link} to={allTabs[3]} />
+                <Tab
+                  style={{ textTransform: "capitalize", fontSize: 15 }}
+                  sx={{ color: "#ff4200" }}
+                  label="Discussions"
+                  value="4"
+                  component={Link}
+                  to={allTabs[3]}
+                />
               )}
               {communityData?.canUserInvite && (
                 <Tab
                   style={{ textTransform: "capitalize", fontSize: 15 }}
+                  sx={{ color: "#ff4200" }}
                   label="Send Invites"
                   value="5"
                   component={Link}
@@ -73,7 +104,14 @@ export default function CommunityTabs({ communityData }) {
               )}
               {/* <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Send Message" value="6" component={Link} to={allTabs[5]} /> */}
               {(communityData?.IsMember?.role === "admin" || communityData?.IsMember?.role === "moderator") && (
-                <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Manage" value="7" component={Link} to={allTabs[6]} />
+                <Tab
+                  style={{ textTransform: "capitalize", fontSize: 15 }}
+                  sx={{ color: "#ff4200" }}
+                  label="Manage"
+                  value="7"
+                  component={Link}
+                  to={allTabs[6]}
+                />
               )}
             </TabList>
           </Box>

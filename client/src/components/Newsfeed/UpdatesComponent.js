@@ -32,7 +32,7 @@ const UpdatesComponent = ({ data, className }) => {
   return (
     <>
       <div className={"bg-white border border-gray-200 rounded-lg p-2 mb-8 " + className}>
-        <h2 className="my-2 px-2 text-md font-medium">Latest updates</h2>
+        <h2 className="my-2 px-2 text-md font-medium text-primary">Latest updates</h2>
         {data?.length > 0 ? (
           <Stack spacing={1}>
             {data?.map((latest, idx) => {
@@ -63,7 +63,9 @@ const UpdatesComponent = ({ data, className }) => {
                             handleRead(latest?.id, latest?.entityId, latest?.entityName);
                           }}
                         >
-                          <span className="font-semibold">{latest?.User?.firstName + " " + latest?.User?.lastName}</span>
+                          <span className="font-semibold text-primary hover:text-secondary">
+                            {latest?.User?.firstName + " " + latest?.User?.lastName}
+                          </span>
                           <span className="font-light">{" " + latest?.message}</span>
                         </div>
                       </p>
@@ -81,7 +83,7 @@ const UpdatesComponent = ({ data, className }) => {
               }
             })}
             {data?.length > 5 && (
-              <Link to={"../../notifications"} className="text-xs mx-auto font-[500] hover:text-primary">
+              <Link to={"../../notifications"} className="text-sm text-primary hover:text-secondary mx-auto font-[500]">
                 View more updates
               </Link>
             )}

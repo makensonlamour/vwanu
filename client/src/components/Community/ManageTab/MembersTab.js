@@ -14,7 +14,7 @@ const MembersTab = ({ communityData }) => {
   return (
     <>
       <div className="bg-white border border-gray-300 py-10 px-2 md:px-16 rounded-xl w-full">
-        <h4 className="md:text-left text-center mb-4 text-lg font-semibold">{`Members`}</h4>
+        <h4 className="md:text-left text-center mb-4 text-lg font-semibold text-primary">{`Members`}</h4>
         <p className="mb-6 ">Manage group members; promote to moderators, co-organizers, or demote or ban.</p>
         <MemberDescription
           title={"Administrators"}

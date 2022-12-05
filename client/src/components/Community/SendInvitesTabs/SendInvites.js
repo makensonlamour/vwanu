@@ -128,7 +128,7 @@ const SendInvites = () => {
                     </button>
                   </div>
                   <div className="border-r border-gray-300">
-                    <p className="text-lg font-semibold p-4">Members</p>
+                    <p className="text-lg font-semibold p-4 text-primary">Members</p>
                     <div className="w-full h-[1px] bg-gray-300"></div>
                     <div className="py-4 px-6">
                       <InputSearch
@@ -187,11 +187,13 @@ const SendInvites = () => {
                                           className="bg-gray-100 mask mask-squircle w-10 h-10"
                                         />
                                       </div>
-                                      <div className="">{member?.firstName + " " + member?.lastName}</div>
+                                      <Link to={"../../profile/" + member?.id} className="text-primary hover:text-secondary">
+                                        {member?.firstName + " " + member?.lastName}
+                                      </Link>
                                     </div>
                                   )}
                                   {user?.id !== member?.id && (
-                                    <div className="">
+                                    <div className="text-primary hover:text-secondary">
                                       {isIntoArray(member) ? (
                                         <button onClick={handleRemove(member)}>
                                           <MdOutlineRemoveCircleOutline size={"24px"} className="" />
@@ -222,7 +224,7 @@ const SendInvites = () => {
         <div className="hidden lg:block border border-gray-300 rounded-lg">
           <div className="grid grid-cols-2">
             <div className="border-r border-gray-300">
-              <p className="text-lg font-semibold p-4">Members</p>
+              <p className="text-lg font-semibold p-4 text-primary">Members</p>
               <div className="w-full h-[1px] bg-gray-300"></div>
               <div className="py-4 px-6">
                 <InputSearch
@@ -281,11 +283,13 @@ const SendInvites = () => {
                                     className="bg-gray-100 mask mask-squircle w-10 h-10"
                                   />
                                 </div>
-                                <div className="">{member?.firstName + " " + member?.lastName}</div>
+                                <Link to={"../../profile/" + member?.id} className="text-primary hover:text-secondary">
+                                  {member?.firstName + " " + member?.lastName}
+                                </Link>
                               </div>
                             )}
                             {user?.id !== member?.id && (
-                              <div className="">
+                              <div className="text-primary hover:text-secondary">
                                 {isIntoArray(member) ? (
                                   <button onClick={handleRemove(member)}>
                                     <MdOutlineRemoveCircleOutline size={"24px"} className="" />
@@ -307,7 +311,7 @@ const SendInvites = () => {
               </div>
             </div>
             <div className="">
-              <p className="text-lg font-semibold p-4">Send Invites</p>
+              <p className="text-lg font-semibold p-4 text-primary">Send Invites</p>
               <div className="w-full h-[1px] bg-gray-300"></div>
               <div className="px-6">
                 <div className="bg-sky-100 border border-sky-500 rounded-lg p-3 mt-4">
@@ -356,7 +360,7 @@ const SendInvites = () => {
         {/* For mobile screen */}
         <div className={`${showModal ? "opacity-10" : ""} lg:hidden border rounded-xl`}>
           <div className="flex justify-between items-center mx-2">
-            <p className="text-lg font-semibold py-2 ">Send Invites</p>
+            <p className="text-lg font-semibold py-2 text-primary">Send Invites</p>
             <div onClick={() => setShowModal(true)} className="">
               Add
             </div>

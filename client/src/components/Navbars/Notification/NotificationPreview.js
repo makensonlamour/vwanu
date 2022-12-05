@@ -18,8 +18,6 @@ const NotificationPreview = () => {
   const [notificationList, setNotificationList] = useState([]);
   let run = false;
 
-  console.log(notificationList);
-
   const onCreatedListener = (notification) => {
     if (notification.to.toString() === user.id.toString() && notification.UserId.toString() !== user.id.toString()) {
       setNotificationList((notificationList) => [...notificationList, notification]);
@@ -85,8 +83,8 @@ const NotificationPreview = () => {
     <>
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <Badge badgeContent={NotificationUnview?.length} color="primary" className="">
-            <IoMdNotificationsOutline size="24px" className="text-black" />
+          <Badge badgeContent={NotificationUnview?.length} color="secondary" className="">
+            <IoMdNotificationsOutline size="24px" className="text-primary hover:text-secondary cursor-pointer" />
           </Badge>
         </label>
         <ul
@@ -121,7 +119,10 @@ const NotificationPreview = () => {
                         </div>
                         <div className=" text-sm w-64">
                           <p className="sm:pb-1">
-                            <span className="font-semibold"> {notification?.User?.firstName + " " + notification?.User?.lastName}</span>
+                            <span className="font-semibold text-primary hover:text-secondary">
+                              {" "}
+                              {notification?.User?.firstName + " " + notification?.User?.lastName}
+                            </span>
                             <span className="font-normal text-sm"> {" " + notification?.message}</span>
                           </p>
                           <p className="pt-1 text-gray-400 font-medium text-xs">

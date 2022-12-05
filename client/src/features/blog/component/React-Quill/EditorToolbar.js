@@ -100,7 +100,7 @@ export const modules = (props) => ({
 // Formats objects for setting up the Quill editor
 export const formats = [
   "header",
-  "font",
+  // "font",
   "size",
   "bold",
   "italic",
@@ -133,7 +133,7 @@ export const QuillToolbar = ({ toolbarId }) => {
             <button className="ql-strike" />
           </span>
           <span className="ql-formats">
-            <select className="ql-font">
+            {/* <select className="ql-font">
               <option value="arial"> Arial </option>
               <option value="comic-sans">Comic Sans</option>
               <option value="courier-new">Courier New</option>
@@ -143,7 +143,7 @@ export const QuillToolbar = ({ toolbarId }) => {
                 Inter
               </option>
               <option value="lucida">Lucida</option>
-            </select>
+            </select> */}
             <select className="ql-size">
               <option value="extra-small">Extra Small</option>
               <option value="small">Small</option>
@@ -177,7 +177,12 @@ export const QuillToolbar = ({ toolbarId }) => {
             <button className="ql-direction" />
           </span>
           <span className="ql-formats">
-            <select className="ql-align" />
+            <select className="ql-align">
+              <option></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify" selected></option>
+            </select>
             <select className="ql-color" />
             <select className="ql-background" />
           </span>

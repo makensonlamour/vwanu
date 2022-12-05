@@ -31,42 +31,42 @@ const SidebarLeft = ({ user }) => {
         {
           title: "My Profile",
           path: "/profile/" + user?.id,
-          icon: <FiUser size={"24px"} />,
+          icon: <FiUser size={"24px"} className="" />,
         },
         {
           title: "My Timeline",
           path: routesPath.NEWSFEED,
-          icon: <FiActivity size={"24px"} />,
+          icon: <FiActivity size={"24px"} className="" />,
         },
         {
           title: "My inbox",
           path: routesPath.MESSAGE,
-          icon: <FiInbox size={"24px"} />,
+          icon: <FiInbox size={"24px"} className="" />,
         },
         {
           title: "My Community",
           path: routesPath.GROUPS + "?tabs=myCommunity",
-          icon: <MdGroups size={"24px"} />,
+          icon: <MdGroups size={"24px"} className="" />,
         },
         {
           title: "My Network",
           path: "/profile/" + user?.id + "/network?tabs=network&subTabs=friends",
-          icon: <MdGroups size={"24px"} />,
+          icon: <MdGroups size={"24px"} className="" />,
         },
         {
           title: "My Album",
           path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=album",
-          icon: <MdPhotoLibrary size={"24px"} />,
+          icon: <MdPhotoLibrary size={"24px"} className="" />,
         },
         {
           title: "My Photo",
           path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=photo",
-          icon: <MdPhotoSizeSelectActual size={"24px"} />,
+          icon: <MdPhotoSizeSelectActual size={"24px"} className="" />,
         },
         {
           title: "My Blog",
           path: "/profile/" + user?.id + "/blog?tabs=blog&subTabs=friends",
-          icon: <FaBlog size={"24px"} />,
+          icon: <FaBlog size={"24px"} className="" />,
         },
       ],
     },
@@ -104,7 +104,7 @@ const SidebarLeft = ({ user }) => {
 
   return (
     <>
-      <div className={`${full ? "w-[15vw] " : ""} h-screen md:shadow-xl antialiased md:fixed z-50`}>
+      <div className={`${full ? "w-[15vw] " : "xl:w-[6vw] lg:bg-white"} h-screen md:shadow-xl antialiased md:fixed z-50`}>
         {/* Mobile menu Toggle */}
         <button
           onClick={() => {
@@ -126,10 +126,10 @@ const SidebarLeft = ({ user }) => {
             <CgMenuLeft size={"24px"} className="" />
           </button>
 
-          <div className="px-4 space-y-2">
+          <div className="px-4 space-y-6">
             {ItemSidebarLeft.map((item) => {
               return (
-                <div key={cryptoRandomString({ length: 10 })}>
+                <div key={cryptoRandomString({ length: 10 })} className="space-y-4">
                   <p key={cryptoRandomString({ length: 10 })} className={`${full ? "block" : "hidden"}  pt-4 text-gray-500 text-lg`}>
                     {" "}
                     {item.menuTitle}
@@ -139,7 +139,7 @@ const SidebarLeft = ({ user }) => {
                     return (
                       <div
                         key={cryptoRandomString({ length: 10 })}
-                        className="relative flex items-center hover:text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
+                        className="relative flex items-center text-primary hover:!text-white hover:bg-secondary space-x-2 rounded-md p-2 cursor-pointer"
                       >
                         <Tooltip className={`${full ? "mr-3" : ""}`} title={it.title}>
                           <NavLink
@@ -150,17 +150,17 @@ const SidebarLeft = ({ user }) => {
                             key={cryptoRandomString({ length: 10 })}
                             to={it.path}
                             style={({ isActive }) => (isActive ? activeStyle : notActiveStyle)}
-                            className="inline-flex "
+                            className="inline-flex hover:text-white"
                           >
                             {" "}
-                            <span className={`${full ? "mr-3" : ""}`}>{it.icon}</span>
-                            <h1 className={`${full ? "block" : "hidden"}`}>{it.title}</h1>
+                            <span className={`${full ? "mr-3" : ""} `}>{it.icon}</span>
+                            <h1 className={`${full ? "block" : "hidden"} `}>{it.title}</h1>
                           </NavLink>
                         </Tooltip>
                       </div>
                     );
                   })}
-                  <div className={`${full ? "hidden" : "block"} w-full h-[1px] bg-black`}></div>
+                  {/* <div className={`${full ? "hidden" : "block"} w-full h-[1px] bg-black`}></div> */}
                 </div>
               );
             })}

@@ -44,21 +44,19 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
     inputRef.current.focus();
   }, []);
 
-  console.log(filterData, filterDataBlog, filterDataCommunity);
-
   return (
     <>
       <div className="w-full dropdown">
         <div tabIndex={0} className="w-full relative text-gray-400 focus-within:text-gray-400">
           <span className="absolute inset-y-0 right-0 flex items-center pr-2">
-            <button onClick={() => setIsSearchOpen(false)} className="">
+            <button onClick={() => setIsSearchOpen(false)} className="text-primary">
               <AiOutlineClose size={"24px"} className="" />
             </button>
           </span>
           <input
             ref={inputRef}
             onChange={(e) => setKeyword(e?.target?.value)}
-            className="w-full outline-0 py-2 px-4 border border-gray-300 rounded-lg "
+            className="w-full outline-1 outline-primary py-2 px-4 border border-gray-300 rounded-lg "
             placeholder={
               filterSearch === "" || filterSearch === "members"
                 ? placeholder
@@ -73,17 +71,17 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
             <p className="text-sm mr-3">Search by:</p>
             <input type="radio" id="members" name="filter" value="members" />
             <label htmlFor="members" className="text-sm">
-              members
+              People
             </label>
 
             <input type="radio" id="blogs" name="filter" value="blogs" />
             <label htmlFor="blogs" className="text-sm">
-              blogs
+              Blog
             </label>
 
             <input type="radio" id="community" name="filter" value="community" />
             <label htmlFor="community" className="text-sm">
-              community
+              Community
             </label>
           </div>
           {isLoading || loadingCommunity || loadingBlog ? (

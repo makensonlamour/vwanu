@@ -49,6 +49,7 @@
 .ql-editor {
   /* min-height: 50vh; */
   font-size: 16px;
+  text-align: "justify" !important;
 }
 .App .ql-snow .ql-tooltip.ql-flip {
   width: auto;
@@ -71,6 +72,7 @@
     margin: 0;
     box-shadow: none;
     align-self: flex-start;
+    text-align: "justify" !important;
   }
   .container .ql-toolbar.ql-snow {
     display: none;
@@ -90,7 +92,7 @@ iframe,
 }
 
 .view > p > a {
-  color: #ff4200;
+  color: #ff4200 !important;
 }
 
 .view > p > a:hover {

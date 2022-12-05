@@ -102,7 +102,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                         <Link
                           to={`../../profile/` + item?.id}
                           key={item?.firstName + "ml-2 align-center items-center " + item?.lastName}
-                          className="font-semibold hover:text-primary"
+                          className="font-semibold hover:text-secondary text-primary"
                         >
                           {item?.firstName + " " + item?.lastName}
                         </Link>
@@ -116,7 +116,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                       }
                       className="mr-2"
                     >
-                      <IoVideocamOutline size={"22px"} className="hover:text-secondary" />
+                      <IoVideocamOutline size={"22px"} className="text-primary hover:text-secondary" />
                     </button>
                     <button
                       onClick={() =>
@@ -124,7 +124,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                       }
                       className="ml-2"
                     >
-                      <IoCallOutline size={"22px"} className="hover:text-secondary" />
+                      <IoCallOutline size={"22px"} className="text-primary hover:text-secondary" />
                     </button>
                   </div>
                 </div>

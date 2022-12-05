@@ -9,7 +9,7 @@ import { AiOutlineMail } from "react-icons/ai";
 import { RiUserUnfollowLine } from "react-icons/ri";
 import Loader from "../../../components/common/Loader";
 import { ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList } from "@mui/material";
-import { useSendFollow } from "../../follower/followerSlice";
+import { useSendFollow, useSendUnfollow } from "../../follower/followerSlice";
 
 const MenuButton = ({ otherUser }) => {
   const [open, setOpen] = useState(false);
@@ -17,6 +17,8 @@ const MenuButton = ({ otherUser }) => {
   const anchorRef = useRef(null);
 
   const follow = useSendFollow(["user", "request"]);
+
+  const unfollow = useSendUnfollow(["user", "request"]);
 
   console.log(otherUser);
 
@@ -83,6 +85,22 @@ const MenuButton = ({ otherUser }) => {
     }
   };
 
+  const handleUnfollow = async () => {
+    // e.preventDefault();
+    setIsLoading(true);
+    try {
+      console.log("ok");
+      await unfollow.mutateAsync({ id: otherUser?.id });
+      FollowRequestSuccess();
+      // window.location.reload();
+    } catch (e) {
+      console.log(e);
+      FollowRequestError();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <Toaster />
@@ -132,7 +150,7 @@ const MenuButton = ({ otherUser }) => {
                   <MenuItem
                     onClick={(e) => {
                       if (otherUser?.isFriend) {
-                        handleFollow(e, "unfollow");
+                        handleUnfollow();
                       } else {
                         handleFollow(e, "follow");
                       }

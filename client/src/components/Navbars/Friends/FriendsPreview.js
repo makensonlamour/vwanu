@@ -76,8 +76,8 @@ const FriendsPreview = () => {
       <Toaster />
       <div className="dropdown dropdown-hover dropdown-end">
         <label tabIndex="2">
-          <Badge badgeContent={friendReceiveNumber} color="primary" className="">
-            <AiOutlineUserAdd size={"24px"} />
+          <Badge badgeContent={friendReceiveNumber} color="secondary" className="">
+            <AiOutlineUserAdd size={"24px"} className="text-primary hover:text-secondary cursor-pointer" />
           </Badge>
         </label>
         <ul

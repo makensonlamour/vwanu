@@ -18,7 +18,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
   return (
     <div>
       <div className="bg-white w-full  border border-gray-200 rounded-lg p-2 mb-8">
-        <h2 className="my-2 px-2 text-md font-medium">Blog</h2>
+        <h2 className="my-2 px-2 text-md font-medium text-primary">Blog</h2>
         {isLoading ? (
           <div className="flex justify-center py-5">
             <Loader color="black" />
@@ -63,9 +63,9 @@ const BlogComponent = ({ data, isError, isLoading }) => {
                         />
                       </div>
                     )}
-                    <div>
+                    <div className="space-y-1 w-full ml-1">
                       <p className=" text-sm line-clamp-2 max-w-[25ch] text-ellipsis whitespace-wrap overflow-hidden font-medium ml-2 pb-1">
-                        <Link className="hover:text-secondary" to={`../../blogs/${blog?.id}`}>
+                        <Link className="text-primary hover:text-secondary font-semibold" to={`../../blogs/${blog?.id}`}>
                           {blog?.blogTitle}
                         </Link>
                       </p>
@@ -78,7 +78,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
               }
             })}
             {data && data?.length > 6 ? (
-              <Link className="hover:text-primary text-xs text-center font-semibold" to={"../../blogs"}>
+              <Link className="text-primary hover:text-secondary text-sm text-center font-semibold" to={"../../blogs"}>
                 see more
               </Link>
             ) : null}
