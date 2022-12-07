@@ -32,7 +32,7 @@ const UpdatesComponent = ({ data, className }) => {
   return (
     <>
       <div className={"bg-white border border-gray-200 rounded-lg p-2 mb-8 " + className}>
-        <h2 className="my-2 px-2 text-md font-medium text-primary">Latest updates</h2>
+        <h2 className="my-2 px-2 text-md font-semibold text-primary">Latest updates</h2>
         {data?.length > 0 ? (
           <Stack spacing={1}>
             {data?.map((latest, idx) => {

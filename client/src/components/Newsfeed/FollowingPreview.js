@@ -15,7 +15,7 @@ const FollowingPreview = ({ data, isError, isLoading }) => {
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8 mb-4">
-        <h2 className="my-2 px-2 text-md font-medium text-primary">
+        <h2 className="my-2 px-2 text-md font-semibold text-primary">
           {`I'm Following `}
           <span className="font-normal text-md text-gray-400">{data?.length || 0}</span>
         </h2>
