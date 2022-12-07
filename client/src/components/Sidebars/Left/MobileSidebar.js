@@ -36,7 +36,7 @@ const SidebarLeft = ({ user }) => {
       menuTitle: "General",
       menuItems: [
         { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
-        { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
+        { title: "People", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
         { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: routesPath?.GROUPS },
         { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
         { title: "Blog", icon: <FaBlog size={24} className="mx-auto" />, path: routesPath?.BLOG },

@@ -26,7 +26,7 @@ const Member = () => {
   return (
     <>
       <div className="bg-white border border-gray-300 py-5 px-2 md:px-10 rounded-xl mt-2 xl:max-w-screen-lg mx-auto">
-        <p className="text-lg lg:text-3xl font-bold text-primary">Member</p>
+        <p className="text-lg lg:text-3xl font-bold text-primary">People</p>
         <div className="py-4">
           <TabContext value={value}>
             <div>
