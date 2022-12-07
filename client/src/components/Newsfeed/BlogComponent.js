@@ -18,7 +18,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
   return (
     <div>
       <div className="bg-white w-full  border border-gray-200 rounded-lg p-2 mb-8">
-        <h2 className="my-2 px-2 text-md font-medium text-primary">Blog</h2>
+        <h2 className="my-2 px-2 text-md font-semibold text-primary">Blog</h2>
         {isLoading ? (
           <div className="flex justify-center py-5">
             <Loader color="black" />

@@ -30,7 +30,7 @@ const Navbar = ({ user, countMessage }) => {
 
   const pages = [
     { title: "Activity", icon: <FiActivity size={24} className="mx-auto" />, path: routesPath?.NEWSFEED },
-    { title: "Members", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
+    { title: "People", icon: <BiUserCircle size={24} className="mx-auto" />, path: routesPath?.MEMBERS },
     { title: "Community", icon: <HiUsers size={24} className="mx-auto" />, path: routesPath?.GROUPS },
     { title: "Forum", icon: <BiMessageDetail size={24} className="mx-auto" />, path: routesPath?.FORUMS },
     { title: "Blog", icon: <FaBlog size={24} className="mx-auto" />, path: routesPath?.BLOG },
@@ -42,7 +42,7 @@ const Navbar = ({ user, countMessage }) => {
       icon: <BiUserCircle size={20} style={{ marginRight: "10px" }} className="mr-2 items-center" />,
       path: "../../profile/" + user?.id,
     },
-    { title: "Edit Profile", icon: "" },
+    { title: "Edit Profile", icon: "", path: "../../me/profile/edit?tabs=edit&subtabs=general" },
     { title: "Account Settings", icon: "" },
     { title: "Terms & Privacy", icon: "" },
   ];

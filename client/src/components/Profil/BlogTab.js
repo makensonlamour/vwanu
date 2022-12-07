@@ -1,6 +1,6 @@
 import React from "react";
 // import PropTypes from "prop-types";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useOutletContext } from "react-router-dom";
 import SingleBlogRelated from "../Blog/SingleBlogRelated";
 import { useGetMyBlogList } from "../../features/blog/blogSlice";
 import { ImSad } from "react-icons/im";
@@ -12,6 +12,7 @@ import { useQueryClient } from "react-query";
 const BlogTab = () => {
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const user = useOutletContext();
   const {
     data: blogList,
     isLoading,
@@ -28,12 +29,14 @@ const BlogTab = () => {
       <div className="w-full my-4 bg-white border border-gray-300 py-5 md:py-10 px-2 md:px-16 rounded-xl">
         <div className="flex justify-between items-center pb-4">
           <h4 className="text-lg md:text-xl font-semibold text-primary">Blog</h4>
-          <Link
-            to={"../../blogs/add"}
-            className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-1 md:py-2 px-4 md:px-6 font-semibold"
-          >
-            Create Blog
-          </Link>
+          {user?.id.toString() === id.toString() && (
+            <Link
+              to={"../../blogs/add"}
+              className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-1 md:py-2 px-4 md:px-6 font-semibold"
+            >
+              Create Blog
+            </Link>
+          )}
         </div>
         <div className="!w-full">
           <div className="">
