@@ -23,7 +23,7 @@ const ViewCategory = ({ data }) => {
           {data?.description === "" ? <p className="py-5"></p> : <p className="line-clamp-2 text-sm font-normal">{data?.description}</p>}
         </div>
         <div className="p-4 flex items-end">
-          <p className="text-gray-500 text-sm font-[400] self-end">{format(new Date(data?.createdAt), "MMM dd, yyyy")}</p>
+          <p className="text-gray-500 text-sm font-[400] self-end">{data && format(new Date(data?.createdAt), "MMM dd, yyyy")}</p>
         </div>
       </Link>
     </>
