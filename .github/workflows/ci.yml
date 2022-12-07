@@ -13,16 +13,16 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/checkout@v2
 
-      - name: Adding env variable files
+#      - name: Adding env variable files
         # if: github.event_name == 'pull_request'
-        run: |
-          touch server/.env
-          echo "OAUTH_REDIRECT_URL=${{secrets.OAUTH_REDIRECT_URL}}" >>  server/.env
-          echo "GOOGLE_KEY=${{secrets.GOOGLE_KEY}}" >>  server/.env
-          echo "GOOGLE_SECRET=${{secrets.GOOGLE_SECRET}}" >>  server/.env
+#        run: |
+ #         touch server/.env
+  #        echo "OAUTH_REDIRECT_URL=${{secrets.OAUTH_REDIRECT_URL}}" >>  server/.env
+   #       echo "GOOGLE_KEY=${{secrets.GOOGLE_KEY}}" >>  server/.env
+    #      echo "GOOGLE_SECRET=${{secrets.GOOGLE_SECRET}}" >>  server/.env
 
-      - name: Read env file file
-        run: cat server/.env
+     # - name: Read env file file
+ #       run: cat server/.env
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1
