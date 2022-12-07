@@ -7,6 +7,7 @@ import EmptyComponent from "../common/EmptyComponent";
 import { useQueryClient } from "react-query";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
+import { format } from "date-fns";
 
 const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isError, hasNextPage, fetchNextPage }) => {
   const id = useParams();
@@ -102,7 +103,7 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
                                     " " +
                                     item?.lastComment?.commenterLastName +
                                     " replied on " +
-                                    item?.lastComment?.createdAt}
+                                    item && format(new Date(item?.lastComment?.createdAt), "MMM dd, yyyy")}
                                 </span>
                               )}
                               {item?.lastComment === null && (
