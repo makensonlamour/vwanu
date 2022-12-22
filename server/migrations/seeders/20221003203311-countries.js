@@ -19,13 +19,25 @@ const findOrSaveState = async (stateAndCities, countryId, queryInterface) => {
   return { StateId: val[0].id, cities };
 };
 
+const findOrSaveCity = async (city, stateId, queryInterface) => {
+  // console.log(`Saving cities of state with id: ${stateId}}`);
+
+  const { name } = city;
+  const query = `
+  INSERT INTO "Cities" (id, name, "StateId", "createdAt", "updatedAt" )
+  VALUES ('${v4()}', '${name}', '${stateId}', current_timestamp, current_timestamp)
+  ON CONFLICT (name) DO UPDATE SET name = '${name}' RETURNING id;`;
+
+  return queryInterface.sequelize.query(query, { type: QueryTypes.SELECT });
+};
+
 async function saveAndAssociateCities(queryInterface, stateAndCities) {
   const { StateId, cities } = stateAndCities;
 
-  console.log({ stateAndCities });
+  // console.log({ stateAndCities });
   if (!cities || !cities.length) return;
 
-  const list = cities.map(({name}) => ({
+  const list = cities.map(({ name }) => ({
     id: v4(),
     name,
     StateId,
@@ -33,7 +45,13 @@ async function saveAndAssociateCities(queryInterface, stateAndCities) {
     updatedAt: new Date(),
   }));
 
-  await queryInterface.bulkInsert('Cities', list);
+  await Promise.all(
+    list.map((city) => findOrSaveCity(city, city.StateId, queryInterface))
+  );
+
+  // await queryInterface.bulkInsert('Cities', list, {
+  //   updateOnDuplicate: ['name'],
+  // });
 }
 async function saveAndAssociateStatesAndCities(queryInterface, stateDetails) {
   const { states: stateList, CountryId } = stateDetails;
