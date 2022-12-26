@@ -97,22 +97,18 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
                               {item?.title}
                             </Link>
                             <p className="pt-2 text-sm text-gray-500">
-                              {item?.lastComment && (
+                              {item?.lastComment !== null && (
                                 <span className="">
                                   {item?.lastComment?.commenterFirstName +
                                     " " +
                                     item?.lastComment?.commenterLastName +
                                     " replied on " +
-                                    item?.lastComment && format(new Date(item?.lastComment?.createdAt), "MMM dd, yyyy")}
+                                    item && format(new Date(item?.lastComment?.createdAt), "MMM dd, yyyy")}
                                 </span>
                               )}
-                              {!item?.lastComment && (
+                              {item?.lastComment === null && (
                                 <span className="">
-                                  {item?.User?.firstName +
-                                    " " +
-                                    item?.User?.lastName +
-                                    " created on " +
-                                    format(new Date(item?.createdAt), "MMM dd, yyyy")}
+                                  {item?.User?.firstName + " " + item?.User?.lastName + " created on " + item?.createdAt}
                                 </span>
                               )}
                               <span className="mx-2">

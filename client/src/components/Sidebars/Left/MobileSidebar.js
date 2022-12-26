@@ -9,7 +9,7 @@ import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
 import { FaBlog } from "react-icons/fa";
 import { BiUserCircle, BiMessageDetail } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
-import { MdGroups, MdPhotoLibrary } from "react-icons/md";
+import { MdGroups, MdPhotoLibrary, MdPhotoSizeSelectActual } from "react-icons/md";
 import { BottomMenuContext } from "../../../context/BottomMenuContext";
 import { deleteToken } from "../../../helpers/index";
 
@@ -75,11 +75,11 @@ const SidebarLeft = ({ user }) => {
           path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=album",
           icon: <MdPhotoLibrary size={"24px"} />,
         },
-        // {
-        //   title: "My Photo",
-        //   path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=photo",
-        //   icon: <MdPhotoSizeSelectActual size={"24px"} />,
-        // },
+        {
+          title: "My Photo",
+          path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=photo",
+          icon: <MdPhotoSizeSelectActual size={"24px"} />,
+        },
         {
           title: "My Blog",
           path: "/profile/" + user?.id + "/blog?tabs=blog&subTabs=friends",

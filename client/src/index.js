@@ -10,9 +10,6 @@ import "react-quill/dist/quill.snow.css";
 import "cropperjs/dist/cropper.css";
 import "react-slidy/lib/styles.css";
 import "react-videoplayer/lib/index.css";
-import "react-image-gallery/styles/css/image-gallery.css";
-import "video-react/dist/video-react.css";
-import "react-slideshow-image/dist/styles.css";
 // import { StyledEngineProvider } from "@mui/material/styles";
 // import { CssBaseline } from "@mui/material";
 

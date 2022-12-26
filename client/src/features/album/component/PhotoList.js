@@ -7,10 +7,8 @@ import EmptyComponent from "../../../components/common/EmptyComponent";
 import Loader from "../../../components/common/Loader";
 import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 import { useQueryClient } from "react-query";
-// import ReactPlayer from "react-player";
-// import ResponsivePlayer from "../../../components/common/ResponsivePlayer";
+import ReactPlayer from "react-player";
 import ViewerMedia from "./ViewerMedia";
-import { BsPlayCircle } from "react-icons/bs";
 
 const PhotoList = ({ user }) => {
   const queryClient = useQueryClient();
@@ -57,18 +55,12 @@ const PhotoList = ({ user }) => {
           <div className="mx-auto w-full">
             <div className="flex flex-wrap justify-start">
               {photoList?.pages?.map((page) => {
-                return page?.data?.data?.map((photo, idx) => {
+                return page?.data?.data?.map((photo) => {
                   return (
                     <Link
                       to={"#"}
                       key={photo?.id}
-                      style={{
-                        backgroundImage: `url('${photo?.original?.replace("mp4", "jpg")}')`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "cover",
-                        backgroundPositionX: "center",
-                      }}
-                      className="shadow-sm rounded-lg h-[120px] w-[120px] sm:w-[130px] sm:h-[130px] mx-3 sm:mx-3 mt-3 mb-3 hover:shadow-lg hover:brightness-75"
+                      className="shadow-sm rounded-lg h-[120px] w-[120px] sm:w-[130px] sm:h-[130px] mx-3 sm:mx-3 mt-3 mb-3 hover:shadow-lg"
                     >
                       {photo?.original.endsWith(".mp4") ||
                       photo?.original.endsWith(".avi") ||
@@ -88,21 +80,26 @@ const PhotoList = ({ user }) => {
                       photo?.original.endsWith(".m4v") ? (
                         <ViewerMedia
                           type={"video"}
-                          idx={idx}
                           photo={photo}
-                          dataPhoto={page?.data?.data}
                           imgComponent={
-                            <div className="relative top-7 left-7 opacity-75">
-                              <BsPlayCircle size={"72px"} className="text-secondary text-center align-middle" />
+                            <div>
+                              <ReactPlayer
+                                className={
+                                  "bg-black border border-gray-300 h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
+                                }
+                                url={photo?.original}
+                                muted={false}
+                                pip={true}
+                                volume={1}
+                                light={true}
+                              />
                             </div>
                           }
                         />
                       ) : (
                         <ViewerMedia
                           photo={photo}
-                          dataPhoto={page?.data?.data}
                           type="photo"
-                          idx={idx}
                           imgComponent={
                             <img
                               className="shadow-sm border border-gray-300 h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
@@ -138,15 +135,3 @@ PhotoList.propTypes = {
 };
 
 export default PhotoList;
-
-/* <ReactPlayer
-                                className={
-                                  "bg-black border border-gray-300 h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
-                                }
-                                url={photo?.original}
-                                muted={false}
-                                pip={true}
-                                volume={1}
-                                light={photo?.original?.replace("mp4", "jpg")}
-                              />
-                            </div> */
