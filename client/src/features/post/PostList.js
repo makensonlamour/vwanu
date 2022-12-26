@@ -154,7 +154,7 @@ const PostList = ({ post, pageTitle }) => {
                     {" ago"} <span className="ml-2 text-gray-600">{" • "}</span> <span className="ml-2">{post?.privacyType}</span>
                   </p>
                 </div>
-                <span className="ml-auto mt-2">{post?.User?.id === user?.id && <MenuPost post={post} />}</span>
+                <span className="ml-auto mt-2">{(post?.User?.id === user?.id || post?.canDelete) && <MenuPost post={post} />}</span>
                 <ReusableDialog
                   title={"Delete Post"}
                   action={"delete"}

@@ -195,7 +195,7 @@ const NewsFeed = () => {
               </span>
 
               {/* <CompleteProfile percentage={percentage} data={steps} /> */}
-              <UpdatesComponent className="mt-8" data={notificationList || []} />
+              <UpdatesComponent className="mt-0" data={notificationList || []} />
               <RecentlyActive
                 data={listOnline || []}
                 isLoading={loadingOnline}

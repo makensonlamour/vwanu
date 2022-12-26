@@ -5,8 +5,10 @@ import { formatDistance, parseISO } from "date-fns";
 import MenuPost from "./../../post/components/MenuPost";
 import { transformHashtagAndLink } from "../../../helpers/index";
 
+// eslint-disable-next-line no-unused-vars
 const CommentSingle = ({ comment, response = false, PostId }) => {
   const user = useOutletContext();
+  console.log(comment);
   return (
     <div className="z-0 flex items-start pr-3 gap-y-2">
       <img
@@ -28,7 +30,7 @@ const CommentSingle = ({ comment, response = false, PostId }) => {
                 },
               ])}
             </span>
-            {user?.id === comment?.User?.id || user?.id === PostId ? <MenuPost post={comment} /> : null}
+            {user?.id === comment?.User?.id || comment?.canDelete ? <MenuPost post={comment} /> : null}
           </div>
 
           <p className={`text-gray-800 font-light ${response ? "text-[0.85rem]" : "text-[0.97rem]"}`}>

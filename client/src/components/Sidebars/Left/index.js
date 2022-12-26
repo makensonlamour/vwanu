@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import routesPath from "../../../routesPath";
 import { FiUser, FiActivity, FiInbox } from "react-icons/fi";
 import { FaBlog } from "react-icons/fa";
-import { MdGroups, MdPhotoLibrary, MdPhotoSizeSelectActual } from "react-icons/md";
+import { MdGroups, MdPhotoLibrary } from "react-icons/md";
 
 const SidebarLeft = ({ user }) => {
   const [full, setFull] = useState(false);
@@ -58,11 +58,11 @@ const SidebarLeft = ({ user }) => {
           path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=album",
           icon: <MdPhotoLibrary size={"24px"} className="" />,
         },
-        {
-          title: "My Photo",
-          path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=photo",
-          icon: <MdPhotoSizeSelectActual size={"24px"} className="" />,
-        },
+        // {
+        //   title: "My Photo",
+        //   path: "/profile/" + user?.id + "/albums?tabs=albums&subTabs=photo",
+        //   icon: <MdPhotoSizeSelectActual size={"24px"} className="" />,
+        // },
         {
           title: "My Blog",
           path: "/profile/" + user?.id + "/blog?tabs=blog&subTabs=friends",

@@ -167,7 +167,7 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
             <span className="pl-6">{"Posted by " + data?.User?.firstName + " " + data?.User?.lastName}</span>
             <span className="">
               {" on "}
-              {data && format(new Date(data?.createdAt), "MMM dd, yyyy hh:mm aaaa")}
+              {Object.keys(data).length > 0 && format(new Date(data?.createdAt), "MMM dd, yyyy hh:mm aaaa")}
             </span>
           </p>
           <p className="px-6 py-2">{data?.body}</p>
@@ -184,16 +184,16 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
             </div>
           )}
           <p className="pb-4 px-6 text-sm text-gray-500">
-            {data?.lastComment !== null && (
+            {data?.lastComment && (
               <span className="">
                 {data?.lastComment?.commenterFirstName + " " + data?.lastComment?.commenterLastName + " replied on "}
-                {data && format(new Date(data?.lastComment?.createdAt), "MMM dd, yyyy hh:mm aaaa")}
+                {data?.lastComment && format(new Date(data?.lastComment?.createdAt), "MMM dd, yyyy hh:mm aaaa")}
               </span>
             )}
-            {data?.lastComment === null && (
+            {!data?.lastComment && (
               <span className="">
                 {data?.User?.firstName + " " + data?.User?.lastName + " created on "}{" "}
-                {data && format(new Date(data?.createdAt), "MMM dd, yyyy hh:mm aaaa")}
+                {data?.createdAt && format(new Date(data?.createdAt), "MMM dd, yyyy hh:mm aaaa")}
               </span>
             )}
             <span className="mx-2">

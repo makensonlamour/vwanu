@@ -31,6 +31,40 @@ export function getToken(name = null) {
   return localStorage.getItem("token");
 }
 
+export function assignDataMedia(obj) {
+  if (obj?.length === 0) return [];
+  const array = [];
+
+  console.log(obj);
+
+  obj?.map((item) => {
+    if (
+      item?.original.endsWith(".mp4") ||
+      item?.original.endsWith(".avi") ||
+      item?.original.endsWith(".mov") ||
+      item?.original.endsWith(".wmv") ||
+      item?.original.endsWith(".flv") ||
+      item?.original.endsWith(".f4v") ||
+      item?.original.endsWith(".swf") ||
+      item?.original.endsWith(".mkv") ||
+      item?.original.endsWith(".webm") ||
+      item?.original.endsWith(".html5") ||
+      item?.original.endsWith(".mpeg-2") ||
+      item?.original.endsWith(".avchd") ||
+      item?.original.endsWith(".ogv") ||
+      item?.original.endsWith(".m3u8") ||
+      item?.original.endsWith(".mpd") ||
+      item?.original.endsWith(".m4v")
+    ) {
+      return;
+    } else {
+      return array?.push({ ...item });
+    }
+  });
+
+  return array;
+}
+
 //calculate scrolling page
 export function getYPosition() {
   window.addEventListener("scroll", () => {
