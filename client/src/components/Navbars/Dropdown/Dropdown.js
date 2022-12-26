@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import { deleteToken } from "../../../helpers/index";
 import { DropdownItem } from "./DropdownItem.js";
 import routesPath from "../../../routesPath";
-
-//icon
 import { BsPower } from "react-icons/bs";
 
 const Dropdown = ({ user }) => {
@@ -38,8 +36,7 @@ const Dropdown = ({ user }) => {
                 })}
                 <Link to={""} onClick={Logout}>
                   <span className="pr-4 py-2">
-                    {" "}
-                    <BsPower className="mx-2" size="24px" />{" "}
+                    <BsPower className="mx-2" size="30px" />
                   </span>
                   Log Out
                 </Link>

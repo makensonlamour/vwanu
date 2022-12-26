@@ -3,9 +3,9 @@ import ReactPlayer from "react-player";
 import "./responsive-player.css";
 import { PropTypes } from "prop-types";
 
-const ResponsivePlayer = ({ url, autoplay = false, muted = true, volume = 1 }) => {
+const ResponsivePlayer = ({ url, autoplay = false, muted = true, volume = 1, ...otherProps }) => {
   return (
-    <div className="player-wrapper">
+    <div className="player-wrapper !h-full">
       <ReactPlayer
         className="react-player"
         url={url}
@@ -22,6 +22,7 @@ const ResponsivePlayer = ({ url, autoplay = false, muted = true, volume = 1 }) =
             forceVideo: true,
           },
         }}
+        {...otherProps}
       />
     </div>
   );
