@@ -155,7 +155,7 @@ const NotificationPreview = () => {
             </>
           ) : (
             <>
-              <div className="text-primary font-semibold p-5 text-center">
+              <div className="text-black font-semibold p-5 text-center">
                 <span>
                   {" "}
                   <BsXCircleFill size={"48px"} className="m-auto p-2" />

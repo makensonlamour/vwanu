@@ -57,7 +57,7 @@ const Profil = () => {
 
     if (run) {
       return () => {
-        console.log("listenner remove");
+        // console.log("listenner remove");
         notificationService.removeListener("created", onCreatedListener);
       };
     }

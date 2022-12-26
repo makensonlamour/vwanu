@@ -84,7 +84,6 @@ const FriendsPreview = () => {
           tabIndex="2"
           className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-[90vw] sm:w-96 text-gray-900 overflow-auto scrollbar h-fit max-h-96"
         >
-          {console.log(listFriendReceive)}
           {listFriendReceive &&
           listFriendReceive?.pages &&
           listFriendReceive?.pages?.length > 0 &&
@@ -129,12 +128,12 @@ const FriendsPreview = () => {
             </li>
           ) : (
             <>
-              <div className="w-full text-green-500 font-semibold p-5 text-center">
+              <div className="w-full text-black font-semibold p-5 text-center">
                 <span>
                   {" "}
                   <BsXCircleFill size={"48px"} className="m-auto p-2" />
                 </span>
-                <span> No Friend request</span>
+                <span> No connection request</span>
               </div>
             </>
           )}

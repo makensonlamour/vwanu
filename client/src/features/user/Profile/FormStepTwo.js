@@ -83,7 +83,7 @@ const FormStepTwo = () => {
       if (addressTypesList && addressTypesList?.total > 0) {
         addressTypesList?.data?.map((item) => {
           console.log(item, item?.description);
-          if (item?.description === "Home") {
+          if (item?.description === "home") {
             typeAddress = item?.id;
           }
         });
