@@ -6,7 +6,7 @@ RUN npm install
 COPY . . 
 ENV REACT_APP_API_URL=http://143.244.157.80
 
-RUN npm run build; 
+RUN CI=false npm run build; 
 
 # step 2 form production
 FROM nginx:1.12-alpine 
