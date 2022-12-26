@@ -87,7 +87,7 @@ const Community = () => {
                       {value === "1" ? (
                         <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Community</div>
                       ) : (
-                        <div className="flex text-primary">Community</div>
+                        <div className="flex text-primary">Communities</div>
                       )}
                     </Fragment>
                   }
