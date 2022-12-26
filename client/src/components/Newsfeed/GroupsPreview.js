@@ -10,6 +10,7 @@ const GroupsPreview = () => {
   const [value, setValue] = React.useState("one");
 
   const user = useOutletContext();
+  console.log(user, user?.Interests);
   var randomItem =
     user !== undefined && user !== null && user?.Interests !== null && user?.Interests !== undefined
       ? user?.Interests[Math.floor(Math.random() * user?.Interests?.length)]

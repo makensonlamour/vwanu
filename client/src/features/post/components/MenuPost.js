@@ -1,7 +1,6 @@
 /*eslint-disable */
 import React, { useRef, useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import { VscEdit } from "react-icons/vsc";
 import { BiBlock } from "react-icons/bi";
@@ -33,7 +32,6 @@ const MenuPost = ({ post }) => {
   const [loading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const anchorRef = useRef(null);
-  const user = useOutletContext();
 
   const deletePost = useDeletePost(["post", "home", post?.id], undefined, undefined);
 
@@ -188,33 +186,29 @@ const MenuPost = ({ post }) => {
                   zIndex="tooltip"
                   onKeyDown={handleListKeyDown}
                 >
-                  {post.User?.id?.toString() === user?.id?.toString() && (
-                    <MenuItem
-                      className="text-primary hover:text-secondary rounded-xl"
-                      onClick={(e) => {
-                        handleClickOpen(e);
-                        handleClose(e);
-                        setShowModal(true);
-                      }}
-                    >
-                      <VscEdit size={"18px"} className="mr-1 items-center align-middle inline" />
-                      Edit
-                    </MenuItem>
-                  )}
-                  {(post?.User?.id === user?.id || post?.canDelete) && (
-                    <MenuItem
-                      className="text-primary hover:text-secondary rounded-xl"
-                      onClick={(e) => {
-                        //   window.location.href = `../../messages?newMessage=true&otherUserId=${otherUser?.id}`;
-                        handleClickOpenDialog();
-                        handleClose(e);
-                      }}
-                    >
-                      {" "}
-                      <AiOutlineDelete size={"18px"} className="mr-1 items-center align-middle" />
-                      Delete
-                    </MenuItem>
-                  )}
+                  <MenuItem
+                    className="text-primary hover:text-secondary rounded-xl"
+                    onClick={(e) => {
+                      handleClickOpen(e);
+                      handleClose(e);
+                      setShowModal(true);
+                    }}
+                  >
+                    <VscEdit size={"18px"} className="mr-1 items-center align-middle inline" />
+                    Edit
+                  </MenuItem>
+                  <MenuItem
+                    className="text-primary hover:text-secondary rounded-xl"
+                    onClick={(e) => {
+                      //   window.location.href = `../../messages?newMessage=true&otherUserId=${otherUser?.id}`;
+                      handleClickOpenDialog();
+                      handleClose(e);
+                    }}
+                  >
+                    {" "}
+                    <AiOutlineDelete size={"18px"} className="mr-1 items-center align-middle" />
+                    Delete
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

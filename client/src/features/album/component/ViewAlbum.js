@@ -10,8 +10,7 @@ import { Field, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { useUpdateAlbum, useDeleteAlbum } from "../albumSlice";
-// import ReactPlayer from "react-player";
-import { BsPlayCircle } from "react-icons/bs";
+import ReactPlayer from "react-player";
 import ViewerMedia from "./ViewerMedia";
 
 const ValidationSchema = Yup.object().shape({
@@ -137,7 +136,7 @@ const ViewAlbum = ({ albumId, album, user }) => {
           {photos?.Medias?.length > 0 ? (
             <div className="mx-auto w-full">
               <div className="flex flex-wrap justify-start">
-                {photos?.Medias?.map((photo, idx) => {
+                {photos?.Medias?.map((photo) => {
                   return (
                     <Link to={"#"} key={photo?.id} className="shadow-sm rounded-lg w-[130px] h-[130px] mx-3 mt-3 mb-3 hover:shadow-lg">
                       {photo?.original.endsWith(".mp4") ||
@@ -159,10 +158,18 @@ const ViewAlbum = ({ albumId, album, user }) => {
                         <ViewerMedia
                           type={"video"}
                           photo={photo}
-                          dataPhoto={photos}
                           imgComponent={
-                            <div className="relative top-7 left-7 opacity-75">
-                              <BsPlayCircle size={"72px"} className="text-secondary text-center align-middle" />
+                            <div>
+                              <ReactPlayer
+                                className={
+                                  "bg-black border border-gray-300 h-full flex-wrap inline object-scale-down max-h-[350px] object-center w-full"
+                                }
+                                url={photo?.original}
+                                muted={false}
+                                pip={true}
+                                volume={1}
+                                light={true}
+                              />
                             </div>
                           }
                         />
@@ -170,8 +177,6 @@ const ViewAlbum = ({ albumId, album, user }) => {
                         <ViewerMedia
                           photo={photo}
                           type="photo"
-                          idx={idx}
-                          dataPhoto={photos}
                           imgComponent={
                             <img
                               className="shadow-sm border border-gray-300 h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
@@ -181,6 +186,13 @@ const ViewAlbum = ({ albumId, album, user }) => {
                           }
                         />
                       )}
+                      {/*} <div className=" ">
+                    <img
+                      className="shadow-sm h-[130px] w-[130px] object-cover rounded-lg hover:shadow-lg hover:brightness-75"
+                      src={photo?.original}
+                      alt={"_img_" + photo?.id}
+                    />
+              </div> {*/}
                     </Link>
                   );
                 })}

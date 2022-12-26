@@ -1,92 +1,75 @@
 /*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Modal } from "@mantine/core";
-import { Slide } from "react-slideshow-image";
-import {
-  Player,
-  BigPlayButton,
-  PlayToggle,
-  ControlBar,
-  ReplayControl,
-  ForwardControl,
-  CurrentTimeDisplay,
-  TimeDivider,
-  PlaybackRateMenuButton,
-  VolumeMenuButton,
-} from "video-react";
-import { useMediaQuery } from "@mantine/hooks";
+import ResponsivePlayer from "../../../components/common/ResponsivePlayer";
+import { Modal, useMantineTheme } from "@mantine/core";
 
-const ViewerMedia = ({ photo, imgComponent, type = "photo", dataPhoto = [], idx = 0 }) => {
+const ViewerMedia = ({ photo, imgComponent, type = "photo" }) => {
   // const user = useOutletContext();
   const [showModal, setShowModal] = useState(false);
-
-  const matches = useMediaQuery("(min-width: 750px)");
+  const theme = useMantineTheme();
 
   // const { data: listComment } = useGetComment(["comments", "all", photo?.id], photo?.id !== "undefined" ? true : false, photo?.id);
 
   return (
     <>
-      <Modal size={matches ? "55%" : "100%"} centered opened={showModal} onClose={() => setShowModal(false)} title="">
+      <Modal
+        overlayColor={"#000"}
+        sx={{ backgroundColor: "#000" }}
+        overlayOpacity={0.95}
+        opened={showModal}
+        onClose={() => setShowModal(false)}
+        title=""
+        fullScreen
+      >
         {/* Modal content */}
-
-        <Slide defaultIndex={idx} autoplay={false} className="flex justify-center items-center w-full h-fit">
-          {dataPhoto?.map((item) => {
-            return (
-              <div key={item?.original} className="each-slide-effect w-full">
-                {item?.original.endsWith(".mp4") ||
-                item?.original.endsWith(".avi") ||
-                item?.original.endsWith(".mov") ||
-                item?.original.endsWith(".wmv") ||
-                item?.original.endsWith(".flv") ||
-                item?.original.endsWith(".f4v") ||
-                item?.original.endsWith(".swf") ||
-                item?.original.endsWith(".mkv") ||
-                item?.original.endsWith(".webm") ||
-                item?.original.endsWith(".html5") ||
-                item?.original.endsWith(".mpeg-2") ||
-                item?.original.endsWith(".avchd") ||
-                item?.original.endsWith(".ogv") ||
-                item?.original.endsWith(".m3u8") ||
-                item?.original.endsWith(".mpd") ||
-                item?.original.endsWith(".m4v") ? (
-                  <div>
-                    <Player
-                      poster={item?.original?.replace(".mp4", ".png")}
-                      src={item?.original}
-                      fluid={false}
-                      width={"100%"}
-                      height={matches ? 500 : 300}
-                    >
-                      <BigPlayButton position="center" />
-                      <ControlBar autoHide={false} disableDefaultControls={true}>
-                        <PlayToggle />
-                        <ReplayControl seconds={10} order={1.1} />
-                        <ForwardControl seconds={30} order={1.2} />
-                        <CurrentTimeDisplay order={4.1} />
-                        <TimeDivider order={4.2} />
-                        <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} order={7.1} />
-                        <VolumeMenuButton disabled />
-                      </ControlBar>
-                    </Player>
-                  </div>
-                ) : (
-                  <div className="" style={{ display: "flex", justifyItems: "center" }}>
-                    <img
-                      src={item?.original}
-                      className="bg-black mx-auto object-contain flex justify-center h-[80vh] w-full"
-                      alt={"_img_" + item?.id}
-                    />
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </Slide>
+        <div style={{ display: "flex", justifyContent: "center" }} className="flex justify-center items-center">
+          {type === "photo" ? (
+            <div className="bg-black">
+              <img src={photo?.original} className="px-5 bg-black mx-auto object-contain h-[100vh] " alt={"_img_" + photo?.id} />
+            </div>
+          ) : (
+            <div className="w-full">
+              <ResponsivePlayer url={photo?.original} autoplay={true} muted={true} volume={1} />
+            </div>
+          )}
+        </div>
       </Modal>
       <button onClick={() => setShowModal(true)} className="">
         <div className="">{imgComponent}</div>
       </button>
+      {/* <button onClick={() => setShowModal(true)} className="">
+        <div className="">{imgComponent}</div>
+      </button>
+      {showModal && (
+        <div className="relative w-full my-6 mx-auto max-w-md lg:max-w-lg">
+          {/*content}
+          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+            {/*header}
+            <div className="flex items-start justify-between px-5 py-3 border-b border-solid border-blueGray-200 rounded-t">
+              <p className="text-lg font-medium text-primary"></p>
+              <button onClick={() => setShowModal(false)} className="text-lg font-medium">
+                x
+              </button>
+            </div>
+            <div className="relative p-3">
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col lg:flex-row lg:flex-wrap lg:justify-center w-full items-center outline-none focus:outline-none">
+                <div className="flex flex-col md:flex-row p-3 justify-center">
+                  {type === "photo" ? (
+                    <div className="bg-black">
+                      <img src={photo?.original} className="px-5 bg-black mx-auto object-contain h-[80vh] " alt={"_img_" + photo?.id} />
+                    </div>
+                  ) : (
+                    <div className="w-full h-[80vh]">
+                      <ResponsivePlayer url={photo?.original} autoplay={true} muted={true} volume={1} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )} */}
     </>
   );
 };

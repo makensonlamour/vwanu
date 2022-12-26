@@ -3,17 +3,16 @@ import cryptoRandomString from "crypto-random-string";
 import { Link, NavLink } from "react-router-dom";
 import routesPath from "../../routesPath";
 import PropTypes from "prop-types";
-import { Badge, Menu, Button, Tooltip, MenuItem } from "@mui/material";
+import { Badge, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material";
 import logo from "../../assets/images/Asset_2.png";
 import { IoIosArrowDown } from "react-icons/io";
-import { BsSearch, BsPower, BsPersonCircle, BsGear } from "react-icons/bs";
+import { BsSearch } from "react-icons/bs";
 import { AiOutlineInbox, AiOutlineClose } from "react-icons/ai";
 import { FiActivity } from "react-icons/fi";
-import { FaUserAlt, FaBlog, FaUserEdit } from "react-icons/fa";
+import { FaUserAlt, FaBlog } from "react-icons/fa";
 import { BiUserCircle, BiMessageDetail } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
 import { CgMenuLeft } from "react-icons/cg";
-import { MdOutlinePolicy } from "react-icons/md";
 import { BottomMenuContext } from "../../context/BottomMenuContext";
 import FriendsPreview from "./Friends/FriendsPreview";
 import NotificationPreview from "./Notification/NotificationPreview";
@@ -40,16 +39,12 @@ const Navbar = ({ user, countMessage }) => {
   const settings = [
     {
       title: "Profile",
-      icon: <BsPersonCircle style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
+      icon: <BiUserCircle size={20} style={{ marginRight: "10px" }} className="mr-2 items-center" />,
       path: "../../profile/" + user?.id,
     },
-    {
-      title: "Edit Profile",
-      icon: <FaUserEdit style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
-      path: "../../me/profile/edit?tabs=edit&subtabs=general",
-    },
-    { title: "Account Settings", icon: <BsGear style={{ paddingRight: "0.5rem" }} size="30px" className="" /> },
-    { title: "Terms & Privacy", icon: <MdOutlinePolicy style={{ paddingRight: "0.5rem" }} size="30px" className="" /> },
+    { title: "Edit Profile", icon: "", path: "../../me/profile/edit?tabs=edit&subtabs=general" },
+    { title: "Account Settings", icon: "" },
+    { title: "Terms & Privacy", icon: "" },
   ];
 
   const handleOpenUserMenu = (event) => {
@@ -218,8 +213,10 @@ const Navbar = ({ user, countMessage }) => {
                       onClick={handleCloseUserMenu}
                       sx={{ py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
                     >
-                      <span className="py-2">{setting.icon}</span>
-                      {setting.title}
+                      <Typography component="div" textAlign="center" style={{ display: "flex" }}>
+                        {setting.icon}
+                        {setting.title}
+                      </Typography>
                     </MenuItem>
                   ))}
                   <MenuItem
@@ -227,9 +224,6 @@ const Navbar = ({ user, countMessage }) => {
                     sx={{ py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
                     onClick={handleLogout}
                   >
-                    <span className="py-2">
-                      <BsPower style={{ paddingRight: "0.5rem" }} size="30px" />
-                    </span>
                     Logout
                   </MenuItem>
                 </Menu>

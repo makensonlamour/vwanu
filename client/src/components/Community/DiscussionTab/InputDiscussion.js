@@ -180,7 +180,7 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                         disabled={type === "new" ? false : true}
                         name="postTitle"
                         type="text"
-                        placeholder="Ask your questions here"
+                        placeholder="Discussion Title"
                         className="mt-4 w-full border-none text-lg focus:shadow-lg placeholder:text-gray-600 font-light"
                       />
                     </div>
@@ -196,7 +196,7 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                     <InputField
                       required
                       autoCapitalize="none"
-                      placeholder={`Write the context or your opinion about this questions here.`}
+                      placeholder={`Type your discussion content here`}
                       name="postText"
                       className="basis-full text-lg appearance-none text-secondary placeholder:text-gray-600 font-light border-none "
                       testId="post-error-message"
