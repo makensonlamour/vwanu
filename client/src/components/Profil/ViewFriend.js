@@ -1,73 +1,22 @@
-/*eslint-disable*/
-import React, { useState } from "react";
-import { useSendFriendRequest } from "../../features/friend/friendSlice";
-import { useSendFollow } from "../../features/follower/followerSlice";
+import React from "react";
 import PropTypes from "prop-types";
-import { Link, useOutletContext } from "react-router-dom";
-// import { checkFriendList } from "../../../helpers/index";
-// import FriendButton from "../../features/friend/component/FriendButton";
+import { Link } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
 import InfiniteScroll from "../InfiniteScroll/InfiniteScroll";
-import toast, { Toaster } from "react-hot-toast";
 import EmptyComponent from "../common/EmptyComponent";
 import { ImSad } from "react-icons/im";
 import CustomViewFriend from "./CustomViewFriend";
 
-const friendRequestError = () =>
-  toast.error("Sorry. Error on sending Friend Request!", {
-    position: "top-center",
-  });
-
-const followError = () =>
-  toast.error("Sorry. Error on following this user!", {
-    position: "top-center",
-  });
-
-const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery, isNetwork = false }) => {
+const ViewFriend = ({ data, isLoading, isError, hasNextPage, fetchNextPage, arrayQuery }) => {
   const queryClient = useQueryClient();
-  const user = useOutletContext();
-  // const { data: listFriend } = useGetListFriend(["user", "friend"], true);
-  const [loading, setLoading] = useState(false);
-
-  const sendFriendRequest = useSendFriendRequest(["user", "request"]);
-  const sendFollow = useSendFollow(["user", "follow"]);
 
   function reloadPage() {
     queryClient.refetchQueries(arrayQuery);
   }
 
-  const handleFollower = async (e, _id) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await sendFollow.mutateAsync({ UserId: _id });
-      window.location.reload();
-    } catch (e) {
-      console.log(e);
-      followError();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleFriendRequest = async (e, _id) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await sendFriendRequest.mutateAsync({ UserID: _id });
-      window.location.reload();
-    } catch (e) {
-      console.log(e);
-      friendRequestError();
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <>
-      <Toaster />
       <div className="my-2 w-full">
         {isLoading ? (
           <div className="flex justify-center py-5">

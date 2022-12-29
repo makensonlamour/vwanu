@@ -1,4 +1,3 @@
-/*eslint-disable */
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Sidebar from "../../features/chat/component/Home/Sidebar";

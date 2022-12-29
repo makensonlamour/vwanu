@@ -1,23 +1,12 @@
-/*eslint-disable */
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
-import { useParams, useOutletContext } from "react-router-dom";
 import { Tab } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
-// import Friends from "./NetworkTab/Friends";
-// import Followers from "./NetworkTab/Followers";
-// import FormStepSix from "./../../features/community/component/FormStepSix";
 import SendInvites from "./SendInvitesTabs/SendInvites";
 import PendingInvites from "./SendInvitesTabs/PendingInvites";
 
-const SendInviteTabs = ({ user }) => {
-  const me = useOutletContext();
-  const { id } = useParams();
+const SendInviteTabs = () => {
   const [value, setValue] = useState("1");
-  const [totalFriend, setTotalFriend] = useState(0);
-  const [totalFollowers, setTotalFollowers] = useState(0);
-  //   const [totalFollowing, setTotalFollowing] = useState(0);
-  //   const [totalRequest, setTotalRequest] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -70,7 +59,6 @@ const SendInviteTabs = ({ user }) => {
           </TabPanel>
           <TabPanel value="2">
             <PendingInvites />
-            {/* <Followers user={user} fn={setTotalFollowers} /> */}
           </TabPanel>
         </TabContext>
       </div>

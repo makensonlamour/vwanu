@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useParams, useOutletContext } from "react-router-dom";
@@ -13,10 +12,6 @@ const NetworkTab = ({ user }) => {
   const me = useOutletContext();
   const { id } = useParams();
   const [value, setValue] = useState("one");
-  const [totalFriend, setTotalFriend] = useState(0);
-  const [totalFollowers, setTotalFollowers] = useState(0);
-  const [totalFollowing, setTotalFollowing] = useState(0);
-  const [totalRequest, setTotalRequest] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -63,17 +58,17 @@ const NetworkTab = ({ user }) => {
             </TabList>
           </div>
           <TabPanel value="one">
-            <Friends isNetwork={true} user={user} fn={setTotalFriend} />
+            <Friends isNetwork={true} user={user} />
           </TabPanel>
           <TabPanel value="two">
-            <Followers isNetwork={true} user={user} fn={setTotalFollowers} />
+            <Followers isNetwork={true} user={user} />
           </TabPanel>
           <TabPanel value="three">
-            <Following isNetwork={true} user={user} fn={setTotalFollowing} />
+            <Following isNetwork={true} user={user} />
           </TabPanel>
           {id?.toString() === user?.id?.toString() && (
             <TabPanel value="four">
-              <Request isNetwork={true} user={user} fn={setTotalRequest} />
+              <Request isNetwork={true} user={user} />
             </TabPanel>
           )}
         </TabContext>

@@ -1,20 +1,15 @@
-/*eslint-disable */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import InputSearch from "../../../search/components/InputSearch";
 import Chip from "@mui/material/Chip";
 import { BsSearch } from "react-icons/bs";
 import { BiArrowBack } from "react-icons/bi";
 
-// import { IMAGE_PROXY, THEMES } from "../../shared/constants";
-
-// import Spin from "react-cssfx-loading/src/Spin";
-// import { useNavigate } from "react-router-dom";
-// import { cleanup } from "@testing-library/react";
 import InputMessage from "./../message/InputMessage";
 
 const CreateConversation = ({ setSelectedConversation, setCreateConversationOpened }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [selectMember, setSelectMember] = useState([]);
   const handleRemove = (chipToDelete) => () => {
@@ -22,10 +17,9 @@ const CreateConversation = ({ setSelectedConversation, setCreateConversationOpen
   };
 
   const handleAdd = (data) => {
-    setIsLoading(true);
+    // eslint-disable-next-line no-unused-vars
     setSelectMember((selectMember) => [data]);
     // setSelectMember((selectMember) => [...selectMember, data]);
-    setIsLoading(false);
   };
 
   return (
@@ -62,13 +56,13 @@ const CreateConversation = ({ setSelectedConversation, setCreateConversationOpen
                   );
                 })}
               </div>
-              {!(selectMember?.length == 0 || isSearchOpen) && (
+              {!(selectMember?.length === 0 || isSearchOpen) && (
                 <button className="text-gray-400" onClick={() => setIsSearchOpen(true)}>
                   <BsSearch size={"24px"} className="" />
                 </button>
               )}
             </div>
-            {(selectMember?.length == 0 || isSearchOpen) && (
+            {(selectMember?.length === 0 || isSearchOpen) && (
               <div className="px-2">
                 <InputSearch
                   setIsSearchOpen={setIsSearchOpen}
@@ -91,6 +85,8 @@ const CreateConversation = ({ setSelectedConversation, setCreateConversationOpen
 
 CreateConversation.propTypes = {
   setIsOpened: PropTypes.func.isRequired,
+  setSelectedConversation: PropTypes.func,
+  setCreateConversationOpened: PropTypes.func,
 };
 
 export default CreateConversation;

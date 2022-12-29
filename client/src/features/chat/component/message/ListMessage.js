@@ -1,22 +1,18 @@
-/*eslint-disable*/
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext, useParams, Link, useNavigate } from "react-router-dom";
 import InputMessage from "./InputMessage";
 import { useListMessageOfConversation, useGetConversation } from "../../messageSlice";
 import SingleMessage from "./SingleMessage";
 import { IoVideocamOutline, IoCallOutline } from "react-icons/io5";
-import { useScrollIntoView } from "@mantine/hooks";
 import { BiArrowBack } from "react-icons/bi";
 import Loader from "../../../../components/common/Loader";
 import { useQueryClient } from "react-query";
 import InfiniteScroll from "../../../../components/InfiniteScroll/InfiniteScroll";
-import _ from "lodash";
 
 const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [scrollPosition, setScrollPosition] = useState(0);
   const {
     data: listMessage,
     isError,
@@ -27,23 +23,8 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
   const { data: conversationData, isLoading } = useGetConversation(["conversation", id], id ? true : false, id);
   const user = useOutletContext();
   const filtered = conversationData?.Users?.filter((item) => item.id !== user?.id);
-  // const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView({ duration: 0 });
 
   const targetRef = useRef(null);
-
-  function handleScroll() {
-    console.log(window.innerHeight + document.documentElement.scrollTop, document.documentElement.offsetHeight);
-    if (window.innerHeight + document.documentElement.scrollTop - document.documentElement.offsetHeight < -5) return;
-  }
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  // targetRef.current?.scrollIntoView({ behavior: "auto" });
-  // console.log(targetRef.current);
-  // scrollIntoView();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // return () => window.removeEventListener("scroll", handleScroll);
-  // }, [scrollPosition, setScrollPosition]);
 
   const queryClient = useQueryClient();
   function reloadPage() {
@@ -171,10 +152,6 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                     ?.reverse()
                     ?.map((page) => {
                       let array = page?.data?.data;
-                      // console.log([].concat(array).reverse());
-                      // return []
-                      //   .concat(array)
-                      //   .reverse()
                       return []
                         .concat(array)
                         .reverse()
@@ -192,23 +169,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                         });
                     })}
                 </InfiniteScroll>
-              ) : // <div ref={scrollableRef} className="w-full overflow-y-auto">
-              //   {listMessage?.data?.length > 0 &&
-              //     listMessage?.data?.map((message) => {
-              //       return (
-              //         <div key={message?.id} className="px-2 lg:px-5 py-1">
-              //           <SingleMessage
-              //             conversation={conversationData?.data}
-              //             groups={message?.Conversation?.amountOfPeople > 2 ? true : false}
-              //             sender={user?.id === message?.senderId ? true : false}
-              //             listMessage={message}
-              //           />
-              //         </div>
-              //       );
-              //     })}
-              //   <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
-              // </div>
-              null}
+              ) : null}
               <div ref={targetRef} className=""></div> {/*refrence this element to scroll to the end */}
               <div className="z-40 w-full h-fit">
                 <InputMessage type={""} selectMember={conversationData} />

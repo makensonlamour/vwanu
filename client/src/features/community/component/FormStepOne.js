@@ -1,12 +1,9 @@
-/*eslint-disable */
 import React, { useState } from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import { Field, TextArea, MultiSelect, Form, Submit } from "../../../components/form";
-// import Select from "react-select";
-// import makeAnimated from "react-select/animated";
 import { assignValue } from "../../../helpers/index";
 import { useGetInterestList } from "../../interest/interestSlice";
 import { useCreateCommunity } from "../communitySlice";
@@ -28,8 +25,6 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
   const { data: interestList } = useGetInterestList(["interest", "all"]);
   const createCommunity = useCreateCommunity(["community", "create"], undefined, undefined);
   const options = assignValue(interestList);
-
-  // const animatedComponents = makeAnimated();
 
   const initialValues = {
     communityName: "",
@@ -66,7 +61,6 @@ const FormStepOne = ({ setStep, currentStep, setData }) => {
       updateSuccess();
       setData(result?.data);
       setStep(currentStep + 1);
-      // window.location.reload();
     } catch (e) {
       console.log(e);
       updateError();

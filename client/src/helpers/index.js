@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React from "react";
 import cryptoRandomString from "crypto-random-string";
 import jwtDecode from "jwt-decode";
@@ -56,7 +55,7 @@ export function assignDataMedia(obj) {
       item?.original.endsWith(".mpd") ||
       item?.original.endsWith(".m4v")
     ) {
-      return;
+      return null;
     } else {
       return array?.push({ ...item });
     }
@@ -219,7 +218,7 @@ export function generateArrayLink(text = "") {
       } else if (str.startsWith("www.")) {
         return arrayLinks.push("https://" + str);
       } else {
-        return;
+        return "";
       }
     });
   });
@@ -236,7 +235,7 @@ export function transformHashtagAndLink(strText, preview = false, originalType =
   strText = strText.split(" ").map((str) => {
     if (str.startsWith("https")) {
       if (preview) {
-        return <PreviewUrl url={str} />;
+        return <PreviewUrl key={str} url={str} />;
       } else {
         return (
           <a
@@ -258,7 +257,7 @@ export function transformHashtagAndLink(strText, preview = false, originalType =
       );
     } else if (str.startsWith("www.")) {
       if (preview) {
-        return <PreviewUrl url={"https://" + str} />;
+        return <PreviewUrl key={str} url={"https://" + str} />;
       } else {
         return (
           <a
@@ -278,13 +277,4 @@ export function transformHashtagAndLink(strText, preview = false, originalType =
   });
 
   return strText;
-
-  // if (hasMedia || arrayLinks?.length === 0) {
-  //   return strText;
-  // } else if (arrayLinks?.length > 0) {
-  //   console.log(strText + " " + <PreviewUrl url={arrayLinks[0]} />);
-  //   return strText + " " + <PreviewUrl url={arrayLinks[0]} />;
-  // } else {
-  //   return strText;
-  // }
 }

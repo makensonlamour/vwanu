@@ -1,10 +1,8 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SingleBlog from "../../components/Blog/SingleBlog";
 import { useGetBlogList, useGetBlogListByInterest } from "../../features/blog/blogSlice";
 import { FaBlog } from "react-icons/fa";
-import { FcCancel } from "react-icons/fc";
 import EmptyComponent from "../../components/common/EmptyComponent";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
@@ -63,7 +61,6 @@ const Blog = () => {
             {blogList?.pages?.map((page) => {
               return page?.data?.data?.map((blog) => {
                 return <SingleBlog key={blog?.id} blog={blog} />;
-                // return <PostList key={cryptoRandomString({ length: 10 })} post={post} pageTitle={""} />;
               });
             })}
           </div>
@@ -127,7 +124,6 @@ const Blog = () => {
             {blogListInterest?.pages?.map((page) => {
               return page?.data?.data?.map((blog) => {
                 return <SingleBlog key={blog?.id} blog={blog} />;
-                // return <PostList key={cryptoRandomString({ length: 10 })} post={post} pageTitle={""} />;
               });
             })}
           </div>

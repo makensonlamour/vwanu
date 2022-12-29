@@ -3,14 +3,11 @@ import InputBlog from "../../features/blog/component/React-Quill/InputBlog";
 import toast, { Toaster } from "react-hot-toast";
 import { useGetInterestList } from "../../features/interest/interestSlice";
 import { useCreateBlog, useUpdateBlog } from "../../features/blog/blogSlice";
-// import Select from "react-select";
 import CustomMultiSelect from "../../components/form/CustomMultiSelect";
-// import makeAnimated from "react-select/animated";
 import { assignValue } from "./../../helpers/index";
 import InputCover from "../../features/blog/component/InputCover";
 import ListBlogUser from "../../features/blog/component/ListBlogsUser";
 import Loader from "../../components/common/Loader";
-// import { ImageBlogContext } from "../../context/imageBlogContext";
 
 const AddBlog = () => {
   const blogSuccess = () =>
@@ -23,7 +20,6 @@ const AddBlog = () => {
       position: "top-center",
     });
 
-  // const animatedComponents = makeAnimated();
   const [text, setText] = useState(null);
   const [cover, setCover] = useState([]);
   const [blogTitle, setBlogTitle] = useState("");
@@ -45,11 +41,6 @@ const AddBlog = () => {
   const createBlog = useCreateBlog(["blog", "create"], undefined, undefined);
   const updateBlog = useUpdateBlog(["blog", "update"], editData?.id, undefined, undefined);
   const { data: interestList } = useGetInterestList(["interest", "all"], true);
-
-  // eslint-disable-next-line no-unused-vars
-  // const { resetImageList, imageUpload } = useContext(ImageBlogContext);
-
-  // console.log("list of images uploaded", imageUpload);
 
   const handleSubmit = async (publish) => {
     setLoading(true);
@@ -137,23 +128,10 @@ const AddBlog = () => {
                 val={interest}
                 name="interest"
               />
-              {/* <Select
-                placeholder={"Select the category..."}
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                options={options}
-                isMulti
-                name="interest"
-                value={interest}
-                onChange={(values) => {
-                  setInterest(values);
-                }}
-              /> */}
             </div>
             <label className="text-lg font-semibold">Blog Text</label>
             <div className="my-4 bg-white w-full py-5 rounded-lg overflow-y">
               <InputBlog fn={setText} editData={editData?.blogText} />
-              {/* <InputBlog editData={editData?.blogText} fn={setText} /> */}
             </div>
             <div className="flex mt-4 justify-end mb-5 lg:mb-0">
               {Object.keys(editData).length !== 0 && (

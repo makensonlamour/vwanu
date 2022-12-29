@@ -1,15 +1,8 @@
-/*eslint-disable*/
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import EditorToolbar, { modules, formats } from "./EditorToolbar";
-// import { ImageBlogContext } from "../../../../context/imageBlogContext";
-
-// import Quill from "quill";
-// import ImageResize from "quill-image-resize-module-react";
-
-// ReactQuill.register("modules/imageResize", ImageResize);
 
 const InputBlog = ({ fn, editData = "" }) => {
   const [value, setValue] = useState("");
@@ -33,18 +26,6 @@ const InputBlog = ({ fn, editData = "" }) => {
         formats={formats}
       />
     </>
-    // <ReactQuill
-    //   ref={quillRef}
-    //   placeholder="Type to write a blog..."
-    //   className="h-fit"
-    //   theme="snow"
-    //   value={value}
-    //   modules={modules}
-    //   onChange={(value) => {
-    //     setValue(value);
-    //     fn(value);
-    //   }}
-    // />
   );
 };
 

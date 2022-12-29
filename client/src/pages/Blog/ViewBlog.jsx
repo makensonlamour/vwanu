@@ -1,5 +1,4 @@
-/*eslint-disable*/
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   useCreateResponse,
@@ -8,7 +7,6 @@ import {
   useGetBlog,
   useGetBlogListByInterest,
 } from "../../features/blog/blogSlice";
-// import parse from "html-react-parser";
 import { Chip, Stack } from "@mui/material";
 import { GoComment } from "react-icons/go";
 import SingleBlogRelated from "../../components/Blog/SingleBlogRelated";
@@ -16,9 +14,7 @@ import SingleResponse from "../../components/Blog/SingleResponse";
 import { FaBlog } from "react-icons/fa";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
-// import SocialMediaShare from "../../components/common/SocialMediaShare";
 import EmptyComponent from "../../components/common/EmptyComponent";
-import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
 import Share from "../../components/Share/Share";
 import "react-quill/dist/quill.snow.css";

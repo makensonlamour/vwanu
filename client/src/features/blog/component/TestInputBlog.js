@@ -1,4 +1,3 @@
-/*eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
 import {
@@ -170,6 +169,7 @@ const InputBlog = ({ fn, editData }) => {
       createExitBreakPlugin(CONFIG.exitBreak),
       createBasicMarksPlugin(),
       createAlignPlugin({
+        // eslint-disable-next-line no-unused-vars
         serializeHtml: (props, value) => <p className="bg-red-500">{props.children}</p>,
         inject: {
           props: {
@@ -246,7 +246,8 @@ const InputBlog = ({ fn, editData }) => {
 
 InputBlog.propTypes = {
   fn: PropTypes.func,
-  fn: PropTypes.string,
+  editData: PropTypes.object,
+  children: PropTypes.any,
 };
 
 export default InputBlog;

@@ -1,4 +1,3 @@
-/*eslint-disable */
 import React, { useRef, useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
@@ -76,7 +75,6 @@ const MenuButton = ({ otherUser }) => {
         await follow.mutateAsync({ UserId: otherUser?.id });
       }
       FollowRequestSuccess();
-      // window.location.reload();
     } catch (e) {
       console.log(e);
       FollowRequestError();
@@ -86,13 +84,11 @@ const MenuButton = ({ otherUser }) => {
   };
 
   const handleUnfollow = async () => {
-    // e.preventDefault();
     setIsLoading(true);
     try {
       console.log("ok");
       await unfollow.mutateAsync({ id: otherUser?.id });
       FollowRequestSuccess();
-      // window.location.reload();
     } catch (e) {
       console.log(e);
       FollowRequestError();
@@ -154,7 +150,6 @@ const MenuButton = ({ otherUser }) => {
                       } else {
                         handleFollow(e, "follow");
                       }
-                      // handleClose(e);
                     }}
                     className="text-black rounded-xl hover:text-primary"
                   >

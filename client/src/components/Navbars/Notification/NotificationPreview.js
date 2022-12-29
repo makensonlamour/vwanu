@@ -1,14 +1,11 @@
-/*eslint-disable */
+/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
-// import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { BsXCircleFill } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { AiOutlineEye } from "react-icons/ai";
 import { GoPrimitiveDot } from "react-icons/go";
 import { Badge } from "@mui/material";
 import { formatDistance, parseISO } from "date-fns";
-// import routesPath from "../../../routesPath";
 import client from "../../../features/feathers";
 import useAuthContext from "../../../hooks/useAuthContext";
 import { useReadNotification } from "./../../../features/notification/notificationSlice";
@@ -54,7 +51,7 @@ const NotificationPreview = () => {
 
   const handleReadAll = async () => {
     try {
-      let result = await Promise.all(
+      await Promise.all(
         notificationList?.map(async (notif) => {
           await readNotification.mutateAsync({ id: notif?.id, view: true });
         })
@@ -75,6 +72,7 @@ const NotificationPreview = () => {
         notificationService.removeListener("created", onCreatedListener);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const NotificationUnview = notificationList?.filter((item) => item?.view !== true);
@@ -138,7 +136,6 @@ const NotificationPreview = () => {
                           {notification?.view ? null : (
                             <button className="text-primary">
                               <GoPrimitiveDot size={"20px"} />
-                              {/*}  <AiOutlineEye size={"20px"} /> {*/}
                             </button>
                           )}
                         </div>

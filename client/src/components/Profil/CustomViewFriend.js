@@ -1,7 +1,6 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useOutletContext, useParams, Link } from "react-router-dom";
+import { useOutletContext, Link } from "react-router-dom";
 import {
   useSendFriendRequest,
   useCancelFriendRequest,
@@ -56,7 +55,6 @@ const declineFriendRequestError = () =>
 const CustomViewFriend = ({ data, isRequest = false }) => {
   const user = useOutletContext();
   const queryClient = useQueryClient();
-  const { id } = useParams();
   const sendFriendRequest = useSendFriendRequest(["user", "suggest"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "suggest"], data?.id);
   const sendFollow = useSendFollow(["user", "suggest"]);
@@ -107,8 +105,6 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
   };
 
   const handleAcceptfriendRequest = async (friendId) => {
-    // e.preventDefault();
-    setIsLoading(true);
     try {
       await acceptFriendRequest.mutateAsync({ friendId, accept: true });
       //add query to fetch
@@ -116,14 +112,10 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
     } catch (e) {
       console.log(e);
       acceptFriendRequestError();
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleDeclinefriendRequest = async (friendId) => {
-    // e.preventDefault();
-    setIsLoading(true);
     try {
       await declineFriendRequest.mutateAsync({ friendId, accept: false });
       //add query to fetch
@@ -131,8 +123,6 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
     } catch (e) {
       console.log(e);
       declineFriendRequestError();
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -1,13 +1,9 @@
-/*eslint-disable */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import cryptoRandomString from "crypto-random-string";
-import { Link, useOutletContext } from "react-router-dom";
-// import { Paper, styled } from "@mui/material";
-// import InfiniteScroll from "react-infinite-scroller"; //for infinite scrolling
-// import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
 import { Facebook } from "react-content-loader";
 import { FiRefreshCcw } from "react-icons/fi";
-import client from "../../features/feathers";
+// import client from "../../features/feathers";
 import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import { useQueryClient } from "react-query";
 //Core components
@@ -21,15 +17,14 @@ import InputModal from "../../features/post/components/InputModal";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
-// import CompleteProfile from "../../components/Newsfeed/CompleteProfile";
-import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
+// import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
 import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
 
 const NewsFeed = () => {
-  let run = false;
+  // let run = false;
   const queryClient = useQueryClient();
-  const user = useOutletContext();
-  const [notificationList, setNotificationList] = useState([]);
+  // const user = useOutletContext();
+  // const [notificationList, setNotificationList] = useState([]);
   const { data: list, isLoading, fetchNextPage, hasNextPage, isError } = useGetTimelineList(["post", "home"]);
   const { data: listFollowing, isLoading: loadingFollowing, isError: errorFollowing } = useGetListFollowing(["user", "following"], true);
   const { data: blogList, isLoading: loadingBlog, isError: errorBlog } = useGetBlogList(["blog", "all"], true);
@@ -41,55 +36,37 @@ const NewsFeed = () => {
     fetchNextPage: fetchNextPageOnline,
   } = useGetOnline(["user", "online"]);
 
-  function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-      mybutton.style.display = "block";
-    } else {
-      mybutton.style.display = "none";
-    }
-  }
+  // const onCreatedListener = (notification) => {
+  //   if (notification?.to?.toString() === user?.id?.toString() && notification?.UserId?.toString() !== user?.id?.toString()) {
+  //     setNotificationList((notificationList) => [...notificationList, notification]);
+  //   }
+  // };
+  // const notificationService = client.service("notification");
 
-  const onCreatedListener = (notification) => {
-    if (notification?.to?.toString() === user?.id?.toString() && notification?.UserId?.toString() !== user?.id?.toString()) {
-      setNotificationList((notificationList) => [...notificationList, notification]);
-    }
-  };
-  const notificationService = client.service("notification");
+  // const nots = async () => {
+  //   if (!run) {
+  //     run = true;
+  //     const notifications = await notificationService.find({ query: { to: user?.id } });
+  //     notifications?.data?.forEach(onCreatedListener);
+  //     notificationService.on("created", onCreatedListener);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (!run) {
+  //     nots();
+  //   }
 
-  const nots = async () => {
-    if (!run) {
-      run = true;
-      const notifications = await notificationService.find({ query: { to: user?.id } });
-      notifications?.data?.forEach(onCreatedListener);
-      notificationService.on("created", onCreatedListener);
-    }
-  };
-  useEffect(() => {
-    if (!run) {
-      nots();
-    }
-
-    if (run) {
-      return () => {
-        notificationService.removeListener("created", onCreatedListener);
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   if (run) {
+  //     return () => {
+  //       notificationService.removeListener("created", onCreatedListener);
+  //     };
+  //   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   function reloadPage(arrayQueryKey) {
-    // window.location.reload();
     queryClient.refetchQueries(arrayQueryKey);
   }
-
-  // const percentage = 73;
-
-  // const steps = [
-  //   { title: "General Information", total: 6, complete: 5 },
-  //   { title: "Work Experience", total: 3, complete: 1 },
-  //   { title: "Profile Photo", total: 1, complete: 1 },
-  //   { title: "Cover Photo", total: 1, complete: 1 },
-  // ];
 
   let content;
   if (isLoading) {
@@ -194,8 +171,7 @@ const NewsFeed = () => {
                 />
               </span>
 
-              {/* <CompleteProfile percentage={percentage} data={steps} /> */}
-              <UpdatesComponent className="mt-0" data={notificationList || []} />
+              {/* <UpdatesComponent className="mt-0" data={notificationList || []} /> */}
               <RecentlyActive
                 data={listOnline || []}
                 isLoading={loadingOnline}

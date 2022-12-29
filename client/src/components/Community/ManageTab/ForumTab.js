@@ -1,5 +1,4 @@
-/*eslint-disable */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useGetCommunity, useUpdateCommunity } from "./../../../features/community/communitySlice";
 import toast, { Toaster } from "react-hot-toast";
@@ -20,7 +19,6 @@ const ForumTab = () => {
   const { data: communityData } = useGetCommunity(["community", id], id !== undefined ? true : false, id);
   const updateCommunity = useUpdateCommunity(["community", id], id, undefined, undefined);
   const [forum, setForum] = useState(false);
-  const testRef = useRef(null);
   const handleSubmit = async () => {
     setLoading(true);
     try {

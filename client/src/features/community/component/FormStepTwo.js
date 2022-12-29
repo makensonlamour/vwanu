@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
@@ -49,7 +48,6 @@ const FormStepTwo = ({ setStep, currentStep, data, setData }) => {
       updateSuccess();
       setData(result?.data);
       setStep(currentStep + 1);
-      //   window.location.reload();
     } catch (e) {
       console.log(e);
       updateError();

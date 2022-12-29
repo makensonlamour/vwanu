@@ -1,10 +1,7 @@
-/*eslint-disable */
 import { Link, useParams, useOutletContext } from "react-router-dom";
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Skeleton } from "@mui/material";
 import { BsArrowReturnRight } from "react-icons/bs";
-// import { GrAttachment } from "react-icons/gr";
 import { parseISO, formatRelative } from "date-fns";
 import { enUS } from "date-fns/esm/locale";
 import { GoPrimitiveDot } from "react-icons/go";
@@ -74,7 +71,6 @@ const SelectConversation = ({ setSelectedConversation, setCreateConversationOpen
                   {conversation?.amountOfUnreadMessages > 0 && (
                     <button className="text-primary">
                       <GoPrimitiveDot size={"20px"} />
-                      {/*}  <AiOutlineEye size={"20px"} /> {*/}
                     </button>
                   )}
                 </div>

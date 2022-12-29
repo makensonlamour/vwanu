@@ -1,15 +1,12 @@
-/*eslint-disable */
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment } from "react";
 import cryptoRandomString from "crypto-random-string";
 import PropTypes from "prop-types";
 import { formatDistance, parseISO } from "date-fns";
 import { Link, useOutletContext } from "react-router-dom";
 import _ from "lodash";
-import reactions from "../../data/reactions";
 import { generateArrayLink, transformHashtagAndLink } from "../../helpers/index";
 import { BiComment } from "react-icons/bi";
-// import { RiShareForwardLine } from "react-icons/ri";
-import { FaLongArrowAltRight } from "react-icons/fa";
+// import { FaLongArrowAltRight } from "react-icons/fa";
 import MediaPost from "../../components/form/Post/MediaPost";
 import CommentList from "../comment/component/CommentList";
 import CommentForm from "../comment/component/CommentForm";
@@ -21,7 +18,6 @@ import toast, { Toaster } from "react-hot-toast";
 import Reaction from "../reaction/component/Reaction";
 import MenuPost from "./components/MenuPost";
 import PreviewShareBlog from "./components/PreviewShareBlog";
-// import routesPath from "../../../routesPath";
 
 const notify = () =>
   toast.success("Post deleted successfully!", {
@@ -32,8 +28,6 @@ const PostList = ({ post, pageTitle }) => {
   const user = useOutletContext();
   const [commentPrev, setCommentPrev] = useState(false);
   const [open, setOpen] = useState(false);
-  const [viewLike, setViewLike] = useState(false);
-  const [original, setOriginal] = useState(false);
 
   let arrayLink = [];
   arrayLink = generateArrayLink(post?.postText);
@@ -41,9 +35,6 @@ const PostList = ({ post, pageTitle }) => {
   // const openLike = Boolean(openReactions);
 
   //Dialog functions
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -90,8 +81,9 @@ const PostList = ({ post, pageTitle }) => {
                     {/*Start of design shared */}
                     {post?.wallId !== null ? (
                       <Fragment>
-                        <p className="align-top">
-                          <FaLongArrowAltRight size={"20px"} />
+                        <p className=" align-top text-sm">
+                          {` post on `}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                         <Link
                           className="flex flex-nowrap mb-1"
@@ -103,6 +95,10 @@ const PostList = ({ post, pageTitle }) => {
                         >
                           <span className="text-sm font-bold hover:text-secondary text-primary line-clamp-1">{`${post?.WallUser?.firstName} ${post?.WallUser?.lastName} `}</span>
                         </Link>
+                        <p className=" align-top text-sm">
+                          {`'s wall`}
+                          {/* <FaLongArrowAltRight size={"20px"} /> */}
+                        </p>
                       </Fragment>
                     ) : post?.CommunityId !== null ? (
                       <Fragment>
