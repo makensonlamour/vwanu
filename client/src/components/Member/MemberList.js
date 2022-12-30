@@ -1,15 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import { useParams } from "react-router-dom";
 import { useGetAllMembers } from "../../features/user/userSlice";
 import ViewFriend from "../Profil/ViewFriend";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
 
-const MemberList = ({ fn }) => {
-  // const { id } = useParams();
+const MemberList = () => {
   const { data: listMember, isError, hasNextPage, fetchNextPage, isLoading } = useGetAllMembers(["user", "members"], true);
-  fn(listMember?.data?.length);
 
   return (
     <>

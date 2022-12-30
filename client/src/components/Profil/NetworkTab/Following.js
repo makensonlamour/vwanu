@@ -5,8 +5,7 @@ import { useGetListFollowing } from "../../../features/follower/followerSlice";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
-const Following = ({ user, fn, isNetwork }) => {
-  // const user = useOutletContext();
+const Following = ({ user, isNetwork }) => {
   const {
     data: listFollowing,
     isError,
@@ -14,8 +13,6 @@ const Following = ({ user, fn, isNetwork }) => {
     hasNextPage,
     fetchNextPage,
   } = useGetListFollowing(["user", "following", user?.id], true, user?.id);
-
-  fn(user?.amountOfFollowing || 0);
 
   return (
     <>

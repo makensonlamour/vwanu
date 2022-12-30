@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "@mantine/core";
@@ -17,13 +16,10 @@ import {
 } from "video-react";
 import { useMediaQuery } from "@mantine/hooks";
 
-const ViewerMedia = ({ photo, imgComponent, type = "photo", dataPhoto = [], idx = 0 }) => {
-  // const user = useOutletContext();
+const ViewerMedia = ({ imgComponent, dataPhoto = [], idx = 0 }) => {
   const [showModal, setShowModal] = useState(false);
 
   const matches = useMediaQuery("(min-width: 750px)");
-
-  // const { data: listComment } = useGetComment(["comments", "all", photo?.id], photo?.id !== "undefined" ? true : false, photo?.id);
 
   return (
     <>
@@ -94,7 +90,8 @@ const ViewerMedia = ({ photo, imgComponent, type = "photo", dataPhoto = [], idx 
 ViewerMedia.propTypes = {
   photo: PropTypes.object.isRequired,
   imgComponent: PropTypes.any,
-  type: PropTypes.string,
+  dataPhoto: PropTypes.array,
+  idx: PropTypes.number,
 };
 
 export default ViewerMedia;

@@ -1,14 +1,11 @@
-/*eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
 import ViewFriend from "../ViewFriend";
 import { useGetListFollowers } from "../../../features/follower/followerSlice";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
-const Followers = ({ user, fn, isNetwork }) => {
-  // const user = useOutletContext();
+const Followers = ({ user, isNetwork }) => {
   const {
     data: listFollowers,
     isLoading,
@@ -16,8 +13,6 @@ const Followers = ({ user, fn, isNetwork }) => {
     hasNextPage,
     fetchNextPage,
   } = useGetListFollowers(["user", "followers", user?.id], true, user?.id);
-
-  fn(user?.amountOfFollower || 0);
 
   return (
     <>

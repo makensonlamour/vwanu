@@ -1,4 +1,3 @@
-/*eslint-disable */
 import React, { useState } from "react";
 // import PropTypes from "prop-types";
 import { useOutletContext } from "react-router-dom";
@@ -13,11 +12,6 @@ import Following from "../../components/Profil/NetworkTab/Following";
 const Member = () => {
   const user = useOutletContext();
   const [value, setValue] = useState("one");
-  const [totalMember, setTotalMember] = useState(0);
-  const [totalFriend, setTotalFriend] = useState(0);
-  const [totalFollowers, setTotalFollowers] = useState(0);
-  const [totalFollowing, setTotalFollowing] = useState(0);
-  const [totalRequest, setTotalRequest] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -65,19 +59,19 @@ const Member = () => {
               </TabList>
             </div>
             <TabPanel value="one" sx={{ width: "100%" }} style={{ padding: 0 }}>
-              <MemberList user={user} fn={setTotalMember} />
+              <MemberList user={user} />
             </TabPanel>
             <TabPanel value="two" style={{ padding: 0 }}>
-              <Friends user={user} fn={setTotalFriend} />
+              <Friends user={user} />
             </TabPanel>
             <TabPanel value="three" style={{ padding: 0 }}>
-              <Followers user={user} fn={setTotalFollowers} />
+              <Followers user={user} />
             </TabPanel>
             <TabPanel value="four" style={{ padding: 0 }}>
-              <Following user={user} fn={setTotalFollowing} />
+              <Following user={user} />
             </TabPanel>
             <TabPanel value="five" style={{ padding: 0 }}>
-              <Request user={user} fn={setTotalRequest} />
+              <Request user={user} />
             </TabPanel>
           </TabContext>
         </div>

@@ -1,5 +1,4 @@
-/*eslint-disable*/
-import React, { StrictMode } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
@@ -10,14 +9,8 @@ import "react-quill/dist/quill.snow.css";
 import "cropperjs/dist/cropper.css";
 import "react-slidy/lib/styles.css";
 import "react-videoplayer/lib/index.css";
-import "react-image-gallery/styles/css/image-gallery.css";
 import "video-react/dist/video-react.css";
 import "react-slideshow-image/dist/styles.css";
-// import { StyledEngineProvider } from "@mui/material/styles";
-// import { CssBaseline } from "@mui/material";
-
-// import "video-react/dist/video-react.css";
-// import "quill-emoji/dist/quill-emoji.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { history } from "./components/common/Alert/_helpers";

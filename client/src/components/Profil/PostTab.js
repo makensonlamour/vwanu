@@ -1,11 +1,8 @@
-/*eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
 import ProfileFeed from "./ProfileFeed";
 import FollowingPreview from "../Newsfeed/FollowingPreview";
 import UpdatesComponent from "../Newsfeed/UpdatesComponent";
-
-// import InfoCard from "../../features/user/Profile/component/InfoCard";
 
 const PostTab = ({ user, otherUser, listFollowing, notificationList }) => {
   return (

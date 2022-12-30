@@ -1,7 +1,5 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useParams, useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import { FiUserX, FiUserPlus } from "react-icons/fi";
@@ -10,10 +8,8 @@ import AcceptFriendRequestButton from "./AcceptFriendRequestButton";
 import { useSendFriendRequest, useCancelFriendRequest, useUnfriendUser } from "../friendSlice";
 
 const FriendRequestButton = ({ otherUser }) => {
-  const { id } = useParams();
   const [loading, setIsLoading] = useState(false);
   const [isEnter, setIsEnter] = useState(false);
-  // const user = useOutletContext();
 
   //error dialog
   const friendRequestError = () =>

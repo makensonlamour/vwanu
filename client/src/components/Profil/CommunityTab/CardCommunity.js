@@ -1,17 +1,14 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AvatarGroup, Avatar, Chip, Stack } from "@mui/material";
 import { MdGroups } from "react-icons/md";
 import random_cover from "../../../assets/images/cover_group_random.png";
 import { useJoinCommunity } from "../../../features/community/communitySlice";
-// import { isInvitation, isInvitationReceive } from "../../../helpers/index";
 
 const CardCommunity = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
-  const user = useOutletContext();
 
   const handleJoin = async () => {
     setIsLoading(true);

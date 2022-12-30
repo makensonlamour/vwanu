@@ -4,22 +4,16 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import CommentForm from "../../comment/component/CommentForm";
 import _ from "lodash";
-// import { Player } from "video-react";
 import VideoPlayer from "react-videoplayer";
 import "video-react/dist/video-react.css";
-// import ReactPlayer from "react-player";
-// import { VideoPlayer } from "@videojs-player/react";
 import { useScrollLock } from "@mantine/hooks";
 import ReactSlidy from "react-slidy";
-// import "video.js/dist/video-js.css";
 import Reaction from "../../reaction/component/Reaction";
 import Share from "../../../components/Share/Share";
 import ViewLikeButton from "../../reaction/component/ViewLikeButton";
 import koremPNG from "../../../assets/images/reactions/korem2.png";
-// import { useGetComment } from "../../comment/commentSlice";
 
-// eslint-disable-next-line no-unused-vars
-const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo", idxImg = 0, pageTitle = "post" }) => {
+const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo", pageTitle = "post" }) => {
   // const user = useOutletContext();
   const [showModal, setShowModal] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -83,7 +77,6 @@ const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo", idxImg = 0,
                         defaultBrowserControls={true}
                         customHtmlControls={false}
                       />
-                      {/* <Player fluid={true} src={photo?.original} muted={true} playsInline controls pip={true} autoplay={true} /> */}
                     </div>
                   )}
                 </div>
@@ -181,7 +174,6 @@ const ViewPhoto = ({ photo, data = {}, imgComponent, type = "photo", idxImg = 0,
                         onClick={() => setCommentPrev(!commentPrev)}
                         className="text-gray-700 normal-case font-[500] ml-auto mt-2 text-sm hover:text-primary hover:bg-gray-200 hover:rounded-lg p-2 lg:px-5 lg:py-2"
                       >
-                        {/* <BiComment size={"24px"} className="inline text-white bg-g-one p-1 mask mask-squircle" /> */}
                         {" Comment"}
                       </button>
                       <Share post={data} label={" Share"} link={""} />

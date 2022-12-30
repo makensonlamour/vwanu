@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./select.module.css";
@@ -7,10 +6,6 @@ const CustomSelect = ({ multiple, value, onChange, options, label }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const containerRef = useRef(null);
-
-  function clearOptions() {
-    multiple ? onChange([]) : onChange(undefined);
-  }
 
   function selectOption(option) {
     if (multiple) {
@@ -70,9 +65,6 @@ const CustomSelect = ({ multiple, value, onChange, options, label }) => {
   }, [isOpen, highlightedIndex, options]);
 
   return (
-    /*
-      styles.container
-    */
     <>
       {" "}
       <label className="mt-4 text-sm font-[500] text-secondary">{label}</label>
@@ -102,16 +94,7 @@ const CustomSelect = ({ multiple, value, onChange, options, label }) => {
               ))
             : value?.label}
         </span>
-        {/* <button
-        onClick={(e) => {
-          e.stopPropagation();
-          clearOptions();
-        }}
-        className={styles["clear-btn"]}
-      >
-        &times;
-      </button> */}
-        {/* <div className={styles.divider}></div> */}
+
         <div className={styles.caret}></div>
         <ul className={`scrollbar !text-sm ${styles.options} ${isOpen ? styles.show : ""}`}>
           {options?.map((option, index) => (

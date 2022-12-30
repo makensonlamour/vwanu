@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import ForumReply from "./ForumReply";
@@ -8,12 +7,9 @@ import { BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
 import { isMobile } from "react-device-detect";
-
-// import { useQueryClient } from "react-query";
 import InputDiscussion from "../Community/DiscussionTab/InputDiscussion";
 import { format } from "date-fns";
 import Share from "../Share/Share";
-// import CustomDropdown from "./../common/CustomDropdown";
 
 const discussionSuccess = (_text) =>
   toast.success("discussion " + _text + " successfully!", {
@@ -36,7 +32,6 @@ const deleteError = () =>
   });
 
 const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
-  // const queryClient = useQueryClient();
   const user = useOutletContext();
   const [openShare, setOpenShare] = useState(false);
   const navigate = useNavigate();
@@ -57,7 +52,6 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
         locked,
       };
       await updateDiscussion.mutateAsync(dataObj);
-      // queryClient.invalidateQueries(["community", "discussion", data?.id]);
       if (locked) {
         discussionSuccess("locked");
       } else {
@@ -76,7 +70,6 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
     if (!consent) return;
     try {
       await deleteDiscussion.mutateAsync({ id: _id });
-      // queryClient.invalidateQueries(["community", "discussion", data?.id]);
       deleteSuccess();
       navigate(-1);
     } catch (e) {
@@ -136,7 +129,6 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
                     )}
                   </p>
                 )}
-                {/* <CustomDropdown /> */}
                 <div className="dropdown dropdown-end">
                   <label tabIndex={0} className="cursor-pointer">
                     <BsThreeDots size={"24px"} className="inline" />
@@ -172,10 +164,7 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
           </p>
           <p className="px-6 py-2">{data?.body}</p>
           {data && data?.Media?.length > 0 && (
-            <div
-              // onClick={() => navigate(`../../post/preview?posts=${data?.id}&type=${type}&from=post`)}
-              className=" rounded-lg bg-cover py-2 px-6 mt-2 flex justify-center items-center w-full"
-            >
+            <div className=" rounded-lg bg-cover py-2 px-6 mt-2 flex justify-center items-center w-full">
               <img
                 src={transformImgSingle(data?.Media[0]?.original, 1)}
                 alt={"discussion_image_" + data?.Media[0]?.id}
@@ -223,9 +212,7 @@ const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
             </p>
             {!data?.locked && (
               <div className="">
-                {/* <button className="text-white bg-primary px-8 py-2 border border-gray-200 rounded-lg mr-2 w-48"> */}
                 <InputDiscussion labelBtn={"Reply"} communityId={""} data={data} type="reply" />
-                {/* </button> */}
               </div>
             )}
           </div>

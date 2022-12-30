@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState, Fragment } from "react";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
@@ -266,8 +265,6 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
                     </div>
                   </div>
                   <div className="flex-auto">
-                    {/*<Editor fn={setTextEditor} placeholder={`Share what's on your mind, ${user?.firstName}...`} />*/}
-
                     <InputField
                       required
                       autoCapitalize="none"

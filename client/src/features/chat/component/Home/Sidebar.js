@@ -1,18 +1,13 @@
-/*eslint-disable */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, useLocation, useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import { useListConversation, useCreateConversation } from "../../messageSlice";
-import ClickAwayListener from "../utils/ClickAwayListener";
 import { IoCreateOutline } from "react-icons/io5";
-import CreateConversation from "./CreateConversation";
 import SelectConversation from "./SelectConversation";
-import client from "../../../feathers/index";
 import Loader from "../../../../components/common/Loader";
 import { useQueryClient } from "react-query";
 import { FaLaptopHouse } from "react-icons/fa";
 import InfiniteScroll from "../../../../components/InfiniteScroll/InfiniteScroll";
-// import { MessageContext } from "../context/MessageContext";
 
 const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selectedConversation, createConversationOpened }) => {
   //random data
@@ -68,6 +63,7 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
         // cancel the subscription
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otherUserId, newMessage]);
 
   return (
@@ -98,7 +94,6 @@ const SideBar = ({ setSelectedConversation, setCreateConversationOpened, selecte
           </div>
 
           {isLoading ? (
-            // <div className="my-6 flex justify-center">Loading...{/*} <Spin /> {*/}</div>
             <div className="flex justify-center py-5">
               <Loader color="black" />
             </div>

@@ -1,14 +1,9 @@
-/*eslint-disable*/
 import React, { useState, useEffect, useMemo, useRef } from "react";
-// import { Player } from "video-react";
-// import ReactPlayer from "react-player";
 import PropTypes from "prop-types";
 import ViewPhoto from "../../../features/album/component/ViewPhoto";
 import { isMobile } from "react-device-detect";
-import VideoPlayer from "react-videoplayer";
 import { useNavigate } from "react-router-dom";
 import ResponsivePlayer from "../../common/ResponsivePlayer";
-import ReactPlayer from "react-player";
 
 function useIsInViewport(ref) {
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -83,17 +78,6 @@ const MediaPost = ({ medias, post }) => {
       <div className=" rounded-lg bg-cover pt-0 mt-2 flex justify-center items-center w-full">
         <div onClick={() => navigate(`../../post/preview?posts=${post?.id}&type=${type}&from=post`)} className="w-full object-cover">
           <ResponsivePlayer url={medias[0]?.original} autoplay={isInViewport ? true : false} muted={true} volume={1} loop={false} />
-          {/* <VideoPlayer
-                width={10}
-                style={{ borderRadius: "10px" }}
-                className={"rounded-lg"}
-                videoSrc={medias[0]?.original}
-                autoPlay={false}
-                muted={true}
-                videoVolume={100}
-                defaultBrowserControls={true}
-                customHtmlControls={false}
-              /> */}
         </div>
       </div>
     );
@@ -116,7 +100,7 @@ const MediaPost = ({ medias, post }) => {
     content = (
       <div className="grid grid-cols-2 gap-2 pt-5">
         {" "}
-        {medias?.map((media, idx) => {
+        {medias?.map((media) => {
           return (
             <>
               <div

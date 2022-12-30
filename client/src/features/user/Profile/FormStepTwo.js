@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import * as Yup from "yup";
 import routesPath from "../../../routesPath";
@@ -8,14 +7,10 @@ import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import { useGetInterestList } from "../../interest/interestSlice";
 import { useGetCountry, useGetState, useGetCity, useGetAddressType } from "../../address/addressSlice";
-// import countries from "../../../data/countries.json";
-// import states from "../../../data/states.json";
-// import cities from "../../../data/cities.json";
 import { assignValueCountries, assignValue } from "../../../helpers/index";
 
 // Core components
 import { Field, Select, MultiSelect, Form, Submit } from "../../../components/form";
-import CustomSelect from "../../../components/form/CustomSelect/CustomSelect";
 import Loader from "../../../components/common/Loader";
 import { differenceInYears } from "date-fns";
 
@@ -27,7 +22,6 @@ const FormStepTwo = () => {
   const [countryCode, setCountryCode] = useState(false);
   const [stateCode, setStateCode] = useState(false);
   const [cityCode, setCityCode] = useState(false);
-  // const [typeAddress, setTypeAddress] = useState("");
   let typeAddress = "";
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,11 +34,8 @@ const FormStepTwo = () => {
 
   const options = assignValue(interestList);
   const optionsCountry = assignValueCountries(countryList);
-  // const stateList = jsonQuery(`[*country_code=${countryCode}]`, { data: states });
   const optionsState = assignValueCountries(stateList);
   const optionsCity = assignValueCountries(cityList);
-
-  // console.log(addressTypesList, countryList, stateList, cityList);
 
   const initialValues = {
     country: "",
@@ -81,6 +72,7 @@ const FormStepTwo = () => {
     try {
       setIsLoading(true);
       if (addressTypesList && addressTypesList?.total > 0) {
+        // eslint-disable-next-line array-callback-return
         addressTypesList?.data?.map((item) => {
           console.log(item, item?.description);
           if (item?.description === "Home") {
@@ -178,18 +170,7 @@ const FormStepTwo = () => {
           val={interest}
           name="interest"
         />
-        {/* <CustomSelect label={"Country"} options={optionsCountry} value={countryCode} onChange={(o) => setCountryCode(o)} /> */}
-        {/* <Select
-          required
-          label="Country"
-          placeholder="Country"
-          name="country"
-          style={{ width: "100%" }}
-          fn={setCountryCode}
-          className="mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-          testId="country-error-message"
-          options={optionsCountry}
-        /> */}
+
         <Select
           required
           label="Country"
@@ -226,24 +207,7 @@ const FormStepTwo = () => {
             options={optionsCity}
           />
         </div>
-        {/* <div className="flex w-full">
-          <Field
-            label="Street"
-            placeholder="Street Address"
-            name="street"
-            type="text"
-            containerClassName="w-full"
-            className="w-full mr-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-          />
-          <Field
-            label="Zip Code"
-            placeholder="Zip Code"
-            name="zipCode"
-            type="text"
-            containerClassName=""
-            className="w-full ml-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
-          />
-        </div> */}
+
         <div className="mt-6">
           <Submit className="rounded-xl py-2 text-base-100 text-md w-full ml-auto" title={isLoading ? <Loader /> : "Next"} />
         </div>

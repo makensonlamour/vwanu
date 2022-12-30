@@ -1,7 +1,6 @@
-/*eslint-disable*/
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { useSendFriendRequest, useCancelFriendRequest } from "../../../features/friend/friendSlice";
 import { useSendFollow } from "../../../features/follower/followerSlice";
 import toast, { Toaster } from "react-hot-toast";
@@ -40,7 +39,6 @@ const followError = () =>
 
 const FindFriend = ({ data }) => {
   const user = useOutletContext();
-  const { id } = useParams();
   const queryClient = useQueryClient();
   const sendFriendRequest = useSendFriendRequest(["user", "suggest"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "suggest"], data?.id);

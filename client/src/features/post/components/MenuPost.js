@@ -1,19 +1,14 @@
-/*eslint-disable */
 import React, { useRef, useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { useOutletContext } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import { VscEdit } from "react-icons/vsc";
-import { BiBlock } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
-import Loader from "../../../components/common/Loader";
 import { ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList } from "@mui/material";
 import ReusableDialog from "../../../components/common/ReusableDialog";
 import { useDeletePost } from "../../post/postSlice";
 import toast, { Toaster } from "react-hot-toast";
 import EditPost from "../components/EditPost";
-
-//import { deleteComment } from "../utils/postActions";
 import { useQueryClient } from "react-query";
 
 const deletePostError = () =>
@@ -25,19 +20,15 @@ const deletePostSuccess = () =>
   toast.success("Post deleted successfully.", {
     position: "top-center",
   });
-// import { useUnfriendUser } from "../friendSlice";
 
 const MenuPost = ({ post }) => {
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [loading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const anchorRef = useRef(null);
   const user = useOutletContext();
 
   const deletePost = useDeletePost(["post", "home", post?.id], undefined, undefined);
-
-  // const unfriend = useUnfriendUser(["user", "request"]);
 
   //error dialog
 
@@ -71,19 +62,6 @@ const MenuPost = ({ post }) => {
 
     prevOpen.current = open;
   }, [open]);
-
-  const handleUnfriend = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      await unfriend.mutateAsync({ friendId: otherUser?.id });
-    } catch (e) {
-      unFriendRequestError();
-      console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
@@ -154,13 +132,7 @@ const MenuPost = ({ post }) => {
         onClick={handleToggle}
         className="flex justify-center items-center"
       >
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            <BsThreeDots size={"18px"} className="mr-1 items-center align-middle" />
-          </>
-        )}
+        <BsThreeDots size={"18px"} className="mr-1 items-center align-middle" />
       </button>
       <Popper
         open={open}
