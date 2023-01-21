@@ -1,30 +1,48 @@
 import React, { createContext, useReducer, useEffect } from "react";
+import { Peer } from "peerjs";
+
 import client from "../features/feathers";
 const Types = {
   USER_LOGGED_IN: "LOGIN",
   USER_LOGGED_OUT: "LOG_OUT",
   AUTH_IS_READY: "AUTH_READY",
   USER_UPDATED: "USER_UPDATED",
+  USER_ON_CALL: "USER_ON_CALL",
+  USER_INCOMING_CALL: "USER_INCOMING_CALL",
 };
 const initialState = {
   user: null,
   authIsReady: false,
+  peer: null,
+  onCall: false,
+  incomingCall: false,
+  call: null,
 };
 export const AuthContext = createContext();
+let peer = null;
 export const authReducer = (state, action) => {
   switch (action.type) {
     case Types.USER_LOGGED_IN:
-      return { ...state, user: action.payload };
+      peer = action?.payload?.id ? new Peer(action.payload.id) : null;
+      console.log(`Peer id registered`, peer);
+      return { ...state, user: action.payload, peer };
     case Types.USER_LOGGED_OUT:
       return { ...state, user: null };
     case Types.AUTH_IS_READY:
-      return { ...state, user: action.payload, authIsReady: true };
+      peer = action?.payload?.id ? new Peer(action.payload.id) : null;
+      console.log(`Peer id registered`, peer);
+      return { ...state, user: action.payload, authIsReady: true, peer };
     case Types.USER_UPDATED:
       return { ...state, user: action.payload };
+    case Types.USER_ON_CALL:
+      return { ...state, onCall: action.payload };
+    case Types.USER_INCOMING_CALL:
+      return { ...state, incomingCall: true, call: action.payload };
     default:
       return state;
   }
 };
+
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
