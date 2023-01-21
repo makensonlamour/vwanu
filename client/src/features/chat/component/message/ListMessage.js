@@ -9,9 +9,12 @@ import { BiArrowBack } from "react-icons/bi";
 import Loader from "../../../../components/common/Loader";
 import { useQueryClient } from "react-query";
 import InfiniteScroll from "../../../../components/InfiniteScroll/InfiniteScroll";
+import useAuthContext from "../../../../hooks/useAuthContext";
+import { makeCall } from "../../../../lib/makecall";
 
 const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) => {
   const { id } = useParams();
+  const { peer } = useAuthContext();
   const navigate = useNavigate();
   const {
     data: listMessage,
@@ -100,8 +103,12 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                       <IoVideocamOutline size={"22px"} className="text-primary hover:text-secondary" />
                     </button>
                     <button
-                      onClick={() =>
-                        window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
+                      onClick={
+                        () => {
+                          console.log("call button clicked", filtered[0]);
+                          makeCall(peer, filtered[0].id);
+                        }
+                        // window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
                       }
                       className="ml-2"
                     >
