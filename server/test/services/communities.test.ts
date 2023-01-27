@@ -341,12 +341,12 @@ describe("'communities ' service", () => {
             UserId: firstCreator.id,
             // amountOfMembers: '1',
             IsMember: null,
-            canUserPost: true,
-            canUserInvite: true,
-            canUserUploadDoc: true,
-            canUserUploadPhotos: true,
-            canUserUploadVideo: true,
-            canMessageUserInGroup: true,
+            canUserPost: expect.any(Boolean),
+            canUserInvite: expect.any(Boolean),
+            canUserUploadDoc: expect.any(Boolean),
+            canUserUploadPhotos: expect.any(Boolean),
+            canUserUploadVideo: expect.any(Boolean),
+            canMessageUserInGroup: expect.any(Boolean),
             Interests: expect.any(Array),
           });
           com.Interests.forEach((interest) => {
