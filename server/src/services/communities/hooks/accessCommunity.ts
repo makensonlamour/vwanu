@@ -35,7 +35,8 @@ export default async (context: HookContext) => {
             WHEN "CR"."name"='admin' 
              AND "CR"."id" = "CU"."CommunityRoleId" 
              AND "CU"."UserId"='${context.params.User.id}' THEN true
-            WHEN "C"."canInPost" = 'E' THEN true 
+            WHEN "C"."canInPost" = 'E' 
+            AND "CU"."UserId"='${context.params.User.id}' THEN true
             WHEN "C"."canInPost" = 'M'  
              AND "CR"."id" = "CU"."CommunityRoleId" 
              AND ("CR"."name"='admin' OR "CR"."name"='moderator')
