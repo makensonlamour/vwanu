@@ -145,6 +145,9 @@ export default (sequelize: any, DataTypes: any) => {
       User.hasMany(models.Message, {
         onDelete: 'CASCADE',
       });
+      User.hasMany(models.Call, {
+        onDelete: 'CASCADE',
+      });
 
       User.hasMany(models.Interest);
       User.hasMany(models.Blog, {

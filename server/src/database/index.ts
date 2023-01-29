@@ -5,9 +5,9 @@ import Sequelize from 'sequelize';
 
 /** Local dependencies */
 import { Application } from '../declarations';
-
 /** Tables */
 
+import call from './call';
 import post from './post';
 import user from './user';
 import city from './city';
@@ -40,6 +40,7 @@ import communityInvitationRequest from './communityInvitationRequest';
 import forumCatergory from './forumCatergory';
 
 const tables = [
+  call,
   user,
   city,
   city,
