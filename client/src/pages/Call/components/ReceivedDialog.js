@@ -2,8 +2,12 @@ import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import { Box, Button, List, DialogTitle, DialogContent, DialogActions, Dialog } from "@mui/material";
 
+// custom dependencies
+import useCall from "../../../hooks/useCall";
 function ConfirmationDialogRaw(props) {
-  const { onClose, denyCall, answerCall, open, ...other } = props;
+  const { answerCall, denyCall, call } = useCall();
+  console.log("incomming", call);
+  const { onClose, open, ...other } = props;
   const radioGroupRef = useRef(null);
 
   const handleEntering = () => {
@@ -44,38 +48,27 @@ ConfirmationDialogRaw.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   value: PropTypes.string.isRequired,
-  denyCall: PropTypes.func.isRequired,
-  answerCall: PropTypes.func.isRequired,
 };
 
-const ReceivedDialog = ({ open, caller, setIsCalling, denyCall, answerCall }) => {
+const ReceivedDialog = ({ open, caller }) => {
+  const { denyCall } = useCall();
   console.log(caller);
 
   const handleClose = () => {
-    setIsCalling(false);
+    console.log("closed ConfirmationDialogRaw");
+    denyCall();
   };
 
   return (
     <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       <List component="div" role="group">
-        <ConfirmationDialogRaw
-          id="ringtone-menu"
-          denyCall={denyCall}
-          answerCall={answerCall}
-          keepMounted
-          open={open}
-          onClose={handleClose}
-          value={"ok"}
-        />
+        <ConfirmationDialogRaw id="ringtone-menu" keepMounted open={open} onClose={handleClose} value={"ok"} />
       </List>
     </Box>
   );
 };
 
 ReceivedDialog.propTypes = {
-  setIsCalling: PropTypes.func.isRequired,
-  denyCall: PropTypes.func.isRequired,
-  answerCall: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   caller: PropTypes.object,
 };

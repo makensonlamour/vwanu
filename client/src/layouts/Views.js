@@ -22,12 +22,15 @@ import client from "../features/feathers/index";
 import { MessageContext } from "../context/MessageContext";
 import { useListConversation } from "../features/chat/messageSlice";
 
+import useCall from "../hooks/useCall";
+
 const Views = () => {
+  const { incomingCall, peer } = useCall();
   const queryClient = useQueryClient();
   const user = useAuthContext();
-  const [calling, setCalling] = useState(false);
+  const [cc, setCalling] = useState(false);
   const [incoming, setIncoming] = useState(true);
-  const [peer, setPeer] = useState(null);
+  const [p, setPeer] = useState(null);
   const me = user?.user?.id + "vwanu";
   const sound = new Howl({
     src: [messageRing],
@@ -126,26 +129,14 @@ const Views = () => {
     setIncomingCall(false);
   }
 
-  function ConnectPeer() {
-    let peer = new Peer(me);
-    setPeer(peer);
-    peer.on("call", (call) => {
-      setCalling(true);
-      setIncomingCall(call);
-    });
-
-    peer.on("open", function (id) {
-      console.log("connection opened on ", id);
-    });
-  }
-
   const { countUnreadMessageConversation } = useContext(MessageContext);
 
   useEffect(() => {
     messageFn();
     onlineFn();
-    ConnectPeer();
-  }, []);
+    console.log("connection ddd");
+    console.log(peer);
+  }, [user, peer]);
 
   useEffect(() => {
     countUnreadMessageConversation(listConversation);
@@ -153,9 +144,9 @@ const Views = () => {
 
   return (
     <>
-      {calling && (
+      {incomingCall && (
         <>
-          <ReceivedDialog denyCall={denyCall} answerCall={answerCall} setIsCalling={setCalling} open={calling} caller={{}} />
+          <ReceivedDialog open={incomingCall} caller={{}} />
         </>
       )}
       <div className="mx-auto bg-placeholder-color">

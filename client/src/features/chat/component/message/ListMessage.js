@@ -9,12 +9,12 @@ import { BiArrowBack } from "react-icons/bi";
 import Loader from "../../../../components/common/Loader";
 import { useQueryClient } from "react-query";
 import InfiniteScroll from "../../../../components/InfiniteScroll/InfiniteScroll";
-import useAuthContext from "../../../../hooks/useAuthContext";
-import { makeCall } from "../../../../lib/makecall";
+import useCall from "../../../../hooks/useCall";
 
 const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) => {
+  const { makeCall } = useCall();
   const { id } = useParams();
-  const { peer } = useAuthContext();
+
   const navigate = useNavigate();
   const {
     data: listMessage,
@@ -26,7 +26,6 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
   const { data: conversationData, isLoading } = useGetConversation(["conversation", id], id ? true : false, id);
   const user = useOutletContext();
   const filtered = conversationData?.Users?.filter((item) => item.id !== user?.id);
-
   const targetRef = useRef(null);
 
   const queryClient = useQueryClient();
@@ -105,8 +104,7 @@ const ListMessage = ({ setSelectedConversation, setCreateConversationOpened }) =
                     <button
                       onClick={
                         () => {
-                          console.log("call button clicked", filtered[0]);
-                          makeCall(peer, filtered[0].id);
+                          makeCall(filtered[0].id, { audio: true, video: true });
                         }
                         // window.open("../../call", "MsgWindow", "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600")
                       }

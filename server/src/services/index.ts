@@ -77,9 +77,11 @@ import searchBlog from './search-blog/search-blog.service';
 import searchCommunity from './search-community/search-community.service';
 
 import forumCategories from './forum-categories/forum-categories.service';
+import call from './call/call.service';
 
 export default function (app: Application): void {
   app.configure(search);
+  app.configure(call);
   app.configure(post);
   app.configure(users);
   app.configure(friend);

@@ -4,16 +4,7 @@
  * @param {Object} callProperties | object containing the properties of the call
  */
 
-const setupCall = (cb, callProperties) => {
+export default function loadMedia(mediaProperties, cb, errCb) {
   var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-  getUserMedia(
-    {
-      video: true,
-      audio: true,
-      ...callProperties,
-    },
-    cb
-  );
-};
-
-export default setupCall;
+  getUserMedia(mediaProperties, cb, errCb);
+}
