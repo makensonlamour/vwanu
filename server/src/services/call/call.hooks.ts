@@ -1,7 +1,16 @@
-// import { HooksObject } from '@feathersjs/feathers';
-import { HookContext } from '@feathersjs/feathers';
 import * as authentication from '@feathersjs/authentication';
-// Don't remove this comment. It's needed to format import lines nicely.
+// import { fastJoin } from 'feathers-hooks-common';
+
+import { createCallSchema } from '../../schema/call';
+import validateResource from '../../middleware/validateResource';
+import {
+  AssignCaller,
+  ReturnCallDetails,
+  RegisterCallErrors,
+  IncludePeople,
+} from './hooks';
+
+// import { resolvers, query } from './hooks/IncludePeople';
 
 const { authenticate } = authentication.hooks;
 export default {
@@ -10,9 +19,17 @@ export default {
     find: [],
     get: [],
     create: [
-      (context) => {
-        context.data.callerId = context.params.User.id;
-        return context;
+      validateResource(createCallSchema),
+      AssignCaller,
+      (C) => {
+        console.log('b4 include people');
+        return C;
+      },
+      // fastJoin(resolvers, query),
+      (C) => {
+        console.log('after include people');
+
+        return C;
       },
     ],
     update: [],
@@ -21,28 +38,23 @@ export default {
   },
 
   after: {
-    all: [
-      (context: HookContext) => {
-        if (context.data.callDetails)
-          context.result.details = context.data.callDetails;
-        return context;
-      },
-    ],
+    all: [ReturnCallDetails, IncludePeople],
     find: [],
     get: [],
-    create: [],
+    create: [
+      (C) => {
+        console.log('after include people');
+        console.log(C.result);
+        return C;
+      },
+    ],
     update: [],
     patch: [],
     remove: [],
   },
 
   error: {
-    all: [
-      (context) => {
-        console.log('Error in call service', context.error);
-        return context;
-      },
-    ],
+    all: [RegisterCallErrors],
     find: [],
     get: [],
     create: [],

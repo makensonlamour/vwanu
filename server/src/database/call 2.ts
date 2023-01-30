@@ -1,9 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { Model } from 'sequelize';
 
-// Customs dependencies:
-import { CallInterface, CallStatus } from '../schema/call';
-
+export interface CallInterface {
+  id: string;
+  startTime: number;
+  endTime: number;
+  status: string;
+  type: string;
+}
 export default (sequelize: any, DataTypes: any) => {
   class Call extends Model<CallInterface> implements CallInterface {
     id: string;
@@ -39,7 +43,16 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: false,
         validate: {
           customValidator: (value) => {
-            if (!CallStatus.includes(value)) {
+            if (
+              ![
+                'initiated',
+                'answered',
+                'denied',
+                'canceled',
+                'ended',
+                'connected',
+              ].includes(value)
+            ) {
               throw new Error(`${value} is not a valid option for call status`);
             }
           },

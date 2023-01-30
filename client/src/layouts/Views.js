@@ -1,12 +1,12 @@
 /*eslint-disable*/
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useEffect, useContext } from "react";
 import cryptoRandomString from "crypto-random-string";
 import { Route, Routes } from "react-router-dom";
 import { routes, role } from "../routes";
 import messageRing from "../assets/sounds/messageNotif.mp3";
 import { Howl } from "howler";
 import { useQueryClient } from "react-query";
-
+import Peer from "peerjs";
 //Container
 import LayoutUser from "./LayoutUser/index";
 import LayoutPublic from "./LayoutPublic/index";
@@ -17,7 +17,6 @@ import LayoutCall from "./LayoutCall/index";
 import NotFound from "../pages/NotFound/index";
 import useAuthContext from "../hooks/useAuthContext";
 import ReceivedDialog from "../pages/Call/components/ReceivedDialog";
-import { Peer } from "peerjs";
 import client from "../features/feathers/index";
 import { MessageContext } from "../context/MessageContext";
 import { useListConversation } from "../features/chat/messageSlice";
@@ -25,18 +24,12 @@ import { useListConversation } from "../features/chat/messageSlice";
 import useCall from "../hooks/useCall";
 
 const Views = () => {
-  const { incomingCall, peer } = useCall();
+  const { incomingCall, peer, onNewCAllRequest, onCallPatched } = useCall();
   const queryClient = useQueryClient();
   const user = useAuthContext();
-  const [cc, setCalling] = useState(false);
-  const [incoming, setIncoming] = useState(true);
-  const [p, setPeer] = useState(null);
-  const me = user?.user?.id + "vwanu";
   const sound = new Howl({
     src: [messageRing],
   });
-
-  const newMessageRef = useRef(null);
 
   const { data: listConversation } = useListConversation(
     ["user", "conversation", "all"],
@@ -72,6 +65,7 @@ const Views = () => {
   };
 
   const userService = client.service("users");
+  const callService = client.service("call");
 
   const onlineFn = async () => {
     userService.on("updated", onUpdatedOnlineListener);
@@ -111,32 +105,20 @@ const Views = () => {
     queryClient.invalidateQueries(["user", "received"]);
   };
 
-  function denyCall() {
-    console.log("deny call");
-    setCalling(false);
-    console.log(call);
-    setIncomingCall(false);
-  }
-
-  function answerCall() {
-    console.log("accept call");
-    window.open(
-      `../../call?me=${me}&caller=1vwanu&isReceiving=true&audio=true&video=false`,
-      "MsgWindow",
-      "toolbar=no,scrollbars=no,resizable=no,top=0,left=0,width=600,height=600"
-    );
-    setCalling(false);
-    setIncomingCall(false);
-  }
-
   const { countUnreadMessageConversation } = useContext(MessageContext);
 
   useEffect(() => {
     messageFn();
     onlineFn();
+    callService.on("created", onNewCAllRequest);
+    callService.on("patched", onCallPatched);
     console.log("connection ddd");
     console.log(peer);
-  }, [user, peer]);
+    return () => {
+      callService.off("created", onNewCAllRequest);
+      callService.off("patched", onCallPatched);
+    };
+  }, [user]);
 
   useEffect(() => {
     countUnreadMessageConversation(listConversation);

@@ -6,7 +6,6 @@ import { Box, Button, List, DialogTitle, DialogContent, DialogActions, Dialog } 
 import useCall from "../../../hooks/useCall";
 function ConfirmationDialogRaw(props) {
   const { answerCall, denyCall, call } = useCall();
-  console.log("incomming", call);
   const { onClose, open, ...other } = props;
   const radioGroupRef = useRef(null);
 
@@ -32,8 +31,8 @@ function ConfirmationDialogRaw(props) {
       open={open}
       {...other}
     >
-      <DialogTitle>Incoming Call from Yves</DialogTitle>
-      <DialogContent dividers>{`You're receiving a call from Yves Gervens Constant`}</DialogContent>
+      <DialogTitle>{`Incoming Call from ${call.caller.firstName} ${call.caller.lastName[0]}.`}</DialogTitle>
+      <DialogContent dividers>{`You're receiving a call from ${call.caller.firstName} ${call.caller.lastName}.`}</DialogContent>
       <DialogActions>
         <Button autoFocus onClick={denyCall}>
           Deny call
