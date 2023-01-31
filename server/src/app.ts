@@ -47,6 +47,7 @@ app.configure(channels);
 app.configure(database);
 app.get('startSequelize')();
 app.configure(services);
+app.use(express.errorHandler({ logger: console } as any));
 
 export type HookContext<T = any> = {
   app: Application;

@@ -1,12 +1,12 @@
 import express from '@feathersjs/express';
-import { Request, Response, NextFunction } from 'express';
+// import { Request, Response, NextFunction } from 'express';
 import { ExpressPeerServer } from 'peer';
 
 import app from '../app';
-import common from '../lib/utils/common';
+// import common from '../lib/utils/common';
 import Logger from '../lib/utils/logger';
 
-const { sendErrorResponse } = common;
+// const { sendErrorResponse } = common;
 
 function normalizePort(val: string): number | string | null {
   const port = parseInt(val, 10);
@@ -43,27 +43,26 @@ function onError(error: any): void {
 
 const server = app.listen(port);
 const PeerJsServer = ExpressPeerServer(server);
-PeerJsServer.on('connection', (client) => {
-  console.log('new client connection connected', client);
+PeerJsServer.on('connection', () => {
+  console.log('new client connection connected');
 });
 
 app.use('/peerjs', PeerJsServer);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
-app.use(express.errorHandler({ logger: console } as any));
 
 /* Handling all errors thrown */
 // eslint-disable-next-line prefer-arrow-callback
-app.use(function (
-  err: Error | any,
-  req: Request,
-  res: Response,
-  // eslint-disable-next-line no-unused-vars
-  next: NextFunction
-) {
-  return sendErrorResponse(res, err.status || err.code || 500, [err]);
-});
+// app.use(function (
+//   err: Error | any,
+//   req: Request,
+//   res: Response,
+//   // eslint-disable-next-line no-unused-vars
+//   next: NextFunction
+// ) {
+//   return sendErrorResponse(res, err.status || err.code || 500, [err]);
+// });
 
 server.on('error', onError);
 server.on('listening', () => {
