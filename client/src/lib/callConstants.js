@@ -10,7 +10,7 @@ export const CALL_DETAILS = {
   RESPONDING: "responding",
 };
 
-const baseUrl = process.env.REACT_APP_API_BASE_URL ? process.env.REACT_APP_API_BASE_URL + "/api" : null;
+const baseUrl = process.env.REACT_APP_API_URL ? "vwanu.webvitals.org" + "/api" : null;
 
 export const peerConfiguration = {
   path: "peerjs",
