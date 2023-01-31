@@ -48,20 +48,6 @@ app.configure(database);
 app.get('startSequelize')();
 app.configure(services);
 
-// Configure a middleware for 404s and the error handler
-app.use(express.notFound());
-app.use(express.errorHandler({ logger: console } as any));
-
-/* Handling all errors thrown */
-// eslint-disable-next-line prefer-arrow-callback
-app.use(function (
-  err: Error | any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  return sendErrorResponse(res, err.status || err.code || 500, [err]);
-});
 export type HookContext<T = any> = {
   app: Application;
 } & FeathersHookContext<T>;

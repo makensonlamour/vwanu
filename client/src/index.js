@@ -15,6 +15,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { history } from "./components/common/Alert/_helpers";
 import { AuthContextProvider } from "./context/AuthContext";
+import { CallContextProvider } from "./context/CallContext";
 import { MessageContextProvider } from "./context/MessageContext";
 import { ImageBlogContextProvider } from "./context/imageBlogContext";
 import { IntlProvider } from "react-intl";
@@ -42,13 +43,15 @@ root.render(
   <BrowserRouter history={history}>
     <div>
       <AuthContextProvider>
-        <MessageContextProvider>
-          <ImageBlogContextProvider>
-            <IntlProvider locale={language} messages={languages[language]}>
-              <App />
-            </IntlProvider>
-          </ImageBlogContextProvider>
-        </MessageContextProvider>
+        <CallContextProvider>
+          <MessageContextProvider>
+            <ImageBlogContextProvider>
+              <IntlProvider locale={language} messages={languages[language]}>
+                <App />
+              </IntlProvider>
+            </ImageBlogContextProvider>
+          </MessageContextProvider>
+        </CallContextProvider>
       </AuthContextProvider>
     </div>
   </BrowserRouter>
