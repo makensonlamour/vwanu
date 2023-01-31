@@ -19,6 +19,7 @@ const Types = {
   SET_LAST_ACTIVITY: "SET_LAST_ACTIVITY",
   SET_ON_GOING_CALL: "SET_ON_GOING_CALL",
   SET_MY_STREAM: "SET_MY_STREAM",
+  OUTGOING_CALL_DENIED: "OUTGOING_CALL_DENIED",
 };
 
 // const peerConfiguration = () => {
@@ -76,6 +77,8 @@ export const callReducer = (state, action) => {
       return { ...state, onCall: action.payload };
     case Types.USER_INCOMING_CALL:
       return { ...state, incomingCall: true, call: action.payload };
+    case Types.INCOMING_CALL_DENIED:
+      return { ...state, incomingCall: false, call: null };
     case Types.ACTIVE_CALL_ACCEPTED:
       return { ...state, incomingCall: false, call: action.payload };
     case Types.REGISTER_PEER:
@@ -90,6 +93,10 @@ export const callReducer = (state, action) => {
       return { ...state, onGoingCall: true };
     case Types.SET_MY_STREAM:
       return { ...state, myStreamOn: true };
+    case Types.OUTGOING_CALL_DENIED:
+      return { ...state, outGoingCall: false, call: null, myStreamOn: false, onGoingCall: false, user: null };
+    case Types.OUTGOING_CALL_CANCELLED:
+      return { ...state, outGoingCall: false, call: null, myStreamOn: false, error: "Your called was canceled" };
     default:
       return state;
   }

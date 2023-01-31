@@ -6,8 +6,9 @@ import client from "../features/feathers";
 import loadMedia from "../lib/loadMedia";
 import useCallContext from "./useCallContext";
 import appendStreamToPage from "../lib/appendStreamToPage";
-import { CALL_STATUS, CALL_DETAILS } from "../lib/callConstants";
+import { CALL_STATUS, CALL_DETAILS, peerConfiguration } from "../lib/callConstants";
 import useAuthContext from "./useAuthContext";
+
 const useCall = () => {
   const { user } = useAuthContext();
   const callService = client.service("call");
@@ -18,38 +19,46 @@ const useCall = () => {
   const callContext = useCallContext();
   const { dispatch, Types, call, lastActivity, peer, incomingCall, myStreamOn } = callContext;
 
-  /**
-   *
-   */
+  const outgoingCallResponded = (call) => {
+    const options = call.type === "video" ? { video: true, audio: true } : { audio: true, muted: true };
+    if (call.status === CALL_STATUS.CONNECTED || lastActivity === CALL_STATUS.CONNECTED) return;
+    console.log("Details", call.details, call.status, lastActivity, CALL_STATUS.CONNECTED);
+    if (!myStreamOn)
+      loadMedia(
+        options,
+        (stream) => {
+          dispatch({ type: Types.SET_MY_STREAM });
+          const media = options.video ? document.createElement("video") : document.createElement("audio");
+          appendStreamToPage(media, stream, console.log);
+          console.log("added media");
+          connectToPeer(call.receiverId, stream, options.video);
+        },
+        (e) => {
+          console.log(e.message || "error loading media to initiate call");
+        }
+      );
+  };
+
   const onNewCAllRequest = (newCallRequest) => {
     if (incomingCall || call) return;
     dispatch({ type: Types.USER_INCOMING_CALL, payload: newCallRequest });
   };
   const onCallPatched = (updatedCall) => {
-    const options = updatedCall.type === "video" ? { video: true, audio: true } : { audio: true, muted: true };
     switch (updatedCall.details) {
       case CALL_DETAILS.RESPONDING:
-        if (updatedCall.status === CALL_STATUS.CONNECTED || lastActivity === CALL_STATUS.CONNECTED) return;
-        console.log("Details", updatedCall.details, updatedCall.status, lastActivity, CALL_STATUS.CONNECTED);
-        if (!myStreamOn)
-          loadMedia(
-            options,
-            (stream) => {
-              dispatch({ type: Types.SET_MY_STREAM });
-              const media = options.video ? document.createElement("video") : document.createElement("audio");
-              appendStreamToPage(media, stream, console.log);
-              console.log("added media");
-              connectToPeer(updatedCall.receiverId, stream, options.video);
-            },
-            (e) => {
-              console.log(e.message || "error loading media to initiate call");
-            }
-          );
+        outgoingCallResponded(updatedCall);
+        break;
+      case CALL_DETAILS.DENIED:
+        dispatch({ type: Types.OUTGOING_CALL_DENIED });
+        break;
+      case CALL_DETAILS.CANCELLED:
+        dispatch({ type: Types.OUTGOING_CALL_CANCELLED });
         break;
       default:
         throw new Error("Unknown call status");
     }
   };
+
   /**
    * this function is used to connect two peers and pass the stream among the
    *
@@ -63,12 +72,7 @@ const useCall = () => {
     if (isNill(stream)) throw new Error("No Audio or video stream set");
     console.log("connecting peer");
     if (!peer) {
-      const newPeer = new Peer(user.id, {
-        host: "/",
-        path: "peerjs",
-        port: 4000, //serverType === "remote" ? 443 : 4000,
-        //secure: serverType === "remote" ? true : false,
-      });
+      const newPeer = new Peer(user.id, peerConfiguration);
       connectionRef.current = newPeer;
       dispatch({ type: Types.REGISTER_PEER, payload: newPeer });
     }
@@ -104,21 +108,17 @@ const useCall = () => {
     if (isCancelled) return;
     if (!peer) {
       console.log("peer not registered", user.id);
-      const newPeer = new Peer(user.id, {
-        host: "/",
-        path: "peerjs",
-        port: 4000, //serverType === "remote" ? 443 : 4000,
-        //secure: serverType === "remote" ? true : false,
-      });
+      const newPeer = new Peer(user.id, peerConfiguration);
       connectionRef.current = newPeer;
       dispatch({ type: Types.REGISTER_PEER, payload: newPeer });
     }
     await callService.patch(call.id, { status: CALL_STATUS.ANSWERED, callDetails: CALL_DETAILS.RESPONDING });
     dispatch({ type: Types.INCOMING_CALL_ACCEPTED });
   };
-  const denyCall = (onCallClose) => {
-    call.close();
-    onCallClose();
+  const denyCall = async () => {
+    if (isCancelled) return;
+    await callService.patch(call.id, { status: CALL_STATUS.DENIED, callDetails: CALL_DETAILS.DENIED });
+    dispatch({ type: Types.INCOMING_CALL_DENIED });
   };
 
   /***
