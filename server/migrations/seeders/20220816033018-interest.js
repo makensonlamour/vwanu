@@ -17,6 +17,7 @@ const interests = interestsList?.map((name) => ({
   createdAt: new Date(),
   updatedAt: new Date(),
   accessible: true,
+  approved: true,
   id: v4(),
 }));
 module.exports = {

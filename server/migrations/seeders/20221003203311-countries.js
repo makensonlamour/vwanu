@@ -8,7 +8,7 @@ const findOrSaveState = async (stateAndCities, countryId, queryInterface) => {
   const query = `
   INSERT INTO "States" (id, name, "CountryId", "initials", "createdAt", "updatedAt" )
   VALUES ('${v4()}', '${name}', '${countryId}','${initials}', current_timestamp, current_timestamp)
-  ON CONFLICT (name) DO UPDATE SET name = '${name}' RETURNING id;`;
+  ON CONFLICT DO NOTHING RETURNING id;`;
 
   const val = await queryInterface.sequelize.query(
     query,
@@ -16,7 +16,7 @@ const findOrSaveState = async (stateAndCities, countryId, queryInterface) => {
     { type: QueryTypes.SELECT }
   );
 
-  return { StateId: val[0].id, cities };
+  return val[0]?.id ? { StateId: val[0].id, cities } : null;
 };
 
 const findOrSaveCity = async (city, stateId, queryInterface) => {
@@ -26,12 +26,13 @@ const findOrSaveCity = async (city, stateId, queryInterface) => {
   const query = `
   INSERT INTO "Cities" (id, name, "StateId", "createdAt", "updatedAt" )
   VALUES ('${v4()}', '${name}', '${stateId}', current_timestamp, current_timestamp)
-  ON CONFLICT (name) DO UPDATE SET name = '${name}' RETURNING id;`;
+  ON CONFLICT DO NOTHING RETURNING id;`;
 
   return queryInterface.sequelize.query(query, { type: QueryTypes.SELECT });
 };
 
 async function saveAndAssociateCities(queryInterface, stateAndCities) {
+  if (!stateAndCities) return;
   const { StateId, cities } = stateAndCities;
 
   // console.log({ stateAndCities });
@@ -59,11 +60,14 @@ async function saveAndAssociateStatesAndCities(queryInterface, stateDetails) {
   // save the states or see if the existed
 
   const savedStatesAndCities = await Promise.all(
-    stateList.map(async (stateAndCities) =>
-      findOrSaveState(stateAndCities, CountryId, queryInterface)
-    )
+    stateList
+      .map(async (stateAndCities) =>
+        findOrSaveState(stateAndCities, CountryId, queryInterface)
+      )
+      .filter((state) => state !== null)
   );
 
+  console.log({ savedStatesAndCities });
   // For each state save all the cities.
   if (!savedStatesAndCities || !savedStatesAndCities.length) return;
   await Promise.all(
