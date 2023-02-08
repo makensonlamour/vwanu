@@ -1,34 +1,36 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
+const fs = require('fs');
+const path = require('path');
 const { v4 } = require('uuid');
 const { QueryTypes } = require('sequelize');
 const countriesData = require('../data/country-state-cities.min');
 
+const findOrSaveStateQuery = fs.readFileSync(
+  path.resolve(__dirname, 'queries', 'findOrSaveState.sql'),
+  'utf-8'
+);
+
+const findOrSaveCityQuery = fs.readFileSync(
+  path.resolve(__dirname, 'queries', 'findOrSaveCity.sql'),
+  'utf-8'
+);
+
 const findOrSaveState = async (stateAndCities, countryId, queryInterface) => {
   const { name, initials, cities } = stateAndCities;
-  const query = `
-  INSERT INTO "States" (id, name, "CountryId", "initials", "createdAt", "updatedAt" )
-  VALUES ('${v4()}', '${name}', '${countryId}','${initials}', current_timestamp, current_timestamp)
-  ON CONFLICT DO NOTHING RETURNING id;`;
-
-  const val = await queryInterface.sequelize.query(
-    query,
-
-    { type: QueryTypes.SELECT }
-  );
+  const val = await queryInterface.sequelize.query(findOrSaveStateQuery, {
+    replacements: [v4(), name, countryId, initials],
+    type: QueryTypes.SELECT,
+  });
 
   return val[0]?.id ? { StateId: val[0].id, cities } : null;
 };
 
 const findOrSaveCity = async (city, stateId, queryInterface) => {
-  // console.log(`Saving cities of state with id: ${stateId}}`);
-
   const { name } = city;
-  const query = `
-  INSERT INTO "Cities" (id, name, "StateId", "createdAt", "updatedAt" )
-  VALUES ('${v4()}', '${name}', '${stateId}', current_timestamp, current_timestamp)
-  ON CONFLICT DO NOTHING RETURNING id;`;
-
-  return queryInterface.sequelize.query(query, { type: QueryTypes.SELECT });
+  return queryInterface.sequelize.query(findOrSaveCityQuery, {
+    type: QueryTypes.SELECT,
+    replacements: [v4(), name, stateId],
+  });
 };
 
 async function saveAndAssociateCities(queryInterface, stateAndCities) {
