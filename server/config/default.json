@@ -92,5 +92,6 @@
   "paginate": {
     "default": 10,
     "max": 25
-  }
+  },
+  "ROOT_USER_PASSWORD_SECURE": "ROOT_USER_PASSWORD_SECURE"
 }
