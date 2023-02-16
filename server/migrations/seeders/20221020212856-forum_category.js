@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { v4 } = require('uuid');
 const { QueryTypes } = require('sequelize');
-const categoriesWithoutInterest = require('../data/categories_without_interest');
+const categoriesWithoutInterest = require('../data/categories_and_interest');
 
 const findOrSaveInterest = async (name, queryInterface) => {
   const val = await queryInterface.sequelize.query(
