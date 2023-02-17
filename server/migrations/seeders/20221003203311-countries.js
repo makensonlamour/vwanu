@@ -15,6 +15,10 @@ const findOrSaveCityQuery = fs.readFileSync(
   'utf-8'
 );
 
+const upsertCountryQuery = fs.readFileSync(
+  path.resolve(__dirname, 'queries', 'upsertCountry.sql'),
+  'utf-8'
+);
 const findOrSaveState = async (stateAndCities, countryId, queryInterface) => {
   const { name, initials, cities } = stateAndCities;
   const val = await queryInterface.sequelize.query(findOrSaveStateQuery, {
@@ -69,7 +73,7 @@ async function saveAndAssociateStatesAndCities(queryInterface, stateDetails) {
       .filter((state) => state !== null)
   );
 
-  console.log({ savedStatesAndCities });
+  // console.log({ savedStatesAndCities });
   // For each state save all the cities.
   if (!savedStatesAndCities || !savedStatesAndCities.length) return;
   await Promise.all(
@@ -98,10 +102,18 @@ const countriesWithStates = countriesList.filter((country) =>
 
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkDelete('States', null, {});
-    await queryInterface.bulkDelete('Cities', null, {});
-    await queryInterface.bulkDelete('Countries', null, {});
-    await queryInterface.bulkInsert('Countries', countries);
+    // await queryInterface.bulkDelete('States', null, {});
+    // await queryInterface.bulkDelete('Cities', null, {});
+    // await queryInterface.bulkDelete('Countries', null, {});
+    await Promise.all(
+      countries.map((country) =>
+        queryInterface.sequelize.query(upsertCountryQuery, {
+          replacements: [country.id, country.name, country.initials],
+          type: QueryTypes.SELECT,
+        })
+      )
+    );
+    // await queryInterface.bulkInsert('Countries', countries);
     // save and associate state with countries then save and associate cities with states
     await Promise.all(
       countriesWithStates.map(async ({ states, id: CountryId }) =>
