@@ -6,17 +6,17 @@ const { QueryTypes } = require('sequelize');
 const countriesData = require('../data/country-state-cities.min');
 
 const findOrSaveStateQuery = fs.readFileSync(
-  path.resolve(__dirname, 'queries', 'findOrSaveState.sql'),
+  path.resolve(__dirname, '../queries', 'findOrSaveState.sql'),
   'utf-8'
 );
 
 const findOrSaveCityQuery = fs.readFileSync(
-  path.resolve(__dirname, 'queries', 'findOrSaveCity.sql'),
+  path.resolve(__dirname, '../queries', 'findOrSaveCity.sql'),
   'utf-8'
 );
 
 const upsertCountryQuery = fs.readFileSync(
-  path.resolve(__dirname, 'queries', 'upsertCountry.sql'),
+  path.resolve(__dirname, '../queries', 'upsertCountry.sql'),
   'utf-8'
 );
 const findOrSaveState = async (stateAndCities, countryId, queryInterface) => {

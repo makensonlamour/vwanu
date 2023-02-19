@@ -6,7 +6,7 @@ const { v4 } = require('uuid');
 const { QueryTypes } = require('sequelize');
 
 const query = fs.readFileSync(
-  path.resolve(__dirname, 'queries', 'upsertAppUsers.sql'),
+  path.resolve(__dirname, '../queries', 'upsertAppUsers.sql'),
   'utf-8'
 );
 const HASHING_SALT_ROUNDS = parseInt(config.get('HASHING_SALT_ROUNDS'), 10);

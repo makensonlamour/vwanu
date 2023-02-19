@@ -6,7 +6,7 @@ const { v4 } = require('uuid');
 const { QueryTypes } = require('sequelize');
 
 const query = fs.readFileSync(
-  path.resolve(__dirname, 'queries', 'upsertInterest.sql'),
+  path.resolve(__dirname, '../queries', 'upsertInterest.sql'),
   'utf-8'
 );
 const interestsList = [

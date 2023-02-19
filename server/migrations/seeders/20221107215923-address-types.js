@@ -15,7 +15,7 @@ const addressTypes = [
 ];
 
 const upsertAddressTypeQuery = fs.readFileSync(
-  path.resolve(__dirname, 'queries', 'upsertAddressType.sql'),
+  path.resolve(__dirname, '../queries', 'upsertAddressType.sql'),
   'utf-8'
 );
 module.exports = {

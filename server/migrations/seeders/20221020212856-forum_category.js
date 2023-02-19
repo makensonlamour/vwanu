@@ -6,7 +6,7 @@ const { QueryTypes } = require('sequelize');
 const categoriesWithoutInterest = require('../data/categories_and_interest');
 
 const upsertForumCategoryQuery = fs.readFileSync(
-  path.resolve(__dirname, 'queries', 'upsertForumCategory.sql'),
+  path.resolve(__dirname, '../queries', 'upsertForumCategory.sql'),
   'utf-8'
 );
 const findOrSaveInterest = async (name, queryInterface) => {
@@ -26,19 +26,19 @@ async function saveAndAssociateCategoryInterest(queryInterface, category) {
   const { interest: interestList } = category;
   if (!interestList || !interestList.length) return;
 
-  const interests = await Promise.all(
+  await Promise.all(
     interestList.map(async (name) => findOrSaveInterest(name, queryInterface))
   );
 
-  if (!interests || !interests.length) return;
-  const list = interests.map(({ InterestId }) => ({
-    InterestId,
-    ForumCategoryId: category.id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+  // if (!interests || !interests.length) return;
+  // const list = interests.map(({ InterestId }) => ({
+  //   InterestId,
+  //   ForumCategoryId: category.id,
+  //   createdAt: new Date(),
+  //   updatedAt: new Date(),
+  // }));
 
-  await queryInterface.bulkInsert('CategoryInterests', list);
+  // await queryInterface.bulkInsert('CategoryInterests', list);
 }
 
 const cats = categoriesWithoutInterest.map((category) => ({
