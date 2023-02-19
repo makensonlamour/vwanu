@@ -1,17 +1,19 @@
 version: '3.8'
 services:
-  web:
-    container_name: vwanu_web_stage
-    image: vwanu_web:staging-nginx
-    build:
-      context: ./client
-      dockerfile: Dockerfile.nginx
-      args: 
-        - REACT_API_URL=${SERVER_ADDRESS}
-    ports:
-      - '3000:3000'
-    restart: unless-stopped
+  # web:
+  #   container_name: vwanu_web_stage
+  #   image: vwanu_web:staging-nginx
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile.nginx
+  #     args:
+  #       - REACT_API_URL=${SERVER_ADDRESS}
+  #   ports:
+  #     - '3000:3000'
+  #   restart: unless-stopped
   api:
+    env_file:
+      - .env
     container_name: vwanu_api_stage
     image: vwanu_api:staging-nginx-2.0.1
     build:
@@ -58,15 +60,15 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - data:/var/lib/postgresql/data
-  nginx:
-    depends_on:
-      - api
-      - web
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-      - "3050:80"
+  # nginx:
+  #   depends_on:
+  #     - api
+  #     - web
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./nginx
+  #   ports:
+  #     - "3050:80"
 volumes:
   data: {}
