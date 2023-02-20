@@ -1,7 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
+const fs = require('fs');
+const path = require('path');
 const { v4 } = require('uuid');
+const { QueryTypes } = require('sequelize');
 
+const query = fs.readFileSync(
+  path.resolve(__dirname, '../queries', 'upsertInterest.sql'),
+  'utf-8'
+);
 const interestsList = [
   'Sports',
   'education',
@@ -12,17 +19,17 @@ const interestsList = [
   'Technology',
   'Art',
 ];
-const interests = interestsList?.map((name) => ({
-  name,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  accessible: true,
-  id: v4(),
-}));
+
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkDelete('Interests', null, {});
-    return queryInterface.bulkInsert('Interests', interests);
+    await Promise.all(
+      interestsList.map((name) =>
+        queryInterface.sequelize.query(query, {
+          replacements: [v4(), name],
+          type: QueryTypes.SELECT,
+        })
+      )
+    );
   },
 
   async down(queryInterface) {

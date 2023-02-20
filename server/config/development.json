@@ -1,3 +1,6 @@
 {
-  "dbSettings": { "dialect": "postgres" }
+  "dbSettings": {
+    "dialect": "postgres",
+    "pool": { "idle": 20000, "acquire": 600000 }
+  }
 }

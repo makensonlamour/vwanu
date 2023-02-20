@@ -1,8 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
+const fs = require('fs');
+const path = require('path');
 const { v4 } = require('uuid');
 const { QueryTypes } = require('sequelize');
-const categoriesWithoutInterest = require('../data/categories_without_interest');
+const categoriesWithoutInterest = require('../data/categories_and_interest');
 
+const upsertForumCategoryQuery = fs.readFileSync(
+  path.resolve(__dirname, '../queries', 'upsertForumCategory.sql'),
+  'utf-8'
+);
 const findOrSaveInterest = async (name, queryInterface) => {
   const val = await queryInterface.sequelize.query(
     `
@@ -20,19 +26,19 @@ async function saveAndAssociateCategoryInterest(queryInterface, category) {
   const { interest: interestList } = category;
   if (!interestList || !interestList.length) return;
 
-  const interests = await Promise.all(
+  await Promise.all(
     interestList.map(async (name) => findOrSaveInterest(name, queryInterface))
   );
 
-  if (!interests || !interests.length) return;
-  const list = interests.map(({ InterestId }) => ({
-    InterestId,
-    ForumCategoryId: category.id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+  // if (!interests || !interests.length) return;
+  // const list = interests.map(({ InterestId }) => ({
+  //   InterestId,
+  //   ForumCategoryId: category.id,
+  //   createdAt: new Date(),
+  //   updatedAt: new Date(),
+  // }));
 
-  await queryInterface.bulkInsert('CategoryInterests', list);
+  // await queryInterface.bulkInsert('CategoryInterests', list);
 }
 
 const cats = categoriesWithoutInterest.map((category) => ({
@@ -53,9 +59,22 @@ const categoriesToSave = cats.map((category) => ({
 module.exports = {
   async up(queryInterface) {
     // Cleaning the table
-    await queryInterface.bulkDelete('ForumCategories', null, {});
+    // await queryInterface.bulkDelete('ForumCategories', null, {});
     // create the category
-    await queryInterface.bulkInsert('ForumCategories', categoriesToSave);
+    await Promise.all(
+      categoriesToSave.map((category) =>
+        queryInterface.sequelize.query(upsertForumCategoryQuery, {
+          replacements: [
+            category.id,
+            category.name,
+            category.description,
+            category.coverPicture,
+          ],
+          type: QueryTypes.SELECT,
+        })
+      )
+    );
+    // await queryInterface.bulkInsert('ForumCategories', categoriesToSave);
     // create or associate categories with interests
     await Promise.all(
       cats

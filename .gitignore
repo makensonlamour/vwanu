@@ -187,6 +187,8 @@ server/src/models/.DS_Store
 .DS_Store
 .DS_Store/
 .vscode
+**/.vscode/
+.vscode/settings.json
 .vscode/settings.jsonserver/src/database/followers.ts
 server/src/database/followers.ts
 server/test/services/follower.test.ts

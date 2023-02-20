@@ -1,6 +1,8 @@
 version: '3.8'
 services:
   api:
+    env_file:
+      - .env
     container_name: vwanu_api
     image: vwanu_api:0.0.1
     build:

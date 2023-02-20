@@ -90,6 +90,7 @@
     "slugify": "^1.6.5",
     "socket.io": "^4.4.1",
     "socketio-jwt-auth": "^0.2.1",
+    "uuid": "^9.0.0",
     "uuidv4": "^6.2.13",
     "winston": "^3.4.0",
     "zod": "^3.11.6"
@@ -129,7 +130,7 @@
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "puppeteer-core": "^19.2.0",
-    "sequelize-cli": "^6.4.1",
+    "sequelize-cli": "^6.6.0",
     "sinon": "^13.0.1",
     "socket.io-client": "^4.4.1",
     "source-map-support": "^0.5.21",

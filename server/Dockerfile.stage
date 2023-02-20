@@ -7,7 +7,8 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-RUN mv config/ build/
+# RUN mv config/ build/
+
 
 
 
@@ -15,9 +16,17 @@ RUN mv config/ build/
 
 FROM node:16.6.1-alpine3.14 as ts-remover  
 WORKDIR /usr/app
+RUN apk update && apk add bash
+RUN apk add --no-cache bash
 COPY --from=ts-compiler /usr/app/package*.json ./
 COPY --from=ts-compiler /usr/app/build ./
+COPY --from=ts-compiler /usr/app/migrations ./migrations
+COPY --from=ts-compiler /usr/app/.sequelizerc ./.sequelizerc
+COPY --from=ts-compiler /usr/app/config ./config
+COPY --from=ts-compiler /usr/app/docker-entrypoint.sh ./
+COPY --from=ts-compiler /usr/app/wait-for ./
 RUN npm install --only=production
+RUN npm install -g sequelize-cli@^6.6.0
 EXPOSE 587
 CMD ["npm","run","start"]
 
