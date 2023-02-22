@@ -2,10 +2,9 @@ import axios from "axios";
 //import Cookies from "js-cookie";
 import { getToken } from "../helpers/index";
 
-export const url = process.env.REACT_APP_API_URL || "localhost:4000";
+export const baseUrl = process.env.REACT_APP_API_URL || "localhost:4000";
 export const token = getToken("feathers-jwt");
 
-const baseUrl = `http://${url}`;
 export const api = {
   get: async (url, params = {}) =>
     axios.get(url?.includes("https") ? url : baseUrl + "" + url, {
