@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile.nginx
       args:
         - REACT_APP_API_URL=${SERVER_ADDRESS}
+        - REACT_API_URL=${SERVER_ADDRESS}
     ports:
       - '3000:3000'
     restart: unless-stopped
