@@ -14,7 +14,7 @@
   },
   "smtp_password": "00bcfe6b6504a3036b1c23051a00dacd",
   "smtp_port": 587,
-  "smtp_host": "send.smtp.mailtrap.io",
+
   "sendEmailFrom": "vwanuht@vwanuht.xyz",
   "send-in-blue-service-url": "smtp-relay.sendinblue.com",
   "send-in-blue-mail-user": "vwanuht@gmail.com",

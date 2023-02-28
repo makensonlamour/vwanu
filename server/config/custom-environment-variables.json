@@ -5,13 +5,14 @@
     "database": "PGDATABASE",
     "host": "PGHOST"
   },
-  "smtp": {
-    "user": "SMTP_USER",
-    "pass": "SMTP_PASS",
+  "SMTP_CONFIGURATION": {
     "host": "SMTP_HOST",
     "port": "SMTP_PORT",
-    "secure": "SMTP_SECURE",
-    "service": "SMTP_SERVICE"
+    "email_from": "SEND_EMAIL_FROM",
+    "auth": {
+      "user": "SMTP_USERNAME",
+      "pass": "SMTP_PASSWORD"
+    }
   },
 
   "CLOUDINARY_API_SECRET": "CLOUDINARY_API_SECRET",
@@ -36,5 +37,10 @@
   "ROOT_USER_PASSWORD": "ROOT_USER_PASSWORD",
   "ROOT_USER_LAST_NAME": "ROOT_USER_LAST_NAME",
   "ROOT_USER_FIRST_NAME": "ROOT_USER_FIRST_NAME",
-  "HASHING_SALT_ROUNDS": "HASHING_SALT_ROUNDS"
+  "HASHING_SALT_ROUNDS": "HASHING_SALT_ROUNDS",
+
+  "SMTP_PORT": "SMTP_PORT",
+  "SMTP_HOST": "SMTP_HOST",
+  "SMTP_USERNAME": "SMTP_USERNAME",
+  "SMTP_PASSWORD": "SMTP_PASSWORD"
 }
