@@ -11,7 +11,7 @@ import messagePicker from '../../../lib/utils/messagePicker.utils';
  */
 export default async (context: HookContext): Promise<HookContext> => {
   const { app, result } = context;
-  if (!app.get('SEND_WELCOME_EMAIL')) return context;
+  // if (!app.get('SEND_WELCOME_EMAIL')) return context;
 
   if (!result) throw new Error('User was not created');
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import isNill from 'lodash/isNil';
+// import isNill from 'lodash/isNil';
 
 const mustHave = ['email', 'phone'];
 
@@ -10,11 +10,7 @@ export const User = z
   })
   .refine(
     (data) =>
-      mustHave.some(
-        (item) =>
-          Object.prototype.hasOwnProperty.call(data, item) &&
-          !isNill(data[item])
-      ),
+      mustHave.some((item) => Object.prototype.hasOwnProperty.call(data, item)),
     {
       message: `Please pass at least either User's${mustHave.join(' or ')}`,
     }

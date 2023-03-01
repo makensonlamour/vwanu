@@ -1,0 +1,16 @@
+{
+  "smtp": {
+    "logSuccess": true
+  },
+  "dbSettings": {
+    "username": "doadmin",
+    "password": "AVNS_emoyPJcVdkWfiWy",
+    "host": "vwanu-dev-db-do-user-10071836-0.b.db.ondigitalocean.com",
+    "port": 25060,
+    "database": "defaultdb",
+    "dialect": "postgres", 
+      "dialectOptions": {
+      "ssl": { "required": true, "rejectUnauthorized": false }
+    }
+  }
+}
