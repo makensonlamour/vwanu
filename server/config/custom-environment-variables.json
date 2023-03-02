@@ -18,6 +18,15 @@
     "host": "API_HOST",
     "port": "API_PORT"
   },
+  "MEDIA_CONFIGURATION": {
+    "maxPostVideos": "maxPostVideos",
+    "maxPostAudios": "maxPostAudios",
+    "maxPostImages": "maxPostImages",
+    "maxMessageImages": "maxMessageImages",
+    "maxDiscussionVideos": "maxDiscussionVideos",
+    "maxDiscussionAudios": "maxDiscussionAudios",
+    "maxDiscussionImages": "maxDiscussionImages"
+  },
   "CLOUDINARY_CONFIGURATION": {
     "api_secret": "CLOUDINARY_API_SECRET",
     "api_key": "CLOUDINARY_API_KEY",

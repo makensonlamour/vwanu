@@ -24,6 +24,7 @@ const profilePictures = new CloudinaryStorage({
   params: {
     allowedFormats: RESTRICTED_FORMAT,
     folder: 'vwanu/profile',
+    resource_type: 'auto',
   },
 });
 
@@ -32,6 +33,7 @@ const freeMedia = new CloudinaryStorage({
   params: {
     allowedFormats: RESTRICTED_FORMAT,
     folder: 'vwanu/medias',
+    resource_type: 'auto',
   },
 });
 const postImages = new CloudinaryStorage({
