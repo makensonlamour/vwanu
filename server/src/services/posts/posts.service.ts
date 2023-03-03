@@ -1,4 +1,3 @@
-import config from 'config';
 import { ServiceAddons } from '@feathersjs/feathers';
 
 /** Local dependencies */
@@ -7,7 +6,10 @@ import { Posts } from './posts.class';
 import { postStorage } from '../../cloudinary';
 import { Application } from '../../declarations';
 import transferUploadedFilesToFeathers from '../../middleware/PassFilesToFeathers/file-to-feathers.middleware';
-
+import {
+  MEDIA_CONFIG_SCHEMA,
+  MEDIA_CONFIG_TYPE,
+} from '../../schema/mediaConf.schema';
 // Add this service to the service type index
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
@@ -23,18 +25,21 @@ export default function (app: Application): void {
     paginate: app.get('paginate'),
   };
 
-  // Initialize our service with any options it requires
-  app.use(
-    '/posts',
-    postStorage.fields([
-      { name: 'postImage', maxCount: config.get<number>('maxPostImages') },
-      { name: 'postVideo', maxCount: config.get<number>('maxPostVideos') },
-      { name: 'postAudio', maxCount: config.get<number>('maxPostAudios') },
-    ]),
-    transferUploadedFilesToFeathers,
-    new Posts(options, app)
-  );
+  const configuration: MEDIA_CONFIG_TYPE = app.get('MEDIA_CONFIGURATION');
+  if (MEDIA_CONFIG_SCHEMA.parse(configuration)) {
+    // Initialize our service with any options it requires
+    app.use(
+      '/posts',
+      postStorage.fields([
+        { name: 'postImage', maxCount: configuration.maxPostImages },
+        { name: 'postVideo', maxCount: configuration.maxPostVideos },
+        { name: 'postAudio', maxCount: configuration.maxPostAudios },
+      ]),
+      transferUploadedFilesToFeathers,
+      new Posts(options, app)
+    );
 
-  const service = app.service('posts');
-  service.hooks(hooks);
+    const service = app.service('posts');
+    service.hooks(hooks);
+  }
 }
