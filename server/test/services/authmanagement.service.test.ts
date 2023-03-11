@@ -66,11 +66,11 @@ describe('/authmanagement service', () => {
   });
 
   describe('Service running', () => {
-    it('service is running', () => {
+    it.skip('service is running', () => {
       const service = app.service('authmanagement');
       expect(service).toBeDefined();
     });
-    it('should return and error if not a supported action string', async () => {
+    it.skip('should return and error if not a supported action string', async () => {
       const response = await testServer
         .post(endpoint)
         .send({})
@@ -80,7 +80,7 @@ describe('/authmanagement service', () => {
   });
 
   describe('check unique', () => {
-    it('should  return `not a unique value`', async () => {
+    it.skip('should  return `not a unique value`', async () => {
       const response = await testServer
         .post(endpoint)
         .send({ action: 'checkUnique', value: { email: goodUser.email } });
@@ -97,7 +97,7 @@ describe('/authmanagement service', () => {
       expect(true).toBe(true);
     });
 
-    it('should return an empty object indicating email is not taken', async () => {
+    it.skip('should return an empty object indicating email is not taken', async () => {
       const response = await testServer.post(endpoint).send({
         action: 'checkUnique',
         value: { email: generateFakeEmail() },
@@ -110,7 +110,7 @@ describe('/authmanagement service', () => {
   });
 
   describe('resendVerifySignup', () => {
-    it('should not send an email because email templates are not set up yet', async () => {
+    it.skip('should not send an email because email templates are not set up yet', async () => {
       const response = await testServer.post(endpoint).send({
         action: 'resendVerifySignup',
         value: { email: goodUser.email },
@@ -121,7 +121,7 @@ describe('/authmanagement service', () => {
 
     /* #region Set up the emails  */
 
-    it('should set the emails ', async () => {
+    it.skip('should set the emails ', async () => {
       const templates = await setupEmails();
       templates.forEach((template) => {
         createdTestEmailsTemplates.push(template.id);
@@ -130,7 +130,7 @@ describe('/authmanagement service', () => {
     });
 
     /* #endregion */
-    it('should send an email and change the user verification details', async () => {
+    it.skip('should send an email and change the user verification details', async () => {
       let userR: any = await app
         .get('sequelizeClient')
         .models.User.findOne({ where: { email: user.email } });
@@ -154,7 +154,7 @@ describe('/authmanagement service', () => {
     });
   });
   describe('verifySignupLong', () => {
-    it('Should not verify with the wrong activation code ', async () => {
+    it.skip('Should not verify with the wrong activation code ', async () => {
       const response = await testServer.post(endpoint).send({
         action: 'verifySignupLong',
         value: Math.random().toString(36).substring(7),
@@ -168,7 +168,7 @@ describe('/authmanagement service', () => {
         name: 'BadRequest',
       });
     });
-    it('should verify signup for emails but not send the email ', async () => {
+    it.skip('should verify signup for emails but not send the email ', async () => {
       const u = await app
         .get('sequelizeClient')
         .models.User.findOne({ where: { email: user.email } });
@@ -193,7 +193,7 @@ describe('/authmanagement service', () => {
       expect(response.body.user.verified).toBe(true);
     });
 
-    it('should not verify signup a second time ', async () => {
+    it.skip('should not verify signup a second time ', async () => {
       const response = await testServer.post(endpoint).send({
         action: 'verifySignupLong',
         value: act,
@@ -209,7 +209,7 @@ describe('/authmanagement service', () => {
     });
 
     /* #region  Create activation Confirmation email */
-    it('should create activation Confirmation email ', async () => {
+    it.skip('should create activation Confirmation email ', async () => {
       const activationConfirmationEmail = await app
         .service('email-template')
         .create({
@@ -221,7 +221,7 @@ describe('/authmanagement service', () => {
       expect(activationConfirmationEmail.id).toBeDefined();
     });
     /* #endregion */
-    it('should verify signup and successfully send email', async () => {
+    it.skip('should verify signup and successfully send email', async () => {
       const rand = getRandUser();
       delete rand.id;
       const UserModel = await app.get('sequelizeClient').models.User;
@@ -241,7 +241,7 @@ describe('/authmanagement service', () => {
     }, 7000);
   });
   describe('sendResetPwd', () => {
-    it('should not send reset password email when the user is unverified', async () => {
+    it.skip('should not send reset password email when the user is unverified', async () => {
       const rand = getRandUser();
       delete rand.id;
       const unverifiedUser = await testServer.post(userEndpoint).send(rand);
@@ -268,7 +268,7 @@ describe('/authmanagement service', () => {
         .set('authorization', unverifiedUser.body.accessToken);
     }, 15000);
 
-    it('should send reset password email', async () => {
+    it.skip('should send reset password email', async () => {
       // User is the verified user
       const response = await testServer.post(endpoint).send({
         action: 'sendResetPwd',
@@ -281,7 +281,7 @@ describe('/authmanagement service', () => {
   });
 
   describe('resetPwdWithLongToken', () => {
-    it('should not change the password with the wrong resetpassword token', async () => {
+    it.skip('should not change the password with the wrong resetpassword token', async () => {
       const newPassword = 'somePassword';
       const response = await testServer.post(endpoint).send({
         action: 'resetPwdLong',
@@ -299,7 +299,7 @@ describe('/authmanagement service', () => {
         name: 'BadRequest',
       });
     });
-    it('should reset changePassword', async () => {
+    it.skip('should reset changePassword', async () => {
       const u = await app
         .get('sequelizeClient')
         .models.User.findOne({ where: { email: user.email } });

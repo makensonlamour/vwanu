@@ -3,13 +3,6 @@ const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-console.log('hello world');
-
-console.log({
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-});
 module.exports = {
   TEST_MAIL_API_KEY: 'TEST_MAIL_API_KEY',
   TEST_MAIL_NAMESPACE: 'TEST_MAIL_NAMESPACE',
