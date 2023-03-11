@@ -65,28 +65,21 @@ jobs:
             echo "maxDiscussionVideos=${{secrets.STAGING_maxDiscussionVideos}}" >>  .env
             echo "maxDiscussionAudios=${{secrets.STAGING_maxDiscussionAudios}}" >>  .env
             echo "maxDiscussionImages=${{secrets.STAGING_maxDiscussionImages}}" >>  .env
-      - name: Reading data from .env 
-        run: cat .env | grep "API_PORT"
-      # - name: Cache node_modules
-      #   if: github.event_name == 'pull_request'
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
+      - name: Reading data from .env
+        run: cat .env
+
       - name: Use NodeJS
         if: github.event_name == 'pull_request'
         uses: actions/setup-node@v1
         with:
           node-version: '16.6.1'
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+      # - name: Cache dependencies
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: npm-${{ hashFiles('package-lock.json') }}
+      #     restore-keys: npm-
       - name: Installing basic Dependencies
         if: github.event_name == 'pull_request'
         run: npm ci --ignore-scripts
@@ -199,7 +192,6 @@ jobs:
             echo "maxDiscussionAudios=${{secrets.STAGING_maxDiscussionAudios}}" >>  .env
             echo "maxDiscussionImages=${{secrets.STAGING_maxDiscussionImages}}" >>  .env
             docker-compose -f docker-compose.nginx.yml up --build -d
-
 
       - name: Deploy to Production
         if: github.event_name == 'push' && github.base_ref == 'master'

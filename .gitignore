@@ -193,3 +193,4 @@ server/src/models/.DS_Store
 server/src/database/followers.ts
 server/test/services/follower.test.ts
 env_generator.js
+.env.STAGING
