@@ -65,7 +65,8 @@ jobs:
             echo "maxDiscussionVideos=${{secrets.STAGING_maxDiscussionVideos}}" >>  .env
             echo "maxDiscussionAudios=${{secrets.STAGING_maxDiscussionAudios}}" >>  .env
             echo "maxDiscussionImages=${{secrets.STAGING_maxDiscussionImages}}" >>  .env
-
+      - name: Reading data from .env 
+        run: cat .env | grep "API_PORT"
       # - name: Cache node_modules
       #   if: github.event_name == 'pull_request'
       #   uses: actions/cache@v1
