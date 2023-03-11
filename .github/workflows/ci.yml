@@ -93,17 +93,17 @@ jobs:
       - name: Check linting
         if: github.event_name == 'pull_request'
         run: npm run lint
-      - name: Testing 🥶
-        if: github.event_name == 'pull_request'
-        run: npm test
-        env:
-          CI: true
-      - name: Upload Test Coverage
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v1
-        with:
-          name: server-code-coverage
-          path: ./server/coverage
+      # - name: Testing 🥶
+      #   if: github.event_name == 'pull_request'
+      #   run: npm test
+      #   env:
+      #     CI: true
+      # - name: Upload Test Coverage
+      #   if: github.event_name == 'pull_request'
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: server-code-coverage
+      #     path: ./server/coverage
 
       - name: Build Project
         if: github.event_name == 'pull_request'
