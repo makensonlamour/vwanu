@@ -1,26 +1,13 @@
 {
-  "port": 4000,
-  "frontendUrl": "http://localhost:3000",
-  "host": "localhost",
-  "smtp": {
-    "user": "mzghhfqe244g3ssi@ethereal.email",
-    "pass": "VGwXCd8dr3xZDNTXuZ",
-    "host": "smtp.ethereal.email",
-    "port": 587,
-    "secure": true
-  },
+  "port": "API_PORT",
+  "frontendUrl": "FRONTEND_URL",
+  "host": "HOST",
   "dbSettings": {
     "dialect": "postgres"
   },
   "smtp_password": "00bcfe6b6504a3036b1c23051a00dacd",
   "smtp_port": 587,
-  "smtp_host": "send.smtp.mailtrap.io",
-  "sendEmailFrom": "vwanuht@vwanuht.xyz",
-  "send-in-blue-service-url": "smtp-relay.sendinblue.com",
-  "send-in-blue-mail-user": "vwanuht@gmail.com",
-  "send-in-blue-mail-pass": "ZcPSk8drzEHFMn6K",
-  "multerSetting": {},
-  "JWT_SECRET": "StageSecretIsREal",
+  "JWT_SECRET": "JWT_SECRET",
   "maxPostImages": 10,
   "maxDiscussionImages": 10,
   "maxMessageImages": 4,
@@ -44,7 +31,7 @@
   "authentication": {
     "entity": "User",
     "service": "users",
-    "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
+    "secret": "AUTHENTICATION_SECRET",
     "authStrategies": ["jwt", "local", "facebook", "google"],
     "jwtOptions": {
       "header": {
@@ -62,15 +49,15 @@
     "oauth": {
       "redirect": "http://localhost:4000/oauth/",
       "facebook": {
-        "key": "1115816222641818",
-        "secret": "5b4be3fc54a9e671e246cd436e77077b",
+        "key": "OAUTH_FACEBOOK_KEY",
+        "secret": "OAUTH_FACEBOOK_SECRET",
         "scope": ["email, public_profile"]
       },
       "google": {
-        "key": "GOOGLE_KEY",
-        "secret": "GOOGLE_SECRET",
+        "key": "OAUTH_GOOGLE_KEY",
+        "secret": "OAUTH_GOOGLE_SECRET",
         "scope": ["email", "profile", "openid"],
-        "callback": "/oauth/google/authenticate",
+        "callback": "OAUTH_GOOGLE_CALLBACK_URL",
         "nonce": true
       }
     }
@@ -78,7 +65,7 @@
   "refresh-token": {
     "entity": "refreshToken",
     "service": "refresh-tokens",
-    "secret": "Q6ny5XDwbJTZ8kV4ZOuySlxXEw8=",
+    "secret": "AUTHENTICATION_SECRET",
     "jwtOptions": {
       "header": {
         "typ": "refresh"

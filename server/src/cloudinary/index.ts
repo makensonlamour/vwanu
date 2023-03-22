@@ -1,41 +1,45 @@
-// import multer from 'multer';
-// import cloud from 'cloudinary';
-// import { CloudinaryStorage } from 'multer-storage-cloudinary';
+/** Local dependencies */
+import {
+  CLOUDINARY_CONFIG_SCHEMA,
+  CLOUDINARY_CONFIG_TYPE,
+} from '../schema/mediaConf.schema';
 
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const config = require('config');
 
-const configuration = config?.get('cloudinary');
-const { CLOUDINARY_API_KEY, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_SECRET } =
-  configuration;
+const ALL_ALLOW_FORMAT = ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'];
+const RESTRICTED_FORMAT = ['jpg', 'png', 'jpeg'];
 
-cloudinary.config({
-  api_secret: CLOUDINARY_API_SECRET,
-  api_key: CLOUDINARY_API_KEY,
-  cloud_name: CLOUDINARY_CLOUD_NAME,
-});
+const configuration: CLOUDINARY_CONFIG_TYPE = config.get(
+  'CLOUDINARY_CONFIGURATION'
+);
+
+if (CLOUDINARY_CONFIG_SCHEMA.parse(configuration))
+  cloudinary.config(configuration);
 
 const profilePictures = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg'],
+    allowedFormats: RESTRICTED_FORMAT,
     folder: 'vwanu/profile',
+    resource_type: 'auto',
   },
 });
 
 const freeMedia = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg'],
+    allowedFormats: RESTRICTED_FORMAT,
     folder: 'vwanu/medias',
+    resource_type: 'auto',
   },
 });
 const postImages = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
+    allowedFormats: ALL_ALLOW_FORMAT,
     folder: 'vwanu/post',
     resource_type: 'auto',
   },
@@ -44,7 +48,7 @@ const postImages = new CloudinaryStorage({
 const discussionImages = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
+    allowedFormats: ALL_ALLOW_FORMAT,
     folder: 'vwanu/post',
     resource_type: 'auto',
   },
@@ -53,7 +57,7 @@ const discussionImages = new CloudinaryStorage({
 const messageMedia = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
+    allowedFormats: ALL_ALLOW_FORMAT,
     folder: 'vwanu/messages',
     resource_type: 'auto',
   },
@@ -61,7 +65,7 @@ const messageMedia = new CloudinaryStorage({
 const blogImages = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
+    allowedFormats: ALL_ALLOW_FORMAT,
     folder: 'vwanu/blog',
     resource_type: 'auto',
   },
@@ -70,7 +74,7 @@ const blogImages = new CloudinaryStorage({
 const albumImages = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'm4v'],
+    allowedFormats: ALL_ALLOW_FORMAT,
     folder: 'vwanu/album',
     resource_type: 'auto',
   },

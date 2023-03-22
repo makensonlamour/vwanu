@@ -1,5 +1,16 @@
 version: '3.8'
 services:
+  # web:
+  #   container_name: vwanu_web_stage
+  #   image: vwanu_web:staging-nginx
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - REACT_APP_API_URL=${SERVER_ADDRESS}
+  #   ports:
+  #     - '3000:3000'
+  #   restart: unless-stopped
   api:
     env_file:
       - .env
@@ -11,38 +22,21 @@ services:
       - '4000:4000'
     volumes:
       - ./server:/app
-    environment:
-      - PORT=4000
-      - PGDATABASE=social_media
-      - PGUSER=vwanu
-      - PGPASSWORD=123456
-      - PGHOST=pg_db
-      - NODE_ENV=development
-      - REDIS_URL=redis://redis:6379/0
-    command: ./docker-entrypoint.sh
+    command: ./docker-entrypoint.testing.sh
     depends_on:
       - pg_db
-    # links:
-    #   - redis
+
   pg_db:
     container_name: pg_db
     image: 'postgres:12'
     ports:
       - '5432:5432'
-    environment:
-      - POSTGRES_USER=vwanu
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=social_media
-      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - nps_data:/var/lib/postgresql/data
-  # redis:
-  #    image: 'redis:alpine'
-  # image: redis:6.2-alpine
-  # container_name: redis
-  # restart: unless-stopped
-  # network_mode: bridge
-  # ports:
-  #   - '6379:6379'
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_HOST_AUTH_METHOD=${DB_HOST_AUTH_METHOD}
 volumes:
   nps_data: {}

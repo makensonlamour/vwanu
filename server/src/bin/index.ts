@@ -1,78 +1,44 @@
 import express from '@feathersjs/express';
-// import { Request, Response, NextFunction } from 'express';
 import { ExpressPeerServer } from 'peer';
 
+/** Local requirements * */
 import app from '../app';
-// import common from '../lib/utils/common';
 import Logger from '../lib/utils/logger';
+import {
+  ApiConfigurationType,
+  API_CONFIG_SCHEMA,
+} from '../schema/serverConf.schema';
+import helper from './sever_helper';
 
-// const { sendErrorResponse } = common;
+const API_CONFIGURATION: ApiConfigurationType = app.get('API_CONFIGURATION');
 
-function normalizePort(val: string): number | string | null {
-  const port = parseInt(val, 10);
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(port)) return val;
-  if (port >= 0) return port;
-  return null;
+let port = null;
+if (API_CONFIG_SCHEMA.parse(API_CONFIGURATION)) {
+  port = helper.normalizePort(API_CONFIGURATION.port);
+
+  // Configure a middleware for 404s and the error handler
+  app.use(express.notFound());
+
+  const server = app.listen(port);
+  const PeerJsServer = ExpressPeerServer(server);
+  PeerJsServer.on('connection', () => {
+    Logger.info('new client connection connected');
+  });
+
+  app.use('/peerjs', PeerJsServer);
+
+  server.on('error', (err) => {
+    helper.onError(err, API_CONFIGURATION.port);
+  });
+  server.on('listening', () => {
+    app
+      .get('sequelizeSync')
+      .then(() => {
+        helper.onListening(server, API_CONFIGURATION.host);
+      })
+      .catch((error) => {
+        Logger.error(error);
+        process.exit(1);
+      });
+  });
 }
-function onListening(server) {
-  const addr = server.address();
-  const bind: string | null =
-    typeof addr === 'string' ? `pipe  ${addr}` : `port ${addr?.port}`;
-  Logger.info(`Listening on ${bind} `);
-}
-const port = normalizePort(process.env.PORT || '6000');
-function onError(error: any): void {
-  if (error.syscall !== 'listen') throw error;
-  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      Logger.error(`${bind} requires elevated privileges`);
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      Logger.error(`${bind}  is already in use`);
-      process.exit(1);
-      break;
-    default:
-      Logger.error(error);
-      process.exit(1);
-  }
-}
-
-const server = app.listen(port);
-const PeerJsServer = ExpressPeerServer(server);
-PeerJsServer.on('connection', () => {
-  console.log('new client connection connected');
-});
-
-app.use('/peerjs', PeerJsServer);
-
-// Configure a middleware for 404s and the error handler
-app.use(express.notFound());
-
-/* Handling all errors thrown */
-// eslint-disable-next-line prefer-arrow-callback
-// app.use(function (
-//   err: Error | any,
-//   req: Request,
-//   res: Response,
-//   // eslint-disable-next-line no-unused-vars
-//   next: NextFunction
-// ) {
-//   return sendErrorResponse(res, err.status || err.code || 500, [err]);
-// });
-
-server.on('error', onError);
-server.on('listening', () => {
-  app
-    .get('sequelizeSync')
-    .then(() => {
-      onListening(server);
-    })
-    .catch((error) => {
-      Logger.error(error);
-      process.exit(1);
-    });
-});

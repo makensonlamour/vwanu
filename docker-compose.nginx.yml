@@ -7,6 +7,7 @@ services:
       context: ./client
       dockerfile: Dockerfile.nginx
       args:
+        - REACT_APP_API_URL=${SERVER_ADDRESS}
         - REACT_API_URL=${SERVER_ADDRESS}
     ports:
       - '3000:3000'
@@ -37,15 +38,7 @@ services:
     command: ./docker-entrypoint.sh
     depends_on:
       - pg_db
-    # links:
-    #   - redis
-  # redis:
-  #   image: redis:6.2-alpine
-  #   container_name: redis
-  #   restart: unless-stopped
-  #   network_mode: bridge
-  #   expose:
-  #     - 6379
+
   pg_db:
     container_name: pg_db
     image: 'postgres:12'
@@ -60,15 +53,6 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - data:/var/lib/postgresql/data
-  # nginx:
-  #   depends_on:
-  #     - api
-  #     - web
-  #   restart: always
-  #   build:
-  #     dockerfile: Dockerfile
-  #     context: ./nginx
-  #   ports:
-  #     - "3050:80"
+
 volumes:
   data: {}

@@ -1,11 +1,17 @@
 // Initializes the `discussion ` service on path `/discussion`
-import config from 'config';
+
 import { ServiceAddons } from '@feathersjs/feathers';
-import { Application } from '../../declarations';
-import { Discussion } from './discussion.class';
+/** Local dependencies  */
 import hooks from './discussion.hooks';
-import transferUploadedFilesToFeathers from '../../middleware/PassFilesToFeathers/file-to-feathers.middleware';
+import { Discussion } from './discussion.class';
+import { Application } from '../../declarations';
 import { discussionStorage } from '../../cloudinary';
+import {
+  MEDIA_CONFIG_SCHEMA,
+  MEDIA_CONFIG_TYPE,
+} from '../../schema/mediaConf.schema';
+import transferUploadedFilesToFeathers from '../../middleware/PassFilesToFeathers/file-to-feathers.middleware';
+
 // Add this service to the service type index
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
@@ -20,29 +26,32 @@ export default function (app: Application): void {
     paginate: app.get('paginate'),
   };
 
-  // Initialize our service with any options it requires
-  app.use(
-    '/discussion',
-    discussionStorage.fields([
-      {
-        name: 'discussionImage',
-        maxCount: config.get<number>('maxDiscussionImages'),
-      },
-      {
-        name: 'discussionVideo',
-        maxCount: config.get<number>('maxDiscussionVideos'),
-      },
-      {
-        name: 'discussionAudio',
-        maxCount: config.get<number>('maxDiscussionAudios'),
-      },
-    ]),
-    transferUploadedFilesToFeathers,
-    new Discussion(options, app)
-  );
+  const config: MEDIA_CONFIG_TYPE = app.get('MEDIA_CONFIGURATION');
+  if (MEDIA_CONFIG_SCHEMA.parse(config)) {
+    // Initialize our service with any options it requires
+    app.use(
+      '/discussion',
+      discussionStorage.fields([
+        {
+          name: 'discussionImage',
+          maxCount: config.maxDiscussionImages,
+        },
+        {
+          name: 'discussionVideo',
+          maxCount: config.maxDiscussionVideos,
+        },
+        {
+          name: 'discussionAudio',
+          maxCount: config.maxDiscussionAudios,
+        },
+      ]),
+      transferUploadedFilesToFeathers,
+      new Discussion(options, app)
+    );
 
-  // Get our initialized service so that we can register hooks
-  const service = app.service('discussion');
+    // Get our initialized service so that we can register hooks
+    const service = app.service('discussion');
 
-  service.hooks(hooks);
+    service.hooks(hooks);
+  }
 }
