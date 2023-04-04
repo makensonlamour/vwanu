@@ -14,7 +14,7 @@
     "install-all-deps": "concurrently \"npm run server-install\" \"npm run client-install\"",
     "build:client": "npm run build --prefix client",
     "build:server": "npm run build --prefix server",
-    "build": " concurrently \"npm run build:serveer\" \"npm run build:client\"",
+    "build": " concurrently \"npm run build:server\" \"npm run build:client\"",
     "prepare": "husky install",
     "pre-commit": "lint-staged"
   },
