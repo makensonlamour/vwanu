@@ -94,13 +94,15 @@ const CommunityFeed = () => {
     );
   }
 
+  console.log(community?.data?.IsMember);
+
   return (
     <>
       <div className="mx-auto">
         <div className="pb-2 mx-auto align-items-center lg:w-full space-y-2">
           <div className="lg:basis-2/3">
             <InputModal
-              disabled={community?.data?.IsMember === null && !community?.data?.canUserPost ? true : false}
+              disabled={community?.data?.IsMember === null || !community?.data?.canUserPost ? true : false}
               reference="communityFeed"
               communityId={id}
             />

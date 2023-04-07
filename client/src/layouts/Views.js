@@ -20,6 +20,7 @@ import ReceivedDialog from "../pages/Call/components/ReceivedDialog";
 import client from "../features/feathers/index";
 import { MessageContext } from "../context/MessageContext";
 import { useListConversation } from "../features/chat/messageSlice";
+import LayoutGeneral from "./LayoutGeneral";
 
 import useCall from "../hooks/useCall";
 
@@ -160,6 +161,13 @@ const Views = () => {
             <Route key={cryptoRandomString({ length: 10 })} path="/" element={<LayoutCall />}>
               {routes.map((route) => {
                 return route.access === role.CALL ? (
+                  <Route key={cryptoRandomString({ length: 10 })} path={route.path} element={<route.element />} exact={true} />
+                ) : null;
+              })}
+            </Route>
+            <Route key={cryptoRandomString({ length: 10 })} path="/" element={<LayoutGeneral />}>
+              {routes.map((route) => {
+                return route.access === role.GENERAL ? (
                   <Route key={cryptoRandomString({ length: 10 })} path={route.path} element={<route.element />} exact={true} />
                 ) : null;
               })}

@@ -144,13 +144,19 @@ const FormRegister = () => {
               <span>
                 {"I Agree with the"}
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a href="#" className="font-semibold hover:text-primary">
-                  {" terms of use "}
+                <a href="../../terms-conditions" className="font-semibold hover:text-primary">
+                  {" terms and conditions "}
                 </a>
+                {" , "}
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a href="../../privacy-policy" className="font-semibold hover:text-primary">
+                  {" privacy policy "}
+                </a>
+
                 {" & "}
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a href="#" className="font-semibold hover:text-primary">
-                  {" privacy and policy. "}
+                <a href="../../community-guidelines" className="font-semibold hover:text-primary">
+                  {" Community Guidelines. "}
                 </a>
               </span>
             </Fragment>

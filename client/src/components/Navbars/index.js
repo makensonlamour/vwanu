@@ -48,8 +48,26 @@ const Navbar = ({ user, countMessage }) => {
       icon: <FaUserEdit style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
       path: "../../me/profile/edit?tabs=edit&subtabs=general",
     },
-    { title: "Account Settings", icon: <BsGear style={{ paddingRight: "0.5rem" }} size="30px" className="" /> },
-    { title: "Terms & Privacy", icon: <MdOutlinePolicy style={{ paddingRight: "0.5rem" }} size="30px" className="" /> },
+    {
+      title: "Account Settings",
+      icon: <BsGear style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
+      path: "#",
+    },
+    {
+      title: "Terms & Conditions",
+      icon: <MdOutlinePolicy style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
+      path: "../../terms-conditions",
+    },
+    {
+      title: "Privacy Policy",
+      icon: <MdOutlinePolicy style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
+      path: "../../privacy-policy",
+    },
+    {
+      title: "Community Guideline",
+      icon: <MdOutlinePolicy style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
+      path: "../../community-guidelines",
+    },
   ];
 
   const handleOpenUserMenu = (event) => {
@@ -168,7 +186,7 @@ const Navbar = ({ user, countMessage }) => {
                 </Tooltip>
 
                 <Menu
-                  sx={{ mt: "45px", borderRadius: "15px" }}
+                  sx={{ mt: "45px", borderRadius: "15px", width: "100%" }}
                   id="menu-appbar"
                   anchorEl={anchorElUser}
                   anchorOrigin={{
@@ -216,10 +234,12 @@ const Navbar = ({ user, countMessage }) => {
                     <MenuItem
                       key={cryptoRandomString({ length: 10 })}
                       onClick={handleCloseUserMenu}
-                      sx={{ py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
+                      sx={{ width: "270px", py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
                     >
-                      <span className="py-2">{setting.icon}</span>
-                      {setting.title}
+                      <Link to={setting?.path} className="flex w-full">
+                        <span className="py-2">{setting?.icon}</span>
+                        {setting.title}
+                      </Link>
                     </MenuItem>
                   ))}
                   <MenuItem

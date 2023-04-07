@@ -23,6 +23,9 @@ import ForumList from "./pages/Forum/ForumList";
 import PreviewPhoto from "./pages/NewsFeed/PreviewPhoto";
 import Notification from "./pages/Notification/Notification";
 import CallScreen from "./pages/Call/CallScreen";
+import TermsConditions from "./pages/Policies/TermsConditions";
+import PrivacyPolicy from "./pages/Policies/PrivacyPolicy";
+import CommunityGuidelines from "./pages/Policies/CommunityGuidelines";
 import TestSingleComponents from "./pages/TestSingleComponents/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
 
@@ -32,6 +35,7 @@ let role = {
   USER: "user",
   AUTH: "auth",
   CALL: "call",
+  GENERAL: "general",
 };
 
 //Define all routes on the app
@@ -218,5 +222,8 @@ let routes = [
     element: TestSingleComponents,
     access: role.CALL,
   },
+  { path: routesPath.TERMS_CONDITIONS, name: "Terms Conditions", element: TermsConditions, access: role.GENERAL },
+  { path: routesPath.PRIVACY_POLICY, name: "Privacy Policy", element: PrivacyPolicy, access: role.GENERAL },
+  { path: routesPath.COMMUNITY_GUIDELINES, name: "Community Guidelines", element: CommunityGuidelines, access: role.GENERAL },
 ];
 export { routes, role };

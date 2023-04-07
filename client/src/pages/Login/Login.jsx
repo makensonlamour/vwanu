@@ -82,13 +82,19 @@ const LoginScreen = () => {
           <div className="place-content-center place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] lg:rounded-none px-4 md:px-8 -mt-28 z-10 md:mx-32 lg:mt-0 lg:mx-0 lg:h-screen xl:h-full 2xl:h-full lg:flex lg:items-center lg:w-full lg:flex-col">
             <div className="lg:flex-none hidden lg:block lg:place-content-center lg:my-4">
               <p className="text-center mt-8 lg:mt-0">
-                <span className="text-md text-primary font-semibold md:text-xl">Not a member ?</span>{" "}
+                <span className="text-md text-primary font-semibold md:text-xl">
+                  <FormattedMessage
+                    id="login.notMemberText"
+                    defaultMessage="Not a member ?"
+                    description="This is not a member yet message"
+                  />
+                </span>{" "}
                 <Link
                   data-testid="registerBtn"
                   to={routesPath.REGISTER}
                   className="btn btn-secondary btn-sm rounded-full normal-case hover:bg-primary hover:text-base-100 md:px-8 ml-1 text-base-100"
                 >
-                  Register
+                  <FormattedMessage id="login.registerText" defaultMessage="Register" description="" />
                 </Link>
               </p>
             </div>
