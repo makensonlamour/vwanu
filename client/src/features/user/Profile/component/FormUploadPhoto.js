@@ -61,7 +61,8 @@ const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append("profilePicture", preview);
+    let finalPreview = preview || files[0].preview;
+    formData.append("profilePicture", finalPreview);
     formData.append("UserId", user?.id);
     try {
       const res = await updateProfilePicture({ formData, id: user?.id });

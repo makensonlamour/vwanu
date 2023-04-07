@@ -6,6 +6,8 @@ import {
   useCancelFriendRequest,
   useAcceptFriendRequest,
   useDeclineFriendRequest,
+  useUnfollowUser,
+  useUnfriendUser,
 } from "../../features/friend/friendSlice";
 import { useSendFollow } from "../../features/follower/followerSlice";
 import toast, { Toaster } from "react-hot-toast";
@@ -58,14 +60,31 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
   const sendFriendRequest = useSendFriendRequest(["user", "suggest"]);
   const cancelFriendRequest = useCancelFriendRequest(["user", "suggest"], data?.id);
   const sendFollow = useSendFollow(["user", "suggest"]);
+  const sendUnfollow = useUnfollowUser(["user", "suggest"]);
   const acceptFriendRequest = useAcceptFriendRequest(["user", "request"]);
   const declineFriendRequest = useDeclineFriendRequest(["user", "request"]);
+  const unconnectFriend = useUnfriendUser(["user", "suggest"], data?.id);
   const [isLoading, setLoading] = useState(false);
 
   const handleFollower = async (_id) => {
     setLoading(true);
     try {
       await sendFollow.mutateAsync({ UserId: _id });
+      queryClient.invalidateQueries(["user", "suggest"]);
+      followSuccess();
+    } catch (e) {
+      console.log(e);
+      followError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUnfollower = async (_id) => {
+    setLoading(true);
+
+    try {
+      await sendUnfollow.mutateAsync({ id: _id });
       queryClient.invalidateQueries(["user", "suggest"]);
       followSuccess();
     } catch (e) {
@@ -94,6 +113,20 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
     setLoading(true);
     try {
       await cancelFriendRequest.mutateAsync({ UserID: _id });
+      queryClient.invalidateQueries(["user", "suggest"]);
+      cancelSuccess();
+    } catch (e) {
+      console.log(e);
+      cancelError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveFriend = async (_id) => {
+    setLoading(true);
+    try {
+      await unconnectFriend.mutateAsync({ UserID: _id });
       queryClient.invalidateQueries(["user", "suggest"]);
       cancelSuccess();
     } catch (e) {
@@ -213,7 +246,7 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
                   {data?.isFriend && (
                     <button
                       onClick={() => {
-                        handleCancelFriendRequest(data?.id);
+                        handleRemoveFriend(data?.id);
                       }}
                       className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-1 my-0 rounded-lg hover:bg-primary"
                     >
@@ -232,7 +265,7 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
                   ) : (
                     <button
                       onClick={() => {
-                        handleFollower(data?.id);
+                        handleUnfollower(data?.id);
                       }}
                       className="text-xs w-fit bg-secondary text-white px-2 mr-2 py-1 my-0 rounded-lg hover:bg-primary"
                     >

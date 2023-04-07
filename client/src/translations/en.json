@@ -1,4 +1,8 @@
 {
   "login.welcome": "Welcome",
-  "login.together": "Together We are Stronger"
+  "login.together": "Together We are Stronger",
+  "login.notMemberText": "Not a member yet ?",
+  "login.registerText": "Register",
+
+  "register.notMemberText": ""
 }

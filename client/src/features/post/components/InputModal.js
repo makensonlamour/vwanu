@@ -189,10 +189,14 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
     <>
       <Toaster />
       <div
-        onClick={() => setShowModal(true)}
-        className={`${
-          disabled ? "hidden" : ""
-        } cursor-pointer rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color`}
+        onClick={() => {
+          if (disabled) {
+            alert(`Sorry! You can't post on this community because you're not a member yet.`);
+          } else {
+            setShowModal(true);
+          }
+        }}
+        className={` cursor-pointer rounded-lg bg-white border border-gray-300 pt-4 w-full hover:bg-placeholder-color`}
       >
         <div className="flex items-center 2xs:px-2 xs:px-4 pb-4">
           {" "}
