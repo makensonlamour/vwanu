@@ -1,8 +1,10 @@
 {
-  "login.welcome": "Welcome",
-  "login.together": "Together We are Stronger",
+  "general.welcome": "Welcome",
+  "general.together": "Together We are Stronger",
   "login.notMemberText": "Not a member yet ?",
   "login.registerText": "Register",
+  "login.signInToVwanu": "Sign in to Vwanu",
 
-  "register.notMemberText": ""
+  "register.signinText": "Sign In",
+  "register.alreadyHaveText": "Already have an account ?"
 }

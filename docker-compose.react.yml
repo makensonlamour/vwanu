@@ -1,28 +1,29 @@
 version: '3.8'
 services:
-  # web:
-  #   container_name: vwanu_web_stage
-  #   image: vwanu_web:staging-nginx
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - REACT_APP_API_URL=${SERVER_ADDRESS}
-  #   ports:
-  #     - '3000:3000'
-  #   restart: unless-stopped
   api:
     env_file:
       - .env
-    container_name: vwanu_api
-    image: vwanu_api:0.0.1
+    container_name: vwanu_api_stage
+    image: vwanu_api:staging-nginx-2.0.1
     build:
       context: ./server
+      dockerfile: Dockerfile.stage
     ports:
       - '4000:4000'
-    volumes:
-      - ./server:/app
-    command: ./docker-entrypoint.testing.sh
+    environment:
+      - PORT=4000
+      - PGDATABASE=social_media
+      - PGUSER=vwanu
+      - PGPASSWORD=123456
+      - PGHOST=pg_db
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - SMTP_SERVICE=${SMTP_SERVICE}
+      - REDIS_URL=redis://cache
+    command: ./docker-entrypoint.sh
     depends_on:
       - pg_db
 
@@ -31,12 +32,15 @@ services:
     image: 'postgres:12'
     ports:
       - '5432:5432'
-    volumes:
-      - nps_data:/var/lib/postgresql/data
+    restart: always
+
     environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_DATABASE}
-      - POSTGRES_HOST_AUTH_METHOD=${DB_HOST_AUTH_METHOD}
+      - POSTGRES_USER=vwanu
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=social_media
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - data:/var/lib/postgresql/data
+
 volumes:
-  nps_data: {}
+  data: {}
