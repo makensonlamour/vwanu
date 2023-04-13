@@ -2,7 +2,7 @@ import axios from "axios";
 //import Cookies from "js-cookie";
 import { getToken } from "../helpers/index";
 
-export const baseUrl = process.env.REACT_APP_API_URL || "localhost:4000";
+export const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:4000";
 export const token = getToken("feathers-jwt");
 
 export const api = {

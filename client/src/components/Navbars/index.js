@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { Badge, Menu, Button, Tooltip, MenuItem } from "@mui/material";
 import logo from "../../assets/images/Asset_2.png";
 import { IoIosArrowDown } from "react-icons/io";
+// eslint-disable-next-line no-unused-vars
 import { BsSearch, BsPower, BsPersonCircle, BsGear } from "react-icons/bs";
 import { AiOutlineInbox, AiOutlineClose } from "react-icons/ai";
 import { FiActivity } from "react-icons/fi";
@@ -48,11 +49,11 @@ const Navbar = ({ user, countMessage }) => {
       icon: <FaUserEdit style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
       path: "../../me/profile/edit?tabs=edit&subtabs=general",
     },
-    {
-      title: "Account Settings",
-      icon: <BsGear style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
-      path: "#",
-    },
+    // {
+    //   title: "Account Settings",
+    //   icon: <BsGear style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
+    //   path: "#",
+    // },
     {
       title: "Terms & Conditions",
       icon: <MdOutlinePolicy style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
@@ -231,16 +232,16 @@ const Navbar = ({ user, countMessage }) => {
                     </Link>
                   </MenuItem>
                   {settings.map((setting) => (
-                    <MenuItem
-                      key={cryptoRandomString({ length: 10 })}
-                      onClick={handleCloseUserMenu}
-                      sx={{ width: "270px", py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
-                    >
-                      <Link to={setting?.path} className="flex w-full">
+                    <Link key={cryptoRandomString({ length: 10 })} to={setting?.path} className="flex w-full">
+                      <MenuItem
+                        onClick={handleCloseUserMenu}
+                        sx={{ width: "270px", py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
+                      >
                         <span className="py-2">{setting?.icon}</span>
+
                         {setting.title}
-                      </Link>
-                    </MenuItem>
+                      </MenuItem>
+                    </Link>
                   ))}
                   <MenuItem
                     key="logout"
