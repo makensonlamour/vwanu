@@ -16,7 +16,6 @@ services:
       - PGDATABASE=social_media
       - PGUSER=vwanu
       - PGPASSWORD=123456
-      - PGHOST=pg_db
       - NODE_ENV=development
       - REDIS_URL=redis://redis:6379/0
     command: ./docker-entrypoint.sh
