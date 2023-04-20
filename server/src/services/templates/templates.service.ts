@@ -2,21 +2,22 @@
 import { ServiceAddons } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
 import { Templates } from './templates.class';
-import createModel from '../../models/templates.model';
+
 import hooks from './templates.hooks';
 
 // Add this service to the service type index
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
   interface ServiceTypes {
-    'templates': Templates & ServiceAddons<any>;
+    templates: Templates & ServiceAddons<any>;
   }
 }
 
 export default function (app: Application): void {
+  const sequelize = app.get('sequelizeClient');
   const options = {
-    Model: createModel(app),
-    paginate: app.get('paginate')
+    Model: sequelize.models.Post,
+    paginate: app.get('paginate'),
   };
 
   // Initialize our service with any options it requires
