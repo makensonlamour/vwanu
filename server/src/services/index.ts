@@ -79,6 +79,8 @@ import searchCommunity from './search-community/search-community.service';
 import forumCategories from './forum-categories/forum-categories.service';
 import call from './call/call.service';
 
+import templates from './templates/templates.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(call);
@@ -127,4 +129,5 @@ export default function (app: Application): void {
   app.configure(searchBlog);
   app.configure(searchCommunity);
   app.configure(forumCategories);
+  app.configure(templates);
 }
