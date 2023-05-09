@@ -1,5 +1,6 @@
-import app from '../../app';
-import { generateFakeEmail } from '../../lib/utils/generateFakeUser';
+
+import app from '../../../src/app';
+import { generateFakeEmail } from '../../../src/lib/utils/generateFakeUser';
 
 const userEmail = generateFakeEmail();
 const template = {
@@ -8,6 +9,7 @@ const template = {
 };
 
 describe('Mailer', () => {
+  
   it('should send an email', async () => {
     const result = await app.service('mailer').create({
       to: userEmail,

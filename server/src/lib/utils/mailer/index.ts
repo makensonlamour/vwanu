@@ -1,3 +1,3 @@
-import mailer from './mailer';
+import * as Mailer from './Emailer';
 
-export default mailer;
+export default Mailer;

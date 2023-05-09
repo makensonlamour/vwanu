@@ -3,7 +3,11 @@ import Mailer from 'feathers-mailer';
 import { ServiceAddons } from '@feathersjs/feathers';
 
 /** Local dependencies */
+import Logger from '../../lib/utils/logger';
 import { Application } from '../../declarations';
+import SMTP_CONF, {
+  SMTP_CONFIGURATION,
+} from '../../schema/smtpconfiguration.schema';
 
 declare module '../../declarations' {
   // eslint-disable-next-line no-unused-vars
@@ -13,19 +17,26 @@ declare module '../../declarations' {
 }
 
 export default function (app: Application): void {
-  const transporter = {
-    host: config.get<string>('smtp_host'),
-    port: 587,
-    auth: {
-      user: config.get<string>('smtp_username'),
-      pass: config.get<string>('smtp_password'),
-    },
-  };
+  try {
+    if (config.has('SMTP_CONFIGURATION')) {
+      const configuration =
+        config.get<SMTP_CONFIGURATION>('SMTP_CONFIGURATION');
 
-  app.use(
-    '/mailer',
-    Mailer(transporter, { from: config.get<string>('sendEmailFrom') })
-  );
-  // const service = app.service('mailer');
-  // service.hooks(hooks);
+      if (SMTP_CONF.parse(configuration)) {
+        const transporter = {
+          ...configuration,
+        };
+
+        app.use(
+          '/mailer',
+          Mailer(transporter, { from: configuration.email_from })
+        );
+      }
+    } else {
+      throw new Error('SMTP_CONFIGURATION is not defined');
+    }
+  } catch (error) {
+    Logger.error(error.message || 'SMTP_CONFIGURATION is not defined');
+    process.exit(1);
+  }
 }

@@ -8,7 +8,7 @@ import { Field, Form, Checkbox, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 import { Link } from "react-router-dom";
 import routesPath from "../../../routesPath";
-// import { login } from "../authSlice";
+import { FormattedMessage } from "react-intl";
 import useAuth from "../../../hooks/useAuth";
 
 const FormLogin = () => {
@@ -39,7 +39,9 @@ const FormLogin = () => {
         onSubmit={handleLogin}
         className="px-2 mt-4 lg:mt-4 lg:mx-2 xl:mx-14 3xl:mx-64"
       >
-        <h1 className="card-title pb-2 text-primary font-bold text-xl lg:text-2xl">Sign in to Vwanu</h1>
+        <h1 className="card-title pb-2 text-primary font-bold text-xl lg:text-2xl">
+          <FormattedMessage id="login.signInToVwanu" defaultMessage="Sign in to Vwanu" description="" />
+        </h1>
         <Alert />
         <Field
           required
@@ -104,12 +106,15 @@ const FormLogin = () => {
         </div> */}
         <div className="mt-8 lg:hidden">
           <p className="text-center mt-4">
-            <span className="text-md text-primary font-semibold md:text-xl">Not a member ?</span>{" "}
+            <span className="text-md text-primary font-semibold md:text-xl">
+              {" "}
+              <FormattedMessage id="login.notMemberText" defaultMessage="Not a member yet ?" description="" />
+            </span>{" "}
             <Link
               to={routesPath.REGISTER}
               className="btn btn-secondary btn-sm rounded-full text-base-100 normal-case md:px-8 ml-1 hover:bg-primary"
             >
-              Register
+              <FormattedMessage id="login.registerText" defaultMessage="Register" description="" />
             </Link>
           </p>
         </div>

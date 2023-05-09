@@ -11,7 +11,7 @@ import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
 import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
 // const verifyHooks = authMan.hooks;
-import { SaveAddress, AddVisitor, GetUser } from './hook';
+import { SaveAddress, AddVisitor, GetUser /* SendEmail */ } from './hook';
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
 const { hashPassword, protect } = local.hooks;
@@ -34,6 +34,7 @@ export default {
         commonHooks.isProvider('external'),
         commonHooks.preventChanges(
           true,
+
           ...[
             'email',
             'isVerified',

@@ -15,6 +15,8 @@ export type FakeUser = {
   password: string;
   passwordConfirmation: string;
   deviceId: string;
+  firstName: string;
+  lastName: string;
 };
 
 export const generateFakeEmail = () =>
