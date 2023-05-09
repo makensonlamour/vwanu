@@ -46,7 +46,8 @@ const FormStepThree = () => {
 
   const handleStepThree = async () => {
     setIsLoading(true);
-    formData.append("profilePicture", preview);
+    let finalPreview = preview === false ? avatar : preview;
+    formData.append("profilePicture", finalPreview);
     formData.append("idUser", idUser);
     try {
       const res = await updateProfilePicture({ formData, id: idUser });
