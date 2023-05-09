@@ -59,9 +59,13 @@ const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
     });
   };
 
+  // console.log(files[0]);
+
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append("profilePicture", preview);
+    let finalPreview = preview === false ? files[0] : preview;
+    // console.log(finalPreview);
+    formData.append("profilePicture", finalPreview);
     formData.append("UserId", user?.id);
     try {
       const res = await updateProfilePicture({ formData, id: user?.id });

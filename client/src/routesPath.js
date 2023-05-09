@@ -44,6 +44,9 @@ let routesPath = {
   VIDEO_CALL: "/general-settings",
   NOTIFICATIONS: "/notifications",
   TEST_PAGE: "/test",
+  TERMS_CONDITIONS: "/terms-conditions",
+  PRIVACY_POLICY: "privacy-policy",
+  COMMUNITY_GUIDELINES: "community-guidelines",
 };
 
 export default routesPath;

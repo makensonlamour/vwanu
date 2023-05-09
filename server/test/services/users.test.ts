@@ -13,6 +13,12 @@ import {
 } from '../../src/lib/utils/generateFakeUser';
 import Service from './index.test';
 
+jest.mock('../../src/lib/utils/messagePicker.utils', () => () => () => ({
+  subject: 'subject',
+  body: '<p>This is the body of a great email</p> {link}',
+}));
+
+app.service('mailer').create = jest.fn();
 export default class UsersClass extends Service {
   constructor() {
     super('/users');
@@ -36,6 +42,10 @@ describe('/users service', () => {
   beforeAll(async () => {
     await sequelize.sync({ force: true });
     testServer = request(app);
+    jest.clearAllMocks();
+  });
+  beforeEach(async () => {
+    jest.clearAllMocks();
   });
 
   afterAll(async () => {
@@ -350,5 +360,22 @@ describe('/users service', () => {
       .set('authorization', privateUser.accessToken);
     expect(privateUser.id).toEqual(deletedUser.body.id);
     expect(deletedUser.statusCode).toEqual(200);
+  });
+  it.skip("Should send an email to the user's email address after creation", async () => {
+    jest.clearAllMocks();
+    app.service('mailer').create.mockClear();
+
+    const newUsersAmount = 2;
+    await Promise.all(
+      getRandUsers(newUsersAmount).map((u) => {
+        const user = u;
+        delete user.id;
+        return testServer.post(endpoint).send(user);
+      })
+    );
+
+    expect(
+      app.service('mailer').create.mock.calls.length
+    ).toBeGreaterThanOrEqual(newUsersAmount);
   });
 });

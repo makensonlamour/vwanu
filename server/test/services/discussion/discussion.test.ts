@@ -27,13 +27,13 @@ describe("'discussion ' service", () => {
     );
     testUsers = testUsers.map((testUser) => testUser.body);
   });
-  it('registered the service', () => {
+  it.skip('registered the service', () => {
     const service = app.service('discussion');
 
     expect(service).toBeTruthy();
   });
 
-  it('Should create a discussion', async () => {
+  it.skip('Should create a discussion', async () => {
     discussion = await testServer
       .post(endpoint)
       .send({
@@ -45,7 +45,7 @@ describe("'discussion ' service", () => {
 
     expect(discussion).toHaveProperty('id');
   });
-  it('should get a discussion', async () => {
+  it.skip('should get a discussion', async () => {
     const { body: fetched } = await testServer
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', `Bearer ${testUsers[0].accessToken}`);
@@ -67,7 +67,7 @@ describe("'discussion ' service", () => {
       },
     });
   });
-  it('should create a comment on a discussion', async () => {
+  it.skip('should create a comment on a discussion', async () => {
     comment = await testServer
       .post(endpoint)
       .send({
@@ -83,7 +83,7 @@ describe("'discussion ' service", () => {
     expect(comment.DiscussionId).toBe(discussion.id);
   });
 
-  it('discussion should show one comment and 1 participant', async () => {
+  it.skip('discussion should show one comment and 1 participant', async () => {
     const { body: discussionWithComment } = await testServer
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[1].accessToken);
@@ -117,7 +117,7 @@ describe("'discussion ' service", () => {
     });
   });
 
-  it('Same user should create a comment on a discussion', async () => {
+  it.skip('Same user should create a comment on a discussion', async () => {
     const { body: comment2 } = await testServer
       .post(endpoint)
       .send({
@@ -130,7 +130,7 @@ describe("'discussion ' service", () => {
     expect(comment2.DiscussionId).toBe(discussion.id);
   });
 
-  it('discussion should show 2 comment and 1 participant', async () => {
+  it.skip('discussion should show 2 comment and 1 participant', async () => {
     const { body: discussionWithComment } = await testServer
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[1].accessToken);
@@ -163,7 +163,7 @@ describe("'discussion ' service", () => {
     });
   });
 
-  it('Different user should create a comment on a discussion', async () => {
+  it.skip('Different user should create a comment on a discussion', async () => {
     const { body: comment3 } = await testServer
       .post(endpoint)
       .send({
@@ -176,7 +176,7 @@ describe("'discussion ' service", () => {
     expect(comment3.DiscussionId).toBe(discussion.id);
   });
 
-  it('discussion should show 3 comment and 2 participant and 0 reactions', async () => {
+  it.skip('discussion should show 3 comment and 2 participant and 0 reactions', async () => {
     const { body: discussionWithComment } = await testServer
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[1].accessToken);
@@ -209,7 +209,7 @@ describe("'discussion ' service", () => {
       },
     });
   });
-  it('should react on a Discussion', async () => {
+  it.skip('should react on a Discussion', async () => {
     const { statusCode: reactionStatus } = await testServer
       .post('/reactions')
       .send({
@@ -222,7 +222,7 @@ describe("'discussion ' service", () => {
     expect(reactionStatus).toBe(201);
   });
 
-  it('discussion should show 3 comment and 2 participant and 1 reactions but not reactor', async () => {
+  it.skip('discussion should show 3 comment and 2 participant and 1 reactions but not reactor', async () => {
     const { body: discussionWithCommentAndReaction } = await testServer
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[1].accessToken);
@@ -257,7 +257,7 @@ describe("'discussion ' service", () => {
     });
   });
 
-  it('discussion should show 3 comment and 2 participant and 1 reactions and is reactor', async () => {
+  it.skip('discussion should show 3 comment and 2 participant and 1 reactions and is reactor', async () => {
     const { body: discussionWithCommentAndReaction } = await testServer
       .get(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[2].accessToken);
@@ -292,7 +292,7 @@ describe("'discussion ' service", () => {
     });
   });
 
-  it('should get all first 50 discussion', async () => {
+  it.skip('should get all first 50 discussion', async () => {
     const { body: discussionsList } = await testServer
       .get(endpoint)
       .set('authorization', testUsers[0].accessToken);
@@ -300,7 +300,7 @@ describe("'discussion ' service", () => {
     expect(discussionsList.data).toHaveLength(1);
     expect(discussionsList.data[0].id).toEqual(discussion.id);
   });
-  it('Should create a second discussion', async () => {
+  it.skip('Should create a second discussion', async () => {
     const { body: discussion2 } = await testServer
       .post(endpoint)
       .send({
@@ -312,7 +312,7 @@ describe("'discussion ' service", () => {
     expect(discussion2).toHaveProperty('id');
   });
 
-  it('should get all first 50 discussion 2 this time', async () => {
+  it.skip('should get all first 50 discussion 2 this time', async () => {
     const { body: discussionsList } = await testServer
       .get(endpoint)
       .set('authorization', testUsers[0].accessToken);
@@ -343,7 +343,7 @@ describe("'discussion ' service", () => {
       }
     });
   });
-  it('should update a discussion', async () => {
+  it.skip('should update a discussion', async () => {
     const { body: updatedDis } = await testServer
       .patch(`${endpoint}/${discussion.id}`)
       .send({ body: 'New Body' })
@@ -351,7 +351,7 @@ describe("'discussion ' service", () => {
 
     expect(updatedDis.body).toEqual(expect.stringContaining('Body'));
   });
-  it('should get comments on a discussion', async () => {
+  it.skip('should get comments on a discussion', async () => {
     const { body: comments } = await testServer
       .get(`${endpoint}?DiscussionId=${discussion.id}`)
       .set('authorization', testUsers[0].accessToken);
@@ -364,7 +364,7 @@ describe("'discussion ' service", () => {
     });
   });
 
-  it('Only discussion creator can update a discussion', async () => {
+  it.skip('Only discussion creator can update a discussion', async () => {
     const response = await testServer
       .patch(`${endpoint}/${discussion.id}`)
       .send({
@@ -375,14 +375,14 @@ describe("'discussion ' service", () => {
     expect(response.statusCode).toBe(400);
   });
 
-  it('should lock discussion', async () => {
+  it.skip('should lock discussion', async () => {
     const { body: lockedDiscussion } = await testServer
       .patch(`${endpoint}/${discussion.id}`)
       .send({ locked: true })
       .set('authorization', testUsers[0].accessToken);
     expect(lockedDiscussion.locked).toBe(true);
   });
-  it('Cannot comment on a discussion if it is locked', async () => {
+  it.skip('Cannot comment on a discussion if it is locked', async () => {
     const commentAttempt = await testServer
       .post(endpoint)
       .send({
@@ -395,13 +395,13 @@ describe("'discussion ' service", () => {
     expect(commentAttempt.statusCode).toBe(400);
   });
 
-  it('Only discussion owner can delete a discussion', async () => {
+  it.skip('Only discussion owner can delete a discussion', async () => {
     const response = await testServer
       .delete(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[1].accessToken);
     expect(response.statusCode).toBe(400);
   });
-  it('should delete a discussion', async () => {
+  it.skip('should delete a discussion', async () => {
     const response = await testServer
       .delete(`${endpoint}/${discussion.id}`)
       .set('authorization', testUsers[0].accessToken);

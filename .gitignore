@@ -192,3 +192,5 @@ server/src/models/.DS_Store
 .vscode/settings.jsonserver/src/database/followers.ts
 server/src/database/followers.ts
 server/test/services/follower.test.ts
+env_generator.js
+.env.STAGING

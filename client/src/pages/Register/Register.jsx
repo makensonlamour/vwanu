@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../routesPath";
+import { FormattedMessage } from "react-intl";
 
 // Core components
 import FormRegister from "../../features/auth/Register/FormRegister";
@@ -30,9 +31,19 @@ const RegisterScreen = () => {
                 <img className="w-[30%] m-auto" src={logo} alt="logo_vwanu" />
               </p>
               <div className="md:flex md:items-center md:flex-col md:justify-center md:h-[60%]">
-                <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center align-middle">Welcome</p>
+                <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center align-middle">
+                  <FormattedMessage
+                    id="general.welcome"
+                    defaultMessage="Welcome"
+                    description="This is the welcome message in the login page"
+                  />
+                </p>
                 <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2 align-middle">
-                  Together We are Stronger
+                  <FormattedMessage
+                    id="general.together"
+                    defaultMessage="Together We are Stronger"
+                    description="This is the message after the welcome message"
+                  />
                 </p>
               </div>
             </div>
@@ -49,8 +60,20 @@ const RegisterScreen = () => {
               <p className="text-center pt-14 text-base-100 text-2xl py-5">
                 <img className="w-[30%] m-auto" src={logo} alt="logo_vwanu" />
               </p>
-              <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center">Welcome</p>
-              <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">Together We are Stronger</p>
+              <p className="text-5xl text-v-yellow-dark font-bold py-10 mt-10 text-center">
+                <FormattedMessage
+                  id="general.welcome"
+                  defaultMessage="Welcome"
+                  description="This is the welcome message in the login page"
+                />
+              </p>
+              <p className="hidden lg:block text-base-100 text-xl font-semibold text-center pb-2">
+                <FormattedMessage
+                  id="general.together"
+                  defaultMessage="Together We are Stronger"
+                  description="This is the message after the welcome message"
+                />
+              </p>
             </div>
             <img
               src={Shape_up}
@@ -62,13 +85,16 @@ const RegisterScreen = () => {
           <div className="place-items-center bg-base-100 shadow-t-2xl rounded-t-[30px] lg:rounded-none px-4 md:px-8 -mt-28 z-10 md:mx-36 lg:mt-0 lg:mx-0 lg:h-screen lg:flex lg:items-center lg:w-full lg:flex-col">
             <div className="lg:flex-none lg:place-content-center lg:mt-6 lg:mb-3">
               <p className="text-center mt-4 lg:mt-0">
-                <span className="text-md text-primary font-semibold md:text-xl">Already have an account ?</span>{" "}
+                <span className="text-md text-primary font-semibold md:text-xl">
+                  {" "}
+                  <FormattedMessage id="register.alreadyHaveText" defaultMessage="Already have an account ?" description="" />
+                </span>{" "}
                 <Link
                   data-testid="loginBtn"
                   to={routesPath.LOGIN}
                   className="btn btn-primary btn-sm rounded-full normal-case hover:btn-secondary hover:text-base-100 md:px-8 ml-1 text-base-100"
                 >
-                  Sign In
+                  <FormattedMessage id="register.signinText" defaultMessage="Sign In" description="" />
                 </Link>
               </p>
             </div>

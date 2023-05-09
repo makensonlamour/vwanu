@@ -1,4 +1,6 @@
 {
-  "login.welcome": "Byenvini",
-  "login.together": "Ansanm nou pi fo"
+  "login.notMemberText": "",
+  "login.registerText": "Enskripsyon",
+  "login.together": "Ansanm nou pi fo",
+  "login.welcome": "Byenvini"
 }

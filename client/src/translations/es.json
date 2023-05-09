@@ -1,4 +1,6 @@
 {
-  "login.welcome": "Bienvnido",
-  "login.together": "Juntos somos mas fuerte"
+  "login.notMemberText": "",
+  "login.registerText": "Registrar",
+  "login.together": "Juntos somos mas fuerte",
+  "login.welcome": "Bienvenido"
 }
