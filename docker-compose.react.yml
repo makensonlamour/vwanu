@@ -15,6 +15,7 @@ services:
       - PGDATABASE=social_media
       - PGUSER=vwanu
       - PGPASSWORD=123456
+
       - PGHOST=pg_db
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
@@ -23,6 +24,7 @@ services:
       - SMTP_SECURE=${SMTP_SECURE}
       - SMTP_SERVICE=${SMTP_SERVICE}
       - REDIS_URL=redis://cache
+
     command: ./docker-entrypoint.sh
     depends_on:
       - pg_db

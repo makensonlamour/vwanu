@@ -27,7 +27,7 @@ services:
       - PGDATABASE=social_media
       - PGUSER=vwanu
       - PGPASSWORD=123456
-      - PGHOST=pg_db
+      - DB_HOST=pg_db
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
       - SMTP_HOST=${SMTP_HOST}
