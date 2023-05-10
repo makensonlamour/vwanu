@@ -6,11 +6,13 @@ export const login = (credentials) => api.post("/auth", credentials);
 
 export const register = (credentials) => api.post("/users", credentials);
 
-export const useVerifyEmail = (data) => usePost(`/users/verify/${data.id}/${data.activationKey}`);
+export const useVerifyEmail = (queryKey, data, oldData, newData) =>
+  usePost(queryKey, `/users/verify/${data.id}/${data.activationKey}`, (oldData, newData));
 
-export const useResetPassword = (credentials) => usePost(`/user/resetPassword/${credentials.idUser}/${credentials.resetPasswordKey}`);
+export const useResetPassword = (queryKey, credentials, oldData, newData) =>
+  usePost(queryKey, `/user/resetPassword/${credentials.idUser}/${credentials.resetPasswordKey}`, (oldData, newData));
 
-export const useForgotPassword = () => usePost("/users/forgotPassword");
+export const useForgotPassword = (queryKey, oldData, newData) => usePost(queryKey, "/users/forgotPassword", (oldData, newData));
 
 export const useGetProfile = (queryKey, enabled) => {
   const token = getToken();

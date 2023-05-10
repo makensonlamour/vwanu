@@ -193,6 +193,7 @@ const FormStepTwo = () => {
             fn={setStateCode}
             byId={true}
             options={optionsState}
+            disabled={optionsState?.length > 0 ? false : true}
           />
           <Select
             required
@@ -205,6 +206,7 @@ const FormStepTwo = () => {
             fn={setCityCode}
             byId={true}
             options={optionsCity}
+            disabled={optionsCity?.length > 0 ? false : true}
           />
         </div>
 

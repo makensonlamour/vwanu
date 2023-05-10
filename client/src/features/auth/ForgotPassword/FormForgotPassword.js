@@ -12,7 +12,7 @@ import Loader from "../../../components/common/Loader";
 
 const FormForgotPassword = () => {
   const navigate = useNavigate();
-  const forgotPassword = useForgotPassword();
+  const forgotPassword = useForgotPassword(["forgot", "password"], undefined, undefined);
   const [isLoading, setIsLoading] = useState(false);
   const ValidationSchema = Yup.object().shape({
     email: Yup.string().required().min(6).email().label("Email"),

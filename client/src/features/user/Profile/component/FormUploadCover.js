@@ -63,7 +63,8 @@ const FormUploadCover = ({ user, hideViewer, getImg }) => {
     // getCroppedImg();
     // await onCrop();
     const formData = new FormData();
-    formData.append("coverPicture", preview);
+    let finalPreview = preview === false ? files[0] : preview;
+    formData.append("coverPicture", finalPreview);
     formData.append("UserId", user?.id);
     try {
       const res = await updateProfilePicture({ formData, id: user?.id });
