@@ -3,27 +3,24 @@ services:
   api:
     env_file:
       - .env
-
     container_name: vwanu_api_development
     image: vwanu_api_dev:0.0.1
 
     build:
       context: ./server
-      dockerfile: Dockerfile.stage
     ports:
       - '4000:4000'
+    volumes:
+      - ./server:/app
     environment:
       - PORT=4000
       - PGDATABASE=social_media
       - PGUSER=vwanu
       - PGPASSWORD=123456
-
       - PGHOST=pg_db
-
       - DG_HOST=pg_db
       - NODE_ENV=development
       - REDIS_URL=redis://redis:6379/0
-
     command: ./docker-entrypoint.sh
     depends_on:
       - pg_db
@@ -41,8 +38,7 @@ services:
       - POSTGRES_DB=social_media
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-
       - nps_data:/var/lib/postgresql/data
 
 volumes:
-  data: {}
+  nps_data: {}

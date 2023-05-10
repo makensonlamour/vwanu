@@ -5,6 +5,10 @@
     "database": "DB_DATABASE",
     "host": "DB_HOST"
   },
+  "EmailerConfiguration": {
+    "from": "SEND_EMAIL_FROM",
+    "api_key": "sendGridApiKey"
+  },
   "SMTP_CONFIGURATION": {
     "host": "SMTP_HOST",
     "port": "SMTP_PORT",
