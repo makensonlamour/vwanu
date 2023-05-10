@@ -1,4 +1,3 @@
-import config from 'config';
 import sendGridMail, { MailDataRequired } from '@sendgrid/mail';
 
 // Custom dependencies
@@ -54,12 +53,3 @@ export default class SendGridMessenger implements IMessenger {
         });
     });
 }
-
-export const emailer = (): IMessenger => {
-  const emailConfig = config.get('EmailerConfiguration');
-  const messenger = new SendGridMessenger(
-    emailConfig.api_key,
-    emailConfig.from
-  );
-  return messenger;
-};
