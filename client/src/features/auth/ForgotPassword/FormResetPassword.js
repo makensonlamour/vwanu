@@ -27,7 +27,7 @@ const FormResetPassword = () => {
     resetPasswordKey,
   };
 
-  const resetPassword = useResetPassword({ idUser, resetPasswordKey });
+  const resetPassword = useResetPassword(["reset", "password"], { idUser, resetPasswordKey }, undefined, undefined);
 
   const handleResetPasword = async (credentials) => {
     setIsLoading(true);

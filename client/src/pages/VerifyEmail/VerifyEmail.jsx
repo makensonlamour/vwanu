@@ -18,7 +18,7 @@ const VerifyEmailScreen = () => {
   // eslint-disable-next-line no-unused-vars
   const [dataObject, setDataObject] = useState({ id, activationKey });
   const [isLoading, setIsLoading] = useState(true);
-  const verifyEmail = useVerifyEmail({ id, activationKey });
+  const verifyEmail = useVerifyEmail(["verify", "email"], { id, activationKey }, undefined, undefined);
 
   useEffect(() => {
     try {

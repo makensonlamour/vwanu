@@ -9,7 +9,7 @@ import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
 import { format } from "date-fns";
 
-const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isError, hasNextPage, fetchNextPage }) => {
+const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading, isError, hasNextPage, fetchNextPage }) => {
   const id = useParams();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const ViewDiscussion = ({ data, type = "forum", CategoryId = "", isLoading, isEr
                 Tap to retry
               </Link>{" "}
             </div>
-          ) : data?.pages && data?.pages?.length > 0 && data?.pages[0]?.data?.total > 0 ? (
+          ) : data && data?.pages && data?.pages?.length > 0 && data?.pages[0]?.data?.total > 0 ? (
             <InfiniteScroll
               fetchMore={fetchNextPage}
               isError={isError}

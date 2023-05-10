@@ -97,6 +97,8 @@ const CommunityHeader = ({ communityData, notificationList }) => {
   let invite = false;
   let inviteReceive = false;
 
+  console.log(communityData);
+
   return (
     <>
       <Toaster />
