@@ -81,6 +81,8 @@ import call from './call/call.service';
 
 import templates from './templates/templates.service';
 
+import template from './template/template.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(call);
@@ -130,4 +132,5 @@ export default function (app: Application): void {
   app.configure(searchCommunity);
   app.configure(forumCategories);
   app.configure(templates);
+  app.configure(template);
 }

@@ -22,10 +22,10 @@ const Messenger = z.object({
     .function()
     .args(z.string(), z.string(), z.string())
     .returns(z.promise(z.object({ ok: z.boolean() }))),
-  // sendEmailTemplate: z
-  //   .function()
-  //   .args(z.string(), z.string(), z.string(), z.string())
-  //   .returns(z.promise(z.object({ ok: z.boolean() }))),
+  sendTemplate: z
+    .function()
+    .args(z.string(), z.string(), z.any())
+    .returns(z.promise(z.object({ ok: z.boolean() }))),
 });
 export type IMessenger = z.infer<typeof Messenger>;
 export type SendEmailType = z.infer<typeof SendEmail>;

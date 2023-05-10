@@ -1,9 +1,7 @@
 import sendGridMail, { MailDataRequired } from '@sendgrid/mail';
 
-import config from 'config';
-
+// Custom dependencies
 import { IMessenger } from '../../../schema/email.schema';
-import Logger from '../../../lib/utils/logger';
 
 export default class SendGridMessenger implements IMessenger {
   constructor(private apikey, private fromEmail) {
@@ -27,22 +25,31 @@ export default class SendGridMessenger implements IMessenger {
           resolve({ ok: true });
         })
         .catch((error) => {
-          Logger.error(error);
           reject(error);
         });
     });
 
-  //   sendEmailTemplate = async (to: string, templateId: string, subject: string) =>
-  //     new Promise<{ ok: boolean }>((resolve, reject) => {});
+  sendTemplate = async (to: string, templateId: string, customs: any) =>
+    new Promise<{ ok: boolean }>((resolve, reject) => {
+      const message = {
+        to,
+        from: this.fromEmail,
+        template_id: templateId,
+        personalizations: [
+          {
+            to: [{ email: to }],
+            dynamic_template_data: customs,
+          },
+        ],
+      };
+      sendGridMail
+        // @ts-ignore
+        .send(message)
+        .then(() => {
+          resolve({ ok: true });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
 }
-
-export const emailer = (): IMessenger => {
-  const emailConfig = config.get('EmailerConfiguration');
-
-  console.log({ emailConfig });
-  const messenger = new SendGridMessenger(
-    emailConfig.api_key,
-    emailConfig.from
-  );
-  return messenger;
-};

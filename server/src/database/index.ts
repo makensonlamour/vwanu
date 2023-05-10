@@ -24,6 +24,7 @@ import message from './message';
 import service from './service';
 import Visitors from './Visitors';
 import interest from './interest';
+import template from './template';
 import reaction from './reaction';
 import community from './communities';
 import discussion from './discussion';
@@ -57,6 +58,7 @@ const tables = [
   country,
   service,
   interest,
+  template,
   Visitors,
   reaction,
   community,

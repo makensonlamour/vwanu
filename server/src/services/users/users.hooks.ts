@@ -22,6 +22,20 @@ import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 const { hashPassword, protect } = local.hooks;
 const { authenticate } = feathersAuthentication.hooks;
 
+const protectkeys = protect(
+  ...[
+    'password',
+    'verifyToken',
+    'resetToken',
+    'resetShortToken',
+    'resetExpires',
+    'verifyShortToken',
+    'activationKey',
+    'resetPasswordKey',
+    'verifyExpires',
+    'search_vector',
+  ]
+);
 export default {
   before: {
     all: [],
@@ -66,25 +80,9 @@ export default {
   },
 
   after: {
-    all: [
-      protect(
-        ...[
-          'password',
-          'verifyToken',
-          'resetToken',
-          'resetShortToken',
-          'resetExpires',
-          'verifyShortToken',
-          'activationKey',
-          'resetPasswordKey',
-          'verifyExpires',
-          'search_vector',
-        ]
-      ),
-      MediaStringToMediaObject(['profilePicture', 'coverPicture']),
-    ],
-    find: [],
-    get: [AddVisitor],
+    all: [MediaStringToMediaObject(['profilePicture', 'coverPicture'])],
+    find: [protectkeys],
+    get: [AddVisitor, protectkeys],
     create: [
       SaveAddress,
       AutoLogin,
@@ -95,6 +93,7 @@ export default {
         foreignKey: 'UserId',
       }),
       SendWelcomeMail,
+      protectkeys,
     ],
     update: [],
     patch: [
@@ -105,8 +104,9 @@ export default {
         relationTableName: 'User_Interest',
         foreignKey: 'UserId',
       }),
+      protectkeys,
     ],
-    remove: [],
+    remove: [protectkeys],
   },
 
   error: {
