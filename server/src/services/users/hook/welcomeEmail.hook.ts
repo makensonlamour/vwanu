@@ -8,11 +8,15 @@ export default async (context: HookContext): Promise<HookContext> => {
   const notifierInstance = new Notifier(emailer());
 
   // get the user data
-  const { email, activationKey, firstName } = result;
+  const { email, activationKey, firstName, lastName } = result;
 
-  const subject = 'Welcome to the Snug API';
-  const html = `${firstName}your activation key is ${activationKey}`;
   const to = email;
-  notifierInstance.send(to, html, subject);
+  const templateId = 'd-120767cc144b4b2c96d8446ab65c5fe9';
+  notifierInstance.sendTemplate(to, templateId, {
+    email,
+    activationKey,
+    firstName,
+    lastName,
+  });
   return context;
 };
