@@ -11,7 +11,7 @@ module.exports = {
   async up(queryInterface) {
     templates.map((template) =>
       queryInterface.sequelize.query(query, {
-        replacements: [template.id, template.snug],
+        replacements: [template.id, template.snug, template.type],
         type: QueryTypes.INSERT,
       })
     );
