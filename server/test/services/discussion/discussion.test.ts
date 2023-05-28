@@ -15,7 +15,7 @@ describe("'discussion ' service", () => {
 
   beforeAll(async () => {
     testServer = request(app);
-    await app.get('sequelizeClient').sync({ force: true });
+    await app.get('sequelizeClient').models.User.sync({ force: true });
 
     // Creating test users
     testUsers = await Promise.all(

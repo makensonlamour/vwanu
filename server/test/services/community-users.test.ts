@@ -16,7 +16,7 @@ describe("'community-users ' service", () => {
   const rolesEndpoint = '/community-role';
   beforeAll(async () => {
     testServer = request(app);
-    await app.get('sequelizeClient').sync({ logged: false, force: true });
+    await app.get('sequelizeClient').models.User.sync({ force: true });
 
     // Creating test users
     testUsers = await Promise.all(

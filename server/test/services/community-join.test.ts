@@ -24,7 +24,6 @@ describe("'community-join ' service", () => {
   let hiddenCommunity;
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(5).map((u, idx) => {
@@ -97,7 +96,6 @@ describe("'community-join ' service", () => {
         CommunityId: publicCommunity.id,
       })
       .set('authorization', user.accessToken);
-
 
     expect(join.body).toMatchObject({
       id: expect.any(String),

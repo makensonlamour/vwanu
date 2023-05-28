@@ -5,6 +5,7 @@
     "logSuccess": true
   },
   "dbSettings": {
+    "killConnections": true,
     "username": "vwanu",
     "password": 123456,
     "host": "localhost",

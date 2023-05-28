@@ -26,9 +26,9 @@ describe('Authentication service', () => {
   let testServer;
   let testUsers;
 
-  console.log(testUsers);
+
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
+  
     testServer = request(app);
     testUsers = (
       await testServer

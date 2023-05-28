@@ -75,8 +75,13 @@ describe("'communityInvitationRequest' service", () => {
 
   let creator;
   let invites;
+  const sequelize = app.get('sequelizeClient');
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
+    await sequelize.models.User.sync({ force: true });
+    await sequelize.models.Community.sync({ force: true });
+    await sequelize.models.CommunityUsers.sync({ force: true });
+    await sequelize.models.CommunityInvitationRequest.sync({ force: true });
+
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(5).map((u, idx) => {

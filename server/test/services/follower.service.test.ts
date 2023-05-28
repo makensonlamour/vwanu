@@ -4,19 +4,28 @@
 import { StatusCodes } from 'http-status-codes';
 import app from '../../src/app';
 import Service from './index.test';
-import UsersClass from './users.test';
+
 import { getRandUsers } from '../../src/lib/utils/generateFakeUser';
 
 let createdTestUsers = [];
 const endpoint = '/followers';
+const userEndpoint = '/users';
+class UsersClass extends Service {
+  constructor() {
+    super(userEndpoint);
+  }
+
+  create(user) {
+    // eslint-disable-next-line no-underscore-dangle
+    return this._testServer.post(this._endpoint).send(user);
+  }
+}
 
 const Users = new UsersClass();
 const Followers = new Service(endpoint);
 
 describe('Follower service, ', () => {
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false });
-
     createdTestUsers = await Promise.all(
       getRandUsers(4).map((u) => {
         const user = u;

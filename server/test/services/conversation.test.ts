@@ -32,7 +32,9 @@ describe("'conversation' service", () => {
   let publicConversation;
   let previousConversation;
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ force: true });
+    await app.get('sequelizeClient').models.User.sync({ force: true });
+    await app.get('sequelizeClient').models.Conversation.sync({ force: true });
+    await app.get('sequelizeClient').models.Message.sync({ force: true });
 
     testServer = request(app);
     // create three users

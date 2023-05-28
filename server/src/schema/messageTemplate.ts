@@ -3,8 +3,8 @@ import { z, object, string } from 'zod';
 export const MessageTemplateSchema = object({
   id: z.string(),
   snug: z.string(),
+  type: z.string(),
 });
-
 
 export const getEmailTemplateSchema = object({
   params: object({
@@ -13,7 +13,7 @@ export const getEmailTemplateSchema = object({
 });
 export const getEmailTemplateSchemaByName = object({
   params: object({
-    string: string(),
+    snug: string(),
   }),
 });
 
@@ -22,5 +22,3 @@ export type getEmailTemplateInput = z.infer<
 >['params'];
 
 export type MessageTemplateInterface = z.infer<typeof MessageTemplateSchema>;
-
-

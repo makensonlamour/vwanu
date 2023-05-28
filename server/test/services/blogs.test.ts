@@ -17,7 +17,8 @@ describe("'blogs ' service", () => {
   const endpoint = '/blogs';
   beforeAll(async () => {
     sequelize = app.get('sequelizeClient');
-    await sequelize.sync({ force: true });
+    await sequelize.models.User.sync({ force: true });
+    await sequelize.models.Blog.sync({ force: true });
 
     testServer = request(app);
     testUsers = await Promise.all(
@@ -309,7 +310,7 @@ describe("'blogs ' service", () => {
       MyBlogs.body.data.some((blog) => blog.publish === false)
     ).toBeTruthy();
   });
-  // Todo check why this is failling and fix it 
+  // Todo check why this is failling and fix it
   it.skip('only owner can review non-publish blog', async () => {
     const user0 = testUsers[0].body; // not the creator
     let mixedBlogs: any = await Promise.all(

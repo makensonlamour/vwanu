@@ -29,7 +29,7 @@ describe("'timeline ' service", () => {
 
   beforeAll(async () => {
     testServer = request(app);
-    await app.get('sequelizeClient').sync({ force: true });
+    await app.get('sequelizeClient').models.User.sync({ force: true });
     createdTestUser = await Promise.all(
       getRandUsers(4).map((user) => createUser(testServer, user))
     );

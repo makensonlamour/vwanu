@@ -8,12 +8,19 @@ const config = require('config');
 
 const dbSettings = config.get('dbSettings');
 
+const dbs = { ...dbSettings };
+if (process.env.NODE_ENV === 'test') {
+  dbs.host = 'localhost';
+}
+
+console.log('dbSettings', dbs);
+
 export default function (app: Application): void {
   const sequelize = dbSettings.url
     ? new Sequelize(dbSettings.url)
     : new Sequelize({
         logging: false,
-        ...dbSettings,
+        ...dbs,
       });
 
   const oldSetup = app.setup;

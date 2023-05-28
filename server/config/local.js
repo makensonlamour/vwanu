@@ -3,6 +3,7 @@ const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
+console.log('process.env.SMTP_HOST', process.env.SMTP_HOST);
 module.exports = {
   TEST_MAIL_API_KEY: 'TEST_MAIL_API_KEY',
   TEST_MAIL_NAMESPACE: 'TEST_MAIL_NAMESPACE',
@@ -26,6 +27,12 @@ module.exports = {
       user: process.env.SMTP_USERNAME,
       pass: process.env.SMTP_PASSWORD,
     },
+  },
+  dbSettings: {
+    username: 'DB_USER',
+    password: 'DB_PASSWORD',
+    database: 'DB_DATABASE',
+    host: 'localhost',
   },
   CLOUDINARY_CONFIGURATION: {
     api_secret: process.env.CLOUDINARY_API_SECRET,

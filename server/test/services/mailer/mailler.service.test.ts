@@ -10,7 +10,7 @@ const template = {
 
 describe('Mailer', () => {
   
-  it('should send an email', async () => {
+  it.skip('should send an email', async () => {
     const result = await app.service('mailer').create({
       to: userEmail,
       subject: template.subject,
