@@ -11,31 +11,32 @@ export default function (app: Application) {
     return user;
   }
   async function getEmailTemplate(snug: string, notifierOptions = {}) {
-    try {
-      const template = await app
+    return new Promise((resolve, reject) => {
+      app
         .service(TemplateServiceName)
-        ._find({ query: { snug, ...notifierOptions }, paginate: false });
-      return template;
-    } catch (error) {
-      const message = `Error getting email template ${snug}`;
-      Logger.error(error.message || message);
-      throw new Error(error.message || message);
-    }
+        ._find({ query: { snug, ...notifierOptions }, paginate: false })
+        .then((response) => {
+          resolve(response[0] as any);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
   return {
     notifier: async (type, user, notifierOptions) => {
       const options = notifierOptions || {};
-      // options.type = options.type || 'email';
+      options.type = options.type || 'email';
       try {
-        const template = await getEmailTemplate(type, options);
-        if (!template || template.length === 0) {
+        const template: any = await getEmailTemplate(type, options);
+        if (!template) {
           Logger.error(`${type} template not found`);
           throw new Error(`${type} email template not found`);
         }
         const notifierInstance = new Notifier(EmailerService());
         const sanitizedUser = sanitizeUserForClient(user);
         const { email: to } = sanitizedUser;
-        notifierInstance.sendTemplate(to, template.id, sanitizedUser);
+        notifierInstance.sendTemplate(to, template?.id, sanitizedUser);
       } catch (error) {
         Logger.error(error);
         throw new Error(error);
