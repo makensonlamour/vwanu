@@ -10,6 +10,8 @@ export default (sequelize: any, DataTypes: any) => {
 
     snug: string;
 
+    type: string;
+
     // eslint-disable-next-line no-unused-vars
     static associate(models: any) {
       // define association here
@@ -27,6 +29,11 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+      },
+
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {
