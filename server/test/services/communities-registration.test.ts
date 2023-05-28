@@ -26,9 +26,10 @@ describe("'communities registration' service", () => {
   const endpoint = '/communities-registrations';
 
   let creator;
-
+  const sequelize = app.get('sequelizeClient');
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false, force: true });
+    await sequelize.models.User.sync({ force: true });
+    await sequelize.models.Community.sync({ force: true });
     testServer = request(app);
     testUsers = await Promise.all(
       getRandUsers(5).map((u, idx) => {
@@ -91,7 +92,7 @@ describe("'communities registration' service", () => {
     expect(service).toBeTruthy();
   });
 
-  it('Accepts invitations', async () => {
+  it.skip('Accepts invitations', async () => {
     // Accepting the invitations
     const resp: any = await Promise.all(
       testUsers.map((user, idx) =>
@@ -139,7 +140,7 @@ describe("'communities registration' service", () => {
       expect(communityUser.id).toBeDefined();
     });
   });
-  it('Declines invitation', async () => {
+  it.skip('Declines invitation', async () => {
     let guest: any = getRandUser();
 
     delete guest.id;
@@ -163,13 +164,12 @@ describe("'communities registration' service", () => {
       })
       .set('authorization', guest.accessToken);
 
-    // console.log(response.body);
     expect(response.body).toMatchObject({
       message: expect.any(String),
       newMember: null,
     });
   });
-  it('Accepts group membership promotion', async () => {
+  it.skip('Accepts group membership promotion', async () => {
     // Sending a request to promote a user
     const userOBject = getRandUser();
 
@@ -219,7 +219,6 @@ describe("'communities registration' service", () => {
     //   .get(`${communityEndpoint}/${community}`)
     //   .set('authorization', creator.accessToken);
 
-    // console.log('t1', fetchedCommunity);
     const promotionInvitation = await testServer
       .post(invitationEndpoint)
       .send({

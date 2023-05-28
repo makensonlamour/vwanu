@@ -6,7 +6,6 @@ import app from '../../../src/app';
 import { getRandUsers } from '../../../src/lib/utils/generateFakeUser';
 
 import Service from '../index.test';
-import UsersClass from '../users.test';
 
 describe('Posts services', () => {
   let observer;
@@ -16,12 +15,24 @@ describe('Posts services', () => {
   let thePost;
   let commenter;
   let commenterToken;
+  const userEndpoint = '/users';
   const Posts = new Service('/posts');
   const Reactions = new Service('/reactions');
+
+  class UsersClass extends Service {
+    constructor() {
+      super(userEndpoint);
+    }
+
+    create(user) {
+      // eslint-disable-next-line no-underscore-dangle
+      return this._testServer.post(this._endpoint).send(user);
+    }
+  }
   const Users = new UsersClass();
 
   beforeAll(async () => {
-    await app.get('sequelizeClient').sync({ logged: false, force: true });
+    await app.get('sequelizeClient').models.User.sync({ force: true });
 
     let testUsers = await Promise.all(
       getRandUsers(4).map((u) => {

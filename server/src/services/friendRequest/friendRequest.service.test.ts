@@ -14,7 +14,7 @@ describe('Friend service, ', () => {
   const userEndpoint = '/users';
   beforeAll(async () => {
     testServer = request(app);
-    await app.get('sequelizeClient').sync({ force: true });
+    await app.get('sequelizeClient').models.User.sync({ force: true });
     createdTestUsers = await Promise.all(
       getRandUsers(4).map((u) => {
         const user = u;

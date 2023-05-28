@@ -20,7 +20,9 @@ describe("'message' service", () => {
   beforeAll(async () => {
     const sequelize = app.get('sequelizeClient');
 
-    await sequelize.sync({ force: true });
+    await sequelize.models.Conversation.sync({ force: true });
+    await sequelize.models.Message.sync({ force: true });
+    await sequelize.models.User.sync({ force: true });
 
     testServer = request(app);
     testUsers = await Promise.all(
