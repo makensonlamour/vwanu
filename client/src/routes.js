@@ -74,7 +74,7 @@ let routes = [
     path: routesPath.VERIFY_EMAIL,
     name: "Verified Email",
     element: VerifyEmail,
-    access: role.AUTH,
+    access: role.USER,
   },
   {
     path: routesPath.NEWSFEED,
