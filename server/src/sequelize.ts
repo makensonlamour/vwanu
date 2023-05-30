@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'test') {
   dbs.host = 'localhost';
 }
 
-console.log('dbSettings', dbs);
+
 
 export default function (app: Application): void {
   const sequelize = dbSettings.url
