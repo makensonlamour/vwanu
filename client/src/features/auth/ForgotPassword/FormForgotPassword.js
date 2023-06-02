@@ -25,7 +25,7 @@ const FormForgotPassword = () => {
   const handleForgotPasword = async (credentials) => {
     setIsLoading(true);
     try {
-      await forgotPassword.mutateAsync(credentials);
+      await forgotPassword.mutateAsync({ action: "sendResetPwd", value: { email: credentials?.email } });
       navigate(routesPath.FORGOT_PASSWORD_SUCCESS, { state: forgotPassword.data, email: credentials.email });
     } catch (e) {
       if (e?.response?.status === 400) {

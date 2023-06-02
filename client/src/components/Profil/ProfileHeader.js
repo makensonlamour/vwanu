@@ -119,8 +119,8 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                         ? otherUser?.Addresses !== null
                           ? otherUser?.Addresses[0]?.country
                           : null
-                        : user.Addresses !== null
-                        ? user.Addresses[0]?.country
+                        : user?.Addresses !== null
+                        ? user?.Addresses[0]?.country
                         : ""}
                       <span className="px-2">•</span>
                       <span>

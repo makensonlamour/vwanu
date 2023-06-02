@@ -13,16 +13,15 @@ import { MdInfo } from "react-icons/md";
 import { VscError } from "react-icons/vsc";
 
 const VerifyEmailScreen = () => {
-  const { id, activationKey } = useParams();
+  const { activationKey } = useParams();
 
   // eslint-disable-next-line no-unused-vars
-  const [dataObject, setDataObject] = useState({ id, activationKey });
   const [isLoading, setIsLoading] = useState(true);
-  const verifyEmail = useVerifyEmail(["verify", "email"], { id, activationKey }, undefined, undefined);
+  const verifyEmail = useVerifyEmail(["verify", "email"], undefined, undefined);
 
   useEffect(() => {
     try {
-      verifyEmail.mutateAsync(dataObject);
+      verifyEmail.mutateAsync({ action: "verifySignupLong", value: activationKey });
     } catch (e) {
       console.log();
     } finally {
@@ -52,9 +51,9 @@ const VerifyEmailScreen = () => {
           ) : (
             <div className="bg-error shadow-3xl rounded-3xl px-2 md:px-8 py-16 justify-center m-auto md:w-2/3 lg:w-2/5">
               <p className="">
-                <VscError size="48" className="m-auto text-red-600" />
+                <VscError size="48" className="m-auto text-white" />
               </p>
-              <p className="text-red-600 text-center font-semibold mt-4">Unknow error occurs while verified your email.</p>
+              <p className="text-white text-center font-semibold mt-4">Unknow error occurs while verified your email.</p>
             </div>
           )}
 
