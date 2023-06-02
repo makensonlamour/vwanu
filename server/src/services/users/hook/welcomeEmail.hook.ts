@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { HookContext } from '@feathersjs/feathers';
-import notifier from '../../authmanagement/notifier';
+import notifier from '../../../lib/utils/messenger';
 import Logger from '../../../lib/utils/logger';
 import { Application } from '../../../declarations';
 

@@ -191,16 +191,6 @@ describe('Posts services', () => {
     expect(lockedPost.locked).toBe(true);
   });
 
-  it('testing noting', async () => {
-    const { body: foundComments } = await Posts.getList(
-      postMakerToken,
-      `UserId=${postMaker.id}`
-    );
-    console.log(foundComments);
-
-    expect(true).toBeTruthy();
-  });
-
   it('Cannot comment on a locked Post', async () => {
     const commentAttempt = await Posts.create(
       {

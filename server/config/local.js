@@ -3,7 +3,6 @@ const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-console.log('process.env.SMTP_HOST', process.env.SMTP_HOST);
 module.exports = {
   TEST_MAIL_API_KEY: 'TEST_MAIL_API_KEY',
   TEST_MAIL_NAMESPACE: 'TEST_MAIL_NAMESPACE',

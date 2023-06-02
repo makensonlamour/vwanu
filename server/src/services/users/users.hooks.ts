@@ -1,6 +1,5 @@
 import commonHooks from 'feathers-hooks-common';
 import * as local from '@feathersjs/authentication-local';
-// import authMan from 'feathers-authentication-management';
 import * as feathersAuthentication from '@feathersjs/authentication';
 
 import * as schema from '../../schema/user';
@@ -10,7 +9,7 @@ import validateResource from '../../middleware/validateResource';
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 import MediaStringToMediaObject from '../../Hooks/ProfileCoverToObject';
 import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.middleware';
-// const verifyHooks = authMan.hooks;
+
 import {
   SaveAddress,
   AddVisitor,
@@ -38,7 +37,6 @@ const protectkeys = protect(
 );
 export default {
   before: {
-    all: [],
     find: [authenticate('jwt'), GetUser],
     get: [authenticate('jwt'), GetUser],
     create: [
@@ -95,10 +93,8 @@ export default {
       SendWelcomeMail,
       protectkeys,
     ],
-    update: [],
     patch: [
       SaveAddress,
-
       SaveAndAttachInterests({
         entityName: 'User',
         relationTableName: 'User_Interest',
@@ -107,16 +103,5 @@ export default {
       protectkeys,
     ],
     remove: [protectkeys],
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-
-    update: [],
-    patch: [],
-    remove: [],
   },
 };

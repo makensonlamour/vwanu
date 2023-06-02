@@ -93,17 +93,17 @@ jobs:
       - name: Check linting
         if: github.event_name == 'pull_request'
         run: npm run lint
-        # - name: Testing 🥶
-        # if: github.event_name == 'pull_request'
-        # run: npm test
-        # env:
-        # CI: true
-      # - name: Upload Test Coverage
-      #   if: github.event_name == 'pull_request'
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: server-code-coverage
-      #     path: ./server/coverage
+      - name: Testing 🥶
+        if: github.event_name == 'pull_request'
+        run: npm test
+        env:
+          CI: true
+      - name: Upload Test Coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v1
+        with:
+          name: server-code-coverage
+          path: ./server/coverage
 
       # - name: Build Project
       #   if: github.event_name == 'pull_request'
@@ -142,55 +142,6 @@ jobs:
           script: |
             cd vwanu
             git pull
-            touch .env
-            echo "ROOT_USER_EMAIL=${{secrets.ROOT_USER_EMAIL}}" >>  .env
-            echo "ROOT_USER_PASSWORD=${{secrets.ROOT_USER_PASSWORD}}" >>  .env
-            echo "ROOT_USER_LAST_NAME=${{secrets.ROOT_USER_LAST_NAME}}" >>  .env
-            echo "ROOT_USER_FIRST_NAME=${{secrets.ROOT_USER_FIRST_NAME}}" >>  .env
-            echo "ROOT_USER_PASSWORD_SECURE=${{secrets.ROOT_USER_PASSWORD_SECURE}}" >>  .env
-            echo "HASHING_SALT_ROUNDS=${{secrets.HASHING_SALT_ROUNDS}}" >>  .env
-            echo "SERVER_ADDRESS=${{secrets.STAGING_SERVER_ADDRESS}}" >>  .env
-            echo "SMTP_PORT=${{secrets.STAGING_SMTP_PORT}}" >>  .env
-            echo "SMTP_HOST=${{secrets.STAGING_SMTP_HOST}}" >>  .env
-            echo "SMTP_USERNAME=${{secrets.STAGING_SMTP_USERNAME}}" >>  .env
-            echo "SMTP_PASSWORD=${{secrets.STAGING_SMTP_PASSWORD}}" >>  .env
-            echo "SMTP_PORT=${{secrets.STAGING_SMTP_PORT}}" >>  .env
-            echo "SMTP_HOST=${{secrets.STAGING_SMTP_HOST}}" >>  .env
-            echo "SMTP_USERNAME=${{secrets.STAGING_SMTP_USERNAME}}" >>  .env
-            echo "SMTP_PASSWORD=${{secrets.STAGING_SMTP_PASSWORD}}" >>  .env
-            echo "SEND_EMAIL_FROM=${{secrets.STAGING_SEND_EMAIL_FROM}}" >>  .env
-            echo "SEND_WELCOME_EMAIL =${{secrets.STAGING_SEND_WELCOME_EMAIL }}" >>  .env
-            echo "CLOUDINARY_API_SECRET=${{secrets.STAGING_CLOUDINARY_API_SECRET}}" >>  .env
-            echo "CLOUDINARY_API_KEY=${{secrets.STAGING_CLOUDINARY_API_KEY}}" >>  .env
-            echo "CLOUDINARY_CLOUD_NAME=${{secrets.STAGING_CLOUDINARY_CLOUD_NAME}}" >>  .env
-            echo "TEST_MAIL_API_KEY=${{secrets.STAGING_TEST_MAIL_API_KEY}}" >>  .env
-            echo "TEST_MAIL_NAMESPACE=${{secrets.STAGING_TEST_MAIL_NAMESPACE}}" >>  .env
-            echo "JWT_SECRET=${{secrets.STAGING_JWT_SECRET}}" >>  .env
-            echo "AUTHENTICATION_SECRET=${{secrets.STAGING_AUTHENTICATION_SECRET}}" >>  .env
-            echo "OAUTH_REDIRECT_URI=${{secrets.STAGING_OAUTH_REDIRECT_URI}}" >>  .env
-            echo "OAUTH_FACEBOOK_KEY=${{secrets.STAGING_OAUTH_FACEBOOK_KEY}}" >>  .env
-            echo "OAUTH_FACEBOOK_SECRET=${{secrets.STAGING_OAUTH_FACEBOOK_SECRET}}" >>  .env
-            echo "OAUTH_GOOGLE_KEY=${{secrets.STAGING_OAUTH_GOOGLE_KEY}}" >>  .env
-            echo "OAUTH_GOOGLE_SECRET=${{secrets.STAGING_OAUTH_GOOGLE_SECRET}}" >>  .env
-            echo "OAUTH_GOOGLE_CALLBACK_URL=${{secrets.STAGING_OAUTH_GOOGLE_CALLBACK_URL}}" >>  .env
-            echo "HOST=${{secrets.STAGING_HOST}}" >>  .env
-            echo "FRONTEND_URL=${{secrets.STAGING_FRONTEND_URL}}" >>  .env
-            echo "API_PORT=${{secrets.STAGING_API_PORT}}" >>  .env
-            echo "API_HOST=${{secrets.STAGING_API_HOST}}" >>  .env
-            echo "DB_DATABASE=${{secrets.STAGING_DB_DATABASE}}" >>  .env
-            echo "DB_USER=${{secrets.STAGING_DB_USER}}" >>  .env
-            echo "DB_PASSWORD=${{secrets.STAGING_DB_PASSWORD}}" >>  .env
-            echo "DB_HOST=${{secrets.STAGING_DB_HOST}}" >>  .env
-            echo "NODE_ENV=${{secrets.STAGING_NODE_ENV}}" >>  .env
-            echo "REDIS_URL=${{secrets.STAGING_REDIS_URL}}" >>  .env
-            echo "DB_HOST_AUTH_METHOD=${{secrets.STAGING_DB_HOST_AUTH_METHOD}}" >>  .env
-            echo "maxPostVideos=${{secrets.STAGING_maxPostVideos}}" >>  .env
-            echo "maxPostAudios=${{secrets.STAGING_maxPostAudios}}" >>  .env
-            echo "maxPostImages=${{secrets.STAGING_maxPostImages}}" >>  .env
-            echo "maxMessageImages=${{secrets.STAGING_maxMessageImages}}" >>  .env
-            echo "maxDiscussionVideos=${{secrets.STAGING_maxDiscussionVideos}}" >>  .env
-            echo "maxDiscussionAudios=${{secrets.STAGING_maxDiscussionAudios}}" >>  .env
-            echo "maxDiscussionImages=${{secrets.STAGING_maxDiscussionImages}}" >>  .env
             docker-compose -f docker-compose.nginx.yml up --build -d
 
       - name: Deploy to Production
