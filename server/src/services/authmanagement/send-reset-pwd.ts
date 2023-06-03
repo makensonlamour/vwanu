@@ -46,10 +46,9 @@ export default async function sendResetPwd(
     resetPasswordKey: concatIDAndHash(user1[usersServiceIdName], nanoid()),
     resetShortPasswordKey: nanoid(options.shortTokenLen),
   });
+  let user3;
   try {
-    await options.notifier('sendResetPwd', user2);
-
-    const user3 = await usersService.patch(user2[usersServiceIdName], {
+    user3 = await usersService.patch(user2[usersServiceIdName], {
       resetExpires: user2.resetExpires,
       resetAttempts: user2.resetAttempts,
       resetPasswordKey: options.reuseResetPasswordKey
@@ -59,6 +58,11 @@ export default async function sendResetPwd(
         ? user2.resetShortPasswordKey
         : await hashPassword(options.app, user2.resetShortPasswordKey, field),
     });
+  } catch (err) {
+    throw new GeneralError('Updating user', { error: err.message });
+  }
+  try {
+    await options.notifier('sendResetPwd', user3);
     return options.sanitizeUserForClient(user3);
   } catch (error) {
     throw new GeneralError('notifier-error', { error: error.message });
