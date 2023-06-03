@@ -51,6 +51,7 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: false,
         // @ts-ignore
         level: 'A',
+        unique: true,
       },
 
       search_vector: {

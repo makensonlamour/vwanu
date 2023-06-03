@@ -23,6 +23,7 @@ module.exports = {
         allowNull: false,
         // @ts-ignore
         level: 'A',
+        unique: true,
       },
 
       createdAt: {
@@ -40,7 +41,7 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface,) {
+  async down(queryInterface) {
     await queryInterface.dropTable('ForumCategories');
   },
 };
