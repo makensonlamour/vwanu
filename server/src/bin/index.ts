@@ -1,4 +1,4 @@
-import express from '@feathersjs/express';
+// import express from '@feathersjs/express';
 import { ExpressPeerServer } from 'peer';
 
 /** Local requirements * */
@@ -17,7 +17,7 @@ if (API_CONFIG_SCHEMA.parse(API_CONFIGURATION)) {
   port = helper.normalizePort(API_CONFIGURATION.port);
 
   // Configure a middleware for 404s and the error handler
-  app.use(express.notFound());
+ 
 
   const server = app.listen(port);
   const PeerJsServer = ExpressPeerServer(server);
