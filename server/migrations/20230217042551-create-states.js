@@ -11,7 +11,6 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
       initials: {
         type: Sequelize.STRING,
