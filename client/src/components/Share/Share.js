@@ -16,7 +16,7 @@ import { useCreatePost } from "../../features/post/postSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { FiShare } from "react-icons/fi";
 
-export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
+// export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
 const shareSuccess = (_text) =>
   toast.success("You share this " + _text + " successfully!", {
@@ -86,10 +86,11 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
         if (message.trim() === "") {
           dataMessage.messageText =
             type === "post"
-              ? "Hello :) Take a look at this: " + url + "/post/" + post?.id
+              ? "Hello :) Take a look at this: " + window.location.href + "/post/" + post?.id
               : "Hello :) Take a look at this: " + window.location.href;
         } else {
-          dataMessage.messageText = type === "post" ? message + ": " + url + "/post/" + post?.id : message + ": " + window.location.href;
+          dataMessage.messageText =
+            type === "post" ? message + ": " + window.location.href + "/post/" + post?.id : message + ": " + window.location.href;
         }
       } else {
         if (message.trim() === "") {
