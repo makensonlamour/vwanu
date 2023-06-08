@@ -63,6 +63,13 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
     queryClient.refetchQueries(["friends", "all"]);
   }
 
+  // const isPreview = () => {
+  //   let url = window.location.href.split("/");
+  //   if (url[1] === -1) return false;
+
+  //   return true;
+  // };
+
   // function generateShare(type) {
   //   if (!type) return "";
   //   let result = "";

@@ -19,6 +19,7 @@ import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
 // import UpdatesComponent from "../../components/Newsfeed/UpdatesComponent";
 import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
+import { FormattedMessage } from "react-intl";
 
 const NewsFeed = () => {
   // let run = false;
@@ -87,16 +88,22 @@ const NewsFeed = () => {
           }
           errorRender={
             <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
-              {"There was an error while fetching the data. "}{" "}
+              <FormattedMessage id="general.retryTxt" defaultMessage="There was an error while fetching the data." description="" />{" "}
               <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["post", "home"])}>
-                Tap to retry
+                <FormattedMessage id="general.retryBtn" defaultMessage="Tap to retry" description="" />
               </Link>{" "}
             </div>
           }
           noDataRender={
             <div className="flex justify-center py-4 my-4 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white shadow-lg rounded-lg">
-              <p>{"No more post. "}</p>
-              <p className="font-semibold hover:text-primary cursor-pointer">{"Back to top ^"}</p>
+              <p>
+                {" "}
+                <FormattedMessage id="newsfeed.noMorePostText" defaultMessage="No more post." description="" />
+              </p>
+              <p className="font-semibold hover:text-primary cursor-pointer">
+                {" "}
+                <FormattedMessage id="general.backToTopTxt" defaultMessage="Back to top ^" description="" />{" "}
+              </p>
             </div>
           }
         >
@@ -124,13 +131,16 @@ const NewsFeed = () => {
       <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
         {"There was an error while fetching the data. "}{" "}
         <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage()}>
-          Tap to retry
+          <FormattedMessage id="general.retryBtn" defaultMessage="Tap to retry" description="" />
         </Link>{" "}
       </div>
     );
   } else {
     content = (
-      <div className="py-4 my-4 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white shadow-lg rounded-lg">{"No posts "} </div>
+      <div className="py-4 my-4 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white shadow-lg rounded-lg">
+        {" "}
+        <FormattedMessage id="newsfeed.noPostText" defaultMessage="No posts to show" description="" />
+      </div>
     );
   }
 
@@ -153,7 +163,10 @@ const NewsFeed = () => {
           </div>
           <div className="2xs:w-full xs:w-0 xs:basis-full lg:basis-[56%]">
             <div className="px-0 sm:px-3">
-              <h2 className="2xs:pl-2 sm:pl-0 pb-5 text-lg font-bold text-primary">Activity Feed</h2>
+              <h2 className="2xs:pl-2 sm:pl-0 pb-5 text-lg font-bold text-primary">
+                {" "}
+                <FormattedMessage id="newsfeed.activityFeedText" defaultMessage="Activity Feed" description="" />
+              </h2>
               <InputModal reference="newsfeed" />
               <div className="w-full py-2">{content}</div>
             </div>

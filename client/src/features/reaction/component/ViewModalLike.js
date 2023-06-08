@@ -7,6 +7,7 @@ import { useId } from "@mantine/hooks";
 import { useGetReaction } from "../reactionSlice";
 import Loader from "../../../components/common/Loader";
 import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
+import { FormattedMessage } from "react-intl";
 
 const style = {
   position: "absolute",
@@ -66,7 +67,7 @@ const ViewModalLike = ({ postId, amountOfReactions, label }) => {
               </div>
             ) : isError ? (
               <div className="py-5 m-auto text-center px-2">
-                {"There was an error while fetching the data. "}{" "}
+                <FormattedMessage id="general.retryTxt" defaultMessage="There was an error while fetching the data." description="" />{" "}
                 <Link
                   style={{
                     color: "#053dc8",
@@ -75,7 +76,7 @@ const ViewModalLike = ({ postId, amountOfReactions, label }) => {
                   to={""}
                   onClick={() => reloadPage()}
                 >
-                  Tap to retry
+                  <FormattedMessage id="general.retryBtn" defaultMessage="Tap to retry" description="" />
                 </Link>{" "}
               </div>
             ) : listReactions?.pages && listReactions?.pages?.length > 0 ? (
@@ -97,7 +98,7 @@ const ViewModalLike = ({ postId, amountOfReactions, label }) => {
                     <div className="my-5 py-10 m-auto text-center lg:pl-16 lg:pr-10 px-2 lg:px-0 bg-white rounded-lg shadow-md">
                       {"There was an error while fetching the data. "}{" "}
                       <Link className="text-secondary hover:text-primary" to={""} onClick={() => reloadPage(["reactions", "all"])}>
-                        Tap to retry
+                        <FormattedMessage id="general.retryBtn" defaultMessage="Tap to retry" description="" />
                       </Link>
                     </div>
                   }

@@ -1,20 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { FormattedMessage } from "react-intl";
 
 function ReusableDialog({ title, action, item, open, handleClose, handleDisagree, handleAgree }) {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogTitle id="alert-dialog-title">{`${title}`}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">{`Are you sure you want to ${action} this ${item}?`}</DialogContentText>
+        <DialogContentText id="alert-dialog-description">
+          {" "}
+          <FormattedMessage id="Dialog.dialogTxt" defaultMessage={`Are you sure you want to ${action} this ${item}?`} description="" />
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button sx={{ color: "red" }} onClick={() => handleDisagree()}>
-          No
+          <FormattedMessage id="Dialog.noTxt" defaultMessage="No" description="" />
         </Button>
         <Button sx={{ color: "green" }} onClick={() => handleAgree()}>
-          Yes
+          <FormattedMessage id="Dialog.yesTxt" defaultMessage="Yes" description="" />
         </Button>
       </DialogActions>
     </Dialog>

@@ -7,6 +7,19 @@
         "idInterpolationPattern": "[sha512:contenthash:base64:6]",
         "ast": true
       }
+    ],
+    [
+      "react-intl-auto",
+      {
+        "removePrefix": "app/",
+        "filebase": false
+      }
+    ],
+    [
+      "react-intl",
+      {
+        "messagesDir": "./build/messages/"
+      }
     ]
   ]
 }

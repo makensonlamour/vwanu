@@ -7,6 +7,7 @@ import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import { Field, Form, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
+import { FormattedMessage } from "react-intl";
 
 const ValidationSchema = Yup.object().shape({
   password: Yup.string().required().min(8).label("Password"),
@@ -55,7 +56,9 @@ const FormResetPassword = () => {
         onSubmit={handleResetPasword}
         className="shadow-lg rounded-3xl my-10"
       >
-        <h1 className="card-title text-secondary text-md text-center">Create New password</h1>
+        <h1 className="card-title text-secondary text-md text-center">
+          <FormattedMessage id="resetPassword.createNewPassword" defaultMessage="Create New password" description="" />
+        </h1>
         <Alert />
         <Field
           required
@@ -83,13 +86,26 @@ const FormResetPassword = () => {
           showPassword={true}
         />
 
-        <Submit data-testid="forgotPasswordBtn" className="rounded-full text-md" title={isLoading ? <Loader /> : "Change Password"} />
-        <div className="divider">OR</div>
+        <Submit
+          data-testid="forgotPasswordBtn"
+          className="rounded-full text-md"
+          title={
+            isLoading ? (
+              <Loader />
+            ) : (
+              <FormattedMessage id="resetPassword.createNewPassword" defaultMessage="Change Password" description="" />
+            )
+          }
+        />
+        <div className="divider">
+          {" "}
+          <FormattedMessage id="general.orText" defaultMessage="OR" description="" />
+        </div>
         <Link className="text-primary font-bold mb-10 text-center" to={routesPath.REGISTER}>
-          Create New Account
+          <FormattedMessage id="forgotPassword.createAccount" defaultMessage="Create New Account" description="" />
         </Link>
         <Link className="text-primary font-bold mt-10 text-center" to={routesPath.LOGIN}>
-          Back to Login
+          <FormattedMessage id="forgotPassword.backToLogin" defaultMessage="Back to Login" description="" />
         </Link>
       </Form>
     </>

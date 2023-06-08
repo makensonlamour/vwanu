@@ -8,6 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import ModalPrivacy from "../../../components/common/ModalPrivacy";
 import Loader from "../../../components/common/Loader";
 import { useUpdatePost } from "../postSlice";
+import { FormattedMessage } from "react-intl";
 
 //Functions for notification after actions
 const postSuccess = () =>
@@ -89,7 +90,9 @@ const EditPost = ({ setShowModal, post }) => {
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
               <div className="flex items-start justify-between px-5 py-3 border-b border-solid border-blueGray-200 rounded-t">
-                <p className="text-lg font-medium">Edit Post</p>
+                <p className="text-lg font-medium">
+                  <FormattedMessage id="inputPost.EditPostTitle" defaultMessage="Edit Post" description="" />
+                </p>
                 <button onClick={() => setShowModal(false)} className="text-lg font-medium">
                   x
                 </button>
@@ -137,7 +140,7 @@ const EditPost = ({ setShowModal, post }) => {
                 <div className="flex font-semibold text-sm justify-end items-center">
                   <div className="flex justify-end py-2">
                     <SubmitPost
-                      title={loading ? <Loader /> : "Post"}
+                      title={loading ? <Loader /> : <FormattedMessage id="inputPost.postBtn" defaultMessage="Post" description="" />}
                       disabled={loading ? true : false}
                       className="bg-primary hover:bg-secondary py-3 px-5 rounded-lg  border-0 text-base-100 float-right text-md leading-none font-semibold outline-none focus:outline-none ease-linear transition-all duration-150"
                     />

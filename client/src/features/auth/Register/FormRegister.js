@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import * as Yup from "yup";
 import useAuth from "../../../hooks/useAuth";
+import { FormattedMessage } from "react-intl";
 
 // Core components
 import { alertService } from "../../../components/common/Alert/Services";
@@ -73,7 +74,10 @@ const FormRegister = () => {
         onSubmit={handleRegister}
         className="mt-4 lg:mt-0 lg:mx-2 xl:mx-14 3xl:mx-64"
       >
-        <h1 className="card-title pb-4 text-primary font-bold text-xl lg:text-2xl">Join the Vwanu Community</h1>
+        <h1 className="card-title pb-4 text-primary font-bold text-xl lg:text-2xl">
+          {" "}
+          <FormattedMessage id="register.joinCommunity" defaultMessage="Join the Vwanu Community" description="" />
+        </h1>
         <Alert />
         <div className="grid grid-cols-2">
           <Field
@@ -175,7 +179,7 @@ const FormRegister = () => {
                 <Loader color="black" />
               </div>
             ) : (
-              "Sign Up"
+              <FormattedMessage id="register.signupBtn" defaultMessage="Sign up" description="" />
             )
           }
         />

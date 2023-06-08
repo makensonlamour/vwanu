@@ -1,6 +1,23 @@
 {
+  "forgotPassword.backToLogin": "",
+  "forgotPassword.createAccount": "",
+  "forgotPassword.descriptionText": "",
+  "forgotPassword.forgotPaswordText": "",
+  "forgotPassword.orText": "",
+  "forgotPassword.resetPaswordBtn": "",
+  "general.together": "",
+  "general.welcome": "",
   "login.notMemberText": "",
   "login.registerText": "Enskripsyon",
+  "login.signInToVwanu": "Enskri nan Vwanu",
   "login.together": "Ansanm nou pi fo",
-  "login.welcome": "Byenvini"
+  "login.welcome": "Byenvini",
+  "register.alreadyHaveText": "",
+  "register.joinCommunity": "",
+  "register.signinText": "",
+  "register.signupBtn": "",
+  "resetPassword.backToLoginLink": "",
+  "resetPassword.changPasswordBtn": "",
+  "resetPassword.createNewAccountLink": "",
+  "resetPassword.createNewPassword": ""
 }
