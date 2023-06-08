@@ -89,6 +89,9 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
         title: credentials.postTitle,
       };
 
+      if (dataObj?.title === "") return alert(`Title can't be empty`);
+      if (dataObj?.body === "") return alert(`Body can't be empty`);
+
       if (files?.length) {
         formData.append("body", credentials.postText);
         formData.append("title", credentials.postTitle);

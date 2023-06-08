@@ -10,6 +10,8 @@ const ViewDetails = ({ title, user, substabs }) => {
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
 
+  console.log(user);
+
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
 
   const handleUpdate = async (isHide, hideName) => {
