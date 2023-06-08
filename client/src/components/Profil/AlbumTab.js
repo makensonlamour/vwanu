@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import * as Yup from "yup";
@@ -100,7 +101,7 @@ const AlbumTab = ({ user }) => {
       <div className="">
         <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
           <div className="flex justify-between items-center pb-4">
-            <p className="font-bold text-lg md:text-3xl text-primary">{value === "1" ? "Photos" : "Albums"}</p>
+            <p className="font-bold text-lg md:text-3xl text-black">{value === "1" ? "Media" : "Albums"}</p>
             {user?.id?.toString() === id?.toString() &&
               (value === "1" ? (
                 <AddPhoto user={user} />
@@ -115,7 +116,8 @@ const AlbumTab = ({ user }) => {
                 </button>
               ))}
           </div>
-          <TabContext value={value}>
+          <PhotoList user={user} />
+          {/* <TabContext value={value}>
             <div className="">
               <TabList
                 TabIndicatorProps={{ style: { background: "inherit" } }}
@@ -138,7 +140,7 @@ const AlbumTab = ({ user }) => {
                   }
                   value="1"
                 />
-                <Tab
+                {/* <Tab
                   sx={{ textTransform: "capitalize" }}
                   label={
                     <Fragment>
@@ -150,7 +152,7 @@ const AlbumTab = ({ user }) => {
                     </Fragment>
                   }
                   value="2"
-                />
+                /> }
               </TabList>
               <TabPanel value="1">
                 <div className="">
@@ -192,7 +194,7 @@ const AlbumTab = ({ user }) => {
                 </div>
               </TabPanel>
             </div>
-          </TabContext>
+          </TabContext> */}
         </div>
       </div>
     </>
