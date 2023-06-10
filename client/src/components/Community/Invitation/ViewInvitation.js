@@ -6,6 +6,8 @@ import { useQueryClient } from "react-query";
 import { useAcceptInvitation } from "../../../features/community/communitySlice";
 import { useOutletContext } from "react-router-dom";
 import { MdGroups } from "react-icons/md";
+import { format } from "date-fns";
+
 // import { isInvitationReceive } from "../../../helpers";
 
 const AcceptInvitationSuccess = (_text) =>
@@ -125,7 +127,7 @@ const ViewInvitation = ({ member }) => {
               </div>
             )}
             <p className="">
-              <span className="text-sm md:text-md">{member?.createdAt}</span>
+              <span className="text-sm md:text-md">{format(new Date(member?.createdAt), "MMM dd, yyyy hh:mm aaaa")}</span>
             </p>
           </div>
         </div>

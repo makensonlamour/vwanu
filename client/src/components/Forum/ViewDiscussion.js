@@ -9,7 +9,16 @@ import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
 import { format } from "date-fns";
 
-const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading, isError, hasNextPage, fetchNextPage }) => {
+const ViewDiscussion = ({
+  data = [],
+  type = "forum",
+  CategoryId = "",
+  isLoading,
+  isError,
+  hasNextPage,
+  fetchNextPage,
+  communityData = {},
+}) => {
   const id = useParams();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -17,6 +26,7 @@ const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading,
   function reloadPage() {
     queryClient.refetchQueries(["community", "discussion", "all"]);
   }
+
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-xl w-full py-5">
@@ -29,7 +39,7 @@ const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading,
             <InputDiscussion
               labelBtn={"New Discussion"}
               communityId={id}
-              data={{}}
+              data={communityData}
               type="new"
               isForum={type === "forum" ? true : false}
               CategoryId={type === "forum" ? CategoryId : ""}
@@ -76,7 +86,6 @@ const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading,
                 </div>
               }
             >
-              {console.log(data)}
               {data &&
                 data?.pages?.map((page) => {
                   return page?.data?.data?.map((item) => {
@@ -162,6 +171,7 @@ ViewDiscussion.propTypes = {
   hasNextPage: PropTypes.bool,
   fetchNextPage: PropTypes.func,
   CategoryId: PropTypes.string,
+  communityData: PropTypes.object,
 };
 
 export default ViewDiscussion;

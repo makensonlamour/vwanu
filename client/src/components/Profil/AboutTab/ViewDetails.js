@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import routesPath from "../../../routesPath";
 import { useUpdateUser } from "../../../features/user/userSlice";
+import { GrView } from "react-icons/gr";
+import { BiHide } from "react-icons/bi";
 
 const ViewDetails = ({ title, user, substabs }) => {
   const userMe = useOutletContext();
@@ -21,7 +23,7 @@ const ViewDetails = ({ title, user, substabs }) => {
 
       await updateUser.mutateAsync(dataObj);
 
-      window.location.href = "../../profile/" + userMe?.id;
+      window.location.href = "../../profile/" + userMe?.id + "/about";
     } catch (e) {
       console.log(e);
     }
@@ -79,9 +81,13 @@ const ViewDetails = ({ title, user, substabs }) => {
                       detail?.name === "Youtube") && (
                       <div>
                         {detail?.view ? (
-                          <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>Hide</button>
+                          <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>
+                            <BiHide size={24} className="" />
+                          </button>
                         ) : (
-                          <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>View</button>
+                          <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>
+                            <GrView size={24} className="" />
+                          </button>
                         )}
                       </div>
                     )}

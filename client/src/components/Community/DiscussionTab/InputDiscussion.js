@@ -42,29 +42,6 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
   const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
   const [openUploadVideo, setOpenUploadVideo] = useState(false);
   const [typeF, setTypeF] = useState("photo");
-  // const [openUploadGif, setOpenUploadGif] = useState(false);
-  // const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
-  //   const [privacyText, setPrivacyText] = useState("public");
-  // const [hashTag, setHashTag] = useState(false);
-  //   const [image, setImage] = useState(null);
-  // const [chosenEmoji, setChosenEmoji] = useState(null);
-  // const [anchorEl, setAnchorEl] = useState(null);
-
-  // const onEmojiClick = (event, emojiObject) => {
-  //   setChosenEmoji(emojiObject);
-  //   console.log(chosenEmoji);
-  // };
-
-  // const handleClick = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
-
-  // const open = Boolean(anchorEl);
-  // const id = open ? "simple-popover" : undefined;
 
   //Formik initial value and yup validation
   const initialValues = {
@@ -138,6 +115,8 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
     setFiles((files) => files.filter((f) => f.name !== itemToRemove.name));
   };
 
+  console.log(data);
+
   return (
     <>
       <Toaster />
@@ -197,6 +176,7 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                 <div className="relative p-3">
                   <div className="flex-auto">
                     <InputField
+                      // disabled={data?.IsMember && isForum === true ? false : true}
                       required
                       autoCapitalize="none"
                       placeholder={`Write the context or your opinion about this questions here.`}
@@ -389,7 +369,8 @@ const InputDiscussion = ({ communityId, labelBtn, data = {}, type = "new", isFor
                     <div>
                       <SubmitPost
                         title={loading ? <Loader /> : "Post"}
-                        className="bg-primary hover:bg-secondary py-3 px-5 rounded-lg  border-0 text-base-100 float-right text-md leading-none font-semibold outline-none focus:outline-none ease-linear transition-all duration-150"
+                        className="bg-primary hover:bg-secondary py-3 px-5 rounded-lg  border-0 text-base-100 float-right text-md leading-none font-semibold outline-none focus:outline-none ease-linear transition-all duration-150 disabled:bg-gray-300"
+                        disabled={data?.IsMember || isForum === true ? false : true}
                       />
                     </div>
                   </div>
