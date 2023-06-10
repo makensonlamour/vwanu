@@ -190,7 +190,7 @@ const PostList = ({ post, pageTitle }) => {
                         </p>
                         <a
                           href={`../../${
-                            post?.originalType === "Post" ? "posts" : post?.originalType === "Blogs" ? "blogs" : "discussions"
+                            post?.originalType === "Post" ? "post" : post?.originalType === "Blogs" ? "blogs" : "discussions"
                           }/${post?.originalId}`}
                           className="text-xs cursor-pointer hover:text-secondary text-primary"
                         >
