@@ -258,6 +258,21 @@ export default (sequelize: any, DataTypes: any) => {
           },
         },
       },
+      followers_amount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
+      followings_amount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
+      friends_amount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
 
       youtubePrivacy: {
         type: DataTypes.BOOLEAN,
