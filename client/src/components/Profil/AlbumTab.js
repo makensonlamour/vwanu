@@ -101,7 +101,7 @@ const AlbumTab = ({ user }) => {
       <div className="">
         <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
           <div className="flex justify-between items-center pb-4">
-            <p className="font-bold text-lg md:text-3xl text-black">{value === "1" ? "Media" : "Albums"}</p>
+            <p className="font-bold text-lg md:text-3xl text-primary">{value === "1" ? "Media" : "Albums"}</p>
             {user?.id?.toString() === id?.toString() &&
               (value === "1" ? (
                 <AddPhoto user={user} />

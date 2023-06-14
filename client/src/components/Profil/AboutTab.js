@@ -4,6 +4,7 @@ import ViewDetails from "./AboutTab/ViewDetails";
 import { format } from "date-fns";
 
 const AboutTab = ({ user }) => {
+  console.log(user?.facebookPrivacy);
   //object destructuring
   const objectDetails = [
     {
@@ -66,8 +67,8 @@ const AboutTab = ({ user }) => {
     {
       name: "Facebook",
       value: user?.facebook,
-      hideName: "facebookPrivacy",
-      view: user?.facebookPrivacy,
+      hideName: "faceBookPrivacy",
+      view: user?.faceBookPrivacy,
     },
     {
       name: "Twitter",

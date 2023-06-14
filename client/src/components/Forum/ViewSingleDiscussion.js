@@ -31,7 +31,7 @@ const deleteError = () =>
     position: "top-center",
   });
 
-const ViewSingleDiscussion = ({ data, type = "forum", communityData = {} }) => {
+const ViewSingleDiscussion = ({ data = {}, type = "forum", communityData = {} }) => {
   const user = useOutletContext();
   const [openShare, setOpenShare] = useState(false);
   const navigate = useNavigate();

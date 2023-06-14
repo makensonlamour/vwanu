@@ -35,7 +35,7 @@ const ForumList = () => {
                 <p className="pl-4 lg:pl-16 text-2xl lg:text-5xl text-left pb-6 font-semibold text-white align-text-bottom">
                   {categoryData?.name}
                 </p>
-                <p className="pl-4 lg:pl-16 text-sm lg:text-md text-left pb-6 font-semibold text-white align-text-bottom">
+                <p className="pl-4 lg:pl-16 text-md lg:text-xl text-left pb-6 font-semibold text-white align-text-bottom">
                   {categoryData?.description}
                 </p>
               </div>

@@ -26,7 +26,7 @@ const Forum = () => {
     <>
       <div className="w-full">
         <div className="w-full bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78]">
-          <div className="text-white py-20">
+          <div className="text-white py-8 lg:py-20">
             <p className="text-3xl text-center pb-6">Discussions</p>
             <div className="flex justify-center">
               <p className="mb-2 text-center pb-6 text-lg w-full lg:w-[30%] font-light">

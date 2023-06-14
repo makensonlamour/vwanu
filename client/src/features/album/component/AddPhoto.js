@@ -59,7 +59,7 @@ const AddPhoto = ({ user, type = "photo" }) => {
         }}
         className="px-2 sm:px-4 py-2 text-xs sm:text-sm bg-placeholder-color text-gray-900 hover:bg-primary hover:text-white rounded-xl mr-2"
       >
-        {type === "photo" ? " Add Photos" : " Add Videos"}
+        {type === "photo" ? " Add Media" : " Add Videos"}
       </button>
       {showModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
