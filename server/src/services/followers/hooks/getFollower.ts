@@ -4,6 +4,55 @@ import { Op } from '@sequelize/core';
 
 import userQuery from '../../../lib/utils/userQuery';
 
+const exclude = [
+  'password',
+  'resetAttempts',
+  'resetToken',
+  'resetTokenExpires',
+  'loginAttempts',
+  'activationKey',
+  'resetPasswordKey',
+  'search_vector',
+  'discord',
+  'friendPrivacy',
+  'friendListPrivacy',
+  'wechat',
+  'facebook',
+  'tiktok',
+  'mailru',
+  'qq',
+  'vk',
+  'instagram',
+  'youtube',
+  'linkedin',
+  'twitter',
+  'relationshipId',
+  'emailPrivacy',
+  'phonePrivacy',
+  'showLastSeen',
+  'eVisitedNotified',
+  'lastSeenPrivacy',
+  'youtubePrivacy',
+  'linkedinPrivacy',
+  'twitterPrivacy',
+  'faceBookPrivacy',
+  'instagramPrivacy',
+  'followPrivacy ',
+  'profilePrivacy ',
+  'avatar',
+  'followPrivacy ',
+  'profilePrivacy ',
+  'username',
+  'birthday',
+  'backgroundImage',
+  'website',
+  'updatedAt',
+  'RequesterRequesterId',
+  'UserRequesterId',
+  'CommunityId',
+  'resetExpires',
+  'admin',
+];
 export default (context: HookContext): HookContext => {
   const { app, params } = context;
   const { query: where } = context.app
@@ -27,8 +76,8 @@ export default (context: HookContext): HookContext => {
   const following = `(
     EXISTS( 
     SELECT 1 
-    FROM "User_Following" AS "UF"
-    WHERE "UF"."UserId"="User"."id" AND "UF"."FollowingId"='${
+    FROM "User_Follower" AS "UF"
+    WHERE "UF"."UserId"="User"."id" AND "UF"."FollowerId"='${
       UserId || params.User.id
     }'))`;
 
@@ -47,7 +96,7 @@ export default (context: HookContext): HookContext => {
       throw new BadRequest('This action is not supported');
   }
 
-  const attributes = userQuery(params.User.id, Sequelize);
+  const attributes = userQuery(params.User.id, Sequelize, exclude);
   params.sequelize = {
     // logging: console.log,
     where: clause,

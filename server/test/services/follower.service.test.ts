@@ -86,7 +86,7 @@ describe('Follower service, ', () => {
       })
     );
 
-    const { User_Follower, User_Following } = app.get('sequelizeClient').models;
+    const { User_Follower } = app.get('sequelizeClient').models;
 
     // Ensuring  the follower records was created in the db
     let followerRecords = await User_Follower.findAll({
@@ -96,19 +96,6 @@ describe('Follower service, ', () => {
       followerRecords.some(
         (record) =>
           record.UserId === user.id && record.FollowerId === requester.id
-      )
-    ).toBeTruthy();
-
-    // Ensuring  the following records was created in the db
-
-    let followingRecords = await User_Following.findAll({
-      where: { FollowingId: user.id, UserId: requester.id },
-    });
-
-    expect(
-      followingRecords.some(
-        (record) =>
-          record.FollowingId === user.id && record.UserId === requester.id
       )
     ).toBeTruthy();
 
@@ -124,13 +111,6 @@ describe('Follower service, ', () => {
           record.UserId !== user.id && record.FollowerId !== requester.id
       )
     ).toBeTruthy();
-
-    // Ensuring the following records no longer exist in db
-
-    followingRecords = await User_Following.findAll({
-      where: { FollowingId: user.id, UserId: requester.id },
-    });
-    expect(followingRecords.length).toBe(0);
   });
 
   it('get the list of all his followers', async () => {
@@ -139,6 +119,7 @@ describe('Follower service, ', () => {
       user.accessToken,
       `action=people-who-follow-me`
     );
+
     expect(response.status).toBe(StatusCodes.OK);
 
     response.body.data.forEach((f) => {

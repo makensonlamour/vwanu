@@ -1,48 +1,28 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import { disallow } from 'feathers-hooks-common';
-
-import QueryFollower from './hooks/getFollower';
+import getFollower from './hooks/getFollower';
 
 const { authenticate } = feathersAuthentication.hooks;
+const notAllowed = disallow();
 export default {
   before: {
     all: [authenticate('jwt')],
-    find: [QueryFollower],
-    get: [disallow()],
+    get: notAllowed,
+    update: notAllowed,
+    patch: notAllowed,
+    find: [getFollower],
     create: [
       async (context) => {
         context.service.options.Model =
           context.app.get('sequelizeClient').models.User_Follower;
         context.data.FollowerId = context.params.User.id;
-        await context.app.get('sequelizeClient').models.User_Following.create({
-          FollowingId: context.data.UserId,
-          UserId: context.params.User.id,
-        });
         return context;
       },
     ],
-    update: [disallow()],
-    patch: [disallow()],
-    remove: [],
   },
-
+  // Might want to notify the user when someone follows or unFollow them
   after: {
-    all: [],
-    find: [],
-    get: [],
     create: [],
-    update: [],
-    patch: [],
-    remove: [],
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
     remove: [],
   },
 };
