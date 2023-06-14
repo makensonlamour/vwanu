@@ -114,7 +114,7 @@ export const Addresses = `(
     INNER JOIN "AddressTypes" ON "AddressTypes"."id" = "EntityAddresses"."AddressTypeId"
     WHERE "EntityAddresses"."UserId" = "User"."id"
   )`;
-export default (UserId, Sequelize) => {
+export default (UserId, Sequelize, ex = null) => {
   const Interests = `(
 SELECT 
   json_agg(
@@ -152,12 +152,12 @@ SELECT
     SELECT  1 FROM "User_friends_request" WHERE ("User_friends_request"."friendsRequestId" = '${UserId}' AND "User_friends_request"."UserId" = "User"."id" )
       ))`;
 
-  const amountOfFollower = `(
-    SELECT COUNT(*) FROM "User_Follower" WHERE "User_Follower"."UserId" = "User"."id"
-  )::int`;
-  const amountOfFollowing = `(
-    SELECT COUNT(*) FROM "User_Following" WHERE "User_Following"."UserId" = "User"."id"
-  )::int`;
+  // const amountOfFollower = `(
+  //   SELECT COUNT(*) FROM "User_Follower" WHERE "User_Follower"."UserId" = "User"."id"
+  // )::int`;
+  // const amountOfFollowing = `(
+  //   SELECT COUNT(*) FROM "User_Following" WHERE "User_Following"."UserId" = "User"."id"
+  // )::int`;
 
   const amountOfFriendRequest = `(
     SELECT COUNT(*) FROM "User_friends_request" WHERE "User_friends_request"."friendsRequestId" = "User"."id"
@@ -166,6 +166,16 @@ SELECT
   const amountOfFriend = `(
     SELECT COUNT(*) FROM "User_friends" WHERE "User_friends"."friendId" = "User"."id") 
   ::int`;
+  const exclude = ex || [
+    'password',
+    'resetAttempts',
+    'resetToken',
+    'resetTokenExpires',
+    'loginAttempts',
+    'activationKey',
+    'resetPasswordKey',
+    'search_vector',
+  ];
   return {
     include: [
       [Sequelize.literal(isFriend), 'isFriend'],
@@ -173,22 +183,13 @@ SELECT
       [Sequelize.literal(isAFollower), 'IsAFollower'],
       [Sequelize.literal(hasReceivedFriendRequest), 'hasReceivedFriendRequest'],
       [Sequelize.literal(hasSentFriendRequest), 'hasSentFriendRequest'],
-      [Sequelize.literal(amountOfFollower), 'amountOfFollower'],
-      [Sequelize.literal(amountOfFollowing), 'amountOfFollowing'],
+      // [Sequelize.literal(amountOfFollower), 'amountOfFollower'],
+      // [Sequelize.literal(amountOfFollowing), 'amountOfFollowing'],
       [Sequelize.literal(amountOfFriend), 'amountOfFriend'],
       [Sequelize.literal(Interests), 'Interests'],
       [Sequelize.literal(Addresses), 'Addresses'],
       [Sequelize.literal(amountOfFriendRequest), 'amountOfFriendRequest'],
     ],
-    exclude: [
-      'password',
-      'resetAttempts',
-      'resetToken',
-      'resetTokenExpires',
-      'loginAttempts',
-      'activationKey',
-      'resetPasswordKey',
-      'search_vector',
-    ],
+    exclude,
   };
 };
