@@ -5,17 +5,17 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       }),
-      queryInterface.addColumn('Users', 'followers_amount', {
+      queryInterface.addColumn('Users', 'amountOfFollower', {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
       }),
-      queryInterface.addColumn('Users', 'followings_amount', {
+      queryInterface.addColumn('Users', 'amountOfFollowing', {
         type: Sequelize.INTEGER,
         allowNull: true,
         defaultValue: 0,
       }),
-      queryInterface.addColumn('Users', 'friends_amount', {
+      queryInterface.addColumn('Users', 'amountOfFriend', {
         type: Sequelize.INTEGER,
         allowNull: true,
         defaultValue: 0,
@@ -25,9 +25,9 @@ module.exports = {
   async down(queryInterface) {
     return Promise.all([
       queryInterface.removeColumn('Users', 'phone'),
-      queryInterface.removeColumn('Users', 'friends_amount'),
-      queryInterface.removeColumn('Users', 'followers_amount'),
-      queryInterface.removeColumn('Users', 'followings_amount'),
+      queryInterface.removeColumn('Users', 'amountOfFriend'),
+      queryInterface.removeColumn('Users', 'amountOfFollower'),
+      queryInterface.removeColumn('Users', 'amountOfFollowing'),
     ]);
   },
 };

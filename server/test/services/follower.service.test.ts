@@ -119,6 +119,7 @@ describe('Follower service, ', () => {
       user.accessToken,
       `action=people-who-follow-me`
     );
+
     expect(response.status).toBe(StatusCodes.OK);
 
     response.body.data.forEach((f) => {

@@ -76,8 +76,8 @@ export default (context: HookContext): HookContext => {
   const following = `(
     EXISTS( 
     SELECT 1 
-    FROM "User_Following" AS "UF"
-    WHERE "UF"."UserId"="User"."id" AND "UF"."FollowingId"='${
+    FROM "User_Follower" AS "UF"
+    WHERE "UF"."UserId"="User"."id" AND "UF"."FollowerId"='${
       UserId || params.User.id
     }'))`;
 
