@@ -86,11 +86,11 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
         if (message.trim() === "") {
           dataMessage.messageText =
             type === "post"
-              ? "Hello :) Take a look at this: " + window.location.href + "/post/" + post?.id
+              ? "Hello :) Take a look at this: " + window.location.href + "post/" + post?.id
               : "Hello :) Take a look at this: " + window.location.href;
         } else {
           dataMessage.messageText =
-            type === "post" ? message + ": " + window.location.href + "/post/" + post?.id : message + ": " + window.location.href;
+            type === "post" ? message + ": " + window.location.href + "post/" + post?.id : message + ": " + window.location.href;
         }
       } else {
         if (message.trim() === "") {
