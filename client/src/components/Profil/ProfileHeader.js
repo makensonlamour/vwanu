@@ -310,6 +310,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                     element={
                       <div>
                         <NetworkTab user={otherUser ? otherUser : user} />
+                        {console.log(otherUser ? otherUser : user)}
                       </div>
                     }
                   />
