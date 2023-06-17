@@ -36,20 +36,20 @@ export default {
     find: [],
     get: [],
     create: [
-      // async (context) => {
-      //   const { UserId } = await context.app
-      //     .service('posts')
-      //     .get(context.result.PostId);
-      //   await context.app.service('notification').create({
-      //     UserId: context.params.User.id,
-      //     to: UserId, //
-      //     message: 'Reacted on your post',
-      //     type: 'direct',
-      //     entityName: 'posts',
-      //     entityId: context.result.PostId, //
-      //   });
-      //   return context;
-      // },
+      async (context) => {
+        const { UserId } = await context.app
+          .service('posts')
+          .get(context.result.id);
+        await context.app.service('notification').create({
+          UserId: context.params.User.id,
+          to: UserId, //
+          message: 'Reacted on your post',
+          type: 'direct',
+          entityName: 'posts',
+          entityId: context.result.id, //
+        });
+        return context;
+      },
     ],
     update: [],
     patch: [],
