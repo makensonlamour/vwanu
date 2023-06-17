@@ -99,6 +99,7 @@ const useAuth = () => {
       }
     }
   };
+
   useEffect(() => {
     // clean up function
     return () => {

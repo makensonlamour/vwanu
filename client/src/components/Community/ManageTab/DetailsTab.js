@@ -42,10 +42,10 @@ const DetailsTab = ({ communityData }) => {
   const handleSubmit = async (data) => {
     setIsLoading(true);
     try {
-      let resultInt = data?.Interests.length > 0 && data?.Interests?.filter((item) => !interest?.includes(item?.name));
+      let resultInt = data?.Interests?.length > 0 && data?.Interests?.filter((item) => !interest?.includes(item?.name));
       resultInt?.length > 0 &&
         resultInt?.map((itemI) => {
-          return removeInterest.push(itemI?.name);
+          return removeInterest?.push(itemI?.name);
         });
       const dataObj = {
         name: data?.communityName,

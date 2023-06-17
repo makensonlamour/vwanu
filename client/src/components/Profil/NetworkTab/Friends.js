@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useOutletContext } from "react-router-dom";
+// import { useOutletContext } from "react-router-dom";
 import { useGetListFriend } from "../../../features/friend/friendSlice";
 import ViewFriend from "../ViewFriend";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../../common/EmptyComponent";
 
-const Friends = ({ isNetwork }) => {
-  const user = useOutletContext();
+const Friends = ({ isNetwork, user = {} }) => {
+  // const user = useOutletContext();
   const {
     data: listFriend,
     isError,
