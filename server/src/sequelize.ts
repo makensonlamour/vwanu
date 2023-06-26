@@ -13,14 +13,13 @@ if (process.env.NODE_ENV === 'test') {
   dbs.host = 'localhost';
 }
 
-
-
 export default function (app: Application): void {
   const sequelize = dbSettings.url
     ? new Sequelize(dbSettings.url)
     : new Sequelize({
         logging: false,
         ...dbs,
+        seederStorge: 'sequelize',
       });
 
   const oldSetup = app.setup;
