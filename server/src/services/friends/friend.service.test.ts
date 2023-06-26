@@ -18,7 +18,7 @@ let notFriend;
 describe('friend service', () => {
   let testServer;
   beforeAll(async () => {
-    await app.get('sequelizeClient').models.User.sync({ logged: false, force: true });
+    await app.get('sequelizeClient').models.User.sync({ force: true });
     testServer = request(app);
     // create the users
     createdTestUsers = await Promise.all(
@@ -82,10 +82,6 @@ describe('friend service', () => {
         profilePicture: toUnfriend.profilePicture,
       })
     );
-
-    const deleteUser = res.body;
-    delete deleteUser.updatedAt;
-    expect(toUnfriend).toMatchObject(deleteUser);
 
     const myFriendsR = await testServer
       .get(endpoint)

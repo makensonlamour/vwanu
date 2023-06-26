@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Op } from '@sequelize/core';
-import { StatusCodes } from 'http-status-codes';
+import { Op, QueryTypes } from '@sequelize/core';
+// import { StatusCodes } from 'http-status-codes';
 import { Params, Id } from '@feathersjs/feathers';
 import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
 
 import { BadRequest, NotFound } from '@feathersjs/errors';
 /** Local dependencies */
 import { Application } from '../../declarations';
-import AppError from '../../errors';
+// import AppError from '../../errors';
 import UrlToMedia from '../../lib/utils/UrlToMedia';
 
 const userAttributes = ['firstName', 'lastName', 'id', 'profilePicture'];
@@ -20,46 +20,44 @@ export class Friends extends Service {
     this.app = app;
   }
 
-  // async find(params: Params) {
-  //   const id = params.query.UserId || params.User.id;
-  //   const { models } = this.app.get('sequelizeClient');
+  async find(params: Params) {
+    const id = params.query.UserId || params.User.id;
+    const { $limit, $skip } = params.query;
+    try {
+      const limit = $limit || this.options.paginate.default;
+      const skip =
+        $skip || this.options.paginate.default * (params.query.page - 1) || 0;
 
-  //   const userAndFriends: any = await models.User.findOne({
-  //     where: { id },
-  //     attributes: [],
-  //     include: [
-  //       {
-  //         model: models.User,
-  //         as: 'friends',
-  //         attributes: userAttributes,
-  //       },
-  //     ],
-  //   });
+      const sequelize = this.app.get('sequelizeClient');
+      const friendList = await sequelize.query(
+        `SELECT * FROM proc_get_friends(:id,:limit, :skip)`,
+        {
+          type: QueryTypes.SELECT,
+          replacements: { limit, skip, id },
+        }
+      );
 
-  //   if (!userAndFriends)
-  //     throw new AppError(
-  //       'Could not find your profiles or friends list',
-  //       StatusCodes.NOT_FOUND
-  //     );
+      const response = Object.assign(
+        friendList[0],
+        {},
+        {
+          limit,
+          skip,
+          data: friendList[0]?.data || [],
+        }
+      );
 
-  //   const friends = userAndFriends.friends.map((friend) => ({
-  //     id: friend.id,
-  //     firstName: friend.firstName,
-  //     lastName: friend.lastName,
-  //     profilePicture: UrlToMedia(friend.profilePicture),
-  //     createdAt: friend.User_friends.createdAt,
-  //     updatedAt: friend.User_friends.updatedAt,
-  //   }));
-
-  //   return Promise.resolve(friends);
-  // }
+      return Promise.resolve(response);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
 
   async create(data, params) {
     const { models } = this.app.get('sequelizeClient');
     const approverId = params.User.id;
     const { friendId } = data;
 
-    // console.log({ approverId, friendId });
     const people: any = await models.User.findAll({
       where: { id: { [Op.or]: [approverId, friendId] } },
       attributes: ['id'],
