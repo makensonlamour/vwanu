@@ -11,15 +11,12 @@ export default class Notifier {
   send = async (to: string, html: string, subject: string) => {
     this.messenger.send(to, html, subject).catch((err) => {
       Logger.error(err);
-      console.log(err);
     });
   };
 
   sendTemplate = async (to: string, templateId: string, customs: any) => {
     this.messenger.sendTemplate(to, templateId, customs).catch((err) => {
       Logger.error(err);
-      console.log(err.message);
-      console.log(err?.response.body);
     });
   };
 }

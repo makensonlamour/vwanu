@@ -161,10 +161,6 @@ export default (sequelize: any, DataTypes: any) => {
         as: 'Follower',
         through: 'User_Follower',
       });
-      User.belongsToMany(models.User, {
-        as: 'Following',
-        through: 'User_Following',
-      });
 
       // User.hasMany(models.User, { as: 'friends' });
       User.belongsToMany(models.User, {
@@ -257,6 +253,21 @@ export default (sequelize: any, DataTypes: any) => {
             }
           },
         },
+      },
+      amountOfFollower: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
+      amountOfFollowing: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
+      amountOfFriend: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
       },
 
       youtubePrivacy: {

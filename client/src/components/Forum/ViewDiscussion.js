@@ -9,7 +9,16 @@ import InfiniteScroll from "../../components/InfiniteScroll/InfiniteScroll";
 import Loader from "../../components/common/Loader";
 import { format } from "date-fns";
 
-const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading, isError, hasNextPage, fetchNextPage }) => {
+const ViewDiscussion = ({
+  data = [],
+  type = "forum",
+  CategoryId = "",
+  isLoading,
+  isError,
+  hasNextPage,
+  fetchNextPage,
+  communityData = {},
+}) => {
   const id = useParams();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -17,6 +26,7 @@ const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading,
   function reloadPage() {
     queryClient.refetchQueries(["community", "discussion", "all"]);
   }
+
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-xl w-full py-5">
@@ -29,7 +39,7 @@ const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading,
             <InputDiscussion
               labelBtn={"New Discussion"}
               communityId={id}
-              data={{}}
+              data={communityData}
               type="new"
               isForum={type === "forum" ? true : false}
               CategoryId={type === "forum" ? CategoryId : ""}
@@ -49,7 +59,7 @@ const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading,
                 Tap to retry
               </Link>{" "}
             </div>
-          ) : data && data?.pages && data?.pages?.length > 0 && data?.pages[0]?.data?.total > 0 ? (
+          ) : data?.pages && data?.pages?.length > 0 && data?.pages[0]?.data?.total > 0 ? (
             <InfiniteScroll
               fetchMore={fetchNextPage}
               isError={isError}
@@ -76,68 +86,66 @@ const ViewDiscussion = ({ data = [], type = "forum", CategoryId = "", isLoading,
                 </div>
               }
             >
-              {data?.pages?.map((page) => {
-                return page?.data?.data?.map((item) => {
-                  return (
-                    <div
-                      onClick={() => navigate(type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`)}
-                      key={item?.title}
-                      className="hover:shadow-lg cursor-pointer"
-                    >
-                      <div className="flex justify-between lg:px-6 px-4 lg:py-3 py-2">
-                        <div className="flex justify-between ">
-                          <div className="mr-4">
-                            <img alt={item?.title} src={item?.User?.profilePicture} className="w-12 h-12 mask mask-squircle" />
-                          </div>
-                          <div className="">
-                            <Link
-                              to={type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`}
-                              className="font-semibold hover:text-primary"
-                            >
-                              {item?.title}
-                            </Link>
-                            <p className="pt-2 text-sm text-gray-500">
-                              {item?.lastComment && (
-                                <span className="">
-                                  {item?.lastComment?.commenterFirstName +
-                                    " " +
-                                    item?.lastComment?.commenterLastName +
-                                    " replied on " +
-                                    item?.lastComment && format(new Date(item?.lastComment?.createdAt), "MMM dd, yyyy")}
+              {data &&
+                data?.pages?.map((page) => {
+                  return page?.data?.data?.map((item) => {
+                    return (
+                      <div
+                        onClick={() => navigate(type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`)}
+                        key={item?.title}
+                        className="hover:shadow-lg cursor-pointer"
+                      >
+                        <div className="flex justify-between lg:px-6 px-4 lg:py-3 py-2">
+                          <div className="flex justify-between ">
+                            <div className="mr-4">
+                              <img alt={item?.title} src={item?.User?.profilePicture} className="w-12 h-12 mask mask-squircle" />
+                            </div>
+                            <div className="">
+                              <Link
+                                to={type === "forum" ? `./${item?.id}` : `.?idD=${item?.id}`}
+                                className="font-semibold hover:text-primary"
+                              >
+                                {item?.title}
+                              </Link>
+                              <p className="pt-2 text-sm text-gray-500">
+                                {item?.lastComment && (
+                                  <span className="">
+                                    {item?.lastComment?.commenterFirstName +
+                                      " " +
+                                      item?.lastComment?.commenterLastName +
+                                      " replied on " +
+                                      item?.lastComment && format(new Date(item?.lastComment?.createdAt), "MMM dd, yyyy")}
+                                  </span>
+                                )}
+                                {!item?.lastComment && (
+                                  <span className="">
+                                    {item?.User?.firstName + " " + item?.User?.lastName + " created on " + item?.createdAt &&
+                                      format(new Date(item?.createdAt), "MMM dd, yyyy")}
+                                  </span>
+                                )}
+                                <span className="mx-2">
+                                  {" " + item?.activeParticipants === 0
+                                    ? "0 Member"
+                                    : item?.activeParticipants > 1
+                                    ? item?.activeParticipants + " Members"
+                                    : item?.activeParticipants + " Member"}
                                 </span>
-                              )}
-                              {!item?.lastComment && (
-                                <span className="">
-                                  {item?.User?.firstName +
-                                    " " +
-                                    item?.User?.lastName +
-                                    " created on " +
-                                    format(new Date(item?.createdAt), "MMM dd, yyyy")}
+                                •
+                                <span className="mx-2">
+                                  {" " + item?.amountOfComments === 0
+                                    ? "0 Reply"
+                                    : item?.amountOfComments > 1
+                                    ? item?.amountOfComments + " Replies"
+                                    : item?.amountOfComments + " Reply"}
                                 </span>
-                              )}
-                              <span className="mx-2">
-                                {" " + item?.activeParticipants === 0
-                                  ? "0 Member"
-                                  : item?.activeParticipants > 1
-                                  ? item?.activeParticipants + " Members"
-                                  : item?.activeParticipants + " Member"}
-                              </span>
-                              •
-                              <span className="mx-2">
-                                {" " + item?.amountOfComments === 0
-                                  ? "0 Reply"
-                                  : item?.amountOfComments > 1
-                                  ? item?.amountOfComments + " Replies"
-                                  : item?.amountOfComments + " Reply"}
-                              </span>
-                            </p>
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                });
-              })}
+                    );
+                  });
+                })}
             </InfiniteScroll>
           ) : (
             <div className="flex justify-center">
@@ -163,6 +171,7 @@ ViewDiscussion.propTypes = {
   hasNextPage: PropTypes.bool,
   fetchNextPage: PropTypes.func,
   CategoryId: PropTypes.string,
+  communityData: PropTypes.object,
 };
 
 export default ViewDiscussion;

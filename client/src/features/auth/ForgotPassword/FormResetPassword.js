@@ -33,7 +33,10 @@ const FormResetPassword = () => {
   const handleResetPasword = async (credentials) => {
     setIsLoading(true);
     try {
-      const data = await resetPassword.mutateAsync(credentials);
+      const data = await resetPassword.mutateAsync({
+        action: "resetPwdLong",
+        value: { token: resetPasswordKey, password: credentials?.password },
+      });
       if (data) {
         navigate(routesPath.LOGIN);
       }

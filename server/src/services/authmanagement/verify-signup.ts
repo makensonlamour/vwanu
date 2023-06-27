@@ -10,17 +10,15 @@ export async function verifySignup(
   tokens,
   notifierOptions = {}
 ) {
-
   const usersService = options.app.service(options.service);
   const usersServiceIdName = usersService.id;
 
   const users = await usersService.find({ query });
-  
+
   const user1 = getUserData(users, [
     'isNotVerifiedOrHasVerifyChanges',
     'verifyNotExpired',
   ]);
-
 
   async function eraseVerifyProps(user, verified, verifyChanges = {}) {
     const patchToUser = {

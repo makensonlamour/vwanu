@@ -107,8 +107,8 @@ export class Friends extends Service {
       await Promise.all([
         approver.addFriend(friend),
         friend.addFriend(approver),
-        approver.addFollowing(friend),
-        friend.addFollowing(approver),
+        // approver.addFollowing(friend),
+        // friend.addFollowing(approver),
         approver.addFollower(friend),
         friend.addFollower(approver),
       ]);

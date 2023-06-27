@@ -44,6 +44,16 @@ const followError = () =>
     position: "top-center",
   });
 
+const unFollowSuccess = () =>
+  toast.success("You unfollow this user", {
+    position: "top-center",
+  });
+
+const unFollowError = () =>
+  toast.error("Sorry. Error on unfollowing this user!", {
+    position: "top-center",
+  });
+
 const acceptFriendRequestError = () =>
   toast.error("Sorry. Error on accepting Friend Request!", {
     position: "top-center",
@@ -86,10 +96,10 @@ const CustomViewFriend = ({ data, isRequest = false }) => {
     try {
       await sendUnfollow.mutateAsync({ id: _id });
       queryClient.invalidateQueries(["user", "suggest"]);
-      followSuccess();
+      unFollowSuccess();
     } catch (e) {
       console.log(e);
-      followError();
+      unFollowError();
     } finally {
       setLoading(false);
     }

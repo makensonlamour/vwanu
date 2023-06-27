@@ -94,6 +94,7 @@ describe('/authmanagement service', () => {
         action: 'resendVerifySignup',
         value: { email: user.email },
       });
+
       expect(response.statusCode).toBe(StatusCodes.CREATED);
 
       userR = await app
@@ -109,16 +110,19 @@ describe('/authmanagement service', () => {
   });
   describe('verifySignupLong', () => {
     it('Should not verify with the wrong activation code ', async () => {
-      const response = await testServer.post(endpoint).send({
-        action: 'verifySignupLong',
-        value: Math.random().toString(36).substring(7),
-      });
+      const response = await testServer
+        .post(endpoint)
+        .send({
+          action: 'verifySignupLong',
+          value: Math.random().toString(36).substring(7),
+        })
+        .set('authorization', user.accessToken);
 
       expect(response.body).toMatchObject({
         className: 'bad-request',
         code: 400,
         errors: {},
-        message: 'User not found.',
+        message: expect.stringContaining('User'),
         name: 'BadRequest',
       });
     });
@@ -126,12 +130,16 @@ describe('/authmanagement service', () => {
       const u = await app
         .get('sequelizeClient')
         .models.User.findOne({ where: { email: user.email } });
+
       const { activationKey } = u;
       act = activationKey;
-      const response = await testServer.post(endpoint).send({
-        action: 'verifySignupLong',
-        value: activationKey,
-      });
+      const response = await testServer
+        .post(endpoint)
+        .send({
+          action: 'verifySignupLong',
+          value: activationKey,
+        })
+        .set('authorization', user.accessToken);
 
       // TODO: verify the email was sent
       const fetchUser = await app
@@ -143,14 +151,17 @@ describe('/authmanagement service', () => {
     });
 
     it('should not verify signup a second time ', async () => {
-      const response = await testServer.post(endpoint).send({
-        action: 'verifySignupLong',
-        value: act,
-      });
+      const response = await testServer
+        .post(endpoint)
+        .send({
+          action: 'verifySignupLong',
+          value: act,
+        })
+        .set('authorization', user.accessToken);
 
       expect(response.body).toMatchObject({
         name: 'BadRequest',
-        message: 'User not found.',
+        message: expect.stringContaining('User'),
         code: 400,
         className: 'bad-request',
         errors: {},

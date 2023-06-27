@@ -25,7 +25,7 @@ import {
 } from './verify-signup';
 
 import sendResetPwd from './send-reset-pwd';
-import notifier from './notifier';
+import notifier from '../../lib/utils/messenger';
 import sanitizeUserForClient from '../../lib/utils/sanitizeUserForClient';
 
 const passwordField = 'password';

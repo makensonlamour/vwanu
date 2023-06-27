@@ -66,7 +66,7 @@ const FormContactInfo = ({ user }) => {
       updateSuccess();
       queryClient.invalidateQueries(["user", "me"]);
       // window.location.reload();
-      window.location.href = "../../profile/" + user?.id;
+      window.location.href = "../../profile/" + user?.id + "/about";
     } catch (e) {
       console.log(e);
       updateError();

@@ -18,7 +18,7 @@ export default async (context: HookContext) => {
       break;
 
     case 'Discussion':
-      if (!community.haveDiscussionForum)
+      if (!community.haveDiscussionForum || !community.canMessageUserInGroup)
         throw new BadRequest(
           'You can not create a forum or add discussion in this community'
         );

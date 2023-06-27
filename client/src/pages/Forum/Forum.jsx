@@ -10,51 +10,6 @@ import EmptyComponent from "../../components/common/EmptyComponent";
 import { ImSad } from "react-icons/im";
 
 const Forum = () => {
-  // const categories = [
-  //   {
-  //     id: 1,
-  //     coverPicture: "https://files.hardwicke.co.uk/wp-content/uploads/2018/08/09112906/shutterstock_674581165.jpg",
-  //     name: "Architecture",
-  //     description:
-  //       "Every man's work, whether it be literature, or music or pictures or architecture or anything else, is always a portrait of himself.",
-  //     date: "2 years, 10 months ago",
-  //   },
-  //   {
-  //     id: 2,
-  //     coverPicture: "https://pbs.twimg.com/media/D70GvKCX4AEcbAt?format=jpg&name=4096x4096",
-  //     name: "Mobile Application",
-  //     description: "A mobile application also referred to as a mobile app or simply an app is a computer program",
-  //     date: "2 years, 10 months ago",
-  //   },
-  //   {
-  //     id: 3,
-  //     coverPicture: "https://pbs.twimg.com/media/Dwh8vcpWwAAuxCD?format=jpg&name=4096x4096",
-  //     name: "Ask Anything Random Here",
-  //     description: "Hey everyone! This forum will be focused on community engagement by getting or providing",
-  //     date: "2 years, 10 months ago",
-  //   },
-  //   {
-  //     id: 4,
-  //     coverPicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0CWQT0mgk0HqzUIjFQfxKqtco5IJiB_waVg&usqp=CAU",
-  //     name: "Business Meet",
-  //     description: "In essence, a business meeting is a gathering of two or more people to discuss ideas, goals and objectives",
-  //     date: "2 years, 10 months ago",
-  //   },
-  //   {
-  //     id: 5,
-  //     coverPicture: "https://www.fcmtravel.com/sites/default/files/styles/large/public/Flight-flying-sunset_0.jpg?itok=Tl3rYwR-",
-  //     name: "Aviation Leaders",
-  //     description: "",
-  //     date: "2 years, 10 months ago",
-  //   },
-  //   {
-  //     id: 6,
-  //     coverPicture: "https://mkb-amsterdam.nl/wp-content/uploads/2022/05/diggity-marketing-SB0WARG16HI-unsplash.jpg",
-  //     name: "Digital Marketing",
-  //     description: "Digital marketing is the marketing of products or services using digital technologies, mainly on the",
-  //     date: "2 years, 10 months ago",
-  //   },
-  // ];
   const queryClient = useQueryClient();
   function reloadPage() {
     queryClient.refetchQueries(["category", "discussion"]);
@@ -71,7 +26,7 @@ const Forum = () => {
     <>
       <div className="w-full">
         <div className="w-full bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78]">
-          <div className="text-white py-20">
+          <div className="text-white py-8 lg:py-20">
             <p className="text-3xl text-center pb-6">Discussions</p>
             <div className="flex justify-center">
               <p className="mb-2 text-center pb-6 text-lg w-full lg:w-[30%] font-light">
@@ -130,7 +85,7 @@ const Forum = () => {
               <div className="flex justify-evenly flex-wrap px-4 lg:mx-36">
                 {categoryList?.pages.map((page) => {
                   return page?.data?.data?.map((category) => {
-                    return <ViewCategory key={category?.id} data={category || []} />;
+                    return <ViewCategory key={category?.id} data={category || {}} />;
                   });
                 })}
               </div>

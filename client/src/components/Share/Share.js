@@ -16,7 +16,7 @@ import { useCreatePost } from "../../features/post/postSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { FiShare } from "react-icons/fi";
 
-export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
+// export const url = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
 const shareSuccess = (_text) =>
   toast.success("You share this " + _text + " successfully!", {
@@ -41,8 +41,15 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
   const [customText, setCustomText] = useState("");
   const [friendId, setFriendId] = useState(false);
   const clipboard = useClipboard({ timeout: 1000 });
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
+
+  function isPreview() {
+    let url = window.location.href.split("/");
+    if (url.length <= 4) return false;
+
+    return true;
+  }
+
+  let urlShare = isPreview() ? window.location.href : window.location.href + "post/" + post?.id;
 
   const {
     data: listFriend,
@@ -63,85 +70,6 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
     queryClient.refetchQueries(["friends", "all"]);
   }
 
-  // const isPreview = () => {
-  //   let url = window.location.href.split("/");
-  //   if (url[1] === -1) return false;
-
-  //   return true;
-  // };
-
-  // function generateShare(type) {
-  //   if (!type) return "";
-  //   let result = "";
-  //   if (type === "post") {
-  //     result =
-  //       post?.User?.id +
-  //       "~=~" +
-  //       post?.User?.firstName +
-  //       " " +
-  //       post?.User?.lastName +
-  //       "~=~" +
-  //       post?.createdAt +
-  //       "~=~" +
-  //       url +
-  //       "/post" +
-  //       post?.id +
-  //       "~=~" +
-  //       customText +
-  //       "~=~" +
-  //       post?.postText;
-  //   } else if (type === "discussion") {
-  //     result =
-  //       post?.User?.id +
-  //       "~=~" +
-  //       post?.User?.firstName +
-  //       " " +
-  //       post?.User?.lastName +
-  //       "~=~" +
-  //       post?.createdAt +
-  //       "~=~" +
-  //       window.location.href +
-  //       "~=~" +
-  //       customText +
-  //       "~=~" +
-  //       post?.title;
-  //   } else if (type === "blog") {
-  //     const newStr = post?.blogText.replace(/(<([^>]+)>)/gi, "");
-  //     let temp = newStr.length > 70 ? newStr.substring(0, 70) + "..." : newStr;
-  //     result =
-  //       post?.User?.id +
-  //       "~=~" +
-  //       post?.User?.firstName +
-  //       " " +
-  //       post?.User?.lastName +
-  //       "~=~" +
-  //       post?.createdAt +
-  //       "~=~" +
-  //       window.location.href +
-  //       "~=~" +
-  //       customText +
-  //       "~=~" +
-  //       post?.blogTitle +
-  //       "\n" +
-  //       temp;
-  //   } else {
-  //     return result;
-  //   }
-
-  //   return result;
-  // }
-
-  // function generateShareWall(type) {
-  //   if (!type) return "";
-  //   let result = "";
-  //   if (type === "post") {
-  //     result = post?.postText;
-  //   } else if (type === "blog") {
-  //     post?.blogTitle + "\n" + post?.post?.blogText;
-  //   } else {
-  //   }
-  //   return result;
-  // }
 
   async function handleCreateConversation() {
     setLoading(true);
@@ -159,10 +87,11 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
         if (message.trim() === "") {
           dataMessage.messageText =
             type === "post"
-              ? "Hello :) Take a look at this: " + url + "/post/" + post?.id
+              ? "Hello :) Take a look at this: " + window.location.href + "post/" + post?.id
               : "Hello :) Take a look at this: " + window.location.href;
         } else {
-          dataMessage.messageText = type === "post" ? message + ": " + url + "/post/" + post?.id : message + ": " + window.location.href;
+          dataMessage.messageText =
+            type === "post" ? message + ": " + window.location.href + "post/" + post?.id : message + ": " + window.location.href;
         }
       } else {
         if (message.trim() === "") {
@@ -416,8 +345,8 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
             </div>
             <div className="flex items-center p-2">
               <p>Copy link:</p>
-              <div onClick={() => clipboard.copy(window.location.href)} className="bg-gray-200 p-1 rounded-lg w-[80%] cursor-pointer">
-                {clipboard.copied ? "link copied" : window.location.href}
+              <div onClick={() => clipboard.copy(urlShare)} className="bg-gray-200 p-1 rounded-lg w-[80%] cursor-pointer">
+                {clipboard.copied ? "link copied" : urlShare}
               </div>
             </div>
           </div>

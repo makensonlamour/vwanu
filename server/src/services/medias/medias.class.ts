@@ -9,6 +9,4 @@ export class Medias extends Service {
   constructor(options: Partial<SequelizeServiceOptions>, app: Application) {
     super(options);
   }
-
-
 }

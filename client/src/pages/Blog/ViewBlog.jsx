@@ -56,7 +56,7 @@ const ViewBlog = () => {
     fetchNextPage: fetchNextPageAutor,
   } = useGetMyBlogList(["blog", id], blog && blog?.User?.id !== "undefined" ? true : false, blog?.User?.id);
 
-  console.log("blogListAutor", blogListAutor);
+  // console.log("blogListAutor", blogListAutor);
 
   const {
     data: listResponse,
