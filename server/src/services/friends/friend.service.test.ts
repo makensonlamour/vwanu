@@ -50,7 +50,6 @@ describe('friend service', () => {
           .set('authorization', User.body.accessToken)
       )
     );
-    Friends.map((friend) => console.log('friend: ', friend.body));
   }, 30000);
 
   afterAll(async () => {
