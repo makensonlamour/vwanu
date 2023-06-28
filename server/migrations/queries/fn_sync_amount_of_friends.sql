@@ -5,12 +5,14 @@ CREATE OR REPLACE FUNCTION fn_sync_amount_of_friends()
       -- Increment the followers count for the user being followed
        UPDATE "Users"
        SET "amountOfFriend" = "amountOfFriend" + 1
-       WHERE id = NEW."UserId";
+       WHERE id = NEW."UserId" 
+       OR id = NEW."friendId";
   ELSIF TG_OP = 'DELETE' THEN
       -- Decrement the followers count for the user being unfollowed
        UPDATE "Users"
        SET "amountOfFriend" = "amountOfFriend" - 1
-       WHERE id = OLD."UserId";
+       WHERE id = OLD."UserId"
+       OR id = OLD."friendId";
    END IF;
     
     RETURN null;

@@ -1,16 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Op } from '@sequelize/core';
-import { StatusCodes } from 'http-status-codes';
+import { Op, QueryTypes } from '@sequelize/core';
 import { Params, Id } from '@feathersjs/feathers';
 import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
+import { BadRequest } from '@feathersjs/errors';
 
-import { BadRequest, NotFound } from '@feathersjs/errors';
 /** Local dependencies */
 import { Application } from '../../declarations';
-import AppError from '../../errors';
 import UrlToMedia from '../../lib/utils/UrlToMedia';
 
-const userAttributes = ['firstName', 'lastName', 'id', 'profilePicture'];
 // eslint-disable-next-line import/prefer-default-export
 export class Friends extends Service {
   app;
@@ -20,142 +17,68 @@ export class Friends extends Service {
     this.app = app;
   }
 
-  // async find(params: Params) {
-  //   const id = params.query.UserId || params.User.id;
-  //   const { models } = this.app.get('sequelizeClient');
+  async find(params: Params) {
+    const id = params.query.UserId || params.User.id;
+    const { $limit, $skip } = params.query;
+    try {
+      const limit = $limit || this.options.paginate.default;
+      const skip =
+        $skip || this.options.paginate.default * (params.query.page - 1) || 0;
 
-  //   const userAndFriends: any = await models.User.findOne({
-  //     where: { id },
-  //     attributes: [],
-  //     include: [
-  //       {
-  //         model: models.User,
-  //         as: 'friends',
-  //         attributes: userAttributes,
-  //       },
-  //     ],
-  //   });
+      const sequelize = this.app.get('sequelizeClient');
+      const friendList = await sequelize.query(
+        `SELECT * FROM proc_get_friends(:id,:limit, :skip)`,
+        {
+          type: QueryTypes.SELECT,
+          replacements: { limit, skip, id },
+        }
+      );
 
-  //   if (!userAndFriends)
-  //     throw new AppError(
-  //       'Could not find your profiles or friends list',
-  //       StatusCodes.NOT_FOUND
-  //     );
+      const response = Object.assign(
+        friendList[0],
+        {},
+        {
+          limit,
+          skip,
+          data: friendList[0]?.data || [],
+        }
+      );
 
-  //   const friends = userAndFriends.friends.map((friend) => ({
-  //     id: friend.id,
-  //     firstName: friend.firstName,
-  //     lastName: friend.lastName,
-  //     profilePicture: UrlToMedia(friend.profilePicture),
-  //     createdAt: friend.User_friends.createdAt,
-  //     updatedAt: friend.User_friends.updatedAt,
-  //   }));
-
-  //   return Promise.resolve(friends);
-  // }
+      return Promise.resolve(response);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
 
   async create(data, params) {
-    const { models } = this.app.get('sequelizeClient');
+    const sequelize = this.app.get('sequelizeClient');
+    const { models } = sequelize;
     const approverId = params.User.id;
-    const { friendId } = data;
+    const { friendId, accept } = data;
 
-    // console.log({ approverId, friendId });
-    const people: any = await models.User.findAll({
-      where: { id: { [Op.or]: [approverId, friendId] } },
-      attributes: ['id'],
-      include: [
+    try {
+      const newFriend = await sequelize.query(
+        'CALL proc_add_friend(:approverId, :friendId, :accept,null,null,null,null,null,null)',
         {
-          model: models.User,
-          as: 'friends',
-          attributes: userAttributes,
-        },
-        {
-          model: models.User,
-          as: 'undesiredFriends',
-          attributes: userAttributes,
-        },
-      ],
-    });
-
-    const approver = people.find(
-      (person) => person.id.toString() === approverId.toString()
-    );
-
-    const friend = people.find(
-      (person) => person.id.toString() === friendId.toString()
-    );
-
-    if (!approver || !friend)
-      throw new NotFound(
-        'Your profile or the profile of the person you want to be friend with was not found'
+          replacements: { approverId, friendId, accept },
+          type: QueryTypes.SELECT,
+          models: models.User,
+        }
       );
-
-    const hasRequest = await approver.hasFriendsRequest(friend);
-
-    if (!hasRequest)
-      throw new NotFound('This person never requested a friend request');
-    let alreadyFiends = await Promise.all([
-      friend.hasFriend(approver),
-      approver.hasFriend(friend),
-    ]);
-
-    alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
-    // if (action === 'add-friend') {
-    if (alreadyFiends) throw new BadRequest('You are already friends');
-
-    if (data.accept)
-      await Promise.all([
-        approver.addFriend(friend),
-        friend.addFriend(approver),
-        // approver.addFollowing(friend),
-        // friend.addFollowing(approver),
-        approver.addFollower(friend),
-        friend.addFollower(approver),
-      ]);
-    else {
-      await approver.addUndesiredFriends(friend);
-    }
-
-    await Promise.all([
-      approver.removeFriendsRequest(friend),
-      friend.removeFriendshipRequested(approver),
-    ]);
-
-    const user2 = await approver.reload();
-
-    if (data.accept) {
-      let newFriend = user2.friends.find(
-        (user) => user.id.toString() === friendId.toString()
-      );
-
-      newFriend = {
-        id: newFriend.id,
-        firstName: newFriend.firstName,
-        lastName: newFriend.lastName,
-        profilePicture: UrlToMedia(newFriend.profilePicture),
-        createdAt: newFriend.User_friends.createdAt,
-        updatedAt: newFriend.User_friends.updatedAt,
+      const friend = {
+        ...newFriend[0],
+        profilePicture: UrlToMedia(newFriend[0].profilePicture),
       };
-
-      return Promise.resolve(newFriend);
+      return Promise.resolve(friend);
+    } catch (err) {
+      const error = err.parent;
+      const msg = error?.detail || error?.message;
+      throw new BadRequest(msg); // reject with this error .
     }
-    let undesiredFriend = user2.undesiredFriends.find(
-      (user) => user.id.toString() === friendId.toString()
-    );
-
-    undesiredFriend = {
-      id: undesiredFriend.id,
-      firstName: undesiredFriend.firstName,
-      lastName: undesiredFriend.lastName,
-      profilePicture: UrlToMedia(undesiredFriend.profilePicture),
-      createdAt: undesiredFriend.User_friends_undesired.createdAt,
-      updatedAt: undesiredFriend.User_friends_undesired.updatedAt,
-    };
-
-    return Promise.resolve(undesiredFriend);
   }
 
   async remove(id: Id, params: Params) {
+    const userAttributes = ['firstName', 'lastName', 'id', 'profilePicture'];
     const { models } = this.app.get('sequelizeClient');
 
     const requesterId = params.User.id;
@@ -185,7 +108,12 @@ export class Friends extends Service {
     const friend = people.find(
       (person) => person.id.toString() === friendId.toString()
     );
-    const areFriends = await requester.hasFriend(friend);
+    const check = await Promise.all([
+      requester.hasFriend(friend),
+      friend.hasFriend(requester),
+    ]);
+
+    const areFriends = check.some((val) => val === true);
 
     if (!areFriends)
       throw new BadRequest(
@@ -207,3 +135,95 @@ export class Friends extends Service {
     return Promise.resolve(removeFriend);
   }
 }
+
+// const people: any = await models.User.findAll({
+//   where: { id: { [Op.or]: [approverId, friendId] } },
+//   attributes: ['id'],
+//   include: [
+//     {
+//       model: models.User,
+//       as: 'friends',
+//       attributes: userAttributes,
+//     },
+//     {
+//       model: models.User,
+//       as: 'undesiredFriends',
+//       attributes: userAttributes,
+//     },
+//   ],
+// });
+
+// const approver = people.find(
+//   (person) => person.id.toString() === approverId.toString()
+// );
+
+// const friend = people.find(
+//   (person) => person.id.toString() === friendId.toString()
+// );
+
+// if (!approver || !friend)
+//   throw new NotFound(
+//     'Your profile or the profile of the person you want to be friend with was not found'
+//   );
+
+// const hasRequest = await approver.hasFriendsRequest(friend);
+
+// if (!hasRequest)
+//   throw new NotFound('This person never requested a friend request');
+// let alreadyFiends = await Promise.all([
+//   friend.hasFriend(approver),
+//   approver.hasFriend(friend),
+// ]);
+
+// alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
+// // if (action === 'add-friend') {
+// if (alreadyFiends) throw new BadRequest('You are already friends');
+
+// if (data.accept)
+//   await Promise.all([
+//     approver.addFriend(friend),
+//     friend.addFriend(approver),
+//     // approver.addFollowing(friend),
+//     // friend.addFollowing(approver),
+//     approver.addFollower(friend),
+//     friend.addFollower(approver),
+//   ]);
+// else {
+//   await approver.addUndesiredFriends(friend);
+// }
+
+// await Promise.all([
+//   approver.removeFriendsRequest(friend),
+//   friend.removeFriendshipRequested(approver),
+// ]);
+
+// const user2 = await approver.reload();
+
+// if (data.accept) {
+//   let newFriend = user2.friends.find(
+//     (user) => user.id.toString() === friendId.toString()
+//   );
+
+//   newFriend = {
+//     id: newFriend.id,
+//     firstName: newFriend.firstName,
+//     lastName: newFriend.lastName,
+//     profilePicture: UrlToMedia(newFriend.profilePicture),
+//     createdAt: newFriend.User_friends.createdAt,
+//     updatedAt: newFriend.User_friends.updatedAt,
+//   };
+
+//   return Promise.resolve(newFriend);
+// }
+// let undesiredFriend = user2.undesiredFriends.find(
+//   (user) => user.id.toString() === friendId.toString()
+// );
+
+// undesiredFriend = {
+//   id: undesiredFriend.id,
+//   firstName: undesiredFriend.firstName,
+//   lastName: undesiredFriend.lastName,
+//   profilePicture: UrlToMedia(undesiredFriend.profilePicture),
+//   createdAt: undesiredFriend.User_friends_undesired.createdAt,
+//   updatedAt: undesiredFriend.User_friends_undesired.updatedAt,
+// };
