@@ -160,16 +160,19 @@ export default (sequelize: any, DataTypes: any) => {
       User.belongsToMany(models.User, {
         as: 'Follower',
         through: 'User_Follower',
+        onDelete: 'CASCADE',
       });
 
       // User.hasMany(models.User, { as: 'friends' });
       User.belongsToMany(models.User, {
         through: 'User_friends',
         as: 'friends',
+        onDelete: 'CASCADE',
       });
       User.belongsToMany(models.User, {
         through: 'User_friends_request',
         as: 'friendsRequest',
+        onDelete: 'CASCADE',
       });
       User.belongsToMany(models.User, {
         through: 'User_friends_Want_to_Be',
@@ -179,6 +182,7 @@ export default (sequelize: any, DataTypes: any) => {
       User.belongsToMany(models.User, {
         through: 'User_friends_undesired',
         as: 'undesiredFriends',
+        onDelete: 'CASCADE',
       });
 
       // User.belongsToMany(models.User, {

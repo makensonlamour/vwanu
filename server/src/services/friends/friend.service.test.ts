@@ -18,7 +18,7 @@ let notFriend;
 describe('friend service', () => {
   let testServer;
   beforeAll(async () => {
-    await app.get('sequelizeClient').models.User.sync({ force: true });
+    await app.get('sequelizeClient').models.User.sync({});
     testServer = request(app);
     // create the users
     createdTestUsers = await Promise.all(
@@ -50,7 +50,13 @@ describe('friend service', () => {
           .set('authorization', User.body.accessToken)
       )
     );
+    Friends.map((friend) => console.log('friend: ', friend.body));
   }, 30000);
+
+  afterAll(async () => {
+    const sequelize = app.get('sequelizeClient');
+    await sequelize.models.User.sync({ force: true });
+  });
 
   it('should see all his friends', async () => {
     const myFriendsR = await testServer
@@ -126,52 +132,4 @@ describe('friend service', () => {
         expect(Friends.some((user) => user.body.id === friend.id)).toBe(true);
     });
   });
-  it.todo('should not be able to see someone as friends if not a friend');
-  // it.skip('should create a friend request', async () => {
-  //   const reqester = createdTestUsers[0].body;
-  //   const friend = createdTestUsers[1].body;
-
-  //   const response = await testServer
-  //     .post(endpoint)
-  //     .send({
-  //       UserId: createdTestUsers[1].body.id,
-  //     })
-  //     .set('authorization', createdTestUsers[0].body.accessToken);
-
-  //   expect(response.status).toBe(StatusCodes.CREATED);
-  // });
-
-  // it.skip('should not create a friend request twice', async () => {
-  //   const requester = createdTestUsers[0].body;
-  //   const friend = createdTestUsers[1].body;
-
-  //   const response = await testServer
-  //     .post(endpoint)
-  //     .send({
-  //       UserId: friend.id,
-  //     })
-  //     .set('authorization', requester.accessToken);
-
-  //   expect(response.status).toBe(StatusCodes.BAD_REQUEST);
-  // });
-  // it.skip('should not create a friend request if one already exist', async () => {
-  //   const requester = createdTestUsers[0].body;
-  //   const friend = createdTestUsers[1].body;
-
-  //   const response = await testServer
-  //     .post(endpoint)
-  //     .send({
-  //       UserId: requester.id,
-  //     })
-  //     .set('authorization', friend.accessToken);
-
-  //   expect(response.status).toBe(StatusCodes.BAD_REQUEST);
-  // });
-  // it.skip('should cancel a friend request', () => {});
-  // it.todo('should deny a friend request');
-  // it.todo('should not be able to send a friend request');
-  // it.todo('should accept a friend request');
-  // it.todo('should return all your friends ');
-  // it.todo('should return all friend request you sent');
-  // it.todo('should return all friend request your received');
 });
