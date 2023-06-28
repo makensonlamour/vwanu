@@ -1,7 +1,7 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import { disallow } from 'feathers-hooks-common';
 
-// import getFriends from './hooks/getFriends';
+import notify from './hooks/notify';
 
 const { authenticate } = feathersAuthentication.hooks;
 
@@ -11,5 +11,8 @@ export default {
     all: [authenticate('jwt')],
     get: notAllowed,
     update: notAllowed,
+  },
+  after: {
+    create: notify,
   },
 };
