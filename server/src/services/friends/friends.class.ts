@@ -27,10 +27,10 @@ export class Friends extends Service {
 
       const sequelize = this.app.get('sequelizeClient');
       const friendList = await sequelize.query(
-        `SELECT * FROM proc_get_friends(:id,:limit, :skip)`,
+        `SELECT * FROM proc_get_friends(:id,:requester,:limit, :skip)`,
         {
           type: QueryTypes.SELECT,
-          replacements: { limit, skip, id },
+          replacements: { limit, skip, id, requester: params.User.id },
         }
       );
 
