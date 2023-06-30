@@ -1,6 +1,5 @@
-CREATE OR REPLACE PROCEDURE 
-proc_add_friend(p_aprover_id UUID, p_requester_id UUID, p_accept BOOLEAN, INOUT id UUID , INOUT "firstName" TEXT, INOUT "lastName" TEXT, INOUT "profilePicture" TEXT, INOUT "createdAt" TEXT, INOUT "updatedAt" TEXT)
-LANGUAGE plpgsql
+CREATE OR REPLACE PROCEDURE public.proc_add_friend(p_aprover_id uuid, p_requester_id uuid, p_accept boolean, INOUT id uuid, INOUT "firstName" text, INOUT "lastName" text, INOUT "profilePicture" text, INOUT "createdAt" text, INOUT "updatedAt" text)
+ LANGUAGE plpgsql
 AS $$
 BEGIN
 
@@ -34,11 +33,14 @@ ELSE
     VALUES (p_aprover_id, p_requester_id, current_timestamp, current_timestamp);
 
 -- Make them follow each other 
+BEGIN 
     INSERT INTO "User_Follower" 
     ("UserId", "FollowerId", "createdAt", "updatedAt")
     VALUES (p_aprover_id, p_requester_id, current_timestamp, current_timestamp), 
            (p_requester_id, p_aprover_id, current_timestamp, current_timestamp);
+EXCEPTION WHEN OTHERS THEN COMMIT;
 
+END;
    ELSE 
     INSERT INTO "User_friends_undesired" 
     ("UserId", "undesiredFriendId", "createdAt", "updatedAt")
@@ -57,4 +59,4 @@ ELSE
  END IF;
 END IF;
 END;
-$$;
+$$
