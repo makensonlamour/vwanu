@@ -1,13 +1,7 @@
 import { HookContext } from '@feathersjs/feathers';
 
 export default async (context: HookContext): Promise<HookContext> => {
-  if (
-    !context?.result?.id ||
-    !context.params.provider ||
-    !context.params.User ||
-    !context.id
-    // !context.params?.User?.eVisitedNotified
-  )
+  if (!context?.result?.id || !context.params.provider || !context.params.User)
     return context;
 
   const { data, result } = context;
