@@ -174,10 +174,6 @@ export default (sequelize: any, DataTypes: any) => {
         as: 'friendsRequest',
         onDelete: 'CASCADE',
       });
-      User.belongsToMany(models.User, {
-        through: 'User_friends_Want_to_Be',
-        as: 'FriendshipRequested',
-      });
 
       User.belongsToMany(models.User, {
         through: 'User_friends_undesired',
