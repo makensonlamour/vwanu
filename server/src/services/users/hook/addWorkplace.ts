@@ -10,7 +10,12 @@ export default async (context: HookContext): Promise<HookContext> => {
   const { app } = context;
 
   try {
-    await app.service('workplace').create(data.workPlace);
+    const workplace = await app.service('workplace').create(data.workPlace);
+
+    await app.service('WorkPlace').create({
+      UserId: context.params.User.id,
+      WorkPlaceId: workplace.id,
+    });
   } catch (err) {
     Logger.error(err);
     throw new BadRequest('Error saving workplace');
