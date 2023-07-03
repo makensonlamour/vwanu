@@ -6,7 +6,9 @@ export const AreFriends = (UserId, Sequelize) => {
     EXISTS(
     SELECT 1 
     FROM "User_friends" 
-    WHERE "User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${UserId}'
+    WHERE 
+    ("User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${UserId}')
+    OR ("User_friends"."friendId" = "User"."id" AND "User_friends"."UserId" = '${UserId}')
     ))`;
   return Sequelize.literal(friends);
 };

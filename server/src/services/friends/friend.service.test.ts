@@ -41,6 +41,7 @@ describe('friend service', () => {
           .set('authorization', body.accessToken)
       )
     );
+
     // Accept all friend request
     Friends = await Promise.all(
       createdTestUsers.map(async ({ body }) =>
