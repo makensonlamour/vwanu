@@ -11,7 +11,7 @@ export default async (context: HookContext): Promise<HookContext> => {
     await context.app.service('notification').create({
       UserId: context.params.User.id,
       to: result.id,
-      message: `${msgVerb} your friend request`,
+      message: `${msgVerb} your connection request`,
       type: 'direct',
       entityName: 'users',
       entityId: context.params.User.id,
