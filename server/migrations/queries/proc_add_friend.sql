@@ -10,7 +10,7 @@ WHERE "UserId"= p_aprover_id
 AND "friendsRequestId"= p_requester_id
 )
 THEN
- RAISE EXCEPTION 'There is no previous friend request made';
+ RAISE EXCEPTION 'There is no previous connection request made';
 ELSE 
  -- Check if they are already friends. 
  IF EXISTS
