@@ -15,6 +15,7 @@ import {
   AddVisitor,
   GetUser,
   SendWelcomeMail /* SendEmail */,
+  AddworkPlace,
 } from './hook';
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
@@ -84,6 +85,7 @@ export default {
     create: [
       SaveAddress,
       AutoLogin,
+      AddworkPlace,
       // IncludeAddress,
       SaveAndAttachInterests({
         entityName: 'User',
@@ -95,6 +97,7 @@ export default {
     ],
     patch: [
       SaveAddress,
+      AddworkPlace,
       SaveAndAttachInterests({
         entityName: 'User',
         relationTableName: 'User_Interest',
