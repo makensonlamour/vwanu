@@ -59,6 +59,8 @@ import templates from './templates/templates.service';
 
 import template from './template/template.service';
 
+import workplace from './workplace/workplace.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(call);
@@ -107,4 +109,5 @@ export default function (app: Application): void {
   app.configure(forumCategories);
   app.configure(templates);
   app.configure(template);
+  app.configure(workplace);
 }
