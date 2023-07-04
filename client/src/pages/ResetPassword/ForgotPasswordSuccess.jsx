@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import routesPath from "../../routesPath";
+import { FormattedMessage } from "react-intl";
 
 // Core components
 import logo_mobile from "../../assets/images/Asset_2.png";
@@ -22,12 +23,16 @@ const ForgotPasswordSuccessScreen = () => {
               <MdMarkEmailRead size="48" className="m-auto text-green-600" />
             </p>
             <p className="text-green-600 text-center font-semibold mt-4">
-              {"Your request has been approved. We send you a link to reset your password on your email."}
+              <FormattedMessage
+                id="forgotPassword.descriptionSuccessText"
+                defaultMessage="Your request has been approved. We send you a link to reset your password on your email."
+                description=""
+              />
             </p>
           </div>
           <div className="m-auto text-center mt-10 hover:text-secondary">
             <Link to={routesPath.NEWSFEED} className="text-primary font-bold mt-10 text-center">
-              Back to Home
+              <FormattedMessage id="general.backToHome" defaultMessage="Back to Home" description="" />
             </Link>
           </div>
         </div>

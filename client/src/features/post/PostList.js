@@ -18,6 +18,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Reaction from "../reaction/component/Reaction";
 import MenuPost from "./components/MenuPost";
 import PreviewShareBlog from "./components/PreviewShareBlog";
+import { FormattedMessage } from "react-intl";
 
 const notify = () =>
   toast.success("Post deleted successfully!", {
@@ -82,7 +83,8 @@ const PostList = ({ post, pageTitle }) => {
                     {post?.wallId !== null ? (
                       <Fragment>
                         <p className=" align-top text-sm">
-                          {` post on `}
+                          <FormattedMessage id="post.postOnTxt" defaultMessage=" post on " description="" />
+
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                         <Link
@@ -96,14 +98,15 @@ const PostList = ({ post, pageTitle }) => {
                           <span className="text-sm font-bold hover:text-secondary text-primary line-clamp-1">{`${post?.WallUser?.firstName} ${post?.WallUser?.lastName} `}</span>
                         </Link>
                         <p className=" align-top text-sm">
-                          {`'s wall`}
+                          <FormattedMessage id="post.wallTxt" defaultMessage="'s wall" description="" />
+
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                       </Fragment>
                     ) : post?.CommunityId !== null ? (
                       <Fragment>
                         <p className="align-top text-sm">
-                          {"post from"}
+                          <FormattedMessage id="post.postFromTxt" defaultMessage="post from" description="" />
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                         <Link
@@ -120,21 +123,21 @@ const PostList = ({ post, pageTitle }) => {
                     ) : post?.originalId !== null && post?.originalType === "Blogs" ? (
                       <Fragment>
                         <p className="align-top text-sm">
-                          {" shared a blog"}
+                          <FormattedMessage id="post.sharedABlogTxt" defaultMessage=" shared a blog" description="" />
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                       </Fragment>
                     ) : post?.originalId !== null && post?.originalType === "Discussion" ? (
                       <Fragment>
                         <p className="align-top text-sm">
-                          {" shared a discussion"}
+                          <FormattedMessage id="post.sharedADiscussionTxt" defaultMessage=" shared a discussion" description="" />
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                       </Fragment>
                     ) : post?.originalId !== null && post?.originalType === "Post" ? (
                       <Fragment>
                         <p className="align-top text-sm">
-                          {" shared a post"}
+                          <FormattedMessage id="post.sharedAPostTxt" defaultMessage=" shared a post" description="" />
                           {/* <FaLongArrowAltRight size={"20px"} /> */}
                         </p>
                       </Fragment>
@@ -147,14 +150,15 @@ const PostList = ({ post, pageTitle }) => {
                         includeSeconds: true,
                       },
                     ])}{" "}
-                    {" ago"} <span className="ml-2 text-gray-600">{" • "}</span> <span className="ml-2">{post?.privacyType}</span>
+                    <FormattedMessage id="post.agoTxt" defaultMessage=" ago" description="" />
+                    {""} <span className="ml-2 text-gray-600">{" • "}</span> <span className="ml-2">{post?.privacyType}</span>
                   </p>
                 </div>
                 <span className="ml-auto mt-2">{(post?.User?.id === user?.id || post?.canDelete) && <MenuPost post={post} />}</span>
                 <ReusableDialog
-                  title={"Delete Post"}
-                  action={"delete"}
-                  item={"post"}
+                  title={<FormattedMessage id="dialog.deletePostTxt" defaultMessage="Delete Post" description="" />}
+                  action={<FormattedMessage id="dialog.deletePostAction" defaultMessage="delete" description="" />}
+                  item={<FormattedMessage id="dialog.deleteItem" defaultMessage="post" description="" />}
                   open={open}
                   handleClose={handleClose}
                   handleAgree={handleAgree}
@@ -186,7 +190,8 @@ const PostList = ({ post, pageTitle }) => {
                               includeSeconds: true,
                             },
                           ])}{" "}
-                          {" ago"} <span className="ml-2 text-gray-600">{" • "}</span>
+                          <FormattedMessage id="post.agoTxt" defaultMessage=" ago" description="" />
+                          <span className="ml-2 text-gray-600">{" • "}</span>
                         </p>
                         <a
                           href={`../../${
@@ -194,7 +199,9 @@ const PostList = ({ post, pageTitle }) => {
                           }/${post?.originalId}`}
                           className="text-xs cursor-pointer hover:text-secondary text-primary"
                         >
-                          <span className="ml-2">{"see original"}</span>
+                          <span className="ml-2">
+                            <FormattedMessage id="post.originalTxt" defaultMessage="see original" description="" />
+                          </span>
                         </a>
                       </div>
                     </div>
@@ -248,21 +255,26 @@ const PostList = ({ post, pageTitle }) => {
                                     <img height={18} width={18} src={koremPNG} alt="_kore" />
                                     {/* <koremPNG width={18} height={18} className="text-black" /> */}
                                     <span className="ml-1">
-                                      {post?.isReactor && post?.isReactor?.length === 1
-                                        ? post?.amountOfReactions - 1 === 0
-                                          ? "You react on this post"
-                                          : "You and "
-                                        : null}
+                                      {post?.isReactor && post?.isReactor?.length === 1 ? (
+                                        post?.amountOfReactions - 1 === 0 ? (
+                                          <FormattedMessage id="post.youReactTxt" defaultMessage="You react on this post" description="" />
+                                        ) : (
+                                          <FormattedMessage id="post.youAndReactTxt" defaultMessage="You and " description="" />
+                                        )
+                                      ) : null}
                                     </span>
                                     <span>
                                       {
                                         post?.amountOfReactions === 0
                                           ? null
                                           : post?.amountOfReactions > 1 && post?.isReactor?.length === 1
-                                          ? post?.amountOfReactions - 1 + " people" //I like and more than one like the post
+                                          ? post?.amountOfReactions -
+                                            1 +
+                                            <FormattedMessage id="post.peopleTxt" defaultMessage=" people" description="" /> //I like and more than one like the post
                                           : post?.isReactor && post?.isReactor?.length - 1 === 0
                                           ? null
-                                          : post?.amountOfReactions + " people" //I don't like and other people like
+                                          : post?.amountOfReactions +
+                                            <FormattedMessage id="post.peopleTxt" defaultMessage=" people" description="" /> //I don't like and other people like
                                       }
                                     </span>
                                   </p>
@@ -283,8 +295,8 @@ const PostList = ({ post, pageTitle }) => {
                       {post?.amountOfComments === 0
                         ? null
                         : post?.amountOfComments === 1
-                        ? post?.amountOfComments + " Comment"
-                        : post?.amountOfComments + " Comments"}
+                        ? post?.amountOfComments + <FormattedMessage id="comment.commentTxt" defaultMessage=" Comment" description="" />
+                        : post?.amountOfComments + <FormattedMessage id="comment.commentTxt" defaultMessage=" Comments" description="" />}
                     </Link>
                     <button className="ml-auto text-xs text-primary hover:border-b hover:border-primary">
                       {post?.Shares?.length ? post?.Shares?.length + " shares" : null}

@@ -4,6 +4,7 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import { GoGlobe } from "react-icons/go";
 import { BiLockAlt } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
+import { FormattedMessage } from "react-intl";
 
 function ModalPrivacy({ title, fn }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -52,8 +53,12 @@ function ModalPrivacy({ title, fn }) {
               <GoGlobe size={"24px"} className="inline mr-1 " />
             </div>
             <div className="inline">
-              <p style={{ fontSize: "18px", fontWeight: "600" }}>Public</p>
-              <p style={{ fontSize: "14px", fontWeight: "100" }}>Visible to anyone, on this site</p>
+              <p style={{ fontSize: "18px", fontWeight: "600" }}>
+                <FormattedMessage id="Privacy.publicTitle" defaultMessage="Public" description="" />
+              </p>
+              <p style={{ fontSize: "14px", fontWeight: "100" }}>
+                <FormattedMessage id="Privacy.publicDescription" defaultMessage="Visible to anyone, on this site" description="" />
+              </p>
             </div>
           </div>
         </MenuItem>
@@ -68,8 +73,12 @@ function ModalPrivacy({ title, fn }) {
               <FaUsers size={"24px"} className="inline mr-1 " />
             </div>
             <div className="inline">
-              <p style={{ fontSize: "18px", fontWeight: "600" }}>My Network</p>
-              <p style={{ fontSize: "14px", fontWeight: "100" }}>Visible only to your network</p>
+              <p style={{ fontSize: "18px", fontWeight: "600" }}>
+                <FormattedMessage id="Privacy.networkTitle" defaultMessage="My Network" description="" />
+              </p>
+              <p style={{ fontSize: "14px", fontWeight: "100" }}>
+                <FormattedMessage id="Privacy.networkDescription" defaultMessage="Visible only to your network" description="" />
+              </p>
             </div>
           </div>
         </MenuItem>
@@ -84,8 +93,12 @@ function ModalPrivacy({ title, fn }) {
               <BiLockAlt size={"24px"} className="inline mr-1 " />
             </div>
             <div className="inline">
-              <p style={{ fontSize: "18px", fontWeight: "600" }}>Only Me</p>
-              <p style={{ fontSize: "14px", fontWeight: "100" }}>Visible only to you</p>
+              <p style={{ fontSize: "18px", fontWeight: "600" }}>
+                <FormattedMessage id="Privacy.meTitle" defaultMessage="Only Me" description="" />
+              </p>
+              <p style={{ fontSize: "14px", fontWeight: "100" }}>
+                <FormattedMessage id="Privacy.meDescription" defaultMessage="Visible only to you" description="" />
+              </p>
             </div>
           </div>
         </MenuItem>

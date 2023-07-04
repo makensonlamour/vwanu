@@ -7,6 +7,7 @@ import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
 import Loader from "../common/Loader";
 import ModalOnlineUser from "./ModalOnlineUser";
+import { FormattedMessage } from "react-intl";
 
 const RecentlyActive = ({ data, isLoading, isError, hasNextPage, fetchNextPage }) => {
   const Item = styled(Paper)(() => ({
@@ -24,7 +25,8 @@ const RecentlyActive = ({ data, isLoading, isError, hasNextPage, fetchNextPage }
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">
         <h2 className="my-2 text-md font-medium text-primary">
-          Online Friends <span className="font-normal text-md text-gray-400">{data.pages ? data?.pages[0]?.data?.total : 0}</span>
+          <FormattedMessage id="newsfeedRecentlyActiveComponent.recentlyActiveTitle" defaultMessage="Online Friends" description="" />
+          <span className="font-normal text-md text-gray-400">{data.pages ? data?.pages[0]?.data?.total : 0}</span>
         </h2>
         {isLoading ? (
           <div style={{ display: "flex", justifyContent: "center" }} className="flex justify-center py-5">
@@ -32,7 +34,7 @@ const RecentlyActive = ({ data, isLoading, isError, hasNextPage, fetchNextPage }
           </div>
         ) : isError ? (
           <div className="py-5 m-auto text-center px-2">
-            {"There was an error while fetching the data. "}{" "}
+            <FormattedMessage id="general.retryTxt" defaultMessage="There was an error while fetching the data." description="" />{" "}
             <Link
               style={{
                 color: "#053dc8",
@@ -41,7 +43,7 @@ const RecentlyActive = ({ data, isLoading, isError, hasNextPage, fetchNextPage }
               to={""}
               onClick={() => reloadPage()}
             >
-              Tap to retry
+              <FormattedMessage id="general.retryBtn" defaultMessage="Tap to retry" description="" />
             </Link>{" "}
           </div>
         ) : data?.pages && data?.pages[0]?.data?.total > 0 ? (
@@ -70,7 +72,13 @@ const RecentlyActive = ({ data, isLoading, isError, hasNextPage, fetchNextPage }
             <EmptyComponent
               border={false}
               icon={<ImSad size={"32px"} className="" />}
-              placeholder={"Sorry, You don't have any active friends."}
+              placeholder={
+                <FormattedMessage
+                  id="newsfeedRecentlyActiveComponent.emptyOnlineUser"
+                  defaultMessage="Sorry, You don't have any active connections."
+                  description=""
+                />
+              }
               tips={""}
             />
           </div>

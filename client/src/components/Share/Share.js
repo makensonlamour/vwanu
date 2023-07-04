@@ -70,6 +70,7 @@ const Share = ({ post, label, type = "", classNameTrigger, noButton = false, cus
     queryClient.refetchQueries(["friends", "all"]);
   }
 
+
   async function handleCreateConversation() {
     setLoading(true);
     if (!friendId) return alert("Please select a friend.");
