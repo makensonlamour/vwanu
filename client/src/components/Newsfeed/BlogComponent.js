@@ -9,6 +9,7 @@ import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
 import { format } from "date-fns";
 import placeholderBlog from "../../assets/images/placeholderBlog.png";
+import { FormattedMessage } from "react-intl";
 
 const BlogComponent = ({ data, isError, isLoading }) => {
   const queryClient = useQueryClient();
@@ -18,16 +19,18 @@ const BlogComponent = ({ data, isError, isLoading }) => {
   return (
     <div>
       <div className="bg-white w-full  border border-gray-200 rounded-lg p-2 mb-8">
-        <h2 className="my-2 px-2 text-md font-semibold text-primary">Blog</h2>
+        <h2 className="my-2 px-2 text-md font-semibold text-primary">
+          <FormattedMessage id="newsfeedBlogComponent.BlogTitle" defaultMessage="Blog" description="" />
+        </h2>
         {isLoading ? (
           <div className="flex justify-center py-5">
             <Loader color="black" />
           </div>
         ) : isError ? (
           <div className="py-5 m-auto text-center px-2 lg:px-2">
-            {"There was an error while fetching the data. "}
+            <FormattedMessage id="general.retryTxt" defaultMessage="There was an error while fetching the data." description="" />
             <Link className="text-secondary hover:text-primary" to={""} onClick={() => queryClient.refetchQueries(["blog", "all"])}>
-              Tap to retry
+              <FormattedMessage id="general.retryBtn" defaultMessage="Tap to retry" description="" />
             </Link>
           </div>
         ) : data?.length > 0 ? (
@@ -79,7 +82,7 @@ const BlogComponent = ({ data, isError, isLoading }) => {
             })}
             {data && data?.length > 6 ? (
               <Link className="text-primary hover:text-secondary text-sm text-center font-semibold" to={"../../blogs"}>
-                see more
+                <FormattedMessage id="newsfeedBlogComponent.seeMore" defaultMessage="see more" description="" />
               </Link>
             ) : null}
           </Stack>
@@ -88,8 +91,16 @@ const BlogComponent = ({ data, isError, isLoading }) => {
             <EmptyComponent
               border={false}
               icon={<ImSad size={"32px"} className="" />}
-              placeholder={"Sorry, There's no blog."}
-              tips={"Here, you can see all the latest blog published on Vwanu,LLC."}
+              placeholder={
+                <FormattedMessage id="newsfeedBlogComponent.blogEmpty" defaultMessage="Sorry, There's no blog." description="" />
+              }
+              tips={
+                <FormattedMessage
+                  id="newsfeedBlogComponent.emptyBlogDescription"
+                  defaultMessage="Here, you can see all the latest blog published on Vwanu, LLC."
+                  description=""
+                />
+              }
             />
           </div>
         )}
