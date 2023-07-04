@@ -88,13 +88,6 @@ SELECT
   LIMIT 10
   )`;
 
-  const countAmountOfMembers = `(
-    SELECT 
-    COUNT(DISTINCT "CU"."UserId")
-    FROM "CommunityUsers" AS "CU"
-    WHERE "CU"."CommunityId"="Community"."id")::int`;
-  // WHERE  "C"."privacyType" <> 'hidden' OR ("CU"."UserId"='${context.params.User.id}' AND "C"."privacyType" = 'hidden')
-
   const isParticipant = `(
     EXISTS (SELECT 1 FROM "CommunityUsers" AS "CU" WHERE "CU"."CommunityId"="Community"."id" AND "CU"."banned"=false AND 
     "CU"."UserId"='${context.params.User.id}')
@@ -153,7 +146,6 @@ SELECT
         [Sequelize.literal(isMember), 'IsMember'],
         [Sequelize.literal(Interests), 'Interests'],
         [Sequelize.literal(members), 'members'],
-        [Sequelize.literal(countAmountOfMembers), 'amountOfMembers'],
         [Sequelize.literal(pendingInvitation), 'pendingInvitation'],
       ],
     },

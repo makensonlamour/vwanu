@@ -38,15 +38,22 @@ describe("'community-join ' service", () => {
     creator = testUsers.shift();
     // denier = testUsers.shift();
 
-    roles = await Promise.all(
-      ['admin', 'member', 'moderator'].map((name) =>
-        testServer
-          .post(rolesEndpoint)
-          .send({ name })
-          .set('authorization', adminUser.accessToken)
-      )
-    );
-    roles = roles.map((role) => role.body);
+    try {
+      roles = await testServer
+        .get(rolesEndpoint)
+        .set('authorization', adminUser.accessToken);
+      roles = roles.body.data.sort((a, b) => a.name - b.name);
+    } catch (e) {
+      roles = await Promise.all(
+        ['admin', 'member', 'moderator'].map((name) =>
+          testServer
+            .post(rolesEndpoint)
+            .send({ name })
+            .set('authorization', adminUser.accessToken)
+        )
+      );
+      roles = roles.map((role) => role.body);
+    }
 
     const name = 'New community';
     const description = 'Unique description required';
@@ -90,6 +97,7 @@ describe("'community-join ' service", () => {
   it('Public communities are auto-join', async () => {
     const user = testUsers[0];
 
+    console.log({ publicCommunity });
     const join = await testServer
       .post(endpoint)
       .send({
@@ -123,6 +131,14 @@ describe("'community-join ' service", () => {
       UserId: user.id,
       CommunityRoleId: expect.any(String),
     });
+
+    const {
+      body: { data: com },
+    } = await testServer
+      .get(`${communityEndpoint}?participate=true`)
+      .set('authorization', user.accessToken);
+
+    console.log(com);
   });
   it('Hidden does not accept join request', async () => {
     const user = testUsers[0];

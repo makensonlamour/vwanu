@@ -68,16 +68,22 @@ describe("'communities ' service", () => {
     testUsers = testUsers.map((testUser) => testUser.body);
     creator = testUsers.shift();
 
-    roles = await Promise.all(
-      ['admin', 'member', 'moderator'].map((name) =>
-        testServer
-          .post(rolesEndpoint)
-          .send({ name })
-          .set('authorization', creator.accessToken)
-      )
-    );
-
-    roles = roles.map((role) => role.body);
+    try {
+      roles = await testServer
+        .get(rolesEndpoint)
+        .set('authorization', creator.accessToken);
+      roles = roles.body.data.sort((a, b) => a.name - b.name);
+    } catch (e) {
+      roles = await Promise.all(
+        ['admin', 'member', 'moderator'].map((name) =>
+          testServer
+            .post(rolesEndpoint)
+            .send({ name })
+            .set('authorization', creator.accessToken)
+        )
+      );
+      roles = roles.map((role) => role.body);
+    }
 
     users = await Promise.all(
       getRandUsers(3).map((u, idx) => {
@@ -243,10 +249,12 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.skip(' Any user can get all communities except hidden unless he is a member of it', async () => {
+  it(' Any user can get all communities except hidden unless he is a member of it', async () => {
     // Manually adding a user to a community
     const newUser = testUsers[1];
+
     const infiltratedCommunity = communities[0].body;
+
     const role = roles[2];
 
     const { CommunityUsers } = app.get('sequelizeClient').models;
@@ -260,7 +268,6 @@ describe("'communities ' service", () => {
     const { body: allCommunities } = await testServer
       .get(endpoint)
       .set('authorization', creator.accessToken);
-    console.log({ allCommunities });
 
     allCommunities.data.forEach((community) => {
       expect(community).toMatchObject({
@@ -401,7 +408,7 @@ describe("'communities ' service", () => {
       expect(newestFirst[0]).not.toBe(oldestFirst[0]);
     });
 
-    it.skip('should return communities with most members first', async () => {
+    it('should return communities with most members first', async () => {
       const {
         body: { data: popularFirst },
       } = await testServer
@@ -462,7 +469,7 @@ describe("'communities ' service", () => {
       });
     });
 
-    it('fetch users not member of community', async () => {
+    it.skip('fetch users not member of community', async () => {
       const {
         body: { data: allUsers },
       } = await testServer

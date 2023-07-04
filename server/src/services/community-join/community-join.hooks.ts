@@ -28,7 +28,6 @@ const AttachingRole = (role) => async (context) => {
   const memberRole = await app
     .service('community-role')
     .find({ query: { ...role, $select: ['id'] }, paginate: false });
-
   data.CommunityRoleId = memberRole[0].id;
   return context;
 };
@@ -65,7 +64,6 @@ export default {
     get: [],
     create: [
       PublicCommunityOnly,
-
       AttachingRole({ name: 'member' }),
       addUserToCommunity,
     ],
