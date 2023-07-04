@@ -94,7 +94,7 @@ export default function LabTabs() {
               <Tab
                 style={{ textTransform: "capitalize", fontSize: 15 }}
                 sx={{ color: "#ff4200" }}
-                label="Album"
+                label="Media"
                 value="4"
                 component={Link}
                 to={allTabs[3]}
