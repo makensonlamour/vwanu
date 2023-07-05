@@ -55,7 +55,7 @@ const CommunityTab = ({ user }) => {
                 onChange={handleChange}
                 aria-label="lab API tabs example"
               >
-                <Tab
+                {/* <Tab
                   style={{ heigth: "150px" }}
                   sx={{ textTransform: "capitalize", textAlign: "left", heigth: "150px" }}
                   label={
@@ -68,7 +68,7 @@ const CommunityTab = ({ user }) => {
                     </Fragment>
                   }
                   value="1"
-                />
+                /> */}
                 <Tab
                   sx={{ textTransform: "capitalize" }}
                   label={

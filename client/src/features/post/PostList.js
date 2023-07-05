@@ -18,6 +18,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Reaction from "../reaction/component/Reaction";
 import MenuPost from "./components/MenuPost";
 import PreviewShareBlog from "./components/PreviewShareBlog";
+import Content from "./components/ReadMore";
 
 const notify = () =>
   toast.success("Post deleted successfully!", {
@@ -216,13 +217,17 @@ const PostList = ({ post, pageTitle }) => {
                 </div>
               ) : (
                 <div>
-                  {post?.postText?.split("\n").map((text) => {
-                    return (
-                      <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
-                        {transformHashtagAndLink(text)}
-                      </p>
-                    );
-                  })}
+                  {post?.postText?.length > 150 ? (
+                    <Content>{post?.postText}</Content>
+                  ) : (
+                    post?.postText?.split("\n").map((text) => {
+                      return (
+                        <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
+                          {transformHashtagAndLink(text)}
+                        </p>
+                      );
+                    })
+                  )}
 
                   {/* to paste link */}
                   {post?.Media?.length === 0 && arrayLink?.length > 0 && (

@@ -102,9 +102,11 @@ const ProfileFeed = ({ otherUser }) => {
     <>
       <div className="mx-auto">
         <div className="pb-2 mx-auto align-items-center lg:w-full space-y-2">
-          <div className="lg:basis-2/3">
-            <InputModal reference="profilefeed" otherUser={otherUser} />
-          </div>
+          {!otherUser && (
+            <div className="lg:basis-2/3">
+              <InputModal reference="profilefeed" otherUser={otherUser} />
+            </div>
+          )}
           <div className="lg:flex">
             <div className="w-full">{content}</div>
           </div>
