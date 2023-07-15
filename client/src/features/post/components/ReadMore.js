@@ -10,7 +10,7 @@ const ReadMore = ({ children }) => {
   };
   return (
     <p className="card-text pt-0 w-[100%] font-normal">
-      {isReadMore ? text?.slice(0, 150) : text}
+      {isReadMore ? text?.slice(0, 300) : text}
       <span onClick={toggleReadMore} className="text-primary cursor-pointer text-sm">
         {isReadMore ? "...read more" : " show less"}
       </span>

@@ -165,13 +165,17 @@ const PostList = ({ post, pageTitle }) => {
               {/* Begin design for shared post */}
               {post?.originalId !== null ? (
                 <div className="mt-3">
-                  {post?.postText?.split("\n").map((text) => {
-                    return (
-                      <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
-                        {transformHashtagAndLink(text)}
-                      </p>
-                    );
-                  })}
+                  {post?.postText?.length > 300 ? (
+                    <Content>{post?.postText}</Content>
+                  ) : (
+                    post?.postText?.split("\n").map((text) => {
+                      return (
+                        <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
+                          {transformHashtagAndLink(text)}
+                        </p>
+                      );
+                    })
+                  )}
                   <div className="border p-1 m-3 border-placeholder-color rounded-lg">
                     <div className="">
                       <Link
@@ -201,13 +205,17 @@ const PostList = ({ post, pageTitle }) => {
                     </div>
 
                     {post?.originalType !== "Blogs" ? (
-                      post?.Original?.content?.split("\n").map((text) => {
-                        return (
-                          <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
-                            {transformHashtagAndLink(text, false, post?.originalType)}
-                          </p>
-                        );
-                      })
+                      post?.Original?.content?.length > 300 ? (
+                        <Content>{post?.Original?.content}</Content>
+                      ) : (
+                        post?.Original?.content?.split("\n").map((text) => {
+                          return (
+                            <p key={cryptoRandomString({ length: 10 })} className="card-text pt-0 w-[100%] font-normal">
+                              {transformHashtagAndLink(text, false, post?.originalType)}
+                            </p>
+                          );
+                        })
+                      )
                     ) : (
                       <PreviewShareBlog data={post?.Original} />
                     )}
@@ -217,7 +225,7 @@ const PostList = ({ post, pageTitle }) => {
                 </div>
               ) : (
                 <div>
-                  {post?.postText?.length > 150 ? (
+                  {post?.postText?.length > 300 ? (
                     <Content>{post?.postText}</Content>
                   ) : (
                     post?.postText?.split("\n").map((text) => {
