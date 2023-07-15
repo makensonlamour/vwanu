@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import routesPath from "../../routesPath";
-import { Link, useParams } from "react-router-dom";
+import { Link, useOutletContext, useParams } from "react-router-dom";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
 import { Tab } from "@mui/material";
 import CommunityList from "../../features/community/component/CommunityList";
@@ -10,6 +10,7 @@ import InvitationTabs from "./../Community/Invitation/InvitationTabs";
 
 const CommunityTab = ({ user }) => {
   const { id } = useParams();
+  const myUser = useOutletContext();
   const [value, setValue] = useState("1");
   const {
     data: communityList,
@@ -48,14 +49,15 @@ const CommunityTab = ({ user }) => {
           </div>
           <TabContext value={value}>
             <div className="">
-              <TabList
-                TabIndicatorProps={{ style: { background: "inherit" } }}
-                sx={{ justifyContent: "start" }}
-                orientation="horizontal"
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                {/* <Tab
+              {user?.id === myUser?.id && (
+                <TabList
+                  TabIndicatorProps={{ style: { background: "inherit" } }}
+                  sx={{ justifyContent: "start" }}
+                  orientation="horizontal"
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  {/* <Tab
                   style={{ heigth: "150px" }}
                   sx={{ textTransform: "capitalize", textAlign: "left", heigth: "150px" }}
                   label={
@@ -69,33 +71,38 @@ const CommunityTab = ({ user }) => {
                   }
                   value="1"
                 /> */}
-                <Tab
-                  sx={{ textTransform: "capitalize" }}
-                  label={
-                    <Fragment>
-                      {value === "2" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">My Community</div>
-                      ) : (
-                        <div className="flex text-primary">My Community</div>
-                      )}
-                    </Fragment>
-                  }
-                  value="2"
-                />
-                <Tab
-                  sx={{ textTransform: "capitalize" }}
-                  label={
-                    <Fragment>
-                      {value === "3" ? (
-                        <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Invitations</div>
-                      ) : (
-                        <div className="flex text-primary">Invitations</div>
-                      )}
-                    </Fragment>
-                  }
-                  value="3"
-                />
-              </TabList>
+                  {user?.id === myUser?.id && (
+                    <Tab
+                      sx={{ textTransform: "capitalize" }}
+                      label={
+                        <Fragment>
+                          {value === "2" ? (
+                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">My Community</div>
+                          ) : (
+                            <div className="flex text-primary">My Community</div>
+                          )}
+                        </Fragment>
+                      }
+                      value="2"
+                    />
+                  )}
+                  {user?.id === myUser?.id && (
+                    <Tab
+                      sx={{ textTransform: "capitalize" }}
+                      label={
+                        <Fragment>
+                          {value === "3" ? (
+                            <div className="capitalize rounded-lg btn btn-sm border-0 px-4 bg-secondary text-base-100">Invitations</div>
+                          ) : (
+                            <div className="flex text-primary">Invitations</div>
+                          )}
+                        </Fragment>
+                      }
+                      value="3"
+                    />
+                  )}
+                </TabList>
+              )}
               <TabPanel value="1">
                 <div className=" w-full">
                   <CommunityList
@@ -118,11 +125,13 @@ const CommunityTab = ({ user }) => {
                   />
                 </div>
               </TabPanel>
-              <TabPanel value="3">
-                <div className="">
-                  <InvitationTabs />
-                </div>
-              </TabPanel>
+              {user?.id === myUser?.id && (
+                <TabPanel value="3">
+                  <div className="">
+                    <InvitationTabs />
+                  </div>
+                </TabPanel>
+              )}
             </div>
           </TabContext>
         </div>
