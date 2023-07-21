@@ -98,6 +98,8 @@ const FormStepFour = ({ setStep, currentStep, data, setData }) => {
         <Form className="w-full px-4 pb-2">
           <Toaster />
 
+          {console.log(img)}
+
           {/*Privacy Options*/}
           {img?.length <= 0 ? (
             <div className="mx-auto mask mask-squircle my-6 flex justify-center items-center bg-gray-50 text-center text-gray-300 w-36 h-36">
@@ -110,7 +112,7 @@ const FormStepFour = ({ setStep, currentStep, data, setData }) => {
                   <div className="h-36 w-36">
                     <img
                       alt={user?.firstName}
-                      src={img[1]}
+                      src={img[0]?.preview}
                       className="h-36 w-36 mask mask-squircle object-cover"
                       // Revoke data uri after image is loaded
                       onLoad={() => {
