@@ -17,7 +17,12 @@ export default (sequelize: any, DataTypes: any) => {
     name: string;
 
     static associate(models: any): void {
-      WorkPlace.belongsToMany(models.User, { through: 'User_WorkPlace' });
+      WorkPlace.hasMany(models.UserWorkPlace, {
+        foreignKey: {
+          name: 'WorkPlaceId',
+          allowNull: false,
+        },
+      });
     }
   }
   WorkPlace.init(
