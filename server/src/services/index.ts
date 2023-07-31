@@ -61,6 +61,8 @@ import template from './template/template.service';
 
 import workplace from './workplace/workplace.service';
 
+import userWorkPlaces from './user-work-places/user-work-places.service';
+
 export default function (app: Application): void {
   app.configure(search);
   app.configure(call);
@@ -110,4 +112,5 @@ export default function (app: Application): void {
   app.configure(templates);
   app.configure(template);
   app.configure(workplace);
+  app.configure(userWorkPlaces);
 }

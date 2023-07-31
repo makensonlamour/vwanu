@@ -116,6 +116,22 @@ export const Addresses = `(
     INNER JOIN "AddressTypes" ON "AddressTypes"."id" = "EntityAddresses"."AddressTypeId"
     WHERE "EntityAddresses"."UserId" = "User"."id"
   )`;
+
+export const WorkPlaces = `(
+  SELECT 
+    json_agg(
+      json_build_object(
+        'id', "WorkPlaces"."id",
+        'name', "WorkPlaces"."name",  
+        'description', "UserWorkPlaces"."description",
+        'from', "UserWorkPlaces"."from",
+        'to', "UserWorkPlaces"."to"
+      ))
+    FROM "WorkPlaces"
+    INNER JOIN "UserWorkPlaces" ON "WorkPlaces"."id" = "UserWorkPlaces"."WorkPlaceId"
+    WHERE "UserWorkPlaces"."UserId" = "User"."id"
+    
+  )`;
 export default (UserId, Sequelize, ex = null) => {
   const Interests = `(
 SELECT 
@@ -180,6 +196,7 @@ SELECT
       // [Sequelize.literal(amountOfFriend), 'amountOfFriend'],
       [Sequelize.literal(Interests), 'Interests'],
       [Sequelize.literal(Addresses), 'Addresses'],
+      [Sequelize.literal(WorkPlaces), 'WorkPlaces'],
       [Sequelize.literal(amountOfFriendRequest), 'amountOfFriendRequest'],
     ],
     exclude,
