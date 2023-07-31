@@ -10,11 +10,22 @@ export default async (context: HookContext): Promise<HookContext> => {
   const { app } = context;
 
   try {
-    const workplace = await app.service('workplace').create(data.workPlace);
+    const sequelizeClient = app.get('sequelizeClient');
 
-    await app.service('WorkPlace').create({
-      UserId: context.params.User.id,
-      WorkPlaceId: workplace.id,
+    const { WorkPlace, UserWorkPlace } = sequelizeClient.models;
+
+    const [{ id: WorkPlaceId }] = await WorkPlace.findOrCreate({
+      where: { name: data.workPlace.name },
+    });
+
+    await UserWorkPlace.findOrCreate({
+      where: {
+        UserId: context.result.id,
+        WorkPlaceId,
+      },
+      defaults: {
+        ...data.workPlace,
+      },
     });
   } catch (err) {
     Logger.error(err);

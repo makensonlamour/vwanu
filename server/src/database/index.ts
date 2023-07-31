@@ -39,6 +39,7 @@ import communityUsers from './community-users';
 import communityInvitationRequest from './communityInvitationRequest';
 import forumCatergory from './forumCatergory';
 import workplace from './workplace';
+import userWorkplace from './userWorkplace';
 
 const tables = [
   call,
@@ -74,6 +75,7 @@ const tables = [
   communityInvitationRequest,
   forumCatergory,
   workplace,
+  userWorkplace,
 ];
 
 export default function (app: Application): void {
