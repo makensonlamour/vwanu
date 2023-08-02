@@ -25,35 +25,7 @@ const FormWorkEducation = ({ user, idWork }) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
-  // dummy data
-  const objectWorkplaces = [
-    {
-      id: 1,
-      description: "Developer",
-      name: "Vwanu",
-      from: "2021-08",
-      to: "2023-06",
-      view: true,
-    },
-    {
-      id: 2,
-      description: "Fullstack developer",
-      name: "Collabo",
-      from: "2023-08",
-      to: "2023-10",
-      view: true,
-    },
-    {
-      id: 3,
-      description: "Freelancer",
-      name: "Upwork",
-      from: "2017-07",
-      to: "2020-02",
-      view: true,
-    },
-  ];
-
-  let editData = getElementById(objectWorkplaces, idWork);
+  let editData = getElementById(user?.WorkPlaces, idWork);
 
   console.log("editData", editData);
 
@@ -74,27 +46,29 @@ const FormWorkEducation = ({ user, idWork }) => {
 
   const handleSubmit = async (dataObj) => {
     setIsLoading(true);
-    let workPlaces = user?.WorkPlaces;
+    let workPlaces = user?.WorkPlaces === null ? [] : user?.workPlaces;
     if (idWork) {
       workPlaces = removeElementArray(workPlaces, idWork);
     }
-    let dataTemp = { name: dataObj.name, description: dataObj.description, from: dataObj.from, to: dataObj.to };
-    workPlaces.push(dataTemp);
-    const data = { id: user?.id, workPlaces };
+    let dataTemp = { name: dataObj?.name, description: dataObj?.description, from: dataObj?.from, to: dataObj?.to };
+    console.log(dataTemp);
+    workPlaces?.push(dataTemp);
+    console.log(workPlaces);
+    const data = { id: user?.id, workPlace: dataTemp };
 
     console.log(data);
 
-    // try {
-    //   await updateUser.mutateAsync(data);
-    //   updateSuccess();
-    //   queryClient.invalidateQueries();
-    //   window.location.href = "../../profile/" + user?.id;
-    // } catch (e) {
-    //   console.log(e);
-    //   updateError();
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    try {
+      await updateUser.mutateAsync(data);
+      updateSuccess();
+      queryClient.invalidateQueries();
+      window.location.href = "../../profile/" + user?.id;
+    } catch (e) {
+      console.log(e);
+      updateError();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
