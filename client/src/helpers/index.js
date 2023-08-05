@@ -34,8 +34,6 @@ export function assignDataMedia(obj) {
   if (obj?.length === 0) return [];
   const array = [];
 
-  console.log(obj);
-
   obj?.map((item) => {
     if (
       item?.original.endsWith(".mp4") ||
@@ -197,7 +195,6 @@ export function isMember(listMembers, data) {
 
 export function isInvitation(listMembers, data) {
   let memb = listMembers?.filter((member) => member?.CommunityId === data?.id);
-  console.log("isInvite", memb);
 
   return memb?.length === 0 ? false : true;
 }
@@ -277,4 +274,34 @@ export function transformHashtagAndLink(strText, preview = false, originalType =
   });
 
   return strText;
+}
+
+export function removeElementArray(array, id) {
+  let tempArray = [];
+
+  if (array?.length === 0) return;
+
+  // eslint-disable-next-line array-callback-return
+  array?.map((el) => {
+    if (el?.id !== id) {
+      return tempArray?.push(el);
+    }
+  });
+  return tempArray;
+}
+
+export function getElementById(array, id) {
+  let arrayTemp = [];
+  if (array?.length === 0) return;
+
+  console.log(array, id);
+
+  // eslint-disable-next-line array-callback-return
+  array?.map((el) => {
+    if (el?.id?.toString() === id?.toString()) {
+      return arrayTemp?.push(el);
+    }
+  });
+
+  return arrayTemp[0];
 }

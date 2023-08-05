@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ViewDetails from "./AboutTab/ViewDetails";
 import { format } from "date-fns";
+import ViewWorkplaces from "./AboutTab/ViewWorkplaces";
 
 const AboutTab = ({ user }) => {
   console.log(user?.facebookPrivacy);
@@ -126,14 +127,6 @@ const AboutTab = ({ user }) => {
     // },
   ];
 
-  const objectWorkedExperience = [
-    {
-      name: "Job Title",
-      value: "Developer",
-      view: true,
-    },
-  ];
-
   const objectBiography = [
     {
       name: "Biography",
@@ -154,8 +147,9 @@ const AboutTab = ({ user }) => {
         <ViewDetails substabs={"place"} title="Places Lived" user={objectPlaces} />
       </div>
       <div className="mb-10">
-        <ViewDetails substabs={"work"} title="Work Experience" user={objectWorkedExperience} />
+        <ViewWorkplaces substabs={"work"} title="Work Experience" user={user?.WorkPlaces} />
       </div>
+      <div className="mb-10">{/* <ViewDetails substabs={"work"} title="Work Experience" user={objectWorkedExperience} /> */}</div>
       <div className="mb-10">
         <ViewDetails substabs={"biography"} title="Biography" user={objectBiography} />
       </div>

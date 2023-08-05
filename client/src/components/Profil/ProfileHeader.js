@@ -62,7 +62,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                         onClick={() => (window.location.href = "../../me/profile/edit?tabs=cover")}
                         className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
                       >
-                        <MdEdit size={"24px"} className="" />
+                        <MdEdit size={"16px"} className="" />
                       </button>
                     )}
                   </div>
@@ -78,9 +78,9 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                           {!otherUser && (
                             <button
                               onClick={() => (window.location.href = "../../me/profile/edit?tabs=profile")}
-                              className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                              className="absolute top-0 right-[1px] bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
                             >
-                              <MdEdit size={"24px"} className="" />
+                              <MdEdit size={"16px"} className="" />
                             </button>
                           )}
                         </div>
