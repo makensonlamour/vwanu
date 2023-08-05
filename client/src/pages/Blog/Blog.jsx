@@ -120,7 +120,7 @@ const Blog = () => {
             </div>
           }
         >
-          <div className="flex flex-wrap lg:justify-start py-2 w-full">
+          <div className="max-w-lg flex flex-wrap lg:justify-start py-2 w-full">
             {blogListInterest?.pages?.map((page) => {
               return page?.data?.data?.map((blog) => {
                 return <SingleBlog key={blog?.id} blog={blog} />;

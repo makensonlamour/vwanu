@@ -63,7 +63,7 @@ const Search = ({ placeholder, setIsSearchOpen }) => {
           />
         </div>
         <ul tabIndex={0} className="w-full dropdown-content menu p-2 shadow bg-base-100 rounded-b-xl">
-          <div onChange={handleChange} className="flex flex-start items-center gap-x-2 my-1">
+          <div onChange={handleChange} className="flex flex-start items-center gap-x-2 my-1 w-full flex-wrap">
             <p className="text-sm mr-3">Search by:</p>
             <input type="radio" id="members" name="filter" value="members" />
             <label htmlFor="members" className="text-sm">

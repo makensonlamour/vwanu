@@ -209,7 +209,9 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
             />{" "}
           </Link>
           <p className="flex-end text-left pl-2 p-2 ml-4 rounded-2xl text-md font-light text-gray-600 w-full">
-            {`Share what's on your mind, ${user?.firstName}...`}
+            {_.isEqual(reference, "communityFeed")
+              ? `Share with your community, ${user?.firstName}...`
+              : `Share what's on your mind, ${user?.firstName}...`}
           </p>
         </div>
         <div className="border-t rounded-b-lg border-gray-300 bg-placeholder-color text-left py-4 px-4">
@@ -272,7 +274,11 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
                     <InputField
                       required
                       autoCapitalize="none"
-                      placeholder={`Share what's on your mind, ${user?.firstName}...`}
+                      placeholder={
+                        _.isEqual(reference, "communityFeed")
+                          ? `Share with your community, ${user?.firstName}...`
+                          : `Share what's on your mind, ${user?.firstName}...`
+                      }
                       name="postText"
                       className="mt-3 basis-full text-lg appearance-none text-secondary placeholder:text-gray-600 font-light border-none "
                       testId="post-error-message"

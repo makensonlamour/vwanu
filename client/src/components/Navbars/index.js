@@ -148,113 +148,122 @@ const Navbar = ({ user, countMessage }) => {
               ) : (
                 <BsSearch onClick={() => setSearch(true)} size="20px" className="text-primary hover:text-secondary cursor-pointer" />
               )}
-              <div className="h-6 bg-black w-[1px]"></div>
-              <Link to={routesPath?.MESSAGE}>
-                <Badge badgeContent={countMessage} color="secondary" className="">
-                  <AiOutlineInbox size="24px" className="text-primary hover:text-secondary cursor-pointer" />
-                </Badge>
-              </Link>
-              <div className="">
-                <FriendsPreview />
-              </div>
-              <div className="mr-2">
-                <NotificationPreview />
-              </div>
+              {!search && (
+                <>
+                  <div className="h-6 bg-black w-[1px]"></div>
+                  <Link to={routesPath?.MESSAGE}>
+                    <Badge badgeContent={countMessage} color="secondary" className="">
+                      <AiOutlineInbox size="24px" className="text-primary hover:text-secondary cursor-pointer" />
+                    </Badge>
+                  </Link>
+                  <div className="">
+                    <FriendsPreview />
+                  </div>
+                  <div className="mr-2">
+                    <NotificationPreview />
+                  </div>
 
-              <span className="hidden sm:block">
-                <Tooltip title="Open profile">
-                  <Button
-                    ariant="text"
-                    onClick={handleOpenUserMenu}
-                    sx={{ p: 0, fontWeight: "light", paddingLeft: "10px", paddingRight: "10px", borderRadius: "15px" }}
-                  >
-                    <p className="hidden mr-1 text-[0.90rem] md:hidden xl:inline text-primary hover:text-secondary capitalize font-semibold">
-                      {user?.firstName}
-                    </p>
-                    <span className="hidden md:hidden xl:inline">
-                      <IoIosArrowDown size="18px" className="mr-2" />
-                    </span>
-                    <div className="rounded-[50px] avatar online">
-                      <div className="rounded-[12px] w-8 h-8 m-1">
-                        {user?.profilePicture?.original ? (
-                          <img className="object-cover object-center w-8 h-8" src={user?.profilePicture?.original} alt="profil_image" />
-                        ) : (
-                          <FaUserAlt size="48" className="" />
-                        )}
-                      </div>
-                    </div>{" "}
-                  </Button>
-                </Tooltip>
-
-                <Menu
-                  sx={{ mt: "45px", borderRadius: "15px", width: "100%" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  <MenuItem
-                    key={"profile_1"}
-                    sx={{ width: "270px", marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
-                    onClick={handleCloseUserMenu}
-                  >
-                    <Link to={"../../profile/" + user?.id}>
-                      <div
-                        className=""
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          paddingTop: "5px",
-                          paddingBottom: "5px",
-                        }}
+                  <span className="hidden sm:block">
+                    <Tooltip title="Open profile">
+                      <Button
+                        ariant="text"
+                        onClick={handleOpenUserMenu}
+                        sx={{ p: 0, fontWeight: "light", paddingLeft: "10px", paddingRight: "10px", borderRadius: "15px" }}
                       >
-                        <p className="w-16">
-                          <img
-                            style={{ width: "36px", height: "36px", marginRight: "10px" }}
-                            className="object-cover object-center m-1 w-10 h-10 mask mask-squircle"
-                            src={user?.profilePicture?.original}
-                            alt="profil_image"
-                          />
-                        </p>
-                        <p style={{ fontWeight: "400px" }} className="align-middle pl-3 !font-semibold text-primary hover:text-secondary">
+                        <p className="hidden mr-1 text-[0.90rem] md:hidden xl:inline text-primary hover:text-secondary capitalize font-semibold">
                           {user?.firstName}
                         </p>
-                      </div>
-                    </Link>
-                  </MenuItem>
-                  {settings.map((setting) => (
-                    <Link key={cryptoRandomString({ length: 10 })} to={setting?.path} className="flex w-full">
-                      <MenuItem
-                        onClick={handleCloseUserMenu}
-                        sx={{ width: "270px", py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
-                      >
-                        <span className="py-2">{setting?.icon}</span>
+                        <span className="hidden md:hidden xl:inline">
+                          <IoIosArrowDown size="18px" className="mr-2" />
+                        </span>
+                        <div className="rounded-[50px] avatar online">
+                          <div className="rounded-[12px] w-8 h-8 m-1">
+                            {user?.profilePicture?.original ? (
+                              <img className="object-cover object-center w-8 h-8" src={user?.profilePicture?.original} alt="profil_image" />
+                            ) : (
+                              <FaUserAlt size="48" className="" />
+                            )}
+                          </div>
+                        </div>{" "}
+                      </Button>
+                    </Tooltip>
 
-                        {setting.title}
+                    <Menu
+                      sx={{ mt: "45px", borderRadius: "15px", width: "100%" }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
+                    >
+                      <MenuItem
+                        key={"profile_1"}
+                        sx={{ width: "270px", marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
+                        onClick={handleCloseUserMenu}
+                      >
+                        <Link to={"../../profile/" + user?.id}>
+                          <div
+                            className=""
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              paddingTop: "5px",
+                              paddingBottom: "5px",
+                            }}
+                          >
+                            <p className="w-16">
+                              <img
+                                style={{ width: "36px", height: "36px", marginRight: "10px" }}
+                                className="object-cover object-center m-1 w-10 h-10 mask mask-squircle"
+                                src={user?.profilePicture?.original}
+                                alt="profil_image"
+                              />
+                            </p>
+                            <p
+                              style={{ fontWeight: "400px" }}
+                              className="align-middle pl-3 !font-semibold text-primary hover:text-secondary"
+                            >
+                              {user?.firstName}
+                            </p>
+                          </div>
+                        </Link>
                       </MenuItem>
-                    </Link>
-                  ))}
-                  <MenuItem
-                    key="logout"
-                    sx={{ py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
-                    onClick={handleLogout}
-                  >
-                    <span className="py-2">
-                      <BsPower style={{ paddingRight: "0.5rem" }} size="30px" />
-                    </span>
-                    Logout
-                  </MenuItem>
-                </Menu>
-              </span>
+                      {settings.map((setting) => (
+                        <Link key={cryptoRandomString({ length: 10 })} to={setting?.path} className="flex w-full">
+                          <MenuItem
+                            onClick={handleCloseUserMenu}
+                            sx={{ width: "270px", py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
+                          >
+                            <span className="py-2">{setting?.icon}</span>
+
+                            {setting.title}
+                          </MenuItem>
+                        </Link>
+                      ))}
+                      {!search && (
+                        <MenuItem
+                          key="logout"
+                          sx={{ py: 1, marginLeft: "15px", marginRight: "15px", borderRadius: "15px" }}
+                          onClick={handleLogout}
+                        >
+                          <span className="py-2">
+                            <BsPower style={{ paddingRight: "0.5rem" }} size="30px" />
+                          </span>
+                          Logout
+                        </MenuItem>
+                      )}
+                    </Menu>
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </div>
