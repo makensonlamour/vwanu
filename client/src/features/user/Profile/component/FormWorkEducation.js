@@ -7,7 +7,7 @@ import { useQueryClient } from "react-query";
 
 import { Field, Form, Submit } from "../../../../components/form";
 import Loader from "../../../../components/common/Loader";
-import { useUpdateUser } from "../../userSlice";
+import { useEditWorkplace, useUpdateUser } from "../../userSlice";
 import { getElementById, removeElementArray } from "../../../../helpers";
 
 //Functions for notification after actions
@@ -30,6 +30,7 @@ const FormWorkEducation = ({ user, idWork }) => {
   console.log("editData", editData);
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
+  const updateWorkPlaces = useEditWorkplace(["workplace", "user"], undefined, undefined);
   const initialValues = {
     name: editData ? editData?.name : "",
     description: editData ? editData?.description : "",
@@ -47,22 +48,25 @@ const FormWorkEducation = ({ user, idWork }) => {
   const handleSubmit = async (dataObj) => {
     setIsLoading(true);
     let workPlaces = user?.WorkPlaces === null ? [] : user?.workPlaces;
-    if (idWork) {
-      workPlaces = removeElementArray(workPlaces, idWork);
-    }
+    // if (idWork) {
+    //   workPlaces = removeElementArray(workPlaces, idWork);
+    // }
     let dataTemp = { name: dataObj?.name, description: dataObj?.description, from: dataObj?.from, to: dataObj?.to };
     console.log(dataTemp);
     workPlaces?.push(dataTemp);
     console.log(workPlaces);
-    const data = { id: user?.id, workPlace: dataTemp };
-
-    console.log(data);
 
     try {
-      await updateUser.mutateAsync(data);
-      updateSuccess();
-      queryClient.invalidateQueries();
-      window.location.href = "../../profile/" + user?.id;
+      if (idWork) {
+        const data = { id: idWork, workPlace: dataTemp };
+        await updateWorkPlaces.mutateAsync(data);
+      } else {
+        const data = { id: user?.id, workPlace: dataTemp };
+        await updateUser.mutateAsync(data);
+        updateSuccess();
+        queryClient.invalidateQueries();
+        window.location.href = "../../profile/" + user?.id;
+      }
     } catch (e) {
       console.log(e);
       updateError();
