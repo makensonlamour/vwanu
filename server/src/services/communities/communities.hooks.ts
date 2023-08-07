@@ -42,10 +42,6 @@ const AutoJoin = async (context) => {
 
   return context;
 };
-const AutoAdmin = (context) => {
-  context.data.numAdmins = 1;
-  return context;
-};
 
 const { authenticate } = authentication.hooks;
 export default {
@@ -55,7 +51,6 @@ export default {
     get: [AccessCommunity],
     create: [
       AutoOwn,
-      AutoAdmin,
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
     ],

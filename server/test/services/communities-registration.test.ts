@@ -28,7 +28,7 @@ describe("'communities registration' service", () => {
   let creator;
   const sequelize = app.get('sequelizeClient');
   beforeAll(async () => {
-    await sequelize.models.User.sync({ force: true });
+    await sequelize.models.User.sync({});
     await sequelize.models.Community.sync({ force: true });
     testServer = request(app);
     testUsers = await Promise.all(
@@ -43,16 +43,22 @@ describe("'communities registration' service", () => {
     const adminUser = testUsers.shift();
     creator = testUsers.shift();
     // denier = testUsers.shift();
-
-    roles = await Promise.all(
-      ['admin', 'member', 'moderator'].map((name) =>
-        testServer
-          .post(rolesEndpoint)
-          .send({ name })
-          .set('authorization', adminUser.accessToken)
-      )
-    );
-    roles = roles.map((role) => role.body);
+    try {
+      roles = await testServer
+        .get(rolesEndpoint)
+        .set('authorization', adminUser.accessToken);
+      roles = roles.body.data.sort((a, b) => a.name - b.name);
+    } catch (error) {
+      roles = await Promise.all(
+        ['admin', 'member', 'moderator'].map((name) =>
+          testServer
+            .post(rolesEndpoint)
+            .send({ name })
+            .set('authorization', adminUser.accessToken)
+        )
+      );
+      roles = roles.map((role) => role.body);
+    }
 
     const name = 'New community';
     const description = 'Unique description required';
@@ -61,7 +67,7 @@ describe("'communities registration' service", () => {
         testServer
           .post(communityEndpoint)
           .send({
-            name: `${privacyType}-${name}-${idx}.`,
+            name: `${idx}-${privacyType}-${name}-${idx}.`,
             privacyType,
             description: `This is a ${privacyType} Community. ${description} - ${idx}.`,
           })
@@ -92,7 +98,7 @@ describe("'communities registration' service", () => {
     expect(service).toBeTruthy();
   });
 
-  it.skip('Accepts invitations', async () => {
+  it('Accepts invitations', async () => {
     // Accepting the invitations
     const resp: any = await Promise.all(
       testUsers.map((user, idx) =>
@@ -140,7 +146,7 @@ describe("'communities registration' service", () => {
       expect(communityUser.id).toBeDefined();
     });
   });
-  it.skip('Declines invitation', async () => {
+  it('Declines invitation', async () => {
     let guest: any = getRandUser();
 
     delete guest.id;
@@ -169,7 +175,7 @@ describe("'communities registration' service", () => {
       newMember: null,
     });
   });
-  it.skip('Accepts group membership promotion', async () => {
+  it('Accepts group membership promotion', async () => {
     // Sending a request to promote a user
     const userOBject = getRandUser();
 
