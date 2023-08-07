@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import routesPath from "../../../routesPath";
-import { removeElementArray } from "../../../helpers";
+// import { removeElementArray } from "../../../helpers";
+import { useDeleteWorkplace } from "./../../../features/user/userSlice";
 
 const ViewWorkplaces = ({ title, substabs, user }) => {
   const userMe = useOutletContext();
@@ -11,10 +12,14 @@ const ViewWorkplaces = ({ title, substabs, user }) => {
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
 
-  const handleDelete = (id) => {
-    let data = removeElementArray(user, id);
+  const deleteWorkplace = useDeleteWorkplace(["workplace", "user"], undefined, undefined);
 
-    console.log(data);
+  const handleDelete = (id) => {
+    // let data = removeElementArray(user, id);
+
+    deleteWorkplace.mutateAsync({ id });
+
+    window.location.reload();
   };
 
   return (
@@ -53,7 +58,12 @@ const ViewWorkplaces = ({ title, substabs, user }) => {
               >
                 <AiOutlineEdit size={"24px"} />
               </button>
-              <button onClick={() => handleDelete(detail?.id)} className="hover:text-primary">
+              <button
+                onClick={() => {
+                  handleDelete(detail?.id);
+                }}
+                className="hover:text-primary"
+              >
                 <AiOutlineDelete size={"24px"} />
               </button>
             </div>

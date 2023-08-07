@@ -158,7 +158,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                     </h4>
                     <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
                       {otherUser
-                        ? otherUser?.facebookPrivacy && (
+                        ? otherUser?.faceBookPrivacy && (
                             <a
                               href={`https://${otherUser?.facebook}`}
                               target="_blank"
@@ -168,7 +168,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                               <BsFacebook size={"24px"} className="mx-auto" />
                             </a>
                           )
-                        : user?.facebookPrivacy && (
+                        : user?.faceBookPrivacy && (
                             <a
                               href={`https://${user?.facebook}`}
                               target="_blank"
