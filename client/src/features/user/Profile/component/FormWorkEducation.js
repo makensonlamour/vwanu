@@ -52,9 +52,8 @@ const FormWorkEducation = ({ user, idWork }) => {
     //   workPlaces = removeElementArray(workPlaces, idWork);
     // }
     let dataTemp = { name: dataObj?.name, description: dataObj?.description, from: dataObj?.from, to: dataObj?.to };
-    console.log(dataTemp);
+    // console.log(dataTemp);
     workPlaces?.push(dataTemp);
-    console.log(workPlaces);
 
     try {
       if (idWork) {
@@ -65,7 +64,7 @@ const FormWorkEducation = ({ user, idWork }) => {
         await updateUser.mutateAsync(data);
         updateSuccess();
         queryClient.invalidateQueries();
-        window.location.href = "../../profile/" + user?.id;
+        // window.location.href = "../../profile/" + user?.id + "/about";
       }
     } catch (e) {
       console.log(e);
@@ -79,8 +78,8 @@ const FormWorkEducation = ({ user, idWork }) => {
     <>
       <Form validationSchema={ValidationSchema} initialValues={initialValues} onSubmit={handleSubmit} className="w-full">
         <Toaster />
-        <div className="flex w-full justify-between gap-x-6">
-          <div className="w-full">
+        <div className="flex w-full flex-col md:flex-row md:justify-between gap-x-6">
+          <div className="w-full flex flex-col flex-wrap md:mt-0 mt-4">
             <Field
               required
               autoCapitalize="none"
@@ -88,14 +87,14 @@ const FormWorkEducation = ({ user, idWork }) => {
               label="Company's Name"
               name="name"
               type="text"
-              className="w-full mt-1 mb-4 font-semibold rounded-xl input-secondary border-gray-200 border invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+              className="w-full mt-1 md:mb-4 font-semibold rounded-xl input-secondary border-gray-200 border invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
             />
             <Field
               autoCapitalize="none"
               label="From"
               placeholder="From"
               name="from"
-              type="month"
+              type="date"
               className="mr-1 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
             />
           </div>
@@ -106,14 +105,14 @@ const FormWorkEducation = ({ user, idWork }) => {
               label="Position"
               name="description"
               type="text"
-              className="w-full mt-1 mb-4 font-semibold rounded-xl input-secondary border-gray-200 border invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
+              className="w-full mt-1 md:mb-4 font-semibold rounded-xl input-secondary border-gray-200 border invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
             />
             <Field
               autoCapitalize="none"
               label="To"
               placeholder="To"
               name="to"
-              type="month"
+              type="date"
               className="mr-1 mt-1 lg:mt-2 border border-gray-200 font-semibold rounded-xl input-secondary invalid:text-red-500 autofill:text-secondary autofill:bg-placeholder-color"
             />
           </div>

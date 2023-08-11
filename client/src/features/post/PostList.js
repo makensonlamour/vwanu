@@ -179,7 +179,7 @@ const PostList = ({ post, pageTitle }) => {
                   <div className="border p-1 m-3 border-placeholder-color rounded-lg">
                     <div className="">
                       <Link
-                        to={"../../profile/" + post?.Original?.id}
+                        to={"../../profile/" + post?.Original?.UserId}
                         className="text-sm xs:text-[0.95rem] font-semibold hover:text-secondary text-primary"
                       >
                         {post?.Original?.firstName + " " + post?.Original?.lastName}

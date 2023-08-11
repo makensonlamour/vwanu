@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import routesPath from "../../../routesPath";
+import { format } from "date-fns";
 // import { removeElementArray } from "../../../helpers";
 import { useDeleteWorkplace } from "./../../../features/user/userSlice";
 
@@ -46,7 +47,10 @@ const ViewWorkplaces = ({ title, substabs, user }) => {
               <p className="basis-2/3 text-gray-900">
                 <span className="">{detail?.description}</span> {" at "} <span className="">{detail?.name}</span>
               </p>
-              <p className="basis-1/3 text-gray-600">{detail?.from + " - " + detail?.to}</p>
+              <p className="basis-1/3 text-gray-600">
+                {detail?.from && format(new Date(detail?.from), "MMM yyyy")} {" - "}{" "}
+                {detail?.to && format(new Date(detail?.to), "MMM yyyy")}
+              </p>
               <button
                 onClick={() => {
                   setEdit(true);

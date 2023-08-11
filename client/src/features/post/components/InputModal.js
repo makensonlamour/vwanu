@@ -84,19 +84,19 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
         }
       }
       let dataObj = {};
-      if (selectedGif !== "") {
-        const arrayGif = [];
-        arrayGif.push(selectedGif);
-        dataObj = {
-          postText: credentials.postText,
-          UserId: credentials.UserId,
-          privacyType: privacyText,
-          mediaLinks: arrayGif,
-        };
-      }
 
       //request for post newsfeed
       if (_.isEqual(reference, "newsfeed")) {
+        if (selectedGif !== "") {
+          const arrayGif = [];
+          arrayGif.push(selectedGif);
+          dataObj = {
+            postText: credentials.postText,
+            UserId: credentials.UserId,
+            privacyType: privacyText,
+            mediaLinks: arrayGif,
+          };
+        }
         formData.append("postText", credentials.postText);
         formData.append("UserId", credentials.UserId);
         formData.append("privacyType", privacyText);
@@ -121,6 +121,16 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
         queryClient.invalidateQueries(["post", "home"]);
         //request for post profile
       } else if (_.isEqual(reference, "profilefeed")) {
+        if (selectedGif !== "") {
+          const arrayGif = [];
+          arrayGif.push(selectedGif);
+          dataObj = {
+            postText: credentials.postText,
+            UserId: credentials.UserId,
+            privacyType: privacyText,
+            mediaLinks: arrayGif,
+          };
+        }
         formData.append("postText", credentials.postText);
         formData.append("UserId", credentials.UserId);
         formData.append("privacyType", privacyText);
@@ -144,6 +154,16 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
 
         //request for post group
       } else if (_.isEqual(reference, "communityFeed")) {
+        if (selectedGif !== "") {
+          const arrayGif = [];
+          arrayGif.push(selectedGif);
+          dataObj = {
+            postText: credentials.postText,
+            CommunityId: communityId,
+            privacyType: privacyText,
+            mediaLinks: arrayGif,
+          };
+        }
         formData.append("postText", credentials.postText);
         formData.append("CommunityId", communityId);
         try {
@@ -160,6 +180,16 @@ const InputModal = ({ reference, communityId, disabled = false, otherUser }) => 
         setShowModal(false);
         //request for post pages
       } else if (_.isEqual(reference, "pagefeed")) {
+        if (selectedGif !== "") {
+          const arrayGif = [];
+          arrayGif.push(selectedGif);
+          dataObj = {
+            postText: credentials.postText,
+            UserId: credentials.UserId,
+            privacyType: privacyText,
+            mediaLinks: arrayGif,
+          };
+        }
         try {
           await mutationAdd.mutateAsync(selectedGif !== "" ? dataObj : formData);
           postSuccess();

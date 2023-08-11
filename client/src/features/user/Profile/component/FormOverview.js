@@ -84,7 +84,7 @@ const FormOverview = ({ user }) => {
       updateSuccess();
       queryClient.invalidateQueries();
       // window.location.reload();
-      window.location.href = "../../profile/" + user?.id;
+      window.location.href = "../../profile/" + user?.id + "/about";
     } catch (e) {
       console.log(e);
       updateError();

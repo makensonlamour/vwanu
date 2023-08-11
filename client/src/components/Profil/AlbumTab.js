@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { Tab } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useOutletContext, useParams, useSearchParams } from "react-router-dom";
 // import routesPath from "../../routesPath";
 import AlbumList from "../../features/album/component/AlbumList";
 import PhotoList from "../../features/album/component/PhotoList";
@@ -32,6 +32,7 @@ const addError = () =>
 const AlbumTab = ({ user }) => {
   // const navigate = useNavigate();
   const { id } = useParams();
+  const myUser = useOutletContext();
 
   const initialValues = {
     name: "",
@@ -102,7 +103,7 @@ const AlbumTab = ({ user }) => {
         <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
           <div className="flex justify-between items-center pb-4">
             <p className="font-bold text-lg md:text-3xl text-primary">{value === "1" ? "Media" : "Media"}</p>
-            {user?.id?.toString() === id?.toString() &&
+            {myUser?.id?.toString() === id?.toString() &&
               (value === "1" ? (
                 <AddPhoto user={user} />
               ) : (

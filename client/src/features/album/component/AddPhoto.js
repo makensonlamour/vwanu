@@ -6,6 +6,7 @@ import InputPhoto from "../../post/components/InputPhoto";
 import { useGetAlbumList, useAddPhoto } from "../albumSlice";
 import { MdPhotoSizeSelectActual, MdVideoLibrary } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
+import Loader from "../../../components/common/Loader";
 
 const AddPhoto = ({ user, type = "photo" }) => {
   const [showModal, setShowModal] = useState(false);
@@ -39,13 +40,13 @@ const AddPhoto = ({ user, type = "photo" }) => {
 
     try {
       addPhoto.mutateAsync(formData);
-      setShowModal(false);
       setMedia([]);
       setData({ caption: "", selectAlbum: "", privacy: "" });
     } catch (e) {
       console.log(e);
     } finally {
       setIsLoading(false);
+      setShowModal(false);
     }
   };
 
@@ -235,8 +236,12 @@ const AddPhoto = ({ user, type = "photo" }) => {
             )} */}
             <div className="flex flex-col sm:flex-row justify-end">
               {!isLoading && (
-                <button onClick={handleSubmit} className="bg-primary px-4 py-2 rounded-lg text-white hover:bg-secondary">
-                  Upload
+                <button
+                  disabled={isLoading ? true : false}
+                  onClick={handleSubmit}
+                  className="bg-primary px-4 py-2 rounded-lg text-white hover:bg-secondary"
+                >
+                  {isLoading ? <Loader /> : "Upload"}
                 </button>
               )}
             </div>
