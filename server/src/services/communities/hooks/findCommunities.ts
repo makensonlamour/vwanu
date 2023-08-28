@@ -14,7 +14,7 @@ export default async (context: HookContext) => {
     const { amountOfMembers } = filters.$sort;
     const customFilters: any = {};
     if (amountOfMembers) {
-      customFilters.amountOfMembers = amountOfMembers;
+      customFilters.numMembers = amountOfMembers; // rename amountOfMembers to numMembers
       delete filters.$sort.amountOfMembers;
     }
     const allField = { ...filters.$sort, ...customFilters };

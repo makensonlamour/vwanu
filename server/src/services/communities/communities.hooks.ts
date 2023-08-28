@@ -43,6 +43,14 @@ const AutoJoin = async (context) => {
   return context;
 };
 
+const refetch = async (context) => {
+  const { app, result } = context;
+  const { id } = result;
+  const community = await app.service('communities')._get(id);
+  context.result = community;
+  return context;
+};
+
 const { authenticate } = authentication.hooks;
 export default {
   before: {
@@ -73,6 +81,7 @@ export default {
         relationTableName: 'Community_Interest',
         foreignKey: 'CommunityId',
       }),
+      refetch,
     ],
     update: [],
     patch: [],
