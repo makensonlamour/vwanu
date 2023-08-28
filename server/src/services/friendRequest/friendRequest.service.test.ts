@@ -65,6 +65,33 @@ describe('Friend service, ', () => {
     });
   });
 
+  it('should be able to see amount of friend request sent ', async () => {
+    const requesters = [createdTestUsers[0].body, createdTestUsers[2].body];
+    const user = createdTestUsers[1].body;
+    // get account
+    const requestersResponse = await Promise.all(
+      requesters.map((requester) =>
+        testServer
+          .get(`${userEndpoint}/${requester.id}`)
+          .set('authorization', requester.accessToken)
+      )
+    );
+
+    requestersResponse.forEach((response) => {
+      expect(response.status).toEqual(StatusCodes.OK);
+      expect(response.body.amountOfFriendRequest).toBeDefined();
+      expect(response.body.amountOfFriendRequest).toEqual(0);
+    });
+
+    const userResponse = await testServer
+      .get(`${userEndpoint}/${user.id}`)
+      .set('authorization', user.accessToken);
+
+    expect(userResponse.status).toEqual(StatusCodes.OK);
+    expect(userResponse.body.amountOfFriendRequest).toBeDefined();
+    expect(userResponse.body.amountOfFriendRequest).toEqual(2);
+  });
+
   it('should not be able to send another friend request if one exit', async () => {
     const requester = createdTestUsers[0].body;
     const user = createdTestUsers[1].body;

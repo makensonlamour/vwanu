@@ -171,7 +171,7 @@ SELECT
       ))`;
 
   const amountOfFriendRequest = `(
-    SELECT COUNT(*) FROM "User_friends_request" WHERE "User_friends_request"."friendsRequestId" = "User"."id"
+    SELECT COUNT(*) FROM "User_friends_request" WHERE "User_friends_request"."UserId" = "User"."id"
   )::int`;
 
   const exclude = ex || [
