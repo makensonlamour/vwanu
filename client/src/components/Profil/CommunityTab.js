@@ -38,7 +38,7 @@ const CommunityTab = ({ user }) => {
         <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
           <div className="flex justify-between items-center pb-4">
             <p className="font-bold text-lg text-primary">Community</p>
-            {user?.id?.toString() === id?.toString() && (
+            {myUser?.id?.toString() === id?.toString() && (
               <Link
                 to={"../.." + routesPath.ADD_GROUPS}
                 className="rounded-lg bg-placeholder-color hover:bg-primary hover:text-white py-2 px-6 font-semibold"
@@ -49,7 +49,7 @@ const CommunityTab = ({ user }) => {
           </div>
           <TabContext value={value}>
             <div className="">
-              {user?.id === myUser?.id && (
+              {id?.toString() === myUser?.id?.toString() && (
                 <TabList
                   TabIndicatorProps={{ style: { background: "inherit" } }}
                   sx={{ justifyContent: "start" }}

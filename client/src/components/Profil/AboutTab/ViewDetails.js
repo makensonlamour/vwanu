@@ -80,11 +80,11 @@ const ViewDetails = ({ title, user, substabs }) => {
                       <div>
                         {detail?.view ? (
                           <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>
-                            <BiHide size={24} className="" />
+                            <GrView size={24} className="" />
                           </button>
                         ) : (
                           <button onClick={() => handleUpdate(!detail?.view, detail?.hideName)}>
-                            <GrView size={24} className="" />
+                            <BiHide size={24} className="" />
                           </button>
                         )}
                       </div>
