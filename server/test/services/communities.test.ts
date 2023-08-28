@@ -252,7 +252,6 @@ describe("'communities ' service", () => {
   it(' Any user can get all communities except hidden unless he is a member of it', async () => {
     // Manually adding a user to a community
     const newUser = testUsers[1];
-
     const infiltratedCommunity = communities[0].body;
 
     const role = roles[2];
@@ -270,13 +269,14 @@ describe("'communities ' service", () => {
       .set('authorization', creator.accessToken);
 
     allCommunities.data.forEach((community) => {
+      // console.log({ community });
       expect(community).toMatchObject({
         name: expect.any(String),
         description: expect.any(String),
         privacyType: expect.any(String),
         id: expect.any(String),
         UserId: expect.any(String),
-        amountOfMembers: expect.any(Number),
+        numMembers: expect.any(Number),
         members: expect.any(Array),
         profilePicture: null,
         coverPicture: null,
@@ -412,19 +412,20 @@ describe("'communities ' service", () => {
       const {
         body: { data: popularFirst },
       } = await testServer
-        .get(`${endpoint}?$sort[amountOfMembers]=-1`)
+        .get(`${endpoint}?$sort[numMembers]=-1`)
         .set('authorization', firstCreator.accessToken);
 
-      expect(popularFirst[0].amountOfMembers).toBeGreaterThan(
-        popularFirst[1].amountOfMembers
+      expect(popularFirst[0].numMembers).toBeGreaterThan(
+        popularFirst[1].numMembers
       );
       const {
         body: { data: unpopular },
       } = await testServer
-        .get(`${endpoint}?$sort[amountOfMembers]=1`)
+        .get(`${endpoint}?$sort[numMembers]=1`)
         .set('authorization', firstCreator.accessToken);
-      expect(popularFirst[0].amountOfMembers).toBeGreaterThan(
-        unpopular[0].amountOfMembers
+
+      expect(popularFirst[0].numMembers).toBeGreaterThan(
+        unpopular[0].numMembers
       );
     });
 

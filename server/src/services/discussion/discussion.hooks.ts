@@ -34,7 +34,13 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      (ctx) => {
+        console.log('Error in discussion create hook');
+        console.log(ctx.error);
+        return ctx;
+      },
+    ],
     update: [],
     patch: [],
     remove: [],
