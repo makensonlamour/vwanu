@@ -9,7 +9,7 @@ import placeholderBlog from "../../assets/images/placeholderBlog.png";
 const SingleBlog = ({ blog }) => {
   return (
     <>
-      <div className={` bg-white shadow-sm w-full rounded-xl pb-4 lg:pb-6 mb-8 lg:mb-10 `}>
+      <div className={` bg-white shadow-sm rounded-xl pb-4 lg:pb-6 mb-8 lg:mb-10 `}>
         {blog?.coverPicture !== null ? (
           <div className="">
             <img className="w-full h-36 lg:h-56 object-cover rounded-t-xl" src={blog?.coverPicture} alt="blog" />

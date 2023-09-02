@@ -51,25 +51,29 @@ const ViewWorkplaces = ({ title, substabs, user }) => {
                 {detail?.from && format(new Date(detail?.from), "MMM yyyy")} {" - "}{" "}
                 {detail?.to && format(new Date(detail?.to), "MMM yyyy")}
               </p>
-              <button
-                onClick={() => {
-                  setEdit(true);
-                  navigate("../.." + routesPath.PROFILE_EDIT + "?tabs=edit&subtabs=" + substabs + "&idWork=" + detail?.id, {
-                    state: { edit },
-                  });
-                }}
-                className="hover:text-primary"
-              >
-                <AiOutlineEdit size={"24px"} />
-              </button>
-              <button
-                onClick={() => {
-                  handleDelete(detail?.id);
-                }}
-                className="hover:text-primary"
-              >
-                <AiOutlineDelete size={"24px"} />
-              </button>
+              {userMe?.id?.toString() === id?.toString() && (
+                <>
+                  <button
+                    onClick={() => {
+                      setEdit(true);
+                      navigate("../.." + routesPath.PROFILE_EDIT + "?tabs=edit&subtabs=" + substabs + "&idWork=" + detail?.id, {
+                        state: { edit },
+                      });
+                    }}
+                    className="hover:text-primary"
+                  >
+                    <AiOutlineEdit size={"24px"} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDelete(detail?.id);
+                    }}
+                    className="hover:text-primary"
+                  >
+                    <AiOutlineDelete size={"24px"} />
+                  </button>
+                </>
+              )}
             </div>
           );
         })
