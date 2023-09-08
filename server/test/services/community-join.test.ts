@@ -10,7 +10,6 @@ describe("'community-join ' service", () => {
   let testServer;
   let communities;
   let invitations;
-  // let denier;
   let creator;
 
   const userEndpoint = '/users';

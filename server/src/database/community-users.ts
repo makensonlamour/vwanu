@@ -3,6 +3,7 @@
 import { Model } from 'sequelize';
 
 export interface CommunityUsersInterface {
+  id: string;
   banned: boolean;
   bannedDate: Date;
   untilDate: Date;
@@ -15,6 +16,8 @@ export default (sequelize: any, DataTypes: any) => {
     extends Model<CommunityUsersInterface>
     implements CommunityUsersInterface
   {
+    id: string;
+
     CommunityId: string;
 
     UserId: string;
@@ -48,6 +51,12 @@ export default (sequelize: any, DataTypes: any) => {
   }
   CommunityUsers.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+
       CommunityRoleId: {
         type: DataTypes.UUID,
         primaryKey: true,
