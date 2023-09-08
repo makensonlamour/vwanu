@@ -37,6 +37,15 @@ export default async (context: HookContext) => {
           Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","C"."canInvite", "C"."canInPost","C"."canInUploadPhotos","C"."canInUploadDoc","C"."canInUploadVideo","C"."canMessageInGroup", "C"."haveDiscussionForum", "C"."numMembers", "CU"."banned","CU"."bannedDate", 
           (SELECT 
             json_build_object(
+            'id', "U"."id",
+            'firstName', "U"."firstName",
+            'lastName', "U"."lastName",
+            'profilePicture', "U"."profilePicture"
+          ) FROM "Users" AS "U"
+          WHERE "U"."id" = "C"."UserId"
+          ) AS "Creator",
+          (SELECT 
+            json_build_object(
              'id', "CU"."UserId",
              'role',"CR"."name",
              'roleId',"CR"."id"

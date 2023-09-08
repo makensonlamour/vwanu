@@ -15,7 +15,12 @@ export default (sequelize: any, DataTypes: any) => {
 
     name: string;
 
-    // static associate(models: any): void {}
+    // static associate(models: any): void {
+    //   CommunityRoles.belongsToMany(models.Community, {
+    //     through: 'CommunityUsers',
+    //     onDelete: 'CASCADE',
+    //   });
+    // }
   }
   CommunityRoles.init(
     {
