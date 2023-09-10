@@ -26,11 +26,14 @@ describe("'communities ' service", () => {
   let firstCreator;
   let distinctCommunities;
   let roles;
+  let uniquePubCom;
+  let testers = [];
 
   const userEndpoint = '/users';
   const endpoint = '/communities';
   const interests = ['sport', 'education'];
   const rolesEndpoint = '/community-role';
+
   const CommunityBasicDetails = {
     id: expect.any(String),
     name: 'unique',
@@ -193,6 +196,104 @@ describe("'communities ' service", () => {
     //   )
     // );
   });
+  it('Public community can be seen but only user can interact', async () => {
+    testers = await Promise.all(
+      getRandUsers(2).map((u) =>
+        testServer.post(userEndpoint).send({ ...u, id: undefined })
+      )
+    );
+    testers = testers.map((t) => t.body);
+    const [firstTester, secondTester] = testers;
+
+    uniquePubCom = await Promise.all(
+      [1].map((p) =>
+        testServer
+          .post(endpoint)
+          .send({
+            name: `test community fgf-${p}`,
+            interests,
+            description: `descriptiondd oft test community-${p}`,
+          })
+          .set('authorization', firstTester.accessToken)
+      )
+    );
+    uniquePubCom = uniquePubCom.map((c) => c.body);
+
+    const communityId = uniquePubCom[0].id;
+
+    const { body: communityaccessByCreator } = await testServer
+      .get(`${endpoint}/${communityId}`)
+      .set('authorization', firstTester.accessToken);
+
+    expect(communityaccessByCreator).toMatchObject({
+      canUserPost: true,
+      canUserInvite: true,
+      canUserUploadDoc: true,
+      canUserUploadPhotos: true,
+      canUserUploadVideo: true,
+      canMessageUserInGroup: true,
+    });
+
+    const { body: communityaccessByNonUser } = await testServer
+      .get(`${endpoint}/${communityId}`)
+      .set('authorization', secondTester.accessToken);
+
+    expect(communityaccessByNonUser).toMatchObject({
+      canUserPost: null,
+      canUserInvite: null,
+      canUserUploadDoc: null,
+      canUserUploadPhotos: null,
+      canUserUploadVideo: null,
+      canMessageUserInGroup: null,
+    });
+
+    // second Tester joinning the community
+
+    await testServer
+      .post('/community-join')
+      .send({
+        CommunityId: communityId,
+      })
+      .set('authorization', secondTester.accessToken);
+
+    const { body: afterJoinning } = await testServer
+      .get(`${endpoint}/${communityId}`)
+      .set('authorization', secondTester.accessToken);
+
+    expect(afterJoinning).toMatchObject({
+      canUserPost: true,
+      canUserInvite: true,
+      canUserUploadDoc: true,
+      canUserUploadPhotos: true,
+      canUserUploadVideo: true,
+      canMessageUserInGroup: true,
+    });
+
+    const { body: firstTestBis } = await testServer
+      .get(`${endpoint}/${communityId}`)
+      .set('authorization', firstTester.accessToken);
+
+    expect(firstTestBis).toMatchObject({
+      canUserPost: true,
+      canUserInvite: true,
+      canUserUploadDoc: true,
+      canUserUploadPhotos: true,
+      canUserUploadVideo: true,
+      canMessageUserInGroup: true,
+    });
+    await cleanup(testServer)(endpoint, communityId, firstTester.accessToken);
+    await cleanup(testServer)(
+      userEndpoint,
+      firstTester.id,
+      firstTester.accessToken
+    );
+    await cleanup(testServer)(
+      userEndpoint,
+      secondTester.id,
+      secondTester.accessToken
+    );
+    expect(true).toBe(true);
+  });
 
   it('Community automatically set creator as first admin and by default are public', async () => {
     const name = 'Auto admin';
@@ -269,7 +370,6 @@ describe("'communities ' service", () => {
       .set('authorization', creator.accessToken);
 
     allCommunities.data.forEach((community) => {
-      // console.log({ community });
       expect(community).toMatchObject({
         name: expect.any(String),
         description: expect.any(String),
@@ -333,14 +433,12 @@ describe("'communities ' service", () => {
         )
       );
       accessToCommunities = accessToCommunities.map((c) => c.body);
+
       accessToCommunities.forEach((com) => {
         if (!com.privacyType && com?.privacyType !== 'public') {
           expect(com).toMatchObject({
-            name: 'BadRequest',
-            message: expect.stringContaining('Community with id'),
-            code: 400,
-            className: 'bad-request',
-            errors: {},
+            name: 'NotFound',
+            code: 404,
           });
         } else {
           expect(com).toMatchObject({
@@ -349,14 +447,6 @@ describe("'communities ' service", () => {
             privacyType: expect.any(String),
             id: expect.any(String),
             UserId: firstCreator.id,
-            // amountOfMembers: '1',
-            IsMember: null,
-            canUserPost: expect.any(Boolean),
-            canUserInvite: expect.any(Boolean),
-            canUserUploadDoc: expect.any(Boolean),
-            canUserUploadPhotos: expect.any(Boolean),
-            canUserUploadVideo: expect.any(Boolean),
-            canMessageUserInGroup: expect.any(Boolean),
             Interests: expect.any(Array),
           });
           com.Interests.forEach((interest) => {
@@ -482,7 +572,8 @@ describe("'communities ' service", () => {
       const { body: communityToCompare } = await testServer
         .get(`${endpoint}/${communities[1].body.id}`)
         .set('authorization', firstCreator.accessToken);
-      const communityAmountOfMembers = +communityToCompare.amountOfMembers;
+
+      const communityAmountOfMembers = +communityToCompare.numMembers;
       const {
         body: { data: usersNotInCommunity },
       } = await testServer
@@ -535,9 +626,6 @@ describe("'communities ' service", () => {
   });
 
   describe('Communities posts and forums', () => {
-    it.todo('Only authorized members can see community posts');
-    it.todo('Only authorized members can see community discussions');
-
     it('should create posts in community', async () => {
       const name = 'Public Community name';
       const description = 'Public Community description';
@@ -613,8 +701,6 @@ describe("'communities ' service", () => {
     });
   });
 
-  it.todo('should like a community');
-  it.todo('list a community Like(s)');
   it('should create forum/discussion in community', async () => {
     const name = 'Public Community with discussion';
     const description = 'Public Community with discussion';
@@ -708,11 +794,13 @@ describe("'communities ' service", () => {
       });
 
     expect(statusCode).toBe(201);
+
     const { statusCode: status, body: user } = await testServer
       .post(userEndpoint)
       .send({ ...getRandUser(), id: undefined });
 
     expect(status).toBe(201);
+
     const { body: nonMemberAccess } = await testServer
       .get(endpoint)
       .set('authorization', user.accessToken);
@@ -726,13 +814,16 @@ describe("'communities ' service", () => {
       UserId: user.id,
       CommunityRoleId: roles[0].id,
     });
-    await CommunityUser.create({
-      CommunityId: privateGroup.id,
-      UserId: user.id,
-      CommunityRoleId: roles[0].id,
-    });
 
     expect(status).toBe(201);
+    const privateCommunity = await testServer
+      .get(`${endpoint}/${privateGroup.id}`)
+      .set('authorization', user.accessToken);
+
+    expect(privateCommunity.body).toMatchObject({
+      canUserPost: true,
+      canUserInvite: true,
+    });
     const { body: memberAccess } = await testServer
       .get(endpoint)
       .set('authorization', user.accessToken);
