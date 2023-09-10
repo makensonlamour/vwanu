@@ -40,6 +40,7 @@ import communityInvitationRequest from './communityInvitationRequest';
 import forumCatergory from './forumCatergory';
 import workplace from './workplace';
 import userWorkplace from './userWorkplace';
+import communityBans from './community-bans';
 
 const tables = [
   call,
@@ -72,6 +73,7 @@ const tables = [
   refreshToken,
   communityUsers,
   communityRoles,
+  communityBans,
   communityInvitationRequest,
   forumCatergory,
   workplace,
