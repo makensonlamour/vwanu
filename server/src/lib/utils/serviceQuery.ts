@@ -15,7 +15,9 @@ export default (
     const UserId = params.User.id;
     const service = context.app.service(context.path);
     if (!UserId) {
-      throw new BadRequest(`You must be logged in to take action on ${service.name}}`);
+      throw new BadRequest(
+        `You must be logged in to take action on ${service.name}}`
+      );
     }
 
     const sequelize = app.get('sequelizeClient');
@@ -26,7 +28,7 @@ export default (
     const clause = queryClause(context, where);
 
     params.sequelize = {
-      logging: console.log,
+      // logging: console.log,
       where: clause,
       attributes,
     };

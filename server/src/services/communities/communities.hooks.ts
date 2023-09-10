@@ -11,7 +11,7 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
-import { FindCommunities, CommunityAccess } from './hooks';
+import { FindCommunities, CommunityAccess, CommunityNotFound } from './hooks';
 
 const AutoJoin = async (context) => {
   const { params, app, result } = context;
@@ -73,7 +73,7 @@ export default {
   after: {
     all: [],
     find: [],
-    get: [],
+    get: [CommunityNotFound],
     create: [
       AutoJoin,
       SaveAndAttachInterests({
@@ -91,7 +91,7 @@ export default {
   error: {
     all: [],
     find: [],
-    get: [],
+    get: [CommunityNotFound],
     create: [],
     update: [],
     patch: [],

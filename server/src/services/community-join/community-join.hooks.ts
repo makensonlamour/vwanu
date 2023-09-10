@@ -15,7 +15,9 @@ const PublicCommunityOnly = async (context) => {
   community = await app.service('communities')._get(data.CommunityId);
 
   if (community?.privacyType !== 'public')
-    throw new BadRequest('Only public community can be joined');
+    throw new BadRequest(
+      'Only public community can be joined without invitation'
+    );
   data.guestId = context.params.User.id;
   data.response = true;
   data.responseDate = Date.now();
@@ -49,6 +51,7 @@ const addUserToCommunity = async (context) => {
 
   if (alreadyMember.length)
     throw new BadRequest('You are already a member of this community');
+
   await app.service('community-users').create({
     CommunityId,
     UserId: id,

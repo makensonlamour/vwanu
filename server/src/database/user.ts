@@ -181,6 +181,11 @@ export default (sequelize: any, DataTypes: any) => {
         onDelete: 'CASCADE',
       });
 
+      User.belongsToMany(models.Community, {
+        through: 'CommunityUsers',
+        onDelete: 'CASCADE',
+      });
+
       User.belongsToMany(models.User, {
         through: 'User_friends_undesired',
         as: 'undesiredFriends',

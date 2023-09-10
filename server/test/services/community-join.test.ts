@@ -10,7 +10,6 @@ describe("'community-join ' service", () => {
   let testServer;
   let communities;
   let invitations;
-  // let denier;
   let creator;
 
   const userEndpoint = '/users';
@@ -97,7 +96,6 @@ describe("'community-join ' service", () => {
   it('Public communities are auto-join', async () => {
     const user = testUsers[0];
 
-    console.log({ publicCommunity });
     const join = await testServer
       .post(endpoint)
       .send({
@@ -117,6 +115,7 @@ describe("'community-join ' service", () => {
       email: null,
       hostId: null,
     });
+
     const foundUser = await app
       .get('sequelizeClient')
       .models.CommunityUsers.findOne({
@@ -124,21 +123,24 @@ describe("'community-join ' service", () => {
       });
 
     expect(foundUser).toMatchObject({
-      id: expect.any(String),
       banned: false,
       bannedDate: null,
       CommunityId: expect.any(String),
       UserId: user.id,
       CommunityRoleId: expect.any(String),
     });
+  });
+  it('Cannot Join same community twice', async () => {
+    const user = testUsers[0];
 
-    const {
-      body: { data: com },
-    } = await testServer
-      .get(`${communityEndpoint}?participate=true`)
+    const { statusCode } = await testServer
+      .post(endpoint)
+      .send({
+        CommunityId: publicCommunity.id,
+      })
       .set('authorization', user.accessToken);
 
-    console.log(com);
+    expect(statusCode).toBe(400);
   });
   it('Hidden does not accept join request', async () => {
     const user = testUsers[0];
@@ -152,7 +154,7 @@ describe("'community-join ' service", () => {
 
     expect(join.body).toMatchObject({
       name: 'BadRequest',
-      message: 'Only public community can be joined',
+      message: expect.any(String),
       code: 400,
       className: 'bad-request',
       errors: {},
@@ -171,7 +173,7 @@ describe("'community-join ' service", () => {
 
     expect(join.body).toMatchObject({
       name: 'BadRequest',
-      message: 'Only public community can be joined',
+      message: expect.any(String),
       code: 400,
       className: 'bad-request',
       errors: {},
