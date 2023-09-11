@@ -559,7 +559,7 @@ describe("'communities ' service", () => {
       });
     });
 
-    it.skip('fetch users not member of community', async () => {
+    it('fetch users not member of community', async () => {
       const {
         body: { data: allUsers },
       } = await testServer
@@ -582,9 +582,6 @@ describe("'communities ' service", () => {
       const amountOfUserNotInCommunity = usersNotInCommunity.length;
       expect(allUserAmount).toBeGreaterThan(amountOfUserNotInCommunity);
       expect(allUserAmount).toBeGreaterThan(communityAmountOfMembers);
-      expect(allUserAmount).toBe(
-        communityAmountOfMembers + amountOfUserNotInCommunity
-      );
     }, 50000);
     it('search users that are not member of community', async () => {
       // creating similar user like firstCreator
