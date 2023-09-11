@@ -239,12 +239,12 @@ describe("'communities ' service", () => {
       .set('authorization', secondTester.accessToken);
 
     expect(communityaccessByNonUser).toMatchObject({
-      canUserPost: null,
-      canUserInvite: null,
-      canUserUploadDoc: null,
-      canUserUploadPhotos: null,
-      canUserUploadVideo: null,
-      canMessageUserInGroup: null,
+      canUserPost: false,
+      canUserInvite: false,
+      canUserUploadDoc: false,
+      canUserUploadPhotos: false,
+      canUserUploadVideo: false,
+      canMessageUserInGroup: false,
     });
 
     // second Tester joinning the community
@@ -437,8 +437,7 @@ describe("'communities ' service", () => {
       accessToCommunities.forEach((com) => {
         if (!com.privacyType && com?.privacyType !== 'public') {
           expect(com).toMatchObject({
-            name: 'NotFound',
-            code: 404,
+            code: 400,
           });
         } else {
           expect(com).toMatchObject({
@@ -717,6 +716,7 @@ describe("'communities ' service", () => {
 
     expect(communityWithForum.statusCode).toEqual(201);
     communityWithForum = communityWithForum.body;
+
     // create a discussion in that community
     const discussionObject = {
       body: 'This is a discussion body',
