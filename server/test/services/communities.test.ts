@@ -294,6 +294,52 @@ describe("'communities ' service", () => {
     );
     expect(true).toBe(true);
   });
+  it.skip('community users are removed when community is deleted', async () => {
+    const name = 'Community to delete soon';
+    const description = 'This community will be deleted';
+    // create a community
+    const community = await testServer
+      .post(endpoint)
+      .send({
+        name,
+        interests,
+        description,
+      })
+      .set('authorization', creator.accessToken);
+    expect(community.statusCode).toEqual(201);
+
+    // add a user to the community
+    const { body: user } = await testServer
+      .post(userEndpoint)
+      .send({ ...getRandUser(), id: undefined });
+
+    // join the community
+    await testServer
+      .post('/community-join')
+      .send({
+        CommunityId: community.body.id,
+      })
+      .set('authorization', user.accessToken);
+
+    // verify that the user is in the community
+    const { body: communityUsers } = await testServer
+      .get(`/community-users?CommunityId=${community.body.id}`)
+      .set('authorization', creator.accessToken);
+
+    expect(communityUsers.total).toBe(2);
+
+    // delete the community
+    await testServer
+      .delete(`${endpoint}/${community.body.id}`)
+      .set('authorization', creator.accessToken);
+
+    // verify that the user is not in the community
+    const { body: communityUsersAfterDelete } = await testServer
+      .get(`/community-users?CommunityId=${community.body.id}`)
+      .set('authorization', creator.accessToken);
+
+    expect(communityUsersAfterDelete.total).toHaveLength(0);
+  });
 
   it('Community automatically set creator as first admin and by default are public', async () => {
     const name = 'Auto admin';

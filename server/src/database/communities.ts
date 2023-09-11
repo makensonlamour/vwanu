@@ -103,6 +103,7 @@ export default (sequelize: any, DataTypes: any) => {
       Community.hasMany(models.CommunityUsers, {
         foreignKey: 'CommunityId',
         sourceKey: 'id',
+        onDelete: 'CASCADE',
       });
     }
   }

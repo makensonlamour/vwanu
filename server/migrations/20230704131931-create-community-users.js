@@ -24,6 +24,7 @@ module.exports = {
           model: 'Communities',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       UserId: {
         type: Sequelize.UUID,

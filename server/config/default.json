@@ -3,7 +3,8 @@
   "frontendUrl": "FRONTEND_URL",
   "host": "HOST",
   "dbSettings": {
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "seederStorage": "sequelize"
   },
   "smtp_password": "00bcfe6b6504a3036b1c23051a00dacd",
   "smtp_port": 587,
