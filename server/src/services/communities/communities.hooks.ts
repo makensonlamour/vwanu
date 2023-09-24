@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
-
+import { disallow } from 'feathers-hooks-common';
 import LimitToOwner from '../../Hooks/LimitToOwner';
 import { AutoOwn } from '../../Hooks';
 
@@ -11,7 +11,7 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
-import { FindCommunities, CommunityAccess, CommunityNotFound } from './hooks';
+import { FindCommunities } from './hooks';
 
 const AutoJoin = async (context) => {
   const { params, app, result } = context;
@@ -56,13 +56,12 @@ export default {
   before: {
     all: [authenticate('jwt')],
     find: [FindCommunities],
-    get: [CommunityAccess],
     create: [
       AutoOwn,
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
     ],
-    update: [],
+    update: disallow(),
     patch: [
       LimitToOwner,
       saveProfilePicture(['profilePicture', 'coverPicture']),
@@ -71,9 +70,6 @@ export default {
   },
 
   after: {
-    all: [],
-    find: [],
-    get: [CommunityNotFound],
     create: [
       AutoJoin,
       SaveAndAttachInterests({
@@ -83,18 +79,5 @@ export default {
       }),
       refetch,
     ],
-    update: [],
-    patch: [],
-    remove: [],
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [CommunityNotFound],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
   },
 };

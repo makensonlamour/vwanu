@@ -3,7 +3,8 @@
     "username": "DB_USER",
     "password": "DB_PASSWORD",
     "database": "DB_DATABASE",
-    "host": "DB_HOST"
+    "host": "DB_HOST",
+    "seederStorage": "sequelize"
   },
   "EmailerConfiguration": {
     "from": "SEND_EMAIL_FROM",
