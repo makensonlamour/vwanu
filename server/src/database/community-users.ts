@@ -1,34 +1,20 @@
 /* eslint-disable import/no-import-module-exports */
-
+import { Id } from '@feathersjs/feathers';
 import { Model } from 'sequelize';
 
 export interface CommunityUsersInterface {
-  id: string;
-  banned: boolean;
-  bannedDate: Date;
-  untilDate: Date;
-  CommunityId: string;
-  UserId: string;
-  CommunityRoleId: string;
+  UserId: Id;
+  CommunityId: Id;
+  CommunityRoleId: Id;
 }
 export default (sequelize: any, DataTypes: any) => {
   class CommunityUsers
     extends Model<CommunityUsersInterface>
     implements CommunityUsersInterface
   {
-    id: string;
-
-    CommunityId: string;
-
-    UserId: string;
-
-    CommunityRoleId: string;
-
-    banned: boolean;
-
-    bannedDate: Date;
-
-    untilDate: Date;
+    UserId: Id;
+    CommunityId: Id;
+    CommunityRoleId: Id;
 
     static associate(models: any): void {
       CommunityUsers.belongsTo(models.User, {
@@ -51,12 +37,6 @@ export default (sequelize: any, DataTypes: any) => {
   }
   CommunityUsers.init(
     {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-      },
-
       CommunityRoleId: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -84,25 +64,12 @@ export default (sequelize: any, DataTypes: any) => {
           key: 'id',
         },
       },
-
-      banned: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      bannedDate: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-
-      untilDate: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
     },
 
     {
       sequelize,
       modelName: 'CommunityUsers',
+      updatedAt: false,
     }
   );
   return CommunityUsers;
