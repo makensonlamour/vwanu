@@ -4,7 +4,7 @@ import { Id } from '@feathersjs/feathers';
 import { Sequelize } from 'sequelize';
 
 const isMemberQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'isMember.sql'),
+  path.join(__dirname, '../sql', 'ismember.sql'),
   'utf8'
 );
 

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 const canUserDoQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'canUserDo.sql'),
+  path.join(__dirname, '../sql', 'canuserdo.sql'),
   'utf8'
 );
 export default (

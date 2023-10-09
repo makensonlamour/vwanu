@@ -20,7 +20,7 @@ const isMemberQuery = fs.readFileSync(
 );
 
 const pendingInvitationQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'pendingInvitation.sql'),
+  path.join(__dirname, '../sql', 'pendinginvitation.sql'),
   'utf8'
 );
 
