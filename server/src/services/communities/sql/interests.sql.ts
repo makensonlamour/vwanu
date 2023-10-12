@@ -1,4 +1,4 @@
-(
+export default `(
     SELECT 
         json_agg(
             json_build_object(
@@ -9,3 +9,4 @@
         INNER JOIN "Community_Interest" AS "CI" ON "CI"."InterestId" = "I"."id"
         WHERE "CI"."CommunityId"="Community"."id"
 )
+`;
