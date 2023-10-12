@@ -3,6 +3,7 @@ import { Sequelize } from 'sequelize';
 
 import isMemberQuery from '../sql/ismember.sql';
 
+
 export default (userId: Id, communityId: Id, sequelize: Sequelize) => {
   const query = isMemberQuery
     .replace(/:userId/g, userId as string)
