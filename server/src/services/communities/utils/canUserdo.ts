@@ -1,11 +1,7 @@
 import { Id } from '@feathersjs/feathers';
-import fs from 'fs';
-import path from 'path';
+import canUserDoQuery from '../sql/canuserdo.sql';
 
-const canUserDoQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'canuserdo.sql'),
-  'utf8'
-);
+
 export default (
   userId: Id,
   field:

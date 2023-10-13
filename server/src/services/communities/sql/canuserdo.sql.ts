@@ -1,4 +1,4 @@
-
+export default `
   (  SELECT 
     
         (CASE 
@@ -31,3 +31,4 @@
 
         
 
+`;

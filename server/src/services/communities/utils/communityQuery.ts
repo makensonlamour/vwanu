@@ -1,33 +1,15 @@
-import fs from 'fs';
-import path from 'path';
 import { Id } from '@feathersjs/feathers';
 import { Sequelize } from 'sequelize';
 
 import canUserDo from './canUserdo';
 
-// const borrowerQuery = fs.readFileSync(
-//   path.join(__dirname, '../sql', 'borrowerQuery.sql'),
-//   'utf8'
-// );
-// const planQuery = fs.readFileSync(
-//   path.join(__dirname, '../sql', 'planQuery.sql'),
-//   'utf8'
-// );
+import isMemberQuery from '../sql/ismember.sql';
 
-const isMemberQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'member.sql'),
-  'utf8'
-);
+import pendingInvitationQuery from '../sql/pendinginvitation.sql';
 
-const pendingInvitationQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'pendinginvitation.sql'),
-  'utf8'
-);
+import interestsQuery from '../sql/interests.sql';
 
-const interestsQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'interests.sql'),
-  'utf8'
-);
+
 
 export default (userId: Id, sequelize: Sequelize, exclude: string[] = []) => {
   const excludeQuery = [...exclude, 'search_vector'];
