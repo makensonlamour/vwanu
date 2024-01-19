@@ -41,6 +41,7 @@ import forumCatergory from './forumCatergory';
 import workplace from './workplace';
 import userWorkplace from './userWorkplace';
 import communityBans from './community-bans';
+import communityHistory from './community-history';
 
 const tables = [
   call,
@@ -74,6 +75,7 @@ const tables = [
   communityUsers,
   communityRoles,
   communityBans,
+  communityHistory,
   communityInvitationRequest,
   forumCatergory,
   workplace,

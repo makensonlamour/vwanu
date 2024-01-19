@@ -17,6 +17,7 @@ describe("'community-join ' service", () => {
   const communityEndpoint = '/communities';
   const invitationEndpoint = '/community-invitation-request';
   const endpoint = '/community-join';
+ 
 
   let privateCommunity;
   let publicCommunity;
@@ -97,10 +98,8 @@ describe("'community-join ' service", () => {
     const user = testUsers[0];
 
     const join = await testServer
-      .post(endpoint)
-      .send({
-        CommunityId: publicCommunity.id,
-      })
+      .post(joinEndpoint)
+      .send({ CommunityId: publicCommunity.id })
       .set('authorization', user.accessToken);
 
     expect(join.body).toMatchObject({

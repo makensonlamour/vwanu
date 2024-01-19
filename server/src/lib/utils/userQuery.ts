@@ -23,11 +23,11 @@ export const OnlyInterests = (interest) =>
 export const notMemberOfCommunity = (communityId) => `(
   NOT EXISTS(
     SELECT 1 FROM 
-    "CommunityUsers" AS "CU"
-    LEFT JOIN "CommunityInvitationRequests" AS "CIR" ON "CIR"."guestId"="CU"."UserId"
+    "community_users" AS "CU"
+    LEFT JOIN "CommunityInvitationRequests" AS "CIR" ON "CIR"."guestId"="CU"."user_id"
     WHERE 
-   ("CU"."UserId"="User"."id" AND
-   "CU"."CommunityId"='${communityId}') 
+   ("CU"."user_id"="User"."id" AND
+   "CU"."community_id"='${communityId}') 
     OR (
     "CIR"."CommunityId"='${communityId}'  
     AND "CIR"."response" IS NULL) 

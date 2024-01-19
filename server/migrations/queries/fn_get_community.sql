@@ -40,17 +40,18 @@ BEGIN
     ) INTO v_is_public;
 
     -- Fetch the user's role if they are a member of the community
-    SELECT "CommunityRoleId", name INTO v_role_id, v_role_name
-    FROM "CommunityUsers" 
-    JOIN "CommunityRoles"  ON "CommunityRoles"."id" = "CommunityUsers"."CommunityRoleId"
-    WHERE "UserId" = p_user_id AND "CommunityId" = p_community_id;
+    SELECT community_role_id, name 
+    INTO v_role_id, v_role_name
+    FROM community_users 
+    JOIN "CommunityRoles"  ON "CommunityRoles"."id" = community_users.community_role_id
+    WHERE user_id = p_user_id AND community_id = p_community_id;
 
 
 	  -- Check if user is a member of the community
      SELECT EXISTS(
-        SELECT 1 FROM "CommunityUsers"
-        WHERE "UserId" = p_user_id 
-        AND "CommunityId" = p_community_id
+        SELECT 1 FROM community_users
+        WHERE user_id = p_user_id 
+        AND community_id = p_community_id
     ) INTO v_is_member;
     
     -- Fetch community if any of the conditions is met

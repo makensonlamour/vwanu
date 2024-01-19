@@ -26,19 +26,14 @@ export default (sequelize: any, DataTypes: any) => {
 
     static associate(models: any): void {
       CommunityBan.belongsTo(models.User);
-      CommunityBan.belongsTo(models.Community, {
-        foreignKey: {
-          allowNull: false,
-        },
-      });
-      CommunityBan.belongsTo(models.CommunityRoles);
+      CommunityBan.belongsTo(models.Community, {});
     }
   }
   CommunityBan.init(
     {
       user_id: {
         type: DataTypes.UUID,
-        primaryKey: true,
+        primaryKey: false,
         references: {
           model: 'Users',
           key: 'id',
@@ -48,7 +43,7 @@ export default (sequelize: any, DataTypes: any) => {
 
       community_id: {
         type: DataTypes.UUID,
-        primaryKey: true,
+        primaryKey: false,
         references: {
           model: 'Communities',
           key: 'id',
@@ -58,7 +53,7 @@ export default (sequelize: any, DataTypes: any) => {
 
       by_user_id: {
         type: DataTypes.UUID,
-        primaryKey: true,
+        primaryKey: false,
         references: {
           model: 'Users',
           key: 'id',
@@ -73,7 +68,7 @@ export default (sequelize: any, DataTypes: any) => {
 
       until: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: false,
       },
     },
 
@@ -82,6 +77,7 @@ export default (sequelize: any, DataTypes: any) => {
       modelName: 'CommunityBans',
       tableName: 'community_bans',
       underscored: true,
+      updatedAt: false,
     }
   );
   return CommunityBan;

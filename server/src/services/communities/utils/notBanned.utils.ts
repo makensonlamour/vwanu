@@ -1,12 +1,6 @@
-import fs from 'fs';
-import path from 'path';
 import { Id } from '@feathersjs/feathers';
 import { Sequelize } from 'sequelize';
-
-const notBannedQuery = fs.readFileSync(
-  path.join(__dirname, '../sql', 'notbanned.sql'),
-  'utf8'
-);
+import notBannedQuery from '../sql/notbanned.sql';
 
 export default (userId: Id, communityId: Id, sequelize: Sequelize) => {
   const query = notBannedQuery

@@ -64,6 +64,7 @@ import workplace from './workplace/workplace.service';
 import userWorkPlaces from './user-work-places/user-work-places.service';
 
 import communityBans from './community-bans/community-bans.service';
+import communityHistory from './community-history/community-history.service';
 
 export default function (app: Application): void {
   app.configure(search);
@@ -116,4 +117,5 @@ export default function (app: Application): void {
   app.configure(workplace);
   app.configure(userWorkPlaces);
   app.configure(communityBans);
+  app.configure(communityHistory);
 }

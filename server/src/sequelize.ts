@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable global-require */
 /* eslint-disable import/no-dynamic-require */
 
@@ -21,6 +22,15 @@ export default function (app: Application): void {
         ...dbs,
         seederStorge: 'sequelize',
       });
+
+  // handling sequelize query error
+  sequelize.query = async function (...args) {
+    try {
+      return await Sequelize.prototype.query.apply(this, args);
+    } catch (err) {
+      throw err;
+    }
+  };
 
   const oldSetup = app.setup;
   app.set('sequelizeClient', sequelize);

@@ -34,7 +34,7 @@ export const useAcceptInvitation = (queryKey, oldData, newData) => usePost(query
 export const useJoinCommunity = (queryKey, oldData, newData) => usePost(queryKey, `/community-join`, (oldData, newData));
 
 export const useGetAllMembersCommunity = (queryKey, enabled = true, communityId) =>
-  useLoadMore(queryKey, enabled, `/community-users?CommunityId=${communityId}&banned=false`);
+  useLoadMore(queryKey, enabled, `/community-users?community_id=${communityId}`);
 
 export const useGetCommunityRole = (queryKey, enabled = true) => useFetch(queryKey, enabled, `/community-role`);
 

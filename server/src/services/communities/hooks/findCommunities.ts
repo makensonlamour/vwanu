@@ -48,13 +48,13 @@ export default async (context: HookContext) => {
   const isMember = `(
   SELECT 
     json_build_object(
-     'id', "CU"."UserId",
+     'id', "CU".user_id,
      'role',"CR"."name",
      'roleId',"CR"."id"
     ) 
-    FROM "CommunityUsers" AS "CU"
-    INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
-    WHERE "CU"."CommunityId"="Community"."id" and "CU"."UserId"='${context.params.User.id}' AND "CU"."untilDate" IS NULL
+    FROM "community_users" AS "CU"
+    INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU".community_role_id
+    WHERE "CU".community_id="Community"."id" and "CU".user_id='${context.params.User.id}'
     LIMIT 1
   )`;
 
@@ -81,17 +81,30 @@ SELECT
       'roleId',"CR"."id"
     )
   ) 
-  FROM "CommunityUsers" AS "CU" 
-  INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
-  INNER JOIN "Users" AS "U" ON "CU"."UserId" = "U"."id"
-  WHERE "CU"."UserId"="U"."id" AND "CU"."CommunityId"="Community"."id" AND "CU"."untilDate" IS NULL
+  FROM "community_users" AS "CU" 
+  INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU".community_role_id
+  INNER JOIN "Users" AS "U" ON "CU".user_id="U"."id"
+  WHERE "CU".user_id="U"."id" AND "CU".community_id="Community"."id"
   LIMIT 10
   )`;
 
-  const isParticipant = `(
-    EXISTS (SELECT 1 FROM "CommunityUsers" AS "CU" WHERE "CU"."CommunityId"="Community"."id" AND "CU"."banned"=false AND 
-    "CU"."UserId"='${context.params.User.id}')
+  const isBanned = `(
+     EXISTS (
+      SELECT 1 FROM "community_bans" AS "cb"
+      WHERE "cb"."community_id"="Community"."id"  AND 
+      "cb"."user_id"='${context.params.User.id}' AND
+      "cb"."until" > NOW() 
+      )
   )`;
+
+  const isParticipant = `(
+    EXISTS (
+      SELECT 1 FROM "community_users" AS "cu" 
+      WHERE "cu"."community_id"="Community"."id"  AND 
+      "cu"."user_id"='${context.params.User.id}'
+      )
+  )`;
+
   const pendingInvitation = `(
     SELECT 
     json_agg(
@@ -114,9 +127,12 @@ SELECT
     ...where,
 
     [Op.and]: [
+      Sequelize.where(Sequelize.literal(isBanned), false),
+
       {
         [Op.or]: [
           { privacyType: { [Op.ne]: 'hidden' } },
+          //
           {
             [Op.and]: [
               { privacyType: 'hidden' },

@@ -1,65 +1,48 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('CommunityUsers', {
-      id: {
+    await queryInterface.createTable('community_users', {
+      // id: {
+      //   type: Sequelize.UUID,
+      //   defaultValue: Sequelize.UUIDV4,
+      //   primaryKey: true,
+      //   allowNull: false,
+      // },
+      community_role_id: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        primaryKey: true,
         allowNull: false,
-      },
-      CommunityRoleId: {
-        type: Sequelize.UUID,
         primaryKey: true,
-        allowNull: false,
         references: {
           model: 'CommunityRoles',
           key: 'id',
         },
       },
-      CommunityId: {
+      community_id: {
         type: Sequelize.UUID,
-        primaryKey: true,
         allowNull: false,
+        primaryKey: true,
         references: {
           model: 'Communities',
           key: 'id',
         },
         onDelete: 'CASCADE',
       },
-      UserId: {
+      user_id: {
         type: Sequelize.UUID,
-        primaryKey: true,
         allowNull: false,
+        primaryKey: true,
         references: {
           model: 'Users',
           key: 'id',
         },
       },
 
-      banned: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
-      bannedDate: {
-        type: Sequelize.DATE,
-        allowNull: true,
-      },
-
-      untilDate: {
-        type: Sequelize.DATE,
-        allowNull: true,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('CommunityUsers');
+    await queryInterface.dropTable('community_users');
   },
 };

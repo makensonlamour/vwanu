@@ -3,7 +3,7 @@ module.exports = {
     await queryInterface.createTable('community_bans', {
       user_id: {
         type: Sequelize.UUID,
-        primaryKey: true,
+        primaryKey: false,
         references: {
           model: 'Users',
           key: 'id',
@@ -13,7 +13,7 @@ module.exports = {
 
       community_id: {
         type: Sequelize.UUID,
-        primaryKey: true,
+        primaryKey: false,
         references: {
           model: 'Communities',
           key: 'id',
@@ -23,7 +23,7 @@ module.exports = {
 
       by_user_id: {
         type: Sequelize.UUID,
-        primaryKey: true,
+        primaryKey: false,
         references: {
           model: 'Users',
           key: 'id',
@@ -38,7 +38,7 @@ module.exports = {
 
       until: {
         type: Sequelize.DATE,
-        allowNull: true,
+        allowNull: false,
       },
 
       created_at: {
