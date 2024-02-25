@@ -1,4 +1,4 @@
-(
+export default `(
     SELECT 
     json_agg(
         json_build_object(
@@ -13,4 +13,4 @@
     ) FROM "CommunityInvitationRequests" AS "INV" 
     INNER JOIN "CommunityRoles" AS "R" ON "R"."id" = "INV"."CommunityRoleId"
     WHERE "INV"."CommunityId"="Community"."id" AND "INV"."guestId"=':userId' AND "INV"."response" IS NULL
-)
+)`

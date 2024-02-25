@@ -17,7 +17,12 @@ const notBannedQuery = `
 )
 `;
 
-console.log(notBannedQuery);
+
+const notBannedQuery = fs.readFileSync(
+  path.join(__dirname, '../sql', 'notbanned.sql'),
+  'utf8'
+);
+
 
 export default (userId: Id, communityId: Id, sequelize: Sequelize) => {
   const query = notBannedQuery
