@@ -17,6 +17,8 @@ const notBannedQuery = `
 )
 `;
 
+console.log(notBannedQuery);
+
 export default (userId: Id, communityId: Id, sequelize: Sequelize) => {
   const query = notBannedQuery
     .replace(/:userId/g, userId as string)
