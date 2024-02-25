@@ -1,12 +1,28 @@
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 import { Id } from '@feathersjs/feathers';
 import { Sequelize } from 'sequelize';
+
+// const notBannedQuery = fs.readFileSync(
+//   path.join(__dirname, '../sql', 'notBanned.sql'),
+//   'utf8'
+// );
+
+const notBannedQuery = `
+  NOT EXISTS(
+    SELECT 1
+    FROM community_bans
+    WHERE community_bans.community_id = ':communityId'
+    AND community_bans.user_id = ':userId'
+)
+`;
+
 
 const notBannedQuery = fs.readFileSync(
   path.join(__dirname, '../sql', 'notbanned.sql'),
   'utf8'
 );
+
 
 export default (userId: Id, communityId: Id, sequelize: Sequelize) => {
   const query = notBannedQuery
