@@ -42,6 +42,8 @@ import workplace from './workplace';
 import userWorkplace from './userWorkplace';
 import communityBans from './community-bans';
 import communityHistory from './community-history';
+import notificationsSettings from './notifications_settings';
+import UserNotificationsSettings from './user_notifications_settings';
 
 const tables = [
   call,
@@ -80,6 +82,8 @@ const tables = [
   forumCatergory,
   workplace,
   userWorkplace,
+  notificationsSettings,
+  UserNotificationsSettings,
 ];
 
 export default function (app: Application): void {
