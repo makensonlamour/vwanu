@@ -49,6 +49,10 @@ export const notificationSettingsSchema = object({
   }),
 });
 
+/**
+ * Represents the inferred type of the `notificationSettingsSchema`.
+ * This type defines the structure of the notification settings.
+ */
 export type NotificationSettingsInterface = z.infer<
   typeof notificationSettingsSchema
 >;

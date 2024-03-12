@@ -1,8 +1,10 @@
 
 import { Model } from 'sequelize';
-
 import { NotificationSettingsInterface } from '../schema/notifications_settings';
 
+/**
+ * Represents a notification setting in the database.
+ */
 export default (sequelize: any, DataTypes: any) => {
   class NotificationSetting
     extends Model<NotificationSettingsInterface>
@@ -12,6 +14,10 @@ export default (sequelize: any, DataTypes: any) => {
     notification_name: string;
     notification_description: string;
 
+    /**
+     * Establishes the association between NotificationSetting and User models.
+     * @param models - The models object containing the User model.
+     */
     static associate(models: any): void {
       NotificationSetting.belongsToMany(models.User, {
         through: 'user_notification_settings',
@@ -19,6 +25,7 @@ export default (sequelize: any, DataTypes: any) => {
       });
     }
   }
+
   NotificationSetting.init(
     {
       id: {
@@ -37,7 +44,6 @@ export default (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
     },
-
     {
       sequelize,
       modelName: 'NotificationSettings',
@@ -46,5 +52,6 @@ export default (sequelize: any, DataTypes: any) => {
       underscored: true,
     }
   );
+
   return NotificationSetting;
 };
