@@ -1,4 +1,5 @@
-CREATE TRIGGER tr_sync_community_participant_counts
-    AFTER INSERT OR DELETE ON community_users
+CREATE TRIGGER 
+tr_initial_community_assignement
+    AFTER UPDATE ON users
     FOR EACH ROW
     EXECUTE FUNCTION fn_initial_community_assignement();

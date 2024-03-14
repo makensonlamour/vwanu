@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION fn_initial_community_assignement()
 RETURNS TRIGGER
 AS $$
-DECLARE
+
     p_role uuid;
     user_city text;
     community_base_id uuid;
