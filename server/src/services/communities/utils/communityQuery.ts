@@ -3,7 +3,7 @@ import { Sequelize } from 'sequelize';
 
 import canUserDo from './canUserdo';
 
-import isMemberQuery from '../sql/member.sql';
+import isMemberQuery from '../sql/ismember.sql';
 
 import pendingInvitationQuery from '../sql/pendinginvitation.sql';
 

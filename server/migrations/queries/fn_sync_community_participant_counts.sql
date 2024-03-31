@@ -9,31 +9,31 @@ IF TG_OP = 'INSERT' THEN
 -- Increment the admin| member count. 
 	SELECT "name" from "CommunityRoles" 
 	INTO p_role
-	WHERE "CommunityRoles".id= NEW.community_role_id;
+	WHERE "CommunityRoles".id= NEW."CommunityRoleId";
     
 	IF p_role ='member' THEN
 		UPDATE "Communities"
 		SET "numMembers" = "numMembers" + 1
-		WHERE id = NEW.community_id;
+		WHERE id = NEW."CommunityId";
 	ELSIF p_role ='admin' THEN
 		UPDATE "Communities"
 		SET "numAdmins" = "numAdmins" + 1
-		WHERE id = NEW.community_id;
+		WHERE id = NEW."CommunityId";
 	END IF;
 	
 ELSIF TG_OP = 'DELETE' THEN
       -- Decrement the the admin| member count.
       SELECT "name" from "CommunityRoles" 
 	  INTO p_role
-	  WHERE "CommunityRoles".id= OLD.community_role_id;
+	  WHERE "CommunityRoles".id= OLD."CommunityRoleId";
 	  IF p_role ='member' THEN
       	 UPDATE "Communities"
          SET "numMembers" = "numMembers" - 1
-         WHERE id = OLD.community_id;
+         WHERE id = OLD."CommunityId";
       ELSIF p_role ='admin' THEN
 		UPDATE "Communities"
 		SET "numAdmins" = "numAdmins" - 1
-		WHERE id = OLD.community_id;
+		WHERE id = OLD."CommunityId";
    	END IF;
    END IF;
 RETURN null;

@@ -16,6 +16,8 @@ export class Communities extends Service {
   }
 
   async get(id: Id, params: Params) {
+    const { log } = console;
+
     const sequelize = this.app.get('sequelizeClient');
 
     try {
@@ -42,7 +44,30 @@ export class Communities extends Service {
 
       return Promise.resolve(community);
     } catch (e) {
-      throw new BadRequest(e.message);
+      if (e.message.includes('permission')) throw new BadRequest(e.message);
+      log({ message: e.message, stack: e.stack });
+      log(`error finding the  community with id ${id as string}`, e);
+      return Promise.reject(e);
     }
   }
+
+  // async find(params) {
+  //   const requesterId = params.User.id;
+  //   const sequelize = this.app.get('sequelizeClient');
+
+  //   try {
+  //     const [communities, met] = await sequelize.query(
+  //       `SELECT * FROM
+  //       ( SELECT * FROM "CommunityUsers" INNER JOIN "Users" ON "CommunityUsers"."UserId"= "Users".id ) a
+  //       INNER JOIN
+  //       (SELECT * FROM "Communities" WHERE "privacyType"<>'hidden' AND "id"<>a.id) b`
+  //     );
+
+  //     console.log(communities, met);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+
+  //   return Promise.resolve([]);
+  // }
 }

@@ -7,7 +7,6 @@ import {
   useUpdateCommunityUser,
   useDeleteCommunityUser,
 } from "../../../features/community/communitySlice";
-import { useCreateCommunityBan } from "../../../features/community/banSlice";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../../components/common/Loader";
 import { useQueryClient } from "react-query";
@@ -48,8 +47,6 @@ const MemberSettings = ({ data, isCreator = false }) => {
   const { id } = useParams();
   const sendInvitation = useSendInvitation(["community", "invitation"], undefined, undefined);
   const updateCommunityUser = useUpdateCommunityUser(["community", "update"], id, undefined, undefined);
-
-  const createCommunityBan = useCreateCommunityBan(["community_ban", "post"], undefined, undefined);
   const leaveCommunityUser = useDeleteCommunityUser(["community", "update"], id, undefined, undefined);
   const { data: roles } = useGetCommunityRole(["roles", "all"]);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,20 +78,14 @@ const MemberSettings = ({ data, isCreator = false }) => {
     }
   };
 
-  /**
-   *
-   * @param {string} userId | Id of the user you want to ban
-   * @param {string} communityId | id of the community you want to ban the user from
-   */
-  const handleKickBan = async (userId, communityId) => {
+  const handleKickBan = async (_id) => {
     setIsLoading();
     try {
       const dataObj = {
-        userId,
-        communityId,
+        banned: true,
+        id: _id,
       };
-      await createCommunityBan.mutateAsync(dataObj);
-      // await updateCommunityUser.mutateAsync(dataObj);
+      await updateCommunityUser.mutateAsync(dataObj);
       queryClient.invalidateQueries(["community", "members", id]);
       banSuccess();
     } catch (e) {
@@ -148,10 +139,8 @@ const MemberSettings = ({ data, isCreator = false }) => {
     <>
       <Toaster />
       <div className="mt-8">
-        {console.log({ m: data[0] })}
         {data?.length > 0 &&
           data?.map((member) => {
-            console.log({ member });
             return (
               <div key={member?.id} className="border border-gray-200 p-4">
                 <div className="flex justify-start items-center">
@@ -198,7 +187,7 @@ const MemberSettings = ({ data, isCreator = false }) => {
                           {member?.UserId !== user?.id && member?.CommunityRole?.name === "member" && (
                             <button
                               onClick={() => {
-                                handleKickBan(member?.UserId, member?.CommunityId);
+                                handleKickBan(member?.id);
                               }}
                               className="py-1 my-1 text-xs w-fit bg-secondary text-white px-2 mr-2 rounded-lg hover:bg-primary"
                             >

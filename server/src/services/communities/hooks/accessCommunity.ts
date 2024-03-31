@@ -34,7 +34,7 @@ export default async (context: HookContext) => {
   const { app } = context;
   const Sequelize = app.get('sequelizeClient');
   const query = `
-          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","C"."canInvite", "C"."canInPost","C"."canInUploadPhotos","C"."canInUploadDoc","C"."canInUploadVideo","C"."canMessageInGroup", "C"."haveDiscussionForum", "C"."numMembers", 
+          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","C"."canInvite", "C"."canInPost","C"."canInUploadPhotos","C"."canInUploadDoc","C"."canInUploadVideo","C"."canMessageInGroup", "C"."haveDiscussionForum", "C"."numMembers", "CU"."banned","CU"."bannedDate", 
           (SELECT 
             json_build_object(
             'id', "U"."id",
@@ -49,7 +49,7 @@ export default async (context: HookContext) => {
              'id', "CU"."UserId",
              'role',"CR"."name",
              'roleId',"CR"."id"
-              ) from community_users as "CU" 
+              ) from "CommunityUsers" as "CU" 
             INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
             WHERE "CU"."CommunityId"="C"."id" and "CU"."UserId"='${
               context.params.User.id
@@ -100,7 +100,7 @@ ${hasAccess(
               'name',"I"."name"
           )) as "Interests"
           FROM "Communities" AS "C" 
-          INNER JOIN community_users AS "CU" ON "CU"."CommunityId" = '${
+          INNER JOIN "CommunityUsers" AS "CU" ON "CU"."CommunityId" = '${
             context.id
           }'
           INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"

@@ -1,8 +1,8 @@
-export default `
+export default`
     EXISTS (
         SELECT 1
-        FROM community_users
+        FROM "CommunityUsers"
         WHERE "CommunityId" = ':communityId'
         AND "UserId" = ':userId'
     )
-`;
+`

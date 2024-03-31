@@ -10,7 +10,7 @@ export default (sequelize: any, DataTypes: any) => {
     id: number;
 
     static associate(models: any): void {
-      // Address.belongsTo(models.Street);
+      Address.belongsTo(models.Street);
       Address.belongsTo(models.City);
       Address.belongsTo(models.State);
       Address.belongsTo(models.Country);

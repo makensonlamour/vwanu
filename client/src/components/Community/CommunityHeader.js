@@ -189,12 +189,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                       <p className=" lg:px-0 py-2 flex items-center text-sm lg:text-md">
                         {"Organizer:"}
                         <span className="ml-4">
-                          {console.log({ communityData })}
-                          <img
-                            alt={communityData?.name}
-                            src={communityData?.creator?.profilePicture}
-                            className="mask mask-squircle w-8 h-8"
-                          />
+                          <img alt={communityData?.name} src={user?.profilePicture?.original} className="mask mask-squircle w-8 h-8" />
                         </span>
                       </p>
                       <div className="lg:hidden">
@@ -255,7 +250,6 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                         </div>
                       }
                     />
-
                     <Route
                       path={allTabs1[4]}
                       element={
@@ -276,9 +270,8 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                         </div>
                       }
                     />
-
                     {/* <Route path={allTabs1[5]} element={<div>Send Messages</div>} /> */}
-                    {(communityData?.isMember?.role === "admin" || communityData?.isMember?.role === "moderator") && (
+                    {(communityData?.IsMember?.role === "admin" || communityData?.IsMember?.role === "moderator") && (
                       <Route
                         path={allTabs1[6]}
                         element={

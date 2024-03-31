@@ -1,17 +1,17 @@
 version: '3.8'
 services:
-  # web:
-  #   container_name: vwanu_web_stage
-  #   image: vwanu_web:staging-nginx
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile.nginx
-  #     args:
-  #       - REACT_APP_API_URL=${SERVER_ADDRESS}
-  #       - REACT_API_URL=${SERVER_ADDRESS}
-  #   ports:
-  #     - '3000:3000'
-  #   restart: unless-stopped
+  web:
+    container_name: vwanu_web_stage
+    image: vwanu_web:staging-nginx
+    build:
+      context: ./client
+      dockerfile: Dockerfile.nginx
+      args:
+        - REACT_APP_API_URL=${SERVER_ADDRESS}
+        - REACT_API_URL=${SERVER_ADDRESS}
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
   api:
     env_file:
       - .env

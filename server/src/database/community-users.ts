@@ -3,6 +3,10 @@
 import { Model } from 'sequelize';
 
 export interface CommunityUsersInterface {
+  id: string;
+  banned: boolean;
+  bannedDate: Date;
+  untilDate: Date;
   CommunityId: string;
   UserId: string;
   CommunityRoleId: string;
@@ -12,11 +16,19 @@ export default (sequelize: any, DataTypes: any) => {
     extends Model<CommunityUsersInterface>
     implements CommunityUsersInterface
   {
+    id: string;
+
     CommunityId: string;
 
     UserId: string;
 
     CommunityRoleId: string;
+
+    banned: boolean;
+
+    bannedDate: Date;
+
+    untilDate: Date;
 
     static associate(models: any): void {
       CommunityUsers.belongsTo(models.User, {
@@ -39,8 +51,15 @@ export default (sequelize: any, DataTypes: any) => {
   }
   CommunityUsers.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+
       CommunityRoleId: {
         type: DataTypes.UUID,
+        primaryKey: true,
         allowNull: false,
         references: {
           model: 'CommunityRoles',
@@ -49,8 +68,8 @@ export default (sequelize: any, DataTypes: any) => {
       },
       CommunityId: {
         type: DataTypes.UUID,
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
         references: {
           model: 'Communities',
           key: 'id',
@@ -58,21 +77,32 @@ export default (sequelize: any, DataTypes: any) => {
       },
       UserId: {
         type: DataTypes.UUID,
-        allowNull: false,
         primaryKey: true,
+        allowNull: false,
         references: {
           model: 'Users',
           key: 'id',
         },
+      },
+
+      banned: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      bannedDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+
+      untilDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
     },
 
     {
       sequelize,
       modelName: 'CommunityUsers',
-      tableName: 'community_users',
-      underscored: true,
-      updatedAt: false,
     }
   );
   return CommunityUsers;

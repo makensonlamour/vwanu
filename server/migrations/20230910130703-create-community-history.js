@@ -3,7 +3,7 @@ module.exports = {
     await queryInterface.createTable('community_history', {
       user_id: {
         type: Sequelize.UUID,
-        primaryKey: false,
+        primaryKey: true,
         references: {
           model: 'Users',
           key: 'id',
@@ -13,7 +13,7 @@ module.exports = {
 
       community_id: {
         type: Sequelize.UUID,
-        primaryKey: false,
+        primaryKey: true,
         references: {
           model: 'Communities',
           key: 'id',

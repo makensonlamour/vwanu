@@ -13,6 +13,7 @@ export default {
       (context) => {
         context.params.query = {
           ...context.params.query,
+          untilDate: null,
         };
       },
       addAssociation({
@@ -37,7 +38,7 @@ export default {
     get: [],
     create: [],
     update: [],
-    patch: [],
+    patch: [OwnerOrAuthorized],
     remove: [OwnerOrAuthorized],
   },
 

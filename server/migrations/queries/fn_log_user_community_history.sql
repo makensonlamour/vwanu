@@ -3,11 +3,11 @@ RETURNS TRIGGER AS $$
 BEGIN
   IF (TG_OP = 'INSERT') THEN
     INSERT INTO community_history (user_id, community_id, joined, created_at)
-    VALUES (NEW.user_id, NEW.community_id, true, CURRENT_TIMESTAMP);
+    VALUES (NEW."UserId", NEW."CommunityId", true, CURRENT_TIMESTAMP);
     RETURN NEW;
   ELSIF (TG_OP = 'DELETE') THEN
-    INSERT INTO community_history (user_id, community_id, joined, created_at)
-    VALUES (OLD.user_id, OLD.community_id, false, CURRENT_TIMESTAMP);
+    INSERT INTO CommunityHistory (user_id, community_id, joined, created_at)
+    VALUES (OLD."UserId", OLD."CommunityId", false, CURRENT_TIMESTAMP);
     RETURN OLD;
   END IF;
 END;

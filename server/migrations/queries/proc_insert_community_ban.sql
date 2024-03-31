@@ -14,8 +14,8 @@ BEGIN
     SELECT name
     INTO v_role 
     FROM "CommunityRoles" AS roles
-    INNER JOIN community_users ON community_users.community_role_id = roles.id
-    WHERE user_id = p_by_user_id;
+    INNER JOIN "CommunityUsers" ON "CommunityUsers"."CommunityRolesId" = roles.id
+    WHERE "UserId" = p_by_user_id;
     
     IF v_role IS NULL THEN
         RAISE EXCEPTION 'Error getting the role of the user trying to insert a ban';
@@ -27,7 +27,7 @@ BEGIN
     
     -- Check if a ban already exists for this user and community with 'until' date in the future
     SELECT until INTO v_existing_ban_until
-    FROM community_bans
+    FROM CommunityBans
     WHERE user_id = p_user_id AND community_id = p_community_id AND until > NOW();
     
     IF v_existing_ban_until IS NOT NULL THEN
@@ -45,10 +45,8 @@ BEGIN
     END IF;
     
     -- Insert the new ban
-    INSERT INTO community_bans (user_id, community_id, by_user_id, comment, until, created_at)
-    VALUES (p_user_id, p_community_id, p_by_user_id, p_comment, p_until, CURRENT_TIMESTAMP);
-
-    Raise notice 'User % banned from community %', p_user_id, p_community_id;
+    INSERT INTO community_bans (user_id, community_id, by_user_id, comment, until)
+    VALUES (p_user_id, p_community_id, p_by_user_id, p_comment, p_until);
     
 END;
 $$;
