@@ -305,3 +305,36 @@ export function getElementById(array, id) {
 
   return arrayTemp[0];
 }
+
+//function to handle storage change
+export function handleStorageChange() {
+  // Remove the value from localStorage when the browser is closed
+  if (!document.visibilityState) {
+    localStorage.removeItem("lastActiveTime");
+    localStorage.removeItem("rememberMe");
+    localStorage.removeItem("feathers-jwt");
+  }
+}
+
+// function to handle user activity
+export function handleUserActivity() {
+  // Update the last active time in localStorage
+  localStorage.setItem("lastActiveTime", Date.now());
+}
+
+// function to check inactivity
+export function checkInactivity() {
+  const lastActiveTime = localStorage.getItem("lastActiveTime");
+  if (lastActiveTime) {
+    const currentTime = Date.now();
+    const timeDifference = currentTime - parseInt(lastActiveTime, 10);
+    const thirtyMinutesInMillis = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+    if (timeDifference >= thirtyMinutesInMillis) {
+      // Remove the value from localStorage after 30 minutes of inactivity
+      localStorage.removeItem("lastActiveTime");
+      localStorage.removeItem("rememberMe");
+      localStorage.removeItem("feathers-jwt");
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SidebarProvider } from "./context/BottomMenuContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -9,6 +9,8 @@ import theme from "./theme";
 import Views from "./layouts/Views.js";
 import useAuthContext from "./hooks/useAuthContext";
 import useCall from "./hooks/useCall";
+import { checkInactivity, handleStorageChange } from "./helpers";
+import { handleUserActivity } from "./helpers/index";
 
 const App = () => {
   const { authIsReady } = useAuthContext();
@@ -36,6 +38,33 @@ const App = () => {
       },
     },
   });
+
+  // handle remember me when closed the browser or after 30 minutes of inactivity
+  useEffect(() => {
+    handleStorageChange();
+
+    handleUserActivity();
+
+    checkInactivity();
+
+    // Add event listeners
+    window.addEventListener("beforeunload", handleStorageChange);
+    window.addEventListener("visibilitychange", handleStorageChange);
+    document.addEventListener("mousemove", handleUserActivity);
+    document.addEventListener("keydown", handleUserActivity);
+
+    // Check for inactivity periodically
+    const inactivityInterval = setInterval(checkInactivity, 60000); // Check every minute
+
+    return () => {
+      // Clean up event listeners and interval
+      window.removeEventListener("beforeunload", handleStorageChange);
+      window.removeEventListener("visibilitychange", handleStorageChange);
+      document.removeEventListener("mousemove", handleUserActivity);
+      document.removeEventListener("keydown", handleUserActivity);
+      clearInterval(inactivityInterval);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
