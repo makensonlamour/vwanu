@@ -308,8 +308,10 @@ export function getElementById(array, id) {
 
 //function to handle storage change
 export function handleStorageChange() {
+  // Remove the value if remember me is false
+  console.log("visibility", document.visibilityState);
   // Remove the value from localStorage when the browser is closed
-  if (!document.visibilityState) {
+  if (document.visibilityState === "hidden" && localStorage.getItem("rememberMe") !== "true") {
     localStorage.removeItem("lastActiveTime");
     localStorage.removeItem("rememberMe");
     localStorage.removeItem("feathers-jwt");
@@ -317,24 +319,39 @@ export function handleStorageChange() {
 }
 
 // function to handle user activity
-export function handleUserActivity() {
+export function handleUserActivity(inactivityTimeoutRef) {
+  // Reset the inactivity timeout
+  clearTimeout(inactivityTimeoutRef.current);
+  const rememberMe = localStorage.getItem("rememberMe") === "true";
+  if (!rememberMe) {
+    inactivityTimeoutRef.current = setTimeout(() => {
+      // Remove the value from localStorage after 30 minutes of inactivity
+      localStorage.removeItem("lastActiveTime");
+      // You can remove other values from localStorage here
+    }, 30 * 60 * 1000); // 30 minutes in milliseconds
+  }
+
   // Update the last active time in localStorage
   localStorage.setItem("lastActiveTime", Date.now());
 }
 
 // function to check inactivity
 export function checkInactivity() {
-  const lastActiveTime = localStorage.getItem("lastActiveTime");
-  if (lastActiveTime) {
-    const currentTime = Date.now();
-    const timeDifference = currentTime - parseInt(lastActiveTime, 10);
-    const thirtyMinutesInMillis = 30 * 60 * 1000; // 30 minutes in milliseconds
+  const rememberMe = localStorage.getItem("rememberMe") === "true";
+  if (!rememberMe) {
+    const lastActiveTime = localStorage.getItem("lastActiveTime");
+    if (lastActiveTime) {
+      const currentTime = Date.now();
+      const timeDifference = currentTime - parseInt(lastActiveTime, 10);
+      const thirtyMinutesInMillis = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-    if (timeDifference >= thirtyMinutesInMillis) {
-      // Remove the value from localStorage after 30 minutes of inactivity
-      localStorage.removeItem("lastActiveTime");
-      localStorage.removeItem("rememberMe");
-      localStorage.removeItem("feathers-jwt");
+      if (timeDifference >= thirtyMinutesInMillis) {
+        // Remove the value from localStorage after 30 minutes of inactivity
+        localStorage.removeItem("lastActiveTime");
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("feathers-jwt");
+        // You can remove other values from localStorage here
+      }
     }
   }
 }

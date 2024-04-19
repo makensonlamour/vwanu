@@ -33,6 +33,7 @@ const VerifyEmailScreen = () => {
   return (
     <>
       <div className="">
+        {console.log(verifyEmail, verifyEmail?.error?.response)}
         <div className="mt-10 mx-0 md:mx-4">
           {isLoading && <Loader /> ? null : verifyEmail.isSuccess ? (
             <div className="bg-success shadow-3xl rounded-3xl px-2 md:px-4  py-16 justify-center m-auto md:w-2/3 lg:w-2/5">

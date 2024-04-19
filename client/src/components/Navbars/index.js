@@ -81,6 +81,8 @@ const Navbar = ({ user, countMessage }) => {
 
   function handleLogout() {
     deleteToken("feathers-jwt");
+    localStorage.removeItem("lastActiveTime");
+    localStorage.removeItem("rememberMe");
     logout();
   }
 
