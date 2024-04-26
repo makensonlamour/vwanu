@@ -39,16 +39,6 @@ const App = () => {
     },
   });
 
-  // useEffect(() => {
-  //   function handleUnload(event) {
-  //     event.preventDefault();
-  //     console.log("about to exit");
-  //     return (event.returnValue = "");
-  //   }
-
-  //   window.addEventListener("beforeunload", handleUnload, { capture: true });
-  // }, []);
-
   const inactivityTimeoutRef = useRef(null);
 
   // handle remember me when closed the browser or after 30 minutes of inactivity
@@ -78,15 +68,6 @@ const App = () => {
       clearTimeout(inactivityTimeoutRef.current);
     };
   }, []);
-
-  // useEffect(() => {
-  //   const rememberMe = localStorage.getItem("rememberMe") === "true";
-  //   if (!rememberMe && !localStorage.getItem("lastActiveTime")) {
-  //     // Set the last active time if rememberMe is not set and lastActiveTime is not already set
-  //     // localStorage.setItem("lastActiveTime", Date.now());
-  //     console.log("windows reload");
-  //   }
-  // }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

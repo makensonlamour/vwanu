@@ -12,9 +12,8 @@ function FormTelephone({ name, label, className, testId, countryCode, ...otherPr
   return (
     <>
       <div className="form-control">
-        <label className="label">
-          <span className="label-text text-md font-semibold -mb-2 mt-4">{label}</span>
-        </label>
+        <label className="label">{label && <span className="label-text text-md font-semibold -mb-2 mt-4">{label}</span>}</label>
+
         <PhoneInput
           international
           countryCallingCodeEditable={false}

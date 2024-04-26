@@ -10,13 +10,13 @@ const useAuth = () => {
   const [isLoading, setLoading] = useState(false);
   const { dispatch, Types } = useAuthContext();
 
-  const signup = async ({ firstName, lastName, email, rememberMe, password, passwordConfirmation, termOfUse }) => {
+  const signup = async ({ firstName, lastName, email, phone, rememberMe, password, passwordConfirmation, termOfUse }) => {
     setError(null);
     setLoading(true);
     console.log("RememberMe", rememberMe);
     try {
       //signup the user
-      const res = await register({ firstName, lastName, email, password, passwordConfirmation, termOfUse });
+      const res = await register({ firstName, lastName, email, phone, password, passwordConfirmation, termOfUse });
 
       //if success try login the user
       console.log(res);

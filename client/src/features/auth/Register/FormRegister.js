@@ -5,13 +5,14 @@ import useAuth from "../../../hooks/useAuth";
 // Core components
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
-import { Field, Form, Checkbox, Submit } from "../../../components/form";
+import { Field, Form, Telephone, Checkbox, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
 
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required().min(3).label("First Name"),
   lastName: Yup.string().required().min(3).label("Last Name"),
   email: Yup.string().required().min(6).email().label("Email"),
+  phone: Yup.string().nullable().label("Telephone"),
   password: Yup.string().required().min(8).label("Password"),
   passwordConfirmation: Yup.string()
     .required()
@@ -23,6 +24,7 @@ const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
+  phone: "",
   password: "",
   passwordConfirmation: "",
   termOfUse: false,
@@ -109,6 +111,12 @@ const FormRegister = () => {
           containerClassName="my-4"
           className="mt-1 lg:mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="email-error-message"
+        />
+        <Telephone
+          label=""
+          name="phone"
+          containerClassName="my-4"
+          className="mt-1 lg:mb-2 lg:mt-0 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
         />
         <Field
           required

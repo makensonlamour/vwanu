@@ -309,7 +309,6 @@ export function getElementById(array, id) {
 //function to handle storage change
 export function handleStorageChange() {
   // Remove the value if remember me is false
-  console.log("visibility", document.visibilityState);
   // Remove the value from localStorage when the browser is closed
   if (document.visibilityState === "hidden" && localStorage.getItem("rememberMe") !== "true") {
     localStorage.removeItem("lastActiveTime");
