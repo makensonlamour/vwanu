@@ -13,7 +13,7 @@ import { checkInactivity, handleStorageChange } from "./helpers";
 import { handleUserActivity } from "./helpers/index";
 
 const App = () => {
-  const { authIsReady } = useAuthContext();
+  const { authIsReady, user } = useAuthContext();
   const { myVideoRef, userVideoRef, call } = useCall();
 
   // peer?.on("call", (call) => {
@@ -43,25 +43,25 @@ const App = () => {
 
   // handle remember me when closed the browser or after 30 minutes of inactivity
   useEffect(() => {
-    handleStorageChange();
+    handleStorageChange(user);
 
-    handleUserActivity(inactivityTimeoutRef);
+    handleUserActivity(inactivityTimeoutRef, user);
 
-    checkInactivity();
+    checkInactivity(user);
 
     // Add event listeners
-    window.addEventListener("beforeunload", handleStorageChange, { capture: true });
-    window.addEventListener("visibilitychange", handleStorageChange);
+    // window.addEventListener("beforeunload", handleStorageChange, { capture: true });
+    // window.addEventListener("visibilitychange", handleStorageChange);
     document.addEventListener("mousemove", handleUserActivity);
     document.addEventListener("keydown", handleUserActivity);
 
     // Check for inactivity periodically
-    const inactivityInterval = setInterval(checkInactivity, 60000); // Check every minute
+    const inactivityInterval = setInterval(checkInactivity(user), 60000); // Check every minute
 
     return () => {
       // Clean up event listeners and interval
       // window.removeEventListener("beforeunload", handleStorageChange, { capture: true });
-      window.removeEventListener("visibilitychange", handleStorageChange);
+      // window.removeEventListener("visibilitychange", handleStorageChange);
       document.removeEventListener("mousemove", handleUserActivity);
       document.removeEventListener("keydown", handleUserActivity);
       clearInterval(inactivityInterval);

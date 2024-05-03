@@ -22,9 +22,16 @@ const LayoutUser = () => {
   const navigate = useNavigate();
   const { isSidebarOpen } = useContext(BottomMenuContext);
 
+  const email = localStorage.getItem("email");
+
   if (!user) {
     // deleteToken();
-    navigate(routesPath.LOGIN, { from: location.pathname });
+    console.log(email);
+    if (email !== "" && email !== undefined) {
+      navigate(routesPath.LOCKSCREEN, { from: location.pathname });
+    } else {
+      navigate(routesPath.LOGIN, { from: location.pathname });
+    }
   }
 
   return (

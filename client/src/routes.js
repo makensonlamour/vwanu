@@ -28,6 +28,7 @@ import PrivacyPolicy from "./pages/Policies/PrivacyPolicy";
 import CommunityGuidelines from "./pages/Policies/CommunityGuidelines";
 import TestSingleComponents from "./pages/TestSingleComponents/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
+import Lockscreen from "./pages/Lockscreen/Lockscreen";
 
 //define access roles
 let role = {
@@ -44,6 +45,12 @@ let routes = [
     path: routesPath.LOGIN,
     name: "Login",
     element: Login,
+    access: role.PUBLIC,
+  },
+  {
+    path: routesPath.LOCKSCREEN,
+    name: "Lockscreen",
+    element: Lockscreen,
     access: role.PUBLIC,
   },
   {

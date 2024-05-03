@@ -83,6 +83,8 @@ const Navbar = ({ user, countMessage }) => {
     deleteToken("feathers-jwt");
     localStorage.removeItem("lastActiveTime");
     localStorage.removeItem("rememberMe");
+    localStorage.removeItem("email");
+    localStorage.removeItem("profilePicture");
     logout();
   }
 

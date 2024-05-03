@@ -8,6 +8,12 @@ export const register = (credentials) => api.post("/users", credentials);
 
 export const useVerifyEmail = (queryKey, oldData, newData) => usePost(queryKey, `/authmanagement`, (oldData, newData));
 
+export const useVerifyPhone = (queryKey, oldData, newData) => usePost(queryKey, `/`, (oldData, newData));
+
+export const useSendOtpPhone = (queryKey, oldData, newData) => usePost(queryKey, `/`, (oldData, newData));
+
+export const useSendEmailVerification = (queryKey, oldData, newData) => usePost(queryKey, `/authmanagement`, (oldData, newData));
+
 export const useResetPassword = (queryKey, oldData, newData) => usePost(queryKey, `/authmanagement`, (oldData, newData));
 
 export const useForgotPassword = (queryKey, oldData, newData) => usePost(queryKey, "/authmanagement", (oldData, newData));
