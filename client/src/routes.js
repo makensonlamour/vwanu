@@ -22,6 +22,7 @@ import ViewForum from "./pages/Forum/ViewForum";
 import ForumList from "./pages/Forum/ForumList";
 import PreviewPhoto from "./pages/NewsFeed/PreviewPhoto";
 import Notification from "./pages/Notification/Notification";
+import NotificationSetting from "./pages/Notification/NotificationSetting";
 import CallScreen from "./pages/Call/CallScreen";
 import TermsConditions from "./pages/Policies/TermsConditions";
 import PrivacyPolicy from "./pages/Policies/PrivacyPolicy";
@@ -190,6 +191,12 @@ let routes = [
     path: routesPath.NOTIFICATIONS,
     name: "Notifications",
     element: Notification,
+    access: role.USER,
+  },
+  {
+    path: routesPath.NOTIFICATIONS_SETTINGS,
+    name: "Notifications Settings",
+    element: NotificationSetting,
     access: role.USER,
   },
   {

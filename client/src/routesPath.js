@@ -43,6 +43,7 @@ let routesPath = {
   VOICE_CALL: "/call",
   VIDEO_CALL: "/general-settings",
   NOTIFICATIONS: "/notifications",
+  NOTIFICATIONS_SETTINGS: "/notifications-settings",
   TEST_PAGE: "/test",
   TERMS_CONDITIONS: "/terms-conditions",
   PRIVACY_POLICY: "privacy-policy",
