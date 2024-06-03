@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
 import * as Yup from "yup";
 import useAuth from "../../../hooks/useAuth";
-import { getCountryCallingCode, formatPhoneNumber } from "react-phone-number-input";
+import { useGetCountry } from "../../address/addressSlice";
+import { getValueFromList } from "../../../helpers";
 
 // Core components
 import { alertService } from "../../../components/common/Alert/Services";
@@ -38,6 +39,7 @@ const FormRegister = () => {
   const { isLoading, error, signup } = useAuth();
   const addPhone = AddPhone(["user", "me"], undefined, undefined);
   const [countryC, setCountryC] = useState("");
+  const { data: countryList } = useGetCountry(["country", "all"], true);
 
   function reloadPage() {
     window.location.reload();
@@ -46,9 +48,9 @@ const FormRegister = () => {
   const handleRegister = async (credentials) => {
     trigger = true;
     try {
-      const code = getCountryCallingCode(countryC);
+      const idCode = getValueFromList(countryList, countryC, "id");
       // console.log("credentials", formatPhoneNumber(credentials?.phone), code, "+" + countryC);
-      const phoneData = { phoneNumber: formatPhoneNumber(credentials.phone), countryCode: code };
+      const phoneData = { phoneNumber: credentials.phone, countryCode: idCode };
       // console.log("phoneData", phoneData);
       await signup(credentials);
       // alertService.error(error, { autoClose: true });
