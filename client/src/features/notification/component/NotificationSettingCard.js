@@ -1,33 +1,127 @@
 import React, { useState } from "react";
+import Switch from "react-switch";
 
-const NotificationSettingCard = () => {
-  const [isNotif, SetIsNotif] = useState(false);
+const NotificationSettingsCard = () => {
+  const [notifications, setNotifications] = useState({
+    disableAll: false,
+    settings: {
+      profile: { normal: true, email: false, sms: false },
+      message: { normal: true, email: false, sms: false },
+      post: { normal: true, email: false, sms: false },
+      comment: { normal: true, email: false, sms: false },
+      reaction: { normal: true, email: false, sms: false },
+      forum: { normal: true, email: false, sms: false },
+      community: { normal: true, email: false, sms: false },
+      friend: { normal: true, email: false, sms: false },
+      blog: { normal: true, email: false, sms: false },
+    },
+  });
+
+  const handleToggle = (category, type) => {
+    setNotifications((prevState) => ({
+      ...prevState,
+      settings: {
+        ...prevState.settings,
+        [category]: {
+          ...prevState.settings[category],
+          [type]: !prevState.settings[category][type],
+        },
+      },
+    }));
+  };
+
+  const handleDisableAll = () => {
+    setNotifications((prevState) => ({
+      ...prevState,
+      disableAll: !prevState.disableAll,
+    }));
+  };
+
+  const renderSwitch = (category, type) => (
+    <Switch
+      onChange={() => handleToggle(category, type)}
+      checked={notifications.settings[category][type]}
+      disabled={notifications.disableAll}
+    />
+  );
+
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md max-w-sm">
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-blue-500 font-semibold">Profile</span>
-        <div className="flex items-center">
-          <span className="text-gray-600 mr-2">Notification</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input onChange={() => SetIsNotif(!isNotif)} type="checkbox" className="sr-only peer" />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
+    <div className="max-w-4xl mx-auto p-4 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold mb-4">Notification Preferences</h2>
+      <div className="mb-4">
+        <label className="flex items-center">
+          <input type="checkbox" checked={notifications.disableAll} onChange={handleDisableAll} className="mr-2" />
+          <span>Do Not Disturb</span>
+        </label>
       </div>
-      {!isNotif && (
-        <div className="flex items-center mb-4">
-          <label className="mr-2">
-            <input type="checkbox" className="mr-1" />
-            Email
-          </label>
-          <label>
-            <input type="checkbox" className="mr-1" />
-            SMS
-          </label>
-        </div>
-      )}
+      <table className="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th className="w-1/4 px-4 py-2"> </th>
+            <th className="w-1/4 px-4 py-2">Normal</th>
+            <th className="w-1/4 px-4 py-2">Email</th>
+            <th className="w-1/4 px-4 py-2">Sms</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="border px-4 py-2">Profile notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("profile", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("profile", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("profile", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Message notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("message", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("message", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("message", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Post notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("post", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("post", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("post", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Comment notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("comment", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("comment", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("comment", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Reaction notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("reaction", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("reaction", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("reaction", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Forum notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("forum", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("forum", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("forum", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Community notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("community", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("community", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("community", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Friend notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("friend", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("friend", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("friend", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Blog notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("blog", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("blog", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("blog", "sms")}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default NotificationSettingCard;
+export default NotificationSettingsCard;
