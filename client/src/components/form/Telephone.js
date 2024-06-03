@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -7,7 +8,7 @@ import { useFormikContext } from "formik";
 import Error from "./Error";
 
 function FormTelephone({ name, label, labelButton, className, testId, countryCode, setCountryCode, ...otherProps }) {
-  const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
+  const { values, setFieldTouched, setFieldValue, errors, touched } = useFormikContext();
 
   return (
     <>
@@ -23,13 +24,14 @@ function FormTelephone({ name, label, labelButton, className, testId, countryCod
 
         <PhoneInput
           international
+          withCountryCallingCode={false}
           countryCallingCodeEditable={false}
           onCountryChange={(e) => setCountryCode(e)}
           defaultCountry={countryCode ? countryCode : ""}
           className={"input first:bg-inherit first:border-none " + className}
           value={values[name]}
-          onBlur={() => setFieldTouched(name)}
-          onChange={handleChange(name)}
+          onBlur={() => setFieldTouched(name, true)}
+          onChange={(value) => setFieldValue(name, value || "")}
           {...otherProps}
         />
         <Error testId={testId} error={errors[name]} visible={touched[name]} />

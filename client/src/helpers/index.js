@@ -140,6 +140,15 @@ export function assignValueCountries(obj) {
   return array;
 }
 
+export function getValueFromList(objects, initials, returnKey) {
+  for (let obj of objects) {
+    if (obj.initials === initials) {
+      return obj[returnKey];
+    }
+  }
+  return null;
+}
+
 export function assignValueStates(obj) {
   if (obj?.length === 0) return;
   const array = [];

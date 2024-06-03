@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import * as Yup from "yup";
 import useAuth from "../../../hooks/useAuth";
-import { getCountryCallingCode } from "react-phone-number-input";
+import { getCountryCallingCode, formatPhoneNumber } from "react-phone-number-input";
 
 // Core components
 import { alertService } from "../../../components/common/Alert/Services";
@@ -39,21 +39,21 @@ const FormRegister = () => {
   const addPhone = AddPhone(["user", "me"], undefined, undefined);
   const [countryC, setCountryC] = useState("");
 
-  // function reloadPage() {
-  //   window.location.reload();
-  // }
+  function reloadPage() {
+    window.location.reload();
+  }
 
   const handleRegister = async (credentials) => {
     trigger = true;
     try {
       const code = getCountryCallingCode(countryC);
-      console.log("credentials", code, "+" + countryC);
-      const phoneData = { phoneNumber: credentials.phone, countryCode: "+" + code };
-      console.log("phoneData", phoneData);
+      // console.log("credentials", formatPhoneNumber(credentials?.phone), code, "+" + countryC);
+      const phoneData = { phoneNumber: formatPhoneNumber(credentials.phone), countryCode: code };
+      // console.log("phoneData", phoneData);
       await signup(credentials);
       // alertService.error(error, { autoClose: true });
       await addPhone.mutateAsync(phoneData);
-      // reloadPage();
+      reloadPage();
     } catch (e) {
       console.log("error", e);
       // if (e.response.status === 400) {

@@ -14,7 +14,7 @@ import { FaUserAlt, FaBlog, FaUserEdit } from "react-icons/fa";
 import { BiUserCircle, BiMessageDetail } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
 import { CgMenuLeft } from "react-icons/cg";
-import { MdOutlinePolicy } from "react-icons/md";
+import { MdOutlinePolicy, MdOutlineSettings } from "react-icons/md";
 import { BottomMenuContext } from "../../context/BottomMenuContext";
 import FriendsPreview from "./Friends/FriendsPreview";
 import NotificationPreview from "./Notification/NotificationPreview";
@@ -68,6 +68,11 @@ const Navbar = ({ user, countMessage }) => {
       title: "Community Guideline",
       icon: <MdOutlinePolicy style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
       path: "../../community-guidelines",
+    },
+    {
+      title: "Settings",
+      icon: <MdOutlineSettings style={{ paddingRight: "0.5rem" }} size="30px" className="" />,
+      path: "../../notifications-settings",
     },
   ];
 

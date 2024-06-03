@@ -109,12 +109,12 @@ const FormUploadPhoto = ({ user, hideViewer, getImg }) => {
                 highlight={true}
                 autoCropArea={0.8}
                 rotatable={false}
-                zoomable={false}
+                zoomable={true}
                 background={false}
-                zoomOnTouch={false}
-                zoomOnWheel={false}
+                zoomOnTouch={true}
+                zoomOnWheel={true}
                 cropBoxMovable={true}
-                cropBoxResizable={false}
+                cropBoxResizable={true}
                 toggleDragModeOnDblclick={false}
                 initialAspectRatio={1 / 1}
                 aspectRatio={1 / 1}
