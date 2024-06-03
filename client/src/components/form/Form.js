@@ -5,7 +5,7 @@ function FormWrapper({ initialValues, onSubmit, validationSchema, children, clas
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema} onKeyDown={onSubmit}>
       {() => (
-        <div role="form" className={unstyle ? " " : " lg:px-10 lg:pt-5 lg:pb-5 card " + className} {...otherProps}>
+        <div role="form" className={unstyle ? " " + className : " lg:px-10 lg:pt-5 lg:pb-5 card " + className} {...otherProps}>
           {children}
         </div>
       )}

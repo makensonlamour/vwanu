@@ -5,6 +5,7 @@ let routesPath = {
   LOGIN: "/login",
   REGISTER: "/register",
   LOGOUT: "/login",
+  LOCKSCREEN: "/lockscreen",
   FORGOT_PASSWORD: "/forgot-password",
   FORGOT_PASSWORD_SUCCESS: "/forgot-password-success",
   VERIFY_EMAIL: "/verify-email/:activationKey",

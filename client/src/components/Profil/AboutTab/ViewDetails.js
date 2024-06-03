@@ -2,9 +2,22 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import routesPath from "../../../routesPath";
+import toast, { Toaster } from "react-hot-toast";
 import { useUpdateUser } from "../../../features/user/userSlice";
 import { GrView } from "react-icons/gr";
 import { BiHide } from "react-icons/bi";
+import { useSendEmailVerification } from "../../../features/auth/authSlice";
+
+//Functions for notification after actions
+const sendEmailSuccess = () =>
+  toast.success("Email Verification resent successfully!", {
+    position: "top-center",
+  });
+
+const sendEmailError = () =>
+  toast.error("Sorry. Error on sending Email Verification!", {
+    position: "top-center",
+  });
 
 const ViewDetails = ({ title, user, substabs }) => {
   const userMe = useOutletContext();
@@ -13,6 +26,7 @@ const ViewDetails = ({ title, user, substabs }) => {
   const [edit, setEdit] = useState(false);
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
+  const sendEmail = useSendEmailVerification(["email", "send"], undefined, undefined);
 
   const handleUpdate = async (isHide, hideName) => {
     try {
@@ -27,8 +41,21 @@ const ViewDetails = ({ title, user, substabs }) => {
     }
   };
 
+  const resendEmail = async () => {
+    try {
+      const dataObj = { action: "resendVerifySignup", value: { email: userMe?.email } };
+      console.log("test", dataObj);
+      await sendEmail.mutateAsync(dataObj);
+      sendEmailSuccess();
+    } catch (e) {
+      console.log(e);
+      sendEmailError();
+    }
+  };
+
   return (
     <>
+      <Toaster />
       <div className="bg-white border border-gray-300 w-full rounded-lg p-4 my-2">
         <div className="border-b flex justify-between items-center pb-4">
           <p className="font-bold text-lg text-primary">{title}</p>
@@ -56,7 +83,7 @@ const ViewDetails = ({ title, user, substabs }) => {
                       <div className="flex flex-wrap justify-start gap-2">
                         {detail?.value?.map((interest) => {
                           return (
-                            <p key={interest?.id} className="capitalize bg-gray-100 px-2 py-1 text-xs rounded-full">
+                            <p key={interest?.id} className="capitalize bg-gray-100 px-2 text-xs rounded-full">
                               {interest?.name}
                             </p>
                           );
@@ -64,7 +91,25 @@ const ViewDetails = ({ title, user, substabs }) => {
                       </div>
                     ) : null
                   ) : (
-                    <p className="basis-2/3 capitalize">{detail?.value}</p>
+                    <div className="flex basis-2/3">
+                      {userMe?.id?.toString() === id?.toString() && detail?.name === "Email" ? (
+                        <div className="flex basis-2/3">
+                          <p className="pr-2">{detail?.value}</p>
+                          {userMe?.verified ? (
+                            <p className=" text-green-600 bg-gray-100 text-xs self-center px-2 rounded-full py-1">Verified</p>
+                          ) : (
+                            <button
+                              onClick={() => resendEmail()}
+                              className="text-xs bg-secondary hover:bg-primary text-white py-0 px-2 rounded-full"
+                            >
+                              Send Verification
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <p className=" capitalize">{detail?.value}</p>
+                      )}
+                    </div>
                   )}
                   {userMe?.id?.toString() === id?.toString() &&
                     (detail?.name === "Birth Date" ||
