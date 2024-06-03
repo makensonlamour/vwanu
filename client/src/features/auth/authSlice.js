@@ -6,11 +6,13 @@ export const login = (credentials) => api.post("/auth", credentials);
 
 export const register = (credentials) => api.post("/users", credentials);
 
+export const AddPhone = (queryKey, oldData, newData) => api.post(queryKey, "/phone", (oldData, newData));
+
 export const useVerifyEmail = (queryKey, oldData, newData) => usePost(queryKey, `/authmanagement`, (oldData, newData));
 
-export const useVerifyPhone = (queryKey, oldData, newData) => usePost(queryKey, `/`, (oldData, newData));
+export const useVerifyPhone = (queryKey, oldData, newData) => usePost(queryKey, `/phone?verify=true`, (oldData, newData));
 
-export const useSendOtpPhone = (queryKey, oldData, newData) => usePost(queryKey, `/`, (oldData, newData));
+export const useSendOtpPhone = (queryKey, oldData, newData) => usePost(queryKey, `/phone?action=resendVerification`, (oldData, newData));
 
 export const useSendEmailVerification = (queryKey, oldData, newData) => usePost(queryKey, `/authmanagement`, (oldData, newData));
 

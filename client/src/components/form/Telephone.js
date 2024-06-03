@@ -6,7 +6,7 @@ import { useFormikContext } from "formik";
 
 import Error from "./Error";
 
-function FormTelephone({ name, label, labelButton, className, testId, countryCode, ...otherProps }) {
+function FormTelephone({ name, label, labelButton, className, testId, countryCode, setCountryCode, ...otherProps }) {
   const { values, setFieldTouched, handleChange, errors, touched } = useFormikContext();
 
   return (
@@ -24,6 +24,7 @@ function FormTelephone({ name, label, labelButton, className, testId, countryCod
         <PhoneInput
           international
           countryCallingCodeEditable={false}
+          onCountryChange={(e) => setCountryCode(e)}
           defaultCountry={countryCode ? countryCode : ""}
           className={"input first:bg-inherit first:border-none " + className}
           value={values[name]}
@@ -44,6 +45,7 @@ FormTelephone.propTypes = {
   className: PropTypes.string,
   testId: PropTypes.string,
   countryCode: PropTypes.string,
+  setCountryCode: PropTypes.func,
 };
 
 export default FormTelephone;

@@ -3,10 +3,12 @@ import Proptypes from "prop-types";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
 import { useQueryClient } from "react-query";
+import { getCountryCallingCode } from "react-phone-number-input";
 
 import { Field, Telephone, Form, Submit } from "../../../../components/form";
 import Loader from "../../../../components/common/Loader";
 import { useUpdateUser } from "../../userSlice";
+import { AddPhone } from "../../../auth/authSlice";
 import CustomModal from "../../../../components/common/CustomModal";
 import { GoX } from "react-icons/go";
 
@@ -25,6 +27,7 @@ const FormContactInfo = ({ user }) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
+  const [countryC, setCountryC] = useState("");
 
   const updateUser = useUpdateUser(["user", "me"], undefined, undefined);
 
@@ -61,6 +64,8 @@ const FormContactInfo = ({ user }) => {
     console.log(dataObj?.otp);
   };
 
+  const addPhone = AddPhone(["user", "me"], undefined, undefined);
+
   const handleSubmit = async (dataObj) => {
     setIsLoading(true);
     const data = {
@@ -75,7 +80,12 @@ const FormContactInfo = ({ user }) => {
       website: dataObj?.website,
     };
 
+    const code = getCountryCallingCode(countryC);
+
+    const phoneData = { phoneNumber: dataObj?.phone, countryCode: "+" + code };
+
     try {
+      await addPhone.mutateAsync(phoneData);
       await updateUser.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries(["user", "me"]);
@@ -133,6 +143,7 @@ const FormContactInfo = ({ user }) => {
         <div className="w-full ">
           <Telephone
             label="Telephone"
+            setCountryCode={setCountryC}
             labelButton={
               !user?.telephone && (
                 <div className="">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NotificationSettingCard = ({}) => {
+const NotificationSettingCard = () => {
   const [isNotif, SetIsNotif] = useState(false);
   return (
     <div className="p-4 bg-white rounded-lg shadow-md max-w-sm">
@@ -14,7 +14,7 @@ const NotificationSettingCard = ({}) => {
           </label>
         </div>
       </div>
-      {!isNotif && (i
+      {!isNotif && (
         <div className="flex items-center mb-4">
           <label className="mr-2">
             <input type="checkbox" className="mr-1" />
