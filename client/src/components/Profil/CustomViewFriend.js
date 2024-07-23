@@ -55,12 +55,12 @@ const unFollowError = () =>
   });
 
 const acceptFriendRequestError = () =>
-  toast.error("Sorry. Error on accepting Friend Request!", {
+  toast.error("Sorry. Error on accepting Connection Request!", {
     position: "top-center",
   });
 
 const declineFriendRequestError = () =>
-  toast.error("Sorry. Error on refusing Friend Request!", {
+  toast.error("Sorry. Error on refusing Connection Request!", {
     position: "top-center",
   });
 

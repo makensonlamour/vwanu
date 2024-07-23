@@ -48,12 +48,12 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
   }, [open]);
 
   const acceptFriendRequestError = () =>
-    toast.error("Sorry. Error on accepting Friend Request!", {
+    toast.error("Sorry. Error on accepting Connection Request!", {
       position: "top-center",
     });
 
   const declineFriendRequestError = () =>
-    toast.error("Sorry. Error on refusing Friend Request!", {
+    toast.error("Sorry. Error on refusing Connection Request!", {
       position: "top-center",
     });
 
@@ -103,7 +103,7 @@ const AcceptFriendRequestButton = ({ otherUser }) => {
           <Loader />
         ) : (
           <>
-            <AiOutlineMenuUnfold size={"18px"} /> <span className="ml-[0.5px]">{"Accept friend"}</span>
+            <AiOutlineMenuUnfold size={"18px"} /> <span className="ml-[0.5px]">{"Accept Connection"}</span>
           </>
         )}
       </button>

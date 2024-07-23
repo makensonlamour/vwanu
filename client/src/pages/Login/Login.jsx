@@ -42,7 +42,7 @@ const LoginScreen = () => {
                 <p className="flex-none hidden lg:block text-base-100 text-xl font-semibold text-center ">
                   <FormattedMessage
                     id="login.together"
-                    defaultMessage="Together We are Stronger"
+                    defaultMessage="Stronger Together"
                     description="This is the message after the welcome message"
                   />
                 </p>

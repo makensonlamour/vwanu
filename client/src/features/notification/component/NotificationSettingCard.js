@@ -13,6 +13,7 @@ const NotificationSettingsCard = () => {
       forum: { normal: true, email: false, sms: false },
       community: { normal: true, email: false, sms: false },
       friend: { normal: true, email: false, sms: false },
+      follow: { normal: true, email: false, sms: false },
       blog: { normal: true, email: false, sms: false },
     },
   });
@@ -111,6 +112,12 @@ const NotificationSettingsCard = () => {
             <td className="border px-4 py-2">{renderSwitch("friend", "normal")}</td>
             <td className="border px-4 py-2">{renderSwitch("friend", "email")}</td>
             <td className="border px-4 py-2">{renderSwitch("friend", "sms")}</td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Follow notifications</td>
+            <td className="border px-4 py-2">{renderSwitch("follow", "normal")}</td>
+            <td className="border px-4 py-2">{renderSwitch("follow", "email")}</td>
+            <td className="border px-4 py-2">{renderSwitch("follow", "sms")}</td>
           </tr>
           <tr>
             <td className="border px-4 py-2">Blog notifications</td>

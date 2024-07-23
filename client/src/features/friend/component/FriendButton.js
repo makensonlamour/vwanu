@@ -15,7 +15,7 @@ const FriendButton = ({ otherUser }) => {
 
   //error dialog
   const unFriendRequestError = () =>
-    toast.error("Sorry. Error on unFriend this user!", {
+    toast.error("Sorry. Error on unconnecting this user!", {
       position: "top-center",
     });
 
@@ -79,7 +79,7 @@ const FriendButton = ({ otherUser }) => {
           <Loader />
         ) : (
           <>
-            <FiUserCheck size={"18px"} className="mr-1 items-center align-middle" /> {" Friend"}
+            <FiUserCheck size={"18px"} className="mr-1 items-center align-middle" /> {" Connection"}
           </>
         )}
       </button>
@@ -107,7 +107,7 @@ const FriendButton = ({ otherUser }) => {
                       handleClose();
                     }}
                   >
-                    Unfriend
+                    Unconnect
                   </MenuItem>
                   <MenuItem onClick={handleClose}>Block</MenuItem>
                 </MenuList>

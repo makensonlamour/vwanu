@@ -12,12 +12,12 @@ const FriendRequestButton = ({ otherUser }) => {
 
   //error dialog
   const friendRequestError = () =>
-    toast.error("Sorry. Error on sending Friend Request!", {
+    toast.error("Sorry. Error on sending Connection Request!", {
       position: "top-center",
     });
 
   const cancelRequestError = () =>
-    toast.error("Sorry. Error on canceling Friend Request!", {
+    toast.error("Sorry. Error on canceling Connection Request!", {
       position: "top-center",
     });
 
