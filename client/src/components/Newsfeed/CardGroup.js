@@ -6,7 +6,8 @@ import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
 import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
-import { MdGroups } from "react-icons/md";
+import logo_vwanu from "../../assets/images/Asset_9.png";
+// import { MdGroups } from "react-icons/md";
 
 const CardGroup = ({ data, isError, isLoading }) => {
   const queryClient = useQueryClient();
@@ -43,7 +44,12 @@ const CardGroup = ({ data, isError, isLoading }) => {
                 >
                   <div className="w-[2.5rem] h-[2.5rem] items-center flex justify-center mask mask-squircle border border-gray-200">
                     {data?.profilePicture === null || data?.profilePicture === undefined ? (
-                      <MdGroups size="32px" className="text-gray-300" />
+                      // <MdGroups size="32px" className="text-gray-300" />
+                      <img
+                        className="mask mask-squircle items-center justify-center w-[5rem] h-10 rounded-lg"
+                        src={logo_vwanu}
+                        alt={group?.name}
+                      />
                     ) : (
                       <img
                         className="mask mask-squircle items-center justify-center w-[5rem] h-10 rounded-lg"

@@ -9,6 +9,7 @@ import Loader from "../../components/common/Loader";
 import { useQueryClient } from "react-query";
 import { useGetInterestList } from "./../../features/interest/interestSlice";
 import { Chip, Stack } from "@mui/material";
+import { sortObjectsByName } from "../../helpers/index";
 
 const Blog = () => {
   const [interest, setInterest] = useState(false);
@@ -21,7 +22,7 @@ const Blog = () => {
     fetchNextPage: fetchNextPageBlog,
   } = useGetBlogListByInterest(["blog", "all", interest], interest ? true : false, interest);
   const { data: interestList, isError: errorInterest, isLoading: loadingInterest } = useGetInterestList(["interest", "all"], true);
-
+  console.log("interest list", interestList);
   const queryClient = useQueryClient();
   let content;
   function reloadPage(arrayQuery) {
@@ -179,7 +180,7 @@ const Blog = () => {
             </div>
           ) : interestList?.length > 0 ? (
             <Stack direction="row" spacing={0} className="flex flex-wrap gap-2 mb-5">
-              {interestList?.map((interest2) => {
+              {sortObjectsByName(interestList)?.map((interest2) => {
                 return (
                   <Chip
                     onClick={() => {

@@ -24,7 +24,7 @@ const RecentlyActive = ({ data, isLoading, isError, hasNextPage, fetchNextPage }
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8">
         <h2 className="my-2 text-md font-medium text-primary">
-          Online Friends <span className="font-normal text-md text-gray-400">{data.pages ? data?.pages[0]?.data?.total : 0}</span>
+          Online Connections <span className="font-normal text-md text-gray-400">{data.pages ? data?.pages[0]?.data?.total : 0}</span>
         </h2>
         {isLoading ? (
           <div style={{ display: "flex", justifyContent: "center" }} className="flex justify-center py-5">
@@ -70,7 +70,7 @@ const RecentlyActive = ({ data, isLoading, isError, hasNextPage, fetchNextPage }
             <EmptyComponent
               border={false}
               icon={<ImSad size={"32px"} className="" />}
-              placeholder={"Sorry, You don't have any active friends."}
+              placeholder={"Sorry, You don't have any active connections."}
               tips={""}
             />
           </div>

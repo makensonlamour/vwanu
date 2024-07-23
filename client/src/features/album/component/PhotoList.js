@@ -124,7 +124,7 @@ const PhotoList = ({ user }) => {
           <EmptyComponent
             border={false}
             icon={<ImSad size={"32px"} className="" />}
-            placeholder={"Sorry, You don't have any pending request."}
+            placeholder={"Sorry, You don't have any media."}
             tips={""}
           />
         </div>

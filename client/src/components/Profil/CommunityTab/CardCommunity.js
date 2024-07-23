@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { AvatarGroup, Avatar, Chip, Stack } from "@mui/material";
-import { MdGroups } from "react-icons/md";
+// import { MdGroups } from "react-icons/md";
+import logo_vwanu from "../../../assets/images/Asset_9.png";
 import random_cover from "../../../assets/images/cover_group_random.png";
 import { useJoinCommunity } from "../../../features/community/communitySlice";
 
@@ -31,7 +32,7 @@ const CardCommunity = ({ data }) => {
       setIsLoading(false);
     }
   };
-
+  console.log(data);
   return (
     <>
       {data && (
@@ -48,7 +49,8 @@ const CardCommunity = ({ data }) => {
             <div className="transform translate-y-2/4 absolute w-full left-0 bottom-0 z-30 flex justify-center">
               <div className="flex items-center justify-center mask mask-squircle w-[86px] h-[86px] bg-gray-100">
                 {data?.profilePicture === null || data?.profilePicture === undefined ? (
-                  <MdGroups size="60px" className="text-gray-300" />
+                  // <MdGroups size="60px" className="text-gray-300" />
+                  <img src={logo_vwanu} className="object-cover mask mask-squircle w-[80px] h-[80px]" alt="profile_picture" />
                 ) : (
                   <img src={data?.profilePicture} className="object-cover mask mask-squircle w-[80px] h-[80px]" alt="profile_picture" />
                 )}

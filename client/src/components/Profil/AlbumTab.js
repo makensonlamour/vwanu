@@ -20,12 +20,12 @@ const ValidationSchema = Yup.object().shape({
 });
 
 const addSuccess = () =>
-  toast.success("Profile updated successfully!", {
+  toast.success("Media added successfully!", {
     position: "top-center",
   });
 
 const addError = () =>
-  toast.error("Sorry. Error on updating profile!", {
+  toast.error("Sorry. Error on adding media!", {
     position: "top-center",
   });
 

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import cover_forum from "../../assets/images/forum_cover_picture.png";
 // import { format } from "date-fns";
 
 const ViewCategory = ({ data }) => {
@@ -15,7 +16,9 @@ const ViewCategory = ({ data }) => {
           {data?.coverPicture !== null ? (
             <img src={data?.coverPicture} alt={data?.name} className="w-full h-36 object-cover rounded-t-xl" />
           ) : (
-            <div className="w-full h-36 object-cover rounded-t-xl"></div>
+            <div className="w-full h-36 object-cover rounded-t-xl">
+              <img src={cover_forum} alt={data?.name} className="w-full h-36 object-cover rounded-t-xl" />
+            </div>
           )}
         </div>
         <div className="px-4 pt-3">

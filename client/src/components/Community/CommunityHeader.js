@@ -4,7 +4,7 @@ import { Routes, Route, useLocation, useOutletContext, useParams } from "react-r
 import CommunityTabs from "./CommunityTabs";
 import { allTabs1 } from "./Tablink.data";
 import UpdatesComponent from "../Newsfeed/UpdatesComponent";
-import { MdGroups } from "react-icons/md";
+// import { MdGroups } from "react-icons/md";
 import { ImSad } from "react-icons/im";
 import random_cover from "../../assets/images/cover_group_random.png";
 import ManageTabs from "./ManageTabs";
@@ -14,6 +14,7 @@ import DiscussionTabs from "./DiscussionTabs";
 import SendInviteTabs from "./SendInviteTabs";
 import { Chip, Stack } from "@mui/material";
 import EmptyComponent from "./../common/EmptyComponent";
+import logo_vwanu from "../../assets/images/Asset_9.png";
 import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
@@ -124,7 +125,12 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                   <div className="transform translate-y-2/4 lg:translate-y-3/4 absolute lg:w-[20%] inset-x-1/2 lg:left-10 bottom-0 z-30 flex justify-center lg:justify-start">
                     <div className="flex items-center justify-center mask mask-squircle w-[156px] h-[156px] bg-gray-100">
                       {communityData?.profilePicture === null || communityData?.profilePicture === undefined ? (
-                        <MdGroups size="92px" className="text-gray-300" />
+                        // <MdGroups size="92px" className="text-gray-300" />
+                        <img
+                          src={logo_vwanu}
+                          className="object-cover mask mask-squircle w-[120px] h-[120px] lg:w-[150px] lg:h-[150px]"
+                          alt="profile_picture"
+                        />
                       ) : (
                         <img
                           src={communityData?.profilePicture || data?.profilePicture}

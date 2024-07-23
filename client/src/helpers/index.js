@@ -382,3 +382,16 @@ export function checkInactivity(user) {
     }
   }
 }
+
+// sort array by name
+export function sortObjectsByName(objects) {
+  return objects.sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
+}
