@@ -17,7 +17,7 @@ if (API_CONFIG_SCHEMA.parse(API_CONFIGURATION)) {
   port = helper.normalizePort(API_CONFIGURATION.port);
 
   // Configure a middleware for 404s and the error handler
- 
+
 
   const server = app.listen(port);
   const PeerJsServer = ExpressPeerServer(server);
@@ -31,6 +31,7 @@ if (API_CONFIG_SCHEMA.parse(API_CONFIGURATION)) {
     helper.onError(err, API_CONFIGURATION.port);
   });
   server.on('listening', () => {
+    helper.envConfigurationCheck();
     app
       .get('sequelizeSync')
       .then(() => {

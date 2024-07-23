@@ -4,6 +4,7 @@ import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 /** Local dependencies  */
 import {
   AutoOwn,
+  AgeAllow,
   LimitToOwner,
   SaveInterest,
   ValidateResource,
@@ -29,6 +30,7 @@ export default {
   before: {
     all: [
       authenticate('jwt'),
+      AgeAllow,
       IncludeAssociations({
         include: [
           {

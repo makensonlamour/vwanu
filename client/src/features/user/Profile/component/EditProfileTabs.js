@@ -14,6 +14,7 @@ const EditProfileTabs = ({ user }) => {
   const [searchParams] = useSearchParams();
   // const urlTabs = searchParams.get("subTabs");
   const editTabs = searchParams.get("subtabs");
+  const idWork = searchParams.get("idWork");
   let run = true;
   // let title = "";
   const [title, setTitle] = useState("Edit General Information");
@@ -108,7 +109,7 @@ const EditProfileTabs = ({ user }) => {
             <FormPlaceLived user={user} />
           </TabPanel>
           <TabPanel value="four">
-            <FormWorkEducation user={user} />
+            <FormWorkEducation user={user} idWork={idWork} />
           </TabPanel>
           <TabPanel value="five">
             <FormBiography user={user} />

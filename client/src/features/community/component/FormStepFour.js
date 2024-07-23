@@ -98,6 +98,8 @@ const FormStepFour = ({ setStep, currentStep, data, setData }) => {
         <Form className="w-full px-4 pb-2">
           <Toaster />
 
+          {console.log(img)}
+
           {/*Privacy Options*/}
           {img?.length <= 0 ? (
             <div className="mx-auto mask mask-squircle my-6 flex justify-center items-center bg-gray-50 text-center text-gray-300 w-36 h-36">
@@ -110,7 +112,7 @@ const FormStepFour = ({ setStep, currentStep, data, setData }) => {
                   <div className="h-36 w-36">
                     <img
                       alt={user?.firstName}
-                      src={img[1]}
+                      src={img[0]?.preview}
                       className="h-36 w-36 mask mask-squircle object-cover"
                       // Revoke data uri after image is loaded
                       onLoad={() => {
@@ -119,14 +121,14 @@ const FormStepFour = ({ setStep, currentStep, data, setData }) => {
                     />
                   </div>
                 </div>
-                <div className="mt-2 flex flex-col justify-center">
+                {/* <div className="mt-2 flex flex-col justify-center">
                   <button
                     onClick={handleSave}
                     className="block mt-4 bg-primary px-5 py-2 border-0 text-base-100 hover:bg-secondary rounded-xl"
                   >
                     {isLoading ? <Loader /> : "Save"}
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
@@ -177,7 +179,10 @@ const FormStepFour = ({ setStep, currentStep, data, setData }) => {
               {isLoading ? <Loader /> : "Previous Step"}
             </button>
             <button
-              onClick={() => handleNext()}
+              onClick={() => {
+                handleSave();
+                handleNext();
+              }}
               className="btn btn-primary mt-4 normal-case hover:bg-secondary w-fit rounded-xl text-base-100 py-1 text-md md:w-1/5"
             >
               {isLoading ? <Loader /> : "Next Step"}

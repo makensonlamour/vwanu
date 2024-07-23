@@ -36,14 +36,11 @@ export default {
     if (port >= 0) return port;
     return null;
   },
-
-  // function (
-  //   err: Error | any,
-  //   req: Request,
-  //   res: Response,
-  //   // eslint-disable-next-line no-unused-vars
-  //   next: NextFunction
-  // ) {
-  //   return sendErrorResponse(res, err.status || err.code || 500, [err]);
-  // }
+  envConfigurationCheck(): void {
+    const mustHaveEnvVars = ['MIN_AGE'];
+    const missingEnvVars = mustHaveEnvVars.filter((envVar) => !process.env[envVar]);
+    if (missingEnvVars.length > 0) {
+      throw new Error(`Server cannot start missing required environment variables: ${missingEnvVars.join(', ')}`);
+    }
+  }
 };

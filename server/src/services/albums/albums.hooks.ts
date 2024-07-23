@@ -5,6 +5,7 @@ import * as authentication from '@feathersjs/authentication';
 import addAssociation from '../../Hooks/AddAssociations';
 // import IncludeAssociations from '../../Hooks/IncludeAssociations';
 import autoOwn from '../../Hooks/AutoOwn';
+import AgeAllow from '../../Hooks/AgeAllow';
 // import saveAndAssociateMedia from '../../Hooks/SaveAndAssociateMedia';
 
 // const UserAttributes = [
@@ -20,6 +21,7 @@ export default {
   before: {
     all: [
       authenticate('jwt'),
+      AgeAllow,
       addAssociation({
         models: [
           {

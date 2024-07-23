@@ -1,0 +1,5 @@
+node_modules
+.git
+build 
+coverage
+# Temporary hide docker file

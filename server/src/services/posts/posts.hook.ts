@@ -2,6 +2,7 @@ import * as feathersAuthentication from '@feathersjs/authentication';
 
 /** Local dependencies */
 import AutoOwn from '../../Hooks/AutoOwn';
+import AgeAllow from '../../Hooks/AgeAllow';
 import { LimitToOwner } from '../../Hooks';
 import DeletePost from './hooks/deletePost';
 import * as schema from '../../schema/post';
@@ -14,7 +15,7 @@ const { authenticate } = feathersAuthentication.hooks;
 
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt'), AgeAllow],
     find: [GetTimeline],
     get: [GetTimeline],
     create: [

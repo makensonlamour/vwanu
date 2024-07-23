@@ -62,7 +62,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                         onClick={() => (window.location.href = "../../me/profile/edit?tabs=cover")}
                         className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
                       >
-                        <MdEdit size={"24px"} className="" />
+                        <MdEdit size={"16px"} className="" />
                       </button>
                     )}
                   </div>
@@ -78,9 +78,9 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                           {!otherUser && (
                             <button
                               onClick={() => (window.location.href = "../../me/profile/edit?tabs=profile")}
-                              className="absolute top-0 right-0 bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
+                              className="absolute top-0 right-[1px] bg-white m-1 p-1 rounded-full hover:bg-primary hover:text-white"
                             >
-                              <MdEdit size={"24px"} className="" />
+                              <MdEdit size={"16px"} className="" />
                             </button>
                           )}
                         </div>
@@ -158,7 +158,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                     </h4>
                     <h4 className="font-mock text-primary flex text-sm mx-auto mb-2 text-center justify-center items-center lg:mt-2 ">
                       {otherUser
-                        ? otherUser?.facebookPrivacy && (
+                        ? otherUser?.faceBookPrivacy && (
                             <a
                               href={`https://${otherUser?.facebook}`}
                               target="_blank"
@@ -168,7 +168,7 @@ const ProfileHeader = ({ user, otherUser, loadingFollowing, errorFollowing, list
                               <BsFacebook size={"24px"} className="mx-auto" />
                             </a>
                           )
-                        : user?.facebookPrivacy && (
+                        : user?.faceBookPrivacy && (
                             <a
                               href={`https://${user?.facebook}`}
                               target="_blank"

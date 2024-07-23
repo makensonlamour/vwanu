@@ -4,13 +4,13 @@
 import { Model } from 'sequelize';
 
 export interface ReactionInterface {
-  id: number;
+  id: string;
   content: string;
   entityType: string;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Reaction extends Model<ReactionInterface> implements ReactionInterface {
-    id: number;
+    id: string;
 
     content: string;
 
@@ -39,9 +39,10 @@ export default (sequelize: any, DataTypes: any) => {
   Reaction.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
       },
       content: {
         type: DataTypes.STRING,

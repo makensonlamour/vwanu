@@ -18,9 +18,11 @@ const FormLogin = () => {
   const ValidationSchema = Yup.object().shape({
     email: Yup.string().required().min(6).email().label("Email"),
     password: Yup.string().required().min(8).label("Password"),
+    rememberMe: Yup.bool(),
   });
 
   const handleLogin = async (credentials) => {
+    localStorage.setItem("rememberMe", credentials.rememberMe);
     await login(credentials);
   };
 
@@ -35,6 +37,7 @@ const FormLogin = () => {
         initialValues={{
           email: "",
           password: "",
+          rememberMe: false,
         }}
         onSubmit={handleLogin}
         className="px-2 mt-4 lg:mt-4 lg:mx-2 xl:mx-14 3xl:mx-64"

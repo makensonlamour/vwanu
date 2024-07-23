@@ -34,13 +34,22 @@ export default async (context: HookContext) => {
   const { app } = context;
   const Sequelize = app.get('sequelizeClient');
   const query = `
-          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","C"."canInvite", "C"."canInPost","C"."canInUploadPhotos","C"."canInUploadDoc","C"."canInUploadVideo","C"."canMessageInGroup", "C"."haveDiscussionForum","CU"."banned","CU"."bannedDate", 
+          Select "C"."id", "C"."name", "C"."description", "C"."privacyType" , "C"."UserId", "C"."profilePicture", "C"."coverPicture", "C"."haveDiscussionForum","C"."canInvite", "C"."canInPost","C"."canInUploadPhotos","C"."canInUploadDoc","C"."canInUploadVideo","C"."canMessageInGroup", "C"."haveDiscussionForum", "C"."numMembers", 
+          (SELECT 
+            json_build_object(
+            'id', "U"."id",
+            'firstName', "U"."firstName",
+            'lastName', "U"."lastName",
+            'profilePicture', "U"."profilePicture"
+          ) FROM "Users" AS "U"
+          WHERE "U"."id" = "C"."UserId"
+          ) AS "Creator",
           (SELECT 
             json_build_object(
              'id', "CU"."UserId",
              'role',"CR"."name",
              'roleId',"CR"."id"
-              ) from "CommunityUsers" as "CU" 
+              ) from community_users as "CU" 
             INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"
             WHERE "CU"."CommunityId"="C"."id" and "CU"."UserId"='${
               context.params.User.id
@@ -84,16 +93,14 @@ ${hasAccess(
   'canMessageInGroup'
 )} AS "canMessageUserInGroup",
   
-          COUNT(DISTINCT CASE WHEN "CU"."CommunityId"='${
-            context.id
-          }' THEN "CU"."UserId" END) As "amountOfMembers",  
+         
           json_agg( 
             json_build_object(
               'id', "I"."id",
               'name',"I"."name"
           )) as "Interests"
           FROM "Communities" AS "C" 
-          INNER JOIN "CommunityUsers" AS "CU" ON "CU"."CommunityId" = '${
+          INNER JOIN community_users AS "CU" ON "CU"."CommunityId" = '${
             context.id
           }'
           INNER JOIN "CommunityRoles" AS "CR" ON "CR"."id" = "CU"."CommunityRoleId"

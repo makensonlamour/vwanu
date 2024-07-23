@@ -41,7 +41,7 @@ const FormBiography = ({ user }) => {
       await updateUser.mutateAsync(data);
       updateSuccess();
       queryClient.invalidateQueries();
-      window.location.href = "../../profile/" + user?.id;
+      window.location.href = "../../profile/" + user?.id + "/about";
     } catch (e) {
       console.log(e);
       updateError();

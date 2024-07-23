@@ -93,7 +93,7 @@ const Community = () => {
                   }
                   value="1"
                 />
-                <Tab
+                {/* <Tab
                   // style={{ heigth: "0px" }}
                   sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px" }}
                   label={
@@ -106,7 +106,7 @@ const Community = () => {
                     </Fragment>
                   }
                   value="2"
-                />
+                /> */}
                 <Tab
                   // style={{ heigth: "150px" }}
                   sx={{ textTransform: "capitalize", textAlign: "left", heigth: "0px" }}

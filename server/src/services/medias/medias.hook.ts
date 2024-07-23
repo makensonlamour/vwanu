@@ -1,11 +1,13 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import saveMedia from '../../Hooks/SaveProfilePictures.hooks';
 
+import AgeAllow from '../../Hooks/AgeAllow';
+
 const { authenticate } = feathersAuthentication.hooks;
 
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt'), AgeAllow],
     find: [],
     get: [],
     create: [saveMedia(['original'])],

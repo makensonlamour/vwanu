@@ -49,7 +49,7 @@ const TermsConditions = () => {
           <Link to="#" className="text-primary hover:text-secondary font-semibold">
             Terms And Conditions Archives
           </Link>
-          <button className="px-6 bg-primary text-white rounded-full py-2 hover:bg-secondary text-md">Download Pdf</button>
+          {/* <button className="px-6 bg-primary text-white rounded-full py-2 hover:bg-secondary text-md">Download Pdf</button> */}
         </div>
       </div>
 

@@ -17,6 +17,8 @@ export default (sequelize: any, DataTypes: any) => {
 
     address: string;
 
+    access_role: string;
+
     active: boolean;
 
     avatar: string | undefined;
@@ -24,6 +26,8 @@ export default (sequelize: any, DataTypes: any) => {
     activationKey?: string | null;
 
     birthday: string;
+
+    active_status: boolean;
 
     backgroundImage: string;
 
@@ -139,6 +143,12 @@ export default (sequelize: any, DataTypes: any) => {
       User.hasMany(models.Post, {
         onDelete: 'CASCADE',
       });
+      User.hasMany(models.UserWorkPlace, {
+        foreignKey: {
+          name: 'UserId',
+          allowNull: false,
+        },
+      });
       User.hasMany(models.Discussion, {
         onDelete: 'CASCADE',
       });
@@ -160,25 +170,30 @@ export default (sequelize: any, DataTypes: any) => {
       User.belongsToMany(models.User, {
         as: 'Follower',
         through: 'User_Follower',
+        onDelete: 'CASCADE',
       });
 
       // User.hasMany(models.User, { as: 'friends' });
       User.belongsToMany(models.User, {
         through: 'User_friends',
         as: 'friends',
+        onDelete: 'CASCADE',
       });
       User.belongsToMany(models.User, {
         through: 'User_friends_request',
         as: 'friendsRequest',
+        onDelete: 'CASCADE',
       });
-      User.belongsToMany(models.User, {
-        through: 'User_friends_Want_to_Be',
-        as: 'FriendshipRequested',
+
+      User.belongsToMany(models.Community, {
+        through: 'CommunityUsers',
+        onDelete: 'CASCADE',
       });
 
       User.belongsToMany(models.User, {
         through: 'User_friends_undesired',
         as: 'undesiredFriends',
+        onDelete: 'CASCADE',
       });
 
       // User.belongsToMany(models.User, {
@@ -205,6 +220,14 @@ export default (sequelize: any, DataTypes: any) => {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
+      },
+      access_role: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: 'CommunityRoles',
+          key: 'id',
+        }
       },
       resetAttempts: {
         type: DataTypes.INTEGER,
@@ -268,6 +291,10 @@ export default (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
+      },
+      active_status: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
 
       youtubePrivacy: {

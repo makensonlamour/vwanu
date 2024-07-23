@@ -12,9 +12,11 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 
 import {
   SaveAddress,
+  AssignRole,
   AddVisitor,
   GetUser,
   SendWelcomeMail /* SendEmail */,
+  AddworkPlace,
 } from './hook';
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
@@ -40,6 +42,7 @@ export default {
     find: [authenticate('jwt'), GetUser],
     get: [authenticate('jwt'), GetUser],
     create: [
+      AssignRole('member'),
       validateResource(schema.createUserSchema),
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
@@ -84,6 +87,7 @@ export default {
     create: [
       SaveAddress,
       AutoLogin,
+      AddworkPlace,
       // IncludeAddress,
       SaveAndAttachInterests({
         entityName: 'User',
@@ -95,6 +99,7 @@ export default {
     ],
     patch: [
       SaveAddress,
+      AddworkPlace,
       SaveAndAttachInterests({
         entityName: 'User',
         relationTableName: 'User_Interest',

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "allowJs": true,
+    "outDir": "./build",
+    "strict": false,
+    "esModuleInterop": true,
+    "baseUrl": "server/src",
+  
+    "paths": {
+      "@config/*": ["config/*"],
+      "@controllers/*": ["controller/*"],
+      "@routes/*": ["routes/*"],
+      "@middleware/*": ["middleware/*"],
+      "@service/*": ["service/*"]
+    },
+    "typeRoots": ["src/custom_typings", "./node_modules/@types"],
+
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["node_modules", "build", "test"]
+}

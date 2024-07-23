@@ -8,7 +8,7 @@ export default async (context: HookContext): Promise<HookContext> => {
   const { result, app } = context;
   if (!result) return context; // Error creating a user
   try {
-    await notifier(app as Application).notifier('WelcomeSignup', result, {});
+    await notifier(app as Application).notifier('WelcomeSignup', result);
   } catch (e) {
     Logger.error(e);
   }

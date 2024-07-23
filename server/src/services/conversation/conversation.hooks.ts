@@ -3,7 +3,7 @@ import * as authentication from '@feathersjs/authentication';
 import commonHooks from 'feathers-hooks-common';
 
 /** Local dependencies */
-import { AddTalker } from '../../Hooks';
+import { AddTalker, AgeAllow, } from '../../Hooks';
 import {
   SetType,
   NotifyUsers,
@@ -16,7 +16,7 @@ const { authenticate } = authentication.hooks;
 
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt'), AgeAllow],
     find: [FilterConversations],
     get: [FilterConversations],
     create: [SetType, LimitDirectConversations],

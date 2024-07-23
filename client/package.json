@@ -60,6 +60,7 @@
     "react-share": "^4.4.0",
     "react-slideshow-image": "^4.1.1",
     "react-slidy": "^4.3.3",
+    "react-switch": "^7.0.0",
     "react-tabs": "^5.1.0",
     "react-test-renderer": "^18.2.0",
     "react-toastify": "^9.0.8",

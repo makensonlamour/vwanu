@@ -3,11 +3,17 @@
     "username": "DB_USER",
     "password": "DB_PASSWORD",
     "database": "DB_DATABASE",
-    "host": "DB_HOST"
+    "host": "DB_HOST",
+    "seederStorage": "sequelize"
   },
   "EmailerConfiguration": {
     "from": "SEND_EMAIL_FROM",
     "api_key": "sendGridApiKey"
+  },
+  "Texterconfiguration":{
+    "authToken":"TWILLIO_AUTH_TOKEN",
+    "fromNumber":"TWILLIO_NUMBER",
+    "accountSid":"TWILLIO_ACCOUNT_SID"
   },
   "SMTP_CONFIGURATION": {
     "host": "SMTP_HOST",

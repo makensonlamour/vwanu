@@ -17,56 +17,6 @@ export class FriendRequest extends Service {
     this.app = app;
   }
 
-  // async find(params) {
-  //   const requesterId = params.User.id;
-  //   const { models } = this.app.get('sequelizeClient');
-  //   const user = await models.User.findOne({
-  //     logging: console.log,
-  //     where: { id: requesterId },
-  //     include: [
-  //       {
-  //         model: models.User,
-  //         attributes: userAttributes,
-  //         as: 'friendsRequest',
-  //       },
-  //       {
-  //         model: models.User,
-  //         attributes: userAttributes,
-  //         as: 'FriendshipRequested',
-  //       },
-  //     ],
-  //   });
-
-  //   if (!user) throw new NotFound('Your profile was not found');
-
-  //   let response;
-  //   switch (params.query.action) {
-  //     case 'people-i-want-to-be-friend-with':
-  //       response = user.FriendshipRequested.map((User) => ({
-  //         id: User.id,
-  //         firstName: User.firstName,
-  //         lastName: User.lastName,
-  //         profilePicture: UrlToMedia(User.profilePicture),
-  //         createdAt: User.User_friends_Want_to_Be.createdAt,
-  //         updatedAt: User.User_friends_Want_to_Be.updatedAt,
-  //       }));
-  //       break;
-  //     case 'people-who-want-to-Be-my-friend':
-  //       response = user.friendsRequest.map((User) => ({
-  //         id: User.id,
-  //         firstName: User.firstName,
-  //         lastName: User.lastName,
-  //         profilePicture: UrlToMedia(User.profilePicture),
-  //         createdAt: User.User_friends_request.createdAt,
-  //         updatedAt: User.User_friends_request.updatedAt,
-  //       }));
-  //       break;
-  //     default:
-  //       throw new BadRequest('This action does not exist');
-  //   }
-  //   return Promise.resolve(response);
-  // }
-
   async create(data, params) {
     const requesterId = params.User.id;
     const friendId = data.UserID;
@@ -82,11 +32,6 @@ export class FriendRequest extends Service {
         {
           model: models.User,
           as: 'friendsRequest',
-          attributes: userAttributes,
-        },
-        {
-          model: models.User,
-          as: 'FriendshipRequested',
           attributes: userAttributes,
         },
       ],
@@ -121,7 +66,7 @@ export class FriendRequest extends Service {
       requester.hasFriend(friend),
     ]);
 
-    alreadyFiends = alreadyFiends[0] && alreadyFiends[1];
+    alreadyFiends = alreadyFiends[0] || alreadyFiends[1];
     if (alreadyFiends) throw new BadRequest('You are already friends');
     const requestedFriendship = await friend.hasFriendsRequest(requester);
 
@@ -129,20 +74,23 @@ export class FriendRequest extends Service {
       throw new BadRequest('You already requested to be friends');
     await Promise.all([
       friend.addFriendsRequest(requester),
-      requester.addFriendshipRequested(friend),
+      // requester.addFriendshipRequested(friend),
     ]);
 
     const user2 = await requester.reload();
-    const friendRequest = user2.FriendshipRequested.map((User) => ({
-      id: User.id,
-      firstName: User.firstName,
-      lastName: User.lastName,
-      profilePicture: UrlToMedia(User.profilePicture),
-      createdAt: User.User_friends_Want_to_Be.createdAt,
-      updatedAt: User.User_friends_Want_to_Be.updatedAt,
-    }));
 
-    return Promise.resolve(friendRequest);
+    await friend.reload();
+
+    const friendRequest = {
+      id: friend.id,
+      firstName: friend.firstName,
+      lastName: friend.lastName,
+      profilePicture: UrlToMedia(friend.profilePicture),
+      createdAt: friend.createdAt,
+      updatedAt: friend.updatedAt,
+    };
+
+    return Promise.resolve([friendRequest]);
   }
 
   async patch(id: Id, data, params: Params) {
@@ -261,4 +209,54 @@ export class FriendRequest extends Service {
 
     return Promise.resolve(user);
   }
+
+  // async find(params) {
+  //   const requesterId = params.User.id;
+  //   const { models } = this.app.get('sequelizeClient');
+  //   const user = await models.User.findOne({
+  //     logging: console.log,
+  //     where: { id: requesterId },
+  //     include: [
+  //       {
+  //         model: models.User,
+  //         attributes: userAttributes,
+  //         as: 'friendsRequest',
+  //       },
+  //       {
+  //         model: models.User,
+  //         attributes: userAttributes,
+  //         as: 'FriendshipRequested',
+  //       },
+  //     ],
+  //   });
+
+  //   if (!user) throw new NotFound('Your profile was not found');
+
+  //   let response;
+  //   switch (params.query.action) {
+  //     case 'people-i-want-to-be-friend-with':
+  //       response = user.FriendshipRequested.map((User) => ({
+  //         id: User.id,
+  //         firstName: User.firstName,
+  //         lastName: User.lastName,
+  //         profilePicture: UrlToMedia(User.profilePicture),
+  //         createdAt: User.User_friends_Want_to_Be.createdAt,
+  //         updatedAt: User.User_friends_Want_to_Be.updatedAt,
+  //       }));
+  //       break;
+  //     case 'people-who-want-to-Be-my-friend':
+  //       response = user.friendsRequest.map((User) => ({
+  //         id: User.id,
+  //         firstName: User.firstName,
+  //         lastName: User.lastName,
+  //         profilePicture: UrlToMedia(User.profilePicture),
+  //         createdAt: User.User_friends_request.createdAt,
+  //         updatedAt: User.User_friends_request.updatedAt,
+  //       }));
+  //       break;
+  //     default:
+  //       throw new BadRequest('This action does not exist');
+  //   }
+  //   return Promise.resolve(response);
+  // }
 }

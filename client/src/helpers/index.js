@@ -34,8 +34,6 @@ export function assignDataMedia(obj) {
   if (obj?.length === 0) return [];
   const array = [];
 
-  console.log(obj);
-
   obj?.map((item) => {
     if (
       item?.original.endsWith(".mp4") ||
@@ -142,6 +140,16 @@ export function assignValueCountries(obj) {
   return array;
 }
 
+export function getValueFromList(objects = [], initials, returnKey) {
+  if (objects?.length === 0) return null;
+  for (let obj of objects) {
+    if (obj.initials === initials) {
+      return obj[returnKey];
+    }
+  }
+  return null;
+}
+
 export function assignValueStates(obj) {
   if (obj?.length === 0) return;
   const array = [];
@@ -197,7 +205,6 @@ export function isMember(listMembers, data) {
 
 export function isInvitation(listMembers, data) {
   let memb = listMembers?.filter((member) => member?.CommunityId === data?.id);
-  console.log("isInvite", memb);
 
   return memb?.length === 0 ? false : true;
 }
@@ -277,4 +284,101 @@ export function transformHashtagAndLink(strText, preview = false, originalType =
   });
 
   return strText;
+}
+
+export function removeElementArray(array, id) {
+  let tempArray = [];
+
+  if (array?.length === 0) return;
+
+  // eslint-disable-next-line array-callback-return
+  array?.map((el) => {
+    if (el?.id !== id) {
+      return tempArray?.push(el);
+    }
+  });
+  return tempArray;
+}
+
+export function getElementById(array, id) {
+  let arrayTemp = [];
+  if (array?.length === 0) return;
+
+  console.log(array, id);
+
+  // eslint-disable-next-line array-callback-return
+  array?.map((el) => {
+    if (el?.id?.toString() === id?.toString()) {
+      return arrayTemp?.push(el);
+    }
+  });
+
+  return arrayTemp[0];
+}
+
+//function to handle storage change
+export function handleStorageChange(user) {
+  // Remove the value from localStorage when the browser is closed
+  if (localStorage.getItem("rememberMe") !== "true") {
+    const lastActiveTime = localStorage.getItem("lastActiveTime");
+    if (lastActiveTime) {
+      const currentTime = Date.now();
+      const timeDifference = currentTime - parseInt(lastActiveTime, 10);
+      const thirtyMinutesInMillis = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+      if (timeDifference >= thirtyMinutesInMillis) {
+        // Remove the value from localStorage after 30 minutes of inactivity
+        localStorage.setItem("email", user?.email);
+        localStorage.setItem("profilePicture", user?.profilePicture?.original);
+        localStorage.removeItem("lastActiveTime");
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("feathers-jwt");
+        // You can remove other values from localStorage here
+      }
+    }
+  }
+}
+
+// function to handle user activity
+export function handleUserActivity(inactivityTimeoutRef, user) {
+  // Reset the inactivity timeout
+  clearTimeout(inactivityTimeoutRef.current);
+  const rememberMe = localStorage.getItem("rememberMe") === "true";
+  if (!rememberMe) {
+    inactivityTimeoutRef.current = setTimeout(() => {
+      // Remove the value from localStorage after 30 minutes of inactivity
+      localStorage.setItem("email", user?.email);
+      localStorage.setItem("profilePicture", user?.profilePicture?.original);
+      localStorage.removeItem("lastActiveTime");
+      localStorage.removeItem("rememberMe");
+      localStorage.removeItem("feathers-jwt");
+      // You can remove other values from localStorage here
+    }, 30 * 60 * 1000); // 30 minutes in milliseconds
+  }
+
+  // Update the last active time in localStorage
+  localStorage.setItem("lastActiveTime", Date.now());
+}
+
+// function to check inactivity
+export function checkInactivity(user) {
+  const rememberMe = localStorage.getItem("rememberMe") === "true";
+  if (!rememberMe) {
+    const lastActiveTime = localStorage.getItem("lastActiveTime");
+    if (lastActiveTime) {
+      const currentTime = Date.now();
+      const timeDifference = currentTime - parseInt(lastActiveTime, 10);
+      const thirtyMinutesInMillis = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+      if (timeDifference >= thirtyMinutesInMillis) {
+        // Remove the value from localStorage after 30 minutes of inactivity
+        localStorage.setItem("email", user?.email);
+        localStorage.setItem("profilePicture", user?.profilePicture?.original);
+        localStorage.removeItem("lastActiveTime");
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("feathers-jwt");
+        // You can remove other values from localStorage here
+      }
+    }
+  }
 }

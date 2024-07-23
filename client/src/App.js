@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { SidebarProvider } from "./context/BottomMenuContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -9,9 +9,11 @@ import theme from "./theme";
 import Views from "./layouts/Views.js";
 import useAuthContext from "./hooks/useAuthContext";
 import useCall from "./hooks/useCall";
+import { checkInactivity, handleStorageChange } from "./helpers";
+import { handleUserActivity } from "./helpers/index";
 
 const App = () => {
-  const { authIsReady } = useAuthContext();
+  const { authIsReady, user } = useAuthContext();
   const { myVideoRef, userVideoRef, call } = useCall();
 
   // peer?.on("call", (call) => {
@@ -36,6 +38,36 @@ const App = () => {
       },
     },
   });
+
+  const inactivityTimeoutRef = useRef(null);
+
+  // handle remember me when closed the browser or after 30 minutes of inactivity
+  useEffect(() => {
+    handleStorageChange(user);
+
+    handleUserActivity(inactivityTimeoutRef, user);
+
+    checkInactivity(user);
+
+    // Add event listeners
+    // window.addEventListener("beforeunload", handleStorageChange, { capture: true });
+    // window.addEventListener("visibilitychange", handleStorageChange);
+    document.addEventListener("mousemove", handleUserActivity);
+    document.addEventListener("keydown", handleUserActivity);
+
+    // Check for inactivity periodically
+    const inactivityInterval = setInterval(checkInactivity(user), 60000); // Check every minute
+
+    return () => {
+      // Clean up event listeners and interval
+      // window.removeEventListener("beforeunload", handleStorageChange, { capture: true });
+      // window.removeEventListener("visibilitychange", handleStorageChange);
+      document.removeEventListener("mousemove", handleUserActivity);
+      document.removeEventListener("keydown", handleUserActivity);
+      clearInterval(inactivityInterval);
+      clearTimeout(inactivityTimeoutRef.current);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

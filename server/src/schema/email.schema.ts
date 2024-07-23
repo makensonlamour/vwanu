@@ -17,6 +17,9 @@ export const SendEmailTemplate = z.object({
   ),
 });
 
+export type NotifierOptions={
+  source: 'email'| 'sms'
+}
 const Messenger = z.object({
   send: z
     .function()

@@ -21,7 +21,7 @@ services:
       - DG_HOST=pg_db
       - NODE_ENV=development
       - REDIS_URL=redis://redis:6379/0
-    command: ./docker-entrypoint.sh
+    command: ./docker-entrypoint.dev.sh
     depends_on:
       - pg_db
 

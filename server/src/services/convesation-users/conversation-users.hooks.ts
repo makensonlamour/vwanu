@@ -3,6 +3,8 @@ import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
 // import { AddAssociations, IncludeAssociations } from '../../Hooks';
 
+import AgeAllow from '../../Hooks/AgeAllow';
+
 const { authenticate } = authentication.hooks;
 
 const findConversationsFrom = async ({ app, conversationId }) => {
@@ -43,6 +45,7 @@ export default {
   before: {
     all: [
       authenticate('jwt'),
+      AgeAllow
       // IncludeAssociations({
       //   include: [
       //     {

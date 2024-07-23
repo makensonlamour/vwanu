@@ -1,7 +1,7 @@
 import commonHooks from 'feathers-hooks-common';
 import * as authentication from '@feathersjs/authentication';
 
-import { AutoOwn, LimitToOwner, IncludeAssociations } from '../../Hooks';
+import { AutoOwn, AgeAllow, LimitToOwner, IncludeAssociations } from '../../Hooks';
 
 const { authenticate } = authentication.hooks;
 
@@ -16,6 +16,7 @@ export default {
   before: {
     all: [
       authenticate('jwt'),
+      AgeAllow,
       IncludeAssociations({
         include: [
           {

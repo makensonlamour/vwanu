@@ -2,6 +2,7 @@ import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
 import {
   AutoOwn,
+  AgeAllow,
   LimitToOwner,
   IncludeAssociations,
   AdjustCount,
@@ -25,6 +26,7 @@ export default {
   before: {
     all: [
       authenticate('jwt'),
+      AgeAllow,
       IncludeAssociations({
         include: [
           {

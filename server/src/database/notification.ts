@@ -10,12 +10,13 @@ export interface NotificationInterface {
   view: boolean;
   entityName: string;
   entityId: number;
+  notificationType: string;
+  sound: boolean;
 }
 export default (sequelize: any, DataTypes: any) => {
   class Notification
     extends Model<NotificationInterface>
-    implements NotificationInterface
-  {
+    implements NotificationInterface {
     id: string;
 
     to: string;
@@ -29,6 +30,9 @@ export default (sequelize: any, DataTypes: any) => {
     entityId: number;
 
     entityName: string;
+
+    notificationType: string;
+    sound: boolean;
 
     static associate(models: any): void {
       Notification.belongsTo(models.User);
@@ -61,6 +65,18 @@ export default (sequelize: any, DataTypes: any) => {
 
       entityId: {
         type: DataTypes.UUID,
+      },
+      sound: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      notificationType: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+          model: 'notification_types',
+          key: 'notification_slug',
+        },
       },
       view: {
         type: DataTypes.BOOLEAN,

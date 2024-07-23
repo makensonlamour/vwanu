@@ -38,6 +38,19 @@ import communityRoles from './community-roles';
 import communityUsers from './community-users';
 import communityInvitationRequest from './communityInvitationRequest';
 import forumCatergory from './forumCatergory';
+import workplace from './workplace';
+import userWorkplace from './userWorkplace';
+import communityBans from './community-bans';
+import communityHistory from './community-history';
+import notificationsSettings from './notifications_types';
+import UserNotificationsSettings from './user_notifications_settings';
+import phone from './phones'
+import userPhoneVerification from './userPhoneVerification';
+import errorCodes from './errorCodes.db';
+import expiryTime from './expiryTime'
+import templateMessages from './templateMessages';
+import userNotificationTypes from './user_notification_types';
+import accessLevelLogs from './access_level_logs'
 
 const tables = [
   call,
@@ -70,8 +83,21 @@ const tables = [
   refreshToken,
   communityUsers,
   communityRoles,
+  communityBans,
+  communityHistory,
   communityInvitationRequest,
   forumCatergory,
+  workplace,
+  userWorkplace,
+  notificationsSettings,
+  UserNotificationsSettings,
+  phone,
+  userPhoneVerification,
+  errorCodes,
+  expiryTime,
+  templateMessages,
+  userNotificationTypes,
+  accessLevelLogs
 ];
 
 export default function (app: Application): void {

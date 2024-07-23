@@ -20,7 +20,7 @@ const CommunityGuidelines = () => {
           <Link to="#" className="text-primary hover:text-secondary font-semibold">
             Community Guidelines Archives
           </Link>
-          <button className="px-6 bg-primary text-white rounded-full py-2 hover:bg-secondary text-md">Download Pdf</button>
+          {/* <button className="px-6 bg-primary text-white rounded-full py-2 hover:bg-secondary text-md">Download Pdf</button> */}
         </div>
       </div>
       <div className="bg-gradient-to-tr from-g-one/[0.78] to-g-two/[0.78] h-52 rounded-xl mx-auto flex items-center justify-center align-middle flex-col">

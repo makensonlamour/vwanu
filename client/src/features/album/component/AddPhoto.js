@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
+
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import InputPhoto from "../../post/components/InputPhoto";
 import { useGetAlbumList, useAddPhoto } from "../albumSlice";
 import { MdPhotoSizeSelectActual, MdVideoLibrary } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
+import Loader from "../../../components/common/Loader";
 
 const AddPhoto = ({ user, type = "photo" }) => {
   const [showModal, setShowModal] = useState(false);
@@ -22,10 +25,10 @@ const AddPhoto = ({ user, type = "photo" }) => {
   };
 
   const handleSubmit = () => {
-    if (!data?.selectAlbum) {
-      alert("Select an album to continue");
-      return;
-    }
+    // if (!data?.selectAlbum) {
+    //   alert("Select an album to continue");
+    //   return;
+    // }
     setIsLoading(true);
     let formData = new FormData();
     if (media?.length) {
@@ -33,17 +36,17 @@ const AddPhoto = ({ user, type = "photo" }) => {
         return formData.append("albumImage", file);
       });
     }
-    formData.append("id", data?.selectAlbum);
+    // formData.append("id", data?.selectAlbum);
 
     try {
       addPhoto.mutateAsync(formData);
-      setShowModal(false);
       setMedia([]);
       setData({ caption: "", selectAlbum: "", privacy: "" });
     } catch (e) {
       console.log(e);
     } finally {
       setIsLoading(false);
+      setShowModal(false);
     }
   };
 
@@ -59,13 +62,13 @@ const AddPhoto = ({ user, type = "photo" }) => {
         }}
         className="px-2 sm:px-4 py-2 text-xs sm:text-sm bg-placeholder-color text-gray-900 hover:bg-primary hover:text-white rounded-xl mr-2"
       >
-        {type === "photo" ? " Add Media" : " Add Videos"}
+        {type === "photo" ? " Add Media" : " Add Media"}
       </button>
       {showModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-5 border w-[90%] sm:w-[50%] shadow-lg rounded-md bg-white">
             <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-              <p className="text-xl font-semibold">{type === "photo" ? "Upload Photo" : "Upload Video"}</p>
+              <p className="text-xl font-semibold">{type === "photo" ? "Upload Media" : "Upload Media"}</p>
               <button
                 onClick={() => {
                   setMedia([]);
@@ -95,7 +98,7 @@ const AddPhoto = ({ user, type = "photo" }) => {
                         label={
                           <Fragment>
                             <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
-                            <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                            <p className="text-center text-md font-semibold">{"Add Media"}</p>
                             <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
                           </Fragment>
                         }
@@ -117,7 +120,7 @@ const AddPhoto = ({ user, type = "photo" }) => {
                               label={
                                 <Fragment>
                                   <MdPhotoSizeSelectActual size={"28px"} className="text-center mx-auto" />
-                                  <p className="text-center text-md font-semibold">{"Add Photos"}</p>
+                                  <p className="text-center text-md font-semibold">{"Add Media"}</p>
                                   <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
                                 </Fragment>
                               }
@@ -157,7 +160,7 @@ const AddPhoto = ({ user, type = "photo" }) => {
                         label={
                           <Fragment>
                             <MdVideoLibrary size={"28px"} className="text-center mx-auto" />
-                            <p className="text-center text-md font-semibold">{"Add Video"}</p>
+                            <p className="text-center text-md font-semibold">{"Add Media"}</p>
                             <p className="text-center text-sm font-light">{"or Drag and drop"}</p>
                           </Fragment>
                         }
@@ -209,7 +212,7 @@ const AddPhoto = ({ user, type = "photo" }) => {
                 </div>
               </div>
             )}
-            {media?.length !== 0 && (
+            {/* {media?.length !== 0 && (
               <div className="flex flex-col sm:flex-row justify-end">
                 <select
                   required
@@ -227,13 +230,21 @@ const AddPhoto = ({ user, type = "photo" }) => {
                       );
                     })}
                 </select>
-                {!isLoading && (
-                  <button onClick={handleSubmit} className="bg-primary px-4 py-2 rounded-lg text-white hover:bg-secondary">
-                    Upload
-                  </button>
-                )}
+                
+                
               </div>
-            )}
+            )} */}
+            <div className="flex flex-col sm:flex-row justify-end">
+              {!isLoading && (
+                <button
+                  disabled={isLoading ? true : false}
+                  onClick={handleSubmit}
+                  className="bg-primary px-4 py-2 rounded-lg text-white hover:bg-secondary"
+                >
+                  {isLoading ? <Loader /> : "Upload"}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

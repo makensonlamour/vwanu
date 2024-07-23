@@ -10,6 +10,14 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
+      access_role: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'CommunityRoles',
+          key: 'id',
+        },
+      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -17,6 +25,11 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      active_status: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
       },
 
@@ -75,7 +88,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      website: {
+      birthday: {
         type: Sequelize.STRING,
         allowNull: true,
       },

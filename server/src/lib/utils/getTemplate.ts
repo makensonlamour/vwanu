@@ -3,8 +3,8 @@ import { Application } from '../../declarations';
 
 import { MessageTemplateInterface } from '../../schema/messageTemplate';
 
-const TemplateServiceName = 'template';
-type OptionsType = {} | Pick<MessageTemplateInterface, 'type'>;
+import { NotifierOptions } from '../../schema/email.schema'
+
 
 /**
  * @param {Application} app | FeathersJS application instance
@@ -20,16 +20,19 @@ export default (app: Application) =>
    */
   async (
     snug: Pick<MessageTemplateInterface, 'snug'>,
-    notifierOptions: OptionsType = {}
-  ): Promise<MessageTemplateInterface> =>
-    new Promise((resolve, reject) => {
+    notifierOptions: NotifierOptions = { source: 'email' }
+  ): Promise<MessageTemplateInterface> => {
+    const TemplateServiceName = notifierOptions.source === 'email' ? 'template' : 'template_messages';
+
+    return new Promise((resolve, reject) => {
       app
         .service(TemplateServiceName)
-        ._find({ query: { snug, ...notifierOptions }, paginate: false })
+        ._find({ query: { snug }, paginate: false })
         .then((response) => {
           resolve(response[0] as any);
         })
         .catch((error) => {
           reject(error);
         });
-    });
+    })
+  };

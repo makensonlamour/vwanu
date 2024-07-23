@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import * as authentication from '@feathersjs/authentication';
 
 import addAssociation from '../../Hooks/AddAssociations';
@@ -24,22 +25,17 @@ export default {
         ],
       }),
     ],
-    get: [],
     create: [AutoOwn],
-    update: [],
-    patch: [],
-    remove: [],
   },
 
   after: {
-    all: [],
-    find: [],
-    get: [],
     create: [
       async (context) => {
-        const { UserId } = await context.app
-          .service('posts')
-          .get(context.result.id);
+        const { entityType, entityId } = context.data;
+        const service = entityType === 'Post' ? 'posts' : entityType;
+
+        const { UserId } = await context.app.service(service)._get(entityId);
+
         await context.app.service('notification').create({
           UserId: context.params.User.id,
           to: UserId, //
@@ -51,18 +47,5 @@ export default {
         return context;
       },
     ],
-    update: [],
-    patch: [],
-    remove: [],
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
   },
 };

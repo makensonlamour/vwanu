@@ -13,6 +13,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      role_access_level: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

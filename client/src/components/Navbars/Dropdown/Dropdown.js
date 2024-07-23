@@ -9,6 +9,8 @@ import { BsPower } from "react-icons/bs";
 const Dropdown = ({ user }) => {
   function Logout() {
     deleteToken("feathers-jwt");
+    localStorage.removeItem("lastActiveTime");
+    localStorage.removeItem("rememberMe");
     window.location.reload();
   }
 

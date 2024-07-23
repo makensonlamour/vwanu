@@ -6,7 +6,9 @@ export const AreFriends = (UserId, Sequelize) => {
     EXISTS(
     SELECT 1 
     FROM "User_friends" 
-    WHERE "User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${UserId}'
+    WHERE 
+    ("User_friends"."UserId" = "User"."id" AND "User_friends"."friendId" = '${UserId}')
+    OR ("User_friends"."friendId" = "User"."id" AND "User_friends"."UserId" = '${UserId}')
     ))`;
   return Sequelize.literal(friends);
 };
@@ -21,11 +23,11 @@ export const OnlyInterests = (interest) =>
 export const notMemberOfCommunity = (communityId) => `(
   NOT EXISTS(
     SELECT 1 FROM 
-    "CommunityUsers" AS "CU"
-    LEFT JOIN "CommunityInvitationRequests" AS "CIR" ON "CIR"."guestId"="CU"."UserId"
+    "community_users" AS "CU"
+    LEFT JOIN "CommunityInvitationRequests" AS "CIR" ON "CIR"."guestId"="CU"."user_id"
     WHERE 
-   ("CU"."UserId"="User"."id" AND
-   "CU"."CommunityId"='${communityId}') 
+   ("CU"."user_id"="User"."id" AND
+   "CU"."community_id"='${communityId}') 
     OR (
     "CIR"."CommunityId"='${communityId}'  
     AND "CIR"."response" IS NULL) 
@@ -114,6 +116,22 @@ export const Addresses = `(
     INNER JOIN "AddressTypes" ON "AddressTypes"."id" = "EntityAddresses"."AddressTypeId"
     WHERE "EntityAddresses"."UserId" = "User"."id"
   )`;
+
+export const WorkPlaces = `(
+  SELECT 
+    json_agg(
+      json_build_object(
+        'id', "WorkPlaces"."id",
+        'name', "WorkPlaces"."name",  
+        'description', "UserWorkPlaces"."description",
+        'from', "UserWorkPlaces"."from",
+        'to', "UserWorkPlaces"."to"
+      ))
+    FROM "WorkPlaces"
+    INNER JOIN "UserWorkPlaces" ON "WorkPlaces"."id" = "UserWorkPlaces"."WorkPlaceId"
+    WHERE "UserWorkPlaces"."UserId" = "User"."id"
+    
+  )`;
 export default (UserId, Sequelize, ex = null) => {
   const Interests = `(
 SELECT 
@@ -153,7 +171,7 @@ SELECT
       ))`;
 
   const amountOfFriendRequest = `(
-    SELECT COUNT(*) FROM "User_friends_request" WHERE "User_friends_request"."friendsRequestId" = "User"."id"
+    SELECT COUNT(*) FROM "User_friends_request" WHERE "User_friends_request"."UserId" = "User"."id"
   )::int`;
 
   const exclude = ex || [
@@ -178,6 +196,7 @@ SELECT
       // [Sequelize.literal(amountOfFriend), 'amountOfFriend'],
       [Sequelize.literal(Interests), 'Interests'],
       [Sequelize.literal(Addresses), 'Addresses'],
+      [Sequelize.literal(WorkPlaces), 'WorkPlaces'],
       [Sequelize.literal(amountOfFriendRequest), 'amountOfFriendRequest'],
     ],
     exclude,

@@ -1,18 +1,21 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import * as Yup from "yup";
 import useAuth from "../../../hooks/useAuth";
 import { FormattedMessage } from "react-intl";
-
+import { useGetCountry } from "../../address/addressSlice";
+import { getValueFromList } from "../../../helpers";
 // Core components
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
-import { Field, Form, Checkbox, Submit } from "../../../components/form";
+import { Field, Form, Telephone, Checkbox, Submit } from "../../../components/form";
 import Loader from "../../../components/common/Loader";
+import { AddPhone } from "../authSlice";
 
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required().min(3).label("First Name"),
   lastName: Yup.string().required().min(3).label("Last Name"),
   email: Yup.string().required().min(6).email().label("Email"),
+  phone: Yup.string().nullable().label("Telephone"),
   password: Yup.string().required().min(8).label("Password"),
   passwordConfirmation: Yup.string()
     .required()
@@ -24,6 +27,7 @@ const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
+  phone: "",
   password: "",
   passwordConfirmation: "",
   termOfUse: false,
@@ -33,6 +37,9 @@ let trigger = false;
 
 const FormRegister = () => {
   const { isLoading, error, signup } = useAuth();
+  const addPhone = AddPhone(["user", "me"], undefined, undefined);
+  const [countryC, setCountryC] = useState("");
+  const { data: countryList } = useGetCountry(["country", "all"], true);
 
   function reloadPage() {
     window.location.reload();
@@ -41,8 +48,13 @@ const FormRegister = () => {
   const handleRegister = async (credentials) => {
     trigger = true;
     try {
+      const idCode = getValueFromList(countryList, countryC, "id");
+      // console.log("credentials", formatPhoneNumber(credentials?.phone), code, "+" + countryC);
+      const phoneData = { phoneNumber: credentials.phone, countryCode: idCode };
+      // console.log("phoneData", phoneData);
       await signup(credentials);
       // alertService.error(error, { autoClose: true });
+      await addPhone.mutateAsync(phoneData);
       reloadPage();
     } catch (e) {
       console.log("error", e);
@@ -113,6 +125,13 @@ const FormRegister = () => {
           containerClassName="my-4"
           className="mt-1 lg:mt-1 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
           testId="email-error-message"
+        />
+        <Telephone
+          label=""
+          name="phone"
+          setCountryCode={setCountryC}
+          containerClassName="my-4"
+          className="mt-1 lg:mb-2 lg:mt-0 bg-blue-200 text-secondary placeholder:text-secondary font-semibold rounded-full input-secondary border-none invalid:text-red-500 autofill:text-secondary autofill:bg-blue-200"
         />
         <Field
           required

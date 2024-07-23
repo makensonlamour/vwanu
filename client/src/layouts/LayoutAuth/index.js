@@ -13,11 +13,19 @@ const LayoutAuth = () => {
 
   const location = useLocation();
   const { countMessage } = useContext(MessageContext);
+  const email = localStorage.getItem("email");
 
   if (!user) {
     // deleteToken();
-    navigate(routesPath.LOGIN, { from: location.pathname });
+    console.log("test", email);
+    if (email !== "" && email !== undefined) {
+      navigate(routesPath.LOCKSCREEN, { from: location.pathname });
+    } else {
+      navigate(routesPath.LOGIN, { from: location.pathname });
+    }
   }
+
+  // Navigate to lockscreen
 
   return (
     <>
@@ -25,7 +33,13 @@ const LayoutAuth = () => {
       {user?.birthday ? <Navigate to={routesPath.NEWSFEED} state={{ from: location }} replace /> : null}
       <div className="">
         <div className="h-auto my-4 px-4 lg:px-16">
-          {user ? <Outlet context={user ? user : undefined} /> : <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />}
+          {user ? (
+            <Outlet context={user ? user : undefined} />
+          ) : email !== "" && email !== undefined ? (
+            <Navigate to={routesPath.LOCKSCREEN} state={{ from: location }} replace />
+          ) : (
+            <Navigate to={routesPath.LOGIN} state={{ from: location }} replace />
+          )}
         </div>
       </div>
     </>

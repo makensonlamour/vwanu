@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable global-require */
 /* eslint-disable import/no-dynamic-require */
 
@@ -13,15 +14,23 @@ if (process.env.NODE_ENV === 'test') {
   dbs.host = 'localhost';
 }
 
-
-
 export default function (app: Application): void {
   const sequelize = dbSettings.url
     ? new Sequelize(dbSettings.url)
     : new Sequelize({
         logging: false,
         ...dbs,
+        seederStorge: 'sequelize',
       });
+
+  // handling sequelize query error
+  sequelize.query = async function (...args) {
+    try {
+      return await Sequelize.prototype.query.apply(this, args);
+    } catch (err) {
+      throw err;
+    }
+  };
 
   const oldSetup = app.setup;
   app.set('sequelizeClient', sequelize);

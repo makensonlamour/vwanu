@@ -1,4 +1,5 @@
 #remove my custom docker file (@gh4m21)
+docker-compose.react.yml
 docker-compose.pam.yml
 build
 request.http

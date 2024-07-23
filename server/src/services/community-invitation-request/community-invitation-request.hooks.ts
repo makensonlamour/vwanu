@@ -3,7 +3,7 @@ import { BadRequest } from '@feathersjs/errors';
 
 /** Local dependencies */
 import AutoAssign from '../../Hooks/AutoAssign.hook';
-import { AddAssociations } from '../../Hooks';
+import { AddAssociations, AgeAllow } from '../../Hooks';
 import UrlToMedia from '../../lib/utils/UrlToMedia';
 
 import { OnlyNotResponded } from './hook';
@@ -99,7 +99,7 @@ const notifyInvitation = async (context) => {
 };
 export default {
   before: {
-    all: [authenticate('jwt'), IncludeGuests],
+    all: [authenticate('jwt'), AgeAllow, IncludeGuests],
     find: [OnlyNotResponded],
     get: [],
     create: [AutoAssign({ hostId: null }), noDuplicateInvitation],

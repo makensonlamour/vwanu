@@ -103,7 +103,8 @@ export default function CommunityTabs({ communityData }) {
                 />
               )}
               {/* <Tab style={{ textTransform: "capitalize", fontSize: 15 }} label="Send Message" value="6" component={Link} to={allTabs[5]} /> */}
-              {(communityData?.IsMember?.role === "admin" || communityData?.IsMember?.role === "moderator") && (
+              {console.log({ tabs: communityData })}
+              {(communityData?.isMember?.role === "admin" || communityData?.isMember?.role === "moderator") && (
                 <Tab
                   style={{ textTransform: "capitalize", fontSize: 15 }}
                   sx={{ color: "#ff4200" }}

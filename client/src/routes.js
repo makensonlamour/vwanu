@@ -22,12 +22,14 @@ import ViewForum from "./pages/Forum/ViewForum";
 import ForumList from "./pages/Forum/ForumList";
 import PreviewPhoto from "./pages/NewsFeed/PreviewPhoto";
 import Notification from "./pages/Notification/Notification";
+import NotificationSetting from "./pages/Notification/NotificationSetting";
 import CallScreen from "./pages/Call/CallScreen";
 import TermsConditions from "./pages/Policies/TermsConditions";
 import PrivacyPolicy from "./pages/Policies/PrivacyPolicy";
 import CommunityGuidelines from "./pages/Policies/CommunityGuidelines";
 import TestSingleComponents from "./pages/TestSingleComponents/index";
 import { Step, StepTwo, StepThree, StepFour } from "./pages/Profil/Steps";
+import Lockscreen from "./pages/Lockscreen/Lockscreen";
 
 //define access roles
 let role = {
@@ -44,6 +46,12 @@ let routes = [
     path: routesPath.LOGIN,
     name: "Login",
     element: Login,
+    access: role.PUBLIC,
+  },
+  {
+    path: routesPath.LOCKSCREEN,
+    name: "Lockscreen",
+    element: Lockscreen,
     access: role.PUBLIC,
   },
   {
@@ -190,6 +198,12 @@ let routes = [
     path: routesPath.NOTIFICATIONS,
     name: "Notifications",
     element: Notification,
+    access: role.USER,
+  },
+  {
+    path: routesPath.NOTIFICATIONS_SETTINGS,
+    name: "Notifications Settings",
+    element: NotificationSetting,
     access: role.USER,
   },
   {

@@ -2,6 +2,8 @@
 import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
 
+import AgeAllow from '../../Hooks/AgeAllow';
+
 import {
   AddSender,
   NewestFirst,
@@ -16,7 +18,7 @@ const { authenticate } = authentication.hooks;
 
 export default {
   before: {
-    all: [authenticate('jwt'), IncludeSenderAndConversation],
+    all: [authenticate('jwt'), AgeAllow, IncludeSenderAndConversation],
     find: [NewestFirst],
     get: [],
     create: [AddSender],

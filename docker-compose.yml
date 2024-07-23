@@ -1,53 +1,52 @@
 version: '3.8'
 services:
   web:
-    container_name: vwanu_web
+    container_name: vwanu_web_stage
+    image: vwanu_web:staging-nginx
     build:
       context: ./client
+      dockerfile: Dockerfile.nginx
+      args:
+        - REACT_APP_API_URL=${SERVER_ADDRESS}
+        - REACT_API_URL=${SERVER_ADDRESS}
     ports:
-      - 3000:3000
-    volumes:
-      - ./client:/app
+      - '3000:3000'
+    restart: unless-stopped
   api:
-    container_name: vwanu_api
-    image: vwanu_api:0.0.1
+    env_file:
+      - .env
+    container_name: vwanu_api_stage
+    image: vwanu_api:staging-nginx-2.0.1
     build:
       context: ./server
+      dockerfile: Dockerfile.stage
     ports:
       - '4000:4000'
-    volumes:
-      - ./server:/app
     environment:
       - PORT=4000
       - PGDATABASE=social_media
       - PGUSER=vwanu
       - PGPASSWORD=123456
-      - PGHOST=pg_db
-      - NODE_ENV=development
-      - REDIS_URL=redis://redis:6379/0
+      - DB_HOST=pg_db
+      - REDIS_URL=redis://cache
+    command: ./docker-entrypoint.sh
     depends_on:
       - pg_db
-    links:
-      - redis
+
   pg_db:
     container_name: pg_db
     image: 'postgres:12'
     ports:
       - '5432:5432'
+    restart: always
+
     environment:
       - POSTGRES_USER=vwanu
       - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=social_media
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-      - nps_data:/var/lib/postgresql/data
-  redis:
-     image: 'redis:alpine'
-    # image: redis:6.2-alpine
-    # container_name: redis
-    # restart: unless-stopped
-    # network_mode: bridge
-    # ports:
-    #   - '6379:6379'
+      - data:/var/lib/postgresql/data
+
 volumes:
-  nps_data: {}
+  data: {}

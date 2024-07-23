@@ -251,4 +251,20 @@ describe('/authmanagement service', () => {
       expect(resetPass !== oldPassword).toBe(true);
     });
   });
+  describe('Phone Verification',()=>{
+
+    it('It can request a phone verification code', ()=>{
+      console.log({user})
+      // create a user 
+      // add a phone number for the user 
+      const userWithPhone = await testServer.patch()
+      // request  phone verification code. 
+      // expect a 200 response. 
+    })
+    it.todo('Received a new verification code when phone when not ver')
+    it.todo('Recieved an error when phone is already verified')
+    it.todo('Cannot verified phone with incorrect verification code')
+    it.todo('Can verify phone with correct verification code')
+
+  })
 });

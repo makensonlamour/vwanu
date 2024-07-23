@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import * as authentication from '@feathersjs/authentication';
 // Don't remove this comment. It's needed to format import lines nicely.
-
+import { disallow } from 'feathers-hooks-common';
 import LimitToOwner from '../../Hooks/LimitToOwner';
-import { AutoOwn } from '../../Hooks';
+import { AutoOwn, AgeAllow } from '../../Hooks';
 
 import saveProfilePicture from '../../Hooks/SaveProfilePictures.hooks';
 
@@ -11,55 +11,28 @@ import filesToBody from '../../middleware/PassFilesToFeathers/feathers-to-data.m
 
 import SaveAndAttachInterests from '../../Hooks/SaveAndAttachInterest';
 
-import { FindCommunities, AccessCommunity } from './hooks';
+import { FindCommunities } from './hooks';
 
-const AutoJoin = async (context) => {
-  const { params, app, result } = context;
-  const {
-    User: { id },
-  } = params;
-  let roles;
-
-  try {
-    roles = await app.service('community-role')._find({
-      query: {
-        name: 'admin',
-        $select: ['id'],
-        $limit: 1,
-      },
-      paginate: false,
-    });
-    const adminRole = roles[0].id;
-    if (!adminRole) throw new Error('No admin role found');
-    await app.service('community-users').create({
-      UserId: id,
-      CommunityId: result.id,
-      CommunityRoleId: adminRole,
-    });
-  } catch (err) {
-    throw new Error(err.message);
-  }
-
-  return context;
-};
-const AutoAdmin = (context) => {
-  context.data.numAdmins = 1;
+const refetch = async (context) => {
+  const { app, result } = context;
+  const { id } = result;
+  const community = await app.service('communities')._get(id);
+  context.result = community;
   return context;
 };
 
 const { authenticate } = authentication.hooks;
+
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt'), AgeAllow],
     find: [FindCommunities],
-    get: [AccessCommunity],
     create: [
       AutoOwn,
-      AutoAdmin,
       saveProfilePicture(['profilePicture', 'coverPicture']),
       filesToBody,
     ],
-    update: [],
+    update: disallow(),
     patch: [
       LimitToOwner,
       saveProfilePicture(['profilePicture', 'coverPicture']),
@@ -68,29 +41,14 @@ export default {
   },
 
   after: {
-    all: [],
-    find: [],
-    get: [],
     create: [
-      AutoJoin,
+      // AutoJoin,
       SaveAndAttachInterests({
         entityName: 'Community',
         relationTableName: 'Community_Interest',
         foreignKey: 'CommunityId',
       }),
+      refetch,
     ],
-    update: [],
-    patch: [],
-    remove: [],
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
   },
 };

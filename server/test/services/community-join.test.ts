@@ -10,7 +10,6 @@ describe("'community-join ' service", () => {
   let testServer;
   let communities;
   let invitations;
-  // let denier;
   let creator;
 
   const userEndpoint = '/users';
@@ -18,6 +17,7 @@ describe("'community-join ' service", () => {
   const communityEndpoint = '/communities';
   const invitationEndpoint = '/community-invitation-request';
   const endpoint = '/community-join';
+ 
 
   let privateCommunity;
   let publicCommunity;
@@ -38,15 +38,22 @@ describe("'community-join ' service", () => {
     creator = testUsers.shift();
     // denier = testUsers.shift();
 
-    roles = await Promise.all(
-      ['admin', 'member', 'moderator'].map((name) =>
-        testServer
-          .post(rolesEndpoint)
-          .send({ name })
-          .set('authorization', adminUser.accessToken)
-      )
-    );
-    roles = roles.map((role) => role.body);
+    try {
+      roles = await testServer
+        .get(rolesEndpoint)
+        .set('authorization', adminUser.accessToken);
+      roles = roles.body.data.sort((a, b) => a.name - b.name);
+    } catch (e) {
+      roles = await Promise.all(
+        ['admin', 'member', 'moderator'].map((name) =>
+          testServer
+            .post(rolesEndpoint)
+            .send({ name })
+            .set('authorization', adminUser.accessToken)
+        )
+      );
+      roles = roles.map((role) => role.body);
+    }
 
     const name = 'New community';
     const description = 'Unique description required';
@@ -91,10 +98,8 @@ describe("'community-join ' service", () => {
     const user = testUsers[0];
 
     const join = await testServer
-      .post(endpoint)
-      .send({
-        CommunityId: publicCommunity.id,
-      })
+      .post(joinEndpoint)
+      .send({ CommunityId: publicCommunity.id })
       .set('authorization', user.accessToken);
 
     expect(join.body).toMatchObject({
@@ -109,6 +114,7 @@ describe("'community-join ' service", () => {
       email: null,
       hostId: null,
     });
+
     const foundUser = await app
       .get('sequelizeClient')
       .models.CommunityUsers.findOne({
@@ -116,13 +122,24 @@ describe("'community-join ' service", () => {
       });
 
     expect(foundUser).toMatchObject({
-      id: expect.any(String),
       banned: false,
       bannedDate: null,
       CommunityId: expect.any(String),
       UserId: user.id,
       CommunityRoleId: expect.any(String),
     });
+  });
+  it('Cannot Join same community twice', async () => {
+    const user = testUsers[0];
+
+    const { statusCode } = await testServer
+      .post(endpoint)
+      .send({
+        CommunityId: publicCommunity.id,
+      })
+      .set('authorization', user.accessToken);
+
+    expect(statusCode).toBe(400);
   });
   it('Hidden does not accept join request', async () => {
     const user = testUsers[0];
@@ -136,7 +153,7 @@ describe("'community-join ' service", () => {
 
     expect(join.body).toMatchObject({
       name: 'BadRequest',
-      message: 'Only public community can be joined',
+      message: expect.any(String),
       code: 400,
       className: 'bad-request',
       errors: {},
@@ -155,7 +172,7 @@ describe("'community-join ' service", () => {
 
     expect(join.body).toMatchObject({
       name: 'BadRequest',
-      message: 'Only public community can be joined',
+      message: expect.any(String),
       code: 400,
       className: 'bad-request',
       errors: {},

@@ -18,12 +18,13 @@ export default (context: HookContext): HookContext => {
   delete where.action;
   delete where.UserId;
   const peopleWhoWantToBeMyFriend = `(
+
       EXISTS (
-    SELECT 1
-      FROM "User_friends_Want_to_Be" AS "UFWTB"
-      WHERE "UFWTB"."UserId"='${
+        SELECT 1
+      FROM "User_friends_request" AS "UFR"
+      WHERE "UFR"."friendsRequestId"='${
         UserId || params.User.id
-      }' AND "UFWTB"."FriendshipRequestedId"="User"."id"
+      }' AND "UFR"."UserId"="User"."id"
     ))`;
 
   const peopleIWantToBe = `(

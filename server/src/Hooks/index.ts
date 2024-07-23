@@ -11,3 +11,4 @@ export { default as AddAssociations } from './AddAssociations';
 export { default as ServiceAssign } from './ServiceAssign';
 export { default as TrueBoolean } from './TrueBoolean';
 export { default as AddTalker } from './AddTalker';
+export { default as AgeAllow } from './AgeAllow';

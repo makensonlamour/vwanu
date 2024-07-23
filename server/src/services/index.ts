@@ -35,29 +35,26 @@ import conversation from './conversation/conversation.service';
 import message from './message/message.service';
 import convesationUsers from './convesation-users/convesation-users.service';
 import country from './country/country.service';
-
 import state from './state/state.service';
-
 import city from './city/city.service';
-
 import street from './street/street.service';
-
 import address from './address/address.service';
-
 import addressTypes from './address-types/address-types.service';
-
 import userAddress from './user-address/user-address.service';
-
 import searchBlog from './search-blog/search-blog.service';
-
 import searchCommunity from './search-community/search-community.service';
-
 import forumCategories from './forum-categories/forum-categories.service';
 import call from './call/call.service';
-
 import templates from './templates/templates.service';
-
 import template from './template/template.service';
+import workplace from './workplace/workplace.service';
+import userWorkPlaces from './user-work-places/user-work-places.service';
+import communityBans from './community-bans/community-bans.service';
+import communityHistory from './community-history/community-history.service';
+import phone from './phone/phone.service'
+import templateMessage from './templateMessages/templateMessage.service';
+import notificationTypes from './notification_types/notification_types.service';
+import userNotificationTypes from './user_notification_types/user_notification_types.service';
 
 export default function (app: Application): void {
   app.configure(search);
@@ -107,4 +104,12 @@ export default function (app: Application): void {
   app.configure(forumCategories);
   app.configure(templates);
   app.configure(template);
+  app.configure(workplace);
+  app.configure(userWorkPlaces);
+  app.configure(communityBans);
+  app.configure(communityHistory);
+  app.configure(phone)
+  app.configure(templateMessage)
+  app.configure(notificationTypes)
+  app.configure(userNotificationTypes)
 }
