@@ -1,10 +1,44 @@
 {
   "general.welcome": "Welcome",
   "general.together": "Together We are Stronger",
+  "general.orText": "OR",
+  "general.backToHome": "Back to Home",
+  "general.retryBtn": "Tap To Retry",
+  "general.retryTxt": "There was an error while fetching the data.",
+  "general.backToTopTxt": "Back to Top ^",
+
   "login.notMemberText": "Not a member yet ?",
   "login.registerText": "Register",
   "login.signInToVwanu": "Sign in to Vwanu",
 
   "register.signinText": "Sign In",
-  "register.alreadyHaveText": "Already have an account ?"
+  "register.alreadyHaveText": "Already have an account ?",
+  "register.joinCommunity": "Join the Vwanu Community",
+  "register.signupBtn": "Sign up",
+
+  "forgotPassword.createAccount": "Create New Account",
+  "forgotPassword.backToLogin": "Back to Login",
+  "forgotPassword.resetPaswordBtn": "Reset Password",
+  "forgotPassword.forgotPaswordText": "Forgot your password?",
+  "forgotPassword.descriptionText": "Enter your email and we'll send you a link to reset your password.",
+  "forgotPassword.descriptionSuccessText": "Your request has been approved. We send you a link to reset your password on your email.",
+
+  "resetPassword.createNewPassword": "Create New password",
+  "resetPassword.changPasswordBtn": "Change Password",
+
+  "verifyEmail.successTxt": "Your email has been verified succesfully.",
+  "verifyEmail.alreadyVerifyTxt": "Your email has already verified.",
+  "verifyEmail.errorTxt": "Unknow error occurs while verified your email.",
+
+  "newsfeed.noMorePostText": "No more post.",
+  "newsfeed.noPostText": "No posts to show.",
+  "newsfeed.activityFeedText": "Activity Feed",
+
+  "post.postOnTxt": " post on ",
+  "post.wallTxt": "'s wall",
+  "post.postFromTxt": "post from",
+  "post.sharedABlogTxt": " shared a blog",
+  "post.sharedADiscussionTxt": " shared a discussion",
+  "post.sharedAPostTxt": " shared a post",
+  "post.agoTxt": " ago"
 }

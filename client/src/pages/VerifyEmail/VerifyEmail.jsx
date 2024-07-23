@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import routesPath from "../../routesPath";
+import _ from "lodash";
+import { FormattedMessage } from "react-intl";
 // import _ from "lodash";
 
 //RTK query
@@ -40,7 +42,10 @@ const VerifyEmailScreen = () => {
               <p className="">
                 <MdMarkEmailRead size="48" className="m-auto text-green-600" />
               </p>
-              <p className="text-green-600 text-center font-semibold mt-4">Your email has been verified succesfully.</p>
+              <p className="text-green-600 text-center font-semibold mt-4">
+                {" "}
+                <FormattedMessage id="verifyEmail.successTxt" defaultMessage="Your email has been verified succesfully." description="" />
+              </p>
             </div>
           ) : verifyEmail?.error ? (
             <div className="bg-info shadow-3xl rounded-3xl px-2 md:px-8 py-16 justify-center m-auto md:w-2/3 lg:w-2/5">
@@ -54,13 +59,20 @@ const VerifyEmailScreen = () => {
               <p className="">
                 <VscError size="48" className="m-auto text-white" />
               </p>
-              <p className="text-white text-center font-semibold mt-4">Unknow error occurs while verified your email.</p>
+              <p className="text-red-600 text-center font-semibold mt-4">
+                {" "}
+                <FormattedMessage
+                  id="verifyEmail.errorTxt"
+                  defaultMessage="Unknow error occurs while verified your email."
+                  description=""
+                />
+              </p>
             </div>
           )}
 
           <div className="m-auto text-center mt-16">
             <Link className="text-primary font-bold mt-10 text-center" to={routesPath.NEWSFEED}>
-              Back to Home
+              <FormattedMessage id="general.backToHome" defaultMessage="Back To Home" description="" />
             </Link>
           </div>
         </div>

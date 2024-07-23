@@ -10,6 +10,7 @@ import { useDeletePost } from "../../post/postSlice";
 import toast, { Toaster } from "react-hot-toast";
 import EditPost from "../components/EditPost";
 import { useQueryClient } from "react-query";
+import { FormattedMessage } from "react-intl";
 
 const deletePostError = () =>
   toast.error("Sorry. Error on deleting this user!", {
@@ -104,9 +105,9 @@ const MenuPost = ({ post }) => {
 
       <ReusableDialog
         post={post}
-        title={"Delete Post"}
-        action={"delete"}
-        item={"post"}
+        title={<FormattedMessage id="dialog.deletePostTxt" defaultMessage="Delete Post" description="" />}
+        action={<FormattedMessage id="dialog.deletePostAction" defaultMessage="delete" description="" />}
+        item={<FormattedMessage id="dialog.deleteItem" defaultMessage="post" description="" />}
         open={openDialog}
         handleAgree={handleAgree}
         handleDisagree={handleDisagree}
@@ -170,7 +171,7 @@ const MenuPost = ({ post }) => {
                       }}
                     >
                       <VscEdit size={"18px"} className="mr-1 items-center align-middle inline" />
-                      Edit
+                      <FormattedMessage id="menu.editItem" defaultMessage="Edit" description="" />
                     </MenuItem>
                   )}
                   {(post?.User?.id === user?.id || post?.canDelete) && (
@@ -184,7 +185,7 @@ const MenuPost = ({ post }) => {
                     >
                       {" "}
                       <AiOutlineDelete size={"18px"} className="mr-1 items-center align-middle" />
-                      Delete
+                      <FormattedMessage id="menu.deleteItem" defaultMessage="Delete" description="" />
                     </MenuItem>
                   )}
                 </MenuList>

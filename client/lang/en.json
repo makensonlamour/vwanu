@@ -1,0 +1,142 @@
+{
+  "forgotPassword.backToLogin": {
+    "defaultMessage": "Back to Login",
+    "description": ""
+  },
+  "forgotPassword.createAccount": {
+    "defaultMessage": "Create New Account",
+    "description": ""
+  },
+  "forgotPassword.descriptionSuccessText": {
+    "defaultMessage": "Your request has been approved. We send you a link to reset your password on your email.",
+    "description": ""
+  },
+  "forgotPassword.forgotPaswordText": {
+    "defaultMessage": "Enter your email and we'll send you a link to reset your password.",
+    "description": ""
+  },
+  "forgotPassword.resetPaswordBtn": {
+    "defaultMessage": "Reset Password",
+    "description": ""
+  },
+  "general.backToHome": {
+    "defaultMessage": "Back To Home",
+    "description": ""
+  },
+  "general.backToTopTxt": {
+    "defaultMessage": "Back to top ^",
+    "description": ""
+  },
+  "general.orText": {
+    "defaultMessage": "OR",
+    "description": ""
+  },
+  "general.retryBtn": {
+    "defaultMessage": "Tap to retry",
+    "description": ""
+  },
+  "general.retryTxt": {
+    "defaultMessage": "There was an error while fetching the data.",
+    "description": ""
+  },
+  "general.together": {
+    "defaultMessage": "Together We are Stronger",
+    "description": "This is the message after the welcome message"
+  },
+  "general.welcome": {
+    "defaultMessage": "Welcome",
+    "description": "This is the welcome message in the login page"
+  },
+  "login.notMemberText": {
+    "defaultMessage": "Not a member yet ?",
+    "description": ""
+  },
+  "login.registerText": {
+    "defaultMessage": "Register",
+    "description": ""
+  },
+  "login.signInToVwanu": {
+    "defaultMessage": "Sign in to Vwanu",
+    "description": ""
+  },
+  "login.together": {
+    "defaultMessage": "Together We are Stronger",
+    "description": "This is the message after the welcome message"
+  },
+  "login.welcome": {
+    "defaultMessage": "Welcome",
+    "description": "This is the welcome message in the login page"
+  },
+  "newsfeed.activityFeedText": {
+    "defaultMessage": "Activity Feed",
+    "description": ""
+  },
+  "newsfeed.noMorePostText": {
+    "defaultMessage": "No more post.",
+    "description": ""
+  },
+  "newsfeed.noPostText": {
+    "defaultMessage": "No posts to show",
+    "description": ""
+  },
+  "post.agoTxt": {
+    "defaultMessage": "ago",
+    "description": ""
+  },
+  "post.postFromTxt": {
+    "defaultMessage": "post from",
+    "description": ""
+  },
+  "post.postOnTxt": {
+    "defaultMessage": "post on",
+    "description": ""
+  },
+  "post.sharedABlogTxt": {
+    "defaultMessage": "shared a blog",
+    "description": ""
+  },
+  "post.sharedADiscussionTxt": {
+    "defaultMessage": "shared a discussion",
+    "description": ""
+  },
+  "post.sharedAPostTxt": {
+    "defaultMessage": "shared a post",
+    "description": ""
+  },
+  "post.wallTxt": {
+    "defaultMessage": "'s wall",
+    "description": ""
+  },
+  "register.alreadyHaveText": {
+    "defaultMessage": "Already have an account ?",
+    "description": ""
+  },
+  "register.joinCommunity": {
+    "defaultMessage": "Join the Vwanu Community",
+    "description": ""
+  },
+  "register.signinText": {
+    "defaultMessage": "Sign In",
+    "description": ""
+  },
+  "register.signupBtn": {
+    "defaultMessage": "Sign up",
+    "description": ""
+  },
+  "resetPassword.createNewPassword": {
+    "defaultMessage": "Change Password",
+    "description": ""
+  },
+  "verifyEmail.alreadyVerifyTxt": {
+    "defaultMessage": "Your email has already verified.",
+    "description": ""
+  },
+  "verifyEmail.errorTxt": {
+    "defaultMessage": "Unknow error occurs while verified your email.",
+    "description": ""
+  },
+  "verifyEmail.successTxt": {
+    "defaultMessage": "Your email has been verified succesfully.",
+    "description": ""
+  }
+}

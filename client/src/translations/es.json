@@ -1,6 +1,23 @@
 {
+  "forgotPassword.backToLogin": "",
+  "forgotPassword.createAccount": "",
+  "forgotPassword.descriptionText": "",
+  "forgotPassword.forgotPaswordText": "",
+  "forgotPassword.orText": "",
+  "forgotPassword.resetPaswordBtn": "",
+  "general.together": "",
+  "general.welcome": "",
   "login.notMemberText": "",
   "login.registerText": "Registrar",
+  "login.signInToVwanu": "Iniciar sesión en Vwanu",
   "login.together": "Juntos somos mas fuerte",
-  "login.welcome": "Bienvenido"
+  "login.welcome": "Bienvenido",
+  "register.alreadyHaveText": "",
+  "register.joinCommunity": "",
+  "register.signinText": "",
+  "register.signupBtn": "",
+  "resetPassword.backToLoginLink": "",
+  "resetPassword.changPasswordBtn": "",
+  "resetPassword.createNewAccountLink": "",
+  "resetPassword.createNewPassword": ""
 }

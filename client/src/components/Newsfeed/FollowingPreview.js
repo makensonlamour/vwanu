@@ -6,6 +6,7 @@ import { ImSad } from "react-icons/im";
 import EmptyComponent from "../common/EmptyComponent";
 import { useQueryClient } from "react-query";
 import Loader from "../common/Loader";
+import { FormattedMessage } from "react-intl";
 
 const FollowingPreview = ({ data, isError, isLoading }) => {
   const queryClient = useQueryClient();
@@ -16,7 +17,8 @@ const FollowingPreview = ({ data, isError, isLoading }) => {
     <>
       <div className="bg-white border border-gray-200 rounded-lg p-2 mt-8 mb-4">
         <h2 className="my-2 px-2 text-md font-semibold text-primary">
-          {`I'm Following `}
+          <FormattedMessage id="newsfeedFollowingComponent.followingTitle" defaultMessage="Following " description="" />
+          {``}
           <span className="font-normal text-md text-gray-400">{data?.length || 0}</span>
         </h2>
         {isLoading ? (
@@ -25,9 +27,9 @@ const FollowingPreview = ({ data, isError, isLoading }) => {
           </div>
         ) : isError ? (
           <div className="py-5 m-auto text-center px-2 lg:px-2">
-            {"There was an error while fetching the data. "}
+            <FormattedMessage id="general.retryTxt" defaultMessage="There was an error while fetching the data." description="" />{" "}
             <Link className="text-secondary hover:text-primary" to={""} onClick={() => queryClient.refetchQueries(["user", "following"])}>
-              Tap to retry
+              <FormattedMessage id="general.retryBtn" defaultMessage="Tap to retry" description="" />
             </Link>
           </div>
         ) : data?.length > 0 ? (
@@ -61,8 +63,20 @@ const FollowingPreview = ({ data, isError, isLoading }) => {
             <EmptyComponent
               border={false}
               icon={<ImSad size={"32px"} className="" />}
-              placeholder={"Sorry, You don't follow anyone."}
-              tips={"Follow someone you may know or appreciate to everything about they."}
+              placeholder={
+                <FormattedMessage
+                  id="newsfeedFollowingComponent.emptyFollowing"
+                  defaultMessage="Sorry, You don't follow anyone."
+                  description=""
+                />
+              }
+              tips={
+                <FormattedMessage
+                  id="newsfeedFollowingComponent.emptyFollowingDescription"
+                  defaultMessage="Follow someone you may know or appreciate to everything about they."
+                  description=""
+                />
+              }
             />
           </div>
         )}

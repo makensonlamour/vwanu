@@ -5,6 +5,7 @@ import routesPath from "../../../routesPath";
 import { alertService } from "../../../components/common/Alert/Services";
 import { Alert } from "../../../components/common/Alert";
 import { useForgotPassword } from "../../auth/authSlice";
+import { FormattedMessage } from "react-intl";
 
 // Core components
 import { Field, Form, Submit } from "../../../components/form";
@@ -47,9 +48,18 @@ const FormForgotPassword = () => {
         className="shadow-lg rounded-3xl my-10 bg-white"
       >
         <div className="flex justify-center">
-          <h1 className="card-title text-secondary text-md text-center pb-2">Forgot your password?</h1>
+          <h1 className="card-title text-secondary text-md text-center pb-2">
+            {" "}
+            <FormattedMessage id="forgotPassword.forgotPaswordText" defaultMessage="Forgot your password?" description="" />
+          </h1>
         </div>
-        <p className="">{`Enter your email and we'll send you a link to reset your password.`}</p>
+        <p className="">
+          <FormattedMessage
+            id="forgotPassword.forgotPaswordText"
+            defaultMessage="Enter your email and we'll send you a link to reset your password."
+            description=""
+          />
+        </p>
         <Alert />
         <Field
           required
@@ -73,16 +83,18 @@ const FormForgotPassword = () => {
                 <Loader color="black" />
               </div>
             ) : (
-              "Reset Password"
+              <FormattedMessage id="forgotPassword.resetPaswordBtn" defaultMessage="Reset Password" description="" />
             )
           }
         />
-        <div className="divider">OR</div>
+        <div className="divider">
+          <FormattedMessage id="general.orText" defaultMessage="OR" description="" />
+        </div>
         <Link className="hover:text-primary font-semibold mb-10 text-center" to={routesPath.REGISTER}>
-          Create New Account
+          <FormattedMessage id="forgotPassword.createAccount" defaultMessage="Create New Account" description="" />
         </Link>
         <Link className="text-primary font-bold mt-10 text-center" to={routesPath.LOGIN}>
-          Back to Login
+          <FormattedMessage id="forgotPassword.backToLogin" defaultMessage="Back to Login" description="" />
         </Link>
       </Form>
     </>
