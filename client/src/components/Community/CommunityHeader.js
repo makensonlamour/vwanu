@@ -19,12 +19,13 @@ import BlogComponent from "../../components/Newsfeed/BlogComponent";
 import FollowingPreview from "../../components/Newsfeed/FollowingPreview";
 import RecentlyActive from "../../components/Newsfeed/RecentlyActive";
 import GroupsPreview from "../../components/Newsfeed/GroupsPreview";
-import { useSendInvitation, useGetCommunityRole, useJoinCommunity } from "../../features/community/communitySlice";
+import { useSendInvitation, useGetCommunityRole, useJoinCommunity, useDeleteCommunityUser } from "../../features/community/communitySlice";
 import { useGetBlogList } from "../../features/blog/blogSlice";
 import { useGetOnline } from "../../features/user/userSlice";
 import { useGetListFollowing } from "../../features/follower/followerSlice";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../components/common/Loader";
+import { useQueryClient } from "react-query";
 
 const sendInvitationSuccess = () =>
   toast.success("You sent the invitation", {
@@ -36,14 +37,27 @@ const sendInvitationError = () =>
     position: "top-center",
   });
 
+const leaveSuccess = () =>
+  toast.success("You leave this community successfully.", {
+    position: "top-center",
+  });
+
+const leaveError = () =>
+  toast.error("Sorry. Error on leaving this community!", {
+    position: "top-center",
+  });
+
 const CommunityHeader = ({ communityData, notificationList }) => {
+  const queryClient = useQueryClient();
   const location = useLocation();
   const data = location.state;
   const user = useOutletContext();
   const { id } = useParams();
   // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   // const [over, setOver] = useState(false);
+  const leaveCommunityUser = useDeleteCommunityUser(["community", "update"], undefined, undefined);
   const sendInvitation = useSendInvitation(["community", "invitation"], undefined, undefined);
   const joinCommunity = useJoinCommunity(["community", "join"], undefined, undefined);
   const { data: roles } = useGetCommunityRole(["roles", "all"], true);
@@ -89,6 +103,20 @@ const CommunityHeader = ({ communityData, notificationList }) => {
       window.location.reload();
     } catch (e) {
       sendInvitationError();
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const leaveGroup = async (_id) => {
+    setIsLoading();
+    try {
+      await leaveCommunityUser.mutateAsync({ id: _id });
+      queryClient.invalidateQueries(["community", "members", id]);
+      leaveSuccess();
+    } catch (e) {
+      leaveError();
       console.log(e);
     } finally {
       setIsLoading(false);
@@ -154,7 +182,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                           {communityData?.privacyType || data?.privacyType}
                         </p>
                       </div>
-                      {communityData?.IsMember === null || data?.IsMember === null ? (
+                      {communityData?.isMember === null || data?.IsMember === null ? (
                         !invite ? (
                           <button
                             onClick={handleSubmit}
@@ -172,8 +200,15 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                           </button>
                         )
                       ) : (
-                        <button className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white">
-                          {communityData?.IsMember?.role}
+                        <button
+                          onMouseEnter={() => setIsHover(true)}
+                          onMouseLeave={() => setIsHover(false)}
+                          onClick={() => {
+                            leaveGroup(communityData?.isMember?.id);
+                          }}
+                          className="hidden lg:flex justify-self-end px-6 bg-placeholder-color py-2 rounded-lg hover:bg-primary hover:text-white"
+                        >
+                          {isHover ? "Exit" : communityData?.isMember?.role}
                         </button>
                       )}
                     </div>
@@ -204,7 +239,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                         </span>
                       </p>
                       <div className="lg:hidden">
-                        {communityData?.IsMember === null || data?.IsMember === null ? (
+                        {communityData?.isMember === null || data?.IsMember === null ? (
                           !invite ? (
                             <button
                               onClick={handleSubmit}
@@ -222,8 +257,15 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                             </button>
                           )
                         ) : (
-                          <button className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white">
-                            {communityData?.IsMember?.role}
+                          <button
+                            onMouseEnter={() => setIsHover(true)}
+                            onMouseLeave={() => setIsHover(false)}
+                            onClick={() => {
+                              leaveGroup(communityData?.isMember?.id);
+                            }}
+                            className="text-sm lg:hidden flex justify-self-end px-2 lg:px-6 bg-placeholder-color py-1 lg:py-2 rounded-lg hover:bg-primary hover:text-white"
+                          >
+                            {isHover ? "Exit" : communityData?.isMember?.role}
                           </button>
                         )}
                       </div>
@@ -266,7 +308,7 @@ const CommunityHeader = ({ communityData, notificationList }) => {
                       path={allTabs1[4]}
                       element={
                         <div>
-                          {communityData?.IsMember !== null ? (
+                          {communityData?.isMember !== null ? (
                             <SendInviteTabs />
                           ) : (
                             <div className="flex justify-center py-5">
