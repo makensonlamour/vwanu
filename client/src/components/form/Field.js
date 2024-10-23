@@ -57,7 +57,7 @@ function FormField({
               className="w-10 rounded px-2 py-1 text-sm hover:text-gray-700 text-gray-600 text-right -mt-9 mr-3 ml-auto"
               htmlFor="toggle"
             >
-              {show ? <BiHide size={"20px"} className="" /> : <BiShow size={"20px"} className="" />}
+              {show ? <BiShow size={"20px"} className="" /> : <BiHide size={"20px"} className="" />}
             </label>
           </>
         ) : null}
